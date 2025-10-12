@@ -2,9 +2,11 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
+
 import { allProblems } from '@/lib/problems';
 import { Difficulty } from '@/lib/types';
-import { getCompletedProblems } from '@/lib/storage';
+import { getCompletedProblems } from '@/lib/helpers/storage';
+import { formatDescription } from '@/lib/utils/formatText';
 
 export default function AllProblemsPage() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -46,7 +48,7 @@ export default function AllProblemsPage() {
         // Sort problems
         problems = [...problems].sort((a, b) => {
             if (sortBy === 'number') {
-                return a.order - b.order;
+                return (a.order ?? 0) - (b.order ?? 0);
             } else if (sortBy === 'title') {
                 return a.title.localeCompare(b.title);
             } else {
@@ -253,35 +255,6 @@ function ProblemCard({
     difficultyColors: Record<Difficulty, string>;
     isCompleted: boolean;
 }) {
-    // Format description with inline code and bold text
-    const formatDescription = (text: string) => {
-        const firstLine = text.split('\n')[0];
-        const parts = firstLine.split(/(`[^`]+`|\*\*[^*]+\*\*)/g);
-
-        return parts.map((part, index) => {
-            if (part.startsWith('`') && part.endsWith('`')) {
-                const code = part.slice(1, -1);
-                return (
-                    <code
-                        key={index}
-                        className="rounded bg-[#6272a4] px-2 py-0.5 font-mono text-sm text-[#f8f8f2]"
-                    >
-                        {code}
-                    </code>
-                );
-            }
-            if (part.startsWith('**') && part.endsWith('**')) {
-                const boldText = part.slice(2, -2);
-                return (
-                    <span key={index} className="text-[#f8f8f2]">
-                        {boldText}
-                    </span>
-                );
-            }
-            return <span key={index}>{part}</span>;
-        });
-    };
-
     return (
         <Link href={`/problems/${problem.id}`} className="mb-6 block">
             <div className="group cursor-pointer rounded-lg border-2 border-[#44475a] bg-[#44475a] p-6 transition-all hover:border-[#bd93f9] hover:shadow-xl">

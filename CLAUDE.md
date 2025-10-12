@@ -2,7 +2,7 @@
 
 ## 🎯 Project Overview
 
-BinSearch is an interactive learning platform focused on mastering binary search algorithms through hands-on Python coding practice. All code execution happens in the browser using Pyodide (Python compiled to WebAssembly).
+CodeBlanket is an interactive learning platform focused on mastering algorithms and data structures through hands-on Python coding practice. All code execution happens in the browser using Pyodide (Python compiled to WebAssembly). Currently supports Binary Search and Two Pointers algorithm topics.
 
 ## 🚀 Development Commands
 
@@ -39,19 +39,32 @@ npm run lint:fix
 ```
 frontend/
 ├── app/
-│   ├── layout.tsx              # Root layout with Pyodide script
-│   ├── page.tsx                # Home page with problem list
-│   ├── problems/[id]/
-│   │   └── page.tsx            # Individual problem page
-│   └── globals.css             # Global styles
+│   ├── layout.tsx                  # Root layout with Pyodide script
+│   ├── page.tsx                    # Home page with problem categories
+│   ├── problems/
+│   │   ├── [id]/page.tsx          # Individual problem page
+│   │   └── page.tsx               # All problems listing
+│   ├── topics/
+│   │   └── [slug]/page.tsx        # Problems by topic
+│   ├── monaco-config.ts           # Monaco editor configuration
+│   └── globals.css                # Global styles
 ├── components/
-│   └── PythonCodeRunner.tsx    # Monaco editor + Pyodide test runner
+│   └── PythonCodeRunner.tsx       # Monaco editor + Pyodide test runner
 ├── lib/
-│   ├── pyodide.ts              # Pyodide singleton loader
-│   ├── types.ts                # TypeScript interfaces
-│   └── problems/
-│       └── binary-search.ts    # Problem definitions
-├── public/                      # Static assets
+│   ├── helpers/
+│   │   └── storage.ts             # LocalStorage utilities (completion, code)
+│   ├── hooks/
+│   │   ├── usePyodide.ts          # Custom hook for Pyodide loading
+│   │   └── useCodeStorage.ts      # Custom hook for code persistence
+│   ├── utils/
+│   │   └── formatText.tsx         # Text formatting utilities
+│   ├── problems/
+│   │   ├── binary-search.ts       # Binary search problem definitions
+│   │   ├── two-pointers.ts        # Two pointers problem definitions
+│   │   └── index.ts               # Problem exports and categories
+│   ├── pyodide.ts                 # Pyodide singleton loader
+│   └── types.ts                   # TypeScript interfaces
+├── public/                         # Static assets
 └── ...config files
 ```
 
@@ -92,13 +105,16 @@ frontend/
 ### Imports
 
 ```typescript
-// 1. External libraries
+// 1. External libraries (React, third-party packages)
 import { useState, useEffect } from 'react';
 import Editor from '@monaco-editor/react';
 
-// 2. Internal modules (use @ alias)
+// 2. Internal modules (grouped by category, use @ alias)
 import { Problem } from '@/lib/types';
 import { getPyodide } from '@/lib/pyodide';
+import { usePyodide } from '@/lib/hooks/usePyodide';
+import { getCompletedProblems } from '@/lib/helpers/storage';
+import { formatText } from '@/lib/utils/formatText';
 import { PythonCodeRunner } from '@/components/PythonCodeRunner';
 
 // 3. Relative imports
@@ -247,13 +263,19 @@ Can include **bold**, \`code\`, etc.
 - Use consistent spacing scale (4, 8, 12, 16, 24, 32...)
 - Follow mobile-first responsive design
 
-### Color Scheme
+### Color Scheme (Dracula Theme)
 
-- Primary: Indigo/Purple gradient
-- Success: Green
-- Error: Red
-- Warning: Yellow
-- Info: Blue
+- Background: `#282a36`
+- Foreground: `#f8f8f2`
+- Current Line: `#44475a`
+- Comment: `#6272a4`
+- Cyan: `#8be9fd`
+- Green: `#50fa7b`
+- Orange: `#ffb86c`
+- Pink: `#ff79c6`
+- Purple: `#bd93f9`
+- Red: `#ff5555`
+- Yellow: `#f1fa8c`
 
 ### Common Patterns
 
@@ -328,17 +350,26 @@ This ensures:
 - **Monaco Editor**: https://microsoft.github.io/monaco-editor/
 - **Tailwind CSS**: https://tailwindcss.com/docs
 
+## 💡 Implemented Features
+
+- ✅ User progress tracking (localStorage)
+- ✅ Multiple algorithm topics (Binary Search, Two Pointers)
+- ✅ Code persistence in localStorage
+- ✅ Problem completion tracking with status filtering
+- ✅ Search, filter, and sort problems
+- ✅ Dark mode with Dracula color scheme
+
 ## 💡 Future Enhancements
 
 Ideas for expanding the platform:
 
-- [ ] User progress tracking (localStorage)
-- [ ] More algorithm topics (two pointers, sliding window, etc.)
+- [ ] More algorithm topics (sliding window, dynamic programming, etc.)
 - [ ] Algorithm visualizations
 - [ ] Solution explanations with step-by-step breakdowns
 - [ ] Multiple language support (JavaScript, TypeScript)
 - [ ] Community solutions
 - [ ] Difficulty progression system
+- [ ] Problem hints with progressive disclosure
 
 ---
 

@@ -1,3 +1,7 @@
+/**
+ * Type definitions for the CodeBlanket application
+ */
+
 export interface TestCase {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   input: any[];
@@ -18,16 +22,19 @@ export interface Problem {
   id: string;
   title: string;
   difficulty: Difficulty;
-  order: number;
   description: string;
   examples: Example[];
-  constraints?: string[];
-  hints?: string[];
+  constraints: string[];
+  hints: string[];
   starterCode: string;
   testCases: TestCase[];
   solution?: string;
   timeComplexity?: string;
   spaceComplexity?: string;
+  order?: number; // For sorting - Made optional
+  topic: string; // e.g., "Binary Search", "Two Pointers"
+  leetcodeUrl?: string; // Link to LeetCode problem
+  youtubeUrl?: string; // Link to YouTube explanation
 }
 
 export interface TestResult {
@@ -40,4 +47,36 @@ export interface TestResult {
   actual: any;
   error?: string;
   executionTime?: number;
+}
+
+/**
+ * Module system types
+ */
+
+export interface ModuleSection {
+  id: string;
+  title: string;
+  content: string;
+  codeExample?: string;
+}
+
+export interface Module {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  sections: ModuleSection[];
+  keyTakeaways: string[];
+  timeComplexity?: string;
+  spaceComplexity?: string;
+  relatedProblems: string[]; // Array of problem IDs
+}
+
+export interface ModuleCategory {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  module: Module;
+  problemCount: number;
 }

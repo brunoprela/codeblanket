@@ -1,5 +1,20 @@
 import { Problem } from '@/lib/types';
+import { advancedGraphsProblems } from './advanced-graphs';
+import { arraysHashingProblems } from './arrays-hashing';
+import { backtrackingProblems } from './backtracking';
 import { binarySearchProblems } from './binary-search';
+import { bitManipulationProblems } from './bit-manipulation';
+import { dynamicProgrammingProblems } from './dynamic-programming';
+import { graphsProblems } from './graphs';
+import { greedyProblems } from './greedy';
+import { heapProblems } from './heap';
+import { intervalsProblems } from './intervals';
+import { linkedListProblems } from './linked-list';
+import { mathGeometryProblems } from './math-geometry';
+import { slidingWindowProblems } from './sliding-window';
+import { stackProblems } from './stack';
+import { treesProblems } from './trees';
+import { triesProblems } from './tries';
 import { twoPointersProblems } from './two-pointers';
 
 export interface ProblemCategory {
@@ -13,6 +28,33 @@ export interface ProblemCategory {
 
 export const problemCategories: ProblemCategory[] = [
     {
+        id: 'advanced-graphs',
+        title: 'Advanced Graphs',
+        description:
+            'Master advanced graph algorithms including shortest paths, minimum spanning trees, and network flow',
+        icon: '🗺️',
+        problemCount: advancedGraphsProblems.length,
+        problems: advancedGraphsProblems,
+    },
+    {
+        id: 'arrays-hashing',
+        title: 'Arrays & Hashing',
+        description:
+            'Master array manipulation and hash table techniques for optimal performance',
+        icon: '🔢',
+        problemCount: arraysHashingProblems.length,
+        problems: arraysHashingProblems,
+    },
+    {
+        id: 'backtracking',
+        title: 'Backtracking',
+        description:
+            'Master backtracking for exploring all possible solutions with pruning',
+        icon: '🔙',
+        problemCount: backtrackingProblems.length,
+        problems: backtrackingProblems,
+    },
+    {
         id: 'binary-search',
         title: 'Binary Search',
         description:
@@ -20,6 +62,113 @@ export const problemCategories: ProblemCategory[] = [
         icon: '🔍',
         problemCount: binarySearchProblems.length,
         problems: binarySearchProblems,
+    },
+    {
+        id: 'bit-manipulation',
+        title: 'Bit Manipulation',
+        description:
+            'Master bitwise operations and bit tricks for efficient problem solving',
+        icon: '⚡',
+        problemCount: bitManipulationProblems.length,
+        problems: bitManipulationProblems,
+    },
+    {
+        id: 'dynamic-programming',
+        title: 'Dynamic Programming',
+        description:
+            'Master the art of breaking problems into overlapping subproblems and building optimal solutions',
+        icon: '🧩',
+        problemCount: dynamicProgrammingProblems.length,
+        problems: dynamicProgrammingProblems,
+    },
+    {
+        id: 'graphs',
+        title: 'Graphs',
+        description:
+            'Master graph traversal, pathfinding, and connectivity problems for complex network structures',
+        icon: '🕸️',
+        problemCount: graphsProblems.length,
+        problems: graphsProblems,
+    },
+    {
+        id: 'greedy',
+        title: 'Greedy',
+        description:
+            'Master greedy algorithms that make locally optimal choices to find global optima',
+        icon: '🎯',
+        problemCount: greedyProblems.length,
+        problems: greedyProblems,
+    },
+    {
+        id: 'heap',
+        title: 'Heap / Priority Queue',
+        description:
+            'Master heaps and priority queues for efficient min/max operations',
+        icon: '⛰️',
+        problemCount: heapProblems.length,
+        problems: heapProblems,
+    },
+    {
+        id: 'intervals',
+        title: 'Intervals',
+        description:
+            'Master interval manipulation including merging, overlapping, and intersection problems',
+        icon: '↔️',
+        problemCount: intervalsProblems.length,
+        problems: intervalsProblems,
+    },
+    {
+        id: 'linked-list',
+        title: 'Linked List',
+        description: 'Master linked list manipulation and pointer techniques',
+        icon: '🔗',
+        problemCount: linkedListProblems.length,
+        problems: linkedListProblems,
+    },
+    {
+        id: 'math-geometry',
+        title: 'Math & Geometry',
+        description:
+            'Master mathematical algorithms and geometric computations for problem solving',
+        icon: '📐',
+        problemCount: mathGeometryProblems.length,
+        problems: mathGeometryProblems,
+    },
+    {
+        id: 'sliding-window',
+        title: 'Sliding Window',
+        description:
+            'Master the sliding window technique for substring and subarray problems',
+        icon: '🪟',
+        problemCount: slidingWindowProblems.length,
+        problems: slidingWindowProblems,
+    },
+    {
+        id: 'stack',
+        title: 'Stack',
+        description:
+            'Master the Last-In-First-Out (LIFO) data structure for parsing and backtracking',
+        icon: '📚',
+        problemCount: stackProblems.length,
+        problems: stackProblems,
+    },
+    {
+        id: 'trees',
+        title: 'Trees',
+        description:
+            'Master tree structures, traversals, and recursive problem-solving',
+        icon: '🌳',
+        problemCount: treesProblems.length,
+        problems: treesProblems,
+    },
+    {
+        id: 'tries',
+        title: 'Tries',
+        description:
+            'Master the prefix tree data structure for efficient string operations and searches',
+        icon: '🌲',
+        problemCount: triesProblems.length,
+        problems: triesProblems,
     },
     {
         id: 'two-pointers',
@@ -33,7 +182,22 @@ export const problemCategories: ProblemCategory[] = [
 ];
 
 export const allProblems: Problem[] = [
+    ...advancedGraphsProblems,
+    ...arraysHashingProblems,
+    ...backtrackingProblems,
     ...binarySearchProblems,
+    ...bitManipulationProblems,
+    ...dynamicProgrammingProblems,
+    ...graphsProblems,
+    ...greedyProblems,
+    ...heapProblems,
+    ...intervalsProblems,
+    ...linkedListProblems,
+    ...mathGeometryProblems,
+    ...slidingWindowProblems,
+    ...stackProblems,
+    ...treesProblems,
+    ...triesProblems,
     ...twoPointersProblems,
 ];
 

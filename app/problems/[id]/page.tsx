@@ -2,10 +2,12 @@
 
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import { useState, useEffect, use } from 'react';
+
 import { getProblemById } from '@/lib/problems';
 import { PythonCodeRunner } from '@/components/PythonCodeRunner';
-import { useState, useEffect, use } from 'react';
-import { isProblemCompleted } from '@/lib/storage';
+import { isProblemCompleted } from '@/lib/helpers/storage';
+import { formatText } from '@/lib/utils/formatText';
 
 export default function ProblemPage({
   params,
@@ -232,34 +234,4 @@ export default function ProblemPage({
       </div>
     </div>
   );
-}
-
-// Helper function to format text with inline code and bold
-function formatText(text: string) {
-  const parts = text.split(/(`[^`]+`|\*\*[^*]+\*\*)/g);
-
-  return parts.map((part, index) => {
-    // Handle inline code
-    if (part.startsWith('`') && part.endsWith('`')) {
-      const code = part.slice(1, -1);
-      return (
-        <code
-          key={index}
-          className="rounded bg-[#44475a] px-2 py-0.5 font-mono text-sm text-[#8be9fd]"
-        >
-          {code}
-        </code>
-      );
-    }
-    // Handle bold text
-    if (part.startsWith('**') && part.endsWith('**')) {
-      const boldText = part.slice(2, -2);
-      return (
-        <strong key={index} className="font-semibold text-[#f8f8f2]">
-          {boldText}
-        </strong>
-      );
-    }
-    return <span key={index}>{part}</span>;
-  });
 }

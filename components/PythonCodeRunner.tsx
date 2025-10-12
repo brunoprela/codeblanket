@@ -1,17 +1,17 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Editor from '@monaco-editor/react';
+
 import { TestCase, TestResult } from '@/lib/types';
 import { getPyodide } from '@/lib/pyodide';
-import { configureMonaco } from '@/app/monaco-config';
+import { usePyodide } from '@/lib/hooks/usePyodide';
+import { useCodeStorage } from '@/lib/hooks/useCodeStorage';
 import {
   markProblemCompleted,
   markProblemIncomplete,
-  saveUserCode,
-  getUserCode,
-  clearUserCode,
-} from '@/lib/storage';
+} from '@/lib/helpers/storage';
+import { configureMonaco } from '@/app/monaco-config';
 
 interface PythonCodeRunnerProps {
   starterCode: string;
@@ -26,48 +26,27 @@ export function PythonCodeRunner({
   problemId,
   onSuccess,
 }: PythonCodeRunnerProps) {
-  const [code, setCode] = useState(starterCode);
+  // Custom hooks for managing state
+  const {
+    isReady: pyodideReady,
+    isLoading: pyodideLoading,
+    error: loadError,
+  } = usePyodide();
+  const {
+    code,
+    setCode,
+    resetCode: resetCodeStorage,
+  } = useCodeStorage(problemId, starterCode);
+
+  // Local state
   const [results, setResults] = useState<TestResult[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [pyodideReady, setPyodideReady] = useState(false);
-  const [loadError, setLoadError] = useState<string | null>(null);
+  const [isRunning, setIsRunning] = useState(false);
 
-  // Configure Monaco and load Pyodide when component mounts
-  useEffect(() => {
-    // Configure Monaco to suppress loader errors
-    configureMonaco();
-
-    async function loadPyodide() {
-      try {
-        await getPyodide();
-        setPyodideReady(true);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (error: any) {
-        console.error('Failed to load Pyodide:', error);
-        setLoadError(error.message);
-      }
-    }
-
-    loadPyodide();
-
-    // Load saved user code from localStorage if problemId is provided
-    if (problemId) {
-      const savedCode = getUserCode(problemId);
-      if (savedCode) {
-        setCode(savedCode);
-      }
-    }
-  }, [problemId]);
-
-  // Save user code to localStorage whenever it changes
-  useEffect(() => {
-    if (problemId && code !== starterCode) {
-      saveUserCode(problemId, code);
-    }
-  }, [code, problemId, starterCode]);
+  // Configure Monaco on mount
+  configureMonaco();
 
   const runCode = async () => {
-    setIsLoading(true);
+    setIsRunning(true);
     setResults([]);
 
     try {
@@ -150,16 +129,15 @@ json.dumps(result)
         },
       ]);
     } finally {
-      setIsLoading(false);
+      setIsRunning(false);
     }
   };
 
-  const resetCode = () => {
-    setCode(starterCode);
+  const handleReset = () => {
+    resetCodeStorage();
     setResults([]);
 
     if (problemId) {
-      clearUserCode(problemId);
       markProblemIncomplete(problemId);
       // Dispatch event to notify parent component
       window.dispatchEvent(
@@ -184,8 +162,8 @@ json.dumps(result)
 
   return (
     <div className="flex h-full flex-col">
-      {/* Loading State */}
-      {!pyodideReady && (
+      {/* Pyodide Loading State */}
+      {pyodideLoading && (
         <div className="m-4 rounded-lg border-2 border-[#bd93f9] bg-[#bd93f9]/10 p-4">
           <div className="flex items-center space-x-3">
             <div className="h-5 w-5 animate-spin rounded-full border-2 border-[#bd93f9] border-t-transparent" />
@@ -297,10 +275,10 @@ json.dumps(result)
       <div className="flex gap-3 bg-[#44475a] p-4">
         <button
           onClick={runCode}
-          disabled={!pyodideReady || isLoading}
+          disabled={!pyodideReady || isRunning}
           className="rounded-lg bg-[#50fa7b] px-6 py-2.5 font-bold text-[#282a36] transition-colors hover:bg-[#50fa7b]/80 disabled:cursor-not-allowed disabled:bg-[#6272a4]"
         >
-          {isLoading ? (
+          {isRunning ? (
             <span className="flex items-center gap-2">
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-[#282a36] border-t-transparent" />
               Running...
@@ -311,7 +289,7 @@ json.dumps(result)
         </button>
 
         <button
-          onClick={resetCode}
+          onClick={handleReset}
           disabled={!pyodideReady}
           className="rounded-lg bg-[#6272a4] px-6 py-2.5 font-semibold text-[#f8f8f2] transition-colors hover:bg-[#6272a4]/80 disabled:cursor-not-allowed disabled:bg-[#44475a]"
         >
@@ -339,10 +317,11 @@ json.dumps(result)
             {results.map((result, i) => (
               <div
                 key={i}
-                className={`rounded-lg border-2 p-4 ${result.passed
-                  ? 'border-[#50fa7b] bg-[#50fa7b]/10'
-                  : 'border-[#ff5555] bg-[#ff5555]/10'
-                  }`}
+                className={`rounded-lg border-2 p-4 ${
+                  result.passed
+                    ? 'border-[#50fa7b] bg-[#50fa7b]/10'
+                    : 'border-[#ff5555] bg-[#ff5555]/10'
+                }`}
               >
                 <div className="mb-3 flex items-center justify-between">
                   <div className="text-lg font-semibold text-[#f8f8f2]">
