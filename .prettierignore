@@ -1,0 +1,7 @@
+# Prettier-specific ignores
+node_modules
+.next
+out
+build
+*.tsbuildinfo
+

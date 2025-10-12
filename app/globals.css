@@ -1,0 +1,53 @@
+@import 'tailwindcss';
+
+/* Dracula Color Scheme */
+:root {
+  --background: #282a36;
+  --foreground: #f8f8f2;
+  --current-line: #44475a;
+  --comment: #6272a4;
+  --cyan: #8be9fd;
+  --green: #50fa7b;
+  --orange: #ffb86c;
+  --pink: #ff79c6;
+  --purple: #bd93f9;
+  --red: #ff5555;
+  --yellow: #f1fa8c;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Resizable editor styles */
+.resize-y {
+  resize: vertical;
+  overflow: auto;
+}
+
+.resize-y::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    transparent 50%,
+    rgba(156, 163, 175, 0.4) 50%,
+    rgba(156, 163, 175, 0.4) 100%
+  );
+  cursor: ns-resize;
+  pointer-events: none;
+}

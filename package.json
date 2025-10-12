@@ -1,0 +1,43 @@
+{
+  "name": "codeblanket",
+  "version": "0.1.0",
+  "private": true,
+  "description": "An interactive learning platform for mastering binary search algorithms",
+  "author": "Bruno Prela",
+  "license": "MIT",
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build --turbopack",
+    "start": "next start",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint \"**/*.{ts,tsx,js,jsx}\" --max-warnings 0",
+    "lint:fix": "npm run lint -- --fix",
+    "format": "prettier \"**/*.{ts,tsx,js,jsx,json,css,md}\" --write",
+    "format-check": "prettier \"**/*.{ts,tsx,js,jsx,json,css,md}\" --check",
+    "validate": "npm run type-check && npm run lint && npm run format-check"
+  },
+  "dependencies": {
+    "@monaco-editor/react": "^4.7.0",
+    "next": "15.5.4",
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "^9.37.0",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@typescript-eslint/eslint-plugin": "^8.46.0",
+    "@typescript-eslint/parser": "^8.46.0",
+    "eslint": "^9.37.0",
+    "eslint-config-next": "^15.5.4",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "prettier": "^3.6.2",
+    "prettier-plugin-tailwindcss": "^0.6.14",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
