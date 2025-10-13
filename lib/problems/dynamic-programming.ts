@@ -479,4 +479,398 @@ def coin_change_optimized(coins: List[int], amount: int) -> int:
     leetcodeUrl: 'https://leetcode.com/problems/coin-change/',
     youtubeUrl: 'https://www.youtube.com/watch?v=H9bfqozjoqs',
   },
+
+  // EASY - Fibonacci Number
+  {
+    id: 'fibonacci-number',
+    title: 'Fibonacci Number',
+    difficulty: 'Easy',
+    topic: 'Dynamic Programming',
+    description: `The **Fibonacci numbers**, commonly denoted \`F(n)\` form a sequence, called the **Fibonacci sequence**, such that each number is the sum of the two preceding ones, starting from \`0\` and \`1\`. That is,
+
+\`\`\`
+F(0) = 0, F(1) = 1
+F(n) = F(n - 1) + F(n - 2), for n > 1.
+\`\`\`
+
+Given \`n\`, calculate \`F(n)\`.`,
+    examples: [
+      {
+        input: 'n = 2',
+        output: '1',
+        explanation: 'F(2) = F(1) + F(0) = 1 + 0 = 1.',
+      },
+      {
+        input: 'n = 3',
+        output: '2',
+        explanation: 'F(3) = F(2) + F(1) = 1 + 1 = 2.',
+      },
+      {
+        input: 'n = 4',
+        output: '3',
+        explanation: 'F(4) = F(3) + F(2) = 2 + 1 = 3.',
+      },
+    ],
+    constraints: ['0 <= n <= 30'],
+    hints: [
+      'Use bottom-up DP',
+      'Only need last two values',
+      'Space can be O(1)',
+    ],
+    starterCode: `def fib(n: int) -> int:
+    """
+    Calculate nth Fibonacci number.
+    
+    Args:
+        n: Position in sequence
+        
+    Returns:
+        Fibonacci number at position n
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [2],
+        expected: 1,
+      },
+      {
+        input: [3],
+        expected: 2,
+      },
+      {
+        input: [4],
+        expected: 3,
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/fibonacci-number/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=tyB0ztf0DNY',
+  },
+
+  // EASY - Min Cost Climbing Stairs
+  {
+    id: 'min-cost-climbing-stairs',
+    title: 'Min Cost Climbing Stairs',
+    difficulty: 'Easy',
+    topic: 'Dynamic Programming',
+    description: `You are given an integer array \`cost\` where \`cost[i]\` is the cost of \`i-th\` step on a staircase. Once you pay the cost, you can either climb one or two steps.
+
+You can either start from the step with index \`0\`, or the step with index \`1\`.
+
+Return the minimum cost to reach the top of the floor.`,
+    examples: [
+      {
+        input: 'cost = [10,15,20]',
+        output: '15',
+        explanation:
+          'Start at index 1, pay 15, and climb two steps to reach the top.',
+      },
+      {
+        input: 'cost = [1,100,1,1,1,100,1,1,100,1]',
+        output: '6',
+        explanation:
+          'Start at index 0, skip 100, reach top paying 1+1+1+1+1+1 = 6.',
+      },
+    ],
+    constraints: ['2 <= cost.length <= 1000', '0 <= cost[i] <= 999'],
+    hints: [
+      'Similar to climbing stairs',
+      'dp[i] = cost[i] + min(dp[i-1], dp[i-2])',
+      'Answer is min(dp[n-1], dp[n-2])',
+    ],
+    starterCode: `from typing import List
+
+def min_cost_climbing_stairs(cost: List[int]) -> int:
+    """
+    Find minimum cost to reach top.
+    
+    Args:
+        cost: Cost array for each step
+        
+    Returns:
+        Minimum cost to reach top
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[10, 15, 20]],
+        expected: 15,
+      },
+      {
+        input: [[1, 100, 1, 1, 1, 100, 1, 1, 100, 1]],
+        expected: 6,
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/min-cost-climbing-stairs/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=ktmzAZWkEZ0',
+  },
+
+  // EASY - Divisor Game
+  {
+    id: 'divisor-game',
+    title: 'Divisor Game',
+    difficulty: 'Easy',
+    topic: 'Dynamic Programming',
+    description: `Alice and Bob take turns playing a game, with Alice starting first.
+
+Initially, there is a number \`n\` on the chalkboard. On each player's turn, that player makes a move consisting of:
+
+- Choosing any \`x\` with \`0 < x < n\` and \`n % x == 0\`.
+- Replacing the number \`n\` on the chalkboard with \`n - x\`.
+
+Also, if a player cannot make a move, they lose the game.
+
+Return \`true\` if and only if Alice wins the game, assuming both players play optimally.`,
+    examples: [
+      {
+        input: 'n = 2',
+        output: 'true',
+        explanation: 'Alice chooses 1, and Bob receives 1 and loses.',
+      },
+      {
+        input: 'n = 3',
+        output: 'false',
+        explanation:
+          'Alice chooses 1, Bob chooses 1, and Alice has no more valid moves.',
+      },
+    ],
+    constraints: ['1 <= n <= 1000'],
+    hints: [
+      'Try a few examples and look for pattern',
+      'Alice wins if n is even',
+    ],
+    starterCode: `def divisor_game(n: int) -> bool:
+    """
+    Check if Alice wins the game.
+    
+    Args:
+        n: Starting number
+        
+    Returns:
+        True if Alice wins
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [2],
+        expected: true,
+      },
+      {
+        input: [3],
+        expected: false,
+      },
+      {
+        input: [1000],
+        expected: true,
+      },
+    ],
+    timeComplexity: 'O(1)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/divisor-game/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=0cP_1Z4uDxo',
+  },
+
+  // MEDIUM - Maximum Product Subarray
+  {
+    id: 'maximum-product-subarray',
+    title: 'Maximum Product Subarray',
+    difficulty: 'Medium',
+    topic: 'Dynamic Programming',
+    description: `Given an integer array \`nums\`, find a subarray that has the largest product, and return the product.
+
+The test cases are generated so that the answer will fit in a **32-bit** integer.`,
+    examples: [
+      {
+        input: 'nums = [2,3,-2,4]',
+        output: '6',
+        explanation: 'Subarray [2,3] has the largest product 6.',
+      },
+      {
+        input: 'nums = [-2,0,-1]',
+        output: '0',
+        explanation:
+          'The result cannot be 2, because [-2,-1] is not a subarray.',
+      },
+    ],
+    constraints: [
+      '1 <= nums.length <= 2 * 10^4',
+      '-10 <= nums[i] <= 10',
+      'The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer',
+    ],
+    hints: [
+      'Track both max and min products',
+      'Negative * negative can become max',
+      'Handle zero by resetting',
+    ],
+    starterCode: `from typing import List
+
+def max_product(nums: List[int]) -> int:
+    """
+    Find maximum product of contiguous subarray.
+    
+    Args:
+        nums: Input array
+        
+    Returns:
+        Maximum product
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[2, 3, -2, 4]],
+        expected: 6,
+      },
+      {
+        input: [[-2, 0, -1]],
+        expected: 0,
+      },
+      {
+        input: [[-2, 3, -4]],
+        expected: 24,
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/maximum-product-subarray/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=lXVy6YWFcRM',
+  },
+
+  // MEDIUM - Longest Increasing Subsequence
+  {
+    id: 'longest-increasing-subsequence',
+    title: 'Longest Increasing Subsequence',
+    difficulty: 'Medium',
+    topic: 'Dynamic Programming',
+    description: `Given an integer array \`nums\`, return the length of the longest **strictly increasing subsequence**.`,
+    examples: [
+      {
+        input: 'nums = [10,9,2,5,3,7,101,18]',
+        output: '4',
+        explanation:
+          'The longest increasing subsequence is [2,3,7,101], therefore the length is 4.',
+      },
+      {
+        input: 'nums = [0,1,0,3,2,3]',
+        output: '4',
+      },
+      {
+        input: 'nums = [7,7,7,7,7,7,7]',
+        output: '1',
+      },
+    ],
+    constraints: ['1 <= nums.length <= 2500', '-10^4 <= nums[i] <= 10^4'],
+    hints: [
+      'dp[i] = length of LIS ending at index i',
+      'For each i, check all j < i',
+      'If nums[j] < nums[i], dp[i] = max(dp[i], dp[j] + 1)',
+    ],
+    starterCode: `from typing import List
+
+def length_of_lis(nums: List[int]) -> int:
+    """
+    Find length of longest increasing subsequence.
+    
+    Args:
+        nums: Input array
+        
+    Returns:
+        Length of LIS
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[10, 9, 2, 5, 3, 7, 101, 18]],
+        expected: 4,
+      },
+      {
+        input: [[0, 1, 0, 3, 2, 3]],
+        expected: 4,
+      },
+      {
+        input: [[7, 7, 7, 7, 7, 7, 7]],
+        expected: 1,
+      },
+    ],
+    timeComplexity: 'O(n^2) or O(n log n) with binary search',
+    spaceComplexity: 'O(n)',
+    leetcodeUrl:
+      'https://leetcode.com/problems/longest-increasing-subsequence/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=cjWnW0hdF1Y',
+  },
+
+  // MEDIUM - Unique Paths
+  {
+    id: 'unique-paths',
+    title: 'Unique Paths',
+    difficulty: 'Medium',
+    topic: 'Dynamic Programming',
+    description: `There is a robot on an \`m x n\` grid. The robot is initially located at the **top-left corner** (i.e., \`grid[0][0]\`). The robot tries to move to the **bottom-right corner** (i.e., \`grid[m - 1][n - 1]\`). The robot can only move either down or right at any point in time.
+
+Given the two integers \`m\` and \`n\`, return the number of possible unique paths that the robot can take to reach the bottom-right corner.
+
+The test cases are generated so that the answer will be less than or equal to \`2 * 10^9\`.`,
+    examples: [
+      {
+        input: 'm = 3, n = 7',
+        output: '28',
+      },
+      {
+        input: 'm = 3, n = 2',
+        output: '3',
+        explanation:
+          'From the top-left corner, there are a total of 3 ways to reach the bottom-right corner: Right -> Down -> Down, Down -> Down -> Right, Down -> Right -> Down.',
+      },
+    ],
+    constraints: ['1 <= m, n <= 100'],
+    hints: [
+      'dp[i][j] = ways to reach cell (i, j)',
+      'dp[i][j] = dp[i-1][j] + dp[i][j-1]',
+      'Base case: dp[0][j] = dp[i][0] = 1',
+    ],
+    starterCode: `def unique_paths(m: int, n: int) -> int:
+    """
+    Find number of unique paths in m x n grid.
+    
+    Args:
+        m: Number of rows
+        n: Number of columns
+        
+    Returns:
+        Number of unique paths
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [3, 7],
+        expected: 28,
+      },
+      {
+        input: [3, 2],
+        expected: 3,
+      },
+      {
+        input: [1, 1],
+        expected: 1,
+      },
+    ],
+    timeComplexity: 'O(m * n)',
+    spaceComplexity: 'O(n) with space optimization',
+    leetcodeUrl: 'https://leetcode.com/problems/unique-paths/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=IlEsdxuD4lY',
+  },
 ];

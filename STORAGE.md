@@ -99,6 +99,7 @@ useStorageInit() → migrateFromLocalStorage()
 ### 3. Auto-Backups
 
 The app creates auto-backups:
+
 - **On every page load**
 - **Every 5 minutes** while the app is open
 - Stored in localStorage as `codeblanket-auto-backup`
@@ -106,11 +107,13 @@ The app creates auto-backups:
 ### 4. Manual Export/Import
 
 #### To Export:
+
 1. Click "Backup" button in navbar
 2. Click "Export Progress"
 3. File downloads: `codeblanket-progress-YYYY-MM-DD.json`
 
 #### To Import:
+
 1. Click "Backup" button in navbar
 2. Click "Import Progress"
 3. Select your JSON file
@@ -119,6 +122,7 @@ The app creates auto-backups:
 ## Data Stored
 
 ### Completed Problems
+
 ```json
 {
   "codeblanket_completed_problems": [
@@ -130,6 +134,7 @@ The app creates auto-backups:
 ```
 
 ### User Code
+
 ```json
 {
   "codeblanket_code_binary-search": "def binary_search(nums, target):\n    # user code...",
@@ -138,6 +143,7 @@ The app creates auto-backups:
 ```
 
 ### Module Progress
+
 ```json
 {
   "module-binary-search": {
@@ -255,4 +261,3 @@ localStorage.setItem('codeblanket_completed_problems', '["test-problem"]');
 ---
 
 **Questions?** Open an issue or check the code in `lib/helpers/`.
-

@@ -634,18 +634,17 @@ Return the **minimum** possible difference.`,
       {
         input: 'nums = [90], k = 1',
         output: '0',
-        explanation: 'There is one way to pick score(s) of one student: [90]. The difference is 90 - 90 = 0.',
+        explanation:
+          'There is one way to pick score(s) of one student: [90]. The difference is 90 - 90 = 0.',
       },
       {
         input: 'nums = [9,4,1,7], k = 2',
         output: '2',
-        explanation: 'Pick scores 4 and 1. The difference is 4 - 1 = 2. (Can also pick 7 and 9, difference is 2).',
+        explanation:
+          'Pick scores 4 and 1. The difference is 4 - 1 = 2. (Can also pick 7 and 9, difference is 2).',
       },
     ],
-    constraints: [
-      '1 <= k <= nums.length <= 1000',
-      '0 <= nums[i] <= 10^5',
-    ],
+    constraints: ['1 <= k <= nums.length <= 1000', '0 <= nums[i] <= 10^5'],
     hints: [
       'Sort the array first',
       'Use a sliding window of size k on sorted array',
@@ -721,17 +720,15 @@ def minimum_difference(nums: List[int], k: int) -> int:
       {
         input: 'nums = [1,1,0,1,1,1]',
         output: '3',
-        explanation: 'The first two digits or the last three digits are consecutive 1s. The maximum number of consecutive 1s is 3.',
+        explanation:
+          'The first two digits or the last three digits are consecutive 1s. The maximum number of consecutive 1s is 3.',
       },
       {
         input: 'nums = [1,0,1,1,0,1]',
         output: '2',
       },
     ],
-    constraints: [
-      '1 <= nums.length <= 10^5',
-      'nums[i] is either 0 or 1',
-    ],
+    constraints: ['1 <= nums.length <= 10^5', 'nums[i] is either 0 or 1'],
     hints: [
       'Track current consecutive count',
       'Reset when you see 0',
@@ -810,7 +807,7 @@ Given a string \`s\`, return the longest **substring** of \`s\` that is **nice**
       {
         input: 's = "Bb"',
         output: '"Bb"',
-        explanation: '"Bb" is a nice string because both \'B\' and \'b\' appear.',
+        explanation: "\"Bb\" is a nice string because both 'B' and 'b' appear.",
       },
       {
         input: 's = "c"',
@@ -824,7 +821,7 @@ Given a string \`s\`, return the longest **substring** of \`s\` that is **nice**
     ],
     hints: [
       'Check all substrings',
-      'For each substring, verify if it\'s nice',
+      "For each substring, verify if it's nice",
       'A string is nice if for every char, both cases exist',
     ],
     starterCode: `def longest_nice_substring(s: str) -> str:
@@ -904,5 +901,400 @@ def longest_nice_substring_dc(s: str) -> str:
     spaceComplexity: 'O(n)',
     leetcodeUrl: 'https://leetcode.com/problems/longest-nice-substring/',
     youtubeUrl: 'https://www.youtube.com/watch?v=fS2Rz0_JVVE',
+  },
+
+  // EASY - Find All Anagrams in a String
+  {
+    id: 'find-all-anagrams',
+    title: 'Find All Anagrams in a String',
+    difficulty: 'Easy',
+    topic: 'Sliding Window',
+    description: `Given two strings \`s\` and \`p\`, return an array of all the start indices of \`p\`'s anagrams in \`s\`. You may return the answer in any order.
+
+An **Anagram** is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.`,
+    examples: [
+      {
+        input: 's = "cbaebabacd", p = "abc"',
+        output: '[0,6]',
+        explanation:
+          'The substring with start index = 0 is "cba", which is an anagram of "abc". The substring with start index = 6 is "bac", which is an anagram of "abc".',
+      },
+      {
+        input: 's = "abab", p = "ab"',
+        output: '[0,1,2]',
+      },
+    ],
+    constraints: [
+      '1 <= s.length, p.length <= 3 * 10^4',
+      's and p consist of lowercase English letters',
+    ],
+    hints: [
+      'Use a sliding window of size len(p)',
+      'Compare character frequencies',
+    ],
+    starterCode: `from typing import List
+
+def find_anagrams(s: str, p: str) -> List[int]:
+    """
+    Find all start indices of anagrams of p in s.
+    
+    Args:
+        s: String to search in
+        p: Pattern string
+        
+    Returns:
+        List of start indices
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: ['cbaebabacd', 'abc'],
+        expected: [0, 6],
+      },
+      {
+        input: ['abab', 'ab'],
+        expected: [0, 1, 2],
+      },
+      {
+        input: ['baa', 'aa'],
+        expected: [1],
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/find-all-anagrams-in-a-string/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=G8xtZy0fDKg',
+  },
+
+  // EASY - Maximum Sum of Subarray of Size K
+  {
+    id: 'max-sum-subarray-size-k',
+    title: 'Maximum Sum of Subarray of Size K',
+    difficulty: 'Easy',
+    topic: 'Sliding Window',
+    description: `Given an array of integers \`nums\` and an integer \`k\`, find the maximum sum of a contiguous subarray of size \`k\`.`,
+    examples: [
+      {
+        input: 'nums = [2,1,5,1,3,2], k = 3',
+        output: '9',
+        explanation: 'Subarray [5,1,3] has the maximum sum 9.',
+      },
+      {
+        input: 'nums = [2,3,4,1,5], k = 2',
+        output: '7',
+        explanation: 'Subarray [3,4] has the maximum sum 7.',
+      },
+    ],
+    constraints: [
+      '1 <= nums.length <= 10^5',
+      '1 <= k <= nums.length',
+      '-10^4 <= nums[i] <= 10^4',
+    ],
+    hints: [
+      'Use sliding window technique',
+      'Subtract the left element and add the right element',
+    ],
+    starterCode: `from typing import List
+
+def max_sum_subarray(nums: List[int], k: int) -> int:
+    """
+    Find maximum sum of subarray of size k.
+    
+    Args:
+        nums: Integer array
+        k: Subarray size
+        
+    Returns:
+        Maximum sum
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[2, 1, 5, 1, 3, 2], 3],
+        expected: 9,
+      },
+      {
+        input: [[2, 3, 4, 1, 5], 2],
+        expected: 7,
+      },
+      {
+        input: [[1, 4, 2, 10, 23, 3, 1, 0, 20], 4],
+        expected: 39,
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl:
+      'https://leetcode.com/problems/maximum-sum-of-subarray-of-size-k/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=KtpqeN0Goro',
+  },
+
+  // EASY - Minimum Size Subarray Sum
+  {
+    id: 'minimum-size-subarray-sum',
+    title: 'Minimum Size Subarray Sum',
+    difficulty: 'Easy',
+    topic: 'Sliding Window',
+    description: `Given an array of positive integers \`nums\` and a positive integer \`target\`, return the minimal length of a subarray whose sum is greater than or equal to \`target\`. If there is no such subarray, return \`0\` instead.`,
+    examples: [
+      {
+        input: 'target = 7, nums = [2,3,1,2,4,3]',
+        output: '2',
+        explanation:
+          'The subarray [4,3] has the minimal length under the problem constraint.',
+      },
+      {
+        input: 'target = 4, nums = [1,4,4]',
+        output: '1',
+      },
+    ],
+    constraints: [
+      '1 <= target <= 10^9',
+      '1 <= nums.length <= 10^5',
+      '1 <= nums[i] <= 10^4',
+    ],
+    hints: [
+      'Use variable-size sliding window',
+      'Expand window by adding right, contract by removing left',
+    ],
+    starterCode: `from typing import List
+
+def min_subarray_len(target: int, nums: List[int]) -> int:
+    """
+    Find minimum length of subarray with sum >= target.
+    
+    Args:
+        target: Target sum
+        nums: Array of positive integers
+        
+    Returns:
+        Minimum length, or 0 if not possible
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [7, [2, 3, 1, 2, 4, 3]],
+        expected: 2,
+      },
+      {
+        input: [4, [1, 4, 4]],
+        expected: 1,
+      },
+      {
+        input: [11, [1, 1, 1, 1, 1, 1, 1, 1]],
+        expected: 0,
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/minimum-size-subarray-sum/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=aYqYMIqZx5s',
+  },
+
+  // MEDIUM - Permutation in String
+  {
+    id: 'permutation-in-string',
+    title: 'Permutation in String',
+    difficulty: 'Medium',
+    topic: 'Sliding Window',
+    description: `Given two strings \`s1\` and \`s2\`, return \`true\` if \`s2\` contains a permutation of \`s1\`, or \`false\` otherwise.
+
+In other words, return \`true\` if one of \`s1\`'s permutations is the substring of \`s2\`.`,
+    examples: [
+      {
+        input: 's1 = "ab", s2 = "eidbaooo"',
+        output: 'true',
+        explanation: 's2 contains one permutation of s1 ("ba").',
+      },
+      {
+        input: 's1 = "ab", s2 = "eidboaoo"',
+        output: 'false',
+      },
+    ],
+    constraints: [
+      '1 <= s1.length, s2.length <= 10^4',
+      's1 and s2 consist of lowercase English letters',
+    ],
+    hints: [
+      'Use a sliding window of size len(s1)',
+      'Compare character frequencies',
+    ],
+    starterCode: `def check_inclusion(s1: str, s2: str) -> bool:
+    """
+    Check if s2 contains a permutation of s1.
+    
+    Args:
+        s1: Pattern string
+        s2: String to search in
+        
+    Returns:
+        True if s2 contains permutation of s1
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: ['ab', 'eidbaooo'],
+        expected: true,
+      },
+      {
+        input: ['ab', 'eidboaoo'],
+        expected: false,
+      },
+      {
+        input: ['adc', 'dcda'],
+        expected: true,
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/permutation-in-string/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=UbyhOgBN834',
+  },
+
+  // MEDIUM - Longest Repeating Character Replacement
+  {
+    id: 'longest-repeating-character-replacement',
+    title: 'Longest Repeating Character Replacement',
+    difficulty: 'Medium',
+    topic: 'Sliding Window',
+    description: `You are given a string \`s\` and an integer \`k\`. You can choose any character of the string and change it to any other uppercase English character. You can perform this operation at most \`k\` times.
+
+Return the length of the longest substring containing the same letter you can get after performing the above operations.`,
+    examples: [
+      {
+        input: 's = "ABAB", k = 2',
+        output: '4',
+        explanation: "Replace the two A's with two B's or vice versa.",
+      },
+      {
+        input: 's = "AABABBA", k = 1',
+        output: '4',
+        explanation:
+          'Replace the one A in the middle with B and form "AABBBBA". The substring "BBBB" has the longest repeating letters, which is 4.',
+      },
+    ],
+    constraints: [
+      '1 <= s.length <= 10^5',
+      's consists of only uppercase English letters',
+      '0 <= k <= s.length',
+    ],
+    hints: [
+      'Use sliding window with variable size',
+      'Track the most frequent character in the window',
+      'If window_size - max_freq > k, shrink window',
+    ],
+    starterCode: `def character_replacement(s: str, k: int) -> int:
+    """
+    Find longest substring with same letter after k replacements.
+    
+    Args:
+        s: String of uppercase letters
+        k: Maximum number of replacements allowed
+        
+    Returns:
+        Length of longest substring
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: ['ABAB', 2],
+        expected: 4,
+      },
+      {
+        input: ['AABABBA', 1],
+        expected: 4,
+      },
+      {
+        input: ['AAAA', 0],
+        expected: 4,
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl:
+      'https://leetcode.com/problems/longest-repeating-character-replacement/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=gqXU1UyA8pk',
+  },
+
+  // MEDIUM - Frequency of the Most Frequent Element
+  {
+    id: 'frequency-most-frequent-element',
+    title: 'Frequency of the Most Frequent Element',
+    difficulty: 'Medium',
+    topic: 'Sliding Window',
+    description: `The **frequency** of an element is the number of times it occurs in an array.
+
+You are given an integer array \`nums\` and an integer \`k\`. In one operation, you can choose an index of \`nums\` and increment the element at that index by \`1\`.
+
+Return the **maximum possible frequency** of an element after performing **at most** \`k\` operations.`,
+    examples: [
+      {
+        input: 'nums = [1,2,4], k = 5',
+        output: '3',
+        explanation:
+          'Increment the first element three times and the second element two times to make nums = [4,4,4]. 4 has a frequency of 3.',
+      },
+      {
+        input: 'nums = [1,4,8,13], k = 5',
+        output: '2',
+        explanation:
+          'There are multiple optimal solutions: Increment the first element three times to make nums = [4,4,8,13]. 4 has a frequency of 2.',
+      },
+    ],
+    constraints: [
+      '1 <= nums.length <= 10^5',
+      '1 <= nums[i] <= 10^5',
+      '1 <= k <= 10^5',
+    ],
+    hints: [
+      'Sort the array first',
+      'Use sliding window',
+      'For a window to be valid, sum of increments needed should be <= k',
+    ],
+    starterCode: `from typing import List
+
+def max_frequency(nums: List[int], k: int) -> int:
+    """
+    Find maximum frequency after at most k increments.
+    
+    Args:
+        nums: Integer array
+        k: Maximum number of increments
+        
+    Returns:
+        Maximum possible frequency
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[1, 2, 4], 5],
+        expected: 3,
+      },
+      {
+        input: [[1, 4, 8, 13], 5],
+        expected: 2,
+      },
+      {
+        input: [[3, 9, 6], 2],
+        expected: 1,
+      },
+    ],
+    timeComplexity: 'O(n log n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl:
+      'https://leetcode.com/problems/frequency-of-the-most-frequent-element/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=vgBrQ0NM5vE',
   },
 ];

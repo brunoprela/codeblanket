@@ -754,97 +754,7 @@ def find_disappeared_numbers_inplace(nums: List[int]) -> List[int]:
       'https://leetcode.com/problems/find-all-numbers-disappeared-in-an-array/',
     youtubeUrl: 'https://www.youtube.com/watch?v=8i-f24YFWC4',
   },
-  // EASY - Plus One
-  {
-    id: 'plus-one',
-    title: 'Plus One',
-    difficulty: 'Easy',
-    topic: 'Arrays & Hashing',
-    order: 9,
-    description: `You are given a **large integer** represented as an integer array \`digits\`, where each \`digits[i]\` is the \`ith\` digit of the integer. The digits are ordered from most significant to least significant in left-to-right order. The large integer does not contain any leading \`0\`'s.
 
-Increment the large integer by one and return the resulting array of digits.`,
-    examples: [
-      {
-        input: 'digits = [1,2,3]',
-        output: '[1,2,4]',
-        explanation:
-          'The array represents the integer 123. Incrementing by one gives 123 + 1 = 124.',
-      },
-      {
-        input: 'digits = [9,9,9]',
-        output: '[1,0,0,0]',
-        explanation:
-          'The array represents the integer 999. Incrementing by one gives 999 + 1 = 1000.',
-      },
-    ],
-    constraints: [
-      '1 <= digits.length <= 100',
-      '0 <= digits[i] <= 9',
-      'digits does not contain any leading 0s',
-    ],
-    hints: [
-      'Start from the rightmost digit',
-      'Handle carry when digit is 9',
-      'If all digits are 9, you need to add a 1 at the beginning',
-    ],
-    starterCode: `from typing import List
-
-def plus_one(digits: List[int]) -> List[int]:
-    """
-    Add one to the number represented by the array.
-    
-    Args:
-        digits: Array representing a large integer
-        
-    Returns:
-        Array representing the incremented number
-    """
-    # Write your code here
-    pass
-`,
-    testCases: [
-      {
-        input: [[1, 2, 3]],
-        expected: [1, 2, 4],
-      },
-      {
-        input: [[9, 9, 9]],
-        expected: [1, 0, 0, 0],
-      },
-      {
-        input: [[4, 3, 2, 1]],
-        expected: [4, 3, 2, 2],
-      },
-    ],
-    solution: `from typing import List
-
-def plus_one(digits: List[int]) -> List[int]:
-    """
-    Handle carry from right to left.
-    Time: O(n), Space: O(1) or O(n) if all 9s
-    """
-    n = len(digits)
-    
-    # Start from rightmost digit
-    for i in range(n - 1, -1, -1):
-        # If not 9, just increment and return
-        if digits[i] < 9:
-            digits[i] += 1
-            return digits
-        
-        # If 9, set to 0 and continue carry
-        digits[i] = 0
-    
-    # If we're here, all digits were 9
-    # Need to add 1 at the beginning
-    return [1] + digits
-`,
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(1) or O(n) if all 9s',
-    leetcodeUrl: 'https://leetcode.com/problems/plus-one/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=jIaA8boiG1s',
-  },
   // EASY - Pascal's Triangle
   {
     id: 'pascals-triangle',
@@ -2119,5 +2029,454 @@ def max_points(points: List[List[int]]) -> int:
     spaceComplexity: 'O(n)',
     leetcodeUrl: 'https://leetcode.com/problems/max-points-on-a-line/',
     youtubeUrl: 'https://www.youtube.com/watch?v=C1OxnJRpm7o',
+  },
+
+  // EASY - Running Sum of 1d Array
+  {
+    id: 'running-sum-1d-array',
+    title: 'Running Sum of 1d Array',
+    difficulty: 'Easy',
+    topic: 'Arrays & Hashing',
+    description: `Given an array \`nums\`. We define a running sum of an array as \`runningSum[i] = sum(nums[0]…nums[i])\`.
+
+Return the running sum of \`nums\`.`,
+    examples: [
+      {
+        input: 'nums = [1,2,3,4]',
+        output: '[1,3,6,10]',
+        explanation:
+          'Running sum is obtained as follows: [1, 1+2, 1+2+3, 1+2+3+4].',
+      },
+      {
+        input: 'nums = [1,1,1,1,1]',
+        output: '[1,2,3,4,5]',
+      },
+    ],
+    constraints: ['1 <= nums.length <= 1000', '-10^6 <= nums[i] <= 10^6'],
+    hints: [
+      'Think about how each element relates to the previous sum',
+      'Can you do this in-place?',
+    ],
+    starterCode: `from typing import List
+
+def running_sum(nums: List[int]) -> List[int]:
+    """
+    Calculate running sum of array.
+    
+    Args:
+        nums: Input array
+        
+    Returns:
+        Array of running sums
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[1, 2, 3, 4]],
+        expected: [1, 3, 6, 10],
+      },
+      {
+        input: [[1, 1, 1, 1, 1]],
+        expected: [1, 2, 3, 4, 5],
+      },
+      {
+        input: [[3, 1, 2, 10, 1]],
+        expected: [3, 4, 6, 16, 17],
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/running-sum-of-1d-array/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=MruDdQWT-4k',
+  },
+
+  // EASY - Shuffle the Array
+  {
+    id: 'shuffle-the-array',
+    title: 'Shuffle the Array',
+    difficulty: 'Easy',
+    topic: 'Arrays & Hashing',
+    description: `Given the array \`nums\` consisting of \`2n\` elements in the form \`[x1,x2,...,xn,y1,y2,...,yn]\`.
+
+Return the array in the form \`[x1,y1,x2,y2,...,xn,yn]\`.`,
+    examples: [
+      {
+        input: 'nums = [2,5,1,3,4,7], n = 3',
+        output: '[2,3,5,4,1,7]',
+        explanation:
+          'Since x1=2, x2=5, x3=1, y1=3, y2=4, y3=7 then the answer is [2,3,5,4,1,7].',
+      },
+      {
+        input: 'nums = [1,2,3,4,4,3,2,1], n = 4',
+        output: '[1,4,2,3,3,2,4,1]',
+      },
+    ],
+    constraints: ['1 <= n <= 500', 'nums.length == 2n', '1 <= nums[i] <= 10^3'],
+    hints: [
+      'The element at index i in the first half should go to index 2*i',
+      'The element at index i in the second half should go to index 2*(i-n)+1',
+    ],
+    starterCode: `from typing import List
+
+def shuffle(nums: List[int], n: int) -> List[int]:
+    """
+    Shuffle array according to pattern.
+    
+    Args:
+        nums: Array of 2n elements
+        n: Half length of array
+        
+    Returns:
+        Shuffled array
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[2, 5, 1, 3, 4, 7], 3],
+        expected: [2, 3, 5, 4, 1, 7],
+      },
+      {
+        input: [[1, 2, 3, 4, 4, 3, 2, 1], 4],
+        expected: [1, 4, 2, 3, 3, 2, 4, 1],
+      },
+      {
+        input: [[1, 1, 2, 2], 2],
+        expected: [1, 2, 1, 2],
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(n)',
+    leetcodeUrl: 'https://leetcode.com/problems/shuffle-the-array/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=IvIKD_EU8BY',
+  },
+
+  // EASY - Richest Customer Wealth
+  {
+    id: 'richest-customer-wealth',
+    title: 'Richest Customer Wealth',
+    difficulty: 'Easy',
+    topic: 'Arrays & Hashing',
+    description: `You are given an \`m x n\` integer grid \`accounts\` where \`accounts[i][j]\` is the amount of money the \`i-th\` customer has in the \`j-th\` bank. Return the wealth that the richest customer has.
+
+A customer's wealth is the amount of money they have in all their bank accounts. The richest customer is the customer that has the maximum wealth.`,
+    examples: [
+      {
+        input: 'accounts = [[1,2,3],[3,2,1]]',
+        output: '6',
+        explanation:
+          'Customer 0 has wealth = 1+2+3 = 6. Customer 1 has wealth = 3+2+1 = 6. Both customers have wealth 6.',
+      },
+      {
+        input: 'accounts = [[1,5],[7,3],[3,5]]',
+        output: '10',
+        explanation:
+          'Customer 0 has wealth = 1+5 = 6. Customer 1 has wealth = 7+3 = 10. Customer 2 has wealth = 3+5 = 8. The richest customer has wealth 10.',
+      },
+    ],
+    constraints: [
+      'm == accounts.length',
+      'n == accounts[i].length',
+      '1 <= m, n <= 50',
+      '1 <= accounts[i][j] <= 100',
+    ],
+    hints: [
+      'Calculate the sum for each customer',
+      'Keep track of the maximum sum seen',
+    ],
+    starterCode: `from typing import List
+
+def maximum_wealth(accounts: List[List[int]]) -> int:
+    """
+    Find the maximum wealth among all customers.
+    
+    Args:
+        accounts: 2D array where accounts[i][j] is money in bank j for customer i
+        
+    Returns:
+        Maximum wealth
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [
+          [
+            [1, 2, 3],
+            [3, 2, 1],
+          ],
+        ],
+        expected: 6,
+      },
+      {
+        input: [
+          [
+            [1, 5],
+            [7, 3],
+            [3, 5],
+          ],
+        ],
+        expected: 10,
+      },
+      {
+        input: [
+          [
+            [2, 8, 7],
+            [7, 1, 3],
+            [1, 9, 5],
+          ],
+        ],
+        expected: 17,
+      },
+    ],
+    timeComplexity: 'O(m * n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/richest-customer-wealth/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=fMkOQYMx1p0',
+  },
+
+  // MEDIUM - Encode and Decode Strings
+  {
+    id: 'encode-decode-strings',
+    title: 'Encode and Decode Strings',
+    difficulty: 'Medium',
+    topic: 'Arrays & Hashing',
+    description: `Design an algorithm to encode a list of strings to a single string. The encoded string is then decoded back to the original list of strings.
+
+Please implement \`encode\` and \`decode\`.`,
+    examples: [
+      {
+        input: 'strs = ["Hello","World"]',
+        output: '["Hello","World"]',
+        explanation: 'One possible encode method is: "5#Hello5#World".',
+      },
+      {
+        input: 'strs = [""]',
+        output: '[""]',
+      },
+    ],
+    constraints: [
+      '0 <= strs.length < 200',
+      '0 <= strs[i].length < 200',
+      'strs[i] contains only UTF-8 characters',
+    ],
+    hints: [
+      'Use a delimiter that cannot appear in the strings',
+      'Prefix each string with its length',
+      'Use format: length#string',
+    ],
+    starterCode: `from typing import List
+
+def encode(strs: List[str]) -> str:
+    """
+    Encode list of strings to a single string.
+    
+    Args:
+        strs: List of strings
+        
+    Returns:
+        Encoded string
+    """
+    # Write your code here
+    pass
+
+def decode(s: str) -> List[str]:
+    """
+    Decode single string back to list of strings.
+    
+    Args:
+        s: Encoded string
+        
+    Returns:
+        List of original strings
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [['Hello', 'World']],
+        expected: ['Hello', 'World'],
+      },
+      {
+        input: [['']],
+        expected: [''],
+      },
+      {
+        input: [['abc', 'def', 'ghi']],
+        expected: ['abc', 'def', 'ghi'],
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(n)',
+    leetcodeUrl: 'https://leetcode.com/problems/encode-and-decode-strings/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=B1k_sxOSgv8',
+  },
+
+  // MEDIUM - Top K Frequent Words
+  {
+    id: 'top-k-frequent-words',
+    title: 'Top K Frequent Words',
+    difficulty: 'Medium',
+    topic: 'Arrays & Hashing',
+    description: `Given an array of strings \`words\` and an integer \`k\`, return the \`k\` most frequent strings.
+
+Return the answer sorted by the frequency from highest to lowest. Sort the words with the same frequency by their lexicographical order.`,
+    examples: [
+      {
+        input: 'words = ["i","love","leetcode","i","love","coding"], k = 2',
+        output: '["i","love"]',
+        explanation:
+          '"i" and "love" are the two most frequent words. Note that "i" comes before "love" due to a lower alphabetical order.',
+      },
+      {
+        input:
+          'words = ["the","day","is","sunny","the","the","the","sunny","is","is"], k = 4',
+        output: '["the","is","sunny","day"]',
+      },
+    ],
+    constraints: [
+      '1 <= words.length <= 500',
+      '1 <= words[i].length <= 10',
+      'words[i] consists of lowercase English letters',
+      'k is in the range [1, number of unique words]',
+    ],
+    hints: [
+      'Use a hash map to count frequencies',
+      'Use a heap or sort by frequency and lexicographical order',
+    ],
+    starterCode: `from typing import List
+
+def top_k_frequent(words: List[str], k: int) -> List[str]:
+    """
+    Find k most frequent words.
+    
+    Args:
+        words: Array of words
+        k: Number of top frequent words to return
+        
+    Returns:
+        List of k most frequent words
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [['i', 'love', 'leetcode', 'i', 'love', 'coding'], 2],
+        expected: ['i', 'love'],
+      },
+      {
+        input: [
+          [
+            'the',
+            'day',
+            'is',
+            'sunny',
+            'the',
+            'the',
+            'the',
+            'sunny',
+            'is',
+            'is',
+          ],
+          4,
+        ],
+        expected: ['the', 'is', 'sunny', 'day'],
+      },
+      {
+        input: [['a', 'aa', 'aaa'], 1],
+        expected: ['a'],
+      },
+    ],
+    timeComplexity: 'O(n log k)',
+    spaceComplexity: 'O(n)',
+    leetcodeUrl: 'https://leetcode.com/problems/top-k-frequent-words/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=h_lzL-R_MQk',
+  },
+
+  // MEDIUM - Design HashMap
+  {
+    id: 'design-hashmap',
+    title: 'Design HashMap',
+    difficulty: 'Medium',
+    topic: 'Arrays & Hashing',
+    description: `Design a HashMap without using any built-in hash table libraries.
+
+Implement the \`MyHashMap\` class:
+- \`MyHashMap()\` initializes the object with an empty map.
+- \`void put(int key, int value)\` inserts a (key, value) pair into the HashMap. If the key already exists, update the value.
+- \`int get(int key)\` returns the value to which the specified key is mapped, or -1 if this map contains no mapping for the key.
+- \`void remove(key)\` removes the key and its corresponding value if the map contains the mapping for the key.`,
+    examples: [
+      {
+        input:
+          '["MyHashMap", "put", "put", "get", "get", "put", "get", "remove", "get"]',
+        output: '[null, null, null, 1, -1, null, 2, null, -1]',
+        explanation:
+          'MyHashMap myHashMap = new MyHashMap(); myHashMap.put(1, 1); myHashMap.put(2, 2); myHashMap.get(1); returns 1; myHashMap.get(3); returns -1; myHashMap.put(2, 1); myHashMap.get(2); returns 1; myHashMap.remove(2); myHashMap.get(2); returns -1',
+      },
+    ],
+    constraints: [
+      '0 <= key, value <= 10^6',
+      'At most 10^4 calls will be made to put, get, and remove',
+    ],
+    hints: [
+      'Use an array of buckets',
+      'Handle collisions with chaining',
+      'Use modulo to map keys to bucket indices',
+    ],
+    starterCode: `class MyHashMap:
+    """
+    HashMap implementation using array and chaining.
+    """
+    
+    def __init__(self):
+        # Write your code here
+        pass
+        
+    def put(self, key: int, value: int) -> None:
+        # Write your code here
+        pass
+        
+    def get(self, key: int) -> int:
+        # Write your code here
+        pass
+        
+    def remove(self, key: int) -> None:
+        # Write your code here
+        pass
+
+# Test code
+# hashmap = MyHashMap()
+# hashmap.put(1, 1)
+# hashmap.put(2, 2)
+# print(hashmap.get(1))  # returns 1
+# print(hashmap.get(3))  # returns -1
+`,
+    testCases: [
+      {
+        input: [
+          ['put', 'put', 'get'],
+          [[1, 1], [2, 2], [1]],
+        ],
+        expected: [null, null, 1],
+      },
+      {
+        input: [
+          ['put', 'get'],
+          [[1, 1], [3]],
+        ],
+        expected: [null, -1],
+      },
+    ],
+    timeComplexity: 'O(n/k) where k is number of buckets',
+    spaceComplexity: 'O(k + m) where m is number of unique keys',
+    leetcodeUrl: 'https://leetcode.com/problems/design-hashmap/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=cNWsgbKwwoU',
   },
 ];

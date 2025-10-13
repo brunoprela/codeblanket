@@ -529,7 +529,8 @@ If there are two middle nodes, return **the second middle** node.`,
       {
         input: 'head = [1,2,3,4,5,6]',
         output: '[4,5,6]',
-        explanation: 'Since the list has two middle nodes with values 3 and 4, we return the second one.',
+        explanation:
+          'Since the list has two middle nodes with values 3 and 4, we return the second one.',
       },
     ],
     constraints: [
@@ -624,7 +625,8 @@ Delete the given node. Note that by deleting the node, we do not mean removing i
       {
         input: 'head = [4,5,1,9], node = 5',
         output: '[4,1,9]',
-        explanation: 'You are given the second node with value 5. After deleting it, the linked list becomes 4 -> 1 -> 9.',
+        explanation:
+          'You are given the second node with value 5. After deleting it, the linked list becomes 4 -> 1 -> 9.',
       },
       {
         input: 'head = [4,5,1,9], node = 1',
@@ -748,7 +750,10 @@ def merge_two_lists(list1: Optional[ListNode], list2: Optional[ListNode]) -> Opt
 `,
     testCases: [
       {
-        input: [[1, 2, 4], [1, 3, 4]],
+        input: [
+          [1, 2, 4],
+          [1, 3, 4],
+        ],
         expected: [1, 1, 2, 3, 4, 4],
       },
       {
@@ -905,7 +910,8 @@ def delete_duplicates(head: Optional[ListNode]) -> Optional[ListNode]:
 `,
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(1)',
-    leetcodeUrl: 'https://leetcode.com/problems/remove-duplicates-from-sorted-list/',
+    leetcodeUrl:
+      'https://leetcode.com/problems/remove-duplicates-from-sorted-list/',
     youtubeUrl: 'https://www.youtube.com/watch?v=p10f-VpO4nE',
   },
   // EASY - Palindrome Linked List
@@ -1027,5 +1033,445 @@ def is_palindrome_array(head: Optional[ListNode]) -> bool:
     spaceComplexity: 'O(1) for in-place, O(n) for array',
     leetcodeUrl: 'https://leetcode.com/problems/palindrome-linked-list/',
     youtubeUrl: 'https://www.youtube.com/watch?v=yOzXms1J6Nk',
+  },
+
+  // EASY - Intersection of Two Linked Lists
+  {
+    id: 'intersection-two-linked-lists',
+    title: 'Intersection of Two Linked Lists',
+    difficulty: 'Easy',
+    topic: 'Linked List',
+    description: `Given the heads of two singly linked-lists \`headA\` and \`headB\`, return the node at which the two lists intersect. If the two linked lists have no intersection at all, return \`null\`.
+
+It is guaranteed that there are no cycles anywhere in the entire linked structure.
+
+**Note** that the linked lists must retain their original structure after the function returns.`,
+    examples: [
+      {
+        input:
+          'intersectVal = 8, listA = [4,1,8,4,5], listB = [5,6,1,8,4,5], skipA = 2, skipB = 3',
+        output: 'Intersected at node with value 8',
+      },
+      {
+        input: 'intersectVal = 0, listA = [2,6,4], listB = [1,5]',
+        output: 'No intersection',
+      },
+    ],
+    constraints: [
+      'The number of nodes of listA is in the m',
+      'The number of nodes of listB is in the n',
+      '1 <= m, n <= 3 * 10^4',
+      '1 <= Node.val <= 10^5',
+    ],
+    hints: [
+      'Use two pointers',
+      'When a pointer reaches end, redirect it to the other head',
+      'They will meet at intersection or both be null',
+    ],
+    starterCode: `from typing import Optional
+
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def get_intersection_node(headA: Optional[ListNode], headB: Optional[ListNode]) -> Optional[ListNode]:
+    """
+    Find intersection node of two linked lists.
+    
+    Args:
+        headA: Head of first list
+        headB: Head of second list
+        
+    Returns:
+        Intersection node or None
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[4, 1, 8, 4, 5], [5, 6, 1, 8, 4, 5], 2, 3],
+        expected: 8,
+      },
+      {
+        input: [[2, 6, 4], [1, 5], 3, 2],
+        expected: null,
+      },
+    ],
+    timeComplexity: 'O(m + n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl:
+      'https://leetcode.com/problems/intersection-of-two-linked-lists/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=D0X0BONOQhI',
+  },
+
+  // EASY - Remove Linked List Elements
+  {
+    id: 'remove-linked-list-elements',
+    title: 'Remove Linked List Elements',
+    difficulty: 'Easy',
+    topic: 'Linked List',
+    description: `Given the \`head\` of a linked list and an integer \`val\`, remove all the nodes of the linked list that has \`Node.val == val\`, and return the new head.`,
+    examples: [
+      {
+        input: 'head = [1,2,6,3,4,5,6], val = 6',
+        output: '[1,2,3,4,5]',
+      },
+      {
+        input: 'head = [], val = 1',
+        output: '[]',
+      },
+      {
+        input: 'head = [7,7,7,7], val = 7',
+        output: '[]',
+      },
+    ],
+    constraints: [
+      'The number of nodes in the list is in the range [0, 10^4]',
+      '1 <= Node.val <= 50',
+      '0 <= val <= 50',
+    ],
+    hints: ['Use a dummy node to handle edge cases', 'Keep a previous pointer'],
+    starterCode: `from typing import Optional
+
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def remove_elements(head: Optional[ListNode], val: int) -> Optional[ListNode]:
+    """
+    Remove all nodes with given value.
+    
+    Args:
+        head: Head of linked list
+        val: Value to remove
+        
+    Returns:
+        New head after removal
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[1, 2, 6, 3, 4, 5, 6], 6],
+        expected: [1, 2, 3, 4, 5],
+      },
+      {
+        input: [[], 1],
+        expected: [],
+      },
+      {
+        input: [[7, 7, 7, 7], 7],
+        expected: [],
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/remove-linked-list-elements/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=JI71sxtHTng',
+  },
+
+  // EASY - Convert Binary Number in Linked List to Integer
+  {
+    id: 'convert-binary-linked-list-to-integer',
+    title: 'Convert Binary Number in Linked List to Integer',
+    difficulty: 'Easy',
+    topic: 'Linked List',
+    description: `Given \`head\` which is a reference node to a singly-linked list. The value of each node in the linked list is either \`0\` or \`1\`. The linked list holds the binary representation of a number.
+
+Return the decimal value of the number in the linked list.
+
+The **most significant bit** is at the head of the linked list.`,
+    examples: [
+      {
+        input: 'head = [1,0,1]',
+        output: '5',
+        explanation: '(101) in base 2 = (5) in base 10',
+      },
+      {
+        input: 'head = [0]',
+        output: '0',
+      },
+    ],
+    constraints: [
+      'The Linked List is not empty',
+      'Number of nodes will not exceed 30',
+      'Each node value is either 0 or 1',
+    ],
+    hints: [
+      'Traverse the list and build the number',
+      'For each node, result = result * 2 + node.val',
+    ],
+    starterCode: `from typing import Optional
+
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def get_decimal_value(head: Optional[ListNode]) -> int:
+    """
+    Convert binary linked list to decimal integer.
+    
+    Args:
+        head: Head of binary linked list
+        
+    Returns:
+        Decimal value
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[1, 0, 1]],
+        expected: 5,
+      },
+      {
+        input: [[0]],
+        expected: 0,
+      },
+      {
+        input: [[1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0]],
+        expected: 18880,
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl:
+      'https://leetcode.com/problems/convert-binary-number-in-a-linked-list-to-integer/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=zhhlTLfP4WU',
+  },
+
+  // MEDIUM - Remove Nth Node From End of List
+  {
+    id: 'remove-nth-node-from-end',
+    title: 'Remove Nth Node From End of List',
+    difficulty: 'Medium',
+    topic: 'Linked List',
+    description: `Given the \`head\` of a linked list, remove the \`n-th\` node from the end of the list and return its head.`,
+    examples: [
+      {
+        input: 'head = [1,2,3,4,5], n = 2',
+        output: '[1,2,3,5]',
+      },
+      {
+        input: 'head = [1], n = 1',
+        output: '[]',
+      },
+      {
+        input: 'head = [1,2], n = 1',
+        output: '[1]',
+      },
+    ],
+    constraints: [
+      'The number of nodes in the list is sz',
+      '1 <= sz <= 30',
+      '0 <= Node.val <= 100',
+      '1 <= n <= sz',
+    ],
+    hints: [
+      'Use two pointers with n gap between them',
+      'Move both until first reaches end',
+      'Second pointer will be at node before the one to delete',
+    ],
+    starterCode: `from typing import Optional
+
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def remove_nth_from_end(head: Optional[ListNode], n: int) -> Optional[ListNode]:
+    """
+    Remove nth node from end of list.
+    
+    Args:
+        head: Head of linked list
+        n: Position from end (1-indexed)
+        
+    Returns:
+        New head after removal
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[1, 2, 3, 4, 5], 2],
+        expected: [1, 2, 3, 5],
+      },
+      {
+        input: [[1], 1],
+        expected: [],
+      },
+      {
+        input: [[1, 2], 1],
+        expected: [1],
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl:
+      'https://leetcode.com/problems/remove-nth-node-from-end-of-list/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=XVuQxVej6y8',
+  },
+
+  // MEDIUM - Reorder List
+  {
+    id: 'reorder-list',
+    title: 'Reorder List',
+    difficulty: 'Medium',
+    topic: 'Linked List',
+    description: `You are given the head of a singly linked-list. The list can be represented as:
+
+L0 → L1 → … → Ln - 1 → Ln
+
+Reorder the list to be on the following form:
+
+L0 → Ln → L1 → Ln - 1 → L2 → Ln - 2 → …
+
+You may not modify the values in the list nodes. Only nodes themselves may be changed.`,
+    examples: [
+      {
+        input: 'head = [1,2,3,4]',
+        output: '[1,4,2,3]',
+      },
+      {
+        input: 'head = [1,2,3,4,5]',
+        output: '[1,5,2,4,3]',
+      },
+    ],
+    constraints: [
+      'The number of nodes in the list is in the range [1, 5 * 10^4]',
+      '1 <= Node.val <= 1000',
+    ],
+    hints: [
+      'Find middle of list',
+      'Reverse second half',
+      'Merge two halves alternately',
+    ],
+    starterCode: `from typing import Optional
+
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def reorder_list(head: Optional[ListNode]) -> None:
+    """
+    Reorder list in-place.
+    
+    Args:
+        head: Head of linked list
+        
+    Returns:
+        None, modifies list in-place
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[1, 2, 3, 4]],
+        expected: [1, 4, 2, 3],
+      },
+      {
+        input: [[1, 2, 3, 4, 5]],
+        expected: [1, 5, 2, 4, 3],
+      },
+      {
+        input: [[1]],
+        expected: [1],
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/reorder-list/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=S5bfdUTrKLM',
+  },
+
+  // MEDIUM - Add Two Numbers
+  {
+    id: 'add-two-numbers',
+    title: 'Add Two Numbers',
+    difficulty: 'Medium',
+    topic: 'Linked List',
+    description: `You are given two **non-empty** linked lists representing two non-negative integers. The digits are stored in **reverse order**, and each of their nodes contains a single digit. Add the two numbers and return the sum as a linked list.
+
+You may assume the two numbers do not contain any leading zero, except the number 0 itself.`,
+    examples: [
+      {
+        input: 'l1 = [2,4,3], l2 = [5,6,4]',
+        output: '[7,0,8]',
+        explanation: '342 + 465 = 807.',
+      },
+      {
+        input: 'l1 = [0], l2 = [0]',
+        output: '[0]',
+      },
+      {
+        input: 'l1 = [9,9,9,9,9,9,9], l2 = [9,9,9,9]',
+        output: '[8,9,9,9,0,0,0,1]',
+      },
+    ],
+    constraints: [
+      'The number of nodes in each linked list is in the range [1, 100]',
+      '0 <= Node.val <= 9',
+      'It is guaranteed that the list represents a number that does not have leading zeros',
+    ],
+    hints: [
+      'Track carry while adding digits',
+      'Handle different lengths',
+      'Do not forget carry at the end',
+    ],
+    starterCode: `from typing import Optional
+
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def add_two_numbers(l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+    """
+    Add two numbers represented by linked lists.
+    
+    Args:
+        l1: First number (reversed)
+        l2: Second number (reversed)
+        
+    Returns:
+        Sum as linked list (reversed)
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [
+          [2, 4, 3],
+          [5, 6, 4],
+        ],
+        expected: [7, 0, 8],
+      },
+      {
+        input: [[0], [0]],
+        expected: [0],
+      },
+      {
+        input: [
+          [9, 9, 9, 9, 9, 9, 9],
+          [9, 9, 9, 9],
+        ],
+        expected: [8, 9, 9, 9, 0, 0, 0, 1],
+      },
+    ],
+    timeComplexity: 'O(max(m, n))',
+    spaceComplexity: 'O(max(m, n))',
+    leetcodeUrl: 'https://leetcode.com/problems/add-two-numbers/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=wgFPrzTjm7s',
   },
 ];

@@ -186,4 +186,393 @@ Either reaches 1 or enters a cycle. Detect cycle with two pointers.`,
     leetcodeUrl: 'https://leetcode.com/problems/happy-number/',
     youtubeUrl: 'https://www.youtube.com/watch?v=ljz85bxOYJ0',
   },
+
+  // EASY - Plus One
+  {
+    id: 'plus-one',
+    title: 'Plus One',
+    difficulty: 'Easy',
+    topic: 'Math & Geometry',
+    description: `You are given a **large integer** represented as an integer array \`digits\`, where each \`digits[i]\` is the \`i-th\` digit of the integer. The digits are ordered from most significant to least significant in left-to-right order. The large integer does not contain any leading \`0\`'s.
+
+Increment the large integer by one and return the resulting array of digits.`,
+    examples: [
+      {
+        input: 'digits = [1,2,3]',
+        output: '[1,2,4]',
+      },
+      {
+        input: 'digits = [4,3,2,1]',
+        output: '[4,3,2,2]',
+      },
+      {
+        input: 'digits = [9]',
+        output: '[1,0]',
+      },
+    ],
+    constraints: [
+      '1 <= digits.length <= 100',
+      '0 <= digits[i] <= 9',
+      'digits does not contain any leading 0s',
+    ],
+    hints: ['Start from the end', 'Handle carry', 'Special case: all 9s'],
+    starterCode: `from typing import List
+
+def plus_one(digits: List[int]) -> List[int]:
+    """
+    Add one to number represented as array.
+    
+    Args:
+        digits: Array representing large integer
+        
+    Returns:
+        Array with 1 added
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[1, 2, 3]],
+        expected: [1, 2, 4],
+      },
+      {
+        input: [[4, 3, 2, 1]],
+        expected: [4, 3, 2, 2],
+      },
+      {
+        input: [[9]],
+        expected: [1, 0],
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/plus-one/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=jIaA8boiG1s',
+  },
+
+  // EASY - Palindrome Number
+  {
+    id: 'palindrome-number',
+    title: 'Palindrome Number',
+    difficulty: 'Easy',
+    topic: 'Math & Geometry',
+    description: `Given an integer \`x\`, return \`true\` if \`x\` is a palindrome, and \`false\` otherwise.`,
+    examples: [
+      {
+        input: 'x = 121',
+        output: 'true',
+      },
+      {
+        input: 'x = -121',
+        output: 'false',
+        explanation:
+          'From left to right, it reads -121. From right to left, it becomes 121-. Therefore it is not a palindrome.',
+      },
+      {
+        input: 'x = 10',
+        output: 'false',
+      },
+    ],
+    constraints: ['-2^31 <= x <= 2^31 - 1'],
+    hints: [
+      'Reverse the number',
+      'Compare with original',
+      'Negative numbers are not palindromes',
+    ],
+    starterCode: `def is_palindrome(x: int) -> bool:
+    """
+    Check if integer is palindrome.
+    
+    Args:
+        x: Integer to check
+        
+    Returns:
+        True if palindrome
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [121],
+        expected: true,
+      },
+      {
+        input: [-121],
+        expected: false,
+      },
+      {
+        input: [10],
+        expected: false,
+      },
+    ],
+    timeComplexity: 'O(log n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/palindrome-number/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=yubRKwixN-U',
+  },
+
+  // EASY - Excel Sheet Column Number
+  {
+    id: 'excel-column-number',
+    title: 'Excel Sheet Column Number',
+    difficulty: 'Easy',
+    topic: 'Math & Geometry',
+    description: `Given a string \`columnTitle\` that represents the column title as appears in an Excel sheet, return its corresponding column number.
+
+For example:
+
+\`\`\`
+A -> 1
+B -> 2
+C -> 3
+...
+Z -> 26
+AA -> 27
+AB -> 28
+...
+\`\`\``,
+    examples: [
+      {
+        input: 'columnTitle = "A"',
+        output: '1',
+      },
+      {
+        input: 'columnTitle = "AB"',
+        output: '28',
+      },
+      {
+        input: 'columnTitle = "ZY"',
+        output: '701',
+      },
+    ],
+    constraints: [
+      '1 <= columnTitle.length <= 7',
+      'columnTitle consists only of uppercase English letters',
+      'columnTitle is in the range ["A", "FXSHRXW"]',
+    ],
+    hints: ['Think of it as base-26 conversion', 'Each position is 26^i'],
+    starterCode: `def title_to_number(column_title: str) -> int:
+    """
+    Convert Excel column title to number.
+    
+    Args:
+        column_title: Column title (A, B, AA, etc.)
+        
+    Returns:
+        Column number
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: ['A'],
+        expected: 1,
+      },
+      {
+        input: ['AB'],
+        expected: 28,
+      },
+      {
+        input: ['ZY'],
+        expected: 701,
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/excel-sheet-column-number/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=g-PaNc8aD-8',
+  },
+
+  // MEDIUM - Sqrt(x)
+  {
+    id: 'sqrt-x',
+    title: 'Sqrt(x)',
+    difficulty: 'Medium',
+    topic: 'Math & Geometry',
+    description: `Given a non-negative integer \`x\`, return the square root of \`x\` rounded down to the nearest integer. The returned integer should be **non-negative** as well.
+
+You **must not use** any built-in exponent function or operator.`,
+    examples: [
+      {
+        input: 'x = 4',
+        output: '2',
+      },
+      {
+        input: 'x = 8',
+        output: '2',
+        explanation:
+          'The square root of 8 is 2.82842..., and since we round it down to the nearest integer, 2 is returned.',
+      },
+    ],
+    constraints: ['0 <= x <= 2^31 - 1'],
+    hints: [
+      'Use binary search',
+      'Search range [0, x]',
+      'Find largest k where k*k <= x',
+    ],
+    starterCode: `def my_sqrt(x: int) -> int:
+    """
+    Find square root rounded down.
+    
+    Args:
+        x: Non-negative integer
+        
+    Returns:
+        Floor of square root
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [4],
+        expected: 2,
+      },
+      {
+        input: [8],
+        expected: 2,
+      },
+      {
+        input: [0],
+        expected: 0,
+      },
+    ],
+    timeComplexity: 'O(log n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/sqrtx/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=zdMhGxRWutQ',
+  },
+
+  // MEDIUM - Multiply Strings
+  {
+    id: 'multiply-strings',
+    title: 'Multiply Strings',
+    difficulty: 'Medium',
+    topic: 'Math & Geometry',
+    description: `Given two non-negative integers \`num1\` and \`num2\` represented as strings, return the product of \`num1\` and \`num2\`, also represented as a string.
+
+**Note:** You must not use any built-in BigInteger library or convert the inputs to integer directly.`,
+    examples: [
+      {
+        input: 'num1 = "2", num2 = "3"',
+        output: '"6"',
+      },
+      {
+        input: 'num1 = "123", num2 = "456"',
+        output: '"56088"',
+      },
+    ],
+    constraints: [
+      '1 <= num1.length, num2.length <= 200',
+      'num1 and num2 consist of digits only',
+      'Both num1 and num2 do not contain any leading zero, except the number 0 itself',
+    ],
+    hints: [
+      'Simulate long multiplication',
+      'Product of lengths m and n has at most m+n digits',
+      'Position i*j contributes to result[i+j] and result[i+j+1]',
+    ],
+    starterCode: `def multiply(num1: str, num2: str) -> str:
+    """
+    Multiply two numbers represented as strings.
+    
+    Args:
+        num1: First number as string
+        num2: Second number as string
+        
+    Returns:
+        Product as string
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: ['2', '3'],
+        expected: '6',
+      },
+      {
+        input: ['123', '456'],
+        expected: '56088',
+      },
+    ],
+    timeComplexity: 'O(m * n)',
+    spaceComplexity: 'O(m + n)',
+    leetcodeUrl: 'https://leetcode.com/problems/multiply-strings/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=1vZswirL8Y8',
+  },
+
+  // MEDIUM - Spiral Matrix
+  {
+    id: 'spiral-matrix',
+    title: 'Spiral Matrix',
+    difficulty: 'Medium',
+    topic: 'Math & Geometry',
+    description: `Given an \`m x n\` matrix, return all elements of the matrix in spiral order.`,
+    examples: [
+      {
+        input: 'matrix = [[1,2,3],[4,5,6],[7,8,9]]',
+        output: '[1,2,3,6,9,8,7,4,5]',
+      },
+      {
+        input: 'matrix = [[1,2,3,4],[5,6,7,8],[9,10,11,12]]',
+        output: '[1,2,3,4,8,12,11,10,9,5,6,7]',
+      },
+    ],
+    constraints: [
+      'm == matrix.length',
+      'n == matrix[i].length',
+      '1 <= m, n <= 10',
+      '-100 <= matrix[i][j] <= 100',
+    ],
+    hints: [
+      'Track boundaries: top, bottom, left, right',
+      'Move right, down, left, up in sequence',
+      'Shrink boundaries after each direction',
+    ],
+    starterCode: `from typing import List
+
+def spiral_order(matrix: List[List[int]]) -> List[int]:
+    """
+    Traverse matrix in spiral order.
+    
+    Args:
+        matrix: 2D matrix
+        
+    Returns:
+        Elements in spiral order
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [
+          [
+            [1, 2, 3],
+            [4, 5, 6],
+            [7, 8, 9],
+          ],
+        ],
+        expected: [1, 2, 3, 6, 9, 8, 7, 4, 5],
+      },
+      {
+        input: [
+          [
+            [1, 2, 3, 4],
+            [5, 6, 7, 8],
+            [9, 10, 11, 12],
+          ],
+        ],
+        expected: [1, 2, 3, 4, 8, 12, 11, 10, 9, 5, 6, 7],
+      },
+    ],
+    timeComplexity: 'O(m * n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/spiral-matrix/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=BJnMZNwUk1M',
+  },
 ];

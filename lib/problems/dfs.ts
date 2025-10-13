@@ -331,8 +331,7 @@ Water flows from high to low, so reverse the problem: start from oceans and move
       {
         input: `heights = [[1]]`,
         output: '[[0,0]]',
-        explanation:
-          'The only cell touches both oceans so water flows to both',
+        explanation: 'The only cell touches both oceans so water flows to both',
       },
     ],
     constraints: [
@@ -438,5 +437,440 @@ def pacific_atlantic(heights: List[List[int]]) -> List[List[int]]:
     leetcodeUrl: 'https://leetcode.com/problems/pacific-atlantic-water-flow/',
     youtubeUrl: 'https://www.youtube.com/watch?v=s-VkcjHqkGI',
   },
-];
 
+  // EASY - Balanced Binary Tree
+  {
+    id: 'balanced-binary-tree',
+    title: 'Balanced Binary Tree',
+    difficulty: 'Easy',
+    topic: 'DFS',
+    description: `Given a binary tree, determine if it is **height-balanced**.
+
+A height-balanced binary tree is a binary tree in which the depth of the two subtrees of every node never differs by more than one.`,
+    examples: [
+      {
+        input: 'root = [3,9,20,null,null,15,7]',
+        output: 'true',
+      },
+      {
+        input: 'root = [1,2,2,3,3,null,null,4,4]',
+        output: 'false',
+      },
+      {
+        input: 'root = []',
+        output: 'true',
+      },
+    ],
+    constraints: [
+      'The number of nodes in the tree is in the range [0, 5000]',
+      '-10^4 <= Node.val <= 10^4',
+    ],
+    hints: [
+      'Use DFS to calculate height',
+      'Return -1 if unbalanced',
+      'Check height difference at each node',
+    ],
+    starterCode: `from typing import Optional
+
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def is_balanced(root: Optional[TreeNode]) -> bool:
+    """
+    Check if binary tree is height-balanced.
+    
+    Args:
+        root: Root of tree
+        
+    Returns:
+        True if balanced
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[3, 9, 20, null, null, 15, 7]],
+        expected: true,
+      },
+      {
+        input: [[1, 2, 2, 3, 3, null, null, 4, 4]],
+        expected: false,
+      },
+      {
+        input: [[]],
+        expected: true,
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(h)',
+    leetcodeUrl: 'https://leetcode.com/problems/balanced-binary-tree/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=QfJsau0ItOY',
+  },
+
+  // EASY - Sum Root to Leaf Numbers
+  {
+    id: 'sum-root-to-leaf',
+    title: 'Sum Root to Leaf Numbers',
+    difficulty: 'Easy',
+    topic: 'DFS',
+    description: `You are given the \`root\` of a binary tree containing digits from \`0\` to \`9\` only.
+
+Each root-to-leaf path in the tree represents a number.
+
+- For example, the root-to-leaf path \`1 -> 2 -> 3\` represents the number \`123\`.
+
+Return the total sum of all root-to-leaf numbers. Test cases are generated so that the answer will fit in a **32-bit** integer.
+
+A **leaf** node is a node with no children.`,
+    examples: [
+      {
+        input: 'root = [1,2,3]',
+        output: '25',
+        explanation:
+          'The root-to-leaf path 1->2 represents the number 12. The root-to-leaf path 1->3 represents the number 13. Therefore, sum = 12 + 13 = 25.',
+      },
+      {
+        input: 'root = [4,9,0,5,1]',
+        output: '1026',
+      },
+    ],
+    constraints: [
+      'The number of nodes in the tree is in the range [1, 1000]',
+      '0 <= Node.val <= 9',
+      'The depth of the tree will not exceed 10',
+    ],
+    hints: [
+      'DFS with current number as parameter',
+      'At each node: current = current * 10 + node.val',
+      'Add to sum when reaching leaf',
+    ],
+    starterCode: `from typing import Optional
+
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def sum_numbers(root: Optional[TreeNode]) -> int:
+    """
+    Sum all root-to-leaf path numbers.
+    
+    Args:
+        root: Root of tree
+        
+    Returns:
+        Sum of all path numbers
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[1, 2, 3]],
+        expected: 25,
+      },
+      {
+        input: [[4, 9, 0, 5, 1]],
+        expected: 1026,
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(h)',
+    leetcodeUrl: 'https://leetcode.com/problems/sum-root-to-leaf-numbers/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=Jg4E4KZstFE',
+  },
+
+  // EASY - Diameter of Binary Tree
+  {
+    id: 'diameter-of-binary-tree-dfs',
+    title: 'Diameter of Binary Tree',
+    difficulty: 'Easy',
+    topic: 'DFS',
+    description: `Given the \`root\` of a binary tree, return the length of the **diameter** of the tree.
+
+The **diameter** of a binary tree is the **length** of the longest path between any two nodes in a tree. This path may or may not pass through the \`root\`.
+
+The **length** of a path between two nodes is represented by the number of edges between them.`,
+    examples: [
+      {
+        input: 'root = [1,2,3,4,5]',
+        output: '3',
+        explanation: 'The path [4,2,1,3] or [5,2,1,3] has length 3.',
+      },
+      {
+        input: 'root = [1,2]',
+        output: '1',
+      },
+    ],
+    constraints: [
+      'The number of nodes in the tree is in the range [1, 10^4]',
+      '-100 <= Node.val <= 100',
+    ],
+    hints: [
+      'Calculate height of each subtree',
+      'Diameter at node = left_height + right_height',
+      'Track max diameter globally',
+    ],
+    starterCode: `from typing import Optional
+
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def diameter_of_binary_tree(root: Optional[TreeNode]) -> int:
+    """
+    Find diameter of binary tree.
+    
+    Args:
+        root: Root of tree
+        
+    Returns:
+        Diameter (longest path)
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[1, 2, 3, 4, 5]],
+        expected: 3,
+      },
+      {
+        input: [[1, 2]],
+        expected: 1,
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(h)',
+    leetcodeUrl: 'https://leetcode.com/problems/diameter-of-binary-tree/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=bkxqA8Rfv04',
+  },
+
+  // MEDIUM - Binary Tree Right Side View
+  {
+    id: 'binary-tree-right-side-view',
+    title: 'Binary Tree Right Side View',
+    difficulty: 'Medium',
+    topic: 'DFS',
+    description: `Given the \`root\` of a binary tree, imagine yourself standing on the **right side** of it, return the values of the nodes you can see ordered from top to bottom.`,
+    examples: [
+      {
+        input: 'root = [1,2,3,null,5,null,4]',
+        output: '[1,3,4]',
+      },
+      {
+        input: 'root = [1,null,3]',
+        output: '[1,3]',
+      },
+      {
+        input: 'root = []',
+        output: '[]',
+      },
+    ],
+    constraints: [
+      'The number of nodes in the tree is in the range [0, 100]',
+      '-100 <= Node.val <= 100',
+    ],
+    hints: [
+      'DFS with level tracking',
+      'Visit right subtree before left',
+      'First node at each level is visible',
+    ],
+    starterCode: `from typing import Optional, List
+
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def right_side_view(root: Optional[TreeNode]) -> List[int]:
+    """
+    Get right side view of binary tree.
+    
+    Args:
+        root: Root of tree
+        
+    Returns:
+        List of rightmost nodes at each level
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[1, 2, 3, null, 5, null, 4]],
+        expected: [1, 3, 4],
+      },
+      {
+        input: [[1, null, 3]],
+        expected: [1, 3],
+      },
+      {
+        input: [[]],
+        expected: [],
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(h)',
+    leetcodeUrl: 'https://leetcode.com/problems/binary-tree-right-side-view/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=d4zLyf32e3I',
+  },
+
+  // MEDIUM - All Paths From Source to Target (DFS)
+  {
+    id: 'all-paths-source-target-dfs',
+    title: 'All Paths From Source to Target',
+    difficulty: 'Medium',
+    topic: 'DFS',
+    description: `Given a directed acyclic graph (**DAG**) of \`n\` nodes labeled from \`0\` to \`n - 1\`, find all possible paths from node \`0\` to node \`n - 1\` and return them in **any order**.
+
+The graph is given as follows: \`graph[i]\` is a list of all nodes you can visit from node \`i\` (i.e., there is a directed edge from node \`i\` to node \`graph[i][j]\`).`,
+    examples: [
+      {
+        input: 'graph = [[1,2],[3],[3],[]]',
+        output: '[[0,1,3],[0,2,3]]',
+        explanation: 'There are two paths: 0 -> 1 -> 3 and 0 -> 2 -> 3.',
+      },
+      {
+        input: 'graph = [[4,3,1],[3,2,4],[3],[4],[]]',
+        output: '[[0,4],[0,3,4],[0,1,3,4],[0,1,2,3,4],[0,1,4]]',
+      },
+    ],
+    constraints: [
+      'n == graph.length',
+      '2 <= n <= 15',
+      '0 <= graph[i][j] < n',
+      'graph[i][j] != i (no self-loops)',
+      'All elements of graph[i] are unique',
+      'The input graph is guaranteed to be a DAG',
+    ],
+    hints: [
+      'Use DFS with path tracking',
+      'When reaching target, add path to result',
+      'Backtrack after exploring',
+    ],
+    starterCode: `from typing import List
+
+def all_paths_source_target(graph: List[List[int]]) -> List[List[int]]:
+    """
+    Find all paths from 0 to n-1.
+    
+    Args:
+        graph: Adjacency list
+        
+    Returns:
+        All paths from source to target
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[[1, 2], [3], [3], []]],
+        expected: [
+          [0, 1, 3],
+          [0, 2, 3],
+        ],
+      },
+      {
+        input: [[[4, 3, 1], [3, 2, 4], [3], [4], []]],
+        expected: [
+          [0, 4],
+          [0, 3, 4],
+          [0, 1, 3, 4],
+          [0, 1, 2, 3, 4],
+          [0, 1, 4],
+        ],
+      },
+    ],
+    timeComplexity: 'O(2^n * n)',
+    spaceComplexity: 'O(n)',
+    leetcodeUrl:
+      'https://leetcode.com/problems/all-paths-from-source-to-target/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=bSfxLRBXQPU',
+  },
+
+  // MEDIUM - Longest Path in DAG
+  {
+    id: 'longest-increasing-path',
+    title: 'Longest Increasing Path in a Matrix',
+    difficulty: 'Medium',
+    topic: 'DFS',
+    description: `Given an \`m x n\` integers \`matrix\`, return the length of the longest increasing path in \`matrix\`.
+
+From each cell, you can either move in four directions: left, right, up, or down. You **may not** move **diagonally** or move **outside the boundary** (i.e., wrap-around is not allowed).`,
+    examples: [
+      {
+        input: 'matrix = [[9,9,4],[6,6,8],[2,1,1]]',
+        output: '4',
+        explanation: 'The longest path is [1, 2, 6, 9].',
+      },
+      {
+        input: 'matrix = [[3,4,5],[3,2,6],[2,2,1]]',
+        output: '4',
+        explanation: 'The longest path is [3, 4, 5, 6].',
+      },
+    ],
+    constraints: [
+      'm == matrix.length',
+      'n == matrix[i].length',
+      '1 <= m, n <= 200',
+      '0 <= matrix[i][j] <= 2^31 - 1',
+    ],
+    hints: [
+      'DFS with memoization',
+      'Cache longest path from each cell',
+      'Only move to cells with larger value',
+    ],
+    starterCode: `from typing import List
+
+def longest_increasing_path(matrix: List[List[int]]) -> int:
+    """
+    Find longest increasing path in matrix.
+    
+    Args:
+        matrix: 2D matrix
+        
+    Returns:
+        Length of longest path
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [
+          [
+            [9, 9, 4],
+            [6, 6, 8],
+            [2, 1, 1],
+          ],
+        ],
+        expected: 4,
+      },
+      {
+        input: [
+          [
+            [3, 4, 5],
+            [3, 2, 6],
+            [2, 2, 1],
+          ],
+        ],
+        expected: 4,
+      },
+    ],
+    timeComplexity: 'O(m * n)',
+    spaceComplexity: 'O(m * n)',
+    leetcodeUrl:
+      'https://leetcode.com/problems/longest-increasing-path-in-a-matrix/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=wCc_nd-GiEc',
+  },
+];

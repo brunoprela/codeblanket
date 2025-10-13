@@ -508,4 +508,431 @@ def max_path_sum_nonlocal(root: Optional[TreeNode]) -> int:
     leetcodeUrl: 'https://leetcode.com/problems/binary-tree-maximum-path-sum/',
     youtubeUrl: 'https://www.youtube.com/watch?v=Hr5cWUld4vU',
   },
+
+  // EASY - Same Tree
+  {
+    id: 'same-tree',
+    title: 'Same Tree',
+    difficulty: 'Easy',
+    topic: 'Trees',
+    description: `Given the roots of two binary trees \`p\` and \`q\`, write a function to check if they are the same or not.
+
+Two binary trees are considered the same if they are structurally identical, and the nodes have the same value.`,
+    examples: [
+      {
+        input: 'p = [1,2,3], q = [1,2,3]',
+        output: 'true',
+      },
+      {
+        input: 'p = [1,2], q = [1,null,2]',
+        output: 'false',
+      },
+    ],
+    constraints: [
+      'The number of nodes in both trees is in the range [0, 100]',
+      '-10^4 <= Node.val <= 10^4',
+    ],
+    hints: [
+      'Use recursion to compare nodes',
+      'Base cases: both null (true), one null (false)',
+    ],
+    starterCode: `from typing import Optional
+
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def is_same_tree(p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
+    """
+    Check if two binary trees are identical.
+    
+    Args:
+        p: Root of first tree
+        q: Root of second tree
+        
+    Returns:
+        True if trees are identical
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [
+          [1, 2, 3],
+          [1, 2, 3],
+        ],
+        expected: true,
+      },
+      {
+        input: [
+          [1, 2],
+          [1, null, 2],
+        ],
+        expected: false,
+      },
+      {
+        input: [[], []],
+        expected: true,
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(h)',
+    leetcodeUrl: 'https://leetcode.com/problems/same-tree/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=vRbbcKXCxOw',
+  },
+
+  // EASY - Symmetric Tree
+  {
+    id: 'symmetric-tree',
+    title: 'Symmetric Tree',
+    difficulty: 'Easy',
+    topic: 'Trees',
+    description: `Given the \`root\` of a binary tree, check whether it is a mirror of itself (i.e., symmetric around its center).`,
+    examples: [
+      {
+        input: 'root = [1,2,2,3,4,4,3]',
+        output: 'true',
+      },
+      {
+        input: 'root = [1,2,2,null,3,null,3]',
+        output: 'false',
+      },
+    ],
+    constraints: [
+      'The number of nodes in the tree is in the range [1, 1000]',
+      '-100 <= Node.val <= 100',
+    ],
+    hints: [
+      'A tree is symmetric if left subtree is mirror of right subtree',
+      'Compare left.left with right.right, left.right with right.left',
+    ],
+    starterCode: `from typing import Optional
+
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def is_symmetric(root: Optional[TreeNode]) -> bool:
+    """
+    Check if binary tree is symmetric.
+    
+    Args:
+        root: Root of tree
+        
+    Returns:
+        True if tree is symmetric
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[1, 2, 2, 3, 4, 4, 3]],
+        expected: true,
+      },
+      {
+        input: [[1, 2, 2, null, 3, null, 3]],
+        expected: false,
+      },
+      {
+        input: [[1]],
+        expected: true,
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(h)',
+    leetcodeUrl: 'https://leetcode.com/problems/symmetric-tree/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=Mao9uzxwvmc',
+  },
+
+  // EASY - Diameter of Binary Tree
+  {
+    id: 'diameter-binary-tree',
+    title: 'Diameter of Binary Tree',
+    difficulty: 'Easy',
+    topic: 'Trees',
+    description: `Given the \`root\` of a binary tree, return the length of the **diameter** of the tree.
+
+The **diameter** of a binary tree is the **length** of the longest path between any two nodes in a tree. This path may or may not pass through the \`root\`.
+
+The **length** of a path between two nodes is represented by the number of edges between them.`,
+    examples: [
+      {
+        input: 'root = [1,2,3,4,5]',
+        output: '3',
+        explanation: 'The path [4,2,1,3] or [5,2,1,3] has length 3.',
+      },
+      {
+        input: 'root = [1,2]',
+        output: '1',
+      },
+    ],
+    constraints: [
+      'The number of nodes in the tree is in the range [1, 10^4]',
+      '-100 <= Node.val <= 100',
+    ],
+    hints: [
+      'For each node, diameter through it is left_height + right_height',
+      'Track maximum diameter while calculating heights',
+    ],
+    starterCode: `from typing import Optional
+
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def diameter_of_binary_tree(root: Optional[TreeNode]) -> int:
+    """
+    Find diameter of binary tree.
+    
+    Args:
+        root: Root of tree
+        
+    Returns:
+        Length of longest path
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[1, 2, 3, 4, 5]],
+        expected: 3,
+      },
+      {
+        input: [[1, 2]],
+        expected: 1,
+      },
+      {
+        input: [[1]],
+        expected: 0,
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(h)',
+    leetcodeUrl: 'https://leetcode.com/problems/diameter-of-binary-tree/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=bkxqA8Rfv04',
+  },
+
+  // MEDIUM - Lowest Common Ancestor of BST
+  {
+    id: 'lowest-common-ancestor-bst',
+    title: 'Lowest Common Ancestor of a Binary Search Tree',
+    difficulty: 'Medium',
+    topic: 'Trees',
+    description: `Given a binary search tree (BST), find the lowest common ancestor (LCA) node of two given nodes in the BST.
+
+According to the definition of LCA: "The lowest common ancestor is defined between two nodes \`p\` and \`q\` as the lowest node in T that has both \`p\` and \`q\` as descendants (where we allow **a node to be a descendant of itself**)."`,
+    examples: [
+      {
+        input: 'root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 8',
+        output: '6',
+        explanation: 'The LCA of nodes 2 and 8 is 6.',
+      },
+      {
+        input: 'root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 4',
+        output: '2',
+      },
+    ],
+    constraints: [
+      'The number of nodes in the tree is in the range [2, 10^5]',
+      '-10^9 <= Node.val <= 10^9',
+      'All Node.val are unique',
+      'p != q',
+      'p and q will exist in the BST',
+    ],
+    hints: [
+      'Use BST property: left < root < right',
+      'If both p and q are less than root, go left',
+      'If both p and q are greater than root, go right',
+      'Otherwise, current node is LCA',
+    ],
+    starterCode: `from typing import Optional
+
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def lowest_common_ancestor(root: TreeNode, p: TreeNode, q: TreeNode) -> TreeNode:
+    """
+    Find LCA of two nodes in BST.
+    
+    Args:
+        root: Root of BST
+        p: First node
+        q: Second node
+        
+    Returns:
+        LCA node
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[6, 2, 8, 0, 4, 7, 9, null, null, 3, 5], 2, 8],
+        expected: 6,
+      },
+      {
+        input: [[6, 2, 8, 0, 4, 7, 9, null, null, 3, 5], 2, 4],
+        expected: 2,
+      },
+    ],
+    timeComplexity: 'O(h)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl:
+      'https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=gs2LMfuOR9k',
+  },
+
+  // MEDIUM - Binary Tree Level Order Traversal
+  {
+    id: 'binary-tree-level-order-traversal',
+    title: 'Binary Tree Level Order Traversal',
+    difficulty: 'Medium',
+    topic: 'Trees',
+    description: `Given the \`root\` of a binary tree, return the level order traversal of its nodes' values. (i.e., from left to right, level by level).`,
+    examples: [
+      {
+        input: 'root = [3,9,20,null,null,15,7]',
+        output: '[[3],[9,20],[15,7]]',
+      },
+      {
+        input: 'root = [1]',
+        output: '[[1]]',
+      },
+      {
+        input: 'root = []',
+        output: '[]',
+      },
+    ],
+    constraints: [
+      'The number of nodes in the tree is in the range [0, 2000]',
+      '-1000 <= Node.val <= 1000',
+    ],
+    hints: ['Use BFS with a queue', 'Track level size to group nodes by level'],
+    starterCode: `from typing import Optional, List
+from collections import deque
+
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def level_order(root: Optional[TreeNode]) -> List[List[int]]:
+    """
+    Level order traversal of binary tree.
+    
+    Args:
+        root: Root of tree
+        
+    Returns:
+        List of levels, each level is a list of values
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[3, 9, 20, null, null, 15, 7]],
+        expected: [[3], [9, 20], [15, 7]],
+      },
+      {
+        input: [[1]],
+        expected: [[1]],
+      },
+      {
+        input: [[]],
+        expected: [],
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(n)',
+    leetcodeUrl:
+      'https://leetcode.com/problems/binary-tree-level-order-traversal/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=6ZnyEApgFYg',
+  },
+
+  // MEDIUM - Construct Binary Tree from Inorder and Preorder
+  {
+    id: 'construct-tree-preorder-inorder',
+    title: 'Construct Binary Tree from Preorder and Inorder Traversal',
+    difficulty: 'Medium',
+    topic: 'Trees',
+    description: `Given two integer arrays \`preorder\` and \`inorder\` where \`preorder\` is the preorder traversal of a binary tree and \`inorder\` is the inorder traversal of the same tree, construct and return the binary tree.`,
+    examples: [
+      {
+        input: 'preorder = [3,9,20,15,7], inorder = [9,3,15,20,7]',
+        output: '[3,9,20,null,null,15,7]',
+      },
+      {
+        input: 'preorder = [-1], inorder = [-1]',
+        output: '[-1]',
+      },
+    ],
+    constraints: [
+      '1 <= preorder.length <= 3000',
+      'inorder.length == preorder.length',
+      '-3000 <= preorder[i], inorder[i] <= 3000',
+      'preorder and inorder consist of unique values',
+      'Each value of inorder also appears in preorder',
+      'preorder is guaranteed to be the preorder traversal of the tree',
+      'inorder is guaranteed to be the inorder traversal of the tree',
+    ],
+    hints: [
+      'First element in preorder is always root',
+      'Find root in inorder to split left and right subtrees',
+      'Recursively build left and right subtrees',
+    ],
+    starterCode: `from typing import Optional, List
+
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def build_tree(preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
+    """
+    Construct binary tree from preorder and inorder traversals.
+    
+    Args:
+        preorder: Preorder traversal
+        inorder: Inorder traversal
+        
+    Returns:
+        Root of constructed tree
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [
+          [3, 9, 20, 15, 7],
+          [9, 3, 15, 20, 7],
+        ],
+        expected: [3, 9, 20, null, null, 15, 7],
+      },
+      {
+        input: [[-1], [-1]],
+        expected: [-1],
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(n)',
+    leetcodeUrl:
+      'https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=ihj4IQGZ2zc',
+  },
 ];

@@ -274,10 +274,11 @@ export default function ModulePage({
                       e.stopPropagation();
                       toggleSectionComplete(section.id);
                     }}
-                    className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded border-2 transition-colors ${isCompleted
+                    className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded border-2 transition-colors ${
+                      isCompleted
                         ? 'border-[#50fa7b] bg-[#50fa7b] text-[#282a36]'
                         : 'border-[#6272a4] bg-transparent text-transparent hover:border-[#50fa7b]'
-                      }`}
+                    }`}
                     title={
                       isCompleted ? 'Mark as incomplete' : 'Mark as completed'
                     }
@@ -301,8 +302,9 @@ export default function ModulePage({
 
                   {/* Expand/Collapse Arrow */}
                   <div
-                    className={`flex-shrink-0 text-[#bd93f9] transition-transform ${isExpanded ? 'rotate-180' : ''
-                      }`}
+                    className={`flex-shrink-0 text-[#bd93f9] transition-transform ${
+                      isExpanded ? 'rotate-180' : ''
+                    }`}
                   >
                     <svg
                       className="h-6 w-6"

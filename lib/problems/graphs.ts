@@ -636,4 +636,409 @@ def clone_graph_compact(node: Optional[Node]) -> Optional[Node]:
     leetcodeUrl: 'https://leetcode.com/problems/clone-graph/',
     youtubeUrl: 'https://www.youtube.com/watch?v=mQeF6bN8hMk',
   },
+
+  // EASY - Find if Path Exists in Graph
+  {
+    id: 'find-path-exists-graph',
+    title: 'Find if Path Exists in Graph',
+    difficulty: 'Easy',
+    topic: 'Graphs',
+    description: `There is a **bi-directional** graph with \`n\` vertices, where each vertex is labeled from \`0\` to \`n - 1\` (**inclusive**). The edges in the graph are represented as a 2D integer array \`edges\`, where each \`edges[i] = [ui, vi]\` denotes a bi-directional edge between vertex \`ui\` and vertex \`vi\`. Every vertex pair is connected by **at most one** edge, and no vertex has an edge to itself.
+
+You want to determine if there is a **valid path** that exists from vertex \`source\` to vertex \`destination\`.
+
+Given \`edges\` and the integers \`n\`, \`source\`, and \`destination\`, return \`true\` if there is a **valid path** from \`source\` to \`destination\`, or \`false\` otherwise.`,
+    examples: [
+      {
+        input:
+          'n = 3, edges = [[0,1],[1,2],[2,0]], source = 0, destination = 2',
+        output: 'true',
+        explanation:
+          'There are two paths from vertex 0 to vertex 2: 0 → 1 → 2 and 0 → 2',
+      },
+      {
+        input:
+          'n = 6, edges = [[0,1],[0,2],[3,5],[5,4],[4,3]], source = 0, destination = 5',
+        output: 'false',
+        explanation: 'There is no path from vertex 0 to vertex 5.',
+      },
+    ],
+    constraints: [
+      '1 <= n <= 2 * 10^5',
+      '0 <= edges.length <= 2 * 10^5',
+      'edges[i].length == 2',
+      '0 <= ui, vi <= n - 1',
+      'ui != vi',
+      '0 <= source, destination <= n - 1',
+      'There are no duplicate edges',
+      'There are no self edges',
+    ],
+    hints: ['Build adjacency list from edges', 'Use BFS or DFS to find path'],
+    starterCode: `from typing import List
+from collections import deque, defaultdict
+
+def valid_path(n: int, edges: List[List[int]], source: int, destination: int) -> bool:
+    """
+    Check if path exists from source to destination.
+    
+    Args:
+        n: Number of vertices
+        edges: List of edges
+        source: Starting vertex
+        destination: Target vertex
+        
+    Returns:
+        True if path exists
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [
+          3,
+          [
+            [0, 1],
+            [1, 2],
+            [2, 0],
+          ],
+          0,
+          2,
+        ],
+        expected: true,
+      },
+      {
+        input: [
+          6,
+          [
+            [0, 1],
+            [0, 2],
+            [3, 5],
+            [5, 4],
+            [4, 3],
+          ],
+          0,
+          5,
+        ],
+        expected: false,
+      },
+      {
+        input: [1, [], 0, 0],
+        expected: true,
+      },
+    ],
+    timeComplexity: 'O(V + E)',
+    spaceComplexity: 'O(V + E)',
+    leetcodeUrl: 'https://leetcode.com/problems/find-if-path-exists-in-graph/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=muncqlKJrH0',
+  },
+
+  // EASY - Find Center of Star Graph
+  {
+    id: 'find-center-star-graph',
+    title: 'Find Center of Star Graph',
+    difficulty: 'Easy',
+    topic: 'Graphs',
+    description: `There is an undirected **star** graph consisting of \`n\` nodes labeled from \`1\` to \`n\`. A star graph is a graph where there is one **center** node and **exactly** \`n - 1\` edges that connect the center node with every other node.
+
+You are given a 2D integer array \`edges\` where each \`edges[i] = [ui, vi]\` indicates that there is an edge between the nodes \`ui\` and \`vi\`. Return the center of the given star graph.`,
+    examples: [
+      {
+        input: 'edges = [[1,2],[2,3],[4,2]]',
+        output: '2',
+        explanation:
+          'Node 2 is connected to every other node, so 2 is the center.',
+      },
+      {
+        input: 'edges = [[1,2],[5,1],[1,3],[1,4]]',
+        output: '1',
+      },
+    ],
+    constraints: [
+      '3 <= n <= 10^5',
+      'edges.length == n - 1',
+      'edges[i].length == 2',
+      '1 <= ui, vi <= n',
+      'ui != vi',
+      'The given edges represent a valid star graph',
+    ],
+    hints: ['The center appears in every edge', 'Check first two edges'],
+    starterCode: `from typing import List
+
+def find_center(edges: List[List[int]]) -> int:
+    """
+    Find center node of star graph.
+    
+    Args:
+        edges: List of edges in star graph
+        
+    Returns:
+        Center node number
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [
+          [
+            [1, 2],
+            [2, 3],
+            [4, 2],
+          ],
+        ],
+        expected: 2,
+      },
+      {
+        input: [
+          [
+            [1, 2],
+            [5, 1],
+            [1, 3],
+            [1, 4],
+          ],
+        ],
+        expected: 1,
+      },
+    ],
+    timeComplexity: 'O(1)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/find-center-of-star-graph/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=KFVweOZyY0I',
+  },
+
+  // EASY - Find the Town Judge
+  {
+    id: 'find-town-judge',
+    title: 'Find the Town Judge',
+    difficulty: 'Easy',
+    topic: 'Graphs',
+    description: `In a town, there are \`n\` people labeled from \`1\` to \`n\`. There is a rumor that one of these people is secretly the town judge.
+
+If the town judge exists, then:
+
+1. The town judge trusts nobody.
+2. Everybody (except for the town judge) trusts the town judge.
+3. There is exactly one person that satisfies properties 1 and 2.
+
+You are given an array \`trust\` where \`trust[i] = [ai, bi]\` representing that the person labeled \`ai\` trusts the person labeled \`bi\`. If a trust relationship does not exist in \`trust\` array, then such a trust relationship does not exist.
+
+Return the label of the town judge if the town judge exists and can be identified, or return \`-1\` otherwise.`,
+    examples: [
+      {
+        input: 'n = 2, trust = [[1,2]]',
+        output: '2',
+      },
+      {
+        input: 'n = 3, trust = [[1,3],[2,3]]',
+        output: '3',
+      },
+      {
+        input: 'n = 3, trust = [[1,3],[2,3],[3,1]]',
+        output: '-1',
+      },
+    ],
+    constraints: [
+      '1 <= n <= 1000',
+      '0 <= trust.length <= 10^4',
+      'trust[i].length == 2',
+      'All the pairs of trust are unique',
+      'ai != bi',
+      '1 <= ai, bi <= n',
+    ],
+    hints: [
+      'Count in-degree and out-degree for each person',
+      'Judge has in-degree = n-1, out-degree = 0',
+    ],
+    starterCode: `from typing import List
+
+def find_judge(n: int, trust: List[List[int]]) -> int:
+    """
+    Find the town judge.
+    
+    Args:
+        n: Number of people
+        trust: Trust relationships
+        
+    Returns:
+        Judge label or -1
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [2, [[1, 2]]],
+        expected: 2,
+      },
+      {
+        input: [
+          3,
+          [
+            [1, 3],
+            [2, 3],
+          ],
+        ],
+        expected: 3,
+      },
+      {
+        input: [
+          3,
+          [
+            [1, 3],
+            [2, 3],
+            [3, 1],
+          ],
+        ],
+        expected: -1,
+      },
+    ],
+    timeComplexity: 'O(E)',
+    spaceComplexity: 'O(N)',
+    leetcodeUrl: 'https://leetcode.com/problems/find-the-town-judge/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=ZwFjogT5HuQ',
+  },
+
+  // MEDIUM - All Paths From Source to Target
+  {
+    id: 'all-paths-source-target',
+    title: 'All Paths From Source to Target',
+    difficulty: 'Medium',
+    topic: 'Graphs',
+    description: `Given a directed acyclic graph (**DAG**) of \`n\` nodes labeled from \`0\` to \`n - 1\`, find all possible paths from node \`0\` to node \`n - 1\` and return them in **any order**.
+
+The graph is given as follows: \`graph[i]\` is a list of all nodes you can visit from node \`i\` (i.e., there is a directed edge from node \`i\` to node \`graph[i][j]\`).`,
+    examples: [
+      {
+        input: 'graph = [[1,2],[3],[3],[]]',
+        output: '[[0,1,3],[0,2,3]]',
+        explanation: 'There are two paths: 0 -> 1 -> 3 and 0 -> 2 -> 3.',
+      },
+      {
+        input: 'graph = [[4,3,1],[3,2,4],[3],[4],[]]',
+        output: '[[0,4],[0,3,4],[0,1,3,4],[0,1,2,3,4],[0,1,4]]',
+      },
+    ],
+    constraints: [
+      'n == graph.length',
+      '2 <= n <= 15',
+      '0 <= graph[i][j] < n',
+      'graph[i][j] != i (no self-loops)',
+      'All the elements of graph[i] are unique',
+      'The input graph is guaranteed to be a DAG',
+    ],
+    hints: [
+      'Use DFS backtracking',
+      'Track current path',
+      'Add path to result when reaching target',
+    ],
+    starterCode: `from typing import List
+
+def all_paths_source_target(graph: List[List[int]]) -> List[List[int]]:
+    """
+    Find all paths from source (0) to target (n-1).
+    
+    Args:
+        graph: Adjacency list representation
+        
+    Returns:
+        List of all paths
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[[1, 2], [3], [3], []]],
+        expected: [
+          [0, 1, 3],
+          [0, 2, 3],
+        ],
+      },
+      {
+        input: [[[4, 3, 1], [3, 2, 4], [3], [4], []]],
+        expected: [
+          [0, 4],
+          [0, 3, 4],
+          [0, 1, 3, 4],
+          [0, 1, 2, 3, 4],
+          [0, 1, 4],
+        ],
+      },
+    ],
+    timeComplexity: 'O(2^N * N)',
+    spaceComplexity: 'O(N)',
+    leetcodeUrl:
+      'https://leetcode.com/problems/all-paths-from-source-to-target/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=bSfxLRBXQPU',
+  },
+
+  // MEDIUM - Keys and Rooms
+  {
+    id: 'keys-and-rooms',
+    title: 'Keys and Rooms',
+    difficulty: 'Medium',
+    topic: 'Graphs',
+    description: `There are \`n\` rooms labeled from \`0\` to \`n - 1\` and all the rooms are locked except for room \`0\`. Your goal is to visit all the rooms. However, you cannot enter a locked room without having its key.
+
+When you visit a room, you may find a set of **distinct keys** in it. Each key has a number on it, denoting which room it unlocks, and you can take all of them with you to unlock the other rooms.
+
+Given an array \`rooms\` where \`rooms[i]\` is the set of keys that you can obtain if you visited room \`i\`, return \`true\` if you can visit **all** the rooms, or \`false\` otherwise.`,
+    examples: [
+      {
+        input: 'rooms = [[1],[2],[3],[]]',
+        output: 'true',
+        explanation:
+          'Start in room 0, pick up key 1. Go to room 1, pick up key 2. Go to room 2, pick up key 3. Go to room 3. All rooms visited.',
+      },
+      {
+        input: 'rooms = [[1,3],[3,0,1],[2],[0]]',
+        output: 'false',
+        explanation:
+          'Cannot enter room 2 since the only key that unlocks it is in that room.',
+      },
+    ],
+    constraints: [
+      'n == rooms.length',
+      '2 <= n <= 1000',
+      '0 <= rooms[i].length <= 1000',
+      '1 <= sum(rooms[i].length) <= 3000',
+      '0 <= rooms[i][j] < n',
+      'All the values of rooms[i] are unique',
+    ],
+    hints: [
+      'Use DFS or BFS starting from room 0',
+      'Track visited rooms',
+      'Check if all rooms were visited',
+    ],
+    starterCode: `from typing import List
+
+def can_visit_all_rooms(rooms: List[List[int]]) -> bool:
+    """
+    Check if all rooms can be visited.
+    
+    Args:
+        rooms: List of keys in each room
+        
+    Returns:
+        True if all rooms can be visited
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[[1], [2], [3], []]],
+        expected: true,
+      },
+      {
+        input: [[[1, 3], [3, 0, 1], [2], [0]]],
+        expected: false,
+      },
+    ],
+    timeComplexity: 'O(N + E)',
+    spaceComplexity: 'O(N)',
+    leetcodeUrl: 'https://leetcode.com/problems/keys-and-rooms/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=ye_7c2K0Ark',
+  },
 ];

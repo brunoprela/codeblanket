@@ -457,7 +457,10 @@ def reverse_string(s: List[str]) -> None:
         output: 'false',
       },
     ],
-    constraints: ['1 <= s.length <= 10^5', 's consists of lowercase English letters'],
+    constraints: [
+      '1 <= s.length <= 10^5',
+      's consists of lowercase English letters',
+    ],
     hints: [
       'Use two pointers from both ends',
       'When characters mismatch, try skipping either left or right character',
@@ -608,5 +611,416 @@ def merge(nums1: List[int], m: int, nums2: List[int], n: int) -> None:
     spaceComplexity: 'O(1)',
     leetcodeUrl: 'https://leetcode.com/problems/merge-sorted-array/',
     youtubeUrl: 'https://www.youtube.com/watch?v=P1Ic85RarKY',
+  },
+
+  // EASY - Remove Element
+  {
+    id: 'remove-element',
+    title: 'Remove Element',
+    difficulty: 'Easy',
+    topic: 'Two Pointers',
+    description: `Given an integer array \`nums\` and an integer \`val\`, remove all occurrences of \`val\` in \`nums\` in-place. The order of the elements may be changed. Then return the number of elements in \`nums\` which are not equal to \`val\`.
+
+Consider the number of elements in \`nums\` which are not equal to \`val\` be \`k\`, to get accepted, you need to do the following things:
+- Change the array \`nums\` such that the first \`k\` elements of \`nums\` contain the elements which are not equal to \`val\`. The remaining elements of \`nums\` are not important as well as the size of \`nums\`.
+- Return \`k\`.`,
+    examples: [
+      {
+        input: 'nums = [3,2,2,3], val = 3',
+        output: '2, nums = [2,2,_,_]',
+        explanation:
+          'Your function should return k = 2, with the first two elements of nums being 2.',
+      },
+      {
+        input: 'nums = [0,1,2,2,3,0,4,2], val = 2',
+        output: '5, nums = [0,1,3,0,4,_,_,_]',
+      },
+    ],
+    constraints: [
+      '0 <= nums.length <= 100',
+      '0 <= nums[i] <= 50',
+      '0 <= val <= 100',
+    ],
+    hints: [
+      'Use two pointers: one for reading, one for writing',
+      'Only write to the write pointer when current element is not equal to val',
+    ],
+    starterCode: `from typing import List
+
+def remove_element(nums: List[int], val: int) -> int:
+    """
+    Remove all occurrences of val in-place.
+    
+    Args:
+        nums: Integer array
+        val: Value to remove
+        
+    Returns:
+        Number of elements not equal to val
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[3, 2, 2, 3], 3],
+        expected: 2,
+      },
+      {
+        input: [[0, 1, 2, 2, 3, 0, 4, 2], 2],
+        expected: 5,
+      },
+      {
+        input: [[1], 1],
+        expected: 0,
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/remove-element/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=Pcd1ii9P9ZI',
+  },
+
+  // EASY - Squares of a Sorted Array
+  {
+    id: 'squares-sorted-array',
+    title: 'Squares of a Sorted Array',
+    difficulty: 'Easy',
+    topic: 'Two Pointers',
+    description: `Given an integer array \`nums\` sorted in non-decreasing order, return an array of the squares of each number sorted in non-decreasing order.`,
+    examples: [
+      {
+        input: 'nums = [-4,-1,0,3,10]',
+        output: '[0,1,9,16,100]',
+        explanation:
+          'After squaring, the array becomes [16,1,0,9,100]. After sorting, it becomes [0,1,9,16,100].',
+      },
+      {
+        input: 'nums = [-7,-3,2,3,11]',
+        output: '[4,9,9,49,121]',
+      },
+    ],
+    constraints: [
+      '1 <= nums.length <= 10^4',
+      '-10^4 <= nums[i] <= 10^4',
+      'nums is sorted in non-decreasing order',
+    ],
+    hints: [
+      'Use two pointers from both ends',
+      'The largest square will always be at one of the two ends',
+      'Fill the result array from right to left',
+    ],
+    starterCode: `from typing import List
+
+def sorted_squares(nums: List[int]) -> List[int]:
+    """
+    Return squares of sorted array in sorted order.
+    
+    Args:
+        nums: Sorted integer array
+        
+    Returns:
+        Sorted array of squares
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[-4, -1, 0, 3, 10]],
+        expected: [0, 1, 9, 16, 100],
+      },
+      {
+        input: [[-7, -3, 2, 3, 11]],
+        expected: [4, 9, 9, 49, 121],
+      },
+      {
+        input: [[-5, -3, -2, -1]],
+        expected: [1, 4, 9, 25],
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(n)',
+    leetcodeUrl: 'https://leetcode.com/problems/squares-of-a-sorted-array/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=FPCZsG_AkUg',
+  },
+
+  // EASY - Intersection of Two Arrays II
+  {
+    id: 'intersection-two-arrays-ii',
+    title: 'Intersection of Two Arrays II',
+    difficulty: 'Easy',
+    topic: 'Two Pointers',
+    description: `Given two integer arrays \`nums1\` and \`nums2\`, return an array of their intersection. Each element in the result must appear as many times as it shows in both arrays and you may return the result in any order.`,
+    examples: [
+      {
+        input: 'nums1 = [1,2,2,1], nums2 = [2,2]',
+        output: '[2,2]',
+      },
+      {
+        input: 'nums1 = [4,9,5], nums2 = [9,4,9,8,4]',
+        output: '[4,9]',
+        explanation: '[9,4] is also accepted.',
+      },
+    ],
+    constraints: [
+      '1 <= nums1.length, nums2.length <= 1000',
+      '0 <= nums1[i], nums2[i] <= 1000',
+    ],
+    hints: [
+      'Sort both arrays first',
+      'Use two pointers to traverse both arrays',
+      'When values match, add to result and move both pointers',
+    ],
+    starterCode: `from typing import List
+
+def intersect(nums1: List[int], nums2: List[int]) -> List[int]:
+    """
+    Find intersection of two arrays with duplicates.
+    
+    Args:
+        nums1: First integer array
+        nums2: Second integer array
+        
+    Returns:
+        Array of intersection elements
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [
+          [1, 2, 2, 1],
+          [2, 2],
+        ],
+        expected: [2, 2],
+      },
+      {
+        input: [
+          [4, 9, 5],
+          [9, 4, 9, 8, 4],
+        ],
+        expected: [4, 9],
+      },
+      {
+        input: [
+          [1, 2, 3],
+          [4, 5, 6],
+        ],
+        expected: [],
+      },
+    ],
+    timeComplexity: 'O(n log n + m log m)',
+    spaceComplexity: 'O(min(n, m))',
+    leetcodeUrl: 'https://leetcode.com/problems/intersection-of-two-arrays-ii/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=lKuK69-hMcc',
+  },
+
+  // MEDIUM - 3Sum
+  {
+    id: 'three-sum',
+    title: '3Sum',
+    difficulty: 'Medium',
+    topic: 'Two Pointers',
+    description: `Given an integer array \`nums\`, return all the triplets \`[nums[i], nums[j], nums[k]]\` such that \`i != j\`, \`i != k\`, and \`j != k\`, and \`nums[i] + nums[j] + nums[k] == 0\`.
+
+Notice that the solution set must not contain duplicate triplets.`,
+    examples: [
+      {
+        input: 'nums = [-1,0,1,2,-1,-4]',
+        output: '[[-1,-1,2],[-1,0,1]]',
+        explanation:
+          'The distinct triplets are [-1,0,1] and [-1,-1,2]. Notice that the order of the output and the order of the triplets does not matter.',
+      },
+      {
+        input: 'nums = [0,1,1]',
+        output: '[]',
+        explanation: 'The only possible triplet does not sum up to 0.',
+      },
+    ],
+    constraints: ['3 <= nums.length <= 3000', '-10^5 <= nums[i] <= 10^5'],
+    hints: [
+      'Sort the array first',
+      'For each element, use two pointers to find pairs that sum to -element',
+      'Skip duplicates to avoid duplicate triplets',
+    ],
+    starterCode: `from typing import List
+
+def three_sum(nums: List[int]) -> List[List[int]]:
+    """
+    Find all unique triplets that sum to zero.
+    
+    Args:
+        nums: Integer array
+        
+    Returns:
+        List of triplets that sum to zero
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[-1, 0, 1, 2, -1, -4]],
+        expected: [
+          [-1, -1, 2],
+          [-1, 0, 1],
+        ],
+      },
+      {
+        input: [[0, 1, 1]],
+        expected: [],
+      },
+      {
+        input: [[0, 0, 0]],
+        expected: [[0, 0, 0]],
+      },
+    ],
+    timeComplexity: 'O(n^2)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/3sum/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=jzZsG8n2R9A',
+  },
+
+  // MEDIUM - Sort Colors
+  {
+    id: 'sort-colors',
+    title: 'Sort Colors',
+    difficulty: 'Medium',
+    topic: 'Two Pointers',
+    description: `Given an array \`nums\` with \`n\` objects colored red, white, or blue, sort them in-place so that objects of the same color are adjacent, with the colors in the order red, white, and blue.
+
+We will use the integers \`0\`, \`1\`, and \`2\` to represent the color red, white, and blue, respectively.
+
+You must solve this problem without using the library's sort function.`,
+    examples: [
+      {
+        input: 'nums = [2,0,2,1,1,0]',
+        output: '[0,0,1,1,2,2]',
+      },
+      {
+        input: 'nums = [2,0,1]',
+        output: '[0,1,2]',
+      },
+    ],
+    constraints: [
+      'n == nums.length',
+      '1 <= n <= 300',
+      'nums[i] is either 0, 1, or 2',
+    ],
+    hints: [
+      'Use the Dutch National Flag algorithm',
+      'Maintain three pointers: low (for 0s), mid (current), high (for 2s)',
+      'Swap elements to their correct regions',
+    ],
+    starterCode: `from typing import List
+
+def sort_colors(nums: List[int]) -> None:
+    """
+    Sort array of 0s, 1s, and 2s in-place.
+    
+    Args:
+        nums: Array of integers (0, 1, or 2)
+        
+    Returns:
+        None, modifies nums in-place
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[2, 0, 2, 1, 1, 0]],
+        expected: [0, 0, 1, 1, 2, 2],
+      },
+      {
+        input: [[2, 0, 1]],
+        expected: [0, 1, 2],
+      },
+      {
+        input: [[0]],
+        expected: [0],
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/sort-colors/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=4xbWSRZHqac',
+  },
+
+  // MEDIUM - Boats to Save People
+  {
+    id: 'boats-to-save-people',
+    title: 'Boats to Save People',
+    difficulty: 'Medium',
+    topic: 'Two Pointers',
+    description: `You are given an array \`people\` where \`people[i]\` is the weight of the \`i-th\` person, and an infinite number of boats where each boat can carry a maximum weight of \`limit\`. Each boat carries at most two people at the same time, provided the sum of the weight of those people is at most \`limit\`.
+
+Return the minimum number of boats to carry every given person.`,
+    examples: [
+      {
+        input: 'people = [1,2], limit = 3',
+        output: '1',
+        explanation: '1 boat (1, 2)',
+      },
+      {
+        input: 'people = [3,2,2,1], limit = 3',
+        output: '3',
+        explanation: '3 boats (1, 2), (2) and (3)',
+      },
+      {
+        input: 'people = [3,5,3,4], limit = 5',
+        output: '4',
+        explanation: '4 boats (3), (3), (4), (5)',
+      },
+    ],
+    constraints: [
+      '1 <= people.length <= 5 * 10^4',
+      '1 <= people[i] <= limit <= 3 * 10^4',
+    ],
+    hints: [
+      'Sort the people by weight',
+      'Use two pointers: one for lightest, one for heaviest',
+      'Try to pair the heaviest with the lightest',
+    ],
+    starterCode: `from typing import List
+
+def num_rescue_boats(people: List[int], limit: int) -> int:
+    """
+    Find minimum boats needed to rescue all people.
+    
+    Args:
+        people: Array of weights
+        limit: Maximum weight per boat
+        
+    Returns:
+        Minimum number of boats needed
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[1, 2], 3],
+        expected: 1,
+      },
+      {
+        input: [[3, 2, 2, 1], 3],
+        expected: 3,
+      },
+      {
+        input: [[3, 5, 3, 4], 5],
+        expected: 4,
+      },
+      {
+        input: [[5, 1, 4, 2], 6],
+        expected: 2,
+      },
+    ],
+    timeComplexity: 'O(n log n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/boats-to-save-people/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=XbaxWuHIWUs',
   },
 ];

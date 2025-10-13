@@ -666,4 +666,403 @@ def find_words_optimized(board: List[List[str]], words: List[str]) -> List[str]:
     leetcodeUrl: 'https://leetcode.com/problems/word-search-ii/',
     youtubeUrl: 'https://www.youtube.com/watch?v=asbcE9mZz_U',
   },
+
+  // EASY - Longest Common Prefix
+  {
+    id: 'longest-common-prefix-trie',
+    title: 'Longest Common Prefix',
+    difficulty: 'Easy',
+    topic: 'Tries',
+    description: `Write a function to find the longest common prefix string amongst an array of strings.
+
+If there is no common prefix, return an empty string \`""\`.`,
+    examples: [
+      {
+        input: 'strs = ["flower","flow","flight"]',
+        output: '"fl"',
+      },
+      {
+        input: 'strs = ["dog","racecar","car"]',
+        output: '""',
+        explanation: 'There is no common prefix.',
+      },
+    ],
+    constraints: [
+      '1 <= strs.length <= 200',
+      '0 <= strs[i].length <= 200',
+      'strs[i] consists of only lowercase English letters',
+    ],
+    hints: [
+      'Build trie from all words',
+      'Traverse from root until branching or end',
+    ],
+    starterCode: `from typing import List
+
+def longest_common_prefix(strs: List[str]) -> str:
+    """
+    Find longest common prefix in array of strings.
+    
+    Args:
+        strs: Array of strings
+        
+    Returns:
+        Longest common prefix
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [['flower', 'flow', 'flight']],
+        expected: 'fl',
+      },
+      {
+        input: [['dog', 'racecar', 'car']],
+        expected: '',
+      },
+    ],
+    timeComplexity: 'O(S) where S is sum of all characters',
+    spaceComplexity: 'O(S)',
+    leetcodeUrl: 'https://leetcode.com/problems/longest-common-prefix/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=0sWShKIJoo4',
+  },
+
+  // EASY - Implement Magic Dictionary
+  {
+    id: 'magic-dictionary',
+    title: 'Implement Magic Dictionary',
+    difficulty: 'Easy',
+    topic: 'Tries',
+    description: `Design a data structure that is initialized with a list of **different** words. Provided a string, you should determine if you can change exactly one character in this string to match any word in the data structure.
+
+Implement the \`MagicDictionary\` class:
+- \`MagicDictionary()\` Initializes the object.
+- \`void buildDict(String[] dictionary)\` Sets the data structure with an array of distinct strings \`dictionary\`.
+- \`bool search(String searchWord)\` Returns \`true\` if you can change **exactly one character** in \`searchWord\` to match any string in the data structure, otherwise returns \`false\`.`,
+    examples: [
+      {
+        input:
+          '["MagicDictionary", "buildDict", "search", "search", "search", "search"], [[], [["hello", "leetcode"]], ["hello"], ["hhllo"], ["hell"], ["leetcoded"]]',
+        output: '[null, null, false, true, false, false]',
+      },
+    ],
+    constraints: [
+      '1 <= dictionary.length <= 100',
+      '1 <= dictionary[i].length <= 100',
+      'dictionary[i] consists of only lower-case English letters',
+      'All the strings in dictionary are distinct',
+      '1 <= searchWord.length <= 100',
+      'searchWord consists of only lower-case English letters',
+      'buildDict will be called only once before search',
+      'At most 100 calls will be made to search',
+    ],
+    hints: [
+      'For each position, try changing character',
+      'Check if resulting word exists in trie',
+    ],
+    starterCode: `from typing import List
+
+class MagicDictionary:
+    def __init__(self):
+        """Initialize dictionary."""
+        # Write your code here
+        pass
+    
+    def build_dict(self, dictionary: List[str]) -> None:
+        """Build dictionary from word list."""
+        # Write your code here
+        pass
+    
+    def search(self, search_word: str) -> bool:
+        """Search for word with one character change."""
+        # Write your code here
+        pass
+`,
+    testCases: [
+      {
+        input: [[['hello', 'leetcode']], 'hello', 'hhllo', 'hell', 'leetcoded'],
+        expected: [null, false, true, false, false],
+      },
+    ],
+    timeComplexity: 'O(m * 26) for search where m is word length',
+    spaceComplexity: 'O(n * m) for n words',
+    leetcodeUrl: 'https://leetcode.com/problems/implement-magic-dictionary/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=9HHuFBx2T_k',
+  },
+
+  // EASY - Replace Words
+  {
+    id: 'replace-words',
+    title: 'Replace Words',
+    difficulty: 'Easy',
+    topic: 'Tries',
+    description: `In English, we have a concept called **root**, which can be followed by some other word to form another longer word - let us call this word **derivative**. For example, when the **root** \`"help"\` is followed by the word \`"ful"\`, we can form a derivative \`"helpful"\`.
+
+Given a \`dictionary\` consisting of many **roots** and a \`sentence\` consisting of words separated by spaces, replace all the derivatives in the sentence with the **root** forming it. If a derivative can be replaced by more than one **root**, replace it with the **root** that has **the shortest length**.
+
+Return the \`sentence\` after the replacement.`,
+    examples: [
+      {
+        input:
+          'dictionary = ["cat","bat","rat"], sentence = "the cattle was rattled by the battery"',
+        output: '"the cat was rat by the bat"',
+      },
+      {
+        input:
+          'dictionary = ["a","b","c"], sentence = "aadsfasf absbs bbab cadsfafs"',
+        output: '"a a b c"',
+      },
+    ],
+    constraints: [
+      '1 <= dictionary.length <= 1000',
+      '1 <= dictionary[i].length <= 100',
+      'dictionary[i] consists of only lower-case letters',
+      '1 <= sentence.length <= 10^6',
+      'sentence consists of only lower-case letters and spaces',
+      'The number of words in sentence is in the range [1, 1000]',
+      'The length of each word in sentence is in the range [1, 1000]',
+      'Every two consecutive words in sentence will be separated by exactly one space',
+      'sentence does not have leading or trailing spaces',
+    ],
+    hints: [
+      'Build trie from all roots',
+      'For each word, find shortest root prefix',
+    ],
+    starterCode: `from typing import List
+
+def replace_words(dictionary: List[str], sentence: str) -> str:
+    """
+    Replace words with shortest root.
+    
+    Args:
+        dictionary: List of roots
+        sentence: Input sentence
+        
+    Returns:
+        Sentence with words replaced
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [['cat', 'bat', 'rat'], 'the cattle was rattled by the battery'],
+        expected: 'the cat was rat by the bat',
+      },
+      {
+        input: [['a', 'b', 'c'], 'aadsfasf absbs bbab cadsfafs'],
+        expected: 'a a b c',
+      },
+    ],
+    timeComplexity:
+      'O(N + M) where N is total chars in dictionary, M in sentence',
+    spaceComplexity: 'O(N)',
+    leetcodeUrl: 'https://leetcode.com/problems/replace-words/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=pJJ17U_Qiw8',
+  },
+
+  // MEDIUM - Search Suggestions System
+  {
+    id: 'search-suggestions-system',
+    title: 'Search Suggestions System',
+    difficulty: 'Medium',
+    topic: 'Tries',
+    description: `You are given an array of strings \`products\` and a string \`searchWord\`.
+
+Design a system that suggests at most three product names from \`products\` after each character of \`searchWord\` is typed. Suggested products should have common prefix with \`searchWord\`. If there are more than three products with a common prefix return the three lexicographically minimum products.
+
+Return a list of lists of the suggested products after each character of \`searchWord\` is typed.`,
+    examples: [
+      {
+        input:
+          'products = ["mobile","mouse","moneypot","monitor","mousepad"], searchWord = "mouse"',
+        output:
+          '[["mobile","moneypot","monitor"],["mobile","moneypot","monitor"],["mouse","mousepad"],["mouse","mousepad"],["mouse","mousepad"]]',
+      },
+      {
+        input: 'products = ["havana"], searchWord = "havana"',
+        output:
+          '[["havana"],["havana"],["havana"],["havana"],["havana"],["havana"]]',
+      },
+    ],
+    constraints: [
+      '1 <= products.length <= 1000',
+      '1 <= products[i].length <= 3000',
+      '1 <= sum(products[i].length) <= 2 * 10^4',
+      'All the strings of products are unique',
+      'products[i] consists of lowercase English letters',
+      '1 <= searchWord.length <= 1000',
+      'searchWord consists of lowercase English letters',
+    ],
+    hints: [
+      'Build trie from products',
+      'For each prefix, DFS to find up to 3 words',
+    ],
+    starterCode: `from typing import List
+
+def suggested_products(products: List[str], search_word: str) -> List[List[str]]:
+    """
+    Find product suggestions for each prefix.
+    
+    Args:
+        products: List of product names
+        search_word: Search query
+        
+    Returns:
+        List of suggestions for each prefix
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [
+          ['mobile', 'mouse', 'moneypot', 'monitor', 'mousepad'],
+          'mouse',
+        ],
+        expected: [
+          ['mobile', 'moneypot', 'monitor'],
+          ['mobile', 'moneypot', 'monitor'],
+          ['mouse', 'mousepad'],
+          ['mouse', 'mousepad'],
+          ['mouse', 'mousepad'],
+        ],
+      },
+    ],
+    timeComplexity:
+      'O(N * M + S * M) where N = products, M = avg length, S = searchWord length',
+    spaceComplexity: 'O(N * M)',
+    leetcodeUrl: 'https://leetcode.com/problems/search-suggestions-system/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=D4T2N0yAr20',
+  },
+
+  // MEDIUM - Maximum XOR of Two Numbers
+  {
+    id: 'maximum-xor-two-numbers',
+    title: 'Maximum XOR of Two Numbers in an Array',
+    difficulty: 'Medium',
+    topic: 'Tries',
+    description: `Given an integer array \`nums\`, return the maximum result of \`nums[i] XOR nums[j]\`, where \`0 <= i <= j < n\`.`,
+    examples: [
+      {
+        input: 'nums = [3,10,5,25,2,8]',
+        output: '28',
+        explanation: 'The maximum result is 5 XOR 25 = 28.',
+      },
+      {
+        input: 'nums = [14,70,53,83,49,91,36,80,92,51,66,70]',
+        output: '127',
+      },
+    ],
+    constraints: ['1 <= nums.length <= 2 * 10^5', '0 <= nums[i] <= 2^31 - 1'],
+    hints: [
+      'Build binary trie of all numbers',
+      'For each number, try to find opposite bits',
+      'Maximize XOR by choosing opposite bits',
+    ],
+    starterCode: `from typing import List
+
+def find_maximum_xor(nums: List[int]) -> int:
+    """
+    Find maximum XOR of two numbers.
+    
+    Args:
+        nums: Input array
+        
+    Returns:
+        Maximum XOR value
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[3, 10, 5, 25, 2, 8]],
+        expected: 28,
+      },
+      {
+        input: [[14, 70, 53, 83, 49, 91, 36, 80, 92, 51, 66, 70]],
+        expected: 127,
+      },
+    ],
+    timeComplexity: 'O(n * 32)',
+    spaceComplexity: 'O(n * 32)',
+    leetcodeUrl:
+      'https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=jCuNJRm_Pw0',
+  },
+
+  // MEDIUM - Concatenated Words
+  {
+    id: 'concatenated-words',
+    title: 'Concatenated Words',
+    difficulty: 'Medium',
+    topic: 'Tries',
+    description: `Given an array of strings \`words\` (**without duplicates**), return all the **concatenated words** in the given list of \`words\`.
+
+A **concatenated word** is defined as a string that is comprised entirely of at least two shorter words (not necessarily distinct) in the given array.`,
+    examples: [
+      {
+        input:
+          'words = ["cat","cats","catsdogcats","dog","dogcatsdog","hippopotamuses","rat","ratcatdogcat"]',
+        output: '["catsdogcats","dogcatsdog","ratcatdogcat"]',
+      },
+      {
+        input: 'words = ["cat","dog","catdog"]',
+        output: '["catdog"]',
+      },
+    ],
+    constraints: [
+      '1 <= words.length <= 10^4',
+      '1 <= words[i].length <= 30',
+      'words[i] consists of only lowercase English letters',
+      'All the strings of words are unique',
+      '1 <= sum(words[i].length) <= 10^5',
+    ],
+    hints: [
+      'Build trie from all words',
+      'For each word, check if it can be formed by concatenating',
+      'Use DP to check all possible splits',
+    ],
+    starterCode: `from typing import List
+
+def find_all_concatenated_words_in_a_dict(words: List[str]) -> List[str]:
+    """
+    Find all concatenated words.
+    
+    Args:
+        words: List of words
+        
+    Returns:
+        List of concatenated words
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [
+          [
+            'cat',
+            'cats',
+            'catsdogcats',
+            'dog',
+            'dogcatsdog',
+            'hippopotamuses',
+            'rat',
+            'ratcatdogcat',
+          ],
+        ],
+        expected: ['catsdogcats', 'dogcatsdog', 'ratcatdogcat'],
+      },
+      {
+        input: [['cat', 'dog', 'catdog']],
+        expected: ['catdog'],
+      },
+    ],
+    timeComplexity: 'O(n * m^2) where n = words, m = avg length',
+    spaceComplexity: 'O(n * m)',
+    leetcodeUrl: 'https://leetcode.com/problems/concatenated-words/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=vSc10FaEWmk',
+  },
 ];

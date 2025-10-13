@@ -1,16 +1,16 @@
 import { Module } from '@/lib/types';
 
 export const mathGeometryModule: Module = {
-  id: 'math-geometry',
-  title: 'Math & Geometry',
-  description:
+    id: 'math-geometry',
+    title: 'Math & Geometry',
+    description:
     'Master mathematical algorithms and geometric problem-solving techniques.',
-  icon: '📐',
+    icon: '📐',
   timeComplexity: 'Varies by algorithm',
   spaceComplexity: 'Usually O(1) to O(n)',
-  sections: [
-    {
-      id: 'introduction',
+    sections: [
+        {
+            id: 'introduction',
       title: 'Introduction to Math & Geometry',
       content: `**Math and Geometry** problems test your ability to recognize patterns, apply mathematical principles, and think creatively about spatial relationships.
 
@@ -615,9 +615,9 @@ print(f"Catalan(4) = {catalan(4)}")  # 14`,
 - Off-by-one errors in matrix indices
 - Not handling negative numbers properly
 - Forgetting to consider in-place constraints`,
-    },
-  ],
-  keyTakeaways: [
+        },
+    ],
+    keyTakeaways: [
     'Matrix rotation in-place: transpose + reverse rows (90° clockwise)',
     'Fast exponentiation reduces O(n) to O(log n) using binary representation',
     'Check divisors only up to sqrt(n) for primality and factorization',
@@ -626,6 +626,6 @@ print(f"Catalan(4) = {catalan(4)}")  # 14`,
     'Most math problems optimize to O(1) space with clever techniques',
     'Draw diagrams and work through small examples to find patterns',
     'Modular arithmetic prevents overflow and keeps numbers bounded',
-  ],
-  relatedProblems: ['rotate-image', 'pow-x-n', 'happy-number'],
+    ],
+    relatedProblems: ['rotate-image', 'pow-x-n', 'happy-number'],
 };

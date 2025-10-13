@@ -502,96 +502,7 @@ def first_bad_version(n: int) -> int:
     leetcodeUrl: 'https://leetcode.com/problems/first-bad-version/',
     youtubeUrl: 'https://www.youtube.com/watch?v=GJVO2BTdBZw',
   },
-  // EASY - Sqrt(x)
-  {
-    id: 'sqrt-x',
-    title: 'Sqrt(x)',
-    difficulty: 'Easy',
-    topic: 'Binary Search',
-    order: 6,
-    description: `Given a non-negative integer \`x\`, return the square root of \`x\` rounded down to the nearest integer. The returned integer should be **non-negative** as well.
 
-You **must not use** any built-in exponent function or operator.`,
-    examples: [
-      {
-        input: 'x = 4',
-        output: '2',
-        explanation: 'The square root of 4 is 2.',
-      },
-      {
-        input: 'x = 8',
-        output: '2',
-        explanation:
-          'The square root of 8 is 2.82842..., and we round it down to 2.',
-      },
-    ],
-    constraints: ['0 <= x <= 2^31 - 1'],
-    hints: [
-      'Use binary search on the range [0, x]',
-      'For each mid, check if mid * mid <= x',
-      'Keep track of the largest valid answer',
-    ],
-    starterCode: `def my_sqrt(x: int) -> int:
-    """
-    Calculate square root rounded down.
-    
-    Args:
-        x: Non-negative integer
-        
-    Returns:
-        Square root of x rounded down
-    """
-    # Write your code here
-    pass
-`,
-    testCases: [
-      {
-        input: [4],
-        expected: 2,
-      },
-      {
-        input: [8],
-        expected: 2,
-      },
-      {
-        input: [0],
-        expected: 0,
-      },
-      {
-        input: [1],
-        expected: 1,
-      },
-    ],
-    solution: `def my_sqrt(x: int) -> int:
-    """
-    Binary search for square root.
-    Time: O(log x), Space: O(1)
-    """
-    if x < 2:
-        return x
-    
-    left, right = 1, x // 2
-    result = 0
-    
-    while left <= right:
-        mid = (left + right) // 2
-        square = mid * mid
-        
-        if square == x:
-            return mid
-        elif square < x:
-            result = mid  # Keep track of largest valid answer
-            left = mid + 1
-        else:
-            right = mid - 1
-    
-    return result
-`,
-    timeComplexity: 'O(log x)',
-    spaceComplexity: 'O(1)',
-    leetcodeUrl: 'https://leetcode.com/problems/sqrtx/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=zdMhGxRWutQ',
-  },
   // EASY - Find Smallest Letter Greater Than Target
   {
     id: 'find-smallest-letter-greater-than-target',
@@ -783,6 +694,452 @@ def peak_index_in_mountain_array(arr: List[int]) -> int:
     leetcodeUrl:
       'https://leetcode.com/problems/peak-index-in-a-mountain-array/',
     youtubeUrl: 'https://www.youtube.com/watch?v=HtSuA80QTyo',
+  },
+
+  // EASY - Count Negative Numbers in a Sorted Matrix
+  {
+    id: 'count-negative-numbers-sorted-matrix',
+    title: 'Count Negative Numbers in a Sorted Matrix',
+    difficulty: 'Easy',
+    topic: 'Binary Search',
+    description: `Given a \`m x n\` matrix \`grid\` which is sorted in non-increasing order both row-wise and column-wise, return the number of negative numbers in \`grid\`.`,
+    examples: [
+      {
+        input: 'grid = [[4,3,2,-1],[3,2,1,-1],[1,1,-1,-2],[-1,-1,-2,-3]]',
+        output: '8',
+        explanation: 'There are 8 negatives number in the matrix.',
+      },
+      {
+        input: 'grid = [[3,2],[1,0]]',
+        output: '0',
+      },
+    ],
+    constraints: [
+      'm == grid.length',
+      'n == grid[i].length',
+      '1 <= m, n <= 100',
+      '-100 <= grid[i][j] <= 100',
+    ],
+    hints: [
+      'Use binary search for each row',
+      'The matrix is sorted, so once you find a negative number, all numbers to its right are also negative',
+    ],
+    starterCode: `from typing import List
+
+def count_negatives(grid: List[List[int]]) -> int:
+    """
+    Count negative numbers in sorted matrix.
+    
+    Args:
+        grid: Matrix sorted in non-increasing order
+        
+    Returns:
+        Count of negative numbers
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [
+          [
+            [4, 3, 2, -1],
+            [3, 2, 1, -1],
+            [1, 1, -1, -2],
+            [-1, -1, -2, -3],
+          ],
+        ],
+        expected: 8,
+      },
+      {
+        input: [
+          [
+            [3, 2],
+            [1, 0],
+          ],
+        ],
+        expected: 0,
+      },
+      {
+        input: [
+          [
+            [1, -1],
+            [-1, -1],
+          ],
+        ],
+        expected: 3,
+      },
+    ],
+    timeComplexity: 'O(m log n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl:
+      'https://leetcode.com/problems/count-negative-numbers-in-a-sorted-matrix/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=5BI4BxoVlLo',
+  },
+
+  // EASY - Arranging Coins
+  {
+    id: 'arranging-coins',
+    title: 'Arranging Coins',
+    difficulty: 'Easy',
+    topic: 'Binary Search',
+    description: `You have \`n\` coins and you want to build a staircase with these coins. The staircase consists of \`k\` rows where the \`i-th\` row has exactly \`i\` coins. The last row of the staircase may be incomplete.
+
+Given the integer \`n\`, return the number of complete rows of the staircase you will build.`,
+    examples: [
+      {
+        input: 'n = 5',
+        output: '2',
+        explanation:
+          'The coins can form these rows: ¤, ¤ ¤. The 3rd row is incomplete, so return 2.',
+      },
+      {
+        input: 'n = 8',
+        output: '3',
+        explanation:
+          'The coins can form these rows: ¤, ¤ ¤, ¤ ¤ ¤. The 4th row is incomplete, so return 3.',
+      },
+    ],
+    constraints: ['1 <= n <= 2^31 - 1'],
+    hints: [
+      'Use the formula k * (k + 1) / 2 to calculate the total coins needed for k rows',
+      'Binary search for the answer',
+    ],
+    starterCode: `def arrange_coins(n: int) -> int:
+    """
+    Find complete rows in coin staircase.
+    
+    Args:
+        n: Total number of coins
+        
+    Returns:
+        Number of complete rows
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [5],
+        expected: 2,
+      },
+      {
+        input: [8],
+        expected: 3,
+      },
+      {
+        input: [1],
+        expected: 1,
+      },
+      {
+        input: [10],
+        expected: 4,
+      },
+    ],
+    timeComplexity: 'O(log n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/arranging-coins/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=C4TkkOuBd44',
+  },
+
+  // EASY - Guess Number Higher or Lower
+  {
+    id: 'guess-number-higher-or-lower',
+    title: 'Guess Number Higher or Lower',
+    difficulty: 'Easy',
+    topic: 'Binary Search',
+    description: `We are playing the Guess Game. The game is as follows:
+
+I pick a number from \`1\` to \`n\`. You have to guess which number I picked.
+
+Every time you guess wrong, I will tell you whether the number I picked is higher or lower than your guess.
+
+You call a pre-defined API \`int guess(int num)\`, which returns three possible results:
+- \`-1\`: Your guess is higher than the number I picked (i.e. \`num > pick\`)
+- \`1\`: Your guess is lower than the number I picked (i.e. \`num < pick\`)
+- \`0\`: your guess is equal to the number I picked (i.e. \`num == pick\`)
+
+Return the number that I picked.`,
+    examples: [
+      {
+        input: 'n = 10, pick = 6',
+        output: '6',
+      },
+      {
+        input: 'n = 1, pick = 1',
+        output: '1',
+      },
+    ],
+    constraints: ['1 <= n <= 2^31 - 1', '1 <= pick <= n'],
+    hints: [
+      'Use binary search',
+      'Call guess() to narrow down the search space',
+    ],
+    starterCode: `# The guess API is already defined for you.
+# @param num, your guess
+# @return -1 if num is higher than the picked number
+#          1 if num is lower than the picked number
+#          otherwise return 0
+# def guess(num: int) -> int:
+
+def guess_number(n: int) -> int:
+    """
+    Guess the picked number using binary search.
+    
+    Args:
+        n: Upper bound of range [1, n]
+        
+    Returns:
+        The picked number
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [10],
+        expected: 6,
+      },
+      {
+        input: [1],
+        expected: 1,
+      },
+      {
+        input: [2],
+        expected: 1,
+      },
+    ],
+    timeComplexity: 'O(log n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/guess-number-higher-or-lower/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=xW4QsTtaCa4',
+  },
+
+  // MEDIUM - Find Minimum in Rotated Sorted Array
+  {
+    id: 'find-minimum-rotated-sorted-array',
+    title: 'Find Minimum in Rotated Sorted Array',
+    difficulty: 'Medium',
+    topic: 'Binary Search',
+    description: `Suppose an array of length \`n\` sorted in ascending order is rotated between \`1\` and \`n\` times. For example, the array \`nums = [0,1,2,4,5,6,7]\` might become:
+- \`[4,5,6,7,0,1,2]\` if it was rotated \`4\` times.
+- \`[0,1,2,4,5,6,7]\` if it was rotated \`7\` times.
+
+Notice that rotating an array \`[a[0], a[1], a[2], ..., a[n-1]]\` 1 time results in the array \`[a[n-1], a[0], a[1], a[2], ..., a[n-2]]\`.
+
+Given the sorted rotated array \`nums\` of unique elements, return the minimum element of this array.
+
+You must write an algorithm that runs in **O(log n)** time.`,
+    examples: [
+      {
+        input: 'nums = [3,4,5,1,2]',
+        output: '1',
+        explanation: 'The original array was [1,2,3,4,5] rotated 3 times.',
+      },
+      {
+        input: 'nums = [4,5,6,7,0,1,2]',
+        output: '0',
+        explanation:
+          'The original array was [0,1,2,4,5,6,7] and it was rotated 4 times.',
+      },
+    ],
+    constraints: [
+      'n == nums.length',
+      '1 <= n <= 5000',
+      '-5000 <= nums[i] <= 5000',
+      'All the integers of nums are unique',
+      'nums is sorted and rotated between 1 and n times',
+    ],
+    hints: [
+      'If the array was not rotated, nums[0] < nums[n-1]',
+      'Use binary search. Compare mid with the right boundary',
+      'If nums[mid] > nums[right], the minimum is in the right half',
+    ],
+    starterCode: `from typing import List
+
+def find_min(nums: List[int]) -> int:
+    """
+    Find minimum in rotated sorted array.
+    
+    Args:
+        nums: Rotated sorted array
+        
+    Returns:
+        Minimum element
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[3, 4, 5, 1, 2]],
+        expected: 1,
+      },
+      {
+        input: [[4, 5, 6, 7, 0, 1, 2]],
+        expected: 0,
+      },
+      {
+        input: [[11, 13, 15, 17]],
+        expected: 11,
+      },
+      {
+        input: [[2, 1]],
+        expected: 1,
+      },
+    ],
+    timeComplexity: 'O(log n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl:
+      'https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=nIVW4P8b1VA',
+  },
+
+  // MEDIUM - Search in Rotated Sorted Array II
+  {
+    id: 'search-rotated-sorted-array-ii',
+    title: 'Search in Rotated Sorted Array II',
+    difficulty: 'Medium',
+    topic: 'Binary Search',
+    description: `There is an integer array \`nums\` sorted in non-decreasing order (not necessarily with distinct values).
+
+Before being passed to your function, \`nums\` is rotated at an unknown pivot index \`k\` (\`0 <= k < nums.length\`) such that the resulting array is \`[nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]]\` (0-indexed).
+
+Given the array \`nums\` after the rotation and an integer \`target\`, return \`true\` if \`target\` is in \`nums\`, or \`false\` if it is not in \`nums\`.
+
+You must decrease the overall operation steps as much as possible.`,
+    examples: [
+      {
+        input: 'nums = [2,5,6,0,0,1,2], target = 0',
+        output: 'true',
+      },
+      {
+        input: 'nums = [2,5,6,0,0,1,2], target = 3',
+        output: 'false',
+      },
+    ],
+    constraints: [
+      '1 <= nums.length <= 5000',
+      '-10^4 <= nums[i] <= 10^4',
+      'nums is guaranteed to be rotated at some pivot',
+      '-10^4 <= target <= 10^4',
+    ],
+    hints: [
+      'This is the follow-up problem where nums may contain duplicates',
+      'When nums[left] == nums[mid] == nums[right], we cannot determine which side is sorted',
+      'In worst case, time complexity degrades to O(n)',
+    ],
+    starterCode: `from typing import List
+
+def search(nums: List[int], target: int) -> bool:
+    """
+    Search in rotated sorted array with duplicates.
+    
+    Args:
+        nums: Rotated sorted array (may contain duplicates)
+        target: Target value to search
+        
+    Returns:
+        True if target is in nums, False otherwise
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[2, 5, 6, 0, 0, 1, 2], 0],
+        expected: true,
+      },
+      {
+        input: [[2, 5, 6, 0, 0, 1, 2], 3],
+        expected: false,
+      },
+      {
+        input: [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1], 2],
+        expected: true,
+      },
+    ],
+    timeComplexity: 'O(log n) average, O(n) worst case',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl:
+      'https://leetcode.com/problems/search-in-rotated-sorted-array-ii/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=w-Aw00H73ak',
+  },
+
+  // MEDIUM - Find Peak Element
+  {
+    id: 'find-peak-element',
+    title: 'Find Peak Element',
+    difficulty: 'Medium',
+    topic: 'Binary Search',
+    description: `A peak element is an element that is strictly greater than its neighbors.
+
+Given a 0-indexed integer array \`nums\`, find a peak element, and return its index. If the array contains multiple peaks, return the index to any of the peaks.
+
+You may imagine that \`nums[-1] = nums[n] = -∞\`. In other words, an element is always considered to be strictly greater than a neighbor that is outside the array.
+
+You must write an algorithm that runs in **O(log n)** time.`,
+    examples: [
+      {
+        input: 'nums = [1,2,3,1]',
+        output: '2',
+        explanation:
+          '3 is a peak element and your function should return the index number 2.',
+      },
+      {
+        input: 'nums = [1,2,1,3,5,6,4]',
+        output: '5',
+        explanation:
+          'Your function can return either index number 1 where the peak element is 2, or index number 5 where the peak element is 6.',
+      },
+    ],
+    constraints: [
+      '1 <= nums.length <= 1000',
+      '-2^31 <= nums[i] <= 2^31 - 1',
+      'nums[i] != nums[i + 1] for all valid i',
+    ],
+    hints: [
+      'Use binary search',
+      'If nums[mid] < nums[mid + 1], there must be a peak in the right half',
+      'Otherwise, there must be a peak in the left half (including mid)',
+    ],
+    starterCode: `from typing import List
+
+def find_peak_element(nums: List[int]) -> int:
+    """
+    Find a peak element and return its index.
+    
+    Args:
+        nums: Integer array
+        
+    Returns:
+        Index of a peak element
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[1, 2, 3, 1]],
+        expected: 2,
+      },
+      {
+        input: [[1, 2, 1, 3, 5, 6, 4]],
+        expected: 5,
+      },
+      {
+        input: [[1]],
+        expected: 0,
+      },
+      {
+        input: [[1, 2]],
+        expected: 1,
+      },
+    ],
+    timeComplexity: 'O(log n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/find-peak-element/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=kMzJy9es7Hc',
   },
 ];
 

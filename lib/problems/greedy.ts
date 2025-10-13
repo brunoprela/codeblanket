@@ -161,8 +161,7 @@ Any profit can be decomposed into a sum of single-day profits. Instead of findin
       {
         input: 'prices = [7,6,4,3,1]',
         output: '0',
-        explanation:
-          'There are no profitable transactions, so max profit = 0.',
+        explanation: 'There are no profitable transactions, so max profit = 0.',
       },
     ],
     constraints: ['1 <= prices.length <= 10^5', '0 <= prices[i] <= 10^4'],
@@ -418,5 +417,388 @@ def can_complete_circuit_two_pass(gas: List[int], cost: List[int]) -> int:
     topic: 'Greedy',
     leetcodeUrl: 'https://leetcode.com/problems/gas-station/',
     youtubeUrl: 'https://www.youtube.com/watch?v=lJwbPZGo05A',
+  },
+
+  // EASY - Assign Cookies
+  {
+    id: 'assign-cookies',
+    title: 'Assign Cookies',
+    difficulty: 'Easy',
+    topic: 'Greedy',
+    description: `Assume you are an awesome parent and want to give your children some cookies. But, you should give each child at most one cookie.
+
+Each child \`i\` has a greed factor \`g[i]\`, which is the minimum size of a cookie that the child will be content with; and each cookie \`j\` has a size \`s[j]\`. If \`s[j] >= g[i]\`, we can assign the cookie \`j\` to the child \`i\`, and the child \`i\` will be content. Your goal is to maximize the number of your content children and output the maximum number.`,
+    examples: [
+      {
+        input: 'g = [1,2,3], s = [1,1]',
+        output: '1',
+      },
+      {
+        input: 'g = [1,2], s = [1,2,3]',
+        output: '2',
+      },
+    ],
+    constraints: [
+      '1 <= g.length <= 3 * 10^4',
+      '0 <= s.length <= 3 * 10^4',
+      '1 <= g[i], s[j] <= 2^31 - 1',
+    ],
+    hints: [
+      'Sort both arrays',
+      'Try to satisfy smallest greed with smallest cookie',
+    ],
+    starterCode: `from typing import List
+
+def find_content_children(g: List[int], s: List[int]) -> int:
+    """
+    Find maximum number of content children.
+    
+    Args:
+        g: Array of greed factors
+        s: Array of cookie sizes
+        
+    Returns:
+        Maximum content children
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [
+          [1, 2, 3],
+          [1, 1],
+        ],
+        expected: 1,
+      },
+      {
+        input: [
+          [1, 2],
+          [1, 2, 3],
+        ],
+        expected: 2,
+      },
+    ],
+    timeComplexity: 'O(n log n + m log m)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/assign-cookies/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=DIX2p7vb9co',
+  },
+
+  // EASY - Lemonade Change
+  {
+    id: 'lemonade-change',
+    title: 'Lemonade Change',
+    difficulty: 'Easy',
+    topic: 'Greedy',
+    description: `At a lemonade stand, each lemonade costs \`$5\`. Customers are standing in a queue to buy from you and order one at a time (in the order specified by bills). Each customer will only buy one lemonade and pay with either a \`$5\`, \`$10\`, or \`$20\` bill. You must provide the correct change to each customer so that the net transaction is that the customer pays \`$5\`.
+
+Note that you do not have any change in hand at first.
+
+Given an integer array \`bills\` where \`bills[i]\` is the bill the \`i-th\` customer pays, return \`true\` if you can provide every customer with the correct change, or \`false\` otherwise.`,
+    examples: [
+      {
+        input: 'bills = [5,5,5,10,20]',
+        output: 'true',
+      },
+      {
+        input: 'bills = [5,5,10,10,20]',
+        output: 'false',
+      },
+    ],
+    constraints: [
+      '1 <= bills.length <= 10^5',
+      'bills[i] is either 5, 10, or 20',
+    ],
+    hints: [
+      'Track count of $5 and $10 bills',
+      'For $10: need one $5',
+      'For $20: prefer three $5s or one $10 + one $5',
+    ],
+    starterCode: `from typing import List
+
+def lemonade_change(bills: List[int]) -> bool:
+    """
+    Check if can provide correct change.
+    
+    Args:
+        bills: Customer bills in order
+        
+    Returns:
+        True if can provide change to all
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[5, 5, 5, 10, 20]],
+        expected: true,
+      },
+      {
+        input: [[5, 5, 10, 10, 20]],
+        expected: false,
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/lemonade-change/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=6rF0xNFOLbk',
+  },
+
+  // EASY - Maximum Subarray
+  {
+    id: 'maximum-subarray',
+    title: 'Maximum Subarray',
+    difficulty: 'Easy',
+    topic: 'Greedy',
+    description: `Given an integer array \`nums\`, find the subarray with the largest sum, and return its sum.`,
+    examples: [
+      {
+        input: 'nums = [-2,1,-3,4,-1,2,1,-5,4]',
+        output: '6',
+        explanation: 'The subarray [4,-1,2,1] has the largest sum 6.',
+      },
+      {
+        input: 'nums = [1]',
+        output: '1',
+      },
+      {
+        input: 'nums = [5,4,-1,7,8]',
+        output: '23',
+      },
+    ],
+    constraints: ['1 <= nums.length <= 10^5', '-10^4 <= nums[i] <= 10^4'],
+    hints: [
+      'Kadane algorithm',
+      'Track current sum and max sum',
+      'If current sum < 0, reset to 0',
+    ],
+    starterCode: `from typing import List
+
+def max_sub_array(nums: List[int]) -> int:
+    """
+    Find maximum subarray sum (Kadane algorithm).
+    
+    Args:
+        nums: Input array
+        
+    Returns:
+        Maximum subarray sum
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[-2, 1, -3, 4, -1, 2, 1, -5, 4]],
+        expected: 6,
+      },
+      {
+        input: [[1]],
+        expected: 1,
+      },
+      {
+        input: [[5, 4, -1, 7, 8]],
+        expected: 23,
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/maximum-subarray/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=5WZl3MMT0Eg',
+  },
+
+  // MEDIUM - Jump Game II
+  {
+    id: 'jump-game-ii',
+    title: 'Jump Game II',
+    difficulty: 'Medium',
+    topic: 'Greedy',
+    description: `You are given a 0-indexed array of integers \`nums\` of length \`n\`. You are initially positioned at \`nums[0]\`.
+
+Each element \`nums[i]\` represents the maximum length of a forward jump from index \`i\`. In other words, if you are at \`nums[i]\`, you can jump to any \`nums[i + j]\` where:
+
+- \`0 <= j <= nums[i]\`
+- \`i + j < n\`
+
+Return the minimum number of jumps to reach \`nums[n - 1]\`. The test cases are generated such that you can reach \`nums[n - 1]\`.`,
+    examples: [
+      {
+        input: 'nums = [2,3,1,1,4]',
+        output: '2',
+        explanation:
+          'Jump 1 step from index 0 to 1, then 3 steps to the last index.',
+      },
+      {
+        input: 'nums = [2,3,0,1,4]',
+        output: '2',
+      },
+    ],
+    constraints: [
+      '1 <= nums.length <= 10^4',
+      '0 <= nums[i] <= 1000',
+      'It is guaranteed that you can reach nums[n - 1]',
+    ],
+    hints: [
+      'Track current jump range and farthest reach',
+      'When reach end of current range, increment jumps',
+    ],
+    starterCode: `from typing import List
+
+def jump(nums: List[int]) -> int:
+    """
+    Find minimum jumps to reach end.
+    
+    Args:
+        nums: Array of jump lengths
+        
+    Returns:
+        Minimum number of jumps
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[2, 3, 1, 1, 4]],
+        expected: 2,
+      },
+      {
+        input: [[2, 3, 0, 1, 4]],
+        expected: 2,
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/jump-game-ii/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=dJ7sWiOoK7g',
+  },
+
+  // MEDIUM - Partition Labels
+  {
+    id: 'partition-labels',
+    title: 'Partition Labels',
+    difficulty: 'Medium',
+    topic: 'Greedy',
+    description: `You are given a string \`s\`. We want to partition the string into as many parts as possible so that each letter appears in at most one part.
+
+Note that the partition is done so that after concatenating all the parts in order, the resultant string should be \`s\`.
+
+Return a list of integers representing the size of these parts.`,
+    examples: [
+      {
+        input: 's = "ababcbacadefegdehijhklij"',
+        output: '[9,7,8]',
+        explanation: 'The partition is "ababcbaca", "defegde", "hijhklij".',
+      },
+      {
+        input: 's = "eccbbbbdec"',
+        output: '[10]',
+      },
+    ],
+    constraints: [
+      '1 <= s.length <= 500',
+      's consists of lowercase English letters',
+    ],
+    hints: [
+      'Find last occurrence of each character',
+      'Extend partition to include all occurrences',
+    ],
+    starterCode: `from typing import List
+
+def partition_labels(s: str) -> List[int]:
+    """
+    Partition string into maximum parts.
+    
+    Args:
+        s: Input string
+        
+    Returns:
+        List of partition sizes
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: ['ababcbacadefegdehijhklij'],
+        expected: [9, 7, 8],
+      },
+      {
+        input: ['eccbbbbdec'],
+        expected: [10],
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/partition-labels/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=B7m8UmZE-vw',
+  },
+
+  // MEDIUM - Container With Most Water
+  {
+    id: 'container-most-water',
+    title: 'Container With Most Water',
+    difficulty: 'Medium',
+    topic: 'Greedy',
+    description: `You are given an integer array \`height\` of length \`n\`. There are \`n\` vertical lines drawn such that the two endpoints of the \`i-th\` line are \`(i, 0)\` and \`(i, height[i])\`.
+
+Find two lines that together with the x-axis form a container, such that the container contains the most water.
+
+Return the maximum amount of water a container can store.
+
+**Notice** that you may not slant the container.`,
+    examples: [
+      {
+        input: 'height = [1,8,6,2,5,4,8,3,7]',
+        output: '49',
+        explanation:
+          'The lines at index 1 and 8 form a container with area 49.',
+      },
+      {
+        input: 'height = [1,1]',
+        output: '1',
+      },
+    ],
+    constraints: [
+      'n == height.length',
+      '2 <= n <= 10^5',
+      '0 <= height[i] <= 10^4',
+    ],
+    hints: [
+      'Use two pointers at both ends',
+      'Move pointer with smaller height inward',
+      'Track maximum area',
+    ],
+    starterCode: `from typing import List
+
+def max_area(height: List[int]) -> int:
+    """
+    Find maximum water container area.
+    
+    Args:
+        height: Array of line heights
+        
+    Returns:
+        Maximum area
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[1, 8, 6, 2, 5, 4, 8, 3, 7]],
+        expected: 49,
+      },
+      {
+        input: [[1, 1]],
+        expected: 1,
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/container-with-most-water/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=UuiTKBwPgAo',
   },
 ];

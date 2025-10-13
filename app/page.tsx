@@ -172,8 +172,8 @@ export default function Home() {
             const problemsPercent =
               problemsProgress.total > 0
                 ? Math.round(
-                  (problemsProgress.completed / problemsProgress.total) * 100,
-                )
+                    (problemsProgress.completed / problemsProgress.total) * 100,
+                  )
                 : 0;
 
             const hasAnyProgress =

@@ -562,4 +562,435 @@ def total_n_queens(n: int) -> int:
     leetcodeUrl: 'https://leetcode.com/problems/n-queens/',
     youtubeUrl: 'https://www.youtube.com/watch?v=Ph95IHmRp5M',
   },
+
+  // EASY - Letter Case Permutation
+  {
+    id: 'letter-case-permutation',
+    title: 'Letter Case Permutation',
+    difficulty: 'Easy',
+    topic: 'Backtracking',
+    description: `Given a string \`s\`, you can transform every letter individually to be lowercase or uppercase to create another string.
+
+Return a list of all possible strings we could create. Return the output in **any order**.`,
+    examples: [
+      {
+        input: 's = "a1b2"',
+        output: '["a1b2","a1B2","A1b2","A1B2"]',
+      },
+      {
+        input: 's = "3z4"',
+        output: '["3z4","3Z4"]',
+      },
+    ],
+    constraints: [
+      '1 <= s.length <= 12',
+      's consists of lowercase English letters, uppercase English letters, and digits',
+    ],
+    hints: [
+      'For each letter, branch to try both cases',
+      'For digits, just continue with same char',
+    ],
+    starterCode: `from typing import List
+
+def letter_case_permutation(s: str) -> List[str]:
+    """
+    Generate all letter case permutations.
+    
+    Args:
+        s: Input string
+        
+    Returns:
+        List of all permutations
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: ['a1b2'],
+        expected: ['a1b2', 'a1B2', 'A1b2', 'A1B2'],
+      },
+      {
+        input: ['3z4'],
+        expected: ['3z4', '3Z4'],
+      },
+      {
+        input: ['C'],
+        expected: ['c', 'C'],
+      },
+    ],
+    timeComplexity: 'O(2^n * n)',
+    spaceComplexity: 'O(2^n * n)',
+    leetcodeUrl: 'https://leetcode.com/problems/letter-case-permutation/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=ZCqRY1JbVAo',
+  },
+
+  // EASY - Binary Watch
+  {
+    id: 'binary-watch',
+    title: 'Binary Watch',
+    difficulty: 'Easy',
+    topic: 'Backtracking',
+    description: `A binary watch has 4 LEDs on the top to represent the hours (0-11), and 6 LEDs on the bottom to represent the minutes (0-59). Each LED represents a zero or one, with the least significant bit on the right.
+
+Given an integer \`turnedOn\` which represents the number of LEDs that are currently on (ignoring the PM), return all possible times the watch could represent. You may return the answer in **any order**.
+
+The hour must not contain a leading zero. The minute must consist of two digits and may contain a leading zero.`,
+    examples: [
+      {
+        input: 'turnedOn = 1',
+        output:
+          '["0:01","0:02","0:04","0:08","0:16","0:32","1:00","2:00","4:00","8:00"]',
+      },
+      {
+        input: 'turnedOn = 9',
+        output: '[]',
+      },
+    ],
+    constraints: ['0 <= turnedOn <= 10'],
+    hints: [
+      'Generate all possible hour and minute combinations',
+      'Count bits in each combination',
+      'Filter by total bits equal to turnedOn',
+    ],
+    starterCode: `from typing import List
+
+def read_binary_watch(turnedOn: int) -> List[str]:
+    """
+    Find all possible times with given LED count.
+    
+    Args:
+        turnedOn: Number of LEDs on
+        
+    Returns:
+        List of possible times
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [1],
+        expected: [
+          '0:01',
+          '0:02',
+          '0:04',
+          '0:08',
+          '0:16',
+          '0:32',
+          '1:00',
+          '2:00',
+          '4:00',
+          '8:00',
+        ],
+      },
+      {
+        input: [9],
+        expected: [],
+      },
+      {
+        input: [0],
+        expected: ['0:00'],
+      },
+    ],
+    timeComplexity: 'O(1)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/binary-watch/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=CwDj8xGG2lU',
+  },
+
+  // EASY - Combination Sum III
+  {
+    id: 'combination-sum-iii',
+    title: 'Combination Sum III',
+    difficulty: 'Easy',
+    topic: 'Backtracking',
+    description: `Find all valid combinations of \`k\` numbers that sum up to \`n\` such that the following conditions are true:
+
+- Only numbers \`1\` through \`9\` are used.
+- Each number is used **at most once**.
+
+Return a list of all possible valid combinations. The list must not contain the same combination twice, and the combinations may be returned in any order.`,
+    examples: [
+      {
+        input: 'k = 3, n = 7',
+        output: '[[1,2,4]]',
+        explanation: '1 + 2 + 4 = 7. There are no other valid combinations.',
+      },
+      {
+        input: 'k = 3, n = 9',
+        output: '[[1,2,6],[1,3,5],[2,3,4]]',
+      },
+    ],
+    constraints: ['2 <= k <= 9', '1 <= n <= 60'],
+    hints: [
+      'Use backtracking with numbers 1-9',
+      'Track remaining sum and count',
+      'Prune when sum exceeds target',
+    ],
+    starterCode: `from typing import List
+
+def combination_sum3(k: int, n: int) -> List[List[int]]:
+    """
+    Find combinations of k numbers summing to n.
+    
+    Args:
+        k: Number of elements in combination
+        n: Target sum
+        
+    Returns:
+        List of valid combinations
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [3, 7],
+        expected: [[1, 2, 4]],
+      },
+      {
+        input: [3, 9],
+        expected: [
+          [1, 2, 6],
+          [1, 3, 5],
+          [2, 3, 4],
+        ],
+      },
+      {
+        input: [4, 1],
+        expected: [],
+      },
+    ],
+    timeComplexity: 'O(9! / (k! * (9-k)!))',
+    spaceComplexity: 'O(k)',
+    leetcodeUrl: 'https://leetcode.com/problems/combination-sum-iii/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=xVGCxTmXRBI',
+  },
+
+  // MEDIUM - Combination Sum
+  {
+    id: 'combination-sum',
+    title: 'Combination Sum',
+    difficulty: 'Medium',
+    topic: 'Backtracking',
+    description: `Given an array of **distinct** integers \`candidates\` and a target integer \`target\`, return a list of all **unique combinations** of \`candidates\` where the chosen numbers sum to \`target\`. You may return the combinations in **any order**.
+
+The **same** number may be chosen from \`candidates\` an **unlimited number of times**. Two combinations are unique if the frequency of at least one of the chosen numbers is different.
+
+The test cases are generated such that the number of unique combinations that sum up to \`target\` is less than \`150\` combinations for the given input.`,
+    examples: [
+      {
+        input: 'candidates = [2,3,6,7], target = 7',
+        output: '[[2,2,3],[7]]',
+      },
+      {
+        input: 'candidates = [2,3,5], target = 8',
+        output: '[[2,2,2,2],[2,3,3],[3,5]]',
+      },
+    ],
+    constraints: [
+      '1 <= candidates.length <= 30',
+      '2 <= candidates[i] <= 40',
+      'All elements of candidates are distinct',
+      '1 <= target <= 40',
+    ],
+    hints: [
+      'Use backtracking',
+      'Numbers can be reused',
+      'Start from current index to avoid duplicates',
+    ],
+    starterCode: `from typing import List
+
+def combination_sum(candidates: List[int], target: int) -> List[List[int]]:
+    """
+    Find combinations that sum to target (with repetition).
+    
+    Args:
+        candidates: Available numbers
+        target: Target sum
+        
+    Returns:
+        List of valid combinations
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[2, 3, 6, 7], 7],
+        expected: [[2, 2, 3], [7]],
+      },
+      {
+        input: [[2, 3, 5], 8],
+        expected: [
+          [2, 2, 2, 2],
+          [2, 3, 3],
+          [3, 5],
+        ],
+      },
+      {
+        input: [[2], 1],
+        expected: [],
+      },
+    ],
+    timeComplexity: 'O(2^target)',
+    spaceComplexity: 'O(target)',
+    leetcodeUrl: 'https://leetcode.com/problems/combination-sum/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=GBKI9VSKdGg',
+  },
+
+  // MEDIUM - Generate Parentheses
+  {
+    id: 'generate-parentheses',
+    title: 'Generate Parentheses',
+    difficulty: 'Medium',
+    topic: 'Backtracking',
+    description: `Given \`n\` pairs of parentheses, write a function to generate all combinations of well-formed parentheses.`,
+    examples: [
+      {
+        input: 'n = 3',
+        output: '["((()))","(()())","(())()","()(())","()()()"]',
+      },
+      {
+        input: 'n = 1',
+        output: '["()"]',
+      },
+    ],
+    constraints: ['1 <= n <= 8'],
+    hints: [
+      'Add opening parenthesis if count < n',
+      'Add closing parenthesis if close < open',
+      'Base case: when both counts equal n',
+    ],
+    starterCode: `from typing import List
+
+def generate_parenthesis(n: int) -> List[str]:
+    """
+    Generate all valid parentheses combinations.
+    
+    Args:
+        n: Number of pairs
+        
+    Returns:
+        List of valid combinations
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [3],
+        expected: ['((()))', '(()())', '(())()', '()(())', '()()()'],
+      },
+      {
+        input: [1],
+        expected: ['()'],
+      },
+      {
+        input: [2],
+        expected: ['(())', '()()'],
+      },
+    ],
+    timeComplexity: 'O(4^n / sqrt(n))',
+    spaceComplexity: 'O(n)',
+    leetcodeUrl: 'https://leetcode.com/problems/generate-parentheses/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=s9fokUqJ76A',
+  },
+
+  // MEDIUM - Word Search
+  {
+    id: 'word-search',
+    title: 'Word Search',
+    difficulty: 'Medium',
+    topic: 'Backtracking',
+    description: `Given an \`m x n\` grid of characters \`board\` and a string \`word\`, return \`true\` if \`word\` exists in the grid.
+
+The word can be constructed from letters of sequentially adjacent cells, where adjacent cells are horizontally or vertically neighboring. The same letter cell may not be used more than once.`,
+    examples: [
+      {
+        input:
+          'board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCCED"',
+        output: 'true',
+      },
+      {
+        input:
+          'board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "SEE"',
+        output: 'true',
+      },
+      {
+        input:
+          'board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCB"',
+        output: 'false',
+      },
+    ],
+    constraints: [
+      'm == board.length',
+      'n = board[i].length',
+      '1 <= m, n <= 6',
+      '1 <= word.length <= 15',
+      'board and word consists of only lowercase and uppercase English letters',
+    ],
+    hints: [
+      'Try starting from each cell',
+      'Use DFS backtracking',
+      'Mark visited cells temporarily',
+      'Restore cells after backtracking',
+    ],
+    starterCode: `from typing import List
+
+def exist(board: List[List[str]], word: str) -> bool:
+    """
+    Check if word exists in board.
+    
+    Args:
+        board: 2D grid of characters
+        word: Word to search for
+        
+    Returns:
+        True if word exists
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [
+          [
+            ['A', 'B', 'C', 'E'],
+            ['S', 'F', 'C', 'S'],
+            ['A', 'D', 'E', 'E'],
+          ],
+          'ABCCED',
+        ],
+        expected: true,
+      },
+      {
+        input: [
+          [
+            ['A', 'B', 'C', 'E'],
+            ['S', 'F', 'C', 'S'],
+            ['A', 'D', 'E', 'E'],
+          ],
+          'SEE',
+        ],
+        expected: true,
+      },
+      {
+        input: [
+          [
+            ['A', 'B', 'C', 'E'],
+            ['S', 'F', 'C', 'S'],
+            ['A', 'D', 'E', 'E'],
+          ],
+          'ABCB',
+        ],
+        expected: false,
+      },
+    ],
+    timeComplexity: 'O(m * n * 4^L) where L is word length',
+    spaceComplexity: 'O(L)',
+    leetcodeUrl: 'https://leetcode.com/problems/word-search/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=pfiQ_PS1g8E',
+  },
 ];

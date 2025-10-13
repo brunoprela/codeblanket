@@ -546,4 +546,461 @@ def minimum_effort_path_binary_search(heights: List[List[int]]) -> int:
     leetcodeUrl: 'https://leetcode.com/problems/path-with-minimum-effort/',
     youtubeUrl: 'https://www.youtube.com/watch?v=XQlxCCx2vI4',
   },
+
+  // EASY - Find if Path Exists (Union-Find)
+  {
+    id: 'redundant-connection',
+    title: 'Redundant Connection',
+    difficulty: 'Easy',
+    topic: 'Advanced Graphs',
+    description: `In this problem, a tree is an **undirected graph** that is connected and has no cycles.
+
+You are given a graph that started as a tree with \`n\` nodes labeled from \`1\` to \`n\`, with one additional edge added. The added edge has two **different** vertices chosen from \`1\` to \`n\`, and was not an edge that already existed. The graph is represented as an array \`edges\` of length \`n\` where \`edges[i] = [ai, bi]\` indicates that there is an edge between nodes \`ai\` and \`bi\` in the graph.
+
+Return an edge that can be removed so that the resulting graph is a tree of \`n\` nodes. If there are multiple answers, return the answer that occurs last in the input.`,
+    examples: [
+      {
+        input: 'edges = [[1,2],[1,3],[2,3]]',
+        output: '[2,3]',
+      },
+      {
+        input: 'edges = [[1,2],[2,3],[3,4],[1,4],[1,5]]',
+        output: '[1,4]',
+      },
+    ],
+    constraints: [
+      'n == edges.length',
+      '3 <= n <= 1000',
+      'edges[i].length == 2',
+      '1 <= ai < bi <= edges.length',
+      'ai != bi',
+      'There are no repeated edges',
+      'The given graph is connected',
+    ],
+    hints: [
+      'Use Union-Find (DSU)',
+      'If both nodes already in same component, edge creates cycle',
+    ],
+    starterCode: `from typing import List
+
+def find_redundant_connection(edges: List[List[int]]) -> List[int]:
+    """
+    Find redundant edge using Union-Find.
+    
+    Args:
+        edges: List of edges
+        
+    Returns:
+        Edge that creates cycle
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [
+          [
+            [1, 2],
+            [1, 3],
+            [2, 3],
+          ],
+        ],
+        expected: [2, 3],
+      },
+      {
+        input: [
+          [
+            [1, 2],
+            [2, 3],
+            [3, 4],
+            [1, 4],
+            [1, 5],
+          ],
+        ],
+        expected: [1, 4],
+      },
+    ],
+    timeComplexity: 'O(n * α(n)) where α is inverse Ackermann',
+    spaceComplexity: 'O(n)',
+    leetcodeUrl: 'https://leetcode.com/problems/redundant-connection/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=FXWRE67PLL0',
+  },
+
+  // EASY - Accounts Merge
+  {
+    id: 'accounts-merge',
+    title: 'Accounts Merge',
+    difficulty: 'Easy',
+    topic: 'Advanced Graphs',
+    description: `Given a list of \`accounts\` where each element \`accounts[i]\` is a list of strings, where the first element \`accounts[i][0]\` is a name, and the rest of the elements are **emails** representing emails of the account.
+
+Now, we would like to merge these accounts. Two accounts definitely belong to the same person if there is some common email to both accounts. Note that even if two accounts have the same name, they may belong to different people as people could have the same name. A person can have any number of accounts initially, but all of their accounts definitely have the same name.
+
+After merging the accounts, return the accounts in the following format: the first element of each account is the name, and the rest of the elements are emails **in sorted order**. The accounts themselves can be returned in **any order**.`,
+    examples: [
+      {
+        input:
+          'accounts = [["John","johnsmith@mail.com","john_newyork@mail.com"],["John","johnsmith@mail.com","john00@mail.com"],["Mary","mary@mail.com"],["John","johnnybravo@mail.com"]]',
+        output:
+          '[["John","john00@mail.com","john_newyork@mail.com","johnsmith@mail.com"],["Mary","mary@mail.com"],["John","johnnybravo@mail.com"]]',
+      },
+    ],
+    constraints: [
+      '1 <= accounts.length <= 1000',
+      '2 <= accounts[i].length <= 10',
+      '1 <= accounts[i][j].length <= 30',
+      'accounts[i][0] consists of English letters',
+      'accounts[i][j] (for j > 0) is a valid email',
+    ],
+    hints: [
+      'Use Union-Find on emails',
+      'Build mapping from email to name',
+      'Group emails by root parent',
+    ],
+    starterCode: `from typing import List
+
+def accounts_merge(accounts: List[List[str]]) -> List[List[str]]:
+    """
+    Merge accounts with common emails.
+    
+    Args:
+        accounts: List of [name, email1, email2, ...]
+        
+    Returns:
+        Merged accounts
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [
+          [
+            ['John', 'johnsmith@mail.com', 'john_newyork@mail.com'],
+            ['John', 'johnsmith@mail.com', 'john00@mail.com'],
+            ['Mary', 'mary@mail.com'],
+            ['John', 'johnnybravo@mail.com'],
+          ],
+        ],
+        expected: [
+          [
+            'John',
+            'john00@mail.com',
+            'john_newyork@mail.com',
+            'johnsmith@mail.com',
+          ],
+          ['Mary', 'mary@mail.com'],
+          ['John', 'johnnybravo@mail.com'],
+        ],
+      },
+    ],
+    timeComplexity: 'O(n * k * α(n)) where k is avg emails per account',
+    spaceComplexity: 'O(n * k)',
+    leetcodeUrl: 'https://leetcode.com/problems/accounts-merge/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=wU6udHRIkcc',
+  },
+
+  // EASY - Number of Provinces
+  {
+    id: 'number-of-provinces',
+    title: 'Number of Provinces',
+    difficulty: 'Easy',
+    topic: 'Advanced Graphs',
+    description: `There are \`n\` cities. Some of them are connected, while some are not. If city \`a\` is connected directly with city \`b\`, and city \`b\` is connected directly with city \`c\`, then city \`a\` is connected indirectly with city \`c\`.
+
+A **province** is a group of directly or indirectly connected cities and no other cities outside of the group.
+
+You are given an \`n x n\` matrix \`isConnected\` where \`isConnected[i][j] = 1\` if the \`i-th\` city and the \`j-th\` city are directly connected, and \`isConnected[i][j] = 0\` otherwise.
+
+Return the total number of **provinces**.`,
+    examples: [
+      {
+        input: 'isConnected = [[1,1,0],[1,1,0],[0,0,1]]',
+        output: '2',
+      },
+      {
+        input: 'isConnected = [[1,0,0],[0,1,0],[0,0,1]]',
+        output: '3',
+      },
+    ],
+    constraints: [
+      '1 <= n <= 200',
+      'n == isConnected.length',
+      'n == isConnected[i].length',
+      'isConnected[i][j] is 1 or 0',
+      'isConnected[i][i] == 1',
+      'isConnected[i][j] == isConnected[j][i]',
+    ],
+    hints: ['Use Union-Find or DFS', 'Count number of connected components'],
+    starterCode: `from typing import List
+
+def find_circle_num(is_connected: List[List[int]]) -> int:
+    """
+    Count number of provinces (connected components).
+    
+    Args:
+        is_connected: Adjacency matrix
+        
+    Returns:
+        Number of provinces
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [
+          [
+            [1, 1, 0],
+            [1, 1, 0],
+            [0, 0, 1],
+          ],
+        ],
+        expected: 2,
+      },
+      {
+        input: [
+          [
+            [1, 0, 0],
+            [0, 1, 0],
+            [0, 0, 1],
+          ],
+        ],
+        expected: 3,
+      },
+    ],
+    timeComplexity: 'O(n^2)',
+    spaceComplexity: 'O(n)',
+    leetcodeUrl: 'https://leetcode.com/problems/number-of-provinces/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=ZGr5nX-Gi6Y',
+  },
+
+  // MEDIUM - Minimum Spanning Tree (Kruskal)
+  {
+    id: 'min-cost-to-connect-all-points',
+    title: 'Min Cost to Connect All Points',
+    difficulty: 'Medium',
+    topic: 'Advanced Graphs',
+    description: `You are given an array \`points\` representing integer coordinates of some points on a 2D-plane, where \`points[i] = [xi, yi]\`.
+
+The cost of connecting two points \`[xi, yi]\` and \`[xj, yj]\` is the **manhattan distance** between them: \`|xi - xj| + |yi - yj|\`, where \`|val|\` denotes the absolute value of \`val\`.
+
+Return the minimum cost to make all points connected. All points are connected if there is **exactly one** simple path between any two points.`,
+    examples: [
+      {
+        input: 'points = [[0,0],[2,2],[3,10],[5,2],[7,0]]',
+        output: '20',
+      },
+      {
+        input: 'points = [[3,12],[-2,5],[-4,1]]',
+        output: '18',
+      },
+    ],
+    constraints: [
+      '1 <= points.length <= 1000',
+      '-10^6 <= xi, yi <= 10^6',
+      'All pairs (xi, yi) are distinct',
+    ],
+    hints: [
+      'Build MST using Kruskal algorithm',
+      'Sort all edges by weight',
+      'Use Union-Find to detect cycles',
+    ],
+    starterCode: `from typing import List
+
+def min_cost_connect_points(points: List[List[int]]) -> int:
+    """
+    Find MST cost using Kruskal algorithm.
+    
+    Args:
+        points: Array of [x, y] coordinates
+        
+    Returns:
+        Minimum spanning tree cost
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [
+          [
+            [0, 0],
+            [2, 2],
+            [3, 10],
+            [5, 2],
+            [7, 0],
+          ],
+        ],
+        expected: 20,
+      },
+      {
+        input: [
+          [
+            [3, 12],
+            [-2, 5],
+            [-4, 1],
+          ],
+        ],
+        expected: 18,
+      },
+    ],
+    timeComplexity: 'O(n^2 log n)',
+    spaceComplexity: 'O(n^2)',
+    leetcodeUrl:
+      'https://leetcode.com/problems/min-cost-to-connect-all-points/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=f7JOBJIC-NA',
+  },
+
+  // MEDIUM - Swim in Rising Water
+  {
+    id: 'swim-in-rising-water',
+    title: 'Swim in Rising Water',
+    difficulty: 'Medium',
+    topic: 'Advanced Graphs',
+    description: `You are given an \`n x n\` integer matrix \`grid\` where each value \`grid[i][j]\` represents the elevation at that point \`(i, j)\`.
+
+The rain starts to fall. At time \`t\`, the depth of the water everywhere is \`t\`. You can swim from a square to another 4-directionally adjacent square if and only if the elevation of both squares individually are at most \`t\`. You can swim infinite distances in zero time. Of course, you must stay within the boundaries of the grid during your swim.
+
+Return the least time until you can reach the bottom right square \`(n - 1, n - 1)\` if you start at the top left square \`(0, 0)\`.`,
+    examples: [
+      {
+        input: 'grid = [[0,2],[1,3]]',
+        output: '3',
+      },
+      {
+        input:
+          'grid = [[0,1,2,3,4],[24,23,22,21,5],[12,13,14,15,16],[11,17,18,19,20],[10,9,8,7,6]]',
+        output: '16',
+      },
+    ],
+    constraints: [
+      'n == grid.length',
+      'n == grid[i].length',
+      '1 <= n <= 50',
+      '0 <= grid[i][j] < n^2',
+      'Each value grid[i][j] is unique',
+    ],
+    hints: [
+      'Use Dijkstra or binary search + BFS',
+      'Track minimum maximum elevation on path',
+    ],
+    starterCode: `from typing import List
+import heapq
+
+def swim_in_water(grid: List[List[int]]) -> int:
+    """
+    Find minimum time to reach bottom-right.
+    
+    Args:
+        grid: Elevation matrix
+        
+    Returns:
+        Minimum time needed
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [
+          [
+            [0, 2],
+            [1, 3],
+          ],
+        ],
+        expected: 3,
+      },
+      {
+        input: [
+          [
+            [0, 1, 2, 3, 4],
+            [24, 23, 22, 21, 5],
+            [12, 13, 14, 15, 16],
+            [11, 17, 18, 19, 20],
+            [10, 9, 8, 7, 6],
+          ],
+        ],
+        expected: 16,
+      },
+    ],
+    timeComplexity: 'O(n^2 log n)',
+    spaceComplexity: 'O(n^2)',
+    leetcodeUrl: 'https://leetcode.com/problems/swim-in-rising-water/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=amvrKlMLuGY',
+  },
+
+  // MEDIUM - Critical Connections
+  {
+    id: 'critical-connections',
+    title: 'Critical Connections in a Network',
+    difficulty: 'Medium',
+    topic: 'Advanced Graphs',
+    description: `There are \`n\` servers numbered from \`0\` to \`n - 1\` connected by undirected server-to-server \`connections\` forming a network where \`connections[i] = [ai, bi]\` represents a connection between servers \`ai\` and \`bi\`. Any server can reach other servers directly or indirectly through the network.
+
+A **critical connection** is a connection that, if removed, will make some servers unable to reach some other server.
+
+Return all critical connections in the network in any order.`,
+    examples: [
+      {
+        input: 'n = 4, connections = [[0,1],[1,2],[2,0],[1,3]]',
+        output: '[[1,3]]',
+      },
+      {
+        input: 'n = 2, connections = [[0,1]]',
+        output: '[[0,1]]',
+      },
+    ],
+    constraints: [
+      '2 <= n <= 10^5',
+      'n - 1 <= connections.length <= 10^5',
+      '0 <= ai, bi <= n - 1',
+      'ai != bi',
+      'There are no repeated connections',
+    ],
+    hints: [
+      'Use Tarjan algorithm for finding bridges',
+      'Track discovery time and low-link values',
+      'Bridge exists if low[child] > disc[parent]',
+    ],
+    starterCode: `from typing import List
+
+def critical_connections(n: int, connections: List[List[int]]) -> List[List[int]]:
+    """
+    Find all bridges (critical edges) using Tarjan.
+    
+    Args:
+        n: Number of nodes
+        connections: List of edges
+        
+    Returns:
+        List of critical connections
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [
+          4,
+          [
+            [0, 1],
+            [1, 2],
+            [2, 0],
+            [1, 3],
+          ],
+        ],
+        expected: [[1, 3]],
+      },
+      {
+        input: [2, [[0, 1]]],
+        expected: [[0, 1]],
+      },
+    ],
+    timeComplexity: 'O(V + E)',
+    spaceComplexity: 'O(V + E)',
+    leetcodeUrl:
+      'https://leetcode.com/problems/critical-connections-in-a-network/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=Rhxs4k6DyMM',
+  },
 ];

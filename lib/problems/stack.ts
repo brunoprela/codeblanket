@@ -543,15 +543,17 @@ Return the final string after all such duplicate removals have been made. It can
       {
         input: 's = "abbaca"',
         output: '"ca"',
-        explanation:
-          'Remove "bb" to get "aaca", then remove "aa" to get "ca".',
+        explanation: 'Remove "bb" to get "aaca", then remove "aa" to get "ca".',
       },
       {
         input: 's = "azxxzy"',
         output: '"ay"',
       },
     ],
-    constraints: ['1 <= s.length <= 10^5', 's consists of lowercase English letters'],
+    constraints: [
+      '1 <= s.length <= 10^5',
+      's consists of lowercase English letters',
+    ],
     hints: [
       'Use a stack to process characters',
       'If top of stack equals current char, pop it',
@@ -786,11 +788,17 @@ def next_greater_element(nums1: List[int], nums2: List[int]) -> List[int]:
 `,
     testCases: [
       {
-        input: [[4, 1, 2], [1, 3, 4, 2]],
+        input: [
+          [4, 1, 2],
+          [1, 3, 4, 2],
+        ],
         expected: [-1, 3, -1],
       },
       {
-        input: [[2, 4], [1, 2, 3, 4]],
+        input: [
+          [2, 4],
+          [1, 2, 3, 4],
+        ],
         expected: [3, -1],
       },
     ],
@@ -851,7 +859,10 @@ Implement the \`MyQueue\` class:
           'MyQueue myQueue = new MyQueue();\nmyQueue.push(1);\nmyQueue.push(2);\nmyQueue.peek(); // return 1\nmyQueue.pop(); // return 1\nmyQueue.empty(); // return false',
       },
     ],
-    constraints: ['1 <= x <= 9', 'At most 100 calls will be made to push, pop, peek, and empty'],
+    constraints: [
+      '1 <= x <= 9',
+      'At most 100 calls will be made to push, pop, peek, and empty',
+    ],
     hints: [
       'Use two stacks: one for push, one for pop',
       'Transfer from push stack to pop stack when needed',
@@ -884,7 +895,10 @@ Implement the \`MyQueue\` class:
 `,
     testCases: [
       {
-        input: [['push', 'push', 'peek', 'pop', 'empty'], [[1], [2], [], [], []]],
+        input: [
+          ['push', 'push', 'peek', 'pop', 'empty'],
+          [[1], [2], [], [], []],
+        ],
         expected: [null, null, 1, 1, false],
       },
     ],
@@ -926,5 +940,419 @@ Implement the \`MyQueue\` class:
     spaceComplexity: 'O(n)',
     leetcodeUrl: 'https://leetcode.com/problems/implement-queue-using-stacks/',
     youtubeUrl: 'https://www.youtube.com/watch?v=eanwa3ht3YQ',
+  },
+
+  // EASY - Implement Stack using Queues
+  {
+    id: 'implement-stack-using-queues',
+    title: 'Implement Stack using Queues',
+    difficulty: 'Easy',
+    topic: 'Stack',
+    description: `Implement a last-in-first-out (LIFO) stack using only two queues. The implemented stack should support all the functions of a normal stack (push, top, pop, and empty).
+
+Implement the \`MyStack\` class:
+- \`void push(int x)\` Pushes element x to the top of the stack.
+- \`int pop()\` Removes the element on the top of the stack and returns it.
+- \`int top()\` Returns the element on the top of the stack.
+- \`boolean empty()\` Returns true if the stack is empty, false otherwise.`,
+    examples: [
+      {
+        input: '["MyStack", "push", "push", "top", "pop", "empty"]',
+        output: '[null, null, null, 2, 2, false]',
+      },
+    ],
+    constraints: [
+      '1 <= x <= 9',
+      'At most 100 calls will be made to push, pop, top, and empty',
+    ],
+    hints: [
+      'Use one queue as the main storage',
+      'When pushing, add new element and rotate all previous elements',
+    ],
+    starterCode: `from collections import deque
+
+class MyStack:
+    """
+    Stack implementation using queues.
+    """
+    
+    def __init__(self):
+        # Write your code here
+        pass
+        
+    def push(self, x: int) -> None:
+        # Write your code here
+        pass
+        
+    def pop(self) -> int:
+        # Write your code here
+        pass
+        
+    def top(self) -> int:
+        # Write your code here
+        pass
+        
+    def empty(self) -> bool:
+        # Write your code here
+        pass
+`,
+    testCases: [
+      {
+        input: [
+          ['push', 'push', 'top'],
+          [[1], [2], []],
+        ],
+        expected: [null, null, 2],
+      },
+      {
+        input: [
+          ['push', 'pop', 'empty'],
+          [[1], [], []],
+        ],
+        expected: [null, 1, true],
+      },
+    ],
+    timeComplexity: 'O(1) for all operations except push which is O(n)',
+    spaceComplexity: 'O(n)',
+    leetcodeUrl: 'https://leetcode.com/problems/implement-stack-using-queues/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=rW4vm0-DLYc',
+  },
+
+  // EASY - Make The String Great
+  {
+    id: 'make-string-great',
+    title: 'Make The String Great',
+    difficulty: 'Easy',
+    topic: 'Stack',
+    description: `Given a string \`s\` of lower and upper case English letters.
+
+A good string is a string which does not have two adjacent characters \`s[i]\` and \`s[i + 1]\` where:
+- \`0 <= i <= s.length - 2\`
+- \`s[i]\` is a lower-case letter and \`s[i + 1]\` is the same letter but in upper-case or vice-versa.
+
+To make the string good, you can choose two adjacent characters that make the string bad and remove them. You can keep doing this until the string becomes good.
+
+Return the string after making it good. The answer is guaranteed to be unique under the given constraints.`,
+    examples: [
+      {
+        input: 's = "leEeetcode"',
+        output: '"leetcode"',
+        explanation:
+          'In the first step, either you choose i = 1 or i = 2, both will result "leEeetcode" to be reduced to "leetcode".',
+      },
+      {
+        input: 's = "abBAcC"',
+        output: '""',
+      },
+    ],
+    constraints: [
+      '1 <= s.length <= 100',
+      's contains only lower and upper case English letters',
+    ],
+    hints: [
+      'Use a stack to keep track of characters',
+      'If top of stack and current character are same letter but different case, pop',
+    ],
+    starterCode: `def make_good(s: str) -> str:
+    """
+    Remove adjacent characters that are same letter but different case.
+    
+    Args:
+        s: Input string
+        
+    Returns:
+        Good string
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: ['leEeetcode'],
+        expected: 'leetcode',
+      },
+      {
+        input: ['abBAcC'],
+        expected: '',
+      },
+      {
+        input: ['s'],
+        expected: 's',
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(n)',
+    leetcodeUrl: 'https://leetcode.com/problems/make-the-string-great/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=D67hXk_ZFQM',
+  },
+
+  // EASY - Remove Outermost Parentheses
+  {
+    id: 'remove-outermost-parentheses',
+    title: 'Remove Outermost Parentheses',
+    difficulty: 'Easy',
+    topic: 'Stack',
+    description: `A valid parentheses string is either empty \`""\`, \`"(" + A + ")"\`, or \`A + B\`, where \`A\` and \`B\` are valid parentheses strings, and \`+\` represents string concatenation.
+
+Given a valid parentheses string \`s\`, consider its primitive decomposition: \`s = P1 + P2 + ... + Pk\`, where \`Pi\` are primitive valid parentheses strings.
+
+Return \`s\` after removing the outermost parentheses of every primitive string in the primitive decomposition of \`s\`.`,
+    examples: [
+      {
+        input: 's = "(()())(())"',
+        output: '"()()()"',
+        explanation:
+          'The input string is "(()())(())", with primitive decomposition "(()())" + "(())". After removing outer parentheses of each part, this is "()()" + "()" = "()()()".',
+      },
+      {
+        input: 's = "()()"',
+        output: '""',
+      },
+    ],
+    constraints: [
+      '1 <= s.length <= 10^5',
+      's[i] is either ( or )',
+      's is a valid parentheses string',
+    ],
+    hints: [
+      'Keep track of the depth of parentheses',
+      'Only include characters when depth > 1',
+    ],
+    starterCode: `def remove_outer_parentheses(s: str) -> str:
+    """
+    Remove outermost parentheses from primitive decomposition.
+    
+    Args:
+        s: Valid parentheses string
+        
+    Returns:
+        String with outermost parentheses removed
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: ['(()())(())'],
+        expected: '()()()',
+      },
+      {
+        input: ['()()'],
+        expected: '',
+      },
+      {
+        input: ['(()())(())(()(()))'],
+        expected: '()()()()(())',
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(n)',
+    leetcodeUrl: 'https://leetcode.com/problems/remove-outermost-parentheses/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=YTqd04zvkp0',
+  },
+
+  // MEDIUM - Daily Temperatures
+  {
+    id: 'daily-temperatures',
+    title: 'Daily Temperatures',
+    difficulty: 'Medium',
+    topic: 'Stack',
+    description: `Given an array of integers \`temperatures\` represents the daily temperatures, return an array \`answer\` such that \`answer[i]\` is the number of days you have to wait after the \`i-th\` day to get a warmer temperature. If there is no future day for which this is possible, keep \`answer[i] == 0\` instead.`,
+    examples: [
+      {
+        input: 'temperatures = [73,74,75,71,69,72,76,73]',
+        output: '[1,1,4,2,1,1,0,0]',
+      },
+      {
+        input: 'temperatures = [30,40,50,60]',
+        output: '[1,1,1,0]',
+      },
+    ],
+    constraints: [
+      '1 <= temperatures.length <= 10^5',
+      '30 <= temperatures[i] <= 100',
+    ],
+    hints: [
+      'Use a monotonic decreasing stack',
+      'Store indices in the stack',
+      'Pop when you find a warmer temperature',
+    ],
+    starterCode: `from typing import List
+
+def daily_temperatures(temperatures: List[int]) -> List[int]:
+    """
+    Find days until warmer temperature.
+    
+    Args:
+        temperatures: Daily temperatures
+        
+    Returns:
+        Days to wait for warmer temperature
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[73, 74, 75, 71, 69, 72, 76, 73]],
+        expected: [1, 1, 4, 2, 1, 1, 0, 0],
+      },
+      {
+        input: [[30, 40, 50, 60]],
+        expected: [1, 1, 1, 0],
+      },
+      {
+        input: [[30, 60, 90]],
+        expected: [1, 1, 0],
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(n)',
+    leetcodeUrl: 'https://leetcode.com/problems/daily-temperatures/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=cTBiBSnjO3c',
+  },
+
+  // MEDIUM - Evaluate Reverse Polish Notation
+  {
+    id: 'evaluate-reverse-polish-notation',
+    title: 'Evaluate Reverse Polish Notation',
+    difficulty: 'Medium',
+    topic: 'Stack',
+    description: `You are given an array of strings \`tokens\` that represents an arithmetic expression in Reverse Polish Notation.
+
+Evaluate the expression. Return an integer that represents the value of the expression.
+
+**Note that:**
+- The valid operators are \`'+'\`, \`'-'\`, \`'*'\`, and \`'/'\`.
+- Each operand may be an integer or another expression.
+- The division between two integers always truncates toward zero.
+- There will not be any division by zero.
+- The input represents a valid arithmetic expression in reverse polish notation.
+- The answer and all the intermediate calculations can be represented in a 32-bit integer.`,
+    examples: [
+      {
+        input: 'tokens = ["2","1","+","3","*"]',
+        output: '9',
+        explanation: '((2 + 1) * 3) = 9',
+      },
+      {
+        input: 'tokens = ["4","13","5","/","+"]',
+        output: '6',
+        explanation: '(4 + (13 / 5)) = 6',
+      },
+    ],
+    constraints: [
+      '1 <= tokens.length <= 10^4',
+      'tokens[i] is either an operator: "+", "-", "*", or "/", or an integer in the range [-200, 200]',
+    ],
+    hints: [
+      'Use a stack to store operands',
+      'When you see an operator, pop two operands, apply operator, push result',
+    ],
+    starterCode: `from typing import List
+
+def eval_rpn(tokens: List[str]) -> int:
+    """
+    Evaluate Reverse Polish Notation expression.
+    
+    Args:
+        tokens: Array of tokens representing RPN expression
+        
+    Returns:
+        Result of evaluation
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [['2', '1', '+', '3', '*']],
+        expected: 9,
+      },
+      {
+        input: [['4', '13', '5', '/', '+']],
+        expected: 6,
+      },
+      {
+        input: [
+          ['10', '6', '9', '3', '+', '-11', '*', '/', '*', '17', '+', '5', '+'],
+        ],
+        expected: 22,
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(n)',
+    leetcodeUrl:
+      'https://leetcode.com/problems/evaluate-reverse-polish-notation/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=iu0082c4HDE',
+  },
+
+  // MEDIUM - Decode String
+  {
+    id: 'decode-string',
+    title: 'Decode String',
+    difficulty: 'Medium',
+    topic: 'Stack',
+    description: `Given an encoded string, return its decoded string.
+
+The encoding rule is: \`k[encoded_string]\`, where the \`encoded_string\` inside the square brackets is being repeated exactly \`k\` times. Note that \`k\` is guaranteed to be a positive integer.
+
+You may assume that the input string is always valid; there are no extra white spaces, square brackets are well-formed, etc. Furthermore, you may assume that the original data does not contain any digits and that digits are only for those repeat numbers, \`k\`. For example, there will not be input like \`3a\` or \`2[4]\`.`,
+    examples: [
+      {
+        input: 's = "3[a]2[bc]"',
+        output: '"aaabcbc"',
+      },
+      {
+        input: 's = "3[a2[c]]"',
+        output: '"accaccacc"',
+      },
+      {
+        input: 's = "2[abc]3[cd]ef"',
+        output: '"abcabccdcdcdef"',
+      },
+    ],
+    constraints: [
+      '1 <= s.length <= 30',
+      's consists of lowercase English letters, digits, and square brackets []',
+      's is guaranteed to be a valid input',
+      'All the integers in s are in the range [1, 300]',
+    ],
+    hints: [
+      'Use stack to store count and previous string',
+      'Build current string until you see ]',
+      'Pop count and previous string when you see ]',
+    ],
+    starterCode: `def decode_string(s: str) -> str:
+    """
+    Decode encoded string.
+    
+    Args:
+        s: Encoded string
+        
+    Returns:
+        Decoded string
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: ['3[a]2[bc]'],
+        expected: 'aaabcbc',
+      },
+      {
+        input: ['3[a2[c]]'],
+        expected: 'accaccacc',
+      },
+      {
+        input: ['2[abc]3[cd]ef'],
+        expected: 'abcabccdcdcdef',
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(n)',
+    leetcodeUrl: 'https://leetcode.com/problems/decode-string/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=qB0zZpBJlh8',
   },
 ];

@@ -426,4 +426,338 @@ def missing_number_gauss(nums: List[int]) -> int:
     leetcodeUrl: 'https://leetcode.com/problems/missing-number/',
     youtubeUrl: 'https://www.youtube.com/watch?v=WnPLSRLSANE',
   },
+
+  // EASY - Counting Bits
+  {
+    id: 'counting-bits',
+    title: 'Counting Bits',
+    difficulty: 'Easy',
+    topic: 'Bit Manipulation',
+    description: `Given an integer \`n\`, return an array \`ans\` of length \`n + 1\` such that for each \`i\` (\`0 <= i <= n\`), \`ans[i]\` is the **number of** \`1\`**'s** in the binary representation of \`i\`.`,
+    examples: [
+      {
+        input: 'n = 2',
+        output: '[0,1,1]',
+      },
+      {
+        input: 'n = 5',
+        output: '[0,1,1,2,1,2]',
+      },
+    ],
+    constraints: ['0 <= n <= 10^5'],
+    hints: [
+      'DP: count[i] = count[i >> 1] + (i & 1)',
+      'Right shift removes last bit, check if it was 1',
+    ],
+    starterCode: `from typing import List
+
+def count_bits(n: int) -> List[int]:
+    """
+    Count 1s in binary for 0 to n.
+    
+    Args:
+        n: Upper limit
+        
+    Returns:
+        Array of bit counts
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [2],
+        expected: [0, 1, 1],
+      },
+      {
+        input: [5],
+        expected: [0, 1, 1, 2, 1, 2],
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1) excluding output',
+    leetcodeUrl: 'https://leetcode.com/problems/counting-bits/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=RyBM56RIWrM',
+  },
+
+  // EASY - Reverse Bits
+  {
+    id: 'reverse-bits',
+    title: 'Reverse Bits',
+    difficulty: 'Easy',
+    topic: 'Bit Manipulation',
+    description: `Reverse bits of a given 32 bits unsigned integer.
+
+**Note:**
+
+- In some languages, such as Java, there is no unsigned integer type. In this case, both input and output will be given as a signed integer type. They should not affect your implementation, as the integer's internal binary representation is the same, whether it is signed or unsigned.
+- In Java, the compiler represents the signed integers using 2's complement notation. Therefore, in **Example 2** above, the input represents the signed integer \`-3\` and the output represents the signed integer \`-1073741825\`.`,
+    examples: [
+      {
+        input: 'n = 00000010100101000001111010011100',
+        output: '00111001011110000010100101000000',
+      },
+      {
+        input: 'n = 11111111111111111111111111111101',
+        output: '10111111111111111111111111111111',
+      },
+    ],
+    constraints: ['The input must be a binary string of length 32'],
+    hints: [
+      'Process each bit from right to left',
+      'Build result by shifting left',
+    ],
+    starterCode: `def reverse_bits(n: int) -> int:
+    """
+    Reverse bits of 32-bit integer.
+    
+    Args:
+        n: 32-bit unsigned integer
+        
+    Returns:
+        Reversed 32-bit integer
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [43261596],
+        expected: 964176192,
+      },
+      {
+        input: [4294967293],
+        expected: 3221225471,
+      },
+    ],
+    timeComplexity: 'O(1)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/reverse-bits/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=UcoN6UjAI64',
+  },
+
+  // EASY - Hamming Distance
+  {
+    id: 'hamming-distance',
+    title: 'Hamming Distance',
+    difficulty: 'Easy',
+    topic: 'Bit Manipulation',
+    description: `The **Hamming distance** between two integers is the number of positions at which the corresponding bits are different.
+
+Given two integers \`x\` and \`y\`, return the **Hamming distance** between them.`,
+    examples: [
+      {
+        input: 'x = 1, y = 4',
+        output: '2',
+        explanation: '1 (0 0 0 1) and 4 (0 1 0 0) differ in 2 positions.',
+      },
+      {
+        input: 'x = 3, y = 1',
+        output: '1',
+      },
+    ],
+    constraints: ['0 <= x, y <= 2^31 - 1'],
+    hints: ['XOR to find differing bits', 'Count 1s in result'],
+    starterCode: `def hamming_distance(x: int, y: int) -> int:
+    """
+    Find Hamming distance between two integers.
+    
+    Args:
+        x: First integer
+        y: Second integer
+        
+    Returns:
+        Number of differing bits
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [1, 4],
+        expected: 2,
+      },
+      {
+        input: [3, 1],
+        expected: 1,
+      },
+    ],
+    timeComplexity: 'O(1)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/hamming-distance/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=yHBsShUIejQ',
+  },
+
+  // MEDIUM - Sum of Two Integers
+  {
+    id: 'sum-of-two-integers',
+    title: 'Sum of Two Integers',
+    difficulty: 'Medium',
+    topic: 'Bit Manipulation',
+    description: `Given two integers \`a\` and \`b\`, return the sum of the two integers **without using the operators** \`+\` **and** \`-\`.`,
+    examples: [
+      {
+        input: 'a = 1, b = 2',
+        output: '3',
+      },
+      {
+        input: 'a = 2, b = 3',
+        output: '5',
+      },
+    ],
+    constraints: ['-1000 <= a, b <= 1000'],
+    hints: [
+      'Use XOR for sum without carry',
+      'Use AND and left shift for carry',
+      'Repeat until no carry',
+    ],
+    starterCode: `def get_sum(a: int, b: int) -> int:
+    """
+    Add two integers without + or - operators.
+    
+    Args:
+        a: First integer
+        b: Second integer
+        
+    Returns:
+        Sum of a and b
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [1, 2],
+        expected: 3,
+      },
+      {
+        input: [2, 3],
+        expected: 5,
+      },
+    ],
+    timeComplexity: 'O(1)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/sum-of-two-integers/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=gVUrDV4tZfY',
+  },
+
+  // MEDIUM - Single Number II
+  {
+    id: 'single-number-ii',
+    title: 'Single Number II',
+    difficulty: 'Medium',
+    topic: 'Bit Manipulation',
+    description: `Given an integer array \`nums\` where every element appears **three times** except for one, which appears **exactly once**. Find the single element and return it.
+
+You must implement a solution with a linear runtime complexity and use only constant extra space.`,
+    examples: [
+      {
+        input: 'nums = [2,2,3,2]',
+        output: '3',
+      },
+      {
+        input: 'nums = [0,1,0,1,0,1,99]',
+        output: '99',
+      },
+    ],
+    constraints: [
+      '1 <= nums.length <= 3 * 10^4',
+      '-2^31 <= nums[i] <= 2^31 - 1',
+      'Each element in nums appears exactly three times except for one element which appears once',
+    ],
+    hints: [
+      'Count bits at each position',
+      'If count % 3 != 0, bit belongs to single number',
+    ],
+    starterCode: `from typing import List
+
+def single_number_ii(nums: List[int]) -> int:
+    """
+    Find element appearing once (others appear 3x).
+    
+    Args:
+        nums: Array of integers
+        
+    Returns:
+        Single element
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[2, 2, 3, 2]],
+        expected: 3,
+      },
+      {
+        input: [[0, 1, 0, 1, 0, 1, 99]],
+        expected: 99,
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/single-number-ii/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=cOFAmaMBVps',
+  },
+
+  // MEDIUM - Bitwise AND of Numbers Range
+  {
+    id: 'bitwise-and-range',
+    title: 'Bitwise AND of Numbers Range',
+    difficulty: 'Medium',
+    topic: 'Bit Manipulation',
+    description: `Given two integers \`left\` and \`right\` that represent the range \`[left, right]\`, return the bitwise AND of all numbers in this range, inclusive.`,
+    examples: [
+      {
+        input: 'left = 5, right = 7',
+        output: '4',
+        explanation: '5 & 6 & 7 = 4',
+      },
+      {
+        input: 'left = 0, right = 0',
+        output: '0',
+      },
+      {
+        input: 'left = 1, right = 2147483647',
+        output: '0',
+      },
+    ],
+    constraints: ['0 <= left <= right <= 2^31 - 1'],
+    hints: [
+      'Find common prefix of left and right',
+      'Right shift until equal, then shift back',
+    ],
+    starterCode: `def range_bitwise_and(left: int, right: int) -> int:
+    """
+    Find bitwise AND of all numbers in range.
+    
+    Args:
+        left: Start of range
+        right: End of range
+        
+    Returns:
+        Bitwise AND of all numbers
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [5, 7],
+        expected: 4,
+      },
+      {
+        input: [0, 0],
+        expected: 0,
+      },
+      {
+        input: [1, 2147483647],
+        expected: 0,
+      },
+    ],
+    timeComplexity: 'O(log n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/bitwise-and-of-numbers-range/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=R3T0olADz-Y',
+  },
 ];
