@@ -9,8 +9,6 @@ export const backtrackingProblems: Problem[] = [
 
 The solution set **must not** contain duplicate subsets. Return the solution in **any order**.
 
-**LeetCode:** [78. Subsets](https://leetcode.com/problems/subsets/)
-**YouTube:** [NeetCode - Subsets](https://www.youtube.com/watch?v=REOH22Xwdkk)
 
 **Approach:**
 Use backtracking to build subsets incrementally. At each element, we have two choices: include it or exclude it. Use a \`start\` index to avoid generating duplicate subsets.
@@ -148,8 +146,6 @@ def subsets_bitmask(nums: List[int]) -> List[List[int]]:
     difficulty: 'Medium',
     description: `Given an array \`nums\` of **distinct** integers, return **all possible permutations**. You can return the answer in **any order**.
 
-**LeetCode:** [46. Permutations](https://leetcode.com/problems/permutations/)
-**YouTube:** [NeetCode - Permutations](https://www.youtube.com/watch?v=s7AvT7cGdSo)
 
 **Approach:**
 Use backtracking. At each step, try adding each unused number to the current permutation. When we've used all numbers, we have a complete permutation.
@@ -357,11 +353,9 @@ Given an integer \`n\`, return **all distinct solutions** to the n-queens puzzle
 
 Each solution contains a distinct board configuration where \`'Q'\` and \`'.'\` represent a queen and an empty space, respectively.
 
-**LeetCode:** [51. N-Queens](https://leetcode.com/problems/n-queens/)
-**YouTube:** [NeetCode - N-Queens](https://www.youtube.com/watch?v=Ph95IHmRp5M)
 
 **Approach:**
-Use backtracking with constraint checking. Place queens row by row. For each row, try each column and check if it's valid (no conflicts with previously placed queens in same column or diagonals).
+Use backtracking with constraint checking. Place queens row by row. For each row, try each column and check if it is valid (no conflicts with previously placed queens in same column or diagonals).
 
 **Constraints:**
 - No two queens in same row (guaranteed by placing one per row)

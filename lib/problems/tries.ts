@@ -9,8 +9,6 @@ export const triesProblems: Problem[] = [
 
 **Trie** is a tree-like data structure used to store strings. Each node represents a character, and paths from root to nodes represent prefixes.
 
-**LeetCode:** [208. Implement Trie](https://leetcode.com/problems/implement-trie-prefix-tree/)
-**YouTube:** [NeetCode - Implement Trie](https://www.youtube.com/watch?v=oobqoCJlHA0)
 
 **Methods to Implement:**
 
@@ -213,8 +211,6 @@ Implement the \`WordDictionary\` class:
 
 \`word\` may contain dots \`'.'\` where **dots can be matched with any letter**.
 
-**LeetCode:** [211. Design Add and Search Words Data Structure](https://leetcode.com/problems/design-add-and-search-words-data-structure/)
-**YouTube:** [NeetCode - Add and Search Word](https://www.youtube.com/watch?v=BTf05gs_8iU)
 
 **Approach:**
 Use a **Trie** with **DFS** for wildcard matching. When encountering \`'.'\`, try all possible children.
@@ -412,8 +408,6 @@ class WordDictionaryOptimized:
 
 Each word must be constructed from letters of sequentially **adjacent cells**, where adjacent cells are horizontally or vertically neighboring. The same letter cell may **not be used more than once** in a word.
 
-**LeetCode:** [212. Word Search II](https://leetcode.com/problems/word-search-ii/)
-**YouTube:** [NeetCode - Word Search II](https://www.youtube.com/watch?v=asbcE9mZz_U)
 
 **Approach:**
 Use **Trie + DFS backtracking**:

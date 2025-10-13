@@ -1,10 +1,22 @@
 /**
- * LocalStorage helper utilities for tracking problem completion and user code.
- * Provides type-safe access to browser localStorage with error handling.
+ * Storage helper utilities for tracking problem completion and user code.
+ * Uses localStorage as cache with IndexedDB for persistent backup.
+ * Provides type-safe access with error handling.
  */
+
+import { setItem, getItem } from './indexeddb';
 
 const COMPLETED_PROBLEMS_KEY = 'codeblanket_completed_problems';
 const USER_CODE_KEY_PREFIX = 'codeblanket_code_';
+
+/**
+ * Sync to IndexedDB in the background (fire and forget)
+ */
+function syncToIndexedDB(key: string, value: unknown): void {
+  setItem(key, value).catch((error) => {
+    console.error('IndexedDB sync failed:', error);
+  });
+}
 
 /**
  * Problem Completion Tracking
@@ -27,7 +39,7 @@ export function getCompletedProblems(): Set<string> {
 }
 
 /**
- * Marks a problem as completed in localStorage
+ * Marks a problem as completed in localStorage and syncs to IndexedDB
  * @param problemId - The unique identifier of the problem
  */
 export function markProblemCompleted(problemId: string): void {
@@ -36,17 +48,20 @@ export function markProblemCompleted(problemId: string): void {
   try {
     const completed = getCompletedProblems();
     completed.add(problemId);
+    const completedArray = [...completed];
     localStorage.setItem(
       COMPLETED_PROBLEMS_KEY,
-      JSON.stringify([...completed]),
+      JSON.stringify(completedArray),
     );
+    // Sync to IndexedDB in background
+    syncToIndexedDB(COMPLETED_PROBLEMS_KEY, completedArray);
   } catch (error) {
     console.error('Failed to save completion status:', error);
   }
 }
 
 /**
- * Marks a problem as incomplete in localStorage
+ * Marks a problem as incomplete in localStorage and syncs to IndexedDB
  * @param problemId - The unique identifier of the problem
  */
 export function markProblemIncomplete(problemId: string): void {
@@ -55,10 +70,13 @@ export function markProblemIncomplete(problemId: string): void {
   try {
     const completed = getCompletedProblems();
     completed.delete(problemId);
+    const completedArray = [...completed];
     localStorage.setItem(
       COMPLETED_PROBLEMS_KEY,
-      JSON.stringify([...completed]),
+      JSON.stringify(completedArray),
     );
+    // Sync to IndexedDB in background
+    syncToIndexedDB(COMPLETED_PROBLEMS_KEY, completedArray);
   } catch (error) {
     console.error('Failed to remove completion status:', error);
   }
@@ -91,7 +109,7 @@ export function clearCompletedProblems(): void {
  */
 
 /**
- * Saves user's code for a specific problem to localStorage
+ * Saves user's code for a specific problem to localStorage and syncs to IndexedDB
  * @param problemId - The unique identifier of the problem
  * @param code - The user's code to save
  */
@@ -99,7 +117,10 @@ export function saveUserCode(problemId: string, code: string): void {
   if (typeof window === 'undefined') return;
 
   try {
-    localStorage.setItem(`${USER_CODE_KEY_PREFIX}${problemId}`, code);
+    const key = `${USER_CODE_KEY_PREFIX}${problemId}`;
+    localStorage.setItem(key, code);
+    // Sync to IndexedDB in background
+    syncToIndexedDB(key, code);
   } catch (error) {
     console.error('Failed to save user code:', error);
   }

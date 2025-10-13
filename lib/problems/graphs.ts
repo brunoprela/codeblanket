@@ -9,8 +9,6 @@ export const graphsProblems: Problem[] = [
 
 An **island** is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
 
-**LeetCode:** [200. Number of Islands](https://leetcode.com/problems/number-of-islands/)
-**YouTube:** [NeetCode - Number of Islands](https://www.youtube.com/watch?v=pV2kpPD66nE)
 
 **Approach:**
 This is a **connected components** problem. Use DFS or BFS to explore each island, marking visited cells. Each time we start a new DFS/BFS, we've found a new island.
@@ -240,11 +238,9 @@ def num_islands_union_find(grid: List[List[str]]) -> int:
 
 Return \`true\` if you can finish all courses. Otherwise, return \`false\`.
 
-**LeetCode:** [207. Course Schedule](https://leetcode.com/problems/course-schedule/)
-**YouTube:** [NeetCode - Course Schedule](https://www.youtube.com/watch?v=EgI5nU9etnU)
 
 **Approach:**
-This is a **cycle detection** problem in a directed graph. If there's a cycle in the dependency graph, it's impossible to complete all courses. Use DFS with a recursion stack or BFS with topological sort (Kahn's algorithm).
+This is a **cycle detection** problem in a directed graph. If there is a cycle in the dependency graph, it is impossible to complete all courses. Use DFS with a recursion stack or BFS with topological sort (Kahn algorithm).
 
 **Key Insight:**
 - No cycle → Can complete all courses (DAG)
@@ -462,8 +458,6 @@ class Node {
 }
 \`\`\`
 
-**LeetCode:** [133. Clone Graph](https://leetcode.com/problems/clone-graph/)
-**YouTube:** [NeetCode - Clone Graph](https://www.youtube.com/watch?v=mQeF6bN8hMk)
 
 **Approach:**
 Use DFS or BFS to traverse the graph. Maintain a hash map to track original → clone mappings to avoid creating duplicate clones and to handle cycles.

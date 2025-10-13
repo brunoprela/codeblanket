@@ -9,8 +9,6 @@ export const advancedGraphsProblems: Problem[] = [
 
 We will send a signal from a given node \`k\`. Return **the minimum time** it takes for all the \`n\` nodes to receive the signal. If it is impossible for all nodes to receive the signal, return \`-1\`.
 
-**LeetCode:** [743. Network Delay Time](https://leetcode.com/problems/network-delay-time/)
-**YouTube:** [NeetCode - Network Delay Time](https://www.youtube.com/watch?v=EaphyqKU4PQ)
 
 **Approach:**
 This is a **single-source shortest path** problem with non-negative weights. Use **Dijkstra's algorithm** to find shortest paths from \`k\` to all nodes. The answer is the maximum of all shortest paths (time for signal to reach furthest node).
@@ -164,8 +162,6 @@ def network_delay_time_bf(times: List[List[int]], n: int, k: int) -> int:
 
 You are also given three integers \`src\`, \`dst\`, and \`k\`, return **the cheapest price** from \`src\` to \`dst\` with at most \`k\` stops. If there is no such route, return \`-1\`.
 
-**LeetCode:** [787. Cheapest Flights Within K Stops](https://leetcode.com/problems/cheapest-flights-within-k-stops/)
-**YouTube:** [NeetCode - Cheapest Flights](https://www.youtube.com/watch?v=5eIK3zUdYmE)
 
 **Approach:**
 Modified **Bellman-Ford** or **BFS with price tracking**. The constraint is number of stops (edges), not just shortest path. Cannot use standard Dijkstra because it might use more stops.
@@ -376,8 +372,6 @@ A route's **effort** is the maximum absolute difference in heights between two c
 
 Return **the minimum effort** required to travel from the top-left to the bottom-right cell.
 
-**LeetCode:** [1631. Path With Minimum Effort](https://leetcode.com/problems/path-with-minimum-effort/)
-**YouTube:** [NeetCode - Path With Minimum Effort](https://www.youtube.com/watch?v=XQlxCCx2vI4)
 
 **Approach:**
 Modified **Dijkstra's** where instead of summing distances, we track the maximum difference encountered on the path. Use min-heap prioritized by maximum effort so far.

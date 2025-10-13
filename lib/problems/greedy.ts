@@ -9,14 +9,12 @@ export const greedyProblems: Problem[] = [
 
 Return \`true\` if you can reach the last index, or \`false\` otherwise.
 
-**LeetCode:** [55. Jump Game](https://leetcode.com/problems/jump-game/)
-**YouTube:** [NeetCode - Jump Game](https://www.youtube.com/watch?v=Yan0cv2cLy8)
 
 **Greedy Approach:**
-Track the maximum index we can reach. At each position, update the max reachable index. If we ever can't reach current position, return false.
+Track the maximum index we can reach. At each position, update the max reachable index. If we ever cannot reach current position, return false.
 
 **Key Insight:**
-We don't need to find actual path - just check if last index is reachable.`,
+We do not need to find actual path - just check if last index is reachable.`,
     examples: [
       {
         input: 'nums = [2,3,1,1,4]',
@@ -132,49 +130,54 @@ def can_jump_simple(nums: List[int]) -> bool:
     youtubeUrl: 'https://www.youtube.com/watch?v=Yan0cv2cLy8',
   },
   {
-    id: 'best-time-to-buy-sell-stock',
-    title: 'Best Time to Buy and Sell Stock',
-    difficulty: 'Medium',
-    description: `You are given an array \`prices\` where \`prices[i]\` is the price of a given stock on the \`ith\` day.
+    id: 'best-time-to-buy-sell-stock-ii',
+    title: 'Best Time to Buy and Sell Stock II',
+    difficulty: 'Easy',
+    description: `You are given an integer array \`prices\` where \`prices[i]\` is the price of a given stock on the \`ith\` day.
 
-You want to maximize your profit by choosing a **single day** to buy one stock and choosing a **different day in the future** to sell that stock.
+On each day, you may decide to buy and/or sell the stock. You can only hold **at most one** share of the stock at any time. However, you can buy it then immediately sell it on the **same day**.
 
-Return the **maximum profit** you can achieve from this transaction. If you cannot achieve any profit, return \`0\`.
+Find and return the **maximum profit** you can achieve.
 
-**LeetCode:** [121. Best Time to Buy and Sell Stock](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/)
-**YouTube:** [NeetCode - Best Time to Buy and Sell Stock](https://www.youtube.com/watch?v=1pkOgXD63yU)
 
 **Greedy Approach:**
-Track the minimum price seen so far. At each day, calculate profit if selling today, and update maximum profit.
+The key insight is that we can capture every upward price movement. Whenever price[i+1] > price[i], we can "buy" at i and "sell" at i+1 to capture that profit. Sum all positive differences.
 
 **Key Insight:**
-For each day, we want to know: "What if I bought at the cheapest price before today and sold today?"`,
+Any profit can be decomposed into a sum of single-day profits. Instead of finding optimal buy/sell pairs, just collect profit from every price increase.`,
     examples: [
       {
         input: 'prices = [7,1,5,3,6,4]',
-        output: '5',
+        output: '7',
         explanation:
-          'Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6-1 = 5.',
+          'Buy on day 2 (price = 1) and sell on day 3 (price = 5), profit = 4. Then buy on day 4 (price = 3) and sell on day 5 (price = 6), profit = 3. Total = 7.',
+      },
+      {
+        input: 'prices = [1,2,3,4,5]',
+        output: '4',
+        explanation:
+          'Buy on day 1 (price = 1) and sell on day 5 (price = 5), profit = 4. Or equivalently, capture each daily increase: (2-1)+(3-2)+(4-3)+(5-4) = 4.',
       },
       {
         input: 'prices = [7,6,4,3,1]',
         output: '0',
-        explanation: 'No transactions are done and the max profit = 0.',
+        explanation:
+          'There are no profitable transactions, so max profit = 0.',
       },
     ],
     constraints: ['1 <= prices.length <= 10^5', '0 <= prices[i] <= 10^4'],
     hints: [
-      'Track the minimum price seen so far',
-      'For each price, calculate: current_price - min_price',
-      'Update max profit if current profit is better',
+      'Think about capturing every upward price movement',
+      'Whenever prices[i+1] > prices[i], you can make a profit',
+      'Sum all positive differences between consecutive days',
+      'You do not need to track actual buy / sell pairs',
       'Single pass O(n) solution',
-      'Think: "Buy at lowest, sell at current, would that be profitable?"',
     ],
     starterCode: `from typing import List
 
 def max_profit(prices: List[int]) -> int:
     """
-    Find maximum profit from single buy-sell transaction.
+    Find maximum profit from multiple buy-sell transactions.
     
     Args:
         prices: Array of stock prices
@@ -188,15 +191,15 @@ def max_profit(prices: List[int]) -> int:
     testCases: [
       {
         input: [[7, 1, 5, 3, 6, 4]],
-        expected: 5,
+        expected: 7,
+      },
+      {
+        input: [[1, 2, 3, 4, 5]],
+        expected: 4,
       },
       {
         input: [[7, 6, 4, 3, 1]],
         expected: 0,
-      },
-      {
-        input: [[1, 2]],
-        expected: 1,
       },
     ],
     solution: `from typing import List
@@ -204,67 +207,60 @@ def max_profit(prices: List[int]) -> int:
 
 def max_profit(prices: List[int]) -> int:
     """
-    Greedy: track min price and max profit.
+    Greedy: sum all positive price differences.
     Time: O(n), Space: O(1)
     """
-    min_price = float('inf')
-    max_profit = 0
-    
-    for price in prices:
-        # Update minimum price seen
-        min_price = min(min_price, price)
-        
-        # Calculate profit if selling today
-        profit = price - min_price
-        
-        # Update maximum profit
-        max_profit = max(max_profit, profit)
-    
-    return max_profit
-
-
-# Alternative: More explicit
-def max_profit_explicit(prices: List[int]) -> int:
-    """
-    Same approach, more explicit logic.
-    """
-    if not prices:
-        return 0
-    
-    buy_price = prices[0]
     profit = 0
     
     for i in range(1, len(prices)):
-        if prices[i] < buy_price:
-            # Found cheaper buy price
-            buy_price = prices[i]
-        else:
-            # Calculate profit if selling today
-            profit = max(profit, prices[i] - buy_price)
+        # If price increased, capture the profit
+        if prices[i] > prices[i - 1]:
+            profit += prices[i] - prices[i - 1]
     
     return profit
 
 
-# Alternative: DP interpretation
-def max_profit_dp(prices: List[int]) -> int:
+# Alternative: More explicit buy/sell tracking
+def max_profit_explicit(prices: List[int]) -> int:
     """
-    Can think of as DP but greedy is simpler.
+    Track valleys (buy) and peaks (sell).
+    Time: O(n), Space: O(1)
     """
-    max_profit = 0
-    min_so_far = prices[0]
+    if len(prices) <= 1:
+        return 0
     
-    for price in prices[1:]:
-        max_profit = max(max_profit, price - min_so_far)
-        min_so_far = min(min_so_far, price)
+    profit = 0
+    i = 0
     
-    return max_profit`,
+    while i < len(prices) - 1:
+        # Find valley (local minimum)
+        while i < len(prices) - 1 and prices[i] >= prices[i + 1]:
+            i += 1
+        valley = prices[i]
+        
+        # Find peak (local maximum)
+        while i < len(prices) - 1 and prices[i] <= prices[i + 1]:
+            i += 1
+        peak = prices[i]
+        
+        profit += peak - valley
+    
+    return profit
+
+
+# Alternative: One-liner
+def max_profit_oneliner(prices: List[int]) -> int:
+    """
+    Pythonic one-liner solution.
+    """
+    return sum(max(prices[i] - prices[i-1], 0) for i in range(1, len(prices)))`,
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(1)',
     order: 2,
     topic: 'Greedy',
     leetcodeUrl:
-      'https://leetcode.com/problems/best-time-to-buy-and-sell-stock/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=1pkOgXD63yU',
+      'https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=3SJ3pUkPQMc',
   },
   {
     id: 'gas-station',
@@ -276,16 +272,14 @@ You have a car with an unlimited gas tank and it costs \`cost[i]\` of gas to tra
 
 Given two integer arrays \`gas\` and \`cost\`, return the starting gas station's index if you can travel around the circuit once in the clockwise direction, otherwise return \`-1\`. If there exists a solution, it is **guaranteed** to be **unique**.
 
-**LeetCode:** [134. Gas Station](https://leetcode.com/problems/gas-station/)
-**YouTube:** [NeetCode - Gas Station](https://www.youtube.com/watch?v=lJwbPZGo05A)
 
 **Greedy Approach:**
 1. If total gas < total cost, impossible
 2. Track current gas tank. If it goes negative, start from next station
-3. Key insight: If we can't reach station j from station i, we also can't reach j from any station between i and j
+3. Key insight: If we cannot reach station j from station i, we also cannot reach j from any station between i and j
 
 **Key Insight:**
-If there's a solution, we can find it in one pass by resetting start whenever tank goes negative.`,
+If there is a solution, we can find it in one pass by resetting start whenever tank goes negative.`,
     examples: [
       {
         input: 'gas = [1,2,3,4,5], cost = [3,4,5,1,2]',

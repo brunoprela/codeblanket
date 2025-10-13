@@ -7,8 +7,6 @@ export const linkedListProblems: Problem[] = [
     difficulty: 'Easy',
     description: `Given the \`head\` of a singly linked list, reverse the list, and return **the reversed list**.
 
-**LeetCode:** [206. Reverse Linked List](https://leetcode.com/problems/reverse-linked-list/)
-**YouTube:** [NeetCode - Reverse Linked List](https://www.youtube.com/watch?v=G0_I-ZF0S38)
 
 **Approach:**
 Iterate through the list, reversing the \`next\` pointer of each node. Use three pointers: \`prev\`, \`curr\`, and \`next_temp\` to safely reverse links without losing references.
@@ -138,11 +136,9 @@ There is a cycle in a linked list if there is some node in the list that can be 
 
 Return \`true\` if there is a cycle in the linked list. Otherwise, return \`false\`.
 
-**LeetCode:** [141. Linked List Cycle](https://leetcode.com/problems/linked-list-cycle/)
-**YouTube:** [NeetCode - Linked List Cycle](https://www.youtube.com/watch?v=gBTe7lFR3vc)
 
 **Approach:**
-Use Floyd's Cycle Detection Algorithm (tortoise and hare). Use two pointers: slow moves one step at a time, fast moves two steps. If there's a cycle, they will eventually meet. If fast reaches None, there's no cycle.`,
+Use Floyd Cycle Detection Algorithm (tortoise and hare). Use two pointers: slow moves one step at a time, fast moves two steps. If there is a cycle, they will eventually meet. If fast reaches None, there is no cycle.`,
     examples: [
       {
         input: 'head = [3,2,0,-4], pos = 1',
@@ -304,8 +300,6 @@ def detect_cycle_start(head: Optional[ListNode]) -> Optional[ListNode]:
 
 **Merge all the linked-lists into one sorted linked-list and return it.**
 
-**LeetCode:** [23. Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists/)
-**YouTube:** [NeetCode - Merge k Sorted Lists](https://www.youtube.com/watch?v=q5a5OiGbT6Q)
 
 **Approach:**
 Multiple approaches possible:
@@ -515,5 +509,523 @@ def merge_k_lists_naive(lists: List[Optional[ListNode]]) -> Optional[ListNode]:
     topic: 'Linked List',
     leetcodeUrl: 'https://leetcode.com/problems/merge-k-sorted-lists/',
     youtubeUrl: 'https://www.youtube.com/watch?v=q5a5OiGbT6Q',
+  },
+  // EASY - Middle of the Linked List
+  {
+    id: 'middle-of-linked-list',
+    title: 'Middle of the Linked List',
+    difficulty: 'Easy',
+    topic: 'Linked List',
+    order: 4,
+    description: `Given the \`head\` of a singly linked list, return the middle node of the linked list.
+
+If there are two middle nodes, return **the second middle** node.`,
+    examples: [
+      {
+        input: 'head = [1,2,3,4,5]',
+        output: '[3,4,5]',
+        explanation: 'The middle node of the list is node 3.',
+      },
+      {
+        input: 'head = [1,2,3,4,5,6]',
+        output: '[4,5,6]',
+        explanation: 'Since the list has two middle nodes with values 3 and 4, we return the second one.',
+      },
+    ],
+    constraints: [
+      'The number of nodes in the list is in the range [1, 100]',
+      '1 <= Node.val <= 100',
+    ],
+    hints: [
+      'Use slow and fast pointers (tortoise and hare)',
+      'Fast moves twice as fast as slow',
+      'When fast reaches end, slow is at middle',
+    ],
+    starterCode: `from typing import Optional
+
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def middle_node(head: Optional[ListNode]) -> Optional[ListNode]:
+    """
+    Find the middle node of linked list.
+    
+    Args:
+        head: Head of the linked list
+        
+    Returns:
+        Middle node (second middle if even length)
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[1, 2, 3, 4, 5]],
+        expected: [3, 4, 5],
+      },
+      {
+        input: [[1, 2, 3, 4, 5, 6]],
+        expected: [4, 5, 6],
+      },
+      {
+        input: [[1]],
+        expected: [1],
+      },
+    ],
+    solution: `from typing import Optional
+
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def middle_node(head: Optional[ListNode]) -> Optional[ListNode]:
+    """
+    Two-pointer approach (slow and fast).
+    Time: O(n), Space: O(1)
+    """
+    slow = fast = head
+    
+    # Fast moves twice as fast as slow
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+    
+    # Slow is at middle
+    return slow
+`,
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/middle-of-the-linked-list/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=A2_ldqM4QcY',
+  },
+  // EASY - Delete Node in a Linked List
+  {
+    id: 'delete-node-in-linked-list',
+    title: 'Delete Node in a Linked List',
+    difficulty: 'Easy',
+    topic: 'Linked List',
+    order: 5,
+    description: `There is a singly-linked list \`head\` and we want to delete a node \`node\` in it.
+
+You are given the node to be deleted \`node\`. You will **not be given access** to the first node of \`head\`.
+
+All the values of the linked list are **unique**, and it is guaranteed that the given node \`node\` is **not the last node** in the linked list.
+
+Delete the given node. Note that by deleting the node, we do not mean removing it from memory. We mean:
+- The value of the given node should not exist in the linked list.
+- The number of nodes in the linked list should decrease by one.
+- All the values before \`node\` should be in the same order.
+- All the values after \`node\` should be in the same order.`,
+    examples: [
+      {
+        input: 'head = [4,5,1,9], node = 5',
+        output: '[4,1,9]',
+        explanation: 'You are given the second node with value 5. After deleting it, the linked list becomes 4 -> 1 -> 9.',
+      },
+      {
+        input: 'head = [4,5,1,9], node = 1',
+        output: '[4,5,9]',
+      },
+    ],
+    constraints: [
+      'The number of the nodes in the given list is in the range [2, 1000]',
+      '-1000 <= Node.val <= 1000',
+      'The value of each node in the list is unique',
+      'The node to be deleted is in the list and is not a tail node',
+    ],
+    hints: [
+      'Copy the value from the next node to current node',
+      'Then delete the next node instead',
+      'This effectively "deletes" the current node',
+    ],
+    starterCode: `class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def delete_node(node: ListNode) -> None:
+    """
+    Delete given node (not given head!).
+    
+    Args:
+        node: The node to delete
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[4, 5, 1, 9], 5],
+        expected: [4, 1, 9],
+      },
+      {
+        input: [[4, 5, 1, 9], 1],
+        expected: [4, 5, 9],
+      },
+    ],
+    solution: `class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def delete_node(node: ListNode) -> None:
+    """
+    Copy next node's value and skip next node.
+    Time: O(1), Space: O(1)
+    """
+    # Copy value from next node
+    node.val = node.next.val
+    
+    # Skip the next node
+    node.next = node.next.next
+`,
+    timeComplexity: 'O(1)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/delete-node-in-a-linked-list/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=f1r_jFWRbH8',
+  },
+  // EASY - Merge Two Sorted Lists
+  {
+    id: 'merge-two-sorted-lists',
+    title: 'Merge Two Sorted Lists',
+    difficulty: 'Easy',
+    topic: 'Linked List',
+    order: 6,
+    description: `You are given the heads of two sorted linked lists \`list1\` and \`list2\`.
+
+Merge the two lists into one **sorted** list. The list should be made by splicing together the nodes of the first two lists.
+
+Return the head of the merged linked list.`,
+    examples: [
+      {
+        input: 'list1 = [1,2,4], list2 = [1,3,4]',
+        output: '[1,1,2,3,4,4]',
+      },
+      {
+        input: 'list1 = [], list2 = []',
+        output: '[]',
+      },
+      {
+        input: 'list1 = [], list2 = [0]',
+        output: '[0]',
+      },
+    ],
+    constraints: [
+      'The number of nodes in both lists is in the range [0, 50]',
+      '-100 <= Node.val <= 100',
+      'Both list1 and list2 are sorted in non-decreasing order',
+    ],
+    hints: [
+      'Use a dummy head to simplify edge cases',
+      'Compare values from both lists',
+      'Append smaller value to result',
+      'Attach remaining list at the end',
+    ],
+    starterCode: `from typing import Optional
+
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def merge_two_lists(list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
+    """
+    Merge two sorted linked lists.
+    
+    Args:
+        list1: Head of first sorted list
+        list2: Head of second sorted list
+        
+    Returns:
+        Head of merged sorted list
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[1, 2, 4], [1, 3, 4]],
+        expected: [1, 1, 2, 3, 4, 4],
+      },
+      {
+        input: [[], []],
+        expected: [],
+      },
+      {
+        input: [[], [0]],
+        expected: [0],
+      },
+    ],
+    solution: `from typing import Optional
+
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def merge_two_lists(list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
+    """
+    Iterative merge with dummy head.
+    Time: O(n + m), Space: O(1)
+    """
+    # Dummy head simplifies edge cases
+    dummy = ListNode(0)
+    current = dummy
+    
+    # Merge while both lists have nodes
+    while list1 and list2:
+        if list1.val <= list2.val:
+            current.next = list1
+            list1 = list1.next
+        else:
+            current.next = list2
+            list2 = list2.next
+        current = current.next
+    
+    # Attach remaining list
+    current.next = list1 if list1 else list2
+    
+    return dummy.next
+
+# Alternative: Recursive approach
+def merge_two_lists_recursive(list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
+    """
+    Recursive merge.
+    Time: O(n + m), Space: O(n + m) for recursion stack
+    """
+    if not list1:
+        return list2
+    if not list2:
+        return list1
+    
+    if list1.val <= list2.val:
+        list1.next = merge_two_lists_recursive(list1.next, list2)
+        return list1
+    else:
+        list2.next = merge_two_lists_recursive(list1, list2.next)
+        return list2
+`,
+    timeComplexity: 'O(n + m)',
+    spaceComplexity: 'O(1) iterative, O(n + m) recursive',
+    leetcodeUrl: 'https://leetcode.com/problems/merge-two-sorted-lists/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=XIdigk956u0',
+  },
+  // EASY - Remove Duplicates from Sorted List
+  {
+    id: 'remove-duplicates-from-sorted-list',
+    title: 'Remove Duplicates from Sorted List',
+    difficulty: 'Easy',
+    topic: 'Linked List',
+    order: 7,
+    description: `Given the \`head\` of a sorted linked list, delete all duplicates such that each element appears only once. Return the linked list **sorted** as well.`,
+    examples: [
+      {
+        input: 'head = [1,1,2]',
+        output: '[1,2]',
+      },
+      {
+        input: 'head = [1,1,2,3,3]',
+        output: '[1,2,3]',
+      },
+    ],
+    constraints: [
+      'The number of nodes in the list is in the range [0, 300]',
+      '-100 <= Node.val <= 100',
+      'The list is guaranteed to be sorted in ascending order',
+    ],
+    hints: [
+      'Traverse the list',
+      'If current value equals next value, skip next',
+      'Otherwise move to next node',
+    ],
+    starterCode: `from typing import Optional
+
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def delete_duplicates(head: Optional[ListNode]) -> Optional[ListNode]:
+    """
+    Remove duplicates from sorted linked list.
+    
+    Args:
+        head: Head of sorted linked list
+        
+    Returns:
+        Head of list with duplicates removed
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[1, 1, 2]],
+        expected: [1, 2],
+      },
+      {
+        input: [[1, 1, 2, 3, 3]],
+        expected: [1, 2, 3],
+      },
+      {
+        input: [[]],
+        expected: [],
+      },
+    ],
+    solution: `from typing import Optional
+
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def delete_duplicates(head: Optional[ListNode]) -> Optional[ListNode]:
+    """
+    Single pass to remove duplicates.
+    Time: O(n), Space: O(1)
+    """
+    if not head:
+        return head
+    
+    current = head
+    
+    while current and current.next:
+        if current.val == current.next.val:
+            # Skip duplicate node
+            current.next = current.next.next
+        else:
+            # Move to next distinct value
+            current = current.next
+    
+    return head
+`,
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1)',
+    leetcodeUrl: 'https://leetcode.com/problems/remove-duplicates-from-sorted-list/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=p10f-VpO4nE',
+  },
+  // EASY - Palindrome Linked List
+  {
+    id: 'palindrome-linked-list',
+    title: 'Palindrome Linked List',
+    difficulty: 'Easy',
+    topic: 'Linked List',
+    order: 8,
+    description: `Given the \`head\` of a singly linked list, return \`true\` if it is a **palindrome** or \`false\` otherwise.`,
+    examples: [
+      {
+        input: 'head = [1,2,2,1]',
+        output: 'true',
+      },
+      {
+        input: 'head = [1,2]',
+        output: 'false',
+      },
+    ],
+    constraints: [
+      'The number of nodes in the list is in the range [1, 10^5]',
+      '0 <= Node.val <= 9',
+    ],
+    hints: [
+      'Find middle of list using slow/fast pointers',
+      'Reverse second half of list',
+      'Compare first half with reversed second half',
+      'Can you do it in O(n) time and O(1) space?',
+    ],
+    starterCode: `from typing import Optional
+
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def is_palindrome(head: Optional[ListNode]) -> bool:
+    """
+    Check if linked list is a palindrome.
+    
+    Args:
+        head: Head of linked list
+        
+    Returns:
+        True if palindrome, False otherwise
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[1, 2, 2, 1]],
+        expected: true,
+      },
+      {
+        input: [[1, 2]],
+        expected: false,
+      },
+      {
+        input: [[1]],
+        expected: true,
+      },
+    ],
+    solution: `from typing import Optional
+
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def is_palindrome(head: Optional[ListNode]) -> bool:
+    """
+    Find middle, reverse second half, compare.
+    Time: O(n), Space: O(1)
+    """
+    if not head or not head.next:
+        return True
+    
+    # Find middle using slow/fast pointers
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+    
+    # Reverse second half
+    prev = None
+    while slow:
+        next_node = slow.next
+        slow.next = prev
+        prev = slow
+        slow = next_node
+    
+    # Compare first half with reversed second half
+    left, right = head, prev
+    while right:  # Only need to check right (shorter or equal)
+        if left.val != right.val:
+            return False
+        left = left.next
+        right = right.next
+    
+    return True
+
+# Alternative: Using extra space
+def is_palindrome_array(head: Optional[ListNode]) -> bool:
+    """
+    Convert to array and check palindrome.
+    Time: O(n), Space: O(n)
+    """
+    values = []
+    current = head
+    while current:
+        values.append(current.val)
+        current = current.next
+    
+    return values == values[::-1]
+`,
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1) for in-place, O(n) for array',
+    leetcodeUrl: 'https://leetcode.com/problems/palindrome-linked-list/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=yOzXms1J6Nk',
   },
 ];

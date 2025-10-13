@@ -7,8 +7,6 @@ export const intervalsProblems: Problem[] = [
     difficulty: 'Easy',
     description: `Given an array of \`intervals\` where \`intervals[i] = [starti, endi]\`, merge all overlapping intervals and return an array of the non-overlapping intervals.
 
-**LeetCode:** [56. Merge Intervals](https://leetcode.com/problems/merge-intervals/)
-**YouTube:** [NeetCode - Merge Intervals](https://www.youtube.com/watch?v=44H3cEC2fFM)
 
 **Approach:**
 1. Sort intervals by start time
@@ -153,8 +151,6 @@ def merge_inplace(intervals: List[List[int]]) -> List[List[int]]:
 
 Insert \`newInterval\` into \`intervals\` such that \`intervals\` is still sorted and has no overlapping intervals. Merge if necessary.
 
-**LeetCode:** [57. Insert Interval](https://leetcode.com/problems/insert-interval/)
-**YouTube:** [NeetCode - Insert Interval](https://www.youtube.com/watch?v=A8NUOmlwOlM)
 
 **Approach:**
 Three phases:
@@ -314,8 +310,6 @@ def insert_concise(intervals: List[List[int]], newInterval: List[int]) -> List[L
     difficulty: 'Hard',
     description: `Given an array of meeting time intervals \`intervals\` where \`intervals[i] = [starti, endi]\`, return **the minimum number of conference rooms** required.
 
-**LeetCode:** [253. Meeting Rooms II](https://leetcode.com/problems/meeting-rooms-ii/) (Premium)
-**YouTube:** [NeetCode - Meeting Rooms II](https://www.youtube.com/watch?v=FdzJmTCVyJU)
 
 **Approach:**
 Use the **Sweep Line** algorithm:
@@ -333,7 +327,7 @@ At any time, the number of rooms needed equals the number of meetings happening 
         input: 'intervals = [[0,30],[5,10],[15,20]]',
         output: '2',
         explanation:
-          "Meeting 1 [0,30] overlaps with meeting 2 [5,10] and meeting 3 [15,20], but meetings 2 and 3 don't overlap. Need 2 rooms.",
+          'Meeting 1 [0,30] overlaps with meeting 2 [5,10] and meeting 3 [15,20], but meetings 2 and 3 do not overlap. Need 2 rooms.',
       },
       {
         input: 'intervals = [[7,10],[2,4]]',

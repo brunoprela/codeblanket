@@ -7,8 +7,6 @@ export const bfsProblems: Problem[] = [
     difficulty: 'Easy',
     description: `Given the \`root\` of a binary tree, return the **level order traversal** of its nodes' values. (i.e., from left to right, level by level).
 
-**LeetCode:** [102. Binary Tree Level Order Traversal](https://leetcode.com/problems/binary-tree-level-order-traversal/)
-**YouTube:** [NeetCode - Binary Tree Level Order Traversal](https://www.youtube.com/watch?v=6ZnyEApgFYg)
 
 **Approach:**
 Use **BFS (Breadth-First Search)** with a queue. Process nodes level by level:
@@ -161,12 +159,10 @@ A **clear path** in a binary matrix is a path from the **top-left** cell (0, 0) 
 
 The **length of a clear path** is the number of visited cells.
 
-**LeetCode:** [1091. Shortest Path in Binary Matrix](https://leetcode.com/problems/shortest-path-in-binary-matrix/)
-**YouTube:** [NeetCode - Shortest Path in Binary Matrix](https://www.youtube.com/watch?v=caXJJOMLyHk)
 
 **Approach:**
 Use **BFS** to find the shortest path in an unweighted grid:
-1. Start from (0, 0) if it's 0
+1. Start from (0, 0) if it is 0
 2. Explore all 8 directions
 3. Track visited cells
 4. Return distance when reaching (n-1, n-1)
@@ -357,8 +353,6 @@ Every minute, any fresh orange that is **4-directionally adjacent** to a rotten 
 
 Return the **minimum number of minutes** that must elapse until no cell has a fresh orange. If this is impossible, return \`-1\`.
 
-**LeetCode:** [994. Rotting Oranges](https://leetcode.com/problems/rotting-oranges/)
-**YouTube:** [NeetCode - Rotting Oranges](https://www.youtube.com/watch?v=y704fEOx0s0)
 
 **Approach:**
 Use **Multi-Source BFS** - start from ALL rotten oranges simultaneously:

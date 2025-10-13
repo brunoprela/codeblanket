@@ -11,8 +11,6 @@ Implement the \`NumArray\` class:
 - \`update(index, val)\`: Update the value at index to val
 - \`sumRange(left, right)\`: Return the sum of elements between indices left and right
 
-**LeetCode:** [307. Range Sum Query - Mutable](https://leetcode.com/problems/range-sum-query-mutable/)
-**YouTube:** [Fenwick Tree Explained](https://www.youtube.com/watch?v=CWDQJGaN1gY)
 
 **Key Insight:**
 Fenwick Tree provides O(log N) for both operations using bit manipulation tricks.`,
@@ -178,6 +176,7 @@ def count_inversions(arr: List[int]) -> int:
     spaceComplexity: 'O(N)',
     order: 2,
     topic: 'Fenwick Tree',
+    leetcodeUrl: 'https://leetcode.com/problems/count-of-range-sum/',
     youtubeUrl: 'https://www.youtube.com/watch?v=kPaJfAUwViY',
   },
   {

@@ -12,8 +12,6 @@ export const segmentTreeProblems: Problem[] = [
 
 Implement the \`NumArray\` class with \`update(index, val)\` and \`sumRange(left, right)\` methods.
 
-**LeetCode:** [307. Range Sum Query - Mutable](https://leetcode.com/problems/range-sum-query-mutable/)
-**YouTube:** [NeetCode - Range Sum Query Mutable](https://www.youtube.com/watch?v=rYBtViWXYeI)
 
 **Key Insight:**
 Use a Segment Tree to achieve O(log N) for both updates and range sum queries.`,
@@ -127,8 +125,6 @@ Use a Segment Tree to achieve O(log N) for both updates and range sum queries.`,
 - \`update(index, val)\`: Update element at index to val
 - \`rangeMin(left, right)\`: Return minimum element in range [left, right]
 
-**LeetCode:** Similar to problem 307 but for minimum instead of sum
-**YouTube:** [Range Minimum Query](https://www.youtube.com/watch?v=Oq2E2yGadnU)
 
 **Key Insight:**
 Use Segment Tree with min operation instead of sum. Return infinity for no-overlap case.`,
@@ -213,6 +209,7 @@ Use Segment Tree with min operation instead of sum. Return infinity for no-overl
     spaceComplexity: 'O(N)',
     order: 2,
     topic: 'Segment Tree',
+    leetcodeUrl: 'https://leetcode.com/problems/range-minimum-query-mutable/',
     youtubeUrl: 'https://www.youtube.com/watch?v=Oq2E2yGadnU',
   },
   {
@@ -221,8 +218,6 @@ Use Segment Tree with min operation instead of sum. Return infinity for no-overl
     difficulty: 'Hard',
     description: `Given an integer array \`nums\`, return an integer array \`counts\` where \`counts[i]\` is the number of smaller elements to the right of \`nums[i]\`.
 
-**LeetCode:** [315. Count of Smaller Numbers After Self](https://leetcode.com/problems/count-of-smaller-numbers-after-self/)
-**YouTube:** [Count of Smaller After Self](https://www.youtube.com/watch?v=ZBHKZF5w4YU)
 
 **Key Insight:**
 Process array from right to left, building a segment tree of seen values. For each element, query how many smaller values have been seen.`,

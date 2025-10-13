@@ -9,8 +9,6 @@ export const mathGeometryProblems: Problem[] = [
 
 You have to rotate the image **in-place**, which means you have to modify the input 2D matrix directly.
 
-**LeetCode:** [48. Rotate Image](https://leetcode.com/problems/rotate-image/)
-**YouTube:** [NeetCode - Rotate Image](https://www.youtube.com/watch?v=fMSJSS7eO1w)
 
 **Approach:**
 1. Transpose the matrix (swap rows with columns)
@@ -80,8 +78,6 @@ def rotate(matrix: List[List[int]]) -> None:
     difficulty: 'Medium',
     description: `Implement \`pow(x, n)\`, which calculates \`x\` raised to the power \`n\`.
 
-**LeetCode:** [50. Pow(x, n)](https://leetcode.com/problems/powx-n/)
-**YouTube:** [NeetCode - Pow(x, n)](https://www.youtube.com/watch?v=g9YQyYi4IQQ)
 
 **Approach:**
 Fast exponentiation using divide and conquer:
@@ -138,8 +134,6 @@ Reduces O(n) to O(log n) by halving exponent each step`,
 
 Return \`true\` if \`n\` is a happy number, and \`false\` if not.
 
-**LeetCode:** [202. Happy Number](https://leetcode.com/problems/happy-number/)
-**YouTube:** [NeetCode - Happy Number](https://www.youtube.com/watch?v=ljz85bxOYJ0)
 
 **Approach:**
 Use **Floyd's Cycle Detection** (slow/fast pointers) to detect if we enter a cycle.

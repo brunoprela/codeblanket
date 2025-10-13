@@ -11,8 +11,6 @@ Note that it is the kth largest element in the sorted order, not the kth distinc
 
 Can you solve it without sorting?
 
-**LeetCode:** [215. Kth Largest Element in an Array](https://leetcode.com/problems/kth-largest-element-in-an-array/)
-**YouTube:** [NeetCode - Kth Largest Element in an Array](https://www.youtube.com/watch?v=XEmy13g1Qxc)
 
 **Approach:**
 Use a min heap of size K. Maintain only the K largest elements in the heap. The root (smallest in heap) is the Kth largest overall.
@@ -160,8 +158,6 @@ def find_kth_largest_quickselect(nums: List[int], k: int) -> int:
     difficulty: 'Medium',
     description: `Given an integer array \`nums\` and an integer \`k\`, return **the k most frequent elements**. You may return the answer in **any order**.
 
-**LeetCode:** [347. Top K Frequent Elements](https://leetcode.com/problems/top-k-frequent-elements/)
-**YouTube:** [NeetCode - Top K Frequent Elements](https://www.youtube.com/watch?v=YPTqKIgVk-k)
 
 **Approach:**
 1. Count frequencies using hash map
@@ -317,8 +313,6 @@ Implement the \`MedianFinder\` class:
 - \`void addNum(int num)\` adds the integer \`num\` from the data stream to the data structure.
 - \`double findMedian()\` returns the median of all elements so far.
 
-**LeetCode:** [295. Find Median from Data Stream](https://leetcode.com/problems/find-median-from-data-stream/)
-**YouTube:** [NeetCode - Find Median from Data Stream](https://www.youtube.com/watch?v=itmhHWaHupI)
 
 **Approach:**
 Use two heaps:

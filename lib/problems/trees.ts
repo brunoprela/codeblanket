@@ -9,13 +9,11 @@ export const treesProblems: Problem[] = [
 
 **Inverting** a binary tree means swapping the left and right children of every node in the tree.
 
-**LeetCode:** [226. Invert Binary Tree](https://leetcode.com/problems/invert-binary-tree/)
-**YouTube:** [NeetCode - Invert Binary Tree](https://www.youtube.com/watch?v=OnSn2XEQ4MY)
 
 **Approach:**
 Use recursion to swap left and right children at each node. Recursively invert the left and right subtrees, then swap them.
 
-**Note:** This is famously the problem Max Howell (creator of Homebrew) couldn't solve in his Google interview!`,
+**Note:** This is famously the problem Max Howell (creator of Homebrew) could not solve in his Google interview!`,
     examples: [
       {
         input: 'root = [4,2,7,1,3,6,9]',
@@ -168,8 +166,6 @@ A valid BST is defined as follows:
 - The right subtree of a node contains only nodes with keys **greater than** the node's key.
 - Both the left and right subtrees must also be binary search trees.
 
-**LeetCode:** [98. Validate Binary Search Tree](https://leetcode.com/problems/validate-binary-search-tree/)
-**YouTube:** [NeetCode - Validate Binary Search Tree](https://www.youtube.com/watch?v=s6ATEkipzow)
 
 **Approach:**
 Use recursion with valid range tracking. For each node, ensure its value is within a valid range (min, max). When going left, update max. When going right, update min.
@@ -345,8 +341,6 @@ The **path sum** of a path is the sum of the node's values in the path.
 
 Given the \`root\` of a binary tree, return **the maximum path sum** of any **non-empty** path.
 
-**LeetCode:** [124. Binary Tree Maximum Path Sum](https://leetcode.com/problems/binary-tree-maximum-path-sum/)
-**YouTube:** [NeetCode - Binary Tree Maximum Path Sum](https://www.youtube.com/watch?v=Hr5cWUld4vU)
 
 **Approach:**
 Use post-order DFS. For each node, calculate:

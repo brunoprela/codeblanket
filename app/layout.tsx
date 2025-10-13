@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import Link from 'next/link';
+import ExportImportMenu from '@/components/ExportImportMenu';
+import StorageInitializer from '@/components/StorageInitializer';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -25,6 +27,7 @@ export default function RootLayout({
         />
       </head>
       <body className={inter.className} suppressHydrationWarning>
+        <StorageInitializer />
         <nav className="border-b border-gray-700 bg-[#282a36] text-white shadow-lg">
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
@@ -49,6 +52,7 @@ export default function RootLayout({
                 >
                   Problems
                 </Link>
+                <ExportImportMenu />
               </div>
             </div>
           </div>

@@ -9,8 +9,6 @@ export const dynamicProgrammingProblems: Problem[] = [
 
 Each time you can either climb \`1\` or \`2\` steps. In how many **distinct ways** can you climb to the top?
 
-**LeetCode:** [70. Climbing Stairs](https://leetcode.com/problems/climbing-stairs/)
-**YouTube:** [NeetCode - Climbing Stairs](https://www.youtube.com/watch?v=Y0lT9Fck7qI)
 
 **Approach:**
 This is a classic **1D Dynamic Programming** problem. At each step \`i\`, you can arrive from either step \`i-1\` (1 step) or step \`i-2\` (2 steps). Therefore, the total ways to reach step \`i\` is the sum of ways to reach \`i-1\` and \`i-2\`.
@@ -138,8 +136,6 @@ def climb_stairs_memo(n: int) -> int:
 
 Given an integer array \`nums\` representing the amount of money of each house, return **the maximum amount of money you can rob tonight without alerting the police**.
 
-**LeetCode:** [198. House Robber](https://leetcode.com/problems/house-robber/)
-**YouTube:** [NeetCode - House Robber](https://www.youtube.com/watch?v=73r3KWiEvyk)
 
 **Approach:**
 Use **decision-making DP**. At each house \`i\`, you have two choices:
@@ -304,8 +300,6 @@ Return **the fewest number of coins** that you need to make up that amount. If t
 
 You may assume that you have an **infinite number** of each kind of coin.
 
-**LeetCode:** [322. Coin Change](https://leetcode.com/problems/coin-change/)
-**YouTube:** [NeetCode - Coin Change](https://www.youtube.com/watch?v=H9bfqozjoqs)
 
 **Approach:**
 This is an **Unbounded Knapsack** problem. Use DP where \`dp[i]\` represents the minimum coins needed to make amount \`i\`.

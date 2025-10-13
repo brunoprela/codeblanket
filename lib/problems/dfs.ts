@@ -9,8 +9,6 @@ export const dfsProblems: Problem[] = [
 
 A binary tree's **maximum depth** is the number of nodes along the longest path from the root node down to the farthest leaf node.
 
-**LeetCode:** [104. Maximum Depth of Binary Tree](https://leetcode.com/problems/maximum-depth-of-binary-tree/)
-**YouTube:** [NeetCode - Maximum Depth of Binary Tree](https://www.youtube.com/watch?v=hTM3phVI6YQ)
 
 **Approach:**
 Use **DFS (Depth-First Search)** to recursively calculate the depth of left and right subtrees. The maximum depth is 1 (current node) plus the maximum of left and right subtree depths.
@@ -141,8 +139,6 @@ def max_depth_iterative(root: Optional[TreeNode]) -> int:
 
 A **leaf** is a node with no children.
 
-**LeetCode:** [112. Path Sum](https://leetcode.com/problems/path-sum/)
-**YouTube:** [NeetCode - Path Sum](https://www.youtube.com/watch?v=LSKQyOz_P8I)
 
 **Approach:**
 Use **DFS** to explore all root-to-leaf paths. At each node:
@@ -306,73 +302,63 @@ def has_path_sum_with_path(root: Optional[TreeNode], target_sum: int) -> bool:
     youtubeUrl: 'https://www.youtube.com/watch?v=LSKQyOz_P8I',
   },
   {
-    id: 'number-of-islands',
-    title: 'Number of Islands',
+    id: 'pacific-atlantic-water-flow',
+    title: 'Pacific Atlantic Water Flow',
     difficulty: 'Hard',
-    description: `Given an \`m x n\` 2D binary grid \`grid\` which represents a map of \`'1'\`s (land) and \`'0'\`s (water), return the **number of islands**.
+    description: `There is an \`m x n\` rectangular island that borders both the **Pacific Ocean** and **Atlantic Ocean**. The Pacific Ocean touches the island's left and top edges, and the Atlantic Ocean touches the island's right and bottom edges.
 
-An **island** is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
+The island is partitioned into a grid of square cells. You are given an \`m x n\` integer matrix \`heights\` where \`heights[r][c]\` represents the **height above sea level** of the cell at coordinate \`(r, c)\`.
 
-**LeetCode:** [200. Number of Islands](https://leetcode.com/problems/number-of-islands/)
-**YouTube:** [NeetCode - Number of Islands](https://www.youtube.com/watch?v=pV2kpPD66nE)
+The island receives a lot of rain, and the rain water can flow to neighboring cells directly north, south, east, and west if the neighboring cell's height is **less than or equal to** the current cell's height. Water can flow from any cell adjacent to an ocean into the ocean.
+
+Return a **2D list** of grid coordinates \`result\` where \`result[i] = [ri, ci]\` denotes that rain water can flow from cell \`(ri, ci)\` to **both** the Pacific and Atlantic oceans.
 
 **Approach:**
-Use **DFS** to explore each island:
-1. Iterate through each cell in the grid
-2. When you find a '1', increment island count
-3. Use DFS to mark all connected '1's as visited
-4. Continue until all cells are processed
+Instead of checking where water flows FROM each cell, work backwards - find which cells can be reached FROM each ocean:
+1. Start DFS from all Pacific border cells (top row + left column)
+2. Start DFS from all Atlantic border cells (bottom row + right column)
+3. Find the intersection of cells reachable from both oceans
 
 **Key Insight:**
-This is a classic connected components problem. Each DFS call explores one complete island. The number of DFS calls equals the number of islands.
-
-**Optimization:** Mark visited cells in-place by changing '1' to '0' or use a separate visited set.`,
+Water flows from high to low, so reverse the problem: start from oceans and move to cells with height >= current height. This avoids checking all possible paths from each cell.`,
     examples: [
       {
-        input: `grid = [
-  ["1","1","1","1","0"],
-  ["1","1","0","1","0"],
-  ["1","1","0","0","0"],
-  ["0","0","0","0","0"]
-]`,
-        output: '1',
-        explanation: 'All connected 1s form a single island',
+        input: `heights = [[1,2,2,3,5],[3,2,3,4,4],[2,4,5,3,1],[6,7,1,4,5],[5,1,1,2,4]]`,
+        output: '[[0,4],[1,3],[1,4],[2,2],[3,0],[3,1],[4,0]]',
+        explanation:
+          'Water from these cells can flow to both oceans via height-decreasing paths',
       },
       {
-        input: `grid = [
-  ["1","1","0","0","0"],
-  ["1","1","0","0","0"],
-  ["0","0","1","0","0"],
-  ["0","0","0","1","1"]
-]`,
-        output: '3',
-        explanation: 'Three separate islands',
+        input: `heights = [[1]]`,
+        output: '[[0,0]]',
+        explanation:
+          'The only cell touches both oceans so water flows to both',
       },
     ],
     constraints: [
-      'm == grid.length',
-      'n == grid[i].length',
-      '1 <= m, n <= 300',
-      "grid[i][j] is '0' or '1'",
+      'm == heights.length',
+      'n == heights[r].length',
+      '1 <= m, n <= 200',
+      '0 <= heights[r][c] <= 10^5',
     ],
     hints: [
-      'Use DFS to explore each island completely',
-      'Mark visited cells to avoid counting same island twice',
-      'Count how many times you start a new DFS',
-      'Check all 4 directions: up, down, left, right',
-      'Can modify grid in-place or use separate visited set',
+      'Think backwards: which cells can reach each ocean?',
+      'Start DFS from all border cells of each ocean',
+      'Water can only flow from higher or equal height to lower',
+      'When starting from ocean, reverse the flow direction',
+      'The answer is the intersection of Pacific-reachable and Atlantic-reachable cells',
     ],
     starterCode: `from typing import List
 
-def num_islands(grid: List[List[str]]) -> int:
+def pacific_atlantic(heights: List[List[int]]) -> List[List[int]]:
     """
-    Count the number of islands in a 2D grid.
+    Find all cells where water can flow to both Pacific and Atlantic oceans.
     
     Args:
-        grid: 2D grid where '1' is land and '0' is water
+        heights: Matrix of heights above sea level
         
     Returns:
-        Number of islands
+        List of [row, col] coordinates
     """
     # Write your code here
     pass
@@ -381,140 +367,76 @@ def num_islands(grid: List[List[str]]) -> int:
       {
         input: [
           [
-            ['1', '1', '1', '1', '0'],
-            ['1', '1', '0', '1', '0'],
-            ['1', '1', '0', '0', '0'],
-            ['0', '0', '0', '0', '0'],
+            [1, 2, 2, 3, 5],
+            [3, 2, 3, 4, 4],
+            [2, 4, 5, 3, 1],
+            [6, 7, 1, 4, 5],
+            [5, 1, 1, 2, 4],
           ],
         ],
-        expected: 1,
+        expected: [
+          [0, 4],
+          [1, 3],
+          [1, 4],
+          [2, 2],
+          [3, 0],
+          [3, 1],
+          [4, 0],
+        ],
       },
       {
-        input: [
-          [
-            ['1', '1', '0', '0', '0'],
-            ['1', '1', '0', '0', '0'],
-            ['0', '0', '1', '0', '0'],
-            ['0', '0', '0', '1', '1'],
-          ],
-        ],
-        expected: 3,
+        input: [[[1]]],
+        expected: [[0, 0]],
       },
     ],
     solution: `from typing import List
 
 
-def num_islands(grid: List[List[str]]) -> int:
+def pacific_atlantic(heights: List[List[int]]) -> List[List[int]]:
     """
-    DFS solution - mark visited cells in-place.
-    Time: O(M × N), Space: O(M × N) for recursion stack
-    """
-    if not grid or not grid[0]:
-        return 0
-    
-    rows, cols = len(grid), len(grid[0])
-    count = 0
-    
-    def dfs(r, c):
-        """Explore entire island starting from (r, c)"""
-        # Base cases: out of bounds or water
-        if r < 0 or r >= rows or c < 0 or c >= cols or grid[r][c] == '0':
-            return
-        
-        # Mark as visited
-        grid[r][c] = '0'
-        
-        # Explore all 4 directions
-        dfs(r + 1, c)  # Down
-        dfs(r - 1, c)  # Up
-        dfs(r, c + 1)  # Right
-        dfs(r, c - 1)  # Left
-    
-    # Iterate through each cell
-    for r in range(rows):
-        for c in range(cols):
-            if grid[r][c] == '1':
-                # Found new island
-                count += 1
-                # Mark entire island as visited
-                dfs(r, c)
-    
-    return count
-
-
-# Alternative: Using separate visited set (preserves grid)
-def num_islands_visited_set(grid: List[List[str]]) -> int:
-    """
-    DFS with separate visited set.
+    Reverse DFS: Start from oceans, find which cells can reach each ocean.
     Time: O(M × N), Space: O(M × N)
     """
-    if not grid or not grid[0]:
-        return 0
+    if not heights or not heights[0]:
+        return []
     
-    rows, cols = len(grid), len(grid[0])
-    visited = set()
-    count = 0
+    rows, cols = len(heights), len(heights[0])
+    pacific = set()
+    atlantic = set()
     
-    def dfs(r, c):
-        if (r < 0 or r >= rows or c < 0 or c >= cols or
-            grid[r][c] == '0' or (r, c) in visited):
-            return
-        
+    def dfs(r, c, visited):
+        """DFS to mark all cells reachable from current ocean"""
         visited.add((r, c))
         
-        # Explore all 4 directions
-        dfs(r + 1, c)
-        dfs(r - 1, c)
-        dfs(r, c + 1)
-        dfs(r, c - 1)
+        # Check all 4 directions
+        for dr, dc in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
+            nr, nc = r + dr, c + dc
+            # Can only move to cells with height >= current (water flows down)
+            if (0 <= nr < rows and 0 <= nc < cols and 
+                (nr, nc) not in visited and 
+                heights[nr][nc] >= heights[r][c]):
+                dfs(nr, nc, visited)
     
+    # Run DFS from all Pacific border cells (top row and left column)
+    for c in range(cols):
+        dfs(0, c, pacific)
     for r in range(rows):
-        for c in range(cols):
-            if grid[r][c] == '1' and (r, c) not in visited:
-                count += 1
-                dfs(r, c)
+        dfs(r, 0, pacific)
     
-    return count
-
-
-# Alternative: Iterative DFS with stack
-def num_islands_iterative(grid: List[List[str]]) -> int:
-    """
-    Iterative DFS using explicit stack.
-    Time: O(M × N), Space: O(M × N)
-    """
-    if not grid or not grid[0]:
-        return 0
-    
-    rows, cols = len(grid), len(grid[0])
-    count = 0
-    
+    # Run DFS from all Atlantic border cells (bottom row and right column)
+    for c in range(cols):
+        dfs(rows - 1, c, atlantic)
     for r in range(rows):
-        for c in range(cols):
-            if grid[r][c] == '1':
-                count += 1
-                
-                # DFS with stack
-                stack = [(r, c)]
-                grid[r][c] = '0'
-                
-                while stack:
-                    curr_r, curr_c = stack.pop()
-                    
-                    # Check all 4 directions
-                    for dr, dc in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
-                        nr, nc = curr_r + dr, curr_c + dc
-                        if (0 <= nr < rows and 0 <= nc < cols and 
-                            grid[nr][nc] == '1'):
-                            grid[nr][nc] = '0'
-                            stack.append((nr, nc))
+        dfs(r, cols - 1, atlantic)
     
-    return count`,
-    timeComplexity: 'O(M × N)',
-    spaceComplexity: 'O(M × N) for recursion stack in worst case',
+    # Find intersection: cells that can reach both oceans
+    return [[r, c] for r, c in pacific & atlantic]`,
+    timeComplexity: 'O(M × N) - visit each cell at most twice',
+    spaceComplexity: 'O(M × N) for recursion stack and visited sets',
     order: 3,
     topic: 'DFS',
-    leetcodeUrl: 'https://leetcode.com/problems/number-of-islands/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=pV2kpPD66nE',
+    leetcodeUrl: 'https://leetcode.com/problems/pacific-atlantic-water-flow/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=s-VkcjHqkGI',
   },
 ];
+

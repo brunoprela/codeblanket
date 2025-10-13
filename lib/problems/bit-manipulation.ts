@@ -9,8 +9,6 @@ export const bitManipulationProblems: Problem[] = [
 
 You must implement a solution with linear runtime complexity and use only constant extra space.
 
-**LeetCode:** [136. Single Number](https://leetcode.com/problems/single-number/)
-**YouTube:** [NeetCode - Single Number](https://www.youtube.com/watch?v=qMPX1AOa83k)
 
 **Approach:**
 Use the **XOR** bitwise operator. XOR has special properties:
@@ -129,8 +127,6 @@ def single_number_oneliner(nums: List[int]) -> int:
     difficulty: 'Medium',
     description: `Write a function that takes an unsigned integer and returns the number of \`1\` bits it has (also known as the **Hamming weight**).
 
-**LeetCode:** [191. Number of 1 Bits](https://leetcode.com/problems/number-of-1-bits/)
-**YouTube:** [NeetCode - Number of 1 Bits](https://www.youtube.com/watch?v=5Km3utixwZs)
 
 **Approach:**
 Use **Brian Kernighan's algorithm**: The expression \`n & (n-1)\` removes the rightmost set bit. Count how many times we can do this until n becomes 0.
@@ -266,8 +262,6 @@ def hamming_weight_lookup(n: int) -> int:
     difficulty: 'Hard',
     description: `Given an array \`nums\` containing \`n\` distinct numbers in the range \`[0, n]\`, return the only number in the range that is missing from the array.
 
-**LeetCode:** [268. Missing Number](https://leetcode.com/problems/missing-number/)
-**YouTube:** [NeetCode - Missing Number](https://www.youtube.com/watch?v=WnPLSRLSANE)
 
 **Multiple Approaches:**
 
