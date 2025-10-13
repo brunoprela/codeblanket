@@ -44,11 +44,58 @@ export function SimpleCodeEditor({
   const [isRunning, setIsRunning] = useState(false);
   const [isResultsCollapsed, setIsResultsCollapsed] = useState(false);
   const [consoleOutput, setConsoleOutput] = useState<string[]>([]);
+  const [executionMode, setExecutionMode] = useState<'run' | 'test' | null>(null);
 
+  // Run code without tests (just execute and show console output)
+  const runCodeOnly = async () => {
+    setIsRunning(true);
+    setResults([]);
+    setConsoleOutput([]);
+    setExecutionMode('run');
+
+    try {
+      const pyodide = await getPyodide();
+      const capturedOutput: string[] = [];
+
+      // Setup console output capture
+      await pyodide.runPythonAsync(`
+import sys
+from io import StringIO
+sys.stdout = StringIO()
+sys.stderr = StringIO()
+`);
+
+      // Execute user's code
+      await pyodide.runPythonAsync(code);
+
+      // Capture all output
+      const output = await pyodide.runPythonAsync(`
+stdout_value = sys.stdout.getvalue()
+stderr_value = sys.stderr.getvalue()
+stdout_value + stderr_value
+`);
+
+      if (output) {
+        capturedOutput.push(output);
+      } else {
+        capturedOutput.push('Code executed successfully (no output)');
+      }
+
+      setConsoleOutput(capturedOutput);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      setConsoleOutput([`Error: ${error.message}`]);
+    } finally {
+      setIsRunning(false);
+    }
+  };
+
+  // Run code with test validation
   const runCode = async () => {
     setIsRunning(true);
     setResults([]);
     setConsoleOutput([]);
+    setExecutionMode('test');
 
     try {
       const pyodide = await getPyodide();
@@ -169,6 +216,7 @@ sys.stdout.getvalue() + sys.stderr.getvalue()
     resetCodeStorage();
     setResults([]);
     setConsoleOutput([]);
+    setExecutionMode(null);
 
     if (problemId) {
       markProblemIncomplete(problemId);
@@ -178,6 +226,29 @@ sys.stdout.getvalue() + sys.stderr.getvalue()
       );
     }
   };
+
+  // Keyboard shortcut support
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Cmd+Enter (Mac) or Ctrl+Enter (Windows/Linux) to run code
+      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+        e.preventDefault();
+        if (pyodideReady && !isRunning) {
+          runCodeOnly();
+        }
+      }
+      // Cmd+Shift+Enter or Ctrl+Shift+Enter to run tests
+      if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'Enter') {
+        e.preventDefault();
+        if (pyodideReady && !isRunning) {
+          runCode();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [pyodideReady, isRunning, code]);
 
   if (loadError) {
     return (
@@ -238,29 +309,54 @@ sys.stdout.getvalue() + sys.stderr.getvalue()
       </div>
 
       {/* Action Buttons */}
-      <div className="flex flex-shrink-0 gap-3 bg-[#44475a] p-4">
-        <button
-          onClick={runCode}
-          disabled={!pyodideReady || isRunning}
-          className="rounded-lg bg-[#50fa7b] px-6 py-2.5 font-bold text-[#282a36] transition-colors hover:bg-[#50fa7b]/80 disabled:cursor-not-allowed disabled:bg-[#6272a4]"
-        >
-          {isRunning ? (
-            <span className="flex items-center gap-2">
-              <div className="h-4 w-4 animate-spin rounded-full border-2 border-[#282a36] border-t-transparent" />
-              Running...
-            </span>
-          ) : (
-            '▶ Run Tests'
-          )}
-        </button>
+      <div className="flex-shrink-0 bg-[#44475a] p-4">
+        <div className="mb-2 flex items-center justify-between">
+          <div className="flex gap-3">
+            <button
+              onClick={runCodeOnly}
+              disabled={!pyodideReady || isRunning}
+              className="rounded-lg bg-[#bd93f9] px-6 py-2.5 font-bold text-[#282a36] transition-colors hover:bg-[#bd93f9]/80 disabled:cursor-not-allowed disabled:bg-[#6272a4]"
+            >
+              {isRunning && executionMode === 'run' ? (
+                <span className="flex items-center gap-2">
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-[#282a36] border-t-transparent" />
+                  Running...
+                </span>
+              ) : (
+                '▶ Run Code'
+              )}
+            </button>
 
-        <button
-          onClick={handleReset}
-          disabled={!pyodideReady}
-          className="rounded-lg bg-[#6272a4] px-6 py-2.5 font-semibold text-[#f8f8f2] transition-colors hover:bg-[#6272a4]/80 disabled:cursor-not-allowed disabled:bg-[#44475a]"
-        >
-          Reset Code
-        </button>
+            <button
+              onClick={runCode}
+              disabled={!pyodideReady || isRunning}
+              className="rounded-lg bg-[#50fa7b] px-6 py-2.5 font-bold text-[#282a36] transition-colors hover:bg-[#50fa7b]/80 disabled:cursor-not-allowed disabled:bg-[#6272a4]"
+            >
+              {isRunning && executionMode === 'test' ? (
+                <span className="flex items-center gap-2">
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-[#282a36] border-t-transparent" />
+                  Running Tests...
+                </span>
+              ) : (
+                '✓ Run Tests'
+              )}
+            </button>
+
+            <button
+              onClick={handleReset}
+              disabled={!pyodideReady}
+              className="rounded-lg bg-[#6272a4] px-6 py-2.5 font-semibold text-[#f8f8f2] transition-colors hover:bg-[#6272a4]/80 disabled:cursor-not-allowed disabled:bg-[#44475a]"
+            >
+              Reset Code
+            </button>
+          </div>
+        </div>
+
+        {/* Keyboard shortcuts hint */}
+        <div className="flex gap-4 text-xs text-[#6272a4]">
+          <span>⌘/Ctrl + Enter: Run Code</span>
+          <span>⌘/Ctrl + Shift + Enter: Run Tests</span>
+        </div>
       </div>
 
       {/* Test Results */}
@@ -360,10 +456,21 @@ sys.stdout.getvalue() + sys.stderr.getvalue()
       {/* Console Output */}
       {consoleOutput.length > 0 && (
         <div className="max-h-[30vh] min-h-0 flex-shrink-0 overflow-y-auto border-t border-[#44475a] bg-[#282a36] p-4">
-          <div className="mb-3 rounded-lg bg-[#44475a] px-4 py-2">
-            <div className="font-semibold text-[#f8f8f2]">📟 Console Output</div>
+          <div className="mb-3 flex items-center justify-between rounded-lg bg-[#44475a] px-4 py-2">
+            <div className="flex items-center gap-2">
+              <span className="text-lg">📟</span>
+              <div className="font-semibold text-[#f8f8f2]">Console Output</div>
+              {executionMode && (
+                <span className={`rounded px-2 py-0.5 text-xs font-semibold ${executionMode === 'run'
+                    ? 'bg-[#bd93f9]/20 text-[#bd93f9]'
+                    : 'bg-[#50fa7b]/20 text-[#50fa7b]'
+                  }`}>
+                  {executionMode === 'run' ? 'Code Execution' : 'Test Execution'}
+                </span>
+              )}
+            </div>
           </div>
-          <div className="rounded-lg bg-[#282a36] border border-[#44475a] p-4 font-mono text-sm">
+          <div className="rounded-lg border border-[#44475a] bg-[#1e1f29] p-4 font-mono text-sm">
             {consoleOutput.map((output, i) => (
               <pre key={i} className="whitespace-pre-wrap text-[#f8f8f2]">
                 {output}
