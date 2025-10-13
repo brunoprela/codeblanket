@@ -52,9 +52,9 @@ export default function ProblemPage({
   };
 
   return (
-    <div className="flex h-[calc(100vh-64px)] flex-col">
+    <div className="flex h-full flex-col overflow-hidden">
       {/* Top Bar */}
-      <div className="border-b border-[#44475a] bg-[#282a36] px-4 py-3">
+      <div className="flex-shrink-0 border-b border-[#44475a] bg-[#282a36] px-4 py-3">
         <div className="flex items-center justify-between">
           <Link
             href="/problems"
@@ -221,15 +221,13 @@ export default function ProblemPage({
         </div>
 
         {/* Right Panel - Code Editor */}
-        <div className="flex w-1/2 flex-col bg-[#282a36]">
-          <div className="flex-1 overflow-hidden">
-            <PythonCodeRunner
-              starterCode={problem.starterCode}
-              testCases={problem.testCases}
-              problemId={problem.id}
-              onSuccess={handleSuccess}
-            />
-          </div>
+        <div className="flex w-1/2 flex-col overflow-hidden bg-[#282a36]">
+          <PythonCodeRunner
+            starterCode={problem.starterCode}
+            testCases={problem.testCases}
+            problemId={problem.id}
+            onSuccess={handleSuccess}
+          />
         </div>
       </div>
     </div>

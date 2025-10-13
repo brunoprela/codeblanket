@@ -381,6 +381,375 @@ def reconstruct_path_fw(next_vertex, i, j):
     return path`,
     },
     {
+      id: 'union-find',
+      title: 'Union-Find (Disjoint Set Union)',
+      content: `**Union-Find** (also called Disjoint Set Union or DSU) is a data structure that tracks elements partitioned into disjoint (non-overlapping) sets.
+
+**Core Operations:**
+- \`find(x)\`: Find which set x belongs to (returns representative/root)
+- \`union(x, y)\`: Merge the sets containing x and y
+
+**Applications:**
+- **Kruskal's MST algorithm**
+- Detecting cycles in undirected graphs
+- Finding connected components
+- Network connectivity
+- Percolation problems
+
+**Basic Implementation:**
+\`\`\`python
+class UnionFind:
+    def __init__(self, n):
+        self.parent = list(range(n))  # Each node is its own parent
+    
+    def find(self, x):
+        """Find root of x"""
+        if self.parent[x] != x:
+            return self.find(self.parent[x])
+        return x
+    
+    def union(self, x, y):
+        """Merge sets containing x and y"""
+        root_x = self.find(x)
+        root_y = self.find(y)
+        if root_x != root_y:
+            self.parent[root_x] = root_y
+\`\`\`
+
+**Optimization 1: Path Compression**
+Make tree flatter by pointing nodes directly to root during find.
+
+\`\`\`python
+def find(self, x):
+    if self.parent[x] != x:
+        self.parent[x] = self.find(self.parent[x])  # Path compression!
+    return self.parent[x]
+\`\`\`
+
+**Optimization 2: Union by Rank**
+Attach smaller tree under larger tree to keep trees balanced.
+
+\`\`\`python
+class UnionFind:
+    def __init__(self, n):
+        self.parent = list(range(n))
+        self.rank = [0] * n  # Tree height
+    
+    def find(self, x):
+        if self.parent[x] != x:
+            self.parent[x] = self.find(self.parent[x])
+        return self.parent[x]
+    
+    def union(self, x, y):
+        root_x = self.find(x)
+        root_y = self.find(y)
+        
+        if root_x == root_y:
+            return False  # Already in same set
+        
+        # Attach smaller rank tree under larger rank
+        if self.rank[root_x] < self.rank[root_y]:
+            self.parent[root_x] = root_y
+        elif self.rank[root_x] > self.rank[root_y]:
+            self.parent[root_y] = root_x
+        else:
+            self.parent[root_y] = root_x
+            self.rank[root_x] += 1
+        
+        return True  # Successfully merged
+\`\`\`
+
+**Complexity with Both Optimizations:**
+- Time: O(α(n)) ≈ O(1) where α is inverse Ackermann (effectively constant)
+- Space: O(n)
+
+**Common Pattern - Cycle Detection:**
+\`\`\`python
+def has_cycle(edges, n):
+    uf = UnionFind(n)
+    for u, v in edges:
+        if uf.find(u) == uf.find(v):
+            return True  # Cycle detected!
+        uf.union(u, v)
+    return False
+\`\`\``,
+      codeExample: `class UnionFind:
+    """Optimized Union-Find with path compression and union by rank"""
+    
+    def __init__(self, n: int):
+        self.parent = list(range(n))
+        self.rank = [0] * n
+        self.components = n  # Track number of disjoint sets
+    
+    def find(self, x: int) -> int:
+        """Find root with path compression. O(α(n)) ≈ O(1)"""
+        if self.parent[x] != x:
+            self.parent[x] = self.find(self.parent[x])
+        return self.parent[x]
+    
+    def union(self, x: int, y: int) -> bool:
+        """
+        Union by rank. Returns True if merged, False if already connected.
+        O(α(n)) ≈ O(1)
+        """
+        root_x = self.find(x)
+        root_y = self.find(y)
+        
+        if root_x == root_y:
+            return False  # Already in same set
+        
+        # Attach smaller rank tree under larger rank
+        if self.rank[root_x] < self.rank[root_y]:
+            self.parent[root_x] = root_y
+        elif self.rank[root_x] > self.rank[root_y]:
+            self.parent[root_y] = root_x
+        else:
+            self.parent[root_y] = root_x
+            self.rank[root_x] += 1
+        
+        self.components -= 1
+        return True
+    
+    def connected(self, x: int, y: int) -> bool:
+        """Check if x and y are in the same set. O(α(n))"""
+        return self.find(x) == self.find(y)
+    
+    def count_components(self) -> int:
+        """Get number of disjoint sets. O(1)"""
+        return self.components
+
+
+# Example: Detect cycle in undirected graph
+def has_cycle_undirected(edges, n):
+    """Returns True if graph has a cycle"""
+    uf = UnionFind(n)
+    for u, v in edges:
+        if not uf.union(u, v):
+            return True  # Edge connects already-connected nodes
+    return False
+
+
+# Example: Count connected components
+def count_components(edges, n):
+    """Count number of connected components"""
+    uf = UnionFind(n)
+    for u, v in edges:
+        uf.union(u, v)
+    return uf.count_components()`,
+    },
+    {
+      id: 'mst',
+      title: 'Minimum Spanning Tree (MST)',
+      content: `A **Minimum Spanning Tree** connects all vertices in a weighted graph with minimum total edge weight, with no cycles.
+
+**Properties:**
+- Connects all V vertices with exactly V-1 edges
+- No cycles (it's a tree!)
+- Minimizes sum of edge weights
+- Not necessarily unique
+
+**Two Main Algorithms:**
+
+**1. Kruskal's Algorithm (Edge-based)**
+- Sort edges by weight
+- Use Union-Find to avoid cycles
+- Add edges greedily if they don't form cycle
+
+\`\`\`python
+def kruskal_mst(edges, n):
+    """
+    edges: [(weight, u, v), ...]
+    n: number of vertices
+    """
+    # Sort edges by weight
+    edges.sort()
+    
+    uf = UnionFind(n)
+    mst = []
+    total_weight = 0
+    
+    for weight, u, v in edges:
+        if uf.union(u, v):  # No cycle
+            mst.append((u, v, weight))
+            total_weight += weight
+            
+            if len(mst) == n - 1:  # Found MST
+                break
+    
+    return mst, total_weight
+\`\`\`
+
+**Complexity:** O(E log E) for sorting + O(E α(V)) for union-find ≈ O(E log E)
+
+**2. Prim's Algorithm (Vertex-based)**
+- Start from any vertex
+- Repeatedly add minimum-weight edge connecting tree to non-tree vertex
+- Use min-heap for efficiency
+
+\`\`\`python
+import heapq
+
+def prim_mst(graph, n):
+    """
+    graph: {node: [(weight, neighbor), ...]}
+    n: number of vertices
+    """
+    visited = set()
+    mst = []
+    total_weight = 0
+    
+    # Start from vertex 0
+    visited.add(0)
+    heap = graph[0][:]  # edges from start
+    heapq.heapify(heap)
+    
+    while heap and len(visited) < n:
+        weight, u, v = heapq.heappop(heap)
+        
+        if v in visited:
+            continue
+        
+        # Add edge to MST
+        visited.add(v)
+        mst.append((u, v, weight))
+        total_weight += weight
+        
+        # Add edges from newly added vertex
+        for w, neighbor in graph[v]:
+            if neighbor not in visited:
+                heapq.heappush(heap, (w, v, neighbor))
+    
+    return mst, total_weight
+\`\`\`
+
+**Complexity:** O((V + E) log V) with binary heap
+
+**Kruskal vs Prim:**
+
+| Aspect | Kruskal | Prim |
+|--------|---------|------|
+| Approach | Edge-based | Vertex-based |
+| Data Structure | Union-Find | Min-Heap |
+| Complexity | O(E log E) | O((V+E) log V) |
+| Best for | Sparse graphs | Dense graphs |
+| Edge list | Yes | Adjacency list better |
+
+**When to use which:**
+- **Kruskal**: Sparse graph, have edge list, simpler to code
+- **Prim**: Dense graph, adjacency list available`,
+      codeExample: `import heapq
+from typing import List, Tuple
+
+
+class UnionFind:
+    """For Kruskal's algorithm"""
+    def __init__(self, n):
+        self.parent = list(range(n))
+        self.rank = [0] * n
+    
+    def find(self, x):
+        if self.parent[x] != x:
+            self.parent[x] = self.find(self.parent[x])
+        return self.parent[x]
+    
+    def union(self, x, y):
+        root_x, root_y = self.find(x), self.find(y)
+        if root_x == root_y:
+            return False
+        if self.rank[root_x] < self.rank[root_y]:
+            self.parent[root_x] = root_y
+        elif self.rank[root_x] > self.rank[root_y]:
+            self.parent[root_y] = root_x
+        else:
+            self.parent[root_y] = root_x
+            self.rank[root_x] += 1
+        return True
+
+
+def kruskal_mst(edges: List[Tuple[int, int, int]], n: int):
+    """
+    Kruskal's MST algorithm.
+    edges: [(u, v, weight), ...]
+    Returns: (mst_edges, total_weight)
+    Time: O(E log E), Space: O(V)
+    """
+    # Sort edges by weight
+    edges.sort(key=lambda x: x[2])
+    
+    uf = UnionFind(n)
+    mst = []
+    total_weight = 0
+    
+    for u, v, weight in edges:
+        if uf.union(u, v):
+            mst.append((u, v, weight))
+            total_weight += weight
+            
+            if len(mst) == n - 1:
+                break
+    
+    return mst, total_weight
+
+
+def prim_mst(graph: dict, n: int, start: int = 0):
+    """
+    Prim's MST algorithm.
+    graph: {node: [(neighbor, weight), ...]}
+    Returns: (mst_edges, total_weight)
+    Time: O((V+E) log V), Space: O(V)
+    """
+    visited = set([start])
+    mst = []
+    total_weight = 0
+    
+    # Min-heap: (weight, from_node, to_node)
+    heap = [(weight, start, neighbor) 
+            for neighbor, weight in graph[start]]
+    heapq.heapify(heap)
+    
+    while heap and len(visited) < n:
+        weight, u, v = heapq.heappop(heap)
+        
+        if v in visited:
+            continue
+        
+        visited.add(v)
+        mst.append((u, v, weight))
+        total_weight += weight
+        
+        # Add edges from newly added vertex
+        for neighbor, w in graph[v]:
+            if neighbor not in visited:
+                heapq.heappush(heap, (w, v, neighbor))
+    
+    return mst, total_weight
+
+
+# Example usage
+if __name__ == "__main__":
+    # Example graph
+    edges = [
+        (0, 1, 4),
+        (0, 2, 3),
+        (1, 2, 1),
+        (1, 3, 2),
+        (2, 3, 4),
+    ]
+    
+    n = 4
+    mst, weight = kruskal_mst(edges, n)
+    print(f"Kruskal MST: {mst}, Total weight: {weight}")
+    
+    # Convert to adjacency list for Prim
+    graph = {i: [] for i in range(n)}
+    for u, v, w in edges:
+        graph[u].append((v, w))
+        graph[v].append((u, w))
+    
+    mst, weight = prim_mst(graph, n)
+    print(f"Prim MST: {mst}, Total weight: {weight}")`,
+    },
+    {
       id: 'comparison',
       title: 'Algorithm Comparison',
       content: `**Shortest Path Algorithm Selection:**

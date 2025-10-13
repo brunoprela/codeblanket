@@ -21,7 +21,37 @@ export default function TopicProblemsPage({
 
   // Load completed problems from localStorage
   useEffect(() => {
+    // Initial load
     setCompletedProblems(getCompletedProblems());
+
+    // Reload when tab/window regains focus (after completing problems on other pages)
+    const handleFocus = () => {
+      setCompletedProblems(getCompletedProblems());
+    };
+
+    // Reload when storage changes (e.g., completing problems in another tab)
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'codeblanket_completed_problems') {
+        setCompletedProblems(getCompletedProblems());
+      }
+    };
+
+    // Listen for custom event when problems are completed
+    const handleProblemCompleted = () => {
+      setCompletedProblems(getCompletedProblems());
+    };
+
+    window.addEventListener('focus', handleFocus);
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('problemCompleted', handleProblemCompleted);
+    window.addEventListener('problemReset', handleProblemCompleted);
+
+    return () => {
+      window.removeEventListener('focus', handleFocus);
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('problemCompleted', handleProblemCompleted);
+      window.removeEventListener('problemReset', handleProblemCompleted);
+    };
   }, []);
 
   const category = problemCategories.find((cat) => cat.id === slug);

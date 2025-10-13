@@ -33,7 +33,7 @@ export default function RootLayout({
                 className="flex items-center space-x-2 transition-opacity hover:opacity-90"
               >
                 <div className="text-2xl font-bold text-[#bd93f9]">
-                  CodeBlanket
+                  🛌 CodeBlanket
                 </div>
               </Link>
               <div className="flex items-center space-x-6">
@@ -54,7 +54,9 @@ export default function RootLayout({
           </div>
         </nav>
 
-        <main className="min-h-screen bg-[#282a36]">{children}</main>
+        <main className="h-[calc(100vh-64px)] overflow-y-auto bg-[#282a36]">
+          {children}
+        </main>
       </body>
     </html>
   );

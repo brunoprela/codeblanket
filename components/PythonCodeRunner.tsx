@@ -41,6 +41,7 @@ export function PythonCodeRunner({
   // Local state
   const [results, setResults] = useState<TestResult[]>([]);
   const [isRunning, setIsRunning] = useState(false);
+  const [isResultsCollapsed, setIsResultsCollapsed] = useState(false);
 
   // Configure Monaco on mount
   configureMonaco();
@@ -161,7 +162,7 @@ json.dumps(result)
   }
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full flex-col overflow-hidden">
       {/* Pyodide Loading State */}
       {pyodideLoading && (
         <div className="m-4 rounded-lg border-2 border-[#bd93f9] bg-[#bd93f9]/10 p-4">
@@ -197,10 +198,20 @@ json.dumps(result)
             fontSize: 15,
             lineNumbers: 'on',
             scrollBeyondLastLine: false,
+            scrollBeyondLastColumn: 0,
             automaticLayout: true,
             tabSize: 4,
             wordWrap: 'on',
-            padding: { top: 16, bottom: 16 },
+            padding: { top: 16, bottom: 0 },
+            scrollbar: {
+              alwaysConsumeMouseWheel: false,
+              vertical: 'auto',
+              horizontal: 'auto',
+              verticalScrollbarSize: 10,
+              horizontalScrollbarSize: 10,
+            },
+            overviewRulerLanes: 0,
+            fixedOverflowWidgets: true,
           }}
           beforeMount={(monaco) => {
             // Define Dracula theme for Monaco
@@ -272,7 +283,7 @@ json.dumps(result)
       </div>
 
       {/* Action Buttons */}
-      <div className="flex gap-3 bg-[#44475a] p-4">
+      <div className="flex flex-shrink-0 gap-3 bg-[#44475a] p-4">
         <button
           onClick={runCode}
           disabled={!pyodideReady || isRunning}
@@ -299,85 +310,94 @@ json.dumps(result)
 
       {/* Test Results */}
       {results.length > 0 && (
-        <div className="max-h-[40vh] space-y-3 overflow-y-auto bg-[#282a36] p-4">
+        <div className="max-h-[40vh] min-h-0 flex-shrink-0 space-y-3 overflow-y-auto bg-[#282a36] p-4">
           <div className="flex items-center justify-between rounded-lg bg-[#44475a] p-4">
             <div className="text-lg font-semibold text-[#f8f8f2]">
               Test Results: {results.filter((r) => r.passed).length} /{' '}
               {results.length} Passed
             </div>
-            {results.every((r) => r.passed) && (
-              <div className="flex items-center gap-2 font-semibold text-[#50fa7b]">
-                <span className="text-2xl">🎉</span>
-                All tests passed!
-              </div>
-            )}
-          </div>
-
-          <div className="space-y-3">
-            {results.map((result, i) => (
-              <div
-                key={i}
-                className={`rounded-lg border-2 p-4 ${
-                  result.passed
-                    ? 'border-[#50fa7b] bg-[#50fa7b]/10'
-                    : 'border-[#ff5555] bg-[#ff5555]/10'
-                }`}
+            <div className="flex items-center gap-3">
+              {results.every((r) => r.passed) && (
+                <div className="flex items-center gap-2 font-semibold text-[#50fa7b]">
+                  <span className="text-2xl">🎉</span>
+                  All tests passed!
+                </div>
+              )}
+              <button
+                onClick={() => setIsResultsCollapsed(!isResultsCollapsed)}
+                className="rounded-lg bg-[#6272a4] px-4 py-2 font-semibold text-[#f8f8f2] transition-colors hover:bg-[#6272a4]/80"
               >
-                <div className="mb-3 flex items-center justify-between">
-                  <div className="text-lg font-semibold text-[#f8f8f2]">
-                    {result.passed ? '✅' : '❌'} Test Case {i + 1}
-                  </div>
-                  {result.executionTime && (
-                    <div className="text-sm text-[#6272a4]">
-                      {result.executionTime.toFixed(2)}ms
-                    </div>
-                  )}
-                </div>
-
-                <div className="space-y-2 font-mono text-sm">
-                  <div className="flex gap-2">
-                    <span className="min-w-[80px] font-semibold text-[#bd93f9]">
-                      Input:
-                    </span>
-                    <span className="text-[#f8f8f2]">
-                      {formatValue(result.input)}
-                    </span>
-                  </div>
-
-                  <div className="flex gap-2">
-                    <span className="min-w-[80px] font-semibold text-[#bd93f9]">
-                      Expected:
-                    </span>
-                    <span className="font-semibold text-[#50fa7b]">
-                      {formatValue(result.expected)}
-                    </span>
-                  </div>
-
-                  <div className="flex gap-2">
-                    <span className="min-w-[80px] font-semibold text-[#bd93f9]">
-                      Got:
-                    </span>
-                    <span
-                      className={`font-semibold ${result.passed ? 'text-[#50fa7b]' : 'text-[#ff5555]'}`}
-                    >
-                      {formatValue(result.actual)}
-                    </span>
-                  </div>
-
-                  {result.error && (
-                    <div className="mt-3 rounded border-2 border-[#ff5555] bg-[#ff5555]/10 p-3">
-                      <div className="mb-1 font-semibold text-[#ff5555]">
-                        Error:
-                      </div>
-                      <pre className="text-xs whitespace-pre-wrap text-[#ff5555]">
-                        {result.error}
-                      </pre>
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
+                {isResultsCollapsed ? '▼ Show Details' : '▲ Hide Details'}
+              </button>
+            </div>
           </div>
+
+          {!isResultsCollapsed && (
+            <div className="space-y-3">
+              {results.map((result, i) => (
+                <div
+                  key={i}
+                  className={`rounded-lg border-2 p-4 ${result.passed
+                      ? 'border-[#50fa7b] bg-[#50fa7b]/10'
+                      : 'border-[#ff5555] bg-[#ff5555]/10'
+                    }`}
+                >
+                  <div className="mb-3 flex items-center justify-between">
+                    <div className="text-lg font-semibold text-[#f8f8f2]">
+                      {result.passed ? '✅' : '❌'} Test Case {i + 1}
+                    </div>
+                    {result.executionTime && (
+                      <div className="text-sm text-[#6272a4]">
+                        {result.executionTime.toFixed(2)}ms
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="space-y-2 font-mono text-sm">
+                    <div className="flex gap-2">
+                      <span className="min-w-[80px] font-semibold text-[#bd93f9]">
+                        Input:
+                      </span>
+                      <span className="text-[#f8f8f2]">
+                        {formatValue(result.input)}
+                      </span>
+                    </div>
+
+                    <div className="flex gap-2">
+                      <span className="min-w-[80px] font-semibold text-[#bd93f9]">
+                        Expected:
+                      </span>
+                      <span className="font-semibold text-[#50fa7b]">
+                        {formatValue(result.expected)}
+                      </span>
+                    </div>
+
+                    <div className="flex gap-2">
+                      <span className="min-w-[80px] font-semibold text-[#bd93f9]">
+                        Got:
+                      </span>
+                      <span
+                        className={`font-semibold ${result.passed ? 'text-[#50fa7b]' : 'text-[#ff5555]'}`}
+                      >
+                        {formatValue(result.actual)}
+                      </span>
+                    </div>
+
+                    {result.error && (
+                      <div className="mt-3 rounded border-2 border-[#ff5555] bg-[#ff5555]/10 p-3">
+                        <div className="mb-1 font-semibold text-[#ff5555]">
+                          Error:
+                        </div>
+                        <pre className="text-xs whitespace-pre-wrap text-[#ff5555]">
+                          {result.error}
+                        </pre>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>

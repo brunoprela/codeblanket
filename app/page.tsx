@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { problemCategories, allProblems } from '@/lib/problems';
+import { allProblems } from '@/lib/problems';
 import { moduleCategories } from '@/lib/modules';
 
 export default function Home() {
@@ -52,74 +52,16 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Learning Modules */}
-      <div className="mb-16 space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-3xl font-bold text-[#f8f8f2]">
-              📚 Learning Modules
-            </h2>
-            <p className="mt-2 text-[#6272a4]">
-              Start here to learn the concepts before practicing
-            </p>
-          </div>
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-2">
-          {moduleCategories.map((moduleCategory) => (
-            <Link
-              key={moduleCategory.id}
-              href={`/modules/${moduleCategory.id}`}
-            >
-              <div className="group h-full cursor-pointer rounded-xl border-2 border-[#bd93f9] bg-[#bd93f9]/10 p-8 shadow-lg transition-all hover:border-[#ff79c6] hover:shadow-2xl">
-                <div className="mb-4 flex items-center justify-between">
-                  <div className="text-5xl">{moduleCategory.icon}</div>
-                  <div className="rounded-full border-2 border-[#bd93f9] bg-[#bd93f9]/20 px-4 py-1.5 text-sm font-semibold text-[#bd93f9]">
-                    {moduleCategory.module.sections.length} sections
-                  </div>
-                </div>
-                <h3 className="mb-3 text-2xl font-bold text-[#f8f8f2] transition-colors group-hover:text-[#ff79c6]">
-                  {moduleCategory.title}
-                </h3>
-                <p className="mb-4 text-[#f8f8f2]">
-                  {moduleCategory.description}
-                </p>
-                <div className="flex items-center gap-2 text-sm text-[#6272a4]">
-                  <span>
-                    📝 {moduleCategory.problemCount} practice problems
-                  </span>
-                </div>
-                <div className="mt-6 flex items-center font-semibold text-[#bd93f9] transition-transform group-hover:translate-x-2">
-                  Start Learning
-                  <svg
-                    className="ml-2 h-5 w-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
-
-      {/* Problem Categories */}
+      {/* Learning Path */}
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-3xl font-bold text-[#f8f8f2]">
-              💪 Practice Problems
+              📚 Learning Path
             </h2>
-            <p className="mt-2 text-[#6272a4]">
-              Jump straight to solving problems by topic
+            <p className="mt-2 text-[#f8f8f2]">
+              Follow this structured curriculum from fundamentals to advanced
+              topics
             </p>
           </div>
           <Link
@@ -130,38 +72,52 @@ export default function Home() {
           </Link>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2">
-          {problemCategories.map((category) => (
-            <Link key={category.id} href={`/topics/${category.id}`}>
-              <div className="group h-full cursor-pointer rounded-xl border-2 border-[#44475a] bg-[#44475a] p-8 shadow-lg transition-all hover:border-[#bd93f9] hover:shadow-2xl">
-                <div className="mb-4 flex items-center justify-between">
-                  <div className="text-5xl">{category.icon}</div>
-                  <div className="rounded-full bg-[#bd93f9] px-4 py-1.5 text-sm font-semibold text-[#282a36]">
-                    {category.problemCount} problems
-                  </div>
-                </div>
-                <h3 className="mb-3 text-2xl font-bold text-[#f8f8f2] transition-colors group-hover:text-[#bd93f9]">
-                  {category.title}
-                </h3>
-                <p className="text-[#f8f8f2]">{category.description}</p>
-                <div className="mt-6 flex items-center font-semibold text-[#bd93f9] transition-transform group-hover:translate-x-2">
-                  Practice Now
-                  <svg
-                    className="ml-2 h-5 w-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </div>
+        <div className="space-y-5">
+          {moduleCategories.map((moduleCategory, index) => (
+            <div
+              key={moduleCategory.id}
+              className="flex items-center gap-6 rounded-xl border-2 border-[#44475a] bg-[#44475a] p-6 shadow-lg"
+            >
+              {/* Number */}
+              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-[#bd93f9] text-xl font-bold text-[#282a36]">
+                {index + 1}
               </div>
-            </Link>
+
+              {/* Icon */}
+              <div className="text-4xl">{moduleCategory.icon}</div>
+
+              {/* Content */}
+              <div className="flex-1">
+                <h3 className="mb-1 text-xl font-bold text-[#f8f8f2]">
+                  {moduleCategory.title}
+                </h3>
+                <p className="text-sm text-[#f8f8f2]">
+                  {moduleCategory.description}
+                </p>
+              </div>
+
+              {/* Metadata and Actions */}
+              <div className="flex flex-shrink-0 items-center gap-3">
+                <div className="rounded-full border-2 border-[#f8f8f2] bg-[#f8f8f2]/10 px-3 py-1 text-xs font-semibold text-[#f8f8f2]">
+                  {moduleCategory.module.sections.length} sections
+                </div>
+                <div className="rounded-full border-2 border-[#f8f8f2] bg-[#f8f8f2]/10 px-3 py-1 text-xs font-semibold text-[#f8f8f2]">
+                  {moduleCategory.problemCount} problems
+                </div>
+                <Link
+                  href={`/modules/${moduleCategory.id}`}
+                  className="rounded-lg bg-[#bd93f9] px-4 py-2 text-sm font-semibold text-[#282a36] transition-colors hover:bg-[#ff79c6]"
+                >
+                  Learn
+                </Link>
+                <Link
+                  href={`/topics/${moduleCategory.id}`}
+                  className="rounded-lg border-2 border-[#bd93f9] bg-transparent px-4 py-2 text-sm font-semibold text-[#bd93f9] transition-colors hover:bg-[#bd93f9] hover:text-[#282a36]"
+                >
+                  Practice
+                </Link>
+              </div>
+            </div>
           ))}
         </div>
       </div>
