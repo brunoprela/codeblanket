@@ -3,86 +3,11 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { use, ReactElement, useState, useEffect } from 'react';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 
 import { getModuleById } from '@/lib/modules';
 import { formatText } from '@/lib/utils/formatText';
-
-// Custom Dracula theme matching Monaco Editor's Dracula theme
-const draculaTheme = {
-  'code[class*="language-"]': {
-    color: '#f8f8f2',
-    background: '#282a36',
-    textShadow: 'none',
-    fontFamily: 'ui-monospace, monospace',
-    fontSize: '0.875rem',
-    lineHeight: '1.5',
-  },
-  'pre[class*="language-"]': {
-    color: '#f8f8f2',
-    background: '#282a36',
-    textShadow: 'none',
-    fontFamily: 'ui-monospace, monospace',
-    fontSize: '0.875rem',
-    lineHeight: '1.5',
-    padding: '1rem',
-    margin: '0',
-    overflow: 'auto',
-    borderRadius: '0.5rem',
-  },
-  // Comments
-  comment: { color: '#6272a4', fontStyle: 'italic' },
-  prolog: { color: '#6272a4' },
-  doctype: { color: '#6272a4' },
-  cdata: { color: '#6272a4' },
-
-  // Keywords and operators
-  keyword: { color: '#ff79c6' },
-  operator: { color: '#ff79c6' },
-  atrule: { color: '#ff79c6' },
-  tag: { color: '#ff79c6' },
-
-  // Strings and regex
-  string: { color: '#f1fa8c' },
-  char: { color: '#f1fa8c' },
-  regex: { color: '#f1fa8c' },
-  'attr-value': { color: '#f1fa8c' },
-  url: { color: '#f1fa8c' },
-
-  // Numbers and booleans
-  number: { color: '#bd93f9' },
-  boolean: { color: '#bd93f9' },
-  constant: { color: '#bd93f9' },
-  symbol: { color: '#bd93f9' },
-
-  // Functions and methods
-  function: { color: '#50fa7b' },
-  selector: { color: '#50fa7b' },
-  property: { color: '#50fa7b' },
-  'attr-name': { color: '#50fa7b' },
-  inserted: { color: '#50fa7b' },
-
-  // Classes and types
-  'class-name': { color: '#8be9fd' },
-  builtin: { color: '#8be9fd' },
-
-  // Parameters and important
-  parameter: { color: '#ffb86c' },
-  important: { color: '#ffb86c', fontWeight: 'bold' },
-
-  // Variables and entities
-  variable: { color: '#f8f8f2' },
-  entity: { color: '#f8f8f2' },
-  punctuation: { color: '#f8f8f2' },
-
-  // Deleted text
-  deleted: { color: '#ff5555' },
-
-  // Formatting
-  bold: { fontWeight: 'bold' },
-  italic: { fontStyle: 'italic' },
-  namespace: { opacity: 0.7 },
-};
+import { InteractiveCodeBlock } from '@/components/InteractiveCodeBlock';
+import { ClientOnlySyntaxHighlighter } from '@/components/ClientOnlySyntaxHighlighter';
 
 export default function ModulePage({
   params,
@@ -570,22 +495,11 @@ export default function ModulePage({
                             lines[0].replace(/```/g, '').trim() || 'text';
                           const code = lines.slice(1, -1).join('\n');
                           elements.push(
-                            <div
+                            <InteractiveCodeBlock
                               key={`code-${elementKey++}`}
-                              className="my-4 overflow-x-auto rounded-lg"
-                            >
-                              <SyntaxHighlighter
-                                language={language}
-                                style={draculaTheme}
-                                customStyle={{
-                                  margin: 0,
-                                  borderRadius: '0.5rem',
-                                  background: '#282a36',
-                                }}
-                              >
-                                {code}
-                              </SyntaxHighlighter>
-                            </div>,
+                              code={code}
+                              language={language}
+                            />,
                           );
 
                           lastIndex = match.index! + match[0].length;
@@ -609,19 +523,10 @@ export default function ModulePage({
                         <div className="mb-2 font-semibold text-[#bd93f9]">
                           Code Example:
                         </div>
-                        <div className="overflow-x-auto rounded-lg">
-                          <SyntaxHighlighter
-                            language="python"
-                            style={draculaTheme}
-                            customStyle={{
-                              margin: 0,
-                              borderRadius: '0.5rem',
-                              background: '#282a36',
-                            }}
-                          >
-                            {section.codeExample}
-                          </SyntaxHighlighter>
-                        </div>
+                        <InteractiveCodeBlock
+                          code={section.codeExample}
+                          language="python"
+                        />
                       </div>
                     )}
 
