@@ -5,39 +5,39 @@
 import { Module } from '../types';
 
 export const pythonFundamentalsModule: Module = {
-    id: 'python-fundamentals',
-    title: 'Python Fundamentals',
-    description:
-        'Master the core concepts of Python programming, from basic syntax to essential data structures and control flow.',
-    category: 'Python',
-    difficulty: 'Beginner',
-    estimatedTime: '8 hours',
-    prerequisites: [],
-    icon: '🐍',
-    keyTakeaways: [
-        'Write Python code with proper syntax and style',
-        'Use variables, data types, and operators effectively',
-        'Control program flow with conditionals and loops',
-        'Work with lists, dictionaries, tuples, and sets',
-        'Create and call functions with parameters',
-        'Manipulate strings and perform common operations',
-        'Handle basic errors with try-except',
-    ],
-    learningObjectives: [
-        'Understand Python syntax and basic data types',
-        'Work with lists, tuples, dictionaries, and sets',
-        'Master control flow with loops and conditionals',
-        'Write and use functions effectively',
-        'Handle strings and perform common operations',
-        'Understand basic exception handling',
-        'Use list comprehensions for concise code',
-        'Work with files for input and output',
-    ],
-    sections: [
-        {
-            id: 'variables-types',
-            title: 'Variables and Data Types',
-            content: `# Variables and Data Types
+  id: 'python-fundamentals',
+  title: 'Python Fundamentals',
+  description:
+    'Master the core concepts of Python programming, from basic syntax to essential data structures and control flow.',
+  category: 'Python',
+  difficulty: 'Beginner',
+  estimatedTime: '8 hours',
+  prerequisites: [],
+  icon: '🐍',
+  keyTakeaways: [
+    'Write Python code with proper syntax and style',
+    'Use variables, data types, and operators effectively',
+    'Control program flow with conditionals and loops',
+    'Work with lists, dictionaries, tuples, and sets',
+    'Create and call functions with parameters',
+    'Manipulate strings and perform common operations',
+    'Handle basic errors with try-except',
+  ],
+  learningObjectives: [
+    'Understand Python syntax and basic data types',
+    'Work with lists, tuples, dictionaries, and sets',
+    'Master control flow with loops and conditionals',
+    'Write and use functions effectively',
+    'Handle strings and perform common operations',
+    'Understand basic exception handling',
+    'Use list comprehensions for concise code',
+    'Work with files for input and output',
+  ],
+  sections: [
+    {
+      id: 'variables-types',
+      title: 'Variables and Data Types',
+      content: `# Variables and Data Types
 
 ## Variables
 
@@ -137,75 +137,75 @@ bool("Hi")  # True
 - Follow naming conventions: \`snake_case\` for variables and functions
 - Constants in UPPERCASE: \`MAX_SIZE = 100\`
 - Avoid reserved keywords: \`class\`, \`if\`, \`for\`, etc.`,
-            videoUrl: 'https://www.youtube.com/watch?v=Z1Yd7upQsXY',
-            quiz: [
-                {
-                    id: 'pf-variables-q-1',
-                    question: 'What is the result of: 5 + 3 * 2?',
-                    options: ['16', '11', '10', '13'],
-                    correctAnswer: 1,
-                    explanation:
-                        'Multiplication has higher precedence than addition, so 3 * 2 = 6, then 5 + 6 = 11.',
-                },
-                {
-                    id: 'pf-variables-q-2',
-                    question: 'Which of these is NOT a valid variable name in Python?',
-                    options: ['my_var', '_private', '2fast', 'myVar'],
-                    correctAnswer: 2,
-                    explanation:
-                        'Variable names cannot start with a number. "2fast" is invalid.',
-                },
-                {
-                    id: 'pf-variables-q-3',
-                    question: 'What is the type of: x = 3.0?',
-                    options: ['int', 'float', 'str', 'number'],
-                    correctAnswer: 1,
-                    explanation:
-                        'Numbers with decimal points are float type, even if the decimal part is zero.',
-                },
-            ],
-            discussion: [
-                {
-                    question: 'When should you use int vs float?',
-                    answer:
-                        'Use int for whole numbers (counting, indexing) and float for measurements or calculations requiring precision. Be aware of floating-point precision issues.',
-                },
-                {
-                    question: 'Why is dynamic typing useful?',
-                    answer:
-                        'Dynamic typing makes Python flexible and easy to write. You can reassign variables to different types, which is convenient for prototyping. However, it can lead to runtime errors if not careful.',
-                },
-            ],
-            multipleChoice: [
-                {
-                    id: 'pf-variables-mc-1',
-                    question:
-                        'What does the following code output?\n\nx = "5"\ny = 2\nprint(x * y)',
-                    options: ['10', '7', '"55"', '"52"'],
-                    correctAnswer: 2,
-                    explanation:
-                        'String multiplication repeats the string. "5" * 2 = "55".',
-                },
-                {
-                    id: 'pf-variables-mc-2',
-                    question:
-                        'Which statement correctly converts the string "123" to an integer?',
-                    options: [
-                        'integer("123")',
-                        'int("123")',
-                        'toInt("123")',
-                        'Number("123")',
-                    ],
-                    correctAnswer: 1,
-                    explanation:
-                        'The int() function converts strings to integers in Python.',
-                },
-            ],
+      videoUrl: 'https://www.youtube.com/watch?v=Z1Yd7upQsXY',
+      quiz: [
+        {
+          id: 'pf-variables-q-1',
+          question: 'What is the result of: 5 + 3 * 2?',
+          options: ['16', '11', '10', '13'],
+          correctAnswer: 1,
+          explanation:
+            'Multiplication has higher precedence than addition, so 3 * 2 = 6, then 5 + 6 = 11.',
         },
         {
-            id: 'control-flow',
-            title: 'Control Flow',
-            content: `# Control Flow
+          id: 'pf-variables-q-2',
+          question: 'Which of these is NOT a valid variable name in Python?',
+          options: ['my_var', '_private', '2fast', 'myVar'],
+          correctAnswer: 2,
+          explanation:
+            'Variable names cannot start with a number. "2fast" is invalid.',
+        },
+        {
+          id: 'pf-variables-q-3',
+          question: 'What is the type of: x = 3.0?',
+          options: ['int', 'float', 'str', 'number'],
+          correctAnswer: 1,
+          explanation:
+            'Numbers with decimal points are float type, even if the decimal part is zero.',
+        },
+      ],
+      discussion: [
+        {
+          question: 'When should you use int vs float?',
+          answer:
+            'Use int for whole numbers (counting, indexing) and float for measurements or calculations requiring precision. Be aware of floating-point precision issues.',
+        },
+        {
+          question: 'Why is dynamic typing useful?',
+          answer:
+            'Dynamic typing makes Python flexible and easy to write. You can reassign variables to different types, which is convenient for prototyping. However, it can lead to runtime errors if not careful.',
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'pf-variables-mc-1',
+          question:
+            'What does the following code output?\n\nx = "5"\ny = 2\nprint(x * y)',
+          options: ['10', '7', '"55"', '"52"'],
+          correctAnswer: 2,
+          explanation:
+            'String multiplication repeats the string. "5" * 2 = "55".',
+        },
+        {
+          id: 'pf-variables-mc-2',
+          question:
+            'Which statement correctly converts the string "123" to an integer?',
+          options: [
+            'integer("123")',
+            'int("123")',
+            'toInt("123")',
+            'Number("123")',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'The int() function converts strings to integers in Python.',
+        },
+      ],
+    },
+    {
+      id: 'control-flow',
+      title: 'Control Flow',
+      content: `# Control Flow
 
 ## If Statements
 
@@ -329,58 +329,58 @@ def http_status(status):
         case _:
             return "Unknown"
 \`\`\``,
-            videoUrl: 'https://www.youtube.com/watch?v=Zp5MuPOtsSY',
-            quiz: [
-                {
-                    id: 'pf-control-q-1',
-                    question: 'What does range(5) produce?',
-                    options: [
-                        '1, 2, 3, 4, 5',
-                        '0, 1, 2, 3, 4',
-                        '0, 1, 2, 3, 4, 5',
-                        '1, 2, 3, 4',
-                    ],
-                    correctAnswer: 1,
-                    explanation:
-                        'range(5) generates numbers from 0 up to (but not including) 5.',
-                },
-                {
-                    id: 'pf-control-q-2',
-                    question: 'What happens when "break" is used in a loop?',
-                    options: [
-                        'Skips current iteration',
-                        'Exits the loop completely',
-                        'Pauses the loop',
-                        'Restarts the loop',
-                    ],
-                    correctAnswer: 1,
-                    explanation:
-                        'break exits the loop immediately, skipping any remaining iterations.',
-                },
-            ],
-            discussion: [
-                {
-                    question: 'When should you use for vs while loops?',
-                    answer:
-                        'Use for loops when you know the number of iterations (iterating over a sequence). Use while loops when the number of iterations depends on a condition.',
-                },
-            ],
-            multipleChoice: [
-                {
-                    id: 'pf-control-mc-1',
-                    question:
-                        'What is the output?\n\nfor i in range(3):\n    if i == 1:\n        continue\n    print(i)',
-                    options: ['0 1 2', '0 2', '1 2', '0 1'],
-                    correctAnswer: 1,
-                    explanation:
-                        'continue skips the rest of the current iteration, so 1 is not printed.',
-                },
-            ],
+      videoUrl: 'https://www.youtube.com/watch?v=Zp5MuPOtsSY',
+      quiz: [
+        {
+          id: 'pf-control-q-1',
+          question: 'What does range(5) produce?',
+          options: [
+            '1, 2, 3, 4, 5',
+            '0, 1, 2, 3, 4',
+            '0, 1, 2, 3, 4, 5',
+            '1, 2, 3, 4',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'range(5) generates numbers from 0 up to (but not including) 5.',
         },
         {
-            id: 'data-structures',
-            title: 'Data Structures',
-            content: `# Python Data Structures
+          id: 'pf-control-q-2',
+          question: 'What happens when "break" is used in a loop?',
+          options: [
+            'Skips current iteration',
+            'Exits the loop completely',
+            'Pauses the loop',
+            'Restarts the loop',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'break exits the loop immediately, skipping any remaining iterations.',
+        },
+      ],
+      discussion: [
+        {
+          question: 'When should you use for vs while loops?',
+          answer:
+            'Use for loops when you know the number of iterations (iterating over a sequence). Use while loops when the number of iterations depends on a condition.',
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'pf-control-mc-1',
+          question:
+            'What is the output?\n\nfor i in range(3):\n    if i == 1:\n        continue\n    print(i)',
+          options: ['0 1 2', '0 2', '1 2', '0 1'],
+          correctAnswer: 1,
+          explanation:
+            'continue skips the rest of the current iteration, so 1 is not printed.',
+        },
+      ],
+    },
+    {
+      id: 'data-structures',
+      title: 'Data Structures',
+      content: `# Python Data Structures
 
 ## Lists
 
@@ -514,52 +514,52 @@ word_lengths = {word: len(word) for word in ["hi", "hello", "hey"]}
 # Set comprehension
 unique_lengths = {len(word) for word in ["hi", "hello", "hey"]}
 \`\`\``,
-            videoUrl: 'https://www.youtube.com/watch?v=W8KRzm-HUcc',
-            quiz: [
-                {
-                    id: 'pf-datastructures-q-1',
-                    question: 'What is the main difference between lists and tuples?',
-                    options: [
-                        'Lists are faster',
-                        'Tuples are immutable',
-                        'Lists can only store numbers',
-                        'Tuples can be nested',
-                    ],
-                    correctAnswer: 1,
-                    explanation:
-                        'Tuples are immutable (cannot be changed after creation), while lists are mutable.',
-                },
-                {
-                    id: 'pf-datastructures-q-2',
-                    question: 'How do you create an empty set?',
-                    options: ['{}', 'set()', '[]', 'Set()'],
-                    correctAnswer: 1,
-                    explanation:
-                        '{} creates an empty dictionary. Use set() for an empty set.',
-                },
-            ],
-            discussion: [
-                {
-                    question: 'When should you use a tuple instead of a list?',
-                    answer:
-                        'Use tuples for fixed collections of heterogeneous data (like coordinates, function returns) or when you want immutability. Use lists for homogeneous, mutable sequences.',
-                },
-            ],
-            multipleChoice: [
-                {
-                    id: 'pf-datastructures-mc-1',
-                    question:
-                        'What does this list comprehension create?\n\n[x*2 for x in range(5) if x > 2]',
-                    options: ['[0, 2, 4, 6, 8]', '[6, 8]', '[3, 4]', '[6, 8, 10]'],
-                    correctAnswer: 1,
-                    explanation: 'Filters x > 2 (3, 4), then multiplies by 2: [6, 8].',
-                },
-            ],
+      videoUrl: 'https://www.youtube.com/watch?v=W8KRzm-HUcc',
+      quiz: [
+        {
+          id: 'pf-datastructures-q-1',
+          question: 'What is the main difference between lists and tuples?',
+          options: [
+            'Lists are faster',
+            'Tuples are immutable',
+            'Lists can only store numbers',
+            'Tuples can be nested',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Tuples are immutable (cannot be changed after creation), while lists are mutable.',
         },
         {
-            id: 'functions',
-            title: 'Functions',
-            content: `# Functions
+          id: 'pf-datastructures-q-2',
+          question: 'How do you create an empty set?',
+          options: ['{}', 'set()', '[]', 'Set()'],
+          correctAnswer: 1,
+          explanation:
+            '{} creates an empty dictionary. Use set() for an empty set.',
+        },
+      ],
+      discussion: [
+        {
+          question: 'When should you use a tuple instead of a list?',
+          answer:
+            'Use tuples for fixed collections of heterogeneous data (like coordinates, function returns) or when you want immutability. Use lists for homogeneous, mutable sequences.',
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'pf-datastructures-mc-1',
+          question:
+            'What does this list comprehension create?\n\n[x*2 for x in range(5) if x > 2]',
+          options: ['[0, 2, 4, 6, 8]', '[6, 8]', '[3, 4]', '[6, 8, 10]'],
+          correctAnswer: 1,
+          explanation: 'Filters x > 2 (3, 4), then multiplies by 2: [6, 8].',
+        },
+      ],
+    },
+    {
+      id: 'functions',
+      title: 'Functions',
+      content: `# Functions
 
 ## Defining Functions
 
@@ -692,53 +692,53 @@ print(calculate_area.__doc__)
 3. **Keep it Short**: If it's too long, split it up
 4. **Use Docstrings**: Document what the function does
 5. **Avoid Side Effects**: Don't modify global state`,
-            videoUrl: 'https://www.youtube.com/watch?v=9Os0o3wzS_I',
-            quiz: [
-                {
-                    id: 'pf-functions-q-1',
-                    question: 'What does *args allow you to do?',
-                    options: [
-                        'Pass a variable number of keyword arguments',
-                        'Pass a variable number of positional arguments',
-                        'Make an argument optional',
-                        'Pass arguments by reference',
-                    ],
-                    correctAnswer: 1,
-                    explanation:
-                        '*args collects variable numbers of positional arguments into a tuple.',
-                },
-                {
-                    id: 'pf-functions-q-2',
-                    question:
-                        'What does a function return if no return statement is used?',
-                    options: ['0', 'Empty string', 'None', 'Error'],
-                    correctAnswer: 2,
-                    explanation:
-                        'Functions without a return statement implicitly return None.',
-                },
-            ],
-            discussion: [
-                {
-                    question: 'When should you use lambda functions?',
-                    answer:
-                        'Use lambda for simple, one-line functions often passed as arguments (e.g., in map, filter, sorted). For complex logic, use regular def functions for better readability.',
-                },
-            ],
-            multipleChoice: [
-                {
-                    id: 'pf-functions-mc-1',
-                    question:
-                        'What is the output?\n\ndef multiply(a, b=2):\n    return a * b\n\nprint(multiply(5))',
-                    options: ['10', '5', '7', 'Error'],
-                    correctAnswer: 0,
-                    explanation: 'b defaults to 2, so 5 * 2 = 10.',
-                },
-            ],
+      videoUrl: 'https://www.youtube.com/watch?v=9Os0o3wzS_I',
+      quiz: [
+        {
+          id: 'pf-functions-q-1',
+          question: 'What does *args allow you to do?',
+          options: [
+            'Pass a variable number of keyword arguments',
+            'Pass a variable number of positional arguments',
+            'Make an argument optional',
+            'Pass arguments by reference',
+          ],
+          correctAnswer: 1,
+          explanation:
+            '*args collects variable numbers of positional arguments into a tuple.',
         },
         {
-            id: 'strings',
-            title: 'String Operations',
-            content: `# String Operations
+          id: 'pf-functions-q-2',
+          question:
+            'What does a function return if no return statement is used?',
+          options: ['0', 'Empty string', 'None', 'Error'],
+          correctAnswer: 2,
+          explanation:
+            'Functions without a return statement implicitly return None.',
+        },
+      ],
+      discussion: [
+        {
+          question: 'When should you use lambda functions?',
+          answer:
+            'Use lambda for simple, one-line functions often passed as arguments (e.g., in map, filter, sorted). For complex logic, use regular def functions for better readability.',
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'pf-functions-mc-1',
+          question:
+            'What is the output?\n\ndef multiply(a, b=2):\n    return a * b\n\nprint(multiply(5))',
+          options: ['10', '5', '7', 'Error'],
+          correctAnswer: 0,
+          explanation: 'b defaults to 2, so 5 * 2 = 10.',
+        },
+      ],
+    },
+    {
+      id: 'strings',
+      title: 'String Operations',
+      content: `# String Operations
 
 ## String Basics
 
@@ -874,45 +874,45 @@ text = "Hello"
 text = "h" + text[1:]  # "hello"
 text = text.replace("H", "h")  # "hello"
 \`\`\``,
-            videoUrl: 'https://www.youtube.com/watch?v=k9TUPpGqYTo',
-            quiz: [
-                {
-                    id: 'pf-strings-q-1',
-                    question: 'What does "Python"[::-1] return?',
-                    options: ['"Python"', '"nohtyP"', '"Pytho"', 'Error'],
-                    correctAnswer: 1,
-                    explanation: '[::-1] reverses the string using negative step.',
-                },
-                {
-                    id: 'pf-strings-q-2',
-                    question: 'Which method checks if a string contains only digits?',
-                    options: ['isnum()', 'isdigit()', 'isnumber()', 'isint()'],
-                    correctAnswer: 1,
-                    explanation: 'isdigit() returns True if all characters are digits.',
-                },
-            ],
-            discussion: [
-                {
-                    question: 'Why are strings immutable in Python?',
-                    answer:
-                        'Immutability allows strings to be used as dictionary keys, enables string interning for memory efficiency, and makes them thread-safe. When you "modify" a string, Python creates a new string object.',
-                },
-            ],
-            multipleChoice: [
-                {
-                    id: 'pf-strings-mc-1',
-                    question:
-                        'What is the output?\n\ntext = "hello world"\nprint(text.title())',
-                    options: [
-                        '"Hello World"',
-                        '"HELLO WORLD"',
-                        '"hello world"',
-                        '"Hello world"',
-                    ],
-                    correctAnswer: 0,
-                    explanation: 'title() capitalizes the first letter of each word.',
-                },
-            ],
+      videoUrl: 'https://www.youtube.com/watch?v=k9TUPpGqYTo',
+      quiz: [
+        {
+          id: 'pf-strings-q-1',
+          question: 'What does "Python"[::-1] return?',
+          options: ['"Python"', '"nohtyP"', '"Pytho"', 'Error'],
+          correctAnswer: 1,
+          explanation: '[::-1] reverses the string using negative step.',
         },
-    ],
+        {
+          id: 'pf-strings-q-2',
+          question: 'Which method checks if a string contains only digits?',
+          options: ['isnum()', 'isdigit()', 'isnumber()', 'isint()'],
+          correctAnswer: 1,
+          explanation: 'isdigit() returns True if all characters are digits.',
+        },
+      ],
+      discussion: [
+        {
+          question: 'Why are strings immutable in Python?',
+          answer:
+            'Immutability allows strings to be used as dictionary keys, enables string interning for memory efficiency, and makes them thread-safe. When you "modify" a string, Python creates a new string object.',
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'pf-strings-mc-1',
+          question:
+            'What is the output?\n\ntext = "hello world"\nprint(text.title())',
+          options: [
+            '"Hello World"',
+            '"HELLO WORLD"',
+            '"hello world"',
+            '"Hello world"',
+          ],
+          correctAnswer: 0,
+          explanation: 'title() capitalizes the first letter of each word.',
+        },
+      ],
+    },
+  ],
 };

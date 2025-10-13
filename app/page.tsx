@@ -119,7 +119,8 @@ export default function Home() {
     // Load multiple choice question stats
     const loadMultipleChoiceStats = () => {
       const total = getTotalMultipleChoiceQuestionsCount(moduleCategories);
-      const completed = getCompletedMultipleChoiceQuestionsCount(moduleCategories);
+      const completed =
+        getCompletedMultipleChoiceQuestionsCount(moduleCategories);
       setTotalMultipleChoice(total);
       setCompletedMultipleChoice(completed);
 
@@ -212,7 +213,8 @@ export default function Home() {
       setModuleDiscussionProgress(discussionProgress);
 
       // Update multiple choice stats
-      const mcCompleted = getCompletedMultipleChoiceQuestionsCount(moduleCategories);
+      const mcCompleted =
+        getCompletedMultipleChoiceQuestionsCount(moduleCategories);
       setCompletedMultipleChoice(mcCompleted);
 
       // Update multiple choice progress per module
@@ -345,8 +347,8 @@ export default function Home() {
             const problemsPercent =
               problemsProgress.total > 0
                 ? Math.round(
-                  (problemsProgress.completed / problemsProgress.total) * 100,
-                )
+                    (problemsProgress.completed / problemsProgress.total) * 100,
+                  )
                 : 0;
 
             // Get discussion progress for this module
@@ -374,10 +376,10 @@ export default function Home() {
             const discussionPercent =
               finalDiscussionProgress.total > 0
                 ? Math.round(
-                  (finalDiscussionProgress.completed /
-                    finalDiscussionProgress.total) *
-                  100,
-                )
+                    (finalDiscussionProgress.completed /
+                      finalDiscussionProgress.total) *
+                      100,
+                  )
                 : 0;
 
             // Get multiple choice progress for this module
@@ -405,8 +407,8 @@ export default function Home() {
             const mcPercent =
               finalMcProgress.total > 0
                 ? Math.round(
-                  (finalMcProgress.completed / finalMcProgress.total) * 100,
-                )
+                    (finalMcProgress.completed / finalMcProgress.total) * 100,
+                  )
                 : 0;
 
             return (

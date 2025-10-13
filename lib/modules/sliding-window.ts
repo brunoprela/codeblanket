@@ -89,7 +89,8 @@ Instead of recalculating results from scratch for each subarray, we maintain a "
       multipleChoice: [
         {
           id: 'mc1',
-          question: 'What is the primary advantage of the sliding window technique?',
+          question:
+            'What is the primary advantage of the sliding window technique?',
           options: [
             'It uses less memory',
             'It reduces time complexity from O(n²) or O(n×k) to O(n)',
@@ -128,7 +129,8 @@ Instead of recalculating results from scratch for each subarray, we maintain a "
         },
         {
           id: 'mc4',
-          question: 'How many times is each element processed in a sliding window algorithm?',
+          question:
+            'How many times is each element processed in a sliding window algorithm?',
           options: [
             'Once',
             'At most twice (when entering and leaving the window)',
@@ -141,7 +143,8 @@ Instead of recalculating results from scratch for each subarray, we maintain a "
         },
         {
           id: 'mc5',
-          question: 'What data structure is commonly used with variable-size sliding windows?',
+          question:
+            'What data structure is commonly used with variable-size sliding windows?',
           options: [
             'Stack',
             'Queue',
@@ -436,7 +439,8 @@ def min_window_substring(s: str, t: str) -> str:
       multipleChoice: [
         {
           id: 'mc1',
-          question: 'In a fixed-size sliding window of size k, how do you slide the window?',
+          question:
+            'In a fixed-size sliding window of size k, how do you slide the window?',
           options: [
             'Recalculate the entire window sum',
             'Add the new element on the right and subtract the old element on the left',
@@ -449,7 +453,8 @@ def min_window_substring(s: str, t: str) -> str:
         },
         {
           id: 'mc2',
-          question: 'For variable-size windows, when do you expand vs shrink the window?',
+          question:
+            'For variable-size windows, when do you expand vs shrink the window?',
           options: [
             'Always expand first, then shrink',
             'Expand when condition not met, shrink when condition violated',
@@ -462,7 +467,8 @@ def min_window_substring(s: str, t: str) -> str:
         },
         {
           id: 'mc3',
-          question: 'What is the longest substring without repeating characters problem pattern?',
+          question:
+            'What is the longest substring without repeating characters problem pattern?',
           options: [
             'Fixed-size window',
             'Variable-size window maximizing length',
@@ -475,7 +481,8 @@ def min_window_substring(s: str, t: str) -> str:
         },
         {
           id: 'mc4',
-          question: 'In minimum window substring, what auxiliary data structure is typically used?',
+          question:
+            'In minimum window substring, what auxiliary data structure is typically used?',
           options: [
             'Stack',
             'Queue',
@@ -488,7 +495,8 @@ def min_window_substring(s: str, t: str) -> str:
         },
         {
           id: 'mc5',
-          question: 'What is the key difference between longest and shortest window problems?',
+          question:
+            'What is the key difference between longest and shortest window problems?',
           options: [
             'Longest expands more, shortest shrinks more',
             'Longest maximizes valid windows, shortest minimizes valid windows',
@@ -604,7 +612,8 @@ for right in range(len(arr)):  # N iterations
       multipleChoice: [
         {
           id: 'mc1',
-          question: 'What is the time complexity of a fixed-size sliding window algorithm?',
+          question:
+            'What is the time complexity of a fixed-size sliding window algorithm?',
           options: ['O(k)', 'O(n)', 'O(n*k)', 'O(n²)'],
           correctAnswer: 1,
           explanation:
@@ -612,7 +621,8 @@ for right in range(len(arr)):  # N iterations
         },
         {
           id: 'mc2',
-          question: 'Why is variable-size sliding window O(n) despite having a nested while loop?',
+          question:
+            'Why is variable-size sliding window O(n) despite having a nested while loop?',
           options: [
             'The while loop never executes',
             'The left pointer moves at most n times total across all iterations',
@@ -621,19 +631,26 @@ for right in range(len(arr)):  # N iterations
           ],
           correctAnswer: 1,
           explanation:
-            'Although there\'s a nested while loop, the left pointer can only move from 0 to n-1 throughout the entire algorithm. So the inner loop executes O(n) times total, not per outer iteration.',
+            "Although there's a nested while loop, the left pointer can only move from 0 to n-1 throughout the entire algorithm. So the inner loop executes O(n) times total, not per outer iteration.",
         },
         {
           id: 'mc3',
-          question: 'What is the space complexity when using a hash set to track characters in a window?',
-          options: ['O(1)', 'O(k) where k is window size or character set size', 'O(n)', 'O(n²)'],
+          question:
+            'What is the space complexity when using a hash set to track characters in a window?',
+          options: [
+            'O(1)',
+            'O(k) where k is window size or character set size',
+            'O(n)',
+            'O(n²)',
+          ],
           correctAnswer: 1,
           explanation:
-            'Space is O(k) where k is the size of the window or character set. For lowercase English letters, k ≤ 26, so it\'s O(26) = O(1) constant space.',
+            "Space is O(k) where k is the size of the window or character set. For lowercase English letters, k ≤ 26, so it's O(26) = O(1) constant space.",
         },
         {
           id: 'mc4',
-          question: 'How does sliding window improve upon brute force for maximum sum of k elements?',
+          question:
+            'How does sliding window improve upon brute force for maximum sum of k elements?',
           options: [
             'From O(n²) to O(n)',
             'From O(n*k) to O(n)',
@@ -646,7 +663,8 @@ for right in range(len(arr)):  # N iterations
         },
         {
           id: 'mc5',
-          question: 'For longest substring without repeating characters, what is the brute force complexity vs sliding window?',
+          question:
+            'For longest substring without repeating characters, what is the brute force complexity vs sliding window?',
           options: [
             'O(n²) vs O(n)',
             'O(n³) vs O(n)',
@@ -843,7 +861,8 @@ def sliding_window_set(arr: List[int], k: int) -> int:
       multipleChoice: [
         {
           id: 'mc1',
-          question: 'In a fixed-size window template, when do you start sliding the window?',
+          question:
+            'In a fixed-size window template, when do you start sliding the window?',
           options: [
             'From index 0',
             'From index k (after building initial window)',
@@ -856,7 +875,8 @@ def sliding_window_set(arr: List[int], k: int) -> int:
         },
         {
           id: 'mc2',
-          question: 'What is the difference between the shrinkable and non-shrinkable window templates?',
+          question:
+            'What is the difference between the shrinkable and non-shrinkable window templates?',
           options: [
             'One uses while to shrink, the other uses if to move left once',
             'One is faster than the other',
@@ -869,7 +889,8 @@ def sliding_window_set(arr: List[int], k: int) -> int:
         },
         {
           id: 'mc3',
-          question: 'In the variable-size shrinkable template, where do you update the answer?',
+          question:
+            'In the variable-size shrinkable template, where do you update the answer?',
           options: [
             'Before adding the right element',
             'Inside the while loop',
@@ -878,11 +899,12 @@ def sliding_window_set(arr: List[int], k: int) -> int:
           ],
           correctAnswer: 2,
           explanation:
-            'You update the answer after the while loop because that\'s when you have a valid window. The while loop restores validity, then you check if this valid window is better than your current answer.',
+            "You update the answer after the while loop because that's when you have a valid window. The while loop restores validity, then you check if this valid window is better than your current answer.",
         },
         {
           id: 'mc4',
-          question: 'When using a hash set to track unique elements in a window, what operation is performed when shrinking?',
+          question:
+            'When using a hash set to track unique elements in a window, what operation is performed when shrinking?',
           options: [
             'Add elements',
             'Sort the set',
@@ -895,12 +917,13 @@ def sliding_window_set(arr: List[int], k: int) -> int:
         },
         {
           id: 'mc5',
-          question: 'What is a common pattern for minimum window problems vs maximum window problems?',
+          question:
+            'What is a common pattern for minimum window problems vs maximum window problems?',
           options: [
             'They use the same template',
             'Minimum expands until valid then shrinks to minimize; maximum expands while valid and tracks maximum',
             'Minimum is always harder',
-            'Maximum problems don\'t use sliding window',
+            "Maximum problems don't use sliding window",
           ],
           correctAnswer: 1,
           explanation:
@@ -1086,20 +1109,17 @@ def find_anagram_indices(s: str, p: str) -> List[int]:
       multipleChoice: [
         {
           id: 'mc1',
-          question: 'What data structure is used for sliding window maximum with O(n) time?',
-          options: [
-            'Stack',
-            'Monotonic deque',
-            'Hash map',
-            'Binary tree',
-          ],
+          question:
+            'What data structure is used for sliding window maximum with O(n) time?',
+          options: ['Stack', 'Monotonic deque', 'Hash map', 'Binary tree'],
           correctAnswer: 1,
           explanation:
             'A monotonic deque maintains elements in decreasing order of values, allowing O(1) access to the maximum. Each element is added and removed at most once, achieving O(n) total time.',
         },
         {
           id: 'mc2',
-          question: 'For "at most k distinct characters", what auxiliary structure do you typically use?',
+          question:
+            'For "at most k distinct characters", what auxiliary structure do you typically use?',
           options: [
             'Array',
             'Hash map to count character frequencies',
@@ -1112,7 +1132,8 @@ def find_anagram_indices(s: str, p: str) -> List[int]:
         },
         {
           id: 'mc3',
-          question: 'What is the prefix sum technique and how does it relate to sliding windows?',
+          question:
+            'What is the prefix sum technique and how does it relate to sliding windows?',
           options: [
             'They are unrelated',
             'Prefix sum can solve subarray sum problems that sliding window cannot handle (negative numbers)',
@@ -1125,7 +1146,8 @@ def find_anagram_indices(s: str, p: str) -> List[int]:
         },
         {
           id: 'mc4',
-          question: 'In anagram detection problems, how do you verify if two character frequency maps are equal?',
+          question:
+            'In anagram detection problems, how do you verify if two character frequency maps are equal?',
           options: [
             'Compare each character count',
             'Use Counter equality (window_count == p_count)',
@@ -1134,11 +1156,12 @@ def find_anagram_indices(s: str, p: str) -> List[int]:
           ],
           correctAnswer: 1,
           explanation:
-            'Python\'s Counter objects can be directly compared for equality, checking if all character frequencies match. This is cleaner and more efficient than manual iteration.',
+            "Python's Counter objects can be directly compared for equality, checking if all character frequencies match. This is cleaner and more efficient than manual iteration.",
         },
         {
           id: 'mc5',
-          question: 'What makes a problem suitable for sliding window vs other techniques?',
+          question:
+            'What makes a problem suitable for sliding window vs other techniques?',
           options: [
             'Any array problem',
             'Problems involving contiguous sequences with local properties',
@@ -1289,12 +1312,13 @@ while window_is_VALID:  # Keep shrinking while still valid
       multipleChoice: [
         {
           id: 'mc1',
-          question: 'Why is window size calculated as right - left + 1 instead of right - left?',
+          question:
+            'Why is window size calculated as right - left + 1 instead of right - left?',
           options: [
             'It is a convention',
             'Because indices are inclusive on both ends',
             'To make it more complicated',
-            'It doesn\'t matter',
+            "It doesn't matter",
           ],
           correctAnswer: 1,
           explanation:
@@ -1302,7 +1326,8 @@ while window_is_VALID:  # Keep shrinking while still valid
         },
         {
           id: 'mc2',
-          question: 'What is a common mistake when cleaning up hash maps in sliding windows?',
+          question:
+            'What is a common mistake when cleaning up hash maps in sliding windows?',
           options: [
             'Adding too many elements',
             'Not deleting entries with 0 count, affecting size checks',
@@ -1315,7 +1340,8 @@ while window_is_VALID:  # Keep shrinking while still valid
         },
         {
           id: 'mc3',
-          question: 'For a fixed-size window, what is a common mistake in the implementation?',
+          question:
+            'For a fixed-size window, what is a common mistake in the implementation?',
           options: [
             'Starting from index 0 and recalculating each window',
             'Using too much memory',
@@ -1328,7 +1354,8 @@ while window_is_VALID:  # Keep shrinking while still valid
         },
         {
           id: 'mc4',
-          question: 'What is the difference in where you update the answer for maximum vs minimum window problems?',
+          question:
+            'What is the difference in where you update the answer for maximum vs minimum window problems?',
           options: [
             'No difference',
             'Maximum updates outside while loop, minimum updates inside while loop',
@@ -1341,7 +1368,8 @@ while window_is_VALID:  # Keep shrinking while still valid
         },
         {
           id: 'mc5',
-          question: 'Why should you not manually increment the right pointer in a for loop?',
+          question:
+            'Why should you not manually increment the right pointer in a for loop?',
           options: [
             'It causes syntax errors',
             'The for loop already increments it, manual increment causes skipping elements',
@@ -1511,7 +1539,8 @@ What makes a window valid or invalid?
       multipleChoice: [
         {
           id: 'mc1',
-          question: 'What keywords in a problem statement strongly suggest using sliding window?',
+          question:
+            'What keywords in a problem statement strongly suggest using sliding window?',
           options: [
             'Recursive, tree, graph',
             'Contiguous, subarray, substring, consecutive',
@@ -1524,7 +1553,8 @@ What makes a window valid or invalid?
         },
         {
           id: 'mc2',
-          question: 'When explaining a sliding window solution, what should you communicate first?',
+          question:
+            'When explaining a sliding window solution, what should you communicate first?',
           options: [
             'The code implementation',
             'The complexity analysis',
@@ -1533,11 +1563,12 @@ What makes a window valid or invalid?
           ],
           correctAnswer: 2,
           explanation:
-            'Start by recognizing the problem pattern and explaining which window type you\'ll use and why. This shows your thought process and sets up the solution clearly.',
+            "Start by recognizing the problem pattern and explaining which window type you'll use and why. This shows your thought process and sets up the solution clearly.",
         },
         {
           id: 'mc3',
-          question: 'What is a good practice strategy for mastering sliding window?',
+          question:
+            'What is a good practice strategy for mastering sliding window?',
           options: [
             'Only practice hard problems',
             'Start with fixed-size, then variable maximum, then variable minimum, then advanced',
@@ -1550,7 +1581,8 @@ What makes a window valid or invalid?
         },
         {
           id: 'mc4',
-          question: 'How long should a medium sliding window problem take in an interview?',
+          question:
+            'How long should a medium sliding window problem take in an interview?',
           options: [
             '5-10 minutes',
             '15-25 minutes',
@@ -1563,7 +1595,8 @@ What makes a window valid or invalid?
         },
         {
           id: 'mc5',
-          question: 'What is the key insight that makes sliding window O(n) instead of O(n²)?',
+          question:
+            'What is the key insight that makes sliding window O(n) instead of O(n²)?',
           options: [
             'Using better data structures',
             'Each element enters and leaves the window at most once',

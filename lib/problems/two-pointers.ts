@@ -7,7 +7,7 @@ export const twoPointersProblems: Problem[] = [
     title: 'Valid Palindrome',
     difficulty: 'Easy',
     topic: 'Two Pointers',
-    
+
     leetcodeUrl: 'https://leetcode.com/problems/valid-palindrome/',
     youtubeUrl: 'https://www.youtube.com/watch?v=jJXJ16kPFWg',
     order: 1,

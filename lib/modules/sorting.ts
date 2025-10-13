@@ -116,7 +116,7 @@ Sorting algorithms can be categorized by:
           ],
           correctAnswer: 1,
           explanation:
-            'Stable sort preserves the relative order of equal elements. If A comes before B and they\'re equal, A stays before B after sorting. Important for multi-level sorting.',
+            "Stable sort preserves the relative order of equal elements. If A comes before B and they're equal, A stays before B after sorting. Important for multi-level sorting.",
         },
         {
           id: 'mc2',
@@ -133,7 +133,8 @@ Sorting algorithms can be categorized by:
         },
         {
           id: 'mc3',
-          question: 'When would you use O(N²) insertion sort over O(N log N) algorithms?',
+          question:
+            'When would you use O(N²) insertion sort over O(N log N) algorithms?',
           options: [
             'Never',
             'Small arrays, nearly-sorted data, or when stability + in-place both needed',
@@ -146,13 +147,9 @@ Sorting algorithms can be categorized by:
         },
         {
           id: 'mc4',
-          question: 'What is the theoretical lower bound for comparison-based sorts?',
-          options: [
-            'O(N)',
-            'O(N log N) in average case',
-            'O(N²)',
-            'O(log N)',
-          ],
+          question:
+            'What is the theoretical lower bound for comparison-based sorts?',
+          options: ['O(N)', 'O(N log N) in average case', 'O(N²)', 'O(log N)'],
           correctAnswer: 1,
           explanation:
             'Any comparison-based sort (comparing pairs) must be Ω(N log N) in average case. This is proven using decision tree analysis. Non-comparison sorts like counting sort can beat this.',
@@ -360,7 +357,8 @@ def heap_sort(arr):
       multipleChoice: [
         {
           id: 'mc1',
-          question: 'What is the best, average, and worst case complexity of Quicksort?',
+          question:
+            'What is the best, average, and worst case complexity of Quicksort?',
           options: [
             'All O(N log N)',
             'Best: O(N log N), Average: O(N log N), Worst: O(N²)',
@@ -373,7 +371,8 @@ def heap_sort(arr):
         },
         {
           id: 'mc2',
-          question: 'Why is Merge Sort guaranteed O(N log N) but uses O(N) space?',
+          question:
+            'Why is Merge Sort guaranteed O(N log N) but uses O(N) space?',
           options: [
             'Poor implementation',
             'Divide-and-conquer always splits evenly, but merge step needs temporary arrays',
@@ -386,7 +385,8 @@ def heap_sort(arr):
         },
         {
           id: 'mc3',
-          question: 'What makes Heap Sort useful despite being slower than Quicksort in practice?',
+          question:
+            'What makes Heap Sort useful despite being slower than Quicksort in practice?',
           options: [
             'It is not useful',
             'Guaranteed O(N log N) worst case, in-place O(1) space',
@@ -395,7 +395,7 @@ def heap_sort(arr):
           ],
           correctAnswer: 1,
           explanation:
-            'Heap sort guarantees O(N log N) worst case (unlike quicksort\'s O(N²)) and is in-place O(1) space (unlike merge sort\'s O(N)). Good when memory is limited and worst-case matters.',
+            "Heap sort guarantees O(N log N) worst case (unlike quicksort's O(N²)) and is in-place O(1) space (unlike merge sort's O(N)). Good when memory is limited and worst-case matters.",
         },
         {
           id: 'mc4',
@@ -412,7 +412,8 @@ def heap_sort(arr):
         },
         {
           id: 'mc5',
-          question: 'Why does Quicksort often outperform Merge Sort in practice despite same average complexity?',
+          question:
+            'Why does Quicksort often outperform Merge Sort in practice despite same average complexity?',
           options: [
             'Better complexity',
             'In-place (cache-friendly), fewer memory operations, lower constant factors',
@@ -643,7 +644,8 @@ def bucket_sort(arr):
         },
         {
           id: 'mc3',
-          question: 'What is the time complexity of Radix Sort for d-digit numbers?',
+          question:
+            'What is the time complexity of Radix Sort for d-digit numbers?',
           options: [
             'O(N log N)',
             'O(d × N) - sort by each digit, O(N) for fixed d',
@@ -678,7 +680,7 @@ def bucket_sort(arr):
           ],
           correctAnswer: 1,
           explanation:
-            'Non-comparison sorts are specialized: counting sort needs known range, radix needs digit representation, bucket needs uniform distribution. Can\'t sort arbitrary objects or use custom comparators.',
+            "Non-comparison sorts are specialized: counting sort needs known range, radix needs digit representation, bucket needs uniform distribution. Can't sort arbitrary objects or use custom comparators.",
         },
       ],
     },
@@ -879,7 +881,7 @@ if all(0 <= x <= 100 for x in grades):
           ],
           correctAnswer: 1,
           explanation:
-            'Timsort combines merge sort (stable, O(N log N)) with insertion sort (fast on small/sorted data). It\'s adaptive: O(N) on sorted data, O(N log N) worst case. Used in Python and Java for stability and real-world performance.',
+            "Timsort combines merge sort (stable, O(N log N)) with insertion sort (fast on small/sorted data). It's adaptive: O(N) on sorted data, O(N log N) worst case. Used in Python and Java for stability and real-world performance.",
         },
         {
           id: 'mc2',
@@ -896,7 +898,8 @@ if all(0 <= x <= 100 for x in grades):
         },
         {
           id: 'mc3',
-          question: 'Why do production sorts often switch to insertion sort for small subarrays?',
+          question:
+            'Why do production sorts often switch to insertion sort for small subarrays?',
           options: [
             'Random choice',
             'Insertion sort has lower overhead, runs faster than quicksort/mergesort on small N (<10-20)',
@@ -905,11 +908,12 @@ if all(0 <= x <= 100 for x in grades):
           ],
           correctAnswer: 1,
           explanation:
-            'For small N, insertion sort\'s simplicity (no recursion, minimal operations) beats quicksort/mergesort\'s overhead. Hybrid algorithms use quick/merge for large N, insertion for small subarrays.',
+            "For small N, insertion sort's simplicity (no recursion, minimal operations) beats quicksort/mergesort's overhead. Hybrid algorithms use quick/merge for large N, insertion for small subarrays.",
         },
         {
           id: 'mc4',
-          question: 'What should you consider when choosing a sorting algorithm?',
+          question:
+            'What should you consider when choosing a sorting algorithm?',
           options: [
             'Only speed',
             'Data size, stability requirement, memory constraints, data distribution, worst-case guarantees',

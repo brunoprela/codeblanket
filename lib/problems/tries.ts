@@ -194,7 +194,7 @@ class TrieArray:
         return True`,
     timeComplexity: 'O(m) where m is the word/prefix length',
     spaceComplexity: 'O(n * m) where n is number of words',
-    
+
     leetcodeUrl: 'https://leetcode.com/problems/implement-trie-prefix-tree/',
     youtubeUrl: 'https://www.youtube.com/watch?v=oobqoCJlHA0',
     order: 1,
@@ -397,8 +397,9 @@ class WordDictionaryOptimized:
         return self.tries[length].search(word)`,
     timeComplexity: 'O(m) for add, O(m) to O(26^k * m) for search (k = dots)',
     spaceComplexity: 'O(n * m) for n words',
-    
-    leetcodeUrl: 'https://leetcode.com/problems/design-add-and-search-words-data-structure/',
+
+    leetcodeUrl:
+      'https://leetcode.com/problems/design-add-and-search-words-data-structure/',
     youtubeUrl: 'https://www.youtube.com/watch?v=BTf05gs_8iU',
     order: 2,
     topic: 'Tries',
@@ -667,7 +668,7 @@ def find_words_optimized(board: List[List[str]], words: List[str]) -> List[str]:
     return result`,
     timeComplexity: 'O(m * n * 4^L) where L is max word length',
     spaceComplexity: 'O(N) where N is total characters in all words',
-    
+
     leetcodeUrl: 'https://leetcode.com/problems/word-search-ii/',
     youtubeUrl: 'https://www.youtube.com/watch?v=asbcE9mZz_U',
     order: 3,

@@ -130,7 +130,8 @@ Given an array, perform these operations efficiently:
         },
         {
           id: 'mc5',
-          question: 'What types of operations can Segment Tree efficiently handle?',
+          question:
+            'What types of operations can Segment Tree efficiently handle?',
           options: [
             'Only sum',
             'Any associative operation: sum, min, max, GCD, OR, AND, XOR',
@@ -283,7 +284,8 @@ def build(arr, tree, node, start, end):
         },
         {
           id: 'mc4',
-          question: 'How do you find children of node i in array representation?',
+          question:
+            'How do you find children of node i in array representation?',
           options: [
             'i+1, i+2',
             'Left child: 2i, Right child: 2i+1',
@@ -477,7 +479,7 @@ print(st.query(1, 3))  # Sum of [10, 5, 7] = 22`,
           ],
           correctAnswer: 1,
           explanation:
-            'Range query cases: 1) No overlap (query range doesn\'t intersect node) → return identity (0 for sum, INF for min), 2) Complete overlap (node fully in query) → return node value, 3) Partial overlap → recurse on both children and combine.',
+            "Range query cases: 1) No overlap (query range doesn't intersect node) → return identity (0 for sum, INF for min), 2) Complete overlap (node fully in query) → return node value, 3) Partial overlap → recurse on both children and combine.",
         },
         {
           id: 'mc2',
@@ -690,7 +692,7 @@ class LazySegmentTree:
           ],
           correctAnswer: 1,
           explanation:
-            'Segment Tree works with any associative operation where order of combining doesn\'t matter: sum, product, min, max, GCD, LCM, XOR, OR, AND. Just change the combine function.',
+            "Segment Tree works with any associative operation where order of combining doesn't matter: sum, product, min, max, GCD, LCM, XOR, OR, AND. Just change the combine function.",
         },
         {
           id: 'mc4',
@@ -1006,7 +1008,7 @@ class LazySegmentTree:
           question: 'When would you use Fenwick Tree instead of Segment Tree?',
           options: [
             'Always',
-            'Simpler code, operation has inverse (sum), don\'t need lazy propagation',
+            "Simpler code, operation has inverse (sum), don't need lazy propagation",
             'Never',
             'Random',
           ],

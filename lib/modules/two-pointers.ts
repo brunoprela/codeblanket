@@ -80,7 +80,8 @@ Imagine two people searching through a sorted list of prices to find two items t
       multipleChoice: [
         {
           id: 'mc1',
-          question: 'What is the primary benefit of the two pointers technique?',
+          question:
+            'What is the primary benefit of the two pointers technique?',
           options: [
             'It reduces space complexity to O(1)',
             'It reduces time complexity from O(n²) to O(n)',
@@ -93,7 +94,8 @@ Imagine two people searching through a sorted list of prices to find two items t
         },
         {
           id: 'mc2',
-          question: 'Which type of data structure property makes two pointers most effective?',
+          question:
+            'Which type of data structure property makes two pointers most effective?',
           options: [
             'Unsorted arrays',
             'Sorted or sortable data',
@@ -106,7 +108,8 @@ Imagine two people searching through a sorted list of prices to find two items t
         },
         {
           id: 'mc3',
-          question: 'What are the three main movement patterns for two pointers?',
+          question:
+            'What are the three main movement patterns for two pointers?',
           options: [
             'Left, right, and center',
             'Fast, slow, and medium',
@@ -119,7 +122,8 @@ Imagine two people searching through a sorted list of prices to find two items t
         },
         {
           id: 'mc4',
-          question: 'When should you consider using two pointers instead of nested loops?',
+          question:
+            'When should you consider using two pointers instead of nested loops?',
           options: [
             'Only for very small arrays',
             'When you need to find pairs/triplets or work with sorted data',
@@ -132,7 +136,8 @@ Imagine two people searching through a sorted list of prices to find two items t
         },
         {
           id: 'mc5',
-          question: 'What is the space complexity of most two-pointer solutions?',
+          question:
+            'What is the space complexity of most two-pointer solutions?',
           options: ['O(n)', 'O(log n)', 'O(1)', 'O(n²)'],
           correctAnswer: 2,
           explanation:
@@ -252,7 +257,8 @@ Imagine two people searching through a sorted list of prices to find two items t
       multipleChoice: [
         {
           id: 'mc1',
-          question: 'In the opposite direction pattern, when do the pointers stop moving?',
+          question:
+            'In the opposite direction pattern, when do the pointers stop moving?',
           options: [
             'When they point to the same element or cross',
             'When they reach the middle of the array',
@@ -265,7 +271,8 @@ Imagine two people searching through a sorted list of prices to find two items t
         },
         {
           id: 'mc2',
-          question: 'What is the key characteristic of the fast and slow pointer pattern?',
+          question:
+            'What is the key characteristic of the fast and slow pointer pattern?',
           options: [
             'Both pointers move at the same speed',
             'Pointers move from opposite ends',
@@ -278,12 +285,13 @@ Imagine two people searching through a sorted list of prices to find two items t
         },
         {
           id: 'mc3',
-          question: 'For the two sum problem on a sorted array, if the current sum is too large, which pointer should you move?',
+          question:
+            'For the two sum problem on a sorted array, if the current sum is too large, which pointer should you move?',
           options: [
             'Move the left pointer right',
             'Move the right pointer left',
             'Move both pointers',
-            'It doesn\'t matter',
+            "It doesn't matter",
           ],
           correctAnswer: 1,
           explanation:
@@ -291,7 +299,8 @@ Imagine two people searching through a sorted list of prices to find two items t
         },
         {
           id: 'mc4',
-          question: 'What problem type is the sliding window pattern best suited for?',
+          question:
+            'What problem type is the sliding window pattern best suited for?',
           options: [
             'Finding pairs in sorted arrays',
             'Checking palindromes',
@@ -304,7 +313,8 @@ Imagine two people searching through a sorted list of prices to find two items t
         },
         {
           id: 'mc5',
-          question: 'In the remove duplicates problem, what does the slow pointer represent?',
+          question:
+            'In the remove duplicates problem, what does the slow pointer represent?',
           options: [
             'The current element being checked',
             'The position where the next unique element should be written',
@@ -485,7 +495,8 @@ def remove_duplicates(nums: List[int]) -> int:
       multipleChoice: [
         {
           id: 'mc1',
-          question: 'What is the time complexity of the two sum algorithm using two pointers on a sorted array?',
+          question:
+            'What is the time complexity of the two sum algorithm using two pointers on a sorted array?',
           options: ['O(1)', 'O(log n)', 'O(n)', 'O(n²)'],
           correctAnswer: 2,
           explanation:
@@ -493,7 +504,8 @@ def remove_duplicates(nums: List[int]) -> int:
         },
         {
           id: 'mc2',
-          question: 'In the two sum algorithm, when the current sum equals the target, what should you do?',
+          question:
+            'In the two sum algorithm, when the current sum equals the target, what should you do?',
           options: [
             'Continue searching for more pairs',
             'Return the indices immediately',
@@ -502,11 +514,12 @@ def remove_duplicates(nums: List[int]) -> int:
           ],
           correctAnswer: 1,
           explanation:
-            'When you find a pair whose sum equals the target, you can return the indices immediately since you\'ve found the solution.',
+            "When you find a pair whose sum equals the target, you can return the indices immediately since you've found the solution.",
         },
         {
           id: 'mc3',
-          question: 'In the remove duplicates algorithm, what is the initial value of the slow pointer?',
+          question:
+            'In the remove duplicates algorithm, what is the initial value of the slow pointer?',
           options: ['-1', '0', '1', 'len(array) - 1'],
           correctAnswer: 1,
           explanation:
@@ -514,7 +527,8 @@ def remove_duplicates(nums: List[int]) -> int:
         },
         {
           id: 'mc4',
-          question: 'What is the return value of the remove duplicates function?',
+          question:
+            'What is the return value of the remove duplicates function?',
           options: [
             'The modified array',
             'The number of unique elements',
@@ -527,7 +541,8 @@ def remove_duplicates(nums: List[int]) -> int:
         },
         {
           id: 'mc5',
-          question: 'Why is sorting a prerequisite for the two sum two-pointers algorithm?',
+          question:
+            'Why is sorting a prerequisite for the two sum two-pointers algorithm?',
           options: [
             'To make the code simpler',
             'To provide predictable behavior when moving pointers',
@@ -644,7 +659,8 @@ Beyond Big-O notation:
       multipleChoice: [
         {
           id: 'mc1',
-          question: 'What is the time complexity of the two pointers technique?',
+          question:
+            'What is the time complexity of the two pointers technique?',
           options: ['O(1)', 'O(log n)', 'O(n)', 'O(n²)'],
           correctAnswer: 2,
           explanation:
@@ -652,7 +668,8 @@ Beyond Big-O notation:
         },
         {
           id: 'mc2',
-          question: 'What is the space complexity of most two-pointer algorithms?',
+          question:
+            'What is the space complexity of most two-pointer algorithms?',
           options: ['O(1)', 'O(log n)', 'O(n)', 'O(n²)'],
           correctAnswer: 0,
           explanation:
@@ -660,7 +677,8 @@ Beyond Big-O notation:
         },
         {
           id: 'mc3',
-          question: 'How does the time complexity change if you need to sort the array first before using two pointers?',
+          question:
+            'How does the time complexity change if you need to sort the array first before using two pointers?',
           options: [
             'Stays O(n)',
             'Becomes O(n log n)',
@@ -673,7 +691,8 @@ Beyond Big-O notation:
         },
         {
           id: 'mc4',
-          question: 'Why is two pointers more cache-friendly than nested loops?',
+          question:
+            'Why is two pointers more cache-friendly than nested loops?',
           options: [
             'It uses less memory',
             'It accesses elements sequentially',
@@ -686,7 +705,8 @@ Beyond Big-O notation:
         },
         {
           id: 'mc5',
-          question: 'When comparing two pointers vs hash map for the two sum problem, what is the key trade-off?',
+          question:
+            'When comparing two pointers vs hash map for the two sum problem, what is the key trade-off?',
           options: [
             'Time vs readability',
             'Space (O(1) vs O(n)) vs need for sorted input',
@@ -849,7 +869,8 @@ def partition(nums: List[int], pivot: int) -> int:
       multipleChoice: [
         {
           id: 'mc1',
-          question: 'In the "pair with sum" template, what do you return when no pair is found?',
+          question:
+            'In the "pair with sum" template, what do you return when no pair is found?',
           options: [
             'null',
             'Empty array or [-1, -1]',
@@ -862,7 +883,8 @@ def partition(nums: List[int], pivot: int) -> int:
         },
         {
           id: 'mc2',
-          question: 'In the "remove element" template, what does the slow pointer represent?',
+          question:
+            'In the "remove element" template, what does the slow pointer represent?',
           options: [
             'Elements to be removed',
             'The next position to write a kept element',
@@ -875,7 +897,8 @@ def partition(nums: List[int], pivot: int) -> int:
         },
         {
           id: 'mc3',
-          question: 'For the 3Sum problem, what is the overall time complexity?',
+          question:
+            'For the 3Sum problem, what is the overall time complexity?',
           options: ['O(n)', 'O(n log n)', 'O(n²)', 'O(n³)'],
           correctAnswer: 2,
           explanation:
@@ -896,7 +919,8 @@ def partition(nums: List[int], pivot: int) -> int:
         },
         {
           id: 'mc5',
-          question: 'What pattern would you use for the "move zeros to end" problem?',
+          question:
+            'What pattern would you use for the "move zeros to end" problem?',
           options: [
             'Opposite direction',
             'Sliding window',
@@ -1075,7 +1099,8 @@ def max_area(height: List[int]) -> int:
       multipleChoice: [
         {
           id: 'mc1',
-          question: 'In the Container With Most Water problem, which pointer should you move?',
+          question:
+            'In the Container With Most Water problem, which pointer should you move?',
           options: [
             'Always move the left pointer',
             'Always move the right pointer',
@@ -1088,15 +1113,17 @@ def max_area(height: List[int]) -> int:
         },
         {
           id: 'mc2',
-          question: 'What is the time complexity of the 3Sum problem using two pointers?',
+          question:
+            'What is the time complexity of the 3Sum problem using two pointers?',
           options: ['O(n)', 'O(n log n)', 'O(n²)', 'O(n³)'],
           correctAnswer: 2,
           explanation:
-            '3Sum uses an outer loop O(n) with two pointers inside O(n), resulting in O(n²) time. Although sorting takes O(n log n), it\'s dominated by the O(n²) nested operations.',
+            "3Sum uses an outer loop O(n) with two pointers inside O(n), resulting in O(n²) time. Although sorting takes O(n log n), it's dominated by the O(n²) nested operations.",
         },
         {
           id: 'mc3',
-          question: 'In Floyd\'s cycle detection, what is the speed ratio between fast and slow pointers?',
+          question:
+            "In Floyd's cycle detection, what is the speed ratio between fast and slow pointers?",
           options: [
             'Fast is 3x slow',
             'Fast is 2x slow',
@@ -1105,11 +1132,12 @@ def max_area(height: List[int]) -> int:
           ],
           correctAnswer: 1,
           explanation:
-            'In Floyd\'s cycle detection algorithm, the slow pointer moves 1 step at a time while the fast pointer moves 2 steps at a time - a 2:1 speed ratio.',
+            "In Floyd's cycle detection algorithm, the slow pointer moves 1 step at a time while the fast pointer moves 2 steps at a time - a 2:1 speed ratio.",
         },
         {
           id: 'mc4',
-          question: 'For the Dutch National Flag problem (sort 0s, 1s, 2s), how many pointers are typically used?',
+          question:
+            'For the Dutch National Flag problem (sort 0s, 1s, 2s), how many pointers are typically used?',
           options: ['One', 'Two', 'Three', 'Four'],
           correctAnswer: 2,
           explanation:
@@ -1294,7 +1322,8 @@ A: "Use fast and slow pointers - Floyd's algorithm"
       multipleChoice: [
         {
           id: 'mc1',
-          question: 'What is the first thing you should check to recognize a two-pointer problem?',
+          question:
+            'What is the first thing you should check to recognize a two-pointer problem?',
           options: [
             'If the array is small',
             'If the data is sorted or can be sorted',
@@ -1307,7 +1336,8 @@ A: "Use fast and slow pointers - Floyd's algorithm"
         },
         {
           id: 'mc2',
-          question: 'Which keywords in a problem statement suggest using two pointers?',
+          question:
+            'Which keywords in a problem statement suggest using two pointers?',
           options: [
             'Recursive, stack, tree',
             'Pair, two numbers, remove, partition, in-place',
@@ -1333,7 +1363,8 @@ A: "Use fast and slow pointers - Floyd's algorithm"
         },
         {
           id: 'mc4',
-          question: 'How much time should you spend planning before coding a two-pointer solution in an interview?',
+          question:
+            'How much time should you spend planning before coding a two-pointer solution in an interview?',
           options: [
             'No time, start coding immediately',
             '2-3 minutes',
@@ -1346,7 +1377,8 @@ A: "Use fast and slow pointers - Floyd's algorithm"
         },
         {
           id: 'mc5',
-          question: 'What edge cases should you always test with two-pointer solutions?',
+          question:
+            'What edge cases should you always test with two-pointer solutions?',
           options: [
             'Only test with large inputs',
             'Empty array, single element, all same values, target at boundaries',
@@ -1355,7 +1387,7 @@ A: "Use fast and slow pointers - Floyd's algorithm"
           ],
           correctAnswer: 1,
           explanation:
-            'Always test edge cases: empty array (what if there\'s no input?), single element (do pointers work?), all same values (duplicates), and targets at boundaries (first/last elements).',
+            "Always test edge cases: empty array (what if there's no input?), single element (do pointers work?), all same values (duplicates), and targets at boundaries (first/last elements).",
         },
       ],
     },

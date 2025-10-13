@@ -90,7 +90,7 @@ def contains_duplicate_alt(nums: List[int]) -> bool:
     return len(nums) != len(set(nums))`,
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(n)',
-    
+
     leetcodeUrl: 'https://leetcode.com/problems/contains-duplicate/',
     youtubeUrl: 'https://www.youtube.com/watch?v=3OamzN90kPg',
     order: 1,
@@ -186,7 +186,7 @@ def two_sum(nums: List[int], target: int) -> List[int]:
     return []  # Should never reach if input is valid`,
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(n)',
-    
+
     leetcodeUrl: 'https://leetcode.com/problems/two-sum/',
     youtubeUrl: 'https://www.youtube.com/watch?v=KLlXCFG5TnA',
     order: 2,
@@ -298,7 +298,7 @@ def group_anagrams_count(strs: List[str]) -> List[List[str]]:
     timeComplexity:
       'O(n * k log k) where n is number of strings and k is max length',
     spaceComplexity: 'O(n * k)',
-    
+
     leetcodeUrl: 'https://leetcode.com/problems/group-anagrams/',
     youtubeUrl: 'https://www.youtube.com/watch?v=vzdNOK2oB2E',
     order: 3,

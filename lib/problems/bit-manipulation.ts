@@ -116,7 +116,7 @@ def single_number_oneliner(nums: List[int]) -> int:
     return reduce(lambda x, y: x ^ y, nums)`,
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(1)',
-    
+
     leetcodeUrl: 'https://leetcode.com/problems/single-number/',
     youtubeUrl: 'https://www.youtube.com/watch?v=qMPX1AOa83k',
     order: 1,
@@ -254,7 +254,7 @@ def hamming_weight_lookup(n: int) -> int:
     return count`,
     timeComplexity: 'O(k) where k is the number of set bits',
     spaceComplexity: 'O(1)',
-    
+
     leetcodeUrl: 'https://leetcode.com/problems/number-of-1-bits/',
     youtubeUrl: 'https://www.youtube.com/watch?v=5Km3utixwZs',
     order: 2,
@@ -427,7 +427,7 @@ def missing_number_gauss(nums: List[int]) -> int:
     return n * (n + 1) // 2 - sum(nums)`,
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(1) with XOR or sum, O(n) with set',
-    
+
     leetcodeUrl: 'https://leetcode.com/problems/missing-number/',
     youtubeUrl: 'https://www.youtube.com/watch?v=WnPLSRLSANE',
     order: 3,

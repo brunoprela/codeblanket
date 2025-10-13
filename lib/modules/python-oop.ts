@@ -5,16 +5,16 @@
 import { Module } from '@/lib/types';
 
 export const pythonOOPModule: Module = {
-    id: 'python-oop',
-    title: 'Python Object-Oriented Programming',
-    description:
-        'Master object-oriented programming in Python including classes, inheritance, polymorphism, and design patterns.',
-    icon: '🏗️',
-    sections: [
-        {
-            id: 'introduction',
-            title: 'Object-Oriented Programming in Python',
-            content: `Object-Oriented Programming (OOP) is a programming paradigm that organizes code around objects that contain both data (attributes) and behavior (methods).
+  id: 'python-oop',
+  title: 'Python Object-Oriented Programming',
+  description:
+    'Master object-oriented programming in Python including classes, inheritance, polymorphism, and design patterns.',
+  icon: '🏗️',
+  sections: [
+    {
+      id: 'introduction',
+      title: 'Object-Oriented Programming in Python',
+      content: `Object-Oriented Programming (OOP) is a programming paradigm that organizes code around objects that contain both data (attributes) and behavior (methods).
 
 **Why OOP Matters:**
 - **Encapsulation:** Bundle data and methods that operate on that data
@@ -30,69 +30,69 @@ export const pythonOOPModule: Module = {
 
 **Key Insight:**
 OOP helps organize complex systems by modeling real-world entities and their relationships, making code more maintainable and easier to reason about.`,
-            quiz: [
-                {
-                    id: 'q1',
-                    question:
-                        'Explain the four pillars of OOP and how they work together.',
-                    sampleAnswer:
-                        'The four pillars are: (1) Encapsulation—bundling data and methods together, hiding internal details. (2) Abstraction—exposing only essential features, hiding complexity. (3) Inheritance—creating new classes from existing ones, promoting code reuse. (4) Polymorphism—using objects of different types through a common interface. They work together: encapsulation hides how something works, abstraction defines what it does, inheritance lets you extend functionality, and polymorphism lets you use different implementations interchangeably. For example, a Car class encapsulates engine details, abstracts a drive() method, inherits from Vehicle, and can be used polymorphically with Truck.',
-                    keyPoints: [
-                        'Encapsulation: bundle data and methods',
-                        'Abstraction: hide complexity, show essentials',
-                        'Inheritance: reuse code through parent classes',
-                        'Polymorphism: common interface for different types',
-                        'Work together to organize complex systems',
-                    ],
-                },
-                {
-                    id: 'q2',
-                    question:
-                        'When should you use composition over inheritance? Give a concrete example.',
-                    sampleAnswer:
-                        'Use composition when you have a "has-a" relationship rather than "is-a". Composition is more flexible and avoids fragile base class problems. For example, bad inheritance: class Car(Engine, Transmission, Stereo)—a car "is-a" engine? No. Good composition: class Car has self.engine, self.transmission, self.stereo. Composition lets you: (1) change implementations at runtime, (2) avoid deep inheritance hierarchies, (3) have better encapsulation. Use inheritance for true "is-a" relationships like ElectricCar(Car) or Dog(Animal), but prefer composition for behavior delegation.',
-                    keyPoints: [
-                        'Composition: "has-a" relationship',
-                        'Inheritance: "is-a" relationship',
-                        'Composition more flexible',
-                        'Example: Car has-a Engine, not is-a Engine',
-                        'Prefer composition to avoid fragile hierarchies',
-                    ],
-                },
-            ],
-            multipleChoice: [
-                {
-                    id: 'mc1',
-                    question: 'What does encapsulation mean in OOP?',
-                    options: [
-                        'Using multiple classes',
-                        'Bundling data and methods that operate on that data',
-                        'Creating child classes from parent classes',
-                        'Using the same method name in different classes',
-                    ],
-                    correctAnswer: 1,
-                    explanation:
-                        'Encapsulation means bundling data (attributes) and methods that operate on that data together in a class, while hiding internal implementation details from outside code.',
-                },
-                {
-                    id: 'mc2',
-                    question: 'Which relationship should use inheritance?',
-                    options: [
-                        'A Car has an Engine',
-                        'A Student has a Backpack',
-                        'A Dog is an Animal',
-                        'A House has a Roof',
-                    ],
-                    correctAnswer: 2,
-                    explanation:
-                        'Inheritance represents "is-a" relationships. A Dog IS AN Animal is a true subtype relationship. The others are "has-a" relationships better modeled with composition.',
-                },
-            ],
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Explain the four pillars of OOP and how they work together.',
+          sampleAnswer:
+            'The four pillars are: (1) Encapsulation—bundling data and methods together, hiding internal details. (2) Abstraction—exposing only essential features, hiding complexity. (3) Inheritance—creating new classes from existing ones, promoting code reuse. (4) Polymorphism—using objects of different types through a common interface. They work together: encapsulation hides how something works, abstraction defines what it does, inheritance lets you extend functionality, and polymorphism lets you use different implementations interchangeably. For example, a Car class encapsulates engine details, abstracts a drive() method, inherits from Vehicle, and can be used polymorphically with Truck.',
+          keyPoints: [
+            'Encapsulation: bundle data and methods',
+            'Abstraction: hide complexity, show essentials',
+            'Inheritance: reuse code through parent classes',
+            'Polymorphism: common interface for different types',
+            'Work together to organize complex systems',
+          ],
         },
         {
-            id: 'classes-objects',
-            title: 'Classes and Objects',
-            content: `**Defining Classes:**
+          id: 'q2',
+          question:
+            'When should you use composition over inheritance? Give a concrete example.',
+          sampleAnswer:
+            'Use composition when you have a "has-a" relationship rather than "is-a". Composition is more flexible and avoids fragile base class problems. For example, bad inheritance: class Car(Engine, Transmission, Stereo)—a car "is-a" engine? No. Good composition: class Car has self.engine, self.transmission, self.stereo. Composition lets you: (1) change implementations at runtime, (2) avoid deep inheritance hierarchies, (3) have better encapsulation. Use inheritance for true "is-a" relationships like ElectricCar(Car) or Dog(Animal), but prefer composition for behavior delegation.',
+          keyPoints: [
+            'Composition: "has-a" relationship',
+            'Inheritance: "is-a" relationship',
+            'Composition more flexible',
+            'Example: Car has-a Engine, not is-a Engine',
+            'Prefer composition to avoid fragile hierarchies',
+          ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What does encapsulation mean in OOP?',
+          options: [
+            'Using multiple classes',
+            'Bundling data and methods that operate on that data',
+            'Creating child classes from parent classes',
+            'Using the same method name in different classes',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Encapsulation means bundling data (attributes) and methods that operate on that data together in a class, while hiding internal implementation details from outside code.',
+        },
+        {
+          id: 'mc2',
+          question: 'Which relationship should use inheritance?',
+          options: [
+            'A Car has an Engine',
+            'A Student has a Backpack',
+            'A Dog is an Animal',
+            'A House has a Roof',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'Inheritance represents "is-a" relationships. A Dog IS AN Animal is a true subtype relationship. The others are "has-a" relationships better modeled with composition.',
+        },
+      ],
+    },
+    {
+      id: 'classes-objects',
+      title: 'Classes and Objects',
+      content: `**Defining Classes:**
 \`\`\`python
 class Dog:
     # Class attribute (shared by all instances)
@@ -207,55 +207,55 @@ pizza = Pizza.margherita()
 # Use static method
 Pizza.is_valid_topping('mozzarella')  # True
 \`\`\``,
-            quiz: [
-                {
-                    id: 'q1',
-                    question:
-                        'Explain the difference between instance attributes, class attributes, and properties.',
-                    sampleAnswer:
-                        'Instance attributes are unique to each object, defined in __init__ with self.name. Class attributes are shared by all instances, defined at class level. Properties are methods that look like attributes using @property decorator. Instance attribute example: each Person has their own name. Class attribute example: all Employees share the same company name. Property example: Circle.area is computed from radius. Properties allow validation, computed values, and controlled access while maintaining attribute syntax. Use instance attributes for object-specific data, class attributes for shared data, and properties for computed or validated access.',
-                    keyPoints: [
-                        'Instance: unique per object (self.name)',
-                        'Class: shared by all instances',
-                        'Property: method accessed like attribute',
-                        'Properties enable validation and computation',
-                        'Choose based on sharing and access needs',
-                    ],
-                },
-            ],
-            multipleChoice: [
-                {
-                    id: 'mc1',
-                    question: 'What is the purpose of the __init__ method?',
-                    options: [
-                        'To delete an object',
-                        'To initialize an object\'s attributes when it is created',
-                        'To compare two objects',
-                        'To convert an object to a string',
-                    ],
-                    correctAnswer: 1,
-                    explanation:
-                        '__init__ is the constructor method called when creating a new instance. It initializes the object\'s attributes with values passed as arguments.',
-                },
-                {
-                    id: 'mc2',
-                    question: 'What does @property decorator do?',
-                    options: [
-                        'Makes a method private',
-                        'Allows a method to be accessed like an attribute',
-                        'Creates a class method',
-                        'Makes an attribute immutable',
-                    ],
-                    correctAnswer: 1,
-                    explanation:
-                        '@property decorator allows a method to be accessed like an attribute without parentheses, enabling computed values, validation, and controlled access.',
-                },
-            ],
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Explain the difference between instance attributes, class attributes, and properties.',
+          sampleAnswer:
+            'Instance attributes are unique to each object, defined in __init__ with self.name. Class attributes are shared by all instances, defined at class level. Properties are methods that look like attributes using @property decorator. Instance attribute example: each Person has their own name. Class attribute example: all Employees share the same company name. Property example: Circle.area is computed from radius. Properties allow validation, computed values, and controlled access while maintaining attribute syntax. Use instance attributes for object-specific data, class attributes for shared data, and properties for computed or validated access.',
+          keyPoints: [
+            'Instance: unique per object (self.name)',
+            'Class: shared by all instances',
+            'Property: method accessed like attribute',
+            'Properties enable validation and computation',
+            'Choose based on sharing and access needs',
+          ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What is the purpose of the __init__ method?',
+          options: [
+            'To delete an object',
+            "To initialize an object's attributes when it is created",
+            'To compare two objects',
+            'To convert an object to a string',
+          ],
+          correctAnswer: 1,
+          explanation:
+            "__init__ is the constructor method called when creating a new instance. It initializes the object's attributes with values passed as arguments.",
         },
         {
-            id: 'inheritance',
-            title: 'Inheritance and Polymorphism',
-            content: `**Basic Inheritance:**
+          id: 'mc2',
+          question: 'What does @property decorator do?',
+          options: [
+            'Makes a method private',
+            'Allows a method to be accessed like an attribute',
+            'Creates a class method',
+            'Makes an attribute immutable',
+          ],
+          correctAnswer: 1,
+          explanation:
+            '@property decorator allows a method to be accessed like an attribute without parentheses, enabling computed values, validation, and controlled access.',
+        },
+      ],
+    },
+    {
+      id: 'inheritance',
+      title: 'Inheritance and Polymorphism',
+      content: `**Basic Inheritance:**
 \`\`\`python
 class Animal:
     def __init__(self, name):
@@ -396,63 +396,62 @@ class Car:
     def start(self):
         self.engine.start()
 \`\`\``,
-            quiz: [
-                {
-                    id: 'q1',
-                    question:
-                        'Explain Method Resolution Order (MRO) and why it matters in multiple inheritance.',
-                    sampleAnswer:
-                        'MRO is the order Python searches for methods in the inheritance hierarchy. It matters because in multiple inheritance, a method might exist in multiple parent classes. Python uses C3 linearization algorithm to create a consistent order. You can see it with ClassName.mro(). For example, if D inherits from B and C, which both inherit from A, the MRO is D -> B -> C -> A -> object. Python searches left to right, depth-first, but ensures each class appears only once and parents appear after their children. This prevents the diamond problem and ensures super() works correctly.',
-                    keyPoints: [
-                        'Order of method search in inheritance',
-                        'Matters for multiple inheritance',
-                        'C3 linearization algorithm',
-                        'View with ClassName.mro()',
-                        'Prevents diamond problem',
-                    ],
-                },
-            ],
-            multipleChoice: [
-                {
-                    id: 'mc1',
-                    question: 'What does super() do?',
-                    options: [
-                        'Creates a superclass',
-                        'Calls the parent class\'s method',
-                        'Makes a method private',
-                        'Creates multiple inheritance',
-                    ],
-                    correctAnswer: 1,
-                    explanation:
-                        'super() returns a temporary object that allows you to call methods of the parent class, enabling proper method chaining in inheritance hierarchies.',
-                },
-                {
-                    id: 'mc2',
-                    question: 'What is polymorphism?',
-                    options: [
-                        'Having multiple classes',
-                        'Using the same interface for different data types',
-                        'Inheriting from multiple parents',
-                        'Hiding implementation details',
-                    ],
-                    correctAnswer: 1,
-                    explanation:
-                        'Polymorphism means using the same interface (method name) for different data types. Different classes can implement the same method in their own way.',
-                },
-            ],
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Explain Method Resolution Order (MRO) and why it matters in multiple inheritance.',
+          sampleAnswer:
+            'MRO is the order Python searches for methods in the inheritance hierarchy. It matters because in multiple inheritance, a method might exist in multiple parent classes. Python uses C3 linearization algorithm to create a consistent order. You can see it with ClassName.mro(). For example, if D inherits from B and C, which both inherit from A, the MRO is D -> B -> C -> A -> object. Python searches left to right, depth-first, but ensures each class appears only once and parents appear after their children. This prevents the diamond problem and ensures super() works correctly.',
+          keyPoints: [
+            'Order of method search in inheritance',
+            'Matters for multiple inheritance',
+            'C3 linearization algorithm',
+            'View with ClassName.mro()',
+            'Prevents diamond problem',
+          ],
         },
-    ],
-    keyTakeaways: [
-        'Classes bundle data and behavior—use __init__ to initialize instance attributes',
-        'Inheritance models "is-a" relationships—use super() to call parent methods',
-        'Polymorphism allows using objects of different types through common interface',
-        'Composition ("has-a") is often better than inheritance for flexibility',
-        'Abstract base classes define interfaces that subclasses must implement',
-    ],
-    relatedProblems: [
-        'class-bankaccount',
-        'inheritance-shapes',
-        'polymorphism-animals',
-    ],
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What does super() do?',
+          options: [
+            'Creates a superclass',
+            "Calls the parent class's method",
+            'Makes a method private',
+            'Creates multiple inheritance',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'super() returns a temporary object that allows you to call methods of the parent class, enabling proper method chaining in inheritance hierarchies.',
+        },
+        {
+          id: 'mc2',
+          question: 'What is polymorphism?',
+          options: [
+            'Having multiple classes',
+            'Using the same interface for different data types',
+            'Inheriting from multiple parents',
+            'Hiding implementation details',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Polymorphism means using the same interface (method name) for different data types. Different classes can implement the same method in their own way.',
+        },
+      ],
+    },
+  ],
+  keyTakeaways: [
+    'Classes bundle data and behavior—use __init__ to initialize instance attributes',
+    'Inheritance models "is-a" relationships—use super() to call parent methods',
+    'Polymorphism allows using objects of different types through common interface',
+    'Composition ("has-a") is often better than inheritance for flexibility',
+    'Abstract base classes define interfaces that subclasses must implement',
+  ],
+  relatedProblems: [
+    'class-bankaccount',
+    'inheritance-shapes',
+    'polymorphism-animals',
+  ],
 };
-

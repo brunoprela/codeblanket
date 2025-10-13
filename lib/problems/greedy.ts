@@ -124,7 +124,7 @@ def can_jump_simple(nums: List[int]) -> bool:
     return True`,
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(1)',
-    
+
     leetcodeUrl: 'https://leetcode.com/problems/jump-game/',
     youtubeUrl: 'https://www.youtube.com/watch?v=Yan0cv2cLy8',
     order: 1,
@@ -258,8 +258,9 @@ def max_profit_oneliner(prices: List[int]) -> int:
     return sum(max(prices[i] - prices[i-1], 0) for i in range(1, len(prices)))`,
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(1)',
-    
-    leetcodeUrl: 'https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/',
+
+    leetcodeUrl:
+      'https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/',
     youtubeUrl: 'https://www.youtube.com/watch?v=3SJ3pUkPQMc',
     order: 2,
     topic: 'Greedy',
@@ -419,7 +420,7 @@ def can_complete_circuit_two_pass(gas: List[int], cost: List[int]) -> int:
     return start`,
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(1)',
-    
+
     leetcodeUrl: 'https://leetcode.com/problems/gas-station/',
     youtubeUrl: 'https://www.youtube.com/watch?v=lJwbPZGo05A',
     order: 3,

@@ -101,7 +101,8 @@ Think of finding a word in a dictionary. You don't start from 'A' and flip throu
         },
         {
           id: 'mc3',
-          question: 'Can you efficiently use binary search on a sorted linked list?',
+          question:
+            'Can you efficiently use binary search on a sorted linked list?',
           options: [
             'Yes, as long as it is sorted',
             'No, because finding the middle element takes O(N) time',
@@ -127,7 +128,8 @@ Think of finding a word in a dictionary. You don't start from 'A' and flip throu
         },
         {
           id: 'mc5',
-          question: 'What happens if you try binary search on an unsorted array?',
+          question:
+            'What happens if you try binary search on an unsorted array?',
           options: [
             'It works but slower',
             'The algorithm breaks down because comparisons cannot reliably determine direction',
@@ -254,7 +256,8 @@ Each comparison eliminates half the search space. After k comparisons, we've eli
       multipleChoice: [
         {
           id: 'mc1',
-          question: 'If the middle element is smaller than the target, what should you do next?',
+          question:
+            'If the middle element is smaller than the target, what should you do next?',
           options: [
             'Set right = mid - 1',
             'Set left = mid + 1',
@@ -267,7 +270,8 @@ Each comparison eliminates half the search space. After k comparisons, we've eli
         },
         {
           id: 'mc2',
-          question: 'Why is mid = left + (right - left) // 2 preferred over mid = (left + right) // 2?',
+          question:
+            'Why is mid = left + (right - left) // 2 preferred over mid = (left + right) // 2?',
           options: [
             'It is faster',
             'It prevents integer overflow in languages like Java/C++',
@@ -280,12 +284,13 @@ Each comparison eliminates half the search space. After k comparisons, we've eli
         },
         {
           id: 'mc3',
-          question: 'Should the loop condition be "while left < right" or "while left <= right"?',
+          question:
+            'Should the loop condition be "while left < right" or "while left <= right"?',
           options: [
             'while left < right',
             'while left <= right',
             'Both work the same',
-            'It doesn\'t matter',
+            "It doesn't matter",
           ],
           correctAnswer: 1,
           explanation:
@@ -293,26 +298,18 @@ Each comparison eliminates half the search space. After k comparisons, we've eli
         },
         {
           id: 'mc4',
-          question: 'After finding that nums[mid] == target, what should you return?',
-          options: [
-            'target',
-            'mid',
-            'nums[mid]',
-            'true',
-          ],
+          question:
+            'After finding that nums[mid] == target, what should you return?',
+          options: ['target', 'mid', 'nums[mid]', 'true'],
           correctAnswer: 1,
           explanation:
             'Return mid, which is the index where the target was found. The problem typically asks for the index, not the value itself.',
         },
         {
           id: 'mc5',
-          question: 'If the loop exits without finding the target, what should you return?',
-          options: [
-            '0',
-            '-1',
-            'null',
-            'false',
-          ],
+          question:
+            'If the loop exits without finding the target, what should you return?',
+          options: ['0', '-1', 'null', 'false'],
           correctAnswer: 1,
           explanation:
             'Return -1 to indicate the target was not found in the array. This is the standard convention in most binary search implementations.',
@@ -404,25 +401,16 @@ The consistency of performance is a major advantage!`,
         {
           id: 'mc1',
           question: 'What is the time complexity of binary search?',
-          options: [
-            'O(N)',
-            'O(log N)',
-            'O(N log N)',
-            'O(1)',
-          ],
+          options: ['O(N)', 'O(log N)', 'O(N log N)', 'O(1)'],
           correctAnswer: 1,
           explanation:
             'Binary search has O(log N) time complexity because it divides the search space in half with each comparison. For N elements, it takes at most log₂(N) comparisons.',
         },
         {
           id: 'mc2',
-          question: 'How many comparisons are needed to search 1 million elements with binary search?',
-          options: [
-            '1,000',
-            'About 20',
-            '1,000,000',
-            '100',
-          ],
+          question:
+            'How many comparisons are needed to search 1 million elements with binary search?',
+          options: ['1,000', 'About 20', '1,000,000', '100'],
           correctAnswer: 1,
           explanation:
             'Binary search needs at most log₂(1,000,000) ≈ 20 comparisons. This is because 2^20 = 1,048,576, which is just over 1 million.',
@@ -430,12 +418,7 @@ The consistency of performance is a major advantage!`,
         {
           id: 'mc3',
           question: 'What is the space complexity of iterative binary search?',
-          options: [
-            'O(log N)',
-            'O(1)',
-            'O(N)',
-            'O(N log N)',
-          ],
+          options: ['O(log N)', 'O(1)', 'O(N)', 'O(N log N)'],
           correctAnswer: 1,
           explanation:
             'Iterative binary search uses O(1) constant space - only a few variables (left, right, mid) are needed regardless of input size.',
@@ -443,12 +426,7 @@ The consistency of performance is a major advantage!`,
         {
           id: 'mc4',
           question: 'What is the space complexity of recursive binary search?',
-          options: [
-            'O(1)',
-            'O(log N)',
-            'O(N)',
-            'O(N²)',
-          ],
+          options: ['O(1)', 'O(log N)', 'O(N)', 'O(N²)'],
           correctAnswer: 1,
           explanation:
             'Recursive binary search uses O(log N) space for the call stack. Each recursive call adds a frame to the stack, and there are at most log N calls.',
@@ -456,12 +434,7 @@ The consistency of performance is a major advantage!`,
         {
           id: 'mc5',
           question: 'What is the best case time complexity of binary search?',
-          options: [
-            'O(log N)',
-            'O(1)',
-            'O(N)',
-            'Best case does not exist',
-          ],
+          options: ['O(log N)', 'O(1)', 'O(N)', 'Best case does not exist'],
           correctAnswer: 1,
           explanation:
             'The best case is O(1) when the target happens to be exactly at the middle position on the first comparison. However, this is rare and average/worst cases are O(log N).',
@@ -588,7 +561,8 @@ def search_insert(nums: List[int], target: int) -> int:
       multipleChoice: [
         {
           id: 'mc1',
-          question: 'When finding the first occurrence of a target in an array with duplicates, what should you do after finding nums[mid] == target?',
+          question:
+            'When finding the first occurrence of a target in an array with duplicates, what should you do after finding nums[mid] == target?',
           options: [
             'Return mid immediately',
             'Save mid as result and continue searching left (right = mid - 1)',
@@ -601,7 +575,8 @@ def search_insert(nums: List[int], target: int) -> int:
         },
         {
           id: 'mc2',
-          question: 'When finding the last occurrence of a target with duplicates, what should you do after finding nums[mid] == target?',
+          question:
+            'When finding the last occurrence of a target with duplicates, what should you do after finding nums[mid] == target?',
           options: [
             'Return mid immediately',
             'Save mid as result and continue searching right (left = mid + 1)',
@@ -614,20 +589,17 @@ def search_insert(nums: List[int], target: int) -> int:
         },
         {
           id: 'mc3',
-          question: 'In the "search insert position" template, what do you return if the target is not found?',
-          options: [
-            '-1',
-            'left (the insertion position)',
-            'right',
-            'mid',
-          ],
+          question:
+            'In the "search insert position" template, what do you return if the target is not found?',
+          options: ['-1', 'left (the insertion position)', 'right', 'mid'],
           correctAnswer: 1,
           explanation:
             'Return left, which naturally ends up at the correct position where the target should be inserted to maintain sorted order.',
         },
         {
           id: 'mc4',
-          question: 'When would you use the "find first" template instead of classic binary search?',
+          question:
+            'When would you use the "find first" template instead of classic binary search?',
           options: [
             'When the array is unsorted',
             'When duplicates exist and you need the leftmost boundary',
@@ -640,7 +612,8 @@ def search_insert(nums: List[int], target: int) -> int:
         },
         {
           id: 'mc5',
-          question: 'Which template would you use to count occurrences of a value in a sorted array?',
+          question:
+            'Which template would you use to count occurrences of a value in a sorted array?',
           options: [
             'Classic binary search',
             'Find first and find last templates',
@@ -769,7 +742,8 @@ Make sure you return:
       multipleChoice: [
         {
           id: 'mc1',
-          question: 'What is the main problem with using mid = (left + right) // 2 in languages like Java or C++?',
+          question:
+            'What is the main problem with using mid = (left + right) // 2 in languages like Java or C++?',
           options: [
             'It is slower',
             'It can cause integer overflow',
@@ -795,7 +769,8 @@ Make sure you return:
         },
         {
           id: 'mc3',
-          question: 'What is the most important precondition for binary search to work correctly?',
+          question:
+            'What is the most important precondition for binary search to work correctly?',
           options: [
             'Array must have no duplicates',
             'Array must be sorted',
@@ -808,7 +783,8 @@ Make sure you return:
         },
         {
           id: 'mc4',
-          question: 'If you must search an unsorted array many times, what is the best approach?',
+          question:
+            'If you must search an unsorted array many times, what is the best approach?',
           options: [
             'Use binary search directly',
             'Build a hash map once for O(1) lookups',
@@ -821,7 +797,8 @@ Make sure you return:
         },
         {
           id: 'mc5',
-          question: 'What should you return from binary search when the target is found?',
+          question:
+            'What should you return from binary search when the target is found?',
           options: [
             'The value itself',
             'The index where it was found',
@@ -950,7 +927,8 @@ Binary search problems in interviews often hide the "sorted" aspect. Look for:
         },
         {
           id: 'mc2',
-          question: 'In a rotated sorted array like [4,5,6,7,0,1,2], what is the key insight for using binary search?',
+          question:
+            'In a rotated sorted array like [4,5,6,7,0,1,2], what is the key insight for using binary search?',
           options: [
             'Sort it first',
             'At least one half is always properly sorted',
@@ -963,7 +941,8 @@ Binary search problems in interviews often hide the "sorted" aspect. Look for:
         },
         {
           id: 'mc3',
-          question: 'What keywords in a problem statement suggest binary search might apply?',
+          question:
+            'What keywords in a problem statement suggest binary search might apply?',
           options: [
             'Sum, average, total',
             'First, last, minimum, maximum, at least',
@@ -976,7 +955,8 @@ Binary search problems in interviews often hide the "sorted" aspect. Look for:
         },
         {
           id: 'mc4',
-          question: 'How can you use binary search to find square root of 25 without using sqrt()?',
+          question:
+            'How can you use binary search to find square root of 25 without using sqrt()?',
           options: [
             'Binary search from 1 to 25, checking if mid * mid equals, is less than, or greater than 25',
             'Use linear search',
@@ -989,7 +969,8 @@ Binary search problems in interviews often hide the "sorted" aspect. Look for:
         },
         {
           id: 'mc5',
-          question: 'What is the key question to ask yourself to recognize if binary search applies?',
+          question:
+            'What is the key question to ask yourself to recognize if binary search applies?',
           options: [
             'Is the array large?',
             'If I check a value, can I tell whether I need to go higher or lower?',
@@ -1111,7 +1092,8 @@ Binary search problems in interviews often hide the "sorted" aspect. Look for:
       multipleChoice: [
         {
           id: 'mc1',
-          question: 'What is the first question you should ask in a binary search interview problem?',
+          question:
+            'What is the first question you should ask in a binary search interview problem?',
           options: [
             'What is the array size?',
             'Is the array sorted?',
@@ -1124,20 +1106,17 @@ Binary search problems in interviews often hide the "sorted" aspect. Look for:
         },
         {
           id: 'mc2',
-          question: 'How long should you spend coding a medium binary search problem in an interview?',
-          options: [
-            '2-3 minutes',
-            '5-7 minutes',
-            '15-20 minutes',
-            '1 minute',
-          ],
+          question:
+            'How long should you spend coding a medium binary search problem in an interview?',
+          options: ['2-3 minutes', '5-7 minutes', '15-20 minutes', '1 minute'],
           correctAnswer: 1,
           explanation:
             'Plan for 5-7 minutes of careful coding. Accuracy is more important than speed. Rush jobs lead to bugs that waste time debugging.',
         },
         {
           id: 'mc3',
-          question: 'What is the recommended approach for a rotated sorted array problem?',
+          question:
+            'What is the recommended approach for a rotated sorted array problem?',
           options: [
             'Sort it first',
             'Use linear search',
@@ -1163,7 +1142,8 @@ Binary search problems in interviews often hide the "sorted" aspect. Look for:
         },
         {
           id: 'mc5',
-          question: 'When debugging binary search, what is the first thing to check?',
+          question:
+            'When debugging binary search, what is the first thing to check?',
           options: [
             'The array contents',
             'Print left, mid, right at each iteration to verify search space is shrinking',

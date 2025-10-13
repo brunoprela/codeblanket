@@ -7,7 +7,7 @@ export const binarySearchProblems: Problem[] = [
     title: 'Binary Search',
     difficulty: 'Easy',
     topic: 'Binary Search',
-    
+
     leetcodeUrl: 'https://leetcode.com/problems/binary-search/',
     youtubeUrl: 'https://www.youtube.com/watch?v=s4DPM8ct1pI',
     order: 1,
@@ -86,8 +86,6 @@ def binary_search(nums: List[int], target: int) -> int:
 `,
     timeComplexity: 'O(log n) - we halve the search space with each iteration',
     spaceComplexity: 'O(1) - we only use a constant amount of extra space',
-    leetcodeUrl: 'https://leetcode.com/problems/binary-search/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=s4DPM8ct1pI',
   },
 
   // MEDIUM - Search in Rotated Sorted Array

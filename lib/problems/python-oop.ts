@@ -5,11 +5,11 @@
 import { Problem } from '../types';
 
 export const pythonOOPProblems: Problem[] = [
-    {
-        id: 'class-bankaccount',
-        title: 'Bank Account Class',
-        difficulty: 'Easy',
-        description: `Implement a \`BankAccount\` class with proper encapsulation and methods.
+  {
+    id: 'class-bankaccount',
+    title: 'Bank Account Class',
+    difficulty: 'Easy',
+    description: `Implement a \`BankAccount\` class with proper encapsulation and methods.
 
 The class should:
 - Store account holder name and balance (private)
@@ -22,27 +22,27 @@ The class should:
 - Balance should be private (_balance)
 - Withdraw should return True/False for success
 - Deposit should only accept positive amounts`,
-        examples: [
-            {
-                input: 'account = BankAccount("Alice", 1000); account.withdraw(200)',
-                output: 'True, balance becomes 800',
-            },
-            {
-                input: 'account.withdraw(2000)',
-                output: 'False, insufficient funds',
-            },
-        ],
-        constraints: [
-            'Balance must be non-negative',
-            'Deposit must be positive',
-            'Use encapsulation (private attributes)',
-        ],
-        hints: [
-            'Use _balance for private attribute',
-            'Check balance before withdrawing',
-            'Return True/False to indicate success',
-        ],
-        starterCode: `class BankAccount:
+    examples: [
+      {
+        input: 'account = BankAccount("Alice", 1000); account.withdraw(200)',
+        output: 'True, balance becomes 800',
+      },
+      {
+        input: 'account.withdraw(2000)',
+        output: 'False, insufficient funds',
+      },
+    ],
+    constraints: [
+      'Balance must be non-negative',
+      'Deposit must be positive',
+      'Use encapsulation (private attributes)',
+    ],
+    hints: [
+      'Use _balance for private attribute',
+      'Check balance before withdrawing',
+      'Return True/False to indicate success',
+    ],
+    starterCode: `class BankAccount:
     """
     Bank account with deposit and withdraw operations.
     """
@@ -105,17 +105,17 @@ print(account.withdraw(200))  # True
 print(account.balance)  # 1300
 print(account.withdraw(2000))  # False
 `,
-        testCases: [
-            {
-                input: ['Alice', 1000, 500, 200],
-                expected: 1300,
-            },
-            {
-                input: ['Bob', 100, 0, 200],
-                expected: false, // withdraw fails
-            },
-        ],
-        solution: `class BankAccount:
+    testCases: [
+      {
+        input: ['Alice', 1000, 500, 200],
+        expected: 1300,
+      },
+      {
+        input: ['Bob', 100, 0, 200],
+        expected: false, // withdraw fails
+      },
+    ],
+    solution: `class BankAccount:
     def __init__(self, name, initial_balance=0):
         self.name = name
         self._balance = initial_balance
@@ -137,16 +137,16 @@ print(account.withdraw(2000))  # False
     
     def __str__(self):
         return f"BankAccount({self.name}, balance={self._balance})"`,
-        timeComplexity: 'O(1) for all operations',
-        spaceComplexity: 'O(1)',
-        order: 1,
-        topic: 'Python Object-Oriented Programming',
-    },
-    {
-        id: 'inheritance-shapes',
-        title: 'Shape Hierarchy with Inheritance',
-        difficulty: 'Medium',
-        description: `Create a shape class hierarchy using inheritance and polymorphism.
+    timeComplexity: 'O(1) for all operations',
+    spaceComplexity: 'O(1)',
+    order: 1,
+    topic: 'Python Object-Oriented Programming',
+  },
+  {
+    id: 'inheritance-shapes',
+    title: 'Shape Hierarchy with Inheritance',
+    difficulty: 'Medium',
+    description: `Create a shape class hierarchy using inheritance and polymorphism.
 
 Implement:
 - Abstract base class \`Shape\` with abstract methods area() and perimeter()
@@ -159,28 +159,28 @@ Implement:
 - All shapes implement area() and perimeter()
 - Square should reuse Rectangle logic
 - Demonstrate polymorphism with a list of shapes`,
-        examples: [
-            {
-                input: 'Circle(radius=5)',
-                output: 'area() returns 78.54, perimeter() returns 31.42',
-            },
-            {
-                input: 'Square(side=4)',
-                output: 'area() returns 16, perimeter() returns 16',
-            },
-        ],
-        constraints: [
-            'Use ABC and abstractmethod',
-            'All shapes must implement required methods',
-            'Square should inherit from Rectangle',
-        ],
-        hints: [
-            'Use abc.ABC and @abstractmethod',
-            'Circle: area = π * r², perimeter = 2 * π * r',
-            'Rectangle: area = w * h, perimeter = 2(w + h)',
-            'Square: just set width = height = side',
-        ],
-        starterCode: `from abc import ABC, abstractmethod
+    examples: [
+      {
+        input: 'Circle(radius=5)',
+        output: 'area() returns 78.54, perimeter() returns 31.42',
+      },
+      {
+        input: 'Square(side=4)',
+        output: 'area() returns 16, perimeter() returns 16',
+      },
+    ],
+    constraints: [
+      'Use ABC and abstractmethod',
+      'All shapes must implement required methods',
+      'Square should inherit from Rectangle',
+    ],
+    hints: [
+      'Use abc.ABC and @abstractmethod',
+      'Circle: area = π * r², perimeter = 2 * π * r',
+      'Rectangle: area = w * h, perimeter = 2(w + h)',
+      'Square: just set width = height = side',
+    ],
+    starterCode: `from abc import ABC, abstractmethod
 import math
 
 class Shape(ABC):
@@ -249,21 +249,21 @@ shapes = [
 for shape in shapes:
     print(f"{shape.__class__.__name__}: area={shape.area():.2f}, perimeter={shape.perimeter():.2f}")
 `,
-        testCases: [
-            {
-                input: ['Circle', 5],
-                expected: 78.54, // area
-            },
-            {
-                input: ['Rectangle', 4, 6],
-                expected: 24, // area
-            },
-            {
-                input: ['Square', 4],
-                expected: 16, // area
-            },
-        ],
-        solution: `from abc import ABC, abstractmethod
+    testCases: [
+      {
+        input: ['Circle', 5],
+        expected: 78.54, // area
+      },
+      {
+        input: ['Rectangle', 4, 6],
+        expected: 24, // area
+      },
+      {
+        input: ['Square', 4],
+        expected: 16, // area
+      },
+    ],
+    solution: `from abc import ABC, abstractmethod
 import math
 
 class Shape(ABC):
@@ -302,16 +302,16 @@ class Rectangle(Shape):
 class Square(Rectangle):
     def __init__(self, side):
         super().__init__(side, side)`,
-        timeComplexity: 'O(1) for all operations',
-        spaceComplexity: 'O(1)',
-        order: 2,
-        topic: 'Python Object-Oriented Programming',
-    },
-    {
-        id: 'polymorphism-animals',
-        title: 'Animal Polymorphism System',
-        difficulty: 'Medium',
-        description: `Create an animal class hierarchy that demonstrates polymorphism, inheritance, and composition.
+    timeComplexity: 'O(1) for all operations',
+    spaceComplexity: 'O(1)',
+    order: 2,
+    topic: 'Python Object-Oriented Programming',
+  },
+  {
+    id: 'polymorphism-animals',
+    title: 'Animal Polymorphism System',
+    difficulty: 'Medium',
+    description: `Create an animal class hierarchy that demonstrates polymorphism, inheritance, and composition.
 
 Implement:
 - Base \`Animal\` class with name, age, and speak() method
@@ -324,24 +324,24 @@ Implement:
 - Polymorphism: Different speak() implementations
 - Composition: Owner has a list of animals
 - Encapsulation: Private attributes with properties`,
-        examples: [
-            {
-                input: 'owner.add_animal(Dog("Buddy", 5)); owner.make_all_speak()',
-                output: 'Buddy says Woof!',
-            },
-        ],
-        constraints: [
-            'Use inheritance for Dog and Cat',
-            'Use composition for Owner',
-            'Demonstrate polymorphism in make_all_speak()',
-        ],
-        hints: [
-            'Animal is the base class',
-            'Each subclass overrides speak()',
-            'Owner stores animals in a list',
-            'Loop through animals and call speak()',
-        ],
-        starterCode: `class Animal:
+    examples: [
+      {
+        input: 'owner.add_animal(Dog("Buddy", 5)); owner.make_all_speak()',
+        output: 'Buddy says Woof!',
+      },
+    ],
+    constraints: [
+      'Use inheritance for Dog and Cat',
+      'Use composition for Owner',
+      'Demonstrate polymorphism in make_all_speak()',
+    ],
+    hints: [
+      'Animal is the base class',
+      'Each subclass overrides speak()',
+      'Owner stores animals in a list',
+      'Loop through animals and call speak()',
+    ],
+    starterCode: `class Animal:
     """
     Base class for all animals.
     """
@@ -414,17 +414,17 @@ owner.add_animal(Dog("Max", 2))
 print(f"{owner.name} has {owner.animal_count} animals")
 owner.make_all_speak()
 `,
-        testCases: [
-            {
-                input: ['Dog', 'Buddy'],
-                expected: 'Buddy says Woof!',
-            },
-            {
-                input: ['Cat', 'Whiskers'],
-                expected: 'Whiskers says Meow!',
-            },
-        ],
-        solution: `class Animal:
+    testCases: [
+      {
+        input: ['Dog', 'Buddy'],
+        expected: 'Buddy says Woof!',
+      },
+      {
+        input: ['Cat', 'Whiskers'],
+        expected: 'Whiskers says Meow!',
+      },
+    ],
+    solution: `class Animal:
     def __init__(self, name, age):
         self._name = name
         self._age = age
@@ -471,16 +471,16 @@ class Owner:
     @property
     def animal_count(self):
         return len(self._animals)`,
-        timeComplexity: 'O(n) for make_all_speak where n is number of animals',
-        spaceComplexity: 'O(n) to store n animals',
-        order: 3,
-        topic: 'Python Object-Oriented Programming',
-    },
-    {
-        id: 'oop-vehicle-factory',
-        title: 'Vehicle Factory Pattern',
-        difficulty: 'Medium',
-        description: `Implement a factory pattern for creating different types of vehicles.
+    timeComplexity: 'O(n) for make_all_speak where n is number of animals',
+    spaceComplexity: 'O(n) to store n animals',
+    order: 3,
+    topic: 'Python Object-Oriented Programming',
+  },
+  {
+    id: 'oop-vehicle-factory',
+    title: 'Vehicle Factory Pattern',
+    difficulty: 'Medium',
+    description: `Implement a factory pattern for creating different types of vehicles.
 
 Create:
 - Abstract \`Vehicle\` base class with speed and fuel_type properties
@@ -489,23 +489,23 @@ Create:
 - Factory should return the appropriate vehicle type based on string input
 
 **Pattern:** Factory pattern centralizes object creation logic.`,
-        examples: [
-            {
-                input: 'VehicleFactory.create_vehicle("car")',
-                output: 'Returns Car instance',
-            },
-        ],
-        constraints: [
-            'Use abstract base class',
-            'Factory method must be static or class method',
-            'Handle invalid vehicle types',
-        ],
-        hints: [
-            'Use @staticmethod or @classmethod for factory',
-            'Use a dictionary to map types to classes',
-            'Raise ValueError for unknown types',
-        ],
-        starterCode: `from abc import ABC, abstractmethod
+    examples: [
+      {
+        input: 'VehicleFactory.create_vehicle("car")',
+        output: 'Returns Car instance',
+      },
+    ],
+    constraints: [
+      'Use abstract base class',
+      'Factory method must be static or class method',
+      'Handle invalid vehicle types',
+    ],
+    hints: [
+      'Use @staticmethod or @classmethod for factory',
+      'Use a dictionary to map types to classes',
+      'Raise ValueError for unknown types',
+    ],
+    starterCode: `from abc import ABC, abstractmethod
 
 class Vehicle(ABC):
     """Abstract vehicle base class."""
@@ -558,17 +558,17 @@ class VehicleFactory:
 car = VehicleFactory.create_vehicle('car')
 print(car.get_info())
 `,
-        testCases: [
-            {
-                input: ['car'],
-                expected: 'Car',
-            },
-            {
-                input: ['motorcycle'],
-                expected: 'Motorcycle',
-            },
-        ],
-        solution: `from abc import ABC, abstractmethod
+    testCases: [
+      {
+        input: ['car'],
+        expected: 'Car',
+      },
+      {
+        input: ['motorcycle'],
+        expected: 'Motorcycle',
+      },
+    ],
+    solution: `from abc import ABC, abstractmethod
 
 class Vehicle(ABC):
     def __init__(self, speed, fuel_type):
@@ -630,16 +630,16 @@ class VehicleFactory:
         if vehicle_class is None:
             raise ValueError(f"Unknown vehicle type: {vehicle_type}")
         return vehicle_class()`,
-        timeComplexity: 'O(1)',
-        spaceComplexity: 'O(1)',
-        order: 4,
-        topic: 'Python Object-Oriented Programming',
-    },
-    {
-        id: 'oop-observer-pattern',
-        title: 'Observer Pattern Implementation',
-        difficulty: 'Hard',
-        description: `Implement the Observer pattern where subjects notify observers of state changes.
+    timeComplexity: 'O(1)',
+    spaceComplexity: 'O(1)',
+    order: 4,
+    topic: 'Python Object-Oriented Programming',
+  },
+  {
+    id: 'oop-observer-pattern',
+    title: 'Observer Pattern Implementation',
+    difficulty: 'Hard',
+    description: `Implement the Observer pattern where subjects notify observers of state changes.
 
 Create:
 - \`Subject\` class that maintains list of observers
@@ -648,23 +648,23 @@ Create:
 - Concrete observer that reacts to subject changes
 
 **Use Case:** Event systems, MVC patterns, pub-sub systems.`,
-        examples: [
-            {
-                input: 'subject.state = 10; subject.notify()',
-                output: 'All observers receive update',
-            },
-        ],
-        constraints: [
-            'Subject maintains observer list',
-            'Observers implement update method',
-            'Support multiple observers',
-        ],
-        hints: [
-            'Store observers in a list',
-            'Loop through observers in notify()',
-            'Pass self to observer.update()',
-        ],
-        starterCode: `from abc import ABC, abstractmethod
+    examples: [
+      {
+        input: 'subject.state = 10; subject.notify()',
+        output: 'All observers receive update',
+      },
+    ],
+    constraints: [
+      'Subject maintains observer list',
+      'Observers implement update method',
+      'Support multiple observers',
+    ],
+    hints: [
+      'Store observers in a list',
+      'Loop through observers in notify()',
+      'Pass self to observer.update()',
+    ],
+    starterCode: `from abc import ABC, abstractmethod
 
 class Observer(ABC):
     """Observer interface."""
@@ -724,13 +724,13 @@ subject.attach(observer1)
 subject.attach(observer2)
 subject.state = 10  # Should notify both observers
 `,
-        testCases: [
-            {
-                input: [10, 2], // state, num observers
-                expected: 'notified',
-            },
-        ],
-        solution: `from abc import ABC, abstractmethod
+    testCases: [
+      {
+        input: [10, 2], // state, num observers
+        expected: 'notified',
+      },
+    ],
+    solution: `from abc import ABC, abstractmethod
 
 class Observer(ABC):
     @abstractmethod
@@ -771,16 +771,16 @@ class ConcreteObserver(Observer):
     
     def update(self, subject):
         print(f"{self.name} received update: state = {subject.state}")`,
-        timeComplexity: 'O(n) for notify where n is number of observers',
-        spaceComplexity: 'O(n) to store observers',
-        order: 5,
-        topic: 'Python Object-Oriented Programming',
-    },
-    {
-        id: 'oop-builder-pattern',
-        title: 'Builder Pattern for Complex Objects',
-        difficulty: 'Medium',
-        description: `Implement the Builder pattern for constructing complex \`House\` objects step by step.
+    timeComplexity: 'O(n) for notify where n is number of observers',
+    spaceComplexity: 'O(n) to store observers',
+    order: 5,
+    topic: 'Python Object-Oriented Programming',
+  },
+  {
+    id: 'oop-builder-pattern',
+    title: 'Builder Pattern for Complex Objects',
+    difficulty: 'Medium',
+    description: `Implement the Builder pattern for constructing complex \`House\` objects step by step.
 
 Create:
 - \`House\` class with multiple optional attributes (walls, roof, windows, doors, garage)
@@ -789,23 +789,23 @@ Create:
 - \`build()\` method returns the constructed House
 
 **Pattern:** Builder separates object construction from representation.`,
-        examples: [
-            {
-                input: 'HouseBuilder().add_walls().add_roof().add_garage().build()',
-                output: 'House with walls, roof, and garage',
-            },
-        ],
-        constraints: [
-            'Use method chaining (fluent interface)',
-            'All parts are optional',
-            'build() returns House instance',
-        ],
-        hints: [
-            'Return self from builder methods',
-            'Store parts in builder, not House',
-            'Create House in build() method',
-        ],
-        starterCode: `class House:
+    examples: [
+      {
+        input: 'HouseBuilder().add_walls().add_roof().add_garage().build()',
+        output: 'House with walls, roof, and garage',
+      },
+    ],
+    constraints: [
+      'Use method chaining (fluent interface)',
+      'All parts are optional',
+      'build() returns House instance',
+    ],
+    hints: [
+      'Return self from builder methods',
+      'Store parts in builder, not House',
+      'Create House in build() method',
+    ],
+    starterCode: `class House:
     """House with various components."""
     
     def __init__(self, walls=False, roof=False, windows=0, doors=0, garage=False):
@@ -873,13 +873,13 @@ house = (HouseBuilder()
          .build())
 print(house)
 `,
-        testCases: [
-            {
-                input: ['walls', 'roof', 'garage'],
-                expected: 'House',
-            },
-        ],
-        solution: `class House:
+    testCases: [
+      {
+        input: ['walls', 'roof', 'garage'],
+        expected: 'House',
+      },
+    ],
+    solution: `class House:
     def __init__(self, walls=False, roof=False, windows=0, doors=0, garage=False):
         self.walls = walls
         self.roof = roof
@@ -938,16 +938,16 @@ class HouseBuilder:
             doors=self._doors,
             garage=self._garage
         )`,
-        timeComplexity: 'O(1)',
-        spaceComplexity: 'O(1)',
-        order: 6,
-        topic: 'Python Object-Oriented Programming',
-    },
-    {
-        id: 'oop-strategy-pattern',
-        title: 'Strategy Pattern for Sorting',
-        difficulty: 'Medium',
-        description: `Implement the Strategy pattern to allow dynamic selection of sorting algorithms.
+    timeComplexity: 'O(1)',
+    spaceComplexity: 'O(1)',
+    order: 6,
+    topic: 'Python Object-Oriented Programming',
+  },
+  {
+    id: 'oop-strategy-pattern',
+    title: 'Strategy Pattern for Sorting',
+    difficulty: 'Medium',
+    description: `Implement the Strategy pattern to allow dynamic selection of sorting algorithms.
 
 Create:
 - \`SortStrategy\` interface with \`sort(data)\` method
@@ -956,23 +956,23 @@ Create:
 - Ability to change strategy at runtime
 
 **Pattern:** Strategy encapsulates interchangeable algorithms.`,
-        examples: [
-            {
-                input: 'processor.set_strategy(QuickSort()); processor.sort([3,1,2])',
-                output: '[1, 2, 3] using QuickSort',
-            },
-        ],
-        constraints: [
-            'Strategies implement common interface',
-            'Strategy can be changed at runtime',
-            'DataProcessor delegates to strategy',
-        ],
-        hints: [
-            'Store strategy as instance variable',
-            'Call strategy.sort() from processor',
-            'Each strategy implements differently',
-        ],
-        starterCode: `from abc import ABC, abstractmethod
+    examples: [
+      {
+        input: 'processor.set_strategy(QuickSort()); processor.sort([3,1,2])',
+        output: '[1, 2, 3] using QuickSort',
+      },
+    ],
+    constraints: [
+      'Strategies implement common interface',
+      'Strategy can be changed at runtime',
+      'DataProcessor delegates to strategy',
+    ],
+    hints: [
+      'Store strategy as instance variable',
+      'Call strategy.sort() from processor',
+      'Each strategy implements differently',
+    ],
+    starterCode: `from abc import ABC, abstractmethod
 
 class SortStrategy(ABC):
     """Strategy interface for sorting."""
@@ -1032,13 +1032,13 @@ processor.set_strategy(BubbleSort())
 result = processor.sort([3, 1, 4, 1, 5, 9, 2, 6])
 print(result)
 `,
-        testCases: [
-            {
-                input: [[3, 1, 2], 'QuickSort'],
-                expected: [1, 2, 3],
-            },
-        ],
-        solution: `from abc import ABC, abstractmethod
+    testCases: [
+      {
+        input: [[3, 1, 2], 'QuickSort'],
+        expected: [1, 2, 3],
+      },
+    ],
+    solution: `from abc import ABC, abstractmethod
 
 class SortStrategy(ABC):
     @abstractmethod
@@ -1101,17 +1101,17 @@ class DataProcessor:
         if self._strategy is None:
             raise ValueError("No strategy set")
         return self._strategy.sort(data)`,
-        timeComplexity:
-            'Depends on strategy (O(n²) for bubble, O(n log n) for others)',
-        spaceComplexity: 'O(n)',
-        order: 7,
-        topic: 'Python Object-Oriented Programming',
-    },
-    {
-        id: 'oop-composite-pattern',
-        title: 'Composite Pattern for File System',
-        difficulty: 'Hard',
-        description: `Implement the Composite pattern to represent a file system hierarchy.
+    timeComplexity:
+      'Depends on strategy (O(n²) for bubble, O(n log n) for others)',
+    spaceComplexity: 'O(n)',
+    order: 7,
+    topic: 'Python Object-Oriented Programming',
+  },
+  {
+    id: 'oop-composite-pattern',
+    title: 'Composite Pattern for File System',
+    difficulty: 'Hard',
+    description: `Implement the Composite pattern to represent a file system hierarchy.
 
 Create:
 - \`FileSystemItem\` abstract base class with \`get_size()\` method
@@ -1120,23 +1120,23 @@ Create:
 - Methods: \`add(item)\`, \`remove(item)\`, \`get_size()\` (sum of all contents)
 
 **Pattern:** Composite lets clients treat individual objects and compositions uniformly.`,
-        examples: [
-            {
-                input: 'dir.add(File(100)); dir.add(File(200)); dir.get_size()',
-                output: '300',
-            },
-        ],
-        constraints: [
-            'Both File and Directory inherit from FileSystemItem',
-            'Directory can contain files and other directories',
-            'get_size() recursively calculates total size',
-        ],
-        hints: [
-            'Directory stores children in a list',
-            'File returns its size directly',
-            "Directory sums children's sizes",
-        ],
-        starterCode: `from abc import ABC, abstractmethod
+    examples: [
+      {
+        input: 'dir.add(File(100)); dir.add(File(200)); dir.get_size()',
+        output: '300',
+      },
+    ],
+    constraints: [
+      'Both File and Directory inherit from FileSystemItem',
+      'Directory can contain files and other directories',
+      'get_size() recursively calculates total size',
+    ],
+    hints: [
+      'Directory stores children in a list',
+      'File returns its size directly',
+      "Directory sums children's sizes",
+    ],
+    starterCode: `from abc import ABC, abstractmethod
 
 class FileSystemItem(ABC):
     """Abstract base for files and directories."""
@@ -1198,13 +1198,13 @@ root.add(File("readme.txt", 256))
 
 print(f"Total size: {root.get_size()} bytes")
 `,
-        testCases: [
-            {
-                input: [1024, 512, 256], // file sizes
-                expected: 1792, // sum
-            },
-        ],
-        solution: `from abc import ABC, abstractmethod
+    testCases: [
+      {
+        input: [1024, 512, 256], // file sizes
+        expected: 1792, // sum
+      },
+    ],
+    solution: `from abc import ABC, abstractmethod
 
 class FileSystemItem(ABC):
     def __init__(self, name):
@@ -1240,16 +1240,16 @@ class Directory(FileSystemItem):
     
     def get_size(self):
         return sum(child.get_size() for child in self.children)`,
-        timeComplexity: 'O(n) where n is total number of items',
-        spaceComplexity: 'O(d) where d is depth of directory tree',
-        order: 8,
-        topic: 'Python Object-Oriented Programming',
-    },
-    {
-        id: 'oop-template-method',
-        title: 'Template Method Pattern',
-        difficulty: 'Medium',
-        description: `Implement the Template Method pattern for a data processing pipeline.
+    timeComplexity: 'O(n) where n is total number of items',
+    spaceComplexity: 'O(d) where d is depth of directory tree',
+    order: 8,
+    topic: 'Python Object-Oriented Programming',
+  },
+  {
+    id: 'oop-template-method',
+    title: 'Template Method Pattern',
+    difficulty: 'Medium',
+    description: `Implement the Template Method pattern for a data processing pipeline.
 
 Create:
 - Abstract \`DataProcessor\` class with template method \`process()\`
@@ -1258,23 +1258,23 @@ Create:
 - Template method defines the algorithm structure
 
 **Pattern:** Template method defines skeleton, subclasses fill in steps.`,
-        examples: [
-            {
-                input: 'CSVProcessor().process()',
-                output: 'Executes CSV-specific steps in defined order',
-            },
-        ],
-        constraints: [
-            'Template method is concrete in base class',
-            'Hook methods are abstract',
-            "Subclasses don't override template method",
-        ],
-        hints: [
-            'Template method calls other methods',
-            'Make step methods abstract',
-            'Each processor implements steps differently',
-        ],
-        starterCode: `from abc import ABC, abstractmethod
+    examples: [
+      {
+        input: 'CSVProcessor().process()',
+        output: 'Executes CSV-specific steps in defined order',
+      },
+    ],
+    constraints: [
+      'Template method is concrete in base class',
+      'Hook methods are abstract',
+      "Subclasses don't override template method",
+    ],
+    hints: [
+      'Template method calls other methods',
+      'Make step methods abstract',
+      'Each processor implements steps differently',
+    ],
+    starterCode: `from abc import ABC, abstractmethod
 
 class DataProcessor(ABC):
     """Template for data processing pipeline."""
@@ -1345,13 +1345,13 @@ class JSONProcessor(DataProcessor):
 csv_processor = CSVProcessor()
 csv_processor.process()
 `,
-        testCases: [
-            {
-                input: ['CSV'],
-                expected: 'processed',
-            },
-        ],
-        solution: `from abc import ABC, abstractmethod
+    testCases: [
+      {
+        input: ['CSV'],
+        expected: 'processed',
+      },
+    ],
+    solution: `from abc import ABC, abstractmethod
 
 class DataProcessor(ABC):
     def process(self):
@@ -1419,16 +1419,16 @@ class JSONProcessor(DataProcessor):
     
     def save_results(self, results):
         print(f"Saving results: {results}")`,
-        timeComplexity: 'O(n) where n is data size',
-        spaceComplexity: 'O(n)',
-        order: 9,
-        topic: 'Python Object-Oriented Programming',
-    },
-    {
-        id: 'oop-multiple-inheritance-mixin',
-        title: 'Multiple Inheritance with Mixins',
-        difficulty: 'Hard',
-        description: `Create a flexible class system using mixins for shared functionality.
+    timeComplexity: 'O(n) where n is data size',
+    spaceComplexity: 'O(n)',
+    order: 9,
+    topic: 'Python Object-Oriented Programming',
+  },
+  {
+    id: 'oop-multiple-inheritance-mixin',
+    title: 'Multiple Inheritance with Mixins',
+    difficulty: 'Hard',
+    description: `Create a flexible class system using mixins for shared functionality.
 
 Implement:
 - \`SerializableMixin\` with \`to_dict()\` and \`from_dict()\` methods
@@ -1437,23 +1437,23 @@ Implement:
 - Proper MRO (Method Resolution Order) handling
 
 **Pattern:** Mixins provide reusable functionality without deep inheritance hierarchies.`,
-        examples: [
-            {
-                input: 'user = User("alice"); user.to_dict()',
-                output: 'Dictionary with user data and timestamp',
-            },
-        ],
-        constraints: [
-            'Mixins should be independent',
-            'User class combines both mixins',
-            'Demonstrate proper MRO',
-        ],
-        hints: [
-            "Mixins typically don't have __init__",
-            'Use super() for cooperative inheritance',
-            'Check class.mro() for resolution order',
-        ],
-        starterCode: `from datetime import datetime
+    examples: [
+      {
+        input: 'user = User("alice"); user.to_dict()',
+        output: 'Dictionary with user data and timestamp',
+      },
+    ],
+    constraints: [
+      'Mixins should be independent',
+      'User class combines both mixins',
+      'Demonstrate proper MRO',
+    ],
+    hints: [
+      "Mixins typically don't have __init__",
+      'Use super() for cooperative inheritance',
+      'Check class.mro() for resolution order',
+    ],
+    starterCode: `from datetime import datetime
 import json
 
 class SerializableMixin:
@@ -1501,13 +1501,13 @@ print(user.updated_at)
 # Test MRO
 print(User.mro())
 `,
-        testCases: [
-            {
-                input: ['alice', 'alice@example.com'],
-                expected: 'dict',
-            },
-        ],
-        solution: `from datetime import datetime
+    testCases: [
+      {
+        input: ['alice', 'alice@example.com'],
+        expected: 'dict',
+      },
+    ],
+    solution: `from datetime import datetime
 import json
 
 class SerializableMixin:
@@ -1553,16 +1553,16 @@ class User(SerializableMixin, TimestampMixin):
         super().__init__()
         self.username = username
         self.email = email`,
-        timeComplexity: 'O(n) where n is number of attributes',
-        spaceComplexity: 'O(n)',
-        order: 10,
-        topic: 'Python Object-Oriented Programming',
-    },
-    {
-        id: 'oop-dataclass-comparison',
-        title: 'Custom Comparison with Dataclasses',
-        difficulty: 'Medium',
-        description: `Use Python's \`@dataclass\` decorator to create classes with automatic comparison methods.
+    timeComplexity: 'O(n) where n is number of attributes',
+    spaceComplexity: 'O(n)',
+    order: 10,
+    topic: 'Python Object-Oriented Programming',
+  },
+  {
+    id: 'oop-dataclass-comparison',
+    title: 'Custom Comparison with Dataclasses',
+    difficulty: 'Medium',
+    description: `Use Python's \`@dataclass\` decorator to create classes with automatic comparison methods.
 
 Implement:
 - \`Point\` dataclass with x and y coordinates
@@ -1572,23 +1572,23 @@ Implement:
 - Implement \`area()\` property
 
 **Modern Pattern:** Dataclasses reduce boilerplate for data-holding classes.`,
-        examples: [
-            {
-                input: 'Point(3, 4).distance_from_origin()',
-                output: '5.0',
-            },
-        ],
-        constraints: [
-            'Use @dataclass decorator',
-            'Points should be comparable',
-            'Rectangle uses Points',
-        ],
-        hints: [
-            'Import from dataclasses',
-            'Use order=True for comparisons',
-            'Add methods normally to dataclasses',
-        ],
-        starterCode: `from dataclasses import dataclass
+    examples: [
+      {
+        input: 'Point(3, 4).distance_from_origin()',
+        output: '5.0',
+      },
+    ],
+    constraints: [
+      'Use @dataclass decorator',
+      'Points should be comparable',
+      'Rectangle uses Points',
+    ],
+    hints: [
+      'Import from dataclasses',
+      'Use order=True for comparisons',
+      'Add methods normally to dataclasses',
+    ],
+    starterCode: `from dataclasses import dataclass
 import math
 
 @dataclass(order=True)
@@ -1637,13 +1637,13 @@ print(p1 < p2)  # Comparison works automatically
 rect = Rectangle(Point(0, 10), Point(10, 0))
 print(f"Area: {rect.area}")
 `,
-        testCases: [
-            {
-                input: [3, 4],
-                expected: 5.0,
-            },
-        ],
-        solution: `from dataclasses import dataclass
+    testCases: [
+      {
+        input: [3, 4],
+        expected: 5.0,
+      },
+    ],
+    solution: `from dataclasses import dataclass
 import math
 
 @dataclass(order=True)
@@ -1678,16 +1678,16 @@ class Rectangle:
     def contains_point(self, point):
         return (self.top_left.x <= point.x <= self.bottom_right.x and
                 self.bottom_right.y <= point.y <= self.top_left.y)`,
-        timeComplexity: 'O(1) for all operations',
-        spaceComplexity: 'O(1)',
-        order: 11,
-        topic: 'Python Object-Oriented Programming',
-    },
-    {
-        id: 'oop-protocol-duck-typing',
-        title: 'Protocol and Duck Typing',
-        difficulty: 'Medium',
-        description: `Implement Protocol (structural subtyping) for duck typing with type hints.
+    timeComplexity: 'O(1) for all operations',
+    spaceComplexity: 'O(1)',
+    order: 11,
+    topic: 'Python Object-Oriented Programming',
+  },
+  {
+    id: 'oop-protocol-duck-typing',
+    title: 'Protocol and Duck Typing',
+    difficulty: 'Medium',
+    description: `Implement Protocol (structural subtyping) for duck typing with type hints.
 
 Create:
 - \`Drawable\` Protocol with \`draw()\` method
@@ -1696,23 +1696,23 @@ Create:
 - Use typing.Protocol for static type checking
 
 **Pattern:** "If it walks like a duck and quacks like a duck, it's a duck."`,
-        examples: [
-            {
-                input: 'canvas.render(Circle()); canvas.render(Square())',
-                output: 'Both work without common base class',
-            },
-        ],
-        constraints: [
-            'Use typing.Protocol',
-            "Classes don't inherit from Drawable",
-            'Canvas works with any object that has draw()',
-        ],
-        hints: [
-            'Import Protocol from typing',
-            'Protocol defines interface, not inheritance',
-            'Classes implicitly satisfy protocol',
-        ],
-        starterCode: `from typing import Protocol
+    examples: [
+      {
+        input: 'canvas.render(Circle()); canvas.render(Square())',
+        output: 'Both work without common base class',
+      },
+    ],
+    constraints: [
+      'Use typing.Protocol',
+      "Classes don't inherit from Drawable",
+      'Canvas works with any object that has draw()',
+    ],
+    hints: [
+      'Import Protocol from typing',
+      'Protocol defines interface, not inheritance',
+      'Classes implicitly satisfy protocol',
+    ],
+    starterCode: `from typing import Protocol
 
 class Drawable(Protocol):
     """Protocol for drawable objects."""
@@ -1776,13 +1776,13 @@ canvas.add(Triangle(3, 4))
 
 print(canvas.render())
 `,
-        testCases: [
-            {
-                input: ['Circle', 5],
-                expected: 'Circle drawn',
-            },
-        ],
-        solution: `from typing import Protocol
+    testCases: [
+      {
+        input: ['Circle', 5],
+        expected: 'Circle drawn',
+      },
+    ],
+    solution: `from typing import Protocol
 
 class Drawable(Protocol):
     def draw(self) -> str:
@@ -1824,16 +1824,16 @@ class Canvas:
     
     def render(self) -> str:
         return '\\n'.join(obj.draw() for obj in self.objects)`,
-        timeComplexity: 'O(n) for rendering n objects',
-        spaceComplexity: 'O(n)',
-        order: 12,
-        topic: 'Python Object-Oriented Programming',
-    },
-    {
-        id: 'oop-enum-state-machine',
-        title: 'State Machine with Enum',
-        difficulty: 'Medium',
-        description: `Implement a state machine using Python's \`Enum\` for a traffic light system.
+    timeComplexity: 'O(n) for rendering n objects',
+    spaceComplexity: 'O(n)',
+    order: 12,
+    topic: 'Python Object-Oriented Programming',
+  },
+  {
+    id: 'oop-enum-state-machine',
+    title: 'State Machine with Enum',
+    difficulty: 'Medium',
+    description: `Implement a state machine using Python's \`Enum\` for a traffic light system.
 
 Create:
 - \`TrafficLightState\` Enum with RED, YELLOW, GREEN
@@ -1843,23 +1843,23 @@ Create:
 - \`next_state()\` method with validation
 
 **Pattern:** Enums provide type-safe state management.`,
-        examples: [
-            {
-                input: 'light.next_state() from RED',
-                output: 'Changes to GREEN',
-            },
-        ],
-        constraints: [
-            'Use enum.Enum',
-            'Enforce valid transitions only',
-            'Each state has a duration',
-        ],
-        hints: [
-            'Import Enum from enum',
-            'Use dictionary for transition rules',
-            'Store current_state in traffic light',
-        ],
-        starterCode: `from enum import Enum
+    examples: [
+      {
+        input: 'light.next_state() from RED',
+        output: 'Changes to GREEN',
+      },
+    ],
+    constraints: [
+      'Use enum.Enum',
+      'Enforce valid transitions only',
+      'Each state has a duration',
+    ],
+    hints: [
+      'Import Enum from enum',
+      'Use dictionary for transition rules',
+      'Store current_state in traffic light',
+    ],
+    starterCode: `from enum import Enum
 
 class TrafficLightState(Enum):
     """Traffic light states."""
@@ -1918,13 +1918,13 @@ print(light)  # YELLOW
 light.next_state()
 print(light)  # RED again
 `,
-        testCases: [
-            {
-                input: ['RED'],
-                expected: 'GREEN',
-            },
-        ],
-        solution: `from enum import Enum
+    testCases: [
+      {
+        input: ['RED'],
+        expected: 'GREEN',
+      },
+    ],
+    solution: `from enum import Enum
 
 class TrafficLightState(Enum):
     RED = 1
@@ -1966,9 +1966,9 @@ class TrafficLight:
     
     def __str__(self):
         return f"Traffic Light: {self.current_state.name}"`,
-        timeComplexity: 'O(1)',
-        spaceComplexity: 'O(1)',
-        order: 13,
-        topic: 'Python Object-Oriented Programming',
-    },
+    timeComplexity: 'O(1)',
+    spaceComplexity: 'O(1)',
+    order: 13,
+    topic: 'Python Object-Oriented Programming',
+  },
 ];

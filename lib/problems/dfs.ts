@@ -126,7 +126,7 @@ def max_depth_iterative(root: Optional[TreeNode]) -> int:
     return max_depth`,
     timeComplexity: 'O(N)',
     spaceComplexity: 'O(H) where H is height',
-    
+
     leetcodeUrl: 'https://leetcode.com/problems/maximum-depth-of-binary-tree/',
     youtubeUrl: 'https://www.youtube.com/watch?v=hTM3phVI6YQ',
     order: 1,
@@ -299,7 +299,7 @@ def has_path_sum_with_path(root: Optional[TreeNode], target_sum: int) -> bool:
     return dfs(root, target_sum, [])`,
     timeComplexity: 'O(N)',
     spaceComplexity: 'O(H) where H is height',
-    
+
     leetcodeUrl: 'https://leetcode.com/problems/path-sum/',
     youtubeUrl: 'https://www.youtube.com/watch?v=LSKQyOz_P8I',
     order: 2,
@@ -438,7 +438,7 @@ def pacific_atlantic(heights: List[List[int]]) -> List[List[int]]:
     return [[r, c] for r, c in pacific & atlantic]`,
     timeComplexity: 'O(M × N) - visit each cell at most twice',
     spaceComplexity: 'O(M × N) for recursion stack and visited sets',
-    
+
     leetcodeUrl: 'https://leetcode.com/problems/pacific-atlantic-water-flow/',
     youtubeUrl: 'https://www.youtube.com/watch?v=s-VkcjHqkGI',
     order: 3,

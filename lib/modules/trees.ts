@@ -166,13 +166,9 @@ root.right = TreeNode(3)
         },
         {
           id: 'mc2',
-          question: 'What is the maximum number of children a node can have in a binary tree?',
-          options: [
-            'Unlimited',
-            '2',
-            '3',
-            '1',
-          ],
+          question:
+            'What is the maximum number of children a node can have in a binary tree?',
+          options: ['Unlimited', '2', '3', '1'],
           correctAnswer: 1,
           explanation:
             'Binary trees limit each node to at most 2 children: left and right. This constraint enables specific algorithms like BST with efficient O(log N) search.',
@@ -205,13 +201,9 @@ root.right = TreeNode(3)
         },
         {
           id: 'mc5',
-          question: 'In a balanced BST with 1000 nodes, approximately how many comparisons are needed to search for a value?',
-          options: [
-            '1000',
-            '10',
-            '100',
-            '500',
-          ],
+          question:
+            'In a balanced BST with 1000 nodes, approximately how many comparisons are needed to search for a value?',
+          options: ['1000', '10', '100', '500'],
           correctAnswer: 1,
           explanation:
             'A balanced tree with 1000 nodes has height log₂(1000) ≈ 10. Search makes one comparison per level, so at most 10 comparisons are needed (since 2^10 = 1024).',
@@ -489,13 +481,9 @@ def level_order_traversal(root: Optional[TreeNode]) -> List[List[int]]:
         },
         {
           id: 'mc2',
-          question: 'Which traversal processes the parent node before its children?',
-          options: [
-            'Inorder',
-            'Preorder',
-            'Postorder',
-            'Level order',
-          ],
+          question:
+            'Which traversal processes the parent node before its children?',
+          options: ['Inorder', 'Preorder', 'Postorder', 'Level order'],
           correctAnswer: 1,
           explanation:
             'Preorder traversal (node, left, right) processes the parent before its children, making it useful for copying trees or creating prefix expressions where parent context is needed first.',
@@ -503,12 +491,7 @@ def level_order_traversal(root: Optional[TreeNode]) -> List[List[int]]:
         {
           id: 'mc3',
           question: 'What data structure does BFS use for tree traversal?',
-          options: [
-            'Stack',
-            'Queue',
-            'Array',
-            'Hash map',
-          ],
+          options: ['Stack', 'Queue', 'Array', 'Hash map'],
           correctAnswer: 1,
           explanation:
             'BFS uses a queue to explore nodes level by level. Nodes are added to the queue and processed in FIFO order, ensuring each level is completed before moving to the next.',
@@ -516,12 +499,7 @@ def level_order_traversal(root: Optional[TreeNode]) -> List[List[int]]:
         {
           id: 'mc4',
           question: 'What is the space complexity of recursive DFS?',
-          options: [
-            'O(1)',
-            'O(H) where H is tree height',
-            'O(N)',
-            'O(log N)',
-          ],
+          options: ['O(1)', 'O(H) where H is tree height', 'O(N)', 'O(log N)'],
           correctAnswer: 1,
           explanation:
             'Recursive DFS uses O(H) space for the call stack where H is tree height. In the worst case (skewed tree), H = N. In a balanced tree, H = log N.',
@@ -760,7 +738,8 @@ def bottom_up(root):
       multipleChoice: [
         {
           id: 'mc1',
-          question: 'What are the three essential steps in the recursive DFS pattern?',
+          question:
+            'What are the three essential steps in the recursive DFS pattern?',
           options: [
             'Initialize, loop, return',
             'Base case, recurse on children, compute current result',
@@ -786,7 +765,8 @@ def bottom_up(root):
         },
         {
           id: 'mc3',
-          question: 'What is backtracking in the path pattern and why is it crucial?',
+          question:
+            'What is backtracking in the path pattern and why is it crucial?',
           options: [
             'Going backwards in the tree',
             'Removing nodes from the path after recursion to maintain correct state',
@@ -799,7 +779,8 @@ def bottom_up(root):
         },
         {
           id: 'mc4',
-          question: 'What is the difference between top-down and bottom-up tree traversal?',
+          question:
+            'What is the difference between top-down and bottom-up tree traversal?',
           options: [
             'Top-down goes left, bottom-up goes right',
             'Top-down passes info from parent to children, bottom-up gathers info from children to parent',
@@ -812,7 +793,8 @@ def bottom_up(root):
         },
         {
           id: 'mc5',
-          question: 'When comparing two trees for structure and values, what is the base case?',
+          question:
+            'When comparing two trees for structure and values, what is the base case?',
           options: [
             'Both are leaves',
             'Both are null (return true) or one is null (return false)',
@@ -941,19 +923,15 @@ Where:
         {
           id: 'mc1',
           question: 'What is the time complexity of search in a balanced BST?',
-          options: [
-            'O(N)',
-            'O(log N)',
-            'O(1)',
-            'O(N²)',
-          ],
+          options: ['O(N)', 'O(log N)', 'O(1)', 'O(N²)'],
           correctAnswer: 1,
           explanation:
             'In a balanced BST with height log N, each comparison eliminates half the remaining nodes, giving O(log N) time complexity for search, insert, and delete operations.',
         },
         {
           id: 'mc2',
-          question: 'What happens to BST operation complexity in a skewed (unbalanced) tree?',
+          question:
+            'What happens to BST operation complexity in a skewed (unbalanced) tree?',
           options: [
             'Stays O(log N)',
             'Degrades to O(N)',
@@ -979,7 +957,8 @@ Where:
         },
         {
           id: 'mc4',
-          question: 'What is the space complexity of BFS (level-order traversal)?',
+          question:
+            'What is the space complexity of BFS (level-order traversal)?',
           options: [
             'O(H) where H is height',
             'O(W) where W is maximum width',
@@ -1202,7 +1181,8 @@ def inorder_iterative(root):
       multipleChoice: [
         {
           id: 'mc1',
-          question: 'What are the three parts of the basic recursive DFS template?',
+          question:
+            'What are the three parts of the basic recursive DFS template?',
           options: [
             'Start, middle, end',
             'Null check (base case), recursive calls on children, combine results',
@@ -1215,7 +1195,8 @@ def inorder_iterative(root):
         },
         {
           id: 'mc2',
-          question: 'In the BFS template, why do we track level size separately?',
+          question:
+            'In the BFS template, why do we track level size separately?',
           options: [
             'To make it faster',
             'To separate levels within the queue since it mixes current level with children',
@@ -1254,7 +1235,8 @@ def inorder_iterative(root):
         },
         {
           id: 'mc5',
-          question: 'What is the key advantage of iterative DFS/BFS templates over recursive?',
+          question:
+            'What is the key advantage of iterative DFS/BFS templates over recursive?',
           options: [
             'They are always faster',
             'Explicit stack/queue control and avoid stack overflow for deep trees',
@@ -1451,7 +1433,8 @@ def inorder_iterative(root):
       multipleChoice: [
         {
           id: 'mc1',
-          question: 'What keywords in a problem description indicate a tree algorithm is needed?',
+          question:
+            'What keywords in a problem description indicate a tree algorithm is needed?',
           options: [
             'Array, sort, search',
             'Binary tree, BST, parent-child, root-to-leaf, inorder',
@@ -1464,16 +1447,17 @@ def inorder_iterative(root):
         },
         {
           id: 'mc2',
-          question: 'What should you clarify first in a tree interview problem?',
+          question:
+            'What should you clarify first in a tree interview problem?',
           options: [
             'The test cases',
-            'Whether it\'s a binary tree or BST, and what to return',
+            "Whether it's a binary tree or BST, and what to return",
             'The programming language',
             'How many nodes',
           ],
           correctAnswer: 1,
           explanation:
-            'Always clarify whether it\'s a binary tree (any values) or BST (ordered values), if there are null nodes, and what the function should return. BST problems can use ordering for optimization.',
+            "Always clarify whether it's a binary tree (any values) or BST (ordered values), if there are null nodes, and what the function should return. BST problems can use ordering for optimization.",
         },
         {
           id: 'mc3',
@@ -1490,7 +1474,8 @@ def inorder_iterative(root):
         },
         {
           id: 'mc4',
-          question: 'When explaining tree solution complexity, what should you mention?',
+          question:
+            'When explaining tree solution complexity, what should you mention?',
           options: [
             'Only time complexity',
             'Time O(N) to visit all nodes, Space O(H) for recursion stack where H is height',
@@ -1503,7 +1488,8 @@ def inorder_iterative(root):
         },
         {
           id: 'mc5',
-          question: 'What is a recommended practice progression for tree mastery?',
+          question:
+            'What is a recommended practice progression for tree mastery?',
           options: [
             'Start with the hardest problems',
             'Start with basics (traversals, depth), then BST, then paths, then advanced',

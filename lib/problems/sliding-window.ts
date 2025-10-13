@@ -111,8 +111,9 @@ def max_profit_window(prices: List[int]) -> int:
     return max_profit`,
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(1)',
-    
-    leetcodeUrl: 'https://leetcode.com/problems/best-time-to-buy-and-sell-stock/',
+
+    leetcodeUrl:
+      'https://leetcode.com/problems/best-time-to-buy-and-sell-stock/',
     youtubeUrl: 'https://www.youtube.com/watch?v=1pkOgXD63yU',
     order: 1,
     topic: 'Sliding Window',
@@ -245,8 +246,9 @@ def length_of_longest_substring_optimized(s: str) -> int:
     return max_length`,
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(min(n, m)) where m is the character set size',
-    
-    leetcodeUrl: 'https://leetcode.com/problems/longest-substring-without-repeating-characters/',
+
+    leetcodeUrl:
+      'https://leetcode.com/problems/longest-substring-without-repeating-characters/',
     youtubeUrl: 'https://www.youtube.com/watch?v=wiGpQwVHdE0',
     order: 2,
     topic: 'Sliding Window',
@@ -428,7 +430,7 @@ def min_window_alt(s: str, t: str) -> str:
     return "" if min_len == float('inf') else s[min_left:min_left + min_len]`,
     timeComplexity: 'O(m + n) where m = len(s), n = len(t)',
     spaceComplexity: 'O(m + n)',
-    
+
     leetcodeUrl: 'https://leetcode.com/problems/minimum-window-substring/',
     youtubeUrl: 'https://www.youtube.com/watch?v=jSto0O4AJbM',
     order: 3,

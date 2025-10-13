@@ -119,7 +119,7 @@ Reduces O(n) to O(log n) by halving exponent each step`,
 `,
     timeComplexity: 'O(log n)',
     spaceComplexity: 'O(log n)',
-    
+
     leetcodeUrl: 'https://leetcode.com/problems/powx-n/',
     youtubeUrl: 'https://www.youtube.com/watch?v=g9YQyYi4IQQ',
     order: 2,
@@ -184,7 +184,7 @@ Either reaches 1 or enters a cycle. Detect cycle with two pointers.`,
 `,
     timeComplexity: 'O(log n)',
     spaceComplexity: 'O(log n)',
-    
+
     leetcodeUrl: 'https://leetcode.com/problems/happy-number/',
     youtubeUrl: 'https://www.youtube.com/watch?v=ljz85bxOYJ0',
     order: 3,

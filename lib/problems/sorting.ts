@@ -134,7 +134,7 @@ def merge_sorted_arrays_v2(nums1, nums2):
     title: 'Sort Array By Parity',
     difficulty: 'Easy',
     topic: 'Sorting Algorithms',
-    
+
     leetcodeUrl: 'https://leetcode.com/problems/sort-array-by-parity/',
     youtubeUrl: 'https://www.youtube.com/watch?v=6YZn-z5jkrg',
     order: 2,
@@ -229,7 +229,7 @@ def sort_array_by_parity_v3(nums):
     title: 'Insertion Sort List',
     difficulty: 'Easy',
     topic: 'Sorting Algorithms',
-    
+
     leetcodeUrl: 'https://leetcode.com/problems/insertion-sort-list/',
     youtubeUrl: 'https://www.youtube.com/watch?v=Kk6mXAzQ3zs',
     order: 3,
@@ -372,7 +372,7 @@ def linked_list_to_list(head):
     title: 'Sort List (Merge Sort)',
     difficulty: 'Medium',
     topic: 'Sorting Algorithms',
-    
+
     leetcodeUrl: 'https://leetcode.com/problems/sort-list/',
     youtubeUrl: 'https://www.youtube.com/watch?v=TGveA1oFhrc',
     order: 4,
@@ -602,8 +602,9 @@ def wiggle_sort_sort(nums):
     title: 'Count of Smaller Numbers After Self',
     difficulty: 'Hard',
     topic: 'Sorting Algorithms',
-    
-    leetcodeUrl: 'https://leetcode.com/problems/count-of-smaller-numbers-after-self/',
+
+    leetcodeUrl:
+      'https://leetcode.com/problems/count-of-smaller-numbers-after-self/',
     youtubeUrl: 'https://www.youtube.com/watch?v=2SVLYsq5W8M',
     order: 6,
     description: `Given an integer array \`nums\`, return an integer array \`counts\` where \`counts[i]\` is the number of smaller elements to the right of \`nums[i]\`.

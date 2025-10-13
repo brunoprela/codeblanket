@@ -150,7 +150,7 @@ def invert_tree_iterative(root: Optional[TreeNode]) -> Optional[TreeNode]:
     return root`,
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(h) where h is the height of the tree',
-    
+
     leetcodeUrl: 'https://leetcode.com/problems/invert-binary-tree/',
     youtubeUrl: 'https://www.youtube.com/watch?v=OnSn2XEQ4MY',
     order: 1,
@@ -329,7 +329,7 @@ def is_valid_bst_iterative(root: Optional[TreeNode]) -> bool:
     return True`,
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(h) where h is the height of the tree',
-    
+
     leetcodeUrl: 'https://leetcode.com/problems/validate-binary-search-tree/',
     youtubeUrl: 'https://www.youtube.com/watch?v=s6ATEkipzow',
     order: 2,
@@ -509,7 +509,7 @@ def max_path_sum_nonlocal(root: Optional[TreeNode]) -> int:
     return max_sum`,
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(h) where h is the height of the tree',
-    
+
     leetcodeUrl: 'https://leetcode.com/problems/binary-tree-maximum-path-sum/',
     youtubeUrl: 'https://www.youtube.com/watch?v=Hr5cWUld4vU',
     order: 3,

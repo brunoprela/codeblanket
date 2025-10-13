@@ -138,7 +138,7 @@ def merge_inplace(intervals: List[List[int]]) -> List[List[int]]:
     return intervals[:write + 1]`,
     timeComplexity: 'O(n log n)',
     spaceComplexity: 'O(n)',
-    
+
     leetcodeUrl: 'https://leetcode.com/problems/merge-intervals/',
     youtubeUrl: 'https://www.youtube.com/watch?v=44H3cEC2fFM',
     order: 1,
@@ -302,7 +302,7 @@ def insert_concise(intervals: List[List[int]], newInterval: List[int]) -> List[L
     return result`,
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(n)',
-    
+
     leetcodeUrl: 'https://leetcode.com/problems/insert-interval/',
     youtubeUrl: 'https://www.youtube.com/watch?v=A8NUOmlwOlM',
     order: 2,
@@ -483,7 +483,7 @@ def min_meeting_rooms_events(intervals: List[List[int]]) -> int:
     return max_rooms`,
     timeComplexity: 'O(n log n)',
     spaceComplexity: 'O(n)',
-    
+
     leetcodeUrl: 'https://leetcode.com/problems/meeting-rooms-ii/',
     youtubeUrl: 'https://www.youtube.com/watch?v=FdzJmTCVyJU',
     order: 3,

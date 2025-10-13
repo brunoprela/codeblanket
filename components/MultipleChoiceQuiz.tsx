@@ -160,10 +160,11 @@ export function MultipleChoiceQuiz({
           return (
             <div
               key={question.id}
-              className={`rounded-lg border-2 p-5 ${isCompleted
+              className={`rounded-lg border-2 p-5 ${
+                isCompleted
                   ? 'border-[#50fa7b] bg-[#50fa7b]/5'
                   : 'border-[#44475a] bg-[#44475a]'
-                }`}
+              }`}
             >
               {/* Question */}
               <div className="mb-4 flex items-start gap-3">
@@ -203,14 +204,15 @@ export function MultipleChoiceQuiz({
                         !showResult && handleSelectAnswer(question, optionIndex)
                       }
                       disabled={showResult}
-                      className={`w-full rounded-lg border-2 p-3 text-left transition-all ${showCorrect
+                      className={`w-full rounded-lg border-2 p-3 text-left transition-all ${
+                        showCorrect
                           ? 'border-[#50fa7b] bg-[#50fa7b]/20 text-[#50fa7b]'
                           : showIncorrect
                             ? 'border-[#ff5555] bg-[#ff5555]/20 text-[#ff5555]'
                             : isSelected
                               ? 'border-[#8be9fd] bg-[#8be9fd]/20 text-[#f8f8f2]'
                               : 'border-[#44475a] bg-[#1e1f29] text-[#f8f8f2] hover:border-[#6272a4] hover:bg-[#44475a]'
-                        } ${showResult ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                      } ${showResult ? 'cursor-not-allowed' : 'cursor-pointer'}`}
                     >
                       <div className="flex items-center gap-3">
                         <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full border-2 font-semibold">
@@ -230,14 +232,16 @@ export function MultipleChoiceQuiz({
                 <div className="space-y-3">
                   {/* Result message */}
                   <div
-                    className={`rounded-lg border-2 p-4 ${isCorrect
+                    className={`rounded-lg border-2 p-4 ${
+                      isCorrect
                         ? 'border-[#50fa7b] bg-[#50fa7b]/10'
                         : 'border-[#ff5555] bg-[#ff5555]/10'
-                      }`}
+                    }`}
                   >
                     <div
-                      className={`mb-2 font-bold ${isCorrect ? 'text-[#50fa7b]' : 'text-[#ff5555]'
-                        }`}
+                      className={`mb-2 font-bold ${
+                        isCorrect ? 'text-[#50fa7b]' : 'text-[#ff5555]'
+                      }`}
                     >
                       {isCorrect ? '✓ Correct!' : '✗ Incorrect'}
                     </div>

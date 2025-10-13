@@ -104,19 +104,15 @@ Many O(n²) brute force solutions can be optimized to O(n) using hash tables to 
           id: 'mc3',
           question:
             'Which data structure should you use for counting element frequencies?',
-          options: [
-            'List',
-            'Set',
-            'Counter or Dictionary',
-            'Tuple',
-          ],
+          options: ['List', 'Set', 'Counter or Dictionary', 'Tuple'],
           correctAnswer: 2,
           explanation:
             'Counter (from collections) or a regular dictionary is perfect for counting frequencies. Sets only track existence, lists require O(n) search, and tuples are immutable.',
         },
         {
           id: 'mc4',
-          question: 'What percentage of interview problems use arrays or hash tables?',
+          question:
+            'What percentage of interview problems use arrays or hash tables?',
           options: ['10-20%', '20-30%', '30-40%', '50-60%'],
           correctAnswer: 2,
           explanation:
@@ -243,7 +239,8 @@ def max_subarray_sum(nums: List[int]) -> int:
       multipleChoice: [
         {
           id: 'mc1',
-          question: 'What is the time complexity of accessing an element by index in an array?',
+          question:
+            'What is the time complexity of accessing an element by index in an array?',
           options: ['O(1)', 'O(log n)', 'O(n)', 'O(n log n)'],
           correctAnswer: 0,
           explanation:
@@ -251,7 +248,7 @@ def max_subarray_sum(nums: List[int]) -> int:
         },
         {
           id: 'mc2',
-          question: 'What does Kadane\'s algorithm solve?',
+          question: "What does Kadane's algorithm solve?",
           options: [
             'Maximum element in array',
             'Maximum subarray sum',
@@ -260,11 +257,12 @@ def max_subarray_sum(nums: List[int]) -> int:
           ],
           correctAnswer: 1,
           explanation:
-            'Kadane\'s algorithm finds the maximum sum of any contiguous subarray in O(n) time by maintaining the maximum sum ending at each position.',
+            "Kadane's algorithm finds the maximum sum of any contiguous subarray in O(n) time by maintaining the maximum sum ending at each position.",
         },
         {
           id: 'mc3',
-          question: 'What is the time complexity of building a prefix sum array?',
+          question:
+            'What is the time complexity of building a prefix sum array?',
           options: ['O(1)', 'O(log n)', 'O(n)', 'O(n²)'],
           correctAnswer: 2,
           explanation:
@@ -427,7 +425,8 @@ def group_anagrams(strs: List[str]) -> List[List[str]]:
       multipleChoice: [
         {
           id: 'mc1',
-          question: 'What is the average-case time complexity for hash table insert, delete, and search operations?',
+          question:
+            'What is the average-case time complexity for hash table insert, delete, and search operations?',
           options: ['O(1)', 'O(log n)', 'O(n)', 'O(n log n)'],
           correctAnswer: 0,
           explanation:
@@ -435,7 +434,8 @@ def group_anagrams(strs: List[str]) -> List[List[str]]:
         },
         {
           id: 'mc2',
-          question: 'What causes hash table operations to degrade to O(n) worst case?',
+          question:
+            'What causes hash table operations to degrade to O(n) worst case?',
           options: [
             'The table is too small',
             'Many hash collisions occur',
@@ -448,7 +448,8 @@ def group_anagrams(strs: List[str]) -> List[List[str]]:
         },
         {
           id: 'mc3',
-          question: 'In Python, which is the best data structure for grouping elements with automatic list initialization?',
+          question:
+            'In Python, which is the best data structure for grouping elements with automatic list initialization?',
           options: ['dict', 'set', 'defaultdict', 'Counter'],
           correctAnswer: 2,
           explanation:
@@ -469,7 +470,8 @@ def group_anagrams(strs: List[str]) -> List[List[str]]:
         },
         {
           id: 'mc5',
-          question: 'For finding the first non-repeating character in a string, what is the optimal approach?',
+          question:
+            'For finding the first non-repeating character in a string, what is the optimal approach?',
           options: [
             'Sort the string',
             'Use nested loops',
@@ -577,7 +579,8 @@ Finding if array has duplicate:
       multipleChoice: [
         {
           id: 'mc1',
-          question: 'What is the time complexity of checking if an element exists in an unsorted array?',
+          question:
+            'What is the time complexity of checking if an element exists in an unsorted array?',
           options: ['O(1)', 'O(log n)', 'O(n)', 'O(n²)'],
           correctAnswer: 2,
           explanation:
@@ -585,7 +588,8 @@ Finding if array has duplicate:
         },
         {
           id: 'mc2',
-          question: 'When comparing arrays vs hash tables for removing duplicates, what is the time complexity difference?',
+          question:
+            'When comparing arrays vs hash tables for removing duplicates, what is the time complexity difference?',
           options: [
             'Both are O(n)',
             'Array: O(n), Hash table: O(n²)',
@@ -598,7 +602,8 @@ Finding if array has duplicate:
         },
         {
           id: 'mc3',
-          question: 'What is the space complexity overhead difference between arrays and hash tables?',
+          question:
+            'What is the space complexity overhead difference between arrays and hash tables?',
           options: [
             'Hash tables use less space',
             'They use the same space',
@@ -611,7 +616,8 @@ Finding if array has duplicate:
         },
         {
           id: 'mc4',
-          question: 'For a problem requiring both fast lookups and maintaining order, which combination is best?',
+          question:
+            'For a problem requiring both fast lookups and maintaining order, which combination is best?',
           options: [
             'Just use an array',
             'Just use a hash table',
@@ -624,7 +630,8 @@ Finding if array has duplicate:
         },
         {
           id: 'mc5',
-          question: 'When should you prefer sorting an array over using a hash table?',
+          question:
+            'When should you prefer sorting an array over using a hash table?',
           options: [
             'When you need O(1) lookups',
             'When memory is extremely limited and O(n log n) time is acceptable',
@@ -791,7 +798,8 @@ idx = index_map.get(target, -1)
         },
         {
           id: 'mc2',
-          question: 'In the complement lookup pattern (two sum), what do you store in the hash table?',
+          question:
+            'In the complement lookup pattern (two sum), what do you store in the hash table?',
           options: [
             'The target value',
             'All possible sums',
@@ -800,11 +808,12 @@ idx = index_map.get(target, -1)
           ],
           correctAnswer: 2,
           explanation:
-            'The complement pattern stores elements you\'ve seen so far in the hash table. For each new element, you check if its complement (target - current) exists in the table.',
+            "The complement pattern stores elements you've seen so far in the hash table. For each new element, you check if its complement (target - current) exists in the table.",
         },
         {
           id: 'mc3',
-          question: 'When grouping anagrams, what should be used as the hash map key?',
+          question:
+            'When grouping anagrams, what should be used as the hash map key?',
           options: [
             'The first word in each group',
             'The sorted characters or character count signature',
@@ -817,7 +826,8 @@ idx = index_map.get(target, -1)
         },
         {
           id: 'mc4',
-          question: 'What is the time complexity of the deduplication pattern using a hash set?',
+          question:
+            'What is the time complexity of the deduplication pattern using a hash set?',
           options: ['O(1)', 'O(log n)', 'O(n)', 'O(n²)'],
           correctAnswer: 2,
           explanation:
@@ -1174,7 +1184,8 @@ A: "Yes, by sorting first, but that's O(n log n) vs O(n)"
       multipleChoice: [
         {
           id: 'mc1',
-          question: 'What keyword in a problem statement strongly suggests using a hash table?',
+          question:
+            'What keyword in a problem statement strongly suggests using a hash table?',
           options: [
             'Sorted',
             'Binary',
@@ -1187,7 +1198,8 @@ A: "Yes, by sorting first, but that's O(n log n) vs O(n)"
         },
         {
           id: 'mc2',
-          question: 'In an interview, when should you mention the brute force approach?',
+          question:
+            'In an interview, when should you mention the brute force approach?',
           options: [
             'Never mention it, go straight to optimal',
             'Only if asked',
@@ -1196,11 +1208,12 @@ A: "Yes, by sorting first, but that's O(n log n) vs O(n)"
           ],
           correctAnswer: 2,
           explanation:
-            'Always state the brute force approach first (even if just briefly) to show you understand the problem, then explain why it\'s not optimal and how you can improve it.',
+            "Always state the brute force approach first (even if just briefly) to show you understand the problem, then explain why it's not optimal and how you can improve it.",
         },
         {
           id: 'mc3',
-          question: 'What is a common mistake when implementing two sum with a hash table?',
+          question:
+            'What is a common mistake when implementing two sum with a hash table?',
           options: [
             'Using O(n) space',
             'Using the same element twice by not checking indices',
@@ -1213,20 +1226,22 @@ A: "Yes, by sorting first, but that's O(n log n) vs O(n)"
         },
         {
           id: 'mc4',
-          question: 'How should you respond if asked "What about hash collisions?"',
+          question:
+            'How should you respond if asked "What about hash collisions?"',
           options: [
             'Say hash collisions never happen',
-            'Explain that Python\'s hash function is robust, average case is O(1) but worst case is O(n)',
+            "Explain that Python's hash function is robust, average case is O(1) but worst case is O(n)",
             'Say you would use a different data structure',
             'Say you would sort the data instead',
           ],
           correctAnswer: 1,
           explanation:
-            'Acknowledge that collisions exist and affect worst-case complexity (O(n)), but Python\'s hash function is well-designed for average-case O(1) performance.',
+            "Acknowledge that collisions exist and affect worst-case complexity (O(n)), but Python's hash function is well-designed for average-case O(1) performance.",
         },
         {
           id: 'mc5',
-          question: 'What is the typical time range for solving a medium hash table problem in an interview?',
+          question:
+            'What is the typical time range for solving a medium hash table problem in an interview?',
           options: [
             '5-10 minutes',
             '15-20 minutes',

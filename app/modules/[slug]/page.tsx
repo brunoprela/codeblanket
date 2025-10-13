@@ -446,18 +446,20 @@ export default function ModulePage({
                   <button
                     key={section.id}
                     onClick={() => setSelectedSectionId(section.id)}
-                    className={`mb-2 w-full rounded-lg border-2 p-3 text-left transition-all ${isSelected
-                      ? 'border-[#bd93f9] bg-[#bd93f9]/20'
-                      : 'border-[#44475a] bg-[#44475a] hover:border-[#6272a4]'
-                      }`}
+                    className={`mb-2 w-full rounded-lg border-2 p-3 text-left transition-all ${
+                      isSelected
+                        ? 'border-[#bd93f9] bg-[#bd93f9]/20'
+                        : 'border-[#44475a] bg-[#44475a] hover:border-[#6272a4]'
+                    }`}
                   >
                     <div className="flex items-center gap-3">
                       {/* Section Number */}
                       <div
-                        className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full font-bold ${isSelected
-                          ? 'bg-[#bd93f9] text-[#282a36]'
-                          : 'bg-[#6272a4] text-[#f8f8f2]'
-                          }`}
+                        className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full font-bold ${
+                          isSelected
+                            ? 'bg-[#bd93f9] text-[#282a36]'
+                            : 'bg-[#6272a4] text-[#f8f8f2]'
+                        }`}
                       >
                         {index + 1}
                       </div>
@@ -505,28 +507,29 @@ export default function ModulePage({
                   </h2>
                   {(moduleData.timeComplexity ||
                     moduleData.spaceComplexity) && (
-                      <div className="flex flex-wrap gap-2">
-                        {moduleData.timeComplexity && (
-                          <span className="rounded-lg border border-[#bd93f9] bg-[#bd93f9]/10 px-2 py-1 text-xs font-semibold text-[#bd93f9]">
-                            Time: {moduleData.timeComplexity}
-                          </span>
-                        )}
-                        {moduleData.spaceComplexity && (
-                          <span className="rounded-lg border border-[#50fa7b] bg-[#50fa7b]/10 px-2 py-1 text-xs font-semibold text-[#50fa7b]">
-                            Space: {moduleData.spaceComplexity}
-                          </span>
-                        )}
-                      </div>
-                    )}
+                    <div className="flex flex-wrap gap-2">
+                      {moduleData.timeComplexity && (
+                        <span className="rounded-lg border border-[#bd93f9] bg-[#bd93f9]/10 px-2 py-1 text-xs font-semibold text-[#bd93f9]">
+                          Time: {moduleData.timeComplexity}
+                        </span>
+                      )}
+                      {moduleData.spaceComplexity && (
+                        <span className="rounded-lg border border-[#50fa7b] bg-[#50fa7b]/10 px-2 py-1 text-xs font-semibold text-[#50fa7b]">
+                          Space: {moduleData.spaceComplexity}
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 {/* Completed Checkbox */}
                 <button
                   onClick={() => toggleSectionComplete(selectedSection.id)}
-                  className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg border-2 transition-colors ${completedSections.has(selectedSection.id)
-                    ? 'border-[#50fa7b] bg-[#50fa7b] text-[#282a36]'
-                    : 'border-[#6272a4] bg-transparent text-transparent hover:border-[#50fa7b]'
-                    }`}
+                  className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg border-2 transition-colors ${
+                    completedSections.has(selectedSection.id)
+                      ? 'border-[#50fa7b] bg-[#50fa7b] text-[#282a36]'
+                      : 'border-[#6272a4] bg-transparent text-transparent hover:border-[#50fa7b]'
+                  }`}
                   title={
                     completedSections.has(selectedSection.id)
                       ? 'Mark as incomplete'
@@ -796,8 +799,8 @@ export default function ModulePage({
               {((selectedSection.multipleChoice &&
                 selectedSection.multipleChoice.length > 0) ||
                 (selectedSection.quiz && selectedSection.quiz.length > 0)) && (
-                  <div className="my-8 border-t-2 border-[#44475a]" />
-                )}
+                <div className="my-8 border-t-2 border-[#44475a]" />
+              )}
 
               {/* Multiple Choice Quiz */}
               {selectedSection.multipleChoice &&

@@ -135,7 +135,7 @@ def subsets_bitmask(nums: List[int]) -> List[List[int]]:
     return result`,
     timeComplexity: 'O(2^N * N)',
     spaceComplexity: 'O(N) for recursion depth',
-    
+
     leetcodeUrl: 'https://leetcode.com/problems/subsets/',
     youtubeUrl: 'https://www.youtube.com/watch?v=REOH22Xwdkk',
     order: 1,
@@ -341,7 +341,7 @@ def permute_remaining(nums: List[int]) -> List[List[int]]:
     return result`,
     timeComplexity: 'O(N! * N)',
     spaceComplexity: 'O(N) for recursion depth',
-    
+
     leetcodeUrl: 'https://leetcode.com/problems/permutations/',
     youtubeUrl: 'https://www.youtube.com/watch?v=s7AvT7cGdSo',
     order: 2,
@@ -563,7 +563,7 @@ def total_n_queens(n: int) -> int:
     return backtrack(0)`,
     timeComplexity: 'O(N!) with constraint pruning',
     spaceComplexity: 'O(N^2) for board + O(N) for sets',
-    
+
     leetcodeUrl: 'https://leetcode.com/problems/n-queens/',
     youtubeUrl: 'https://www.youtube.com/watch?v=Ph95IHmRp5M',
     order: 3,

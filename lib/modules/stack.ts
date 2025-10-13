@@ -103,7 +103,8 @@ item = stack.pop()   # pop() - O(1), returns 2
         },
         {
           id: 'mc2',
-          question: 'What is the time complexity of push and pop operations on a stack?',
+          question:
+            'What is the time complexity of push and pop operations on a stack?',
           options: ['O(1)', 'O(log n)', 'O(n)', 'O(n²)'],
           correctAnswer: 0,
           explanation:
@@ -111,7 +112,8 @@ item = stack.pop()   # pop() - O(1), returns 2
         },
         {
           id: 'mc3',
-          question: 'Which Python data structure is commonly used to implement a stack?',
+          question:
+            'Which Python data structure is commonly used to implement a stack?',
           options: [
             'Dictionary',
             'Set',
@@ -124,7 +126,8 @@ item = stack.pop()   # pop() - O(1), returns 2
         },
         {
           id: 'mc4',
-          question: 'What real-world example best demonstrates the LIFO principle?',
+          question:
+            'What real-world example best demonstrates the LIFO principle?',
           options: [
             'A queue at a store',
             'Browser back button history',
@@ -137,7 +140,8 @@ item = stack.pop()   # pop() - O(1), returns 2
         },
         {
           id: 'mc5',
-          question: 'What type of problems are stacks uniquely good at solving?',
+          question:
+            'What type of problems are stacks uniquely good at solving?',
           options: [
             'Sorting problems',
             'Parsing and matching pairs problems',
@@ -315,7 +319,8 @@ def valid_parentheses(s: str) -> bool:
       multipleChoice: [
         {
           id: 'mc1',
-          question: 'In the matching pairs pattern, what do you push onto the stack?',
+          question:
+            'In the matching pairs pattern, what do you push onto the stack?',
           options: [
             'Closing brackets',
             'Opening brackets',
@@ -337,11 +342,12 @@ def valid_parentheses(s: str) -> bool:
           ],
           correctAnswer: 1,
           explanation:
-            'A monotonic stack maintains elements in either increasing or decreasing order, popping elements that violate this property. It\'s used for problems like finding the next greater element.',
+            "A monotonic stack maintains elements in either increasing or decreasing order, popping elements that violate this property. It's used for problems like finding the next greater element.",
         },
         {
           id: 'mc3',
-          question: 'For the next greater element problem, what type of monotonic stack do you use?',
+          question:
+            'For the next greater element problem, what type of monotonic stack do you use?',
           options: [
             'Increasing stack',
             'Decreasing stack',
@@ -367,7 +373,8 @@ def valid_parentheses(s: str) -> bool:
         },
         {
           id: 'mc5',
-          question: 'What is the time complexity of the next greater element algorithm using a monotonic stack?',
+          question:
+            'What is the time complexity of the next greater element algorithm using a monotonic stack?',
           options: ['O(1)', 'O(log n)', 'O(n)', 'O(n²)'],
           correctAnswer: 2,
           explanation:
@@ -459,13 +466,9 @@ Stacks enable O(N) solutions to problems that would otherwise require O(N²) nes
       multipleChoice: [
         {
           id: 'mc1',
-          question: 'What is the time complexity of push() and pop() operations on a stack?',
-          options: [
-            'O(log N)',
-            'O(1)',
-            'O(N)',
-            'O(N log N)',
-          ],
+          question:
+            'What is the time complexity of push() and pop() operations on a stack?',
+          options: ['O(log N)', 'O(1)', 'O(N)', 'O(N log N)'],
           correctAnswer: 1,
           explanation:
             'Push and pop operations on a stack are O(1) constant time because they only access the top element without traversing the rest of the stack.',
@@ -485,13 +488,9 @@ Stacks enable O(N) solutions to problems that would otherwise require O(N²) nes
         },
         {
           id: 'mc3',
-          question: 'What is the worst-case space complexity of a stack solution for valid parentheses?',
-          options: [
-            'O(1)',
-            'O(N)',
-            'O(log N)',
-            'O(N²)',
-          ],
+          question:
+            'What is the worst-case space complexity of a stack solution for valid parentheses?',
+          options: ['O(1)', 'O(N)', 'O(log N)', 'O(N²)'],
           correctAnswer: 1,
           explanation:
             'Worst case occurs when all brackets are opening brackets (e.g., "(((("), requiring O(N) space to store them all in the stack.',
@@ -683,7 +682,8 @@ def is_valid_parentheses(s: str) -> bool:
         },
         {
           id: 'mc2',
-          question: 'In a monotonic stack template, what determines whether to pop elements?',
+          question:
+            'In a monotonic stack template, what determines whether to pop elements?',
           options: [
             'The stack is full',
             'Comparing current element with stack top violates monotonic property',
@@ -696,7 +696,8 @@ def is_valid_parentheses(s: str) -> bool:
         },
         {
           id: 'mc3',
-          question: 'When should you store indices in the stack instead of values?',
+          question:
+            'When should you store indices in the stack instead of values?',
           options: [
             'Always store indices',
             'When you need to calculate positions, distances, or widths',
@@ -709,20 +710,17 @@ def is_valid_parentheses(s: str) -> bool:
         },
         {
           id: 'mc4',
-          question: 'What is the correct way to implement peek() in Python using a list?',
-          options: [
-            'stack[0]',
-            'stack[-1]',
-            'stack.peek()',
-            'stack.top()',
-          ],
+          question:
+            'What is the correct way to implement peek() in Python using a list?',
+          options: ['stack[0]', 'stack[-1]', 'stack.peek()', 'stack.top()'],
           correctAnswer: 1,
           explanation:
-            'In Python, stack[-1] accesses the last element (top of stack) without removing it. Lists don\'t have a built-in peek() method.',
+            "In Python, stack[-1] accesses the last element (top of stack) without removing it. Lists don't have a built-in peek() method.",
         },
         {
           id: 'mc5',
-          question: 'In the min stack template, when do you push to the min stack?',
+          question:
+            'In the min stack template, when do you push to the min stack?',
           options: [
             'Only when pushing a new minimum',
             'Every time you push to the main stack',
@@ -1019,7 +1017,8 @@ heights = [0] + heights + [0]  # Add sentinels for easier computation
       multipleChoice: [
         {
           id: 'mc1',
-          question: 'What is the most common mistake when popping from a stack?',
+          question:
+            'What is the most common mistake when popping from a stack?',
           options: [
             'Popping too slowly',
             'Not checking if the stack is empty before popping',
@@ -1032,7 +1031,8 @@ heights = [0] + heights + [0]  # Add sentinels for easier computation
         },
         {
           id: 'mc2',
-          question: 'In valid parentheses checking, what must you verify when encountering a closing bracket?',
+          question:
+            'In valid parentheses checking, what must you verify when encountering a closing bracket?',
           options: [
             'Only that the stack is not empty',
             'Both that the stack is not empty AND that the popped bracket matches',
@@ -1045,7 +1045,8 @@ heights = [0] + heights + [0]  # Add sentinels for easier computation
         },
         {
           id: 'mc3',
-          question: 'Why should indices be stored instead of values in monotonic stack problems?',
+          question:
+            'Why should indices be stored instead of values in monotonic stack problems?',
           options: [
             'Indices are smaller',
             'To calculate distances, widths, or fill result arrays at correct positions',
@@ -1058,7 +1059,8 @@ heights = [0] + heights + [0]  # Add sentinels for easier computation
         },
         {
           id: 'mc4',
-          question: 'What happens if you forget to return the final stack check in parentheses validation?',
+          question:
+            'What happens if you forget to return the final stack check in parentheses validation?',
           options: [
             'The code runs faster',
             'It may return True for strings with unmatched opening brackets',
@@ -1071,7 +1073,8 @@ heights = [0] + heights + [0]  # Add sentinels for easier computation
         },
         {
           id: 'mc5',
-          question: 'In monotonic stack problems, what is a common off-by-one error?',
+          question:
+            'In monotonic stack problems, what is a common off-by-one error?',
           options: [
             'Using > instead of >=',
             'Incorrect width calculation: forgetting the +1 or -1 in index arithmetic',
@@ -1225,7 +1228,8 @@ What property does your stack maintain at each step?
       multipleChoice: [
         {
           id: 'mc1',
-          question: 'What keywords in a problem statement suggest using a stack?',
+          question:
+            'What keywords in a problem statement suggest using a stack?',
           options: [
             'Sorted, binary, search',
             'Valid, matching, balanced, next greater',
@@ -1238,7 +1242,8 @@ What property does your stack maintain at each step?
         },
         {
           id: 'mc2',
-          question: 'How long should a medium stack problem take in an interview?',
+          question:
+            'How long should a medium stack problem take in an interview?',
           options: [
             '5-10 minutes',
             '15-20 minutes',
@@ -1251,7 +1256,8 @@ What property does your stack maintain at each step?
         },
         {
           id: 'mc3',
-          question: 'What should you explain first when solving a stack problem in an interview?',
+          question:
+            'What should you explain first when solving a stack problem in an interview?',
           options: [
             'The code implementation',
             'Why you chose a stack and which pattern you are using',
@@ -1264,7 +1270,8 @@ What property does your stack maintain at each step?
         },
         {
           id: 'mc4',
-          question: 'What is a good response when asked "Can you solve it without a stack?"',
+          question:
+            'What is a good response when asked "Can you solve it without a stack?"',
           options: [
             'Say it is impossible',
             'Discuss alternatives like counters for simple cases, but explain stack trade-offs',
@@ -1277,7 +1284,8 @@ What property does your stack maintain at each step?
         },
         {
           id: 'mc5',
-          question: 'What is the recommended practice approach for mastering stacks?',
+          question:
+            'What is the recommended practice approach for mastering stacks?',
           options: [
             'Only solve hard problems',
             'Start with basics (valid parentheses), then monotonic stack, then advanced',

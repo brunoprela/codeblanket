@@ -5,11 +5,11 @@
 import { Problem } from '../types';
 
 export const pythonAdvancedProblems: Problem[] = [
-    {
-        id: 'decorator-retry',
-        title: 'Retry Decorator',
-        difficulty: 'Medium',
-        description: `Create a decorator retry that automatically retries a function if it raises an exception.
+  {
+    id: 'decorator-retry',
+    title: 'Retry Decorator',
+    difficulty: 'Medium',
+    description: `Create a decorator retry that automatically retries a function if it raises an exception.
 
 The decorator should:
 - Accept a parameter max_attempts (number of retry attempts)
@@ -26,25 +26,25 @@ def flaky_function():
         raise ValueError("Failed!")
     return "Success!"
 `,
-        examples: [
-            {
-                input:
-                    '@retry(max_attempts=3), function that fails twice then succeeds',
-                output: '"Success!" after 3 attempts',
-                explanation: 'Function retries until success or max attempts reached.',
-            },
-        ],
-        constraints: [
-            'max_attempts >= 1',
-            'Preserve function metadata',
-            'Must work with any callable',
-        ],
-        hints: [
-            'Use a closure to capture max_attempts',
-            'Use functools.wraps to preserve metadata',
-            'Use a loop for retry logic',
-        ],
-        starterCode: `from functools import wraps
+    examples: [
+      {
+        input:
+          '@retry(max_attempts=3), function that fails twice then succeeds',
+        output: '"Success!" after 3 attempts',
+        explanation: 'Function retries until success or max attempts reached.',
+      },
+    ],
+    constraints: [
+      'max_attempts >= 1',
+      'Preserve function metadata',
+      'Must work with any callable',
+    ],
+    hints: [
+      'Use a closure to capture max_attempts',
+      'Use functools.wraps to preserve metadata',
+      'Use a loop for retry logic',
+    ],
+    starterCode: `from functools import wraps
 
 def retry(max_attempts):
     """
@@ -74,13 +74,13 @@ def failing_function():
 # Should succeed on 3rd attempt
 print(failing_function())
 `,
-        testCases: [
-            {
-                input: [3, [true, true, false]], // max_attempts, [fail, fail, success]
-                expected: 'Success!',
-            },
-        ],
-        solution: `from functools import wraps
+    testCases: [
+      {
+        input: [3, [true, true, false]], // max_attempts, [fail, fail, success]
+        expected: 'Success!',
+      },
+    ],
+    solution: `from functools import wraps
 
 def retry(max_attempts):
     def decorator(func):
@@ -98,16 +98,16 @@ def retry(max_attempts):
             return None
         return wrapper
     return decorator`,
-        timeComplexity: 'O(1)',
-        spaceComplexity: 'O(1)',
-        order: 1,
-        topic: 'Python Advanced',
-    },
-    {
-        id: 'decorator-cache',
-        title: 'Custom Cache Decorator',
-        difficulty: 'Medium',
-        description: `Implement a caching decorator similar to functools.lru_cache but simpler.
+    timeComplexity: 'O(1)',
+    spaceComplexity: 'O(1)',
+    order: 1,
+    topic: 'Python Advanced',
+  },
+  {
+    id: 'decorator-cache',
+    title: 'Custom Cache Decorator',
+    difficulty: 'Medium',
+    description: `Implement a caching decorator similar to functools.lru_cache but simpler.
 
 The decorator should:
 - Cache function results based on arguments
@@ -116,23 +116,23 @@ The decorator should:
 - Handle unhashable arguments gracefully
 
 **Note:** This tests understanding of closures, dictionaries, and argument handling.`,
-        examples: [
-            {
-                input: '@cache, fibonacci(5) called twice',
-                output: 'Second call returns cached result instantly',
-            },
-        ],
-        constraints: [
-            'Cache must be a dictionary',
-            'Handle both positional and keyword arguments',
-            'Arguments must be hashable',
-        ],
-        hints: [
-            'Store cache in closure',
-            'Use tuple of args and frozenset of kwargs as key',
-            'Check cache before calling function',
-        ],
-        starterCode: `from functools import wraps
+    examples: [
+      {
+        input: '@cache, fibonacci(5) called twice',
+        output: 'Second call returns cached result instantly',
+      },
+    ],
+    constraints: [
+      'Cache must be a dictionary',
+      'Handle both positional and keyword arguments',
+      'Arguments must be hashable',
+    ],
+    hints: [
+      'Store cache in closure',
+      'Use tuple of args and frozenset of kwargs as key',
+      'Check cache before calling function',
+    ],
+    starterCode: `from functools import wraps
 
 def cache(func):
     """
@@ -156,13 +156,13 @@ def fibonacci(n):
 
 print(fibonacci(10))
 `,
-        testCases: [
-            {
-                input: [10],
-                expected: 55,
-            },
-        ],
-        solution: `from functools import wraps
+    testCases: [
+      {
+        input: [10],
+        expected: 55,
+      },
+    ],
+    solution: `from functools import wraps
 
 def cache(func):
     _cache = {}
@@ -177,16 +177,16 @@ def cache(func):
         return _cache[key]
     
     return wrapper`,
-        timeComplexity: 'O(1) for cached calls',
-        spaceComplexity: 'O(n) for n unique calls',
-        order: 2,
-        topic: 'Python Advanced',
-    },
-    {
-        id: 'decorator-timer',
-        title: 'Function Timer Decorator',
-        difficulty: 'Easy',
-        description: `Create a decorator that measures and prints the execution time of a function.
+    timeComplexity: 'O(1) for cached calls',
+    spaceComplexity: 'O(n) for n unique calls',
+    order: 2,
+    topic: 'Python Advanced',
+  },
+  {
+    id: 'decorator-timer',
+    title: 'Function Timer Decorator',
+    difficulty: 'Easy',
+    description: `Create a decorator that measures and prints the execution time of a function.
 
 The decorator should:
 - Measure time before and after function execution
@@ -195,23 +195,23 @@ The decorator should:
 - Preserve function metadata
 
 **Use Case:** Performance profiling and optimization.`,
-        examples: [
-            {
-                input: 'Function that sleeps for 1 second',
-                output: 'Prints "Execution time: 1.00s"',
-            },
-        ],
-        constraints: [
-            'Use time.time() for measurement',
-            'Print with 2 decimal places',
-            'Must work with any function',
-        ],
-        hints: [
-            'Import time module',
-            'Record time before and after function call',
-            'Use f-string for formatting',
-        ],
-        starterCode: `import time
+    examples: [
+      {
+        input: 'Function that sleeps for 1 second',
+        output: 'Prints "Execution time: 1.00s"',
+      },
+    ],
+    constraints: [
+      'Use time.time() for measurement',
+      'Print with 2 decimal places',
+      'Must work with any function',
+    ],
+    hints: [
+      'Import time module',
+      'Record time before and after function call',
+      'Use f-string for formatting',
+    ],
+    starterCode: `import time
 from functools import wraps
 
 def timer(func):
@@ -235,13 +235,13 @@ def slow_function():
 
 slow_function()
 `,
-        testCases: [
-            {
-                input: [1], // sleep duration
-                expected: 'Done',
-            },
-        ],
-        solution: `import time
+    testCases: [
+      {
+        input: [1], // sleep duration
+        expected: 'Done',
+      },
+    ],
+    solution: `import time
 from functools import wraps
 
 def timer(func):
@@ -253,16 +253,16 @@ def timer(func):
         print(f"{func.__name__} took {end - start:.2f}s")
         return result
     return wrapper`,
-        timeComplexity: 'O(1) overhead',
-        spaceComplexity: 'O(1)',
-        order: 3,
-        topic: 'Python Advanced',
-    },
-    {
-        id: 'generator-fibonacci',
-        title: 'Fibonacci Generator',
-        difficulty: 'Easy',
-        description: `Implement a generator that yields Fibonacci numbers infinitely.
+    timeComplexity: 'O(1) overhead',
+    spaceComplexity: 'O(1)',
+    order: 3,
+    topic: 'Python Advanced',
+  },
+  {
+    id: 'generator-fibonacci',
+    title: 'Fibonacci Generator',
+    difficulty: 'Easy',
+    description: `Implement a generator that yields Fibonacci numbers infinitely.
 
 The generator should:
 - Yield Fibonacci numbers one at a time
@@ -271,23 +271,23 @@ The generator should:
 - Use O(1) space (only store last two numbers)
 
 **Why Generator:** Fibonacci sequence can be infinite, and we often only need the first N numbers.`,
-        examples: [
-            {
-                input: 'First 5 numbers',
-                output: '[0, 1, 1, 2, 3]',
-            },
-        ],
-        constraints: [
-            'Must use yield',
-            'O(1) space complexity',
-            'Must be infinite',
-        ],
-        hints: [
-            'Use two variables to track previous numbers',
-            'Yield values in infinite loop',
-            'Update variables after each yield',
-        ],
-        starterCode: `def fibonacci():
+    examples: [
+      {
+        input: 'First 5 numbers',
+        output: '[0, 1, 1, 2, 3]',
+      },
+    ],
+    constraints: [
+      'Must use yield',
+      'O(1) space complexity',
+      'Must be infinite',
+    ],
+    hints: [
+      'Use two variables to track previous numbers',
+      'Yield values in infinite loop',
+      'Update variables after each yield',
+    ],
+    starterCode: `def fibonacci():
     """
     Generator that yields Fibonacci numbers infinitely.
     
@@ -303,27 +303,27 @@ import itertools
 result = list(itertools.islice(fibonacci(), 10))
 print(result)
 `,
-        testCases: [
-            {
-                input: [10], // take first 10
-                expected: [0, 1, 1, 2, 3, 5, 8, 13, 21, 34],
-            },
-        ],
-        solution: `def fibonacci():
+    testCases: [
+      {
+        input: [10], // take first 10
+        expected: [0, 1, 1, 2, 3, 5, 8, 13, 21, 34],
+      },
+    ],
+    solution: `def fibonacci():
     a, b = 0, 1
     while True:
         yield a
         a, b = b, a + b`,
-        timeComplexity: 'O(1) per number',
-        spaceComplexity: 'O(1)',
-        order: 4,
-        topic: 'Python Advanced',
-    },
-    {
-        id: 'generator-file-reader',
-        title: 'Memory-Efficient File Reader',
-        difficulty: 'Medium',
-        description: `Create a generator that reads a large file line by line and filters lines containing a keyword.
+    timeComplexity: 'O(1) per number',
+    spaceComplexity: 'O(1)',
+    order: 4,
+    topic: 'Python Advanced',
+  },
+  {
+    id: 'generator-file-reader',
+    title: 'Memory-Efficient File Reader',
+    difficulty: 'Medium',
+    description: `Create a generator that reads a large file line by line and filters lines containing a keyword.
 
 The generator should:
 - Read file lazily (one line at a time)
@@ -332,23 +332,23 @@ The generator should:
 - Work with files of any size without loading into memory
 
 **Use Case:** Processing huge log files efficiently.`,
-        examples: [
-            {
-                input: 'File with "ERROR" keyword',
-                output: 'Yields only lines containing "ERROR"',
-            },
-        ],
-        constraints: [
-            'Must use generator (yield)',
-            'Cannot load entire file into memory',
-            'Case-sensitive search',
-        ],
-        hints: [
-            'Use with open() for proper file handling',
-            'Check if keyword in line',
-            'Yield matching lines',
-        ],
-        starterCode: `def read_matching_lines(filepath, keyword):
+    examples: [
+      {
+        input: 'File with "ERROR" keyword',
+        output: 'Yields only lines containing "ERROR"',
+      },
+    ],
+    constraints: [
+      'Must use generator (yield)',
+      'Cannot load entire file into memory',
+      'Case-sensitive search',
+    ],
+    hints: [
+      'Use with open() for proper file handling',
+      'Check if keyword in line',
+      'Yield matching lines',
+    ],
+    starterCode: `def read_matching_lines(filepath, keyword):
     """
     Generator that yields lines containing keyword.
     
@@ -367,28 +367,28 @@ The generator should:
 for line in read_matching_lines('log.txt', 'ERROR'):
     print(line)
 `,
-        testCases: [
-            {
-                input: ['ERROR', ['INFO: Starting', 'ERROR: Failed', 'INFO: Done']],
-                expected: ['ERROR: Failed'],
-            },
-        ],
-        solution: `def read_matching_lines(filepath, keyword):
+    testCases: [
+      {
+        input: ['ERROR', ['INFO: Starting', 'ERROR: Failed', 'INFO: Done']],
+        expected: ['ERROR: Failed'],
+      },
+    ],
+    solution: `def read_matching_lines(filepath, keyword):
     with open(filepath, 'r') as f:
         for line in f:
             line = line.strip()
             if keyword in line:
                 yield line`,
-        timeComplexity: 'O(n) where n is number of lines',
-        spaceComplexity: 'O(1)',
-        order: 5,
-        topic: 'Python Advanced',
-    },
-    {
-        id: 'context-manager-timer',
-        title: 'Timer Context Manager',
-        difficulty: 'Easy',
-        description: `Implement a context manager that times code execution in a with block.
+    timeComplexity: 'O(n) where n is number of lines',
+    spaceComplexity: 'O(1)',
+    order: 5,
+    topic: 'Python Advanced',
+  },
+  {
+    id: 'context-manager-timer',
+    title: 'Timer Context Manager',
+    difficulty: 'Easy',
+    description: `Implement a context manager that times code execution in a with block.
 
 The context manager should:
 - Record start time on entry
@@ -403,23 +403,23 @@ with Timer():
     time.sleep(1)
 # Prints: "Elapsed time: 1.000s"
 `,
-        examples: [
-            {
-                input: 'Code block that takes 0.5 seconds',
-                output: 'Prints "Elapsed time: 0.500s"',
-            },
-        ],
-        constraints: [
-            'Must implement __enter__ and __exit__',
-            'Print even if exception occurs',
-            'Use time.time() for measurement',
-        ],
-        hints: [
-            'Store start time in __enter__',
-            'Calculate elapsed in __exit__',
-            '__exit__ receives exception info',
-        ],
-        starterCode: `import time
+    examples: [
+      {
+        input: 'Code block that takes 0.5 seconds',
+        output: 'Prints "Elapsed time: 0.500s"',
+      },
+    ],
+    constraints: [
+      'Must implement __enter__ and __exit__',
+      'Print even if exception occurs',
+      'Use time.time() for measurement',
+    ],
+    hints: [
+      'Store start time in __enter__',
+      'Calculate elapsed in __exit__',
+      '__exit__ receives exception info',
+    ],
+    starterCode: `import time
 
 class Timer:
     """
@@ -438,13 +438,13 @@ class Timer:
 with Timer():
     time.sleep(0.5)
 `,
-        testCases: [
-            {
-                input: [0.5], // sleep duration
-                expected: 'Elapsed',
-            },
-        ],
-        solution: `import time
+    testCases: [
+      {
+        input: [0.5], // sleep duration
+        expected: 'Elapsed',
+      },
+    ],
+    solution: `import time
 
 class Timer:
     def __enter__(self):
@@ -456,16 +456,16 @@ class Timer:
         elapsed = self.end - self.start
         print(f"Elapsed time: {elapsed:.3f}s")
         return False  # Don't suppress exceptions`,
-        timeComplexity: 'O(1)',
-        spaceComplexity: 'O(1)',
-        order: 6,
-        topic: 'Python Advanced',
-    },
-    {
-        id: 'context-manager-database',
-        title: 'Database Transaction Context Manager',
-        difficulty: 'Medium',
-        description: `Create a context manager that simulates database transaction management.
+    timeComplexity: 'O(1)',
+    spaceComplexity: 'O(1)',
+    order: 6,
+    topic: 'Python Advanced',
+  },
+  {
+    id: 'context-manager-database',
+    title: 'Database Transaction Context Manager',
+    difficulty: 'Medium',
+    description: `Create a context manager that simulates database transaction management.
 
 The context manager should:
 - Begin transaction on entry
@@ -480,27 +480,27 @@ with Transaction(db):
     db.execute("UPDATE ...")
 # Commits if successful, rolls back if error
 `,
-        examples: [
-            {
-                input: 'Successful operations',
-                output: 'Commit called',
-            },
-            {
-                input: 'Operation raises exception',
-                output: 'Rollback called',
-            },
-        ],
-        constraints: [
-            'Commit only if no exception',
-            'Always rollback on exception',
-            'Connection must close regardless',
-        ],
-        hints: [
-            'Check exc_type in __exit__',
-            'exc_type is None if no exception',
-            'Use try/finally for cleanup',
-        ],
-        starterCode: `class Transaction:
+    examples: [
+      {
+        input: 'Successful operations',
+        output: 'Commit called',
+      },
+      {
+        input: 'Operation raises exception',
+        output: 'Rollback called',
+      },
+    ],
+    constraints: [
+      'Commit only if no exception',
+      'Always rollback on exception',
+      'Connection must close regardless',
+    ],
+    hints: [
+      'Check exc_type in __exit__',
+      'exc_type is None if no exception',
+      'Use try/finally for cleanup',
+    ],
+    starterCode: `class Transaction:
     """
     Context manager for database transactions.
     """
@@ -535,17 +535,17 @@ db = MockDB()
 with Transaction(db):
     print("Doing work...")
 `,
-        testCases: [
-            {
-                input: [true], // success case
-                expected: 'committed',
-            },
-            {
-                input: [false], // error case
-                expected: 'rolled back',
-            },
-        ],
-        solution: `class Transaction:
+    testCases: [
+      {
+        input: [true], // success case
+        expected: 'committed',
+      },
+      {
+        input: [false], // error case
+        expected: 'rolled back',
+      },
+    ],
+    solution: `class Transaction:
     def __init__(self, connection):
         self.conn = connection
     
@@ -562,16 +562,16 @@ with Transaction(db):
         finally:
             self.conn.close()
         return False  # Don't suppress exceptions`,
-        timeComplexity: 'O(1)',
-        spaceComplexity: 'O(1)',
-        order: 7,
-        topic: 'Python Advanced',
-    },
-    {
-        id: 'metaclass-singleton',
-        title: 'Singleton Metaclass',
-        difficulty: 'Hard',
-        description: `Implement a metaclass that ensures a class can only have one instance (Singleton pattern).
+    timeComplexity: 'O(1)',
+    spaceComplexity: 'O(1)',
+    order: 7,
+    topic: 'Python Advanced',
+  },
+  {
+    id: 'metaclass-singleton',
+    title: 'Singleton Metaclass',
+    difficulty: 'Hard',
+    description: `Implement a metaclass that ensures a class can only have one instance (Singleton pattern).
 
 The metaclass should:
 - Store instances in a class-level dictionary
@@ -580,23 +580,23 @@ The metaclass should:
 - Work with any class that uses it
 
 **Use Case:** Database connections, configuration objects, logging.`,
-        examples: [
-            {
-                input: 'Database() called twice',
-                output: 'Returns same instance both times',
-            },
-        ],
-        constraints: [
-            'Must be a metaclass',
-            'Thread-safety not required',
-            'Support class arguments',
-        ],
-        hints: [
-            'Override __call__ method',
-            'Store instances in _instances dict',
-            'Check if class in dict before creating',
-        ],
-        starterCode: `class Singleton(type):
+    examples: [
+      {
+        input: 'Database() called twice',
+        output: 'Returns same instance both times',
+      },
+    ],
+    constraints: [
+      'Must be a metaclass',
+      'Thread-safety not required',
+      'Support class arguments',
+    ],
+    hints: [
+      'Override __call__ method',
+      'Store instances in _instances dict',
+      'Check if class in dict before creating',
+    ],
+    starterCode: `class Singleton(type):
     """
     Metaclass that creates singleton classes.
     """
@@ -618,29 +618,29 @@ db2 = Database("dev")
 print(db1 is db2)  # Should be True
 print(db1.name)    # Should be "prod" (first call wins)
 `,
-        testCases: [
-            {
-                input: [['prod', 'dev']],
-                expected: true, // db1 is db2
-            },
-        ],
-        solution: `class Singleton(type):
+    testCases: [
+      {
+        input: [['prod', 'dev']],
+        expected: true, // db1 is db2
+      },
+    ],
+    solution: `class Singleton(type):
     _instances = {}
     
     def __call__(cls, *args, **kwargs):
         if cls not in cls._instances:
             cls._instances[cls] = super().__call__(*args, **kwargs)
         return cls._instances[cls]`,
-        timeComplexity: 'O(1)',
-        spaceComplexity: 'O(1) per class',
-        order: 8,
-        topic: 'Python Advanced',
-    },
-    {
-        id: 'property-descriptor',
-        title: 'Validated Property Descriptor',
-        difficulty: 'Hard',
-        description: `Create a descriptor that validates values before setting them.
+    timeComplexity: 'O(1)',
+    spaceComplexity: 'O(1) per class',
+    order: 8,
+    topic: 'Python Advanced',
+  },
+  {
+    id: 'property-descriptor',
+    title: 'Validated Property Descriptor',
+    difficulty: 'Hard',
+    description: `Create a descriptor that validates values before setting them.
 
 The descriptor should:
 - Accept a validation function
@@ -657,27 +657,27 @@ p = Person()
 p.age = 25  # OK
 p.age = -5  # Raises ValueError
 `,
-        examples: [
-            {
-                input: 'age = 25',
-                output: 'Value stored successfully',
-            },
-            {
-                input: 'age = -5',
-                output: 'ValueError raised',
-            },
-        ],
-        constraints: [
-            'Must be a descriptor',
-            'Implement __get__ and __set__',
-            'Store data in instance __dict__',
-        ],
-        hints: [
-            'Use instance.__dict__ for storage',
-            'Call validation function before setting',
-            'Use unique attribute name to avoid recursion',
-        ],
-        starterCode: `class ValidatedProperty:
+    examples: [
+      {
+        input: 'age = 25',
+        output: 'Value stored successfully',
+      },
+      {
+        input: 'age = -5',
+        output: 'ValueError raised',
+      },
+    ],
+    constraints: [
+      'Must be a descriptor',
+      'Implement __get__ and __set__',
+      'Store data in instance __dict__',
+    ],
+    hints: [
+      'Use instance.__dict__ for storage',
+      'Call validation function before setting',
+      'Use unique attribute name to avoid recursion',
+    ],
+    starterCode: `class ValidatedProperty:
     """
     Descriptor that validates values.
     """
@@ -705,13 +705,13 @@ p = Person()
 p.age = 25
 print(p.age)
 `,
-        testCases: [
-            {
-                input: [25],
-                expected: 25,
-            },
-        ],
-        solution: `class ValidatedProperty:
+    testCases: [
+      {
+        input: [25],
+        expected: 25,
+      },
+    ],
+    solution: `class ValidatedProperty:
     def __init__(self, validator):
         self.validator = validator
         self.name = None
@@ -728,16 +728,16 @@ print(p.age)
         if not self.validator(value):
             raise ValueError(f"Invalid value: {value}")
         instance.__dict__[self.name] = value`,
-        timeComplexity: 'O(1)',
-        spaceComplexity: 'O(1)',
-        order: 9,
-        topic: 'Python Advanced',
-    },
-    {
-        id: 'iterator-custom',
-        title: 'Custom Range Iterator',
-        difficulty: 'Medium',
-        description: `Implement a custom iterator class similar to Python's range().
+    timeComplexity: 'O(1)',
+    spaceComplexity: 'O(1)',
+    order: 9,
+    topic: 'Python Advanced',
+  },
+  {
+    id: 'iterator-custom',
+    title: 'Custom Range Iterator',
+    difficulty: 'Medium',
+    description: `Implement a custom iterator class similar to Python's range().
 
 The iterator should:
 - Support start, stop, and step parameters
@@ -750,27 +750,27 @@ python
 for i in CustomRange(0, 10, 2):
     print(i)  # 0, 2, 4, 6, 8
 `,
-        examples: [
-            {
-                input: 'CustomRange(0, 10, 2)',
-                output: '[0, 2, 4, 6, 8]',
-            },
-            {
-                input: 'CustomRange(10, 0, -2)',
-                output: '[10, 8, 6, 4, 2]',
-            },
-        ],
-        constraints: [
-            'Must implement iterator protocol',
-            'Support positive and negative step',
-            'Handle edge cases',
-        ],
-        hints: [
-            '__iter__ should return self',
-            'Track current value',
-            'Check stopping condition in __next__',
-        ],
-        starterCode: `class CustomRange:
+    examples: [
+      {
+        input: 'CustomRange(0, 10, 2)',
+        output: '[0, 2, 4, 6, 8]',
+      },
+      {
+        input: 'CustomRange(10, 0, -2)',
+        output: '[10, 8, 6, 4, 2]',
+      },
+    ],
+    constraints: [
+      'Must implement iterator protocol',
+      'Support positive and negative step',
+      'Handle edge cases',
+    ],
+    hints: [
+      '__iter__ should return self',
+      'Track current value',
+      'Check stopping condition in __next__',
+    ],
+    starterCode: `class CustomRange:
     """
     Custom range iterator.
     """
@@ -792,17 +792,17 @@ for i in CustomRange(0, 10, 2):
 result = list(CustomRange(0, 10, 2))
 print(result)
 `,
-        testCases: [
-            {
-                input: [0, 10, 2],
-                expected: [0, 2, 4, 6, 8],
-            },
-            {
-                input: [10, 0, -2],
-                expected: [10, 8, 6, 4, 2],
-            },
-        ],
-        solution: `class CustomRange:
+    testCases: [
+      {
+        input: [0, 10, 2],
+        expected: [0, 2, 4, 6, 8],
+      },
+      {
+        input: [10, 0, -2],
+        expected: [10, 8, 6, 4, 2],
+      },
+    ],
+    solution: `class CustomRange:
     def __init__(self, start, stop, step=1):
         self.current = start
         self.stop = stop
@@ -819,16 +819,16 @@ print(result)
         value = self.current
         self.current += self.step
         return value`,
-        timeComplexity: 'O(1) per iteration',
-        spaceComplexity: 'O(1)',
-        order: 10,
-        topic: 'Python Advanced',
-    },
-    {
-        id: 'coroutine-pipeline',
-        title: 'Data Processing Pipeline with Coroutines',
-        difficulty: 'Hard',
-        description: `Create a data processing pipeline using coroutines (generators with send()).
+    timeComplexity: 'O(1) per iteration',
+    spaceComplexity: 'O(1)',
+    order: 10,
+    topic: 'Python Advanced',
+  },
+  {
+    id: 'coroutine-pipeline',
+    title: 'Data Processing Pipeline with Coroutines',
+    difficulty: 'Hard',
+    description: `Create a data processing pipeline using coroutines (generators with send()).
 
 Build a pipeline that:
 - Accepts data via send()
@@ -842,23 +842,23 @@ pipeline = source() | process() | sink()
 for item in data:
     pipeline.send(item)
 `,
-        examples: [
-            {
-                input: 'Numbers 1-5',
-                output: 'Processes through pipeline stages',
-            },
-        ],
-        constraints: [
-            'Use coroutines (yield with send)',
-            'Chain coroutines together',
-            'Prime coroutines with next()',
-        ],
-        hints: [
-            'Each coroutine yields then receives',
-            'Target coroutine in each stage',
-            'Prime with next() before sending',
-        ],
-        starterCode: `def producer(target):
+    examples: [
+      {
+        input: 'Numbers 1-5',
+        output: 'Processes through pipeline stages',
+      },
+    ],
+    constraints: [
+      'Use coroutines (yield with send)',
+      'Chain coroutines together',
+      'Prime coroutines with next()',
+    ],
+    hints: [
+      'Each coroutine yields then receives',
+      'Target coroutine in each stage',
+      'Prime with next() before sending',
+    ],
+    starterCode: `def producer(target):
     """
     Producer coroutine that sends data to target.
     """
@@ -888,13 +888,13 @@ source = producer(proc)
 for i in range(5):
     source.send(i)
 `,
-        testCases: [
-            {
-                input: [[1, 2, 3]],
-                expected: [2, 4, 6],
-            },
-        ],
-        solution: `def producer(target):
+    testCases: [
+      {
+        input: [[1, 2, 3]],
+        expected: [2, 4, 6],
+      },
+    ],
+    solution: `def producer(target):
     while True:
         item = yield
         target.send(item)
@@ -914,16 +914,16 @@ def consumer():
 def prime(coro):
     next(coro)
     return coro`,
-        timeComplexity: 'O(n) where n is items',
-        spaceComplexity: 'O(1)',
-        order: 11,
-        topic: 'Python Advanced',
-    },
-    {
-        id: 'async-context-manager',
-        title: 'Async Context Manager',
-        difficulty: 'Hard',
-        description: `Implement an async context manager for async resource management.
+    timeComplexity: 'O(n) where n is items',
+    spaceComplexity: 'O(1)',
+    order: 11,
+    topic: 'Python Advanced',
+  },
+  {
+    id: 'async-context-manager',
+    title: 'Async Context Manager',
+    difficulty: 'Hard',
+    description: `Implement an async context manager for async resource management.
 
 The context manager should:
 - Implement __aenter__ and __aexit__
@@ -932,23 +932,23 @@ The context manager should:
 - Properly handle exceptions
 
 **Use Case:** Async database connections, async file I/O.`,
-        examples: [
-            {
-                input: 'Async resource access',
-                output: 'Async setup and cleanup',
-            },
-        ],
-        constraints: [
-            'Must be async context manager',
-            'Use async/await',
-            'Handle exceptions properly',
-        ],
-        hints: [
-            'Implement __aenter__ and __aexit__',
-            'Both methods are async',
-            'Use await for async operations',
-        ],
-        starterCode: `import asyncio
+    examples: [
+      {
+        input: 'Async resource access',
+        output: 'Async setup and cleanup',
+      },
+    ],
+    constraints: [
+      'Must be async context manager',
+      'Use async/await',
+      'Handle exceptions properly',
+    ],
+    hints: [
+      'Implement __aenter__ and __aexit__',
+      'Both methods are async',
+      'Use await for async operations',
+    ],
+    starterCode: `import asyncio
 
 class AsyncResource:
     """
@@ -970,13 +970,13 @@ async def main():
 
 asyncio.run(main())
 `,
-        testCases: [
-            {
-                input: [true],
-                expected: 'Success',
-            },
-        ],
-        solution: `import asyncio
+    testCases: [
+      {
+        input: [true],
+        expected: 'Success',
+      },
+    ],
+    solution: `import asyncio
 
 class AsyncResource:
     async def __aenter__(self):
@@ -988,16 +988,16 @@ class AsyncResource:
         print("Releasing resource")
         await asyncio.sleep(0.1)  # Simulate async cleanup
         return False`,
-        timeComplexity: 'O(1)',
-        spaceComplexity: 'O(1)',
-        order: 12,
-        topic: 'Python Advanced',
-    },
-    {
-        id: 'decorator-params',
-        title: 'Parameterized Decorator with State',
-        difficulty: 'Hard',
-        description: `Create a decorator that counts function calls and limits execution.
+    timeComplexity: 'O(1)',
+    spaceComplexity: 'O(1)',
+    order: 12,
+    topic: 'Python Advanced',
+  },
+  {
+    id: 'decorator-params',
+    title: 'Parameterized Decorator with State',
+    difficulty: 'Hard',
+    description: `Create a decorator that counts function calls and limits execution.
 
 The decorator should:
 - Accept max_calls parameter
@@ -1016,23 +1016,23 @@ api_call()  # OK
 api_call()  # OK
 api_call()  # Raises RuntimeError
 `,
-        examples: [
-            {
-                input: 'max_calls=3, called 4 times',
-                output: 'Fourth call raises RuntimeError',
-            },
-        ],
-        constraints: [
-            'Decorator takes parameters',
-            'Must track state across calls',
-            'Provide reset mechanism',
-        ],
-        hints: [
-            'Three levels of functions needed',
-            'Store count in closure',
-            'Add reset as wrapper attribute',
-        ],
-        starterCode: `from functools import wraps
+    examples: [
+      {
+        input: 'max_calls=3, called 4 times',
+        output: 'Fourth call raises RuntimeError',
+      },
+    ],
+    constraints: [
+      'Decorator takes parameters',
+      'Must track state across calls',
+      'Provide reset mechanism',
+    ],
+    hints: [
+      'Three levels of functions needed',
+      'Store count in closure',
+      'Add reset as wrapper attribute',
+    ],
+    starterCode: `from functools import wraps
 
 def limit_calls(max_calls):
     """
@@ -1055,13 +1055,13 @@ for i in range(4):
     except RuntimeError as e:
         print(f"Error: {e}")
 `,
-        testCases: [
-            {
-                input: [3, 4], // max_calls, actual_calls
-                expected: 'RuntimeError',
-            },
-        ],
-        solution: `from functools import wraps
+    testCases: [
+      {
+        input: [3, 4], // max_calls, actual_calls
+        expected: 'RuntimeError',
+      },
+    ],
+    solution: `from functools import wraps
 
 def limit_calls(max_calls):
     def decorator(func):
@@ -1082,16 +1082,16 @@ def limit_calls(max_calls):
         wrapper.reset = reset
         return wrapper
     return decorator`,
-        timeComplexity: 'O(1)',
-        spaceComplexity: 'O(1)',
-        order: 13,
-        topic: 'Python Advanced',
-    },
-    {
-        id: 'generator-send',
-        title: 'Generator with Send - Running Average',
-        difficulty: 'Medium',
-        description: `Implement a generator that calculates a running average using send().
+    timeComplexity: 'O(1)',
+    spaceComplexity: 'O(1)',
+    order: 13,
+    topic: 'Python Advanced',
+  },
+  {
+    id: 'generator-send',
+    title: 'Generator with Send - Running Average',
+    difficulty: 'Medium',
+    description: `Implement a generator that calculates a running average using send().
 
 The generator should:
 - Accept values via send()
@@ -1100,23 +1100,23 @@ The generator should:
 - Handle first next() call (prime)
 
 **Use Case:** Real-time statistics, streaming data analysis.`,
-        examples: [
-            {
-                input: 'send(10), send(20), send(30)',
-                output: 'Yields 10.0, 15.0, 20.0',
-            },
-        ],
-        constraints: [
-            'Use generator with send()',
-            'Calculate average correctly',
-            'Handle initialization',
-        ],
-        hints: [
-            'First yield returns None (for priming)',
-            'Receive value with yield',
-            'Update total and count',
-        ],
-        starterCode: `def running_average():
+    examples: [
+      {
+        input: 'send(10), send(20), send(30)',
+        output: 'Yields 10.0, 15.0, 20.0',
+      },
+    ],
+    constraints: [
+      'Use generator with send()',
+      'Calculate average correctly',
+      'Handle initialization',
+    ],
+    hints: [
+      'First yield returns None (for priming)',
+      'Receive value with yield',
+      'Update total and count',
+    ],
+    starterCode: `def running_average():
     """
     Generator that calculates running average.
     
@@ -1134,13 +1134,13 @@ print(avg.send(10))  # 10.0
 print(avg.send(20))  # 15.0
 print(avg.send(30))  # 20.0
 `,
-        testCases: [
-            {
-                input: [[10, 20, 30]],
-                expected: [10.0, 15.0, 20.0],
-            },
-        ],
-        solution: `def running_average():
+    testCases: [
+      {
+        input: [[10, 20, 30]],
+        expected: [10.0, 15.0, 20.0],
+      },
+    ],
+    solution: `def running_average():
     total = 0
     count = 0
     average = None
@@ -1151,16 +1151,16 @@ print(avg.send(30))  # 20.0
             total += value
             count += 1
             average = total / count`,
-        timeComplexity: 'O(1) per value',
-        spaceComplexity: 'O(1)',
-        order: 14,
-        topic: 'Python Advanced',
-    },
-    {
-        id: 'metaclass-registry',
-        title: 'Auto-Registration Metaclass',
-        difficulty: 'Hard',
-        description: `Create a metaclass that automatically registers classes in a registry.
+    timeComplexity: 'O(1) per value',
+    spaceComplexity: 'O(1)',
+    order: 14,
+    topic: 'Python Advanced',
+  },
+  {
+    id: 'metaclass-registry',
+    title: 'Auto-Registration Metaclass',
+    difficulty: 'Hard',
+    description: `Create a metaclass that automatically registers classes in a registry.
 
 The metaclass should:
 - Maintain a class-level registry
@@ -1169,23 +1169,23 @@ The metaclass should:
 - Skip abstract base classes
 
 **Use Case:** Plugin systems, command registries, API endpoints.`,
-        examples: [
-            {
-                input: 'class UserCommand(Command)',
-                output: 'Automatically registered as "user"',
-            },
-        ],
-        constraints: [
-            'Must be a metaclass',
-            'Auto-register on class creation',
-            'Skip classes without name attribute',
-        ],
-        hints: [
-            'Override __new__ method',
-            'Check for name attribute',
-            'Store in class-level dictionary',
-        ],
-        starterCode: `class Registry(type):
+    examples: [
+      {
+        input: 'class UserCommand(Command)',
+        output: 'Automatically registered as "user"',
+      },
+    ],
+    constraints: [
+      'Must be a metaclass',
+      'Auto-register on class creation',
+      'Skip classes without name attribute',
+    ],
+    hints: [
+      'Override __new__ method',
+      'Check for name attribute',
+      'Store in class-level dictionary',
+    ],
+    starterCode: `class Registry(type):
     """
     Metaclass that auto-registers classes.
     """
@@ -1219,13 +1219,13 @@ cmd_class = Registry.get("user")
 cmd = cmd_class()
 print(cmd.execute())
 `,
-        testCases: [
-            {
-                input: ['user'],
-                expected: 'User command executed',
-            },
-        ],
-        solution: `class Registry(type):
+    testCases: [
+      {
+        input: ['user'],
+        expected: 'User command executed',
+      },
+    ],
+    solution: `class Registry(type):
     _registry = {}
     
     def __new__(mcs, name, bases, attrs):
@@ -1240,16 +1240,16 @@ print(cmd.execute())
     @classmethod
     def get(mcs, name):
         return mcs._registry.get(name)`,
-        timeComplexity: 'O(1)',
-        spaceComplexity: 'O(n) for n classes',
-        order: 15,
-        topic: 'Python Advanced',
-    },
-    {
-        id: 'descriptor-validation',
-        title: 'Type-Validated Descriptor',
-        difficulty: 'Hard',
-        description: `Create a descriptor that enforces type checking on attribute assignment.
+    timeComplexity: 'O(1)',
+    spaceComplexity: 'O(n) for n classes',
+    order: 15,
+    topic: 'Python Advanced',
+  },
+  {
+    id: 'descriptor-validation',
+    title: 'Type-Validated Descriptor',
+    difficulty: 'Hard',
+    description: `Create a descriptor that enforces type checking on attribute assignment.
 
 The descriptor should:
 - Accept expected type(s) in __init__
@@ -1268,27 +1268,27 @@ p.age = 25  # OK
 p.age = "25"  # TypeError
 p.name = None  # OK (allows None)
 `,
-        examples: [
-            {
-                input: 'age = 25 (int)',
-                output: 'Accepted',
-            },
-            {
-                input: 'age = "25" (str)',
-                output: 'TypeError raised',
-            },
-        ],
-        constraints: [
-            'Must be a descriptor',
-            'Support multiple types',
-            'Clear error messages',
-        ],
-        hints: [
-            'Use isinstance for type checking',
-            'Store allowed types',
-            'Use __set_name__ for attribute name',
-        ],
-        starterCode: `class TypedProperty:
+    examples: [
+      {
+        input: 'age = 25 (int)',
+        output: 'Accepted',
+      },
+      {
+        input: 'age = "25" (str)',
+        output: 'TypeError raised',
+      },
+    ],
+    constraints: [
+      'Must be a descriptor',
+      'Support multiple types',
+      'Clear error messages',
+    ],
+    hints: [
+      'Use isinstance for type checking',
+      'Store allowed types',
+      'Use __set_name__ for attribute name',
+    ],
+    starterCode: `class TypedProperty:
     """
     Descriptor that enforces type checking.
     """
@@ -1318,13 +1318,13 @@ p = Person()
 p.age = 25
 print(p.age)
 `,
-        testCases: [
-            {
-                input: [25],
-                expected: 25,
-            },
-        ],
-        solution: `class TypedProperty:
+    testCases: [
+      {
+        input: [25],
+        expected: 25,
+      },
+    ],
+    solution: `class TypedProperty:
     def __init__(self, *expected_types):
         self.expected_types = expected_types
         self.name = None
@@ -1344,16 +1344,16 @@ print(p.age)
                 f"got {type(value)}"
             )
         instance.__dict__[self.name] = value`,
-        timeComplexity: 'O(1)',
-        spaceComplexity: 'O(1)',
-        order: 16,
-        topic: 'Python Advanced',
-    },
-    {
-        id: 'generator-pipeline',
-        title: 'Chained Generator Pipeline',
-        difficulty: 'Medium',
-        description: `Build a data pipeline using chained generators for memory-efficient processing.
+    timeComplexity: 'O(1)',
+    spaceComplexity: 'O(1)',
+    order: 16,
+    topic: 'Python Advanced',
+  },
+  {
+    id: 'generator-pipeline',
+    title: 'Chained Generator Pipeline',
+    difficulty: 'Medium',
+    description: `Build a data pipeline using chained generators for memory-efficient processing.
 
 Create generators that:
 - read_numbers: yields numbers from a list
@@ -1362,23 +1362,23 @@ Create generators that:
 - Chain them together
 
 **Key Concept:** Generators enable lazy evaluation - no intermediate lists created.`,
-        examples: [
-            {
-                input: '[1, 2, 3, 4, 5, 6]',
-                output: '[4, 16, 36] (even numbers squared)',
-            },
-        ],
-        constraints: [
-            'Each stage must be a generator',
-            'No intermediate lists',
-            'Chain with function composition',
-        ],
-        hints: [
-            'Each generator takes previous as input',
-            'Use yield in loops',
-            'Composition: square(filter_even(read_numbers()))',
-        ],
-        starterCode: `def read_numbers(numbers):
+    examples: [
+      {
+        input: '[1, 2, 3, 4, 5, 6]',
+        output: '[4, 16, 36] (even numbers squared)',
+      },
+    ],
+    constraints: [
+      'Each stage must be a generator',
+      'No intermediate lists',
+      'Chain with function composition',
+    ],
+    hints: [
+      'Each generator takes previous as input',
+      'Use yield in loops',
+      'Composition: square(filter_even(read_numbers()))',
+    ],
+    starterCode: `def read_numbers(numbers):
     """Yield numbers from list."""
     # Your code here
     pass
@@ -1400,13 +1400,13 @@ pipeline = square(filter_even(read_numbers(data)))
 result = list(pipeline)
 print(result)  # [4, 16, 36]
 `,
-        testCases: [
-            {
-                input: [[1, 2, 3, 4, 5, 6]],
-                expected: [4, 16, 36],
-            },
-        ],
-        solution: `def read_numbers(numbers):
+    testCases: [
+      {
+        input: [[1, 2, 3, 4, 5, 6]],
+        expected: [4, 16, 36],
+      },
+    ],
+    solution: `def read_numbers(numbers):
     for num in numbers:
         yield num
 
@@ -1418,16 +1418,16 @@ def filter_even(numbers):
 def square(numbers):
     for num in numbers:
         yield num ** 2`,
-        timeComplexity: 'O(n)',
-        spaceComplexity: 'O(1)',
-        order: 17,
-        topic: 'Python Advanced',
-    },
-    {
-        id: 'context-manager-suppress',
-        title: 'Exception Suppressing Context Manager',
-        difficulty: 'Medium',
-        description: `Create a context manager that suppresses specific exceptions.
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1)',
+    order: 17,
+    topic: 'Python Advanced',
+  },
+  {
+    id: 'context-manager-suppress',
+    title: 'Exception Suppressing Context Manager',
+    difficulty: 'Medium',
+    description: `Create a context manager that suppresses specific exceptions.
 
 The context manager should:
 - Accept exception types to suppress
@@ -1436,23 +1436,23 @@ The context manager should:
 - Log suppressed exceptions
 
 **Use Case:** Gracefully handling expected errors.`,
-        examples: [
-            {
-                input: 'with suppress(ValueError): int("abc")',
-                output: 'ValueError suppressed',
-            },
-        ],
-        constraints: [
-            'Accept multiple exception types',
-            'Only suppress specified types',
-            'Return True to suppress in __exit__',
-        ],
-        hints: [
-            'Store exception types in __init__',
-            'Check exc_type in __exit__',
-            'Use isinstance for checking',
-        ],
-        starterCode: `class suppress:
+    examples: [
+      {
+        input: 'with suppress(ValueError): int("abc")',
+        output: 'ValueError suppressed',
+      },
+    ],
+    constraints: [
+      'Accept multiple exception types',
+      'Only suppress specified types',
+      'Return True to suppress in __exit__',
+    ],
+    hints: [
+      'Store exception types in __init__',
+      'Check exc_type in __exit__',
+      'Use isinstance for checking',
+    ],
+    starterCode: `class suppress:
     """
     Context manager that suppresses exceptions.
     """
@@ -1478,17 +1478,17 @@ with suppress(ValueError, TypeError):
 with suppress(ValueError):
     1 / 0  # Not suppressed (ZeroDivisionError)
 `,
-        testCases: [
-            {
-                input: [['ValueError'], 'ValueError'],
-                expected: 'suppressed',
-            },
-            {
-                input: [['ValueError'], 'TypeError'],
-                expected: 'not suppressed',
-            },
-        ],
-        solution: `class suppress:
+    testCases: [
+      {
+        input: [['ValueError'], 'ValueError'],
+        expected: 'suppressed',
+      },
+      {
+        input: [['ValueError'], 'TypeError'],
+        expected: 'not suppressed',
+      },
+    ],
+    solution: `class suppress:
     def __init__(self, *exceptions):
         self.exceptions = exceptions
     
@@ -1505,16 +1505,16 @@ with suppress(ValueError):
             return True  # Suppress exception
         
         return False  # Let exception propagate`,
-        timeComplexity: 'O(1)',
-        spaceComplexity: 'O(1)',
-        order: 18,
-        topic: 'Python Advanced',
-    },
-    {
-        id: 'decorator-class',
-        title: 'Class-Based Decorator',
-        difficulty: 'Medium',
-        description: `Implement a decorator using a class instead of a function.
+    timeComplexity: 'O(1)',
+    spaceComplexity: 'O(1)',
+    order: 18,
+    topic: 'Python Advanced',
+  },
+  {
+    id: 'decorator-class',
+    title: 'Class-Based Decorator',
+    difficulty: 'Medium',
+    description: `Implement a decorator using a class instead of a function.
 
 The class decorator should:
 - Implement __init__ and __call__
@@ -1523,19 +1523,19 @@ The class decorator should:
 - Provide a get_count() method
 
 **Pattern:** Class decorators use __call__ to make instances callable.`,
-        examples: [
-            {
-                input: '@CountCalls, function called 3 times',
-                output: 'get_count() returns 3',
-            },
-        ],
-        constraints: ['Must be a class', 'Implement __call__', 'Track call count'],
-        hints: [
-            '__init__ receives the function',
-            '__call__ makes instance callable',
-            'Use instance variable for count',
-        ],
-        starterCode: `from functools import wraps
+    examples: [
+      {
+        input: '@CountCalls, function called 3 times',
+        output: 'get_count() returns 3',
+      },
+    ],
+    constraints: ['Must be a class', 'Implement __call__', 'Track call count'],
+    hints: [
+      '__init__ receives the function',
+      '__call__ makes instance callable',
+      'Use instance variable for count',
+    ],
+    starterCode: `from functools import wraps
 
 class CountCalls:
     """
@@ -1565,13 +1565,13 @@ greet("Charlie")
 
 print(f"Called {greet.get_count()} times")
 `,
-        testCases: [
-            {
-                input: [3], // number of calls
-                expected: 3,
-            },
-        ],
-        solution: `from functools import wraps, update_wrapper
+    testCases: [
+      {
+        input: [3], // number of calls
+        expected: 3,
+      },
+    ],
+    solution: `from functools import wraps, update_wrapper
 
 class CountCalls:
     def __init__(self, func):
@@ -1585,16 +1585,16 @@ class CountCalls:
     
     def get_count(self):
         return self.count`,
-        timeComplexity: 'O(1)',
-        spaceComplexity: 'O(1)',
-        order: 19,
-        topic: 'Python Advanced',
-    },
-    {
-        id: 'functools-compose',
-        title: 'Function Composition',
-        difficulty: 'Medium',
-        description: `Implement a compose function that combines multiple functions into one.
+    timeComplexity: 'O(1)',
+    spaceComplexity: 'O(1)',
+    order: 19,
+    topic: 'Python Advanced',
+  },
+  {
+    id: 'functools-compose',
+    title: 'Function Composition',
+    difficulty: 'Medium',
+    description: `Implement a compose function that combines multiple functions into one.
 
 The compose function should:
 - Accept multiple functions as arguments
@@ -1603,23 +1603,23 @@ The compose function should:
 - Work like mathematical composition: (f ∘ g)(x) = f(g(x))
 
 **Use Case:** Functional programming, data transformations.`,
-        examples: [
-            {
-                input: 'compose(str, lambda x: x*2, lambda x: x+1)(5)',
-                output: '"12" ((5+1)*2 converted to string)',
-            },
-        ],
-        constraints: [
-            'Apply functions right-to-left',
-            'Work with any number of functions',
-            'Handle any argument types',
-        ],
-        hints: [
-            'Use reduce or loop through functions',
-            'Apply functions from right to left',
-            'Return a new function that does composition',
-        ],
-        starterCode: `from functools import reduce
+    examples: [
+      {
+        input: 'compose(str, lambda x: x*2, lambda x: x+1)(5)',
+        output: '"12" ((5+1)*2 converted to string)',
+      },
+    ],
+    constraints: [
+      'Apply functions right-to-left',
+      'Work with any number of functions',
+      'Handle any argument types',
+    ],
+    hints: [
+      'Use reduce or loop through functions',
+      'Apply functions from right to left',
+      'Return a new function that does composition',
+    ],
+    starterCode: `from functools import reduce
 
 def compose(*functions):
     """
@@ -1643,13 +1643,13 @@ to_string = str
 combined = compose(to_string, double, add_one)
 print(combined(5))  # "12"
 `,
-        testCases: [
-            {
-                input: [5],
-                expected: '12',
-            },
-        ],
-        solution: `from functools import reduce
+    testCases: [
+      {
+        input: [5],
+        expected: '12',
+      },
+    ],
+    solution: `from functools import reduce
 
 def compose(*functions):
     def composed(arg):
@@ -1675,16 +1675,16 @@ def compose_alt(*functions):
         return result
     
     return inner`,
-        timeComplexity: 'O(n) where n is number of functions',
-        spaceComplexity: 'O(1)',
-        order: 20,
-        topic: 'Python Advanced',
-    },
-    {
-        id: 'advanced-collections-counter',
-        title: 'Counter for Frequency Analysis',
-        difficulty: 'Easy',
-        description: `Use collections.Counter for efficient frequency counting and operations.
+    timeComplexity: 'O(n) where n is number of functions',
+    spaceComplexity: 'O(1)',
+    order: 20,
+    topic: 'Python Advanced',
+  },
+  {
+    id: 'advanced-collections-counter',
+    title: 'Counter for Frequency Analysis',
+    difficulty: 'Easy',
+    description: `Use collections.Counter for efficient frequency counting and operations.
 
 Implement functions using Counter:
 - Find the k most common elements
@@ -1693,23 +1693,23 @@ Implement functions using Counter:
 - Find missing elements between two collections
 
 **Library:** collections.Counter provides dict subclass for counting hashable objects.`,
-        examples: [
-            {
-                input: 'most_common([1,1,1,2,2,3], k=2)',
-                output: '[(1, 3), (2, 2)]',
-            },
-        ],
-        constraints: [
-            'Use Counter methods',
-            'Handle edge cases',
-            'O(n) time complexity',
-        ],
-        hints: [
-            'Counter has most_common() method',
-            'Counters support arithmetic operations',
-            'Subtract to find differences',
-        ],
-        starterCode: `from collections import Counter
+    examples: [
+      {
+        input: 'most_common([1,1,1,2,2,3], k=2)',
+        output: '[(1, 3), (2, 2)]',
+      },
+    ],
+    constraints: [
+      'Use Counter methods',
+      'Handle edge cases',
+      'O(n) time complexity',
+    ],
+    hints: [
+      'Counter has most_common() method',
+      'Counters support arithmetic operations',
+      'Subtract to find differences',
+    ],
+    starterCode: `from collections import Counter
 
 def most_common_elements(items, k):
     """Find k most common elements.
@@ -1755,13 +1755,13 @@ print(most_common_elements([1,1,1,2,2,3,3,3,3], 2))
 print(elements_above_threshold(['a','a','b','b','b','c'], 2))
 print(counter_difference([1,1,2,2,3], [1,2,2,2]))
 ,`,
-        testCases: [
-            {
-                input: [[1, 1, 1, 2, 2, 3], 2],
-                expected: [(1, 3), (2, 2)],
-            },
-        ],
-        solution: `from collections import Counter
+    testCases: [
+      {
+        input: [[1, 1, 1, 2, 2, 3], 2],
+        expected: [(1, 3), (2, 2)],
+      },
+    ],
+    solution: `from collections import Counter
 
 def most_common_elements(items, k):
     return Counter(items).most_common(k)
@@ -1776,16 +1776,16 @@ def counter_difference(list1, list2):
     c1 = Counter(list1)
     c2 = Counter(list2)
     return c1 - c2  # Keeps only positive counts,`,
-        timeComplexity: 'O(n) for counting, O(n log k) for most_common',
-        spaceComplexity: 'O(n)',
-        order: 21,
-        topic: 'Python Advanced',
-    },
-    {
-        id: 'advanced-collections-deque',
-        title: 'Deque for Efficient Queue Operations',
-        difficulty: 'Medium',
-        description: `Use collections.deque for O(1) append and pop from both ends.
+    timeComplexity: 'O(n) for counting, O(n log k) for most_common',
+    spaceComplexity: 'O(n)',
+    order: 21,
+    topic: 'Python Advanced',
+  },
+  {
+    id: 'advanced-collections-deque',
+    title: 'Deque for Efficient Queue Operations',
+    difficulty: 'Medium',
+    description: `Use collections.deque for O(1) append and pop from both ends.
 
 Implement:
 - Sliding window maximum using deque
@@ -1794,23 +1794,23 @@ Implement:
 - Rotate operations
 
 **Advantage:** O(1) operations on both ends vs O(n) for list.`,
-        examples: [
-            {
-                input: 'sliding_window_max([1,3,-1,-3,5,3,6,7], k=3)',
-                output: '[3,3,5,5,6,7]',
-            },
-        ],
-        constraints: [
-            'Use deque operations',
-            'Maintain O(1) or O(n) time',
-            'Handle edge cases',
-        ],
-        hints: [
-            'appendleft/popleft for O(1) operations',
-            'rotate() for rotation',
-            'maxlen parameter for bounded deque',
-        ],
-        starterCode: `from collections import deque
+    examples: [
+      {
+        input: 'sliding_window_max([1,3,-1,-3,5,3,6,7], k=3)',
+        output: '[3,3,5,5,6,7]',
+      },
+    ],
+    constraints: [
+      'Use deque operations',
+      'Maintain O(1) or O(n) time',
+      'Handle edge cases',
+    ],
+    hints: [
+      'appendleft/popleft for O(1) operations',
+      'rotate() for rotation',
+      'maxlen parameter for bounded deque',
+    ],
+    starterCode: `from collections import deque
 
 def sliding_window_max(nums, k):
     """Find maximum in each sliding window of size k.
@@ -1842,13 +1842,13 @@ def rotate_list(items, k):
 print(sliding_window_max([1,3,-1,-3,5,3,6,7], 3))
 print(rotate_list([1,2,3,4,5], 2))
 `,
-        testCases: [
-            {
-                input: [[1, 3, -1, -3, 5, 3, 6, 7], 3],
-                expected: [3, 3, 5, 5, 6, 7],
-            },
-        ],
-        solution: `from collections import deque
+    testCases: [
+      {
+        input: [[1, 3, -1, -3, 5, 3, 6, 7], 3],
+        expected: [3, 3, 5, 5, 6, 7],
+      },
+    ],
+    solution: `from collections import deque
 
 def sliding_window_max(nums, k):
     if not nums or k == 0:
@@ -1878,17 +1878,17 @@ def rotate_list(items, k):
     d = deque(items)
     d.rotate(k)
     return list(d)`,
-        timeComplexity: 'O(n) for sliding window',
-        spaceComplexity: 'O(k)',
-        order: 22,
-        topic: 'Python Advanced',
-    },
+    timeComplexity: 'O(n) for sliding window',
+    spaceComplexity: 'O(k)',
+    order: 22,
+    topic: 'Python Advanced',
+  },
 
-    {
-        id: 'advanced-itertools-combinations',
-        title: 'Itertools for Combinations and Permutations',
-        difficulty: 'Medium',
-        description: `Use itertools for efficient iteration over combinations, permutations, and products.
+  {
+    id: 'advanced-itertools-combinations',
+    title: 'Itertools for Combinations and Permutations',
+    difficulty: 'Medium',
+    description: `Use itertools for efficient iteration over combinations, permutations, and products.
 
 Implement using itertools:
 - Generate all subsets of size k
@@ -1897,23 +1897,23 @@ Implement using itertools:
 - Combinations with replacement
 
 **Library:** itertools provides memory-efficient iterator tools.`,
-        examples: [
-            {
-                input: 'all_subsets([1,2,3], k=2)',
-                output: '[(1,2), (1,3), (2,3)]',
-            },
-        ],
-        constraints: [
-            'Use itertools functions',
-            'Return iterators or lists',
-            'Handle empty inputs',
-        ],
-        hints: [
-            'combinations() for subsets',
-            'permutations() for arrangements',
-            'product() for cartesian product',
-        ],
-        starterCode: `from itertools import combinations, permutations, product, combinations_with_replacement
+    examples: [
+      {
+        input: 'all_subsets([1,2,3], k=2)',
+        output: '[(1,2), (1,3), (2,3)]',
+      },
+    ],
+    constraints: [
+      'Use itertools functions',
+      'Return iterators or lists',
+      'Handle empty inputs',
+    ],
+    hints: [
+      'combinations() for subsets',
+      'permutations() for arrangements',
+      'product() for cartesian product',
+    ],
+    starterCode: `from itertools import combinations, permutations, product, combinations_with_replacement
 
 def all_subsets(items, k):
     """Generate all subsets of size k.
@@ -1957,13 +1957,13 @@ print(all_subsets([1,2,3], 2))
 print(all_permutations([1,2,3]))
 print(cartesian_product([1,2], ['a','b']))
 `,
-        testCases: [
-            {
-                input: [[1, 2, 3], 2],
-                expected: '[(1,2), (1,3), (2,3)]',
-            },
-        ],
-        solution: `from itertools import combinations, permutations, product, combinations_with_replacement
+    testCases: [
+      {
+        input: [[1, 2, 3], 2],
+        expected: '[(1,2), (1,3), (2,3)]',
+      },
+    ],
+    solution: `from itertools import combinations, permutations, product, combinations_with_replacement
 
 def all_subsets(items, k):
     return list(combinations(items, k))
@@ -1975,17 +1975,17 @@ def all_permutations(items):
 
 def cartesian_product(*lists):
     return list(product(*lists))`,
-        timeComplexity: 'O(n choose k) for combinations, O(n!) for permutations',
-        spaceComplexity: 'O(output size)',
-        order: 23,
-        topic: 'Python Advanced',
-    },
+    timeComplexity: 'O(n choose k) for combinations, O(n!) for permutations',
+    spaceComplexity: 'O(output size)',
+    order: 23,
+    topic: 'Python Advanced',
+  },
 
-    {
-        id: 'advanced-itertools-groupby',
-        title: 'GroupBy for Consecutive Grouping',
-        difficulty: 'Medium',
-        description: `Use itertools.groupby to group consecutive elements by a key function.
+  {
+    id: 'advanced-itertools-groupby',
+    title: 'GroupBy for Consecutive Grouping',
+    difficulty: 'Medium',
+    description: `Use itertools.groupby to group consecutive elements by a key function.
 
 Tasks:
 - Group consecutive identical elements
@@ -1994,23 +1994,23 @@ Tasks:
 - Find consecutive runs
 
 **Note:** groupby only groups consecutive elements, so sort first if needed.`,
-        examples: [
-            {
-                input: 'run_length_encode("aaabbccca")',
-                output: '[("a",3), ("b",2), ("c",3), ("a",1)]',
-            },
-        ],
-        constraints: [
-            'Use itertools.groupby',
-            'Handle consecutive grouping',
-            'Sort if grouping all occurrences',
-        ],
-        hints: [
-            'groupby(iterable, key=func)',
-            'Returns (key, group_iterator) pairs',
-            'Sort before groupby if needed',
-        ],
-        starterCode: `from itertools import groupby
+    examples: [
+      {
+        input: 'run_length_encode("aaabbccca")',
+        output: '[("a",3), ("b",2), ("c",3), ("a",1)]',
+      },
+    ],
+    constraints: [
+      'Use itertools.groupby',
+      'Handle consecutive grouping',
+      'Sort if grouping all occurrences',
+    ],
+    hints: [
+      'groupby(iterable, key=func)',
+      'Returns (key, group_iterator) pairs',
+      'Sort before groupby if needed',
+    ],
+    starterCode: `from itertools import groupby
 
 def run_length_encode(s):
     """Encode string using run-length encoding.
@@ -2040,13 +2040,13 @@ def group_consecutive(nums):
 print(run_length_encode("aaabbccca"))
 print(group_consecutive([1,2,3,5,6,8,9,10]))
 `,
-        testCases: [
-            {
-                input: ['aaabbccca'],
-                expected: '[("a",3), ("b",2), ("c",3), ("a",1)]',
-            },
-        ],
-        solution: `from itertools import groupby
+    testCases: [
+      {
+        input: ['aaabbccca'],
+        expected: '[("a",3), ("b",2), ("c",3), ("a",1)]',
+      },
+    ],
+    solution: `from itertools import groupby
 
 def run_length_encode(s):
     return [(char, len(list(group))) for char, group in groupby(s)]
@@ -2057,17 +2057,17 @@ def group_consecutive(nums):
     for k, g in groupby(enumerate(nums), lambda x: x[1] - x[0]):
         result.append([x[1] for x in g])
     return result`,
-        timeComplexity: 'O(n)',
-        spaceComplexity: 'O(n)',
-        order: 24,
-        topic: 'Python Advanced',
-    },
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(n)',
+    order: 24,
+    topic: 'Python Advanced',
+  },
 
-    {
-        id: 'advanced-functools-reduce',
-        title: 'Reduce for Aggregation',
-        difficulty: 'Medium',
-        description: `Use functools.reduce to aggregate values using a binary function.
+  {
+    id: 'advanced-functools-reduce',
+    title: 'Reduce for Aggregation',
+    difficulty: 'Medium',
+    description: `Use functools.reduce to aggregate values using a binary function.
 
 Implement using reduce:
 - Product of all numbers
@@ -2076,23 +2076,23 @@ Implement using reduce:
 - Compose multiple functions
 
 **Pattern:** Reduce applies function cumulatively to items from left to right.`,
-        examples: [
-            {
-                input: 'product([1,2,3,4,5])',
-                output: '120',
-            },
-        ],
-        constraints: [
-            'Use functools.reduce',
-            'Handle empty sequences',
-            'Provide initial values when needed',
-        ],
-        hints: [
-            'reduce(function, sequence, initial)',
-            'Function takes two arguments',
-            'Use operator module for common operations',
-        ],
-        starterCode: `from functools import reduce
+    examples: [
+      {
+        input: 'product([1,2,3,4,5])',
+        output: '120',
+      },
+    ],
+    constraints: [
+      'Use functools.reduce',
+      'Handle empty sequences',
+      'Provide initial values when needed',
+    ],
+    hints: [
+      'reduce(function, sequence, initial)',
+      'Function takes two arguments',
+      'Use operator module for common operations',
+    ],
+    starterCode: `from functools import reduce
 import operator
 import math
 
@@ -2137,13 +2137,13 @@ print(product([1,2,3,4,5]))
 print(flatten_list([[1,2], [3,4], [5]]))
 print(gcd_multiple([48, 64, 128]))
 `,
-        testCases: [
-            {
-                input: [[1, 2, 3, 4, 5]],
-                expected: 120,
-            },
-        ],
-        solution: `from functools import reduce
+    testCases: [
+      {
+        input: [[1, 2, 3, 4, 5]],
+        expected: 120,
+      },
+    ],
+    solution: `from functools import reduce
 import operator
 import math
 
@@ -2157,17 +2157,17 @@ def flatten_list(nested_list):
 
 def gcd_multiple(numbers):
     return reduce(math.gcd, numbers)`,
-        timeComplexity: 'O(n)',
-        spaceComplexity: 'O(1) for product/gcd, O(n) for flatten',
-        order: 25,
-        topic: 'Python Advanced',
-    },
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1) for product/gcd, O(n) for flatten',
+    order: 25,
+    topic: 'Python Advanced',
+  },
 
-    {
-        id: 'advanced-functools-partial',
-        title: 'Partial Function Application',
-        difficulty: 'Easy',
-        description: `Use functools.partial to create new functions with some arguments pre-filled.
+  {
+    id: 'advanced-functools-partial',
+    title: 'Partial Function Application',
+    difficulty: 'Easy',
+    description: `Use functools.partial to create new functions with some arguments pre-filled.
 
 Create partial functions:
 - Power functions (square, cube)
@@ -2176,23 +2176,23 @@ Create partial functions:
 - Custom sorting functions
 
 **Use Case:** Simplify function calls by fixing some arguments.`,
-        examples: [
-            {
-                input: 'square = partial(pow, exp=2); square(5)',
-                output: '25',
-            },
-        ],
-        constraints: [
-            'Use functools.partial',
-            'Pre-fill specific arguments',
-            'Create reusable functions',
-        ],
-        hints: [
-            'partial(func, *args, **kwargs)',
-            'Returns new callable',
-            'Can partially apply positional and keyword args',
-        ],
-        starterCode: `from functools import partial
+    examples: [
+      {
+        input: 'square = partial(pow, exp=2); square(5)',
+        output: '25',
+      },
+    ],
+    constraints: [
+      'Use functools.partial',
+      'Pre-fill specific arguments',
+      'Create reusable functions',
+    ],
+    hints: [
+      'partial(func, *args, **kwargs)',
+      'Returns new callable',
+      'Can partially apply positional and keyword args',
+    ],
+    starterCode: `from functools import partial
 
 def create_power_functions():
     """Create square and cube functions using partial.
@@ -2222,13 +2222,13 @@ filter_even, filter_positive = create_filter_functions()
 print(list(filter_even([1,2,3,4,5,6])))
 print(list(filter_positive([-2,-1,0,1,2])))
 `,
-        testCases: [
-            {
-                input: [5],
-                expected: 25,
-            },
-        ],
-        solution: `from functools import partial
+    testCases: [
+      {
+        input: [5],
+        expected: 25,
+      },
+    ],
+    solution: `from functools import partial
 
 def create_power_functions():
     square = partial(pow, exp=2)
@@ -2242,17 +2242,17 @@ def create_filter_functions():
     filter_even = partial(filter, is_even)
     filter_positive = partial(filter, is_positive)
     return filter_even, filter_positive`,
-        timeComplexity: 'O(1) to create partial functions',
-        spaceComplexity: 'O(1)',
-        order: 26,
-        topic: 'Python Advanced',
-    },
+    timeComplexity: 'O(1) to create partial functions',
+    spaceComplexity: 'O(1)',
+    order: 26,
+    topic: 'Python Advanced',
+  },
 
-    {
-        id: 'advanced-functools-lru-cache',
-        title: 'LRU Cache for Memoization',
-        difficulty: 'Medium',
-        description: `Use @functools.lru_cache decorator for automatic memoization with LRU eviction.
+  {
+    id: 'advanced-functools-lru-cache',
+    title: 'LRU Cache for Memoization',
+    difficulty: 'Medium',
+    description: `Use @functools.lru_cache decorator for automatic memoization with LRU eviction.
 
 Apply LRU cache to:
 - Fibonacci calculation
@@ -2261,23 +2261,23 @@ Apply LRU cache to:
 - Dynamic programming problems
 
 **Benefit:** Automatic caching with bounded memory using LRU policy.`,
-        examples: [
-            {
-                input: 'fibonacci(100)',
-                output: 'Fast result with memoization',
-            },
-        ],
-        constraints: [
-            'Use @lru_cache decorator',
-            'Specify maxsize if needed',
-            'Arguments must be hashable',
-        ],
-        hints: [
-            '@lru_cache(maxsize=128)',
-            'maxsize=None for unlimited cache',
-            'Use cache_info() to see stats',
-        ],
-        starterCode: `from functools import lru_cache
+    examples: [
+      {
+        input: 'fibonacci(100)',
+        output: 'Fast result with memoization',
+      },
+    ],
+    constraints: [
+      'Use @lru_cache decorator',
+      'Specify maxsize if needed',
+      'Arguments must be hashable',
+    ],
+    hints: [
+      '@lru_cache(maxsize=128)',
+      'maxsize=None for unlimited cache',
+      'Use cache_info() to see stats',
+    ],
+    starterCode: `from functools import lru_cache
 
 @lru_cache(maxsize=None)
 def fibonacci(n):
@@ -2311,13 +2311,13 @@ print(fibonacci(100))
 print(count_ways_to_climb(10))
 print(fibonacci.cache_info())  # View cache statistics
 `,
-        testCases: [
-            {
-                input: [10],
-                expected: 55,
-            },
-        ],
-        solution: `from functools import lru_cache
+    testCases: [
+      {
+        input: [10],
+        expected: 55,
+      },
+    ],
+    solution: `from functools import lru_cache
 
 @lru_cache(maxsize=None)
 def fibonacci(n):
@@ -2333,17 +2333,17 @@ def count_ways_to_climb(n, steps=(1, 2)):
     if n < 0:
         return 0
     return sum(count_ways_to_climb(n - step, steps) for step in steps)`,
-        timeComplexity: 'O(n) with memoization vs O(2^n) without',
-        spaceComplexity: 'O(n) for cache',
-        order: 27,
-        topic: 'Python Advanced',
-    },
+    timeComplexity: 'O(n) with memoization vs O(2^n) without',
+    spaceComplexity: 'O(n) for cache',
+    order: 27,
+    topic: 'Python Advanced',
+  },
 
-    {
-        id: 'advanced-heapq-operations',
-        title: 'Heap Operations with Heapq',
-        difficulty: 'Medium',
-        description: `Use heapq module for efficient priority queue operations.
+  {
+    id: 'advanced-heapq-operations',
+    title: 'Heap Operations with Heapq',
+    difficulty: 'Medium',
+    description: `Use heapq module for efficient priority queue operations.
 
 Implement:
 - Find k largest/smallest elements
@@ -2352,23 +2352,23 @@ Implement:
 - Running median using two heaps
 
 **Library:** heapq provides min-heap implementation.`,
-        examples: [
-            {
-                input: 'nlargest([1,4,2,8,5,3], 3)',
-                output: '[8,5,4]',
-            },
-        ],
-        constraints: [
-            'Use heapq functions',
-            'Maintain heap invariant',
-            'O(n log k) for k largest',
-        ],
-        hints: [
-            'heappush/heappop for basic ops',
-            'nlargest/nsmallest for top k',
-            'Use negative values for max heap',
-        ],
-        starterCode: `import heapq
+    examples: [
+      {
+        input: 'nlargest([1,4,2,8,5,3], 3)',
+        output: '[8,5,4]',
+      },
+    ],
+    constraints: [
+      'Use heapq functions',
+      'Maintain heap invariant',
+      'O(n log k) for k largest',
+    ],
+    hints: [
+      'heappush/heappop for basic ops',
+      'nlargest/nsmallest for top k',
+      'Use negative values for max heap',
+    ],
+    starterCode: `import heapq
 
 def find_k_largest(nums, k):
     """Find k largest elements.
@@ -2415,13 +2415,13 @@ class PriorityQueue:
 print(find_k_largest([1,4,2,8,5,3], 3))
 print(merge_sorted_lists([1,3,5], [2,4,6], [0,7,8]))
 `,
-        testCases: [
-            {
-                input: [[1, 4, 2, 8, 5, 3], 3],
-                expected: [8, 5, 4],
-            },
-        ],
-        solution: `import heapq
+    testCases: [
+      {
+        input: [[1, 4, 2, 8, 5, 3], 3],
+        expected: [8, 5, 4],
+      },
+    ],
+    solution: `import heapq
 
 def find_k_largest(nums, k):
     return heapq.nlargest(k, nums)
@@ -2445,17 +2445,17 @@ class PriorityQueue:
         if not self.heap:
             raise IndexError("pop from empty priority queue")
         return heapq.heappop(self.heap)[2]`,
-        timeComplexity: 'O(n log k) for k largest, O(n log n) for merge',
-        spaceComplexity: 'O(k) for k largest, O(n) for merge',
-        order: 28,
-        topic: 'Python Advanced',
-    },
+    timeComplexity: 'O(n log k) for k largest, O(n log n) for merge',
+    spaceComplexity: 'O(k) for k largest, O(n) for merge',
+    order: 28,
+    topic: 'Python Advanced',
+  },
 
-    {
-        id: 'advanced-bisect-binary-search',
-        title: 'Binary Search with Bisect',
-        difficulty: 'Easy',
-        description: `Use bisect module for binary search on sorted sequences.
+  {
+    id: 'advanced-bisect-binary-search',
+    title: 'Binary Search with Bisect',
+    difficulty: 'Easy',
+    description: `Use bisect module for binary search on sorted sequences.
 
 Implement:
 - Find insertion point for value
@@ -2464,23 +2464,23 @@ Implement:
 - Maintain sorted list with insertions
 
 **Library:** bisect provides binary search functions.`,
-        examples: [
-            {
-                input: 'bisect_left([1,2,4,4,5], 4)',
-                output: '2',
-            },
-        ],
-        constraints: [
-            'Use bisect functions',
-            'List must be sorted',
-            'O(log n) search time',
-        ],
-        hints: [
-            'bisect_left finds leftmost position',
-            'bisect_right finds rightmost position',
-            'insort maintains sorted order',
-        ],
-        starterCode: `import bisect
+    examples: [
+      {
+        input: 'bisect_left([1,2,4,4,5], 4)',
+        output: '2',
+      },
+    ],
+    constraints: [
+      'Use bisect functions',
+      'List must be sorted',
+      'O(log n) search time',
+    ],
+    hints: [
+      'bisect_left finds leftmost position',
+      'bisect_right finds rightmost position',
+      'insort maintains sorted order',
+    ],
+    starterCode: `import bisect
 
 def count_in_range(sorted_list, low, high):
     """Count elements in range [low, high].
@@ -2528,13 +2528,13 @@ class SortedList:
 print(count_in_range([1,2,4,4,4,5,7,8], 4, 6))
 print(find_closest([1,3,5,7,9], 6))
 `,
-        testCases: [
-            {
-                input: [[1, 2, 4, 4, 4, 5, 7, 8], 4, 6],
-                expected: 4,
-            },
-        ],
-        solution: `import bisect
+    testCases: [
+      {
+        input: [[1, 2, 4, 4, 4, 5, 7, 8], 4, 6],
+        expected: 4,
+      },
+    ],
+    solution: `import bisect
 
 def count_in_range(sorted_list, low, high):
     left = bisect.bisect_left(sorted_list, low)
@@ -2564,17 +2564,17 @@ class SortedList:
         pos = bisect.bisect_left(self.items, value)
         if pos < len(self.items) and self.items[pos] == value:
             self.items.pop(pos)`,
-        timeComplexity: 'O(log n) for search, O(n) for insertion (list shift)',
-        spaceComplexity: 'O(n)',
-        order: 29,
-        topic: 'Python Advanced',
-    },
+    timeComplexity: 'O(log n) for search, O(n) for insertion (list shift)',
+    spaceComplexity: 'O(n)',
+    order: 29,
+    topic: 'Python Advanced',
+  },
 
-    {
-        id: 'advanced-operator-functions',
-        title: 'Operator Module for Functional Programming',
-        difficulty: 'Easy',
-        description: `Use operator module for function versions of operators.
+  {
+    id: 'advanced-operator-functions',
+    title: 'Operator Module for Functional Programming',
+    difficulty: 'Easy',
+    description: `Use operator module for function versions of operators.
 
 Use operator functions for:
 - Sorting by attributes
@@ -2583,23 +2583,23 @@ Use operator functions for:
 - attrgetter for object attributes
 
 **Benefit:** Avoid lambda functions for simple operations.`,
-        examples: [
-            {
-                input: 'sorted(users, key=operator.attrgetter("age"))',
-                output: 'Users sorted by age',
-            },
-        ],
-        constraints: [
-            'Use operator module',
-            'Prefer operator over lambda when possible',
-            'Understand operator.itemgetter/attrgetter',
-        ],
-        hints: [
-            'itemgetter(1) extracts index 1',
-            'attrgetter("name") gets .name attribute',
-            'methodcaller("upper") calls .upper()',
-        ],
-        starterCode: `import operator
+    examples: [
+      {
+        input: 'sorted(users, key=operator.attrgetter("age"))',
+        output: 'Users sorted by age',
+      },
+    ],
+    constraints: [
+      'Use operator module',
+      'Prefer operator over lambda when possible',
+      'Understand operator.itemgetter/attrgetter',
+    ],
+    hints: [
+      'itemgetter(1) extracts index 1',
+      'attrgetter("name") gets .name attribute',
+      'methodcaller("upper") calls .upper()',
+    ],
+    starterCode: `import operator
 from collections import namedtuple
 
 User = namedtuple('User', ['name', 'age', 'score'])
@@ -2658,13 +2658,13 @@ print(extract_column(data, 1))
 
 print(apply_operation(10, 5, 'add'))
 `,
-        testCases: [
-            {
-                input: [10, 5, 'add'],
-                expected: 15,
-            },
-        ],
-        solution: `import operator
+    testCases: [
+      {
+        input: [10, 5, 'add'],
+        expected: 15,
+      },
+    ],
+    solution: `import operator
 from collections import namedtuple
 
 User = namedtuple('User', ['name', 'age', 'score'])
@@ -2686,17 +2686,17 @@ def apply_operation(a, b, op_name):
         'truediv': operator.truediv,
     }
     return ops[op_name](a, b)`,
-        timeComplexity: 'O(n log n) for sorting, O(n) for extraction',
-        spaceComplexity: 'O(n)',
-        order: 30,
-        topic: 'Python Advanced',
-    },
+    timeComplexity: 'O(n log n) for sorting, O(n) for extraction',
+    spaceComplexity: 'O(n)',
+    order: 30,
+    topic: 'Python Advanced',
+  },
 
-    {
-        id: 'advanced-typing-annotations',
-        title: 'Advanced Type Annotations',
-        difficulty: 'Medium',
-        description: `Use advanced typing features for better type safety and documentation.
+  {
+    id: 'advanced-typing-annotations',
+    title: 'Advanced Type Annotations',
+    difficulty: 'Medium',
+    description: `Use advanced typing features for better type safety and documentation.
 
 Implement with type hints:
 - Generic functions
@@ -2706,23 +2706,23 @@ Implement with type hints:
 - Literal types
 
 **Benefit:** Better IDE support, documentation, and runtime type checking with tools.`,
-        examples: [
-            {
-                input: 'def get_first(items: List[T]) -> Optional[T]',
-                output: 'Generic function with type variable',
-            },
-        ],
-        constraints: [
-            'Use typing module',
-            'Add comprehensive type hints',
-            'Support generics where appropriate',
-        ],
-        hints: [
-            'TypeVar("T") for generics',
-            'Optional[X] = Union[X, None]',
-            'Use Callable[[Args], Return]',
-        ],
-        starterCode: `from typing import TypeVar, List, Optional, Callable, Union, Literal, Dict, Any
+    examples: [
+      {
+        input: 'def get_first(items: List[T]) -> Optional[T]',
+        output: 'Generic function with type variable',
+      },
+    ],
+    constraints: [
+      'Use typing module',
+      'Add comprehensive type hints',
+      'Support generics where appropriate',
+    ],
+    hints: [
+      'TypeVar("T") for generics',
+      'Optional[X] = Union[X, None]',
+      'Use Callable[[Args], Return]',
+    ],
+    starterCode: `from typing import TypeVar, List, Optional, Callable, Union, Literal, Dict, Any
 
 T = TypeVar('T')
 Number = TypeVar('Number', int, float)
@@ -2770,13 +2770,13 @@ print(get_first([1,2,3]))
 print(apply_twice(lambda x: x * 2, 5))
 print(safe_divide(10, 2))
 `,
-        testCases: [
-            {
-                input: [[1, 2, 3]],
-                expected: 1,
-            },
-        ],
-        solution: `from typing import TypeVar, List, Optional, Callable, Union, Literal, Dict, Any
+    testCases: [
+      {
+        input: [[1, 2, 3]],
+        expected: 1,
+      },
+    ],
+    solution: `from typing import TypeVar, List, Optional, Callable, Union, Literal, Dict, Any
 
 T = TypeVar('T')
 Number = TypeVar('Number', int, float)
@@ -2793,17 +2793,17 @@ def safe_divide(a: Number, b: Number) -> Union[Number, Literal["error"]]:
     if b == 0:
         return "error"
     return a / b`,
-        timeComplexity: 'O(1) for all functions',
-        spaceComplexity: 'O(1)',
-        order: 31,
-        topic: 'Python Advanced',
-    },
+    timeComplexity: 'O(1) for all functions',
+    spaceComplexity: 'O(1)',
+    order: 31,
+    topic: 'Python Advanced',
+  },
 
-    {
-        id: 'advanced-comprehensions-nested',
-        title: 'Advanced List/Dict/Set Comprehensions',
-        difficulty: 'Medium',
-        description: `Master complex comprehensions with nesting, conditionals, and multiple iterations.
+  {
+    id: 'advanced-comprehensions-nested',
+    title: 'Advanced List/Dict/Set Comprehensions',
+    difficulty: 'Medium',
+    description: `Master complex comprehensions with nesting, conditionals, and multiple iterations.
 
 Create comprehensions for:
 - Nested list flattening
@@ -2812,23 +2812,23 @@ Create comprehensions for:
 - Set operations with filtering
 
 **Pattern:** Comprehensions are more Pythonic than loops for data transformations.`,
-        examples: [
-            {
-                input: 'flatten([[1,2], [3,4]])',
-                output: '[1,2,3,4]',
-            },
-        ],
-        constraints: [
-            'Use comprehensions (not loops)',
-            'Handle nested structures',
-            'Combine with conditionals',
-        ],
-        hints: [
-            'Nested comprehensions: [x for list in lists for x in list]',
-            'Conditional: [x for x in items if condition]',
-            'Dict comprehension: {k: v for k, v in items}',
-        ],
-        starterCode: `def flatten(nested_list):
+    examples: [
+      {
+        input: 'flatten([[1,2], [3,4]])',
+        output: '[1,2,3,4]',
+      },
+    ],
+    constraints: [
+      'Use comprehensions (not loops)',
+      'Handle nested structures',
+      'Combine with conditionals',
+    ],
+    hints: [
+      'Nested comprehensions: [x for list in lists for x in list]',
+      'Conditional: [x for x in items if condition]',
+      'Dict comprehension: {k: v for k, v in items}',
+    ],
+    starterCode: `def flatten(nested_list):
     """Flatten nested list using comprehension.
     
     Args:
@@ -2882,13 +2882,13 @@ print(transpose_matrix([[1,2,3], [4,5,6]]))
 print(invert_dict({'a': 1, 'b': 2, 'c': 3}))
 print(word_lengths("the quick brown fox"))
 `,
-        testCases: [
-            {
-                input: [[[1, 2], [3, 4], [5]]],
-                expected: [1, 2, 3, 4, 5],
-            },
-        ],
-        solution: `def flatten(nested_list):
+    testCases: [
+      {
+        input: [[[1, 2], [3, 4], [5]]],
+        expected: [1, 2, 3, 4, 5],
+      },
+    ],
+    solution: `def flatten(nested_list):
     return [item for sublist in nested_list for item in sublist]
 
 
@@ -2902,17 +2902,17 @@ def invert_dict(d):
 
 def word_lengths(text):
     return {word: len(word) for word in text.split() if len(word) > 3}`,
-        timeComplexity: 'O(n) where n is total elements',
-        spaceComplexity: 'O(n)',
-        order: 32,
-        topic: 'Python Advanced',
-    },
+    timeComplexity: 'O(n) where n is total elements',
+    spaceComplexity: 'O(n)',
+    order: 32,
+    topic: 'Python Advanced',
+  },
 
-    {
-        id: 'advanced-walrus-operator',
-        title: 'Walrus Operator (:=) for Assignment Expressions',
-        difficulty: 'Easy',
-        description: `Use the walrus operator (:=) for inline assignments in expressions.
+  {
+    id: 'advanced-walrus-operator',
+    title: 'Walrus Operator (:=) for Assignment Expressions',
+    difficulty: 'Easy',
+    description: `Use the walrus operator (:=) for inline assignments in expressions.
 
 Apply walrus operator in:
 - While loop conditions
@@ -2921,23 +2921,23 @@ Apply walrus operator in:
 - Complex conditionals
 
 **Benefit:** Avoid duplicate evaluations and reduce code verbosity.`,
-        examples: [
-            {
-                input: 'if (n := len(items)) > 10: print(f"Too many: {n}")',
-                output: 'Assigns and uses n in one line',
-            },
-        ],
-        constraints: [
-            'Use := operator',
-            'Valid in Python 3.8+',
-            'Understand expression vs statement',
-        ],
-        hints: [
-            'Syntax: (var := expression)',
-            'Returns value of expression',
-            'Useful in comprehensions and conditionals',
-        ],
-        starterCode: `def process_items(items):
+    examples: [
+      {
+        input: 'if (n := len(items)) > 10: print(f"Too many: {n}")',
+        output: 'Assigns and uses n in one line',
+      },
+    ],
+    constraints: [
+      'Use := operator',
+      'Valid in Python 3.8+',
+      'Understand expression vs statement',
+    ],
+    hints: [
+      'Syntax: (var := expression)',
+      'Returns value of expression',
+      'Useful in comprehensions and conditionals',
+    ],
+    starterCode: `def process_items(items):
     """Process items using walrus operator.
     
     Args:
@@ -2986,13 +2986,13 @@ inputs = iter(["apple", "banana", "stop", "cherry"])
 print(read_until_stop(lambda: next(inputs)))
 print(categorize_number(150))
 `,
-        testCases: [
-            {
-                input: [['hi', 'hello', 'hey', 'goodbye']],
-                expected: '[5, 7]',
-            },
-        ],
-        solution: `def process_items(items):
+    testCases: [
+      {
+        input: [['hi', 'hello', 'hey', 'goodbye']],
+        expected: '[5, 7]',
+      },
+    ],
+    solution: `def process_items(items):
     return [length for item in items if (length := len(item)) > 3]
 
 
@@ -3010,18 +3010,18 @@ def categorize_number(n):
         return "medium"
     else:
         return "small"`,
-        timeComplexity:
-            'O(n) for process_items and read_until_stop, O(1) for categorize',
-        spaceComplexity: 'O(n)',
-        order: 33,
-        topic: 'Python Advanced',
-    },
+    timeComplexity:
+      'O(n) for process_items and read_until_stop, O(1) for categorize',
+    spaceComplexity: 'O(n)',
+    order: 33,
+    topic: 'Python Advanced',
+  },
 
-    {
-        id: 'advanced-match-case',
-        title: 'Structural Pattern Matching (Match-Case)',
-        difficulty: 'Medium',
-        description: `Use Python 3.10+ match-case for structural pattern matching.
+  {
+    id: 'advanced-match-case',
+    title: 'Structural Pattern Matching (Match-Case)',
+    difficulty: 'Medium',
+    description: `Use Python 3.10+ match-case for structural pattern matching.
 
 Implement match-case for:
 - Type-based dispatch
@@ -3030,23 +3030,23 @@ Implement match-case for:
 - Handling complex data structures
 
 **Pattern:** More powerful and readable than if-elif chains.`,
-        examples: [
-            {
-                input: 'match_shape(("circle", 5))',
-                output: 'Circle with radius 5',
-            },
-        ],
-        constraints: [
-            'Use match-case statements',
-            'Python 3.10+ required',
-            'Handle all cases with default',
-        ],
-        hints: [
-            'case pattern if guard:',
-            'Use | for OR patterns',
-            'Destructure with case (a, b):',
-        ],
-        starterCode: `def match_command(command):
+    examples: [
+      {
+        input: 'match_shape(("circle", 5))',
+        output: 'Circle with radius 5',
+      },
+    ],
+    constraints: [
+      'Use match-case statements',
+      'Python 3.10+ required',
+      'Handle all cases with default',
+    ],
+    hints: [
+      'case pattern if guard:',
+      'Use | for OR patterns',
+      'Destructure with case (a, b):',
+    ],
+    starterCode: `def match_command(command):
     """Match command patterns.
     
     Args:
@@ -3091,13 +3091,13 @@ print(match_command(("draw", "circle", 5, "red")))
 print(classify_point((0, 0)))
 print(classify_point((5, 5)))
 `,
-        testCases: [
-            {
-                input: [('move', 10, 20)],
-                expected: 'Moving to 10, 20',
-            },
-        ],
-        solution: `def match_command(command):
+    testCases: [
+      {
+        input: [('move', 10, 20)],
+        expected: 'Moving to 10, 20',
+      },
+    ],
+    solution: `def match_command(command):
     match command:
         case ("quit",):
             return "Quitting"
@@ -3127,17 +3127,17 @@ def classify_point(point):
             return f"quadrant 3: ({x}, {y})"
         case (x, y):
             return f"quadrant 4: ({x}, {y})"`,
-        timeComplexity: 'O(1)',
-        spaceComplexity: 'O(1)',
-        order: 34,
-        topic: 'Python Advanced',
-    },
+    timeComplexity: 'O(1)',
+    spaceComplexity: 'O(1)',
+    order: 34,
+    topic: 'Python Advanced',
+  },
 
-    {
-        id: 'advanced-chainmap',
-        title: 'ChainMap for Layered Dictionaries',
-        difficulty: 'Medium',
-        description: `Use collections.ChainMap to manage multiple dictionaries as a single view.
+  {
+    id: 'advanced-chainmap',
+    title: 'ChainMap for Layered Dictionaries',
+    difficulty: 'Medium',
+    description: `Use collections.ChainMap to manage multiple dictionaries as a single view.
 
 Use ChainMap for:
 - Configuration layers (defaults, user, environment)
@@ -3146,23 +3146,23 @@ Use ChainMap for:
 - Fallback lookups
 
 **Benefit:** Efficient layered lookups without copying dictionaries.`,
-        examples: [
-            {
-                input: 'ChainMap(user_config, default_config)',
-                output: 'User config with defaults as fallback',
-            },
-        ],
-        constraints: [
-            'Use collections.ChainMap',
-            'Understand lookup order',
-            'First dict has priority',
-        ],
-        hints: [
-            'ChainMap(*dicts) creates layered view',
-            'Lookups search from first to last',
-            'Updates only affect first dict',
-        ],
-        starterCode: `from collections import ChainMap
+    examples: [
+      {
+        input: 'ChainMap(user_config, default_config)',
+        output: 'User config with defaults as fallback',
+      },
+    ],
+    constraints: [
+      'Use collections.ChainMap',
+      'Understand lookup order',
+      'First dict has priority',
+    ],
+    hints: [
+      'ChainMap(*dicts) creates layered view',
+      'Lookups search from first to last',
+      'Updates only affect first dict',
+    ],
+    starterCode: `from collections import ChainMap
 
 def create_config_system(defaults, user_config, env_config):
     """Create layered configuration system.
@@ -3200,13 +3200,13 @@ env = {'host': '0.0.0.0'}
 config = create_config_system(defaults, user, env)
 print(dict(config))  # Should show env > user > defaults priority
 `,
-        testCases: [
-            {
-                input: [{ a: 1 }, { a: 2, b: 3 }],
-                expected: '{"a": 1, "b": 3}',
-            },
-        ],
-        solution: `from collections import ChainMap
+    testCases: [
+      {
+        input: [{ a: 1 }, { a: 2, b: 3 }],
+        expected: '{"a": 1, "b": 3}',
+      },
+    ],
+    solution: `from collections import ChainMap
 
 def create_config_system(defaults, user_config, env_config):
     # First dict in ChainMap has highest priority
@@ -3217,17 +3217,17 @@ def simulate_scope_chain():
     global_scope = {'x': 1, 'y': 2, 'z': 3}
     local_scope = {'x': 10, 'y': 20}
     return ChainMap(local_scope, global_scope)`,
-        timeComplexity: 'O(k) where k is number of maps (usually small)',
-        spaceComplexity: 'O(1) - no copying, just references',
-        order: 35,
-        topic: 'Python Advanced',
-    },
+    timeComplexity: 'O(k) where k is number of maps (usually small)',
+    spaceComplexity: 'O(1) - no copying, just references',
+    order: 35,
+    topic: 'Python Advanced',
+  },
 
-    {
-        id: 'advanced-named-tuple',
-        title: 'NamedTuple for Structured Data',
-        difficulty: 'Easy',
-        description: `Use collections.namedtuple or typing.NamedTuple for lightweight data structures.
+  {
+    id: 'advanced-named-tuple',
+    title: 'NamedTuple for Structured Data',
+    difficulty: 'Easy',
+    description: `Use collections.namedtuple or typing.NamedTuple for lightweight data structures.
 
 Create namedtuples for:
 - Function return values
@@ -3236,23 +3236,23 @@ Create namedtuples for:
 - Type-hinted data classes (typing.NamedTuple)
 
 **Benefit:** Memory-efficient, immutable, with named fields.`,
-        examples: [
-            {
-                input: 'Point = namedtuple("Point", ["x", "y"])',
-                output: 'Tuple with named fields',
-            },
-        ],
-        constraints: [
-            'Use namedtuple or typing.NamedTuple',
-            'Fields are immutable',
-            'Support all tuple operations',
-        ],
-        hints: [
-            'collections.namedtuple for runtime',
-            'typing.NamedTuple for type hints',
-            'Access by name or index',
-        ],
-        starterCode: `from collections import namedtuple
+    examples: [
+      {
+        input: 'Point = namedtuple("Point", ["x", "y"])',
+        output: 'Tuple with named fields',
+      },
+    ],
+    constraints: [
+      'Use namedtuple or typing.NamedTuple',
+      'Fields are immutable',
+      'Support all tuple operations',
+    ],
+    hints: [
+      'collections.namedtuple for runtime',
+      'typing.NamedTuple for type hints',
+      'Access by name or index',
+    ],
+    starterCode: `from collections import namedtuple
 from typing import NamedTuple
 
 # Method 1: collections.namedtuple
@@ -3302,13 +3302,13 @@ print(calculate_distance(p1, p2))
 person = Person("Alice", 30, "alice@example.com")
 print(person.is_adult())
 `,
-        testCases: [
-            {
-                input: [0, 0, 3, 4],
-                expected: 5.0,
-            },
-        ],
-        solution: `from collections import namedtuple
+    testCases: [
+      {
+        input: [0, 0, 3, 4],
+        expected: 5.0,
+      },
+    ],
+    solution: `from collections import namedtuple
 from typing import NamedTuple
 import math
 
@@ -3331,17 +3331,17 @@ def parse_csv_row(row_string):
 
 def calculate_distance(p1: Point, p2: Point) -> float:
     return math.sqrt((p2.x - p1.x)**2 + (p2.y - p1.y)**2)`,
-        timeComplexity: 'O(1) for field access',
-        spaceComplexity: 'O(n) where n is number of fields',
-        order: 36,
-        topic: 'Python Advanced',
-    },
+    timeComplexity: 'O(1) for field access',
+    spaceComplexity: 'O(n) where n is number of fields',
+    order: 36,
+    topic: 'Python Advanced',
+  },
 
-    {
-        id: 'advanced-slots',
-        title: '__slots__ for Memory Optimization',
-        difficulty: 'Medium',
-        description: `Use __slots__ to reduce memory usage and improve attribute access speed.
+  {
+    id: 'advanced-slots',
+    title: '__slots__ for Memory Optimization',
+    difficulty: 'Medium',
+    description: `Use __slots__ to reduce memory usage and improve attribute access speed.
 
 Implement classes with __slots__:
 - Memory-efficient data classes
@@ -3350,23 +3350,23 @@ Implement classes with __slots__:
 - Compare memory usage with/without slots
 
 **Benefit:** 40-50% memory reduction, faster attribute access, prevents dynamic attributes.`,
-        examples: [
-            {
-                input: 'class Point: __slots__ = ["x", "y"]',
-                output: 'Memory-efficient Point class',
-            },
-        ],
-        constraints: [
-            'Use __slots__ attribute',
-            'Cannot add dynamic attributes',
-            'Incompatible with __dict__',
-        ],
-        hints: [
-            '__slots__ = ["attr1", "attr2"]',
-            'Defined at class level',
-            'All instances share same slots',
-        ],
-        starterCode: `import sys
+    examples: [
+      {
+        input: 'class Point: __slots__ = ["x", "y"]',
+        output: 'Memory-efficient Point class',
+      },
+    ],
+    constraints: [
+      'Use __slots__ attribute',
+      'Cannot add dynamic attributes',
+      'Incompatible with __dict__',
+    ],
+    hints: [
+      '__slots__ = ["attr1", "attr2"]',
+      'Defined at class level',
+      'All instances share same slots',
+    ],
+    starterCode: `import sys
 
 class RegularPoint:
     """Regular class with __dict__."""
@@ -3423,13 +3423,13 @@ v1 = Vector(1, 2, 3)
 v2 = Vector(4, 5, 6)
 print((v1 + v2).__dict__)  # This will fail - no __dict__!
 `,
-        testCases: [
-            {
-                input: [1, 2, 3],
-                expected: 'Vector(1,2,3)',
-            },
-        ],
-        solution: `import sys
+    testCases: [
+      {
+        input: [1, 2, 3],
+        expected: 'Vector(1,2,3)',
+      },
+    ],
+    solution: `import sys
 import math
 
 class RegularPoint:
@@ -3474,17 +3474,17 @@ class Vector:
     
     def __repr__(self):
         return f"Vector({self.x}, {self.y}, {self.z})"`,
-        timeComplexity: 'O(1) for attribute access (faster than __dict__)',
-        spaceComplexity: 'O(1) per instance (40-50% less than regular class)',
-        order: 37,
-        topic: 'Python Advanced',
-    },
+    timeComplexity: 'O(1) for attribute access (faster than __dict__)',
+    spaceComplexity: 'O(1) per instance (40-50% less than regular class)',
+    order: 37,
+    topic: 'Python Advanced',
+  },
 
-    {
-        id: 'advanced-weakref',
-        title: 'Weak References for Cache Management',
-        difficulty: 'Hard',
-        description: `Use weakref module to create references that don't prevent garbage collection.
+  {
+    id: 'advanced-weakref',
+    title: 'Weak References for Cache Management',
+    difficulty: 'Hard',
+    description: `Use weakref module to create references that don't prevent garbage collection.
 
 Implement with weakref:
 - Cache that doesn't prevent cleanup
@@ -3493,23 +3493,23 @@ Implement with weakref:
 - WeakValueDictionary for caches
 
 **Use Case:** Caching, callbacks, and avoiding circular references.`,
-        examples: [
-            {
-                input: 'WeakValueDictionary for object cache',
-                output: 'Cache that auto-cleans when objects deleted',
-            },
-        ],
-        constraints: [
-            'Use weakref module',
-            'Understand when objects are collected',
-            'Handle when weak references become invalid',
-        ],
-        hints: [
-            'weakref.ref(obj) creates weak reference',
-            'WeakValueDictionary for weak values',
-            'Weak references return None when object deleted',
-        ],
-        starterCode: `import weakref
+    examples: [
+      {
+        input: 'WeakValueDictionary for object cache',
+        output: 'Cache that auto-cleans when objects deleted',
+      },
+    ],
+    constraints: [
+      'Use weakref module',
+      'Understand when objects are collected',
+      'Handle when weak references become invalid',
+    ],
+    hints: [
+      'weakref.ref(obj) creates weak reference',
+      'WeakValueDictionary for weak values',
+      'Weak references return None when object deleted',
+    ],
+    starterCode: `import weakref
 
 class ObjectCache:
     """Cache using weak references."""
@@ -3560,13 +3560,13 @@ print(cache.get('key1'))  # Should work
 del obj  # Delete strong reference
 print(cache.get('key1'))  # Should return None (object was collected)
 `,
-        testCases: [
-            {
-                input: ['test_key', 'test_value'],
-                expected: 'cached then None after del',
-            },
-        ],
-        solution: `import weakref
+    testCases: [
+      {
+        input: ['test_key', 'test_value'],
+        expected: 'cached then None after del',
+      },
+    ],
+    solution: `import weakref
 
 class ObjectCache:
     def __init__(self):
@@ -3596,17 +3596,17 @@ class Observable:
                 observer.update(message)
                 live_observers.append(weak_observer)
         self._observers = live_observers`,
-        timeComplexity: 'O(1) for cache operations, O(n) for notify',
-        spaceComplexity: 'O(n) but allows garbage collection',
-        order: 38,
-        topic: 'Python Advanced',
-    },
+    timeComplexity: 'O(1) for cache operations, O(n) for notify',
+    spaceComplexity: 'O(n) but allows garbage collection',
+    order: 38,
+    topic: 'Python Advanced',
+  },
 
-    {
-        id: 'advanced-contextlib-utilities',
-        title: 'Contextlib Utilities for Context Managers',
-        difficulty: 'Medium',
-        description: `Use contextlib module utilities to create context managers easily.
+  {
+    id: 'advanced-contextlib-utilities',
+    title: 'Contextlib Utilities for Context Managers',
+    difficulty: 'Medium',
+    description: `Use contextlib module utilities to create context managers easily.
 
 Use contextlib for:
 - @contextmanager decorator for generators
@@ -3615,23 +3615,23 @@ Use contextlib for:
 - redirect_stdout/redirect_stderr
 
 **Benefit:** Create context managers without defining __enter__/__exit__.`,
-        examples: [
-            {
-                input: '@contextmanager def timer(): ...',
-                output: 'Simple timer context manager',
-            },
-        ],
-        constraints: [
-            'Use contextlib utilities',
-            'Understand generator-based context managers',
-            'Handle cleanup properly',
-        ],
-        hints: [
-            '@contextmanager with yield',
-            'Code before yield is __enter__',
-            'Code after yield is __exit__',
-        ],
-        starterCode: `from contextlib import contextmanager, ExitStack, suppress, redirect_stdout
+    examples: [
+      {
+        input: '@contextmanager def timer(): ...',
+        output: 'Simple timer context manager',
+      },
+    ],
+    constraints: [
+      'Use contextlib utilities',
+      'Understand generator-based context managers',
+      'Handle cleanup properly',
+    ],
+    hints: [
+      '@contextmanager with yield',
+      'Code before yield is __enter__',
+      'Code after yield is __exit__',
+    ],
+    starterCode: `from contextlib import contextmanager, ExitStack, suppress, redirect_stdout
 import time
 import io
 
@@ -3694,13 +3694,13 @@ with timer("test operation"):
 print(safe_int_convert("123"))
 print(safe_int_convert("not a number"))
 `,
-        testCases: [
-            {
-                input: ['test'],
-                expected: 'timed execution',
-            },
-        ],
-        solution: `from contextlib import contextmanager, ExitStack, suppress, redirect_stdout
+    testCases: [
+      {
+        input: ['test'],
+        expected: 'timed execution',
+      },
+    ],
+    solution: `from contextlib import contextmanager, ExitStack, suppress, redirect_stdout
 import time
 import io
 
@@ -3733,9 +3733,9 @@ def capture_print_output(func):
     with redirect_stdout(f):
         func()
     return f.getvalue()`,
-        timeComplexity: 'O(1) for context manager operations',
-        spaceComplexity: 'O(1) or O(n) for ExitStack',
-        order: 39,
-        topic: 'Python Advanced',
-    },
+    timeComplexity: 'O(1) for context manager operations',
+    spaceComplexity: 'O(1) or O(n) for ExitStack',
+    order: 39,
+    topic: 'Python Advanced',
+  },
 ];

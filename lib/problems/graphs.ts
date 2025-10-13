@@ -225,7 +225,7 @@ def num_islands_union_find(grid: List[List[str]]) -> int:
     return uf.count`,
     timeComplexity: 'O(M * N)',
     spaceComplexity: 'O(M * N) for recursion/visited set',
-    
+
     leetcodeUrl: 'https://leetcode.com/problems/number-of-islands/',
     youtubeUrl: 'https://www.youtube.com/watch?v=pV2kpPD66nE',
     order: 1,
@@ -441,7 +441,7 @@ def can_finish_simple(num_courses: int, prerequisites: List[List[int]]) -> bool:
     return True`,
     timeComplexity: 'O(V + E) where V = courses, E = prerequisites',
     spaceComplexity: 'O(V + E)',
-    
+
     leetcodeUrl: 'https://leetcode.com/problems/course-schedule/',
     youtubeUrl: 'https://www.youtube.com/watch?v=EgI5nU9etnU',
     order: 2,
@@ -637,7 +637,7 @@ def clone_graph_compact(node: Optional[Node]) -> Optional[Node]:
     return dfs(node)`,
     timeComplexity: 'O(N + E) where N = nodes, E = edges',
     spaceComplexity: 'O(N) for the hash map',
-    
+
     leetcodeUrl: 'https://leetcode.com/problems/clone-graph/',
     youtubeUrl: 'https://www.youtube.com/watch?v=mQeF6bN8hMk',
     order: 3,

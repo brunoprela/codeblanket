@@ -144,13 +144,9 @@ head.next.next = ListNode(3)
         },
         {
           id: 'mc3',
-          question: 'What is the time complexity of inserting at the beginning of a linked list?',
-          options: [
-            'O(N)',
-            'O(1)',
-            'O(log N)',
-            'O(N²)',
-          ],
+          question:
+            'What is the time complexity of inserting at the beginning of a linked list?',
+          options: ['O(N)', 'O(1)', 'O(log N)', 'O(N²)'],
           correctAnswer: 1,
           explanation:
             'Inserting at the beginning is O(1): create new node, set its next to current head, update head to new node. Only three operations regardless of list size.',
@@ -449,9 +445,10 @@ def remove_nth_from_end(head: ListNode, n: int) -> ListNode:
       multipleChoice: [
         {
           id: 'mc1',
-          question: 'How does the fast and slow pointer technique detect a cycle in a linked list?',
+          question:
+            'How does the fast and slow pointer technique detect a cycle in a linked list?',
           options: [
-            'Fast pointer moves twice as fast; if there\'s a cycle, they will meet',
+            "Fast pointer moves twice as fast; if there's a cycle, they will meet",
             'Both pointers move at same speed',
             'Fast pointer checks each node for duplicates',
             'Slow pointer marks visited nodes',
@@ -462,10 +459,11 @@ def remove_nth_from_end(head: ListNode, n: int) -> ListNode:
         },
         {
           id: 'mc2',
-          question: 'What is the key insight for reversing a linked list iteratively?',
+          question:
+            'What is the key insight for reversing a linked list iteratively?',
           options: [
             'Use a stack to store all nodes',
-            'Reverse each node\'s pointer to point to the previous node',
+            "Reverse each node's pointer to point to the previous node",
             'Create a new list in reverse order',
             'Swap node values',
           ],
@@ -475,12 +473,13 @@ def remove_nth_from_end(head: ListNode, n: int) -> ListNode:
         },
         {
           id: 'mc3',
-          question: 'To remove the nth node from the end, why do you move the first pointer n+1 steps ahead?',
+          question:
+            'To remove the nth node from the end, why do you move the first pointer n+1 steps ahead?',
           options: [
             'To make it faster',
             'So the second pointer stops at the node before the target',
             'To handle lists of length n',
-            'It\'s not necessary',
+            "It's not necessary",
           ],
           correctAnswer: 1,
           explanation:
@@ -488,7 +487,7 @@ def remove_nth_from_end(head: ListNode, n: int) -> ListNode:
         },
         {
           id: 'mc4',
-          question: 'What is Floyd\'s cycle detection algorithm also known as?',
+          question: "What is Floyd's cycle detection algorithm also known as?",
           options: [
             'Binary search method',
             'Tortoise and hare algorithm',
@@ -501,13 +500,9 @@ def remove_nth_from_end(head: ListNode, n: int) -> ListNode:
         },
         {
           id: 'mc5',
-          question: 'What is the time complexity of reversing a linked list iteratively?',
-          options: [
-            'O(N²)',
-            'O(N)',
-            'O(log N)',
-            'O(1)',
-          ],
+          question:
+            'What is the time complexity of reversing a linked list iteratively?',
+          options: ['O(N²)', 'O(N)', 'O(log N)', 'O(1)'],
           correctAnswer: 1,
           explanation:
             'Reversing a linked list iteratively requires a single pass through all N nodes, making it O(N) time complexity with O(1) space complexity.',
@@ -618,20 +613,17 @@ def remove_nth_from_end(head: ListNode, n: int) -> ListNode:
       multipleChoice: [
         {
           id: 'mc1',
-          question: 'What is the time complexity of accessing an element at a specific index in a linked list?',
-          options: [
-            'O(1)',
-            'O(N)',
-            'O(log N)',
-            'O(N²)',
-          ],
+          question:
+            'What is the time complexity of accessing an element at a specific index in a linked list?',
+          options: ['O(1)', 'O(N)', 'O(log N)', 'O(N²)'],
           correctAnswer: 1,
           explanation:
             'Accessing an element at index i requires traversing from the head through i nodes, taking O(N) time. Unlike arrays, linked lists do not support O(1) random access.',
         },
         {
           id: 'mc2',
-          question: 'Why is inserting at the tail O(N) in a singly linked list without a tail pointer?',
+          question:
+            'Why is inserting at the tail O(N) in a singly linked list without a tail pointer?',
           options: [
             'Because linked lists are slow',
             'Because you must traverse the entire list to find the last node',
@@ -644,16 +636,12 @@ def remove_nth_from_end(head: ListNode, n: int) -> ListNode:
         },
         {
           id: 'mc3',
-          question: 'What is the space complexity of Floyd\'s cycle detection algorithm?',
-          options: [
-            'O(N)',
-            'O(1)',
-            'O(log N)',
-            'O(N²)',
-          ],
+          question:
+            "What is the space complexity of Floyd's cycle detection algorithm?",
+          options: ['O(N)', 'O(1)', 'O(log N)', 'O(N²)'],
           correctAnswer: 1,
           explanation:
-            'Floyd\'s algorithm uses only two pointers (slow and fast) regardless of list size, making it O(1) space. This is more efficient than hash set approaches which use O(N) space.',
+            "Floyd's algorithm uses only two pointers (slow and fast) regardless of list size, making it O(1) space. This is more efficient than hash set approaches which use O(N) space.",
         },
         {
           id: 'mc4',
@@ -662,7 +650,7 @@ def remove_nth_from_end(head: ListNode, n: int) -> ListNode:
             'They create new nodes',
             'Each recursive call adds a stack frame to the call stack',
             'They use extra arrays',
-            'They don\'t use O(N) space',
+            "They don't use O(N) space",
           ],
           correctAnswer: 1,
           explanation:
@@ -670,13 +658,9 @@ def remove_nth_from_end(head: ListNode, n: int) -> ListNode:
         },
         {
           id: 'mc5',
-          question: 'What is the time complexity of merging K sorted linked lists using a min heap?',
-          options: [
-            'O(NK)',
-            'O(N log K)',
-            'O(K log N)',
-            'O(N²)',
-          ],
+          question:
+            'What is the time complexity of merging K sorted linked lists using a min heap?',
+          options: ['O(NK)', 'O(N log K)', 'O(K log N)', 'O(N²)'],
           correctAnswer: 1,
           explanation:
             'Using a min heap of size K, each of the N total nodes is added and removed from the heap once, with each operation taking O(log K) time, giving O(N log K) total time.',
@@ -876,7 +860,8 @@ def kth_from_end(head: ListNode, k: int) -> ListNode:
       multipleChoice: [
         {
           id: 'mc1',
-          question: 'In the iterative reversal template, why do you need the next pointer?',
+          question:
+            'In the iterative reversal template, why do you need the next pointer?',
           options: [
             'To make it faster',
             'To temporarily save the rest of the list before reversing the current pointer',
@@ -885,11 +870,12 @@ def kth_from_end(head: ListNode, k: int) -> ListNode:
           ],
           correctAnswer: 1,
           explanation:
-            'The next pointer saves the rest of the list before you reverse curr.next = prev. Without it, you would lose access to the remaining nodes and couldn\'t continue traversal.',
+            "The next pointer saves the rest of the list before you reverse curr.next = prev. Without it, you would lose access to the remaining nodes and couldn't continue traversal.",
         },
         {
           id: 'mc2',
-          question: 'What does the dummy node technique eliminate in linked list problems?',
+          question:
+            'What does the dummy node technique eliminate in linked list problems?',
           options: [
             'All loops',
             'Special case handling for the head node',
@@ -902,7 +888,8 @@ def kth_from_end(head: ListNode, k: int) -> ListNode:
         },
         {
           id: 'mc3',
-          question: 'What is the space complexity advantage of iterative solutions over recursive ones?',
+          question:
+            'What is the space complexity advantage of iterative solutions over recursive ones?',
           options: [
             'Iterative uses O(N) space',
             'Iterative uses O(1) space instead of O(N) for recursive call stack',
@@ -915,20 +902,17 @@ def kth_from_end(head: ListNode, k: int) -> ListNode:
         },
         {
           id: 'mc4',
-          question: 'In the runner technique for finding kth from end, how far ahead should the first pointer move?',
-          options: [
-            'k-1 steps',
-            'k steps',
-            'k+1 steps',
-            '2k steps',
-          ],
+          question:
+            'In the runner technique for finding kth from end, how far ahead should the first pointer move?',
+          options: ['k-1 steps', 'k steps', 'k+1 steps', '2k steps'],
           correctAnswer: 1,
           explanation:
             'Move the first pointer k steps ahead. Then when both pointers move together until first reaches the end, the second pointer will be exactly k nodes from the end.',
         },
         {
           id: 'mc5',
-          question: 'When merging two sorted lists, what should you do after the main loop?',
+          question:
+            'When merging two sorted lists, what should you do after the main loop?',
           options: [
             'Return immediately',
             'Attach the remaining portion of whichever list is not exhausted',
@@ -1156,7 +1140,8 @@ def copy_random_list(head: Node) -> Node:
       multipleChoice: [
         {
           id: 'mc1',
-          question: 'After detecting a cycle, how do you find where the cycle starts?',
+          question:
+            'After detecting a cycle, how do you find where the cycle starts?',
           options: [
             'Use a hash map',
             'Reset one pointer to head, move both one step at a time until they meet',
@@ -1169,20 +1154,22 @@ def copy_random_list(head: Node) -> Node:
         },
         {
           id: 'mc2',
-          question: 'Why is merge sort preferred over quick sort for linked lists?',
+          question:
+            'Why is merge sort preferred over quick sort for linked lists?',
           options: [
             'Quick sort is always slower',
-            'Merge sort doesn\'t require random access which linked lists lack',
+            "Merge sort doesn't require random access which linked lists lack",
             'Merge sort uses less memory',
-            'Quick sort doesn\'t work on lists',
+            "Quick sort doesn't work on lists",
           ],
           correctAnswer: 1,
           explanation:
-            'Merge sort works well with linked lists because it doesn\'t require random access. It uses find-middle, recursively sort, and merge operations that work naturally with linked list structure. Quick sort needs efficient random access for partitioning.',
+            "Merge sort works well with linked lists because it doesn't require random access. It uses find-middle, recursively sort, and merge operations that work naturally with linked list structure. Quick sort needs efficient random access for partitioning.",
         },
         {
           id: 'mc3',
-          question: 'When reversing nodes in k-groups, what is the main challenge?',
+          question:
+            'When reversing nodes in k-groups, what is the main challenge?',
           options: [
             'Finding k nodes',
             'Managing boundary connections between reversed groups',
@@ -1195,7 +1182,8 @@ def copy_random_list(head: Node) -> Node:
         },
         {
           id: 'mc4',
-          question: 'How can you copy a linked list with random pointers in O(N) time and O(1) space?',
+          question:
+            'How can you copy a linked list with random pointers in O(N) time and O(1) space?',
           options: [
             'Use a hash map',
             'Interweave copied nodes with original nodes, then separate',
@@ -1204,17 +1192,13 @@ def copy_random_list(head: Node) -> Node:
           ],
           correctAnswer: 1,
           explanation:
-            'Create new nodes and interweave them with originals (A->A\'->B->B\'), copy random pointers using the interweaved structure, then separate the two lists. This avoids the hash map.',
+            "Create new nodes and interweave them with originals (A->A'->B->B'), copy random pointers using the interweaved structure, then separate the two lists. This avoids the hash map.",
         },
         {
           id: 'mc5',
-          question: 'What is the time complexity of finding the middle of a linked list using fast/slow pointers?',
-          options: [
-            'O(1)',
-            'O(N)',
-            'O(N²)',
-            'O(log N)',
-          ],
+          question:
+            'What is the time complexity of finding the middle of a linked list using fast/slow pointers?',
+          options: ['O(1)', 'O(N)', 'O(N²)', 'O(log N)'],
           correctAnswer: 1,
           explanation:
             'The fast/slow pointer technique requires traversing the list once. Fast moves 2 steps while slow moves 1 step, so they traverse N nodes total, giving O(N) time complexity.',
@@ -1406,7 +1390,8 @@ def merge_lists(l1, l2):
       multipleChoice: [
         {
           id: 'mc1',
-          question: 'What is the most common mistake when working with linked lists?',
+          question:
+            'What is the most common mistake when working with linked lists?',
           options: [
             'Using too much memory',
             'Not checking for null/None before accessing node.next',
@@ -1419,7 +1404,8 @@ def merge_lists(l1, l2):
         },
         {
           id: 'mc2',
-          question: 'What happens if you reverse a pointer before saving the next reference?',
+          question:
+            'What happens if you reverse a pointer before saving the next reference?',
           options: [
             'Nothing, it works fine',
             'You lose access to the rest of the list',
@@ -1432,7 +1418,8 @@ def merge_lists(l1, l2):
         },
         {
           id: 'mc3',
-          question: 'Why should you use a dummy node when removing nodes from a linked list?',
+          question:
+            'Why should you use a dummy node when removing nodes from a linked list?',
           options: [
             'It makes the code slower',
             'It eliminates special case handling for removing the head node',
@@ -1445,7 +1432,8 @@ def merge_lists(l1, l2):
         },
         {
           id: 'mc4',
-          question: 'What is the off-by-one error in the runner technique for finding kth from end?',
+          question:
+            'What is the off-by-one error in the runner technique for finding kth from end?',
           options: [
             'Moving first pointer k-1 steps instead of k',
             'Moving first pointer k steps instead of k+1 or k-1',
@@ -1458,7 +1446,8 @@ def merge_lists(l1, l2):
         },
         {
           id: 'mc5',
-          question: 'Why might modifying a linked list in-place be problematic?',
+          question:
+            'Why might modifying a linked list in-place be problematic?',
           options: [
             'It is always wrong',
             'The caller might need the original data or other parts of code might hold references',
@@ -1644,7 +1633,8 @@ Final:   None ← [1] ← [2] ← [3]
       multipleChoice: [
         {
           id: 'mc1',
-          question: 'What signals in a problem description indicate you should use linked list techniques?',
+          question:
+            'What signals in a problem description indicate you should use linked list techniques?',
           options: [
             'Array sorting required',
             '"Linked list", cycles, middle/nth from end, frequent insertions/deletions',
@@ -1657,11 +1647,12 @@ Final:   None ← [1] ← [2] ← [3]
         },
         {
           id: 'mc2',
-          question: 'What should you clarify first in a linked list interview problem?',
+          question:
+            'What should you clarify first in a linked list interview problem?',
           options: [
             'The programming language',
             'Whether it is singly or doubly linked and if in-place modification is allowed',
-            'The interviewer\'s name',
+            "The interviewer's name",
             'The company size',
           ],
           correctAnswer: 1,
@@ -1670,7 +1661,8 @@ Final:   None ← [1] ← [2] ← [3]
         },
         {
           id: 'mc3',
-          question: 'Why should you draw diagrams when solving linked list problems?',
+          question:
+            'Why should you draw diagrams when solving linked list problems?',
           options: [
             'To waste time',
             'To visualize pointer movements and avoid mistakes',
@@ -1683,7 +1675,8 @@ Final:   None ← [1] ← [2] ← [3]
         },
         {
           id: 'mc4',
-          question: 'When asked "Can you do it in O(1) space?", what does this typically mean for linked lists?',
+          question:
+            'When asked "Can you do it in O(1) space?", what does this typically mean for linked lists?',
           options: [
             'Use arrays instead',
             'Use pointer manipulation instead of hash sets/maps',
@@ -1696,7 +1689,8 @@ Final:   None ← [1] ← [2] ← [3]
         },
         {
           id: 'mc5',
-          question: 'What is the recommended practice progression for linked list mastery?',
+          question:
+            'What is the recommended practice progression for linked list mastery?',
           options: [
             'Start with the hardest problems',
             'Start with basics (reverse, middle), then two pointers, then merging, then advanced',

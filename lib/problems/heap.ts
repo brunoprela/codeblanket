@@ -66,7 +66,7 @@ def last_stone_weight(stones: List[int]) -> int:
     ],
     timeComplexity: 'O(n log n)',
     spaceComplexity: 'O(n)',
-    
+
     leetcodeUrl: 'https://leetcode.com/problems/last-stone-weight/',
     youtubeUrl: 'https://www.youtube.com/watch?v=B-QCq79-Vfw',
     leetcodeUrl: 'https://leetcode.com/problems/last-stone-weight/',
