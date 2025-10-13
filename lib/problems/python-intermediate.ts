@@ -11,6 +11,8 @@ export const pythonIntermediateProblems: Problem[] = [
     difficulty: 'Medium',
     description: `Read a text file and count the frequency of each word.
 
+**Note:** A virtual test file is created for you in the browser environment using Pyodide's filesystem.
+
 **Requirements:**
 - Case-insensitive counting
 - Ignore punctuation
@@ -43,7 +45,12 @@ The dog was not that lazy.
       'Convert to lowercase before counting',
       'Use try-except for file operations',
     ],
-    starterCode: `def count_word_frequency(filename):
+    starterCode: `# Setup: Create virtual test file (for browser environment)
+with open('test.txt', 'w') as f:
+    f.write("""The quick brown fox jumps over the lazy dog.
+The dog was not that lazy.""")
+
+def count_word_frequency(filename):
     """
     Count word frequency in a text file.
     
@@ -65,7 +72,7 @@ The dog was not that lazy.
 
 # Test
 try:
-    result = count_word_frequency("sample.txt")
+    result = count_word_frequency("test.txt")
     print(result)
 except FileNotFoundError as e:
     print(f"Error: {e}")
@@ -73,10 +80,27 @@ except FileNotFoundError as e:
     testCases: [
       {
         input: ['test.txt'],
-        expected: { the: 2, quick: 1, brown: 1 },
+        expected: {
+          the: 3,
+          dog: 2,
+          lazy: 2,
+          brown: 1,
+          fox: 1,
+          jumps: 1,
+          not: 1,
+          over: 1,
+          quick: 1,
+          that: 1,
+          was: 1,
+        },
       },
     ],
-    solution: `import string
+    solution: `# Setup: Create virtual test file (for browser environment)
+with open('test.txt', 'w') as f:
+    f.write("""The quick brown fox jumps over the lazy dog.
+The dog was not that lazy.""")
+
+import string
 from collections import Counter
 
 def count_word_frequency(filename):
@@ -94,10 +118,9 @@ def count_word_frequency(filename):
     words = text.split()
     word_count = Counter(words)
     
-    # Sort by frequency (descending)
+    # Sort by frequency (descending), then alphabetically for ties
     sorted_words = dict(sorted(word_count.items(), 
-                               key=lambda x: x[1], 
-                               reverse=True))
+                               key=lambda x: (-x[1], x[0])))
     
     return sorted_words`,
     timeComplexity: 'O(n) where n is file size',

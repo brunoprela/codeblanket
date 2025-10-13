@@ -212,6 +212,8 @@ def is_palindrome_two_pointers(s):
 - Return a dictionary with word counts
 - Words are separated by spaces
 
+**Note:** You can use dict, Counter, or defaultdict - all will work!
+
 **Example:** "The quick brown fox jumps over the lazy dog" → {'the': 2, 'quick': 1, ...}`,
     examples: [
       {
@@ -228,7 +230,9 @@ def is_palindrome_two_pointers(s):
       'Use a dictionary to count occurrences',
       'Consider using collections.Counter',
     ],
-    starterCode: `def count_words(text):
+    starterCode: `from collections import defaultdict
+
+def count_words(text):
     """
     Count frequency of each word in text.
     
@@ -1002,6 +1006,829 @@ def rotate_list_deque(arr, k):
     timeComplexity: 'O(n) with slicing, O(n) in-place',
     spaceComplexity: 'O(n) with slicing, O(1) in-place',
     order: 10,
+    topic: 'Python Fundamentals',
+  },
+  {
+    id: 'fundamentals-sum-multiples',
+    title: 'Sum of Multiples',
+    difficulty: 'Easy',
+    description: `Find the sum of all multiples of 3 or 5 below n.
+
+**Example:** For n=10, multiples are 3, 5, 6, 9. Sum = 23.
+
+This problem tests:
+- Loop iteration
+- Conditional logic
+- Mathematical operations`,
+    examples: [
+      {
+        input: 'n = 10',
+        output: '23',
+        explanation: '3 + 5 + 6 + 9 = 23',
+      },
+      {
+        input: 'n = 20',
+        output: '78',
+        explanation: 'Sum of all multiples of 3 or 5 below 20',
+      },
+    ],
+    constraints: ['1 <= n <= 10^6'],
+    hints: [
+      'Use modulo operator to check divisibility',
+      'Add numbers that are divisible by 3 OR 5',
+      'Be careful not to double-count multiples of 15',
+    ],
+    starterCode: `def sum_multiples(n):
+    """
+    Find sum of all multiples of 3 or 5 below n.
+    
+    Args:
+        n: Upper limit (exclusive)
+        
+    Returns:
+        Sum of multiples
+        
+    Examples:
+        >>> sum_multiples(10)
+        23
+    """
+    pass`,
+    testCases: [
+      {
+        input: [10],
+        expected: 23,
+      },
+      {
+        input: [20],
+        expected: 78,
+      },
+      {
+        input: [1],
+        expected: 0,
+      },
+    ],
+    solution: `def sum_multiples(n):
+    total = 0
+    for i in range(n):
+        if i % 3 == 0 or i % 5 == 0:
+            total += i
+    return total
+
+# Alternative: Using sum with generator
+def sum_multiples_alt(n):
+    return sum(i for i in range(n) if i % 3 == 0 or i % 5 == 0)`,
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1)',
+    order: 11,
+    topic: 'Python Fundamentals',
+  },
+  {
+    id: 'fundamentals-factorial',
+    title: 'Factorial Calculator',
+    difficulty: 'Easy',
+    description: `Calculate the factorial of a non-negative integer n.
+
+**Factorial** (n!) is the product of all positive integers less than or equal to n.
+- 5! = 5 × 4 × 3 × 2 × 1 = 120
+- 0! = 1 (by definition)
+
+This problem tests:
+- Recursion or iteration
+- Base case handling
+- Mathematical operations`,
+    examples: [
+      {
+        input: 'n = 5',
+        output: '120',
+        explanation: '5! = 5 × 4 × 3 × 2 × 1 = 120',
+      },
+      {
+        input: 'n = 0',
+        output: '1',
+        explanation: '0! = 1 by definition',
+      },
+    ],
+    constraints: ['0 <= n <= 20'],
+    hints: [
+      'Use a loop to multiply numbers from 1 to n',
+      'Or use recursion: n! = n × (n-1)!',
+      'Handle the base case: 0! = 1',
+    ],
+    starterCode: `def factorial(n):
+    """
+    Calculate factorial of n.
+    
+    Args:
+        n: Non-negative integer
+        
+    Returns:
+        Factorial of n
+        
+    Examples:
+        >>> factorial(5)
+        120
+        >>> factorial(0)
+        1
+    """
+    pass`,
+    testCases: [
+      {
+        input: [5],
+        expected: 120,
+      },
+      {
+        input: [0],
+        expected: 1,
+      },
+      {
+        input: [10],
+        expected: 3628800,
+      },
+    ],
+    solution: `def factorial(n):
+    # Iterative approach
+    result = 1
+    for i in range(1, n + 1):
+        result *= i
+    return result
+
+# Recursive approach
+def factorial_recursive(n):
+    if n == 0 or n == 1:
+        return 1
+    return n * factorial_recursive(n - 1)
+
+# Using math module
+import math
+def factorial_builtin(n):
+    return math.factorial(n)`,
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1) iterative, O(n) recursive',
+    order: 12,
+    topic: 'Python Fundamentals',
+  },
+  {
+    id: 'fundamentals-vowel-count',
+    title: 'Count Vowels',
+    difficulty: 'Easy',
+    description: `Count the number of vowels (a, e, i, o, u) in a string.
+
+Count both uppercase and lowercase vowels.
+
+This problem tests:
+- String iteration
+- Character checking
+- Case handling`,
+    examples: [
+      {
+        input: 's = "Hello World"',
+        output: '3',
+        explanation: 'e, o, o are vowels',
+      },
+      {
+        input: 's = "Python Programming"',
+        output: '4',
+        explanation: 'o, a, i, o are vowels',
+      },
+    ],
+    constraints: [
+      '1 <= len(s) <= 10^5',
+      'String contains only letters and spaces',
+    ],
+    hints: [
+      'Convert to lowercase for easier comparison',
+      'Check if each character is in "aeiou"',
+      'Use a counter variable',
+    ],
+    starterCode: `def count_vowels(s):
+    """
+    Count vowels in a string.
+    
+    Args:
+        s: Input string
+        
+    Returns:
+        Number of vowels
+        
+    Examples:
+        >>> count_vowels("Hello")
+        2
+    """
+    pass`,
+    testCases: [
+      {
+        input: ['Hello World'],
+        expected: 3,
+      },
+      {
+        input: ['Python Programming'],
+        expected: 4,
+      },
+      {
+        input: ['xyz'],
+        expected: 0,
+      },
+    ],
+    solution: `def count_vowels(s):
+    vowels = "aeiouAEIOU"
+    count = 0
+    for char in s:
+        if char in vowels:
+            count += 1
+    return count
+
+# Alternative: Using sum
+def count_vowels_alt(s):
+    return sum(1 for char in s if char.lower() in 'aeiou')`,
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1)',
+    order: 13,
+    topic: 'Python Fundamentals',
+  },
+  {
+    id: 'fundamentals-max-min',
+    title: 'Find Max and Min',
+    difficulty: 'Easy',
+    description: `Find both the maximum and minimum values in a list in a single pass.
+
+Return a tuple (min, max).
+
+This problem tests:
+- List traversal
+- Comparison operations
+- Tuple return values`,
+    examples: [
+      {
+        input: 'nums = [3, 1, 4, 1, 5, 9, 2, 6]',
+        output: '(1, 9)',
+        explanation: 'Minimum is 1, maximum is 9',
+      },
+      {
+        input: 'nums = [-5, -2, -10, -1]',
+        output: '(-10, -1)',
+      },
+    ],
+    constraints: [
+      '1 <= len(nums) <= 10^5',
+      'Cannot use built-in min() or max()',
+    ],
+    hints: [
+      'Initialize min and max with first element',
+      'Iterate through remaining elements',
+      'Update min and max as needed',
+    ],
+    starterCode: `def find_max_min(nums):
+    """
+    Find max and min in a list.
+    
+    Args:
+        nums: List of numbers
+        
+    Returns:
+        Tuple (min, max)
+        
+    Examples:
+        >>> find_max_min([3, 1, 4, 1, 5])
+        (1, 5)
+    """
+    pass`,
+    testCases: [
+      {
+        input: [[3, 1, 4, 1, 5, 9, 2, 6]],
+        expected: [1, 9],
+      },
+      {
+        input: [[-5, -2, -10, -1]],
+        expected: [-10, -1],
+      },
+      {
+        input: [[42]],
+        expected: [42, 42],
+      },
+    ],
+    solution: `def find_max_min(nums):
+    if not nums:
+        return None
+    
+    min_val = nums[0]
+    max_val = nums[0]
+    
+    for num in nums[1:]:
+        if num < min_val:
+            min_val = num
+        if num > max_val:
+            max_val = num
+    
+    return (min_val, max_val)`,
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1)',
+    order: 14,
+    topic: 'Python Fundamentals',
+  },
+  {
+    id: 'fundamentals-digit-sum',
+    title: 'Sum of Digits',
+    difficulty: 'Easy',
+    description: `Calculate the sum of all digits in a positive integer.
+
+**Example:** 
+- 123 → 1 + 2 + 3 = 6
+- 9999 → 9 + 9 + 9 + 9 = 36
+
+This problem tests:
+- Number manipulation
+- String conversion or modulo operations
+- Loop iteration`,
+    examples: [
+      {
+        input: 'n = 123',
+        output: '6',
+        explanation: '1 + 2 + 3 = 6',
+      },
+      {
+        input: 'n = 9999',
+        output: '36',
+        explanation: '9 + 9 + 9 + 9 = 36',
+      },
+    ],
+    constraints: ['0 <= n <= 10^9'],
+    hints: [
+      'Convert to string and iterate through characters',
+      'Or use modulo (%) and division (//) to extract digits',
+      'Use sum() with a generator for concise solution',
+    ],
+    starterCode: `def sum_of_digits(n):
+    """
+    Calculate sum of digits in a number.
+    
+    Args:
+        n: Positive integer
+        
+    Returns:
+        Sum of all digits
+        
+    Examples:
+        >>> sum_of_digits(123)
+        6
+    """
+    pass`,
+    testCases: [
+      {
+        input: [123],
+        expected: 6,
+      },
+      {
+        input: [9999],
+        expected: 36,
+      },
+      {
+        input: [0],
+        expected: 0,
+      },
+    ],
+    solution: `def sum_of_digits(n):
+    # String approach
+    return sum(int(digit) for digit in str(n))
+
+# Mathematical approach
+def sum_of_digits_math(n):
+    total = 0
+    while n > 0:
+        total += n % 10
+        n //= 10
+    return total`,
+    timeComplexity: 'O(log n) - number of digits',
+    spaceComplexity: 'O(1)',
+    order: 15,
+    topic: 'Python Fundamentals',
+  },
+  {
+    id: 'fundamentals-capitalize-words',
+    title: 'Capitalize Words',
+    difficulty: 'Easy',
+    description: `Capitalize the first letter of each word in a sentence.
+
+**Example:** "hello world" → "Hello World"
+
+This problem tests:
+- String manipulation
+- String methods
+- List operations`,
+    examples: [
+      {
+        input: 's = "hello world"',
+        output: '"Hello World"',
+      },
+      {
+        input: 's = "python is awesome"',
+        output: '"Python Is Awesome"',
+      },
+    ],
+    constraints: [
+      '1 <= len(s) <= 10^4',
+      'String contains lowercase letters and spaces',
+    ],
+    hints: [
+      'Split string into words',
+      'Capitalize first letter of each word',
+      'Join words back together',
+    ],
+    starterCode: `def capitalize_words(s):
+    """
+    Capitalize first letter of each word.
+    
+    Args:
+        s: Input string
+        
+    Returns:
+        String with capitalized words
+        
+    Examples:
+        >>> capitalize_words("hello world")
+        "Hello World"
+    """
+    pass`,
+    testCases: [
+      {
+        input: ['hello world'],
+        expected: 'Hello World',
+      },
+      {
+        input: ['python is awesome'],
+        expected: 'Python Is Awesome',
+      },
+      {
+        input: ['a'],
+        expected: 'A',
+      },
+    ],
+    solution: `def capitalize_words(s):
+    # Using title() method
+    return s.title()
+
+# Manual approach
+def capitalize_words_manual(s):
+    words = s.split()
+    capitalized = [word.capitalize() for word in words]
+    return ' '.join(capitalized)
+
+# Without split
+def capitalize_words_alt(s):
+    return ' '.join(word[0].upper() + word[1:] if len(word) > 0 else '' for word in s.split())`,
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(n)',
+    order: 16,
+    topic: 'Python Fundamentals',
+  },
+  {
+    id: 'fundamentals-common-elements',
+    title: 'Common Elements in Lists',
+    difficulty: 'Easy',
+    description: `Find common elements between two lists.
+
+Return a list of elements that appear in both lists (no duplicates).
+
+This problem tests:
+- Set operations
+- List comprehension
+- Finding intersections`,
+    examples: [
+      {
+        input: 'list1 = [1, 2, 3, 4], list2 = [3, 4, 5, 6]',
+        output: '[3, 4]',
+        explanation: '3 and 4 appear in both lists',
+      },
+      {
+        input: 'list1 = [1, 1, 2, 3], list2 = [2, 2, 3, 4]',
+        output: '[2, 3]',
+        explanation: 'Return unique common elements',
+      },
+    ],
+    constraints: ['0 <= len(list1), len(list2) <= 1000'],
+    hints: [
+      'Convert lists to sets',
+      'Use set intersection',
+      'Convert back to list',
+    ],
+    starterCode: `def common_elements(list1, list2):
+    """
+    Find common elements between two lists.
+    
+    Args:
+        list1: First list
+        list2: Second list
+        
+    Returns:
+        List of common elements
+        
+    Examples:
+        >>> common_elements([1, 2, 3], [2, 3, 4])
+        [2, 3]
+    """
+    pass`,
+    testCases: [
+      {
+        input: [
+          [1, 2, 3, 4],
+          [3, 4, 5, 6],
+        ],
+        expected: [3, 4],
+      },
+      {
+        input: [
+          [1, 1, 2, 3],
+          [2, 2, 3, 4],
+        ],
+        expected: [2, 3],
+      },
+      {
+        input: [
+          [1, 2, 3],
+          [4, 5, 6],
+        ],
+        expected: [],
+      },
+    ],
+    solution: `def common_elements(list1, list2):
+    # Using set intersection
+    return list(set(list1) & set(list2))
+
+# Alternative approaches
+def common_elements_alt1(list1, list2):
+    return list(set(list1).intersection(set(list2)))
+
+def common_elements_alt2(list1, list2):
+    return [x for x in set(list1) if x in set(list2)]`,
+    timeComplexity: 'O(n + m)',
+    spaceComplexity: 'O(n + m)',
+    order: 17,
+    topic: 'Python Fundamentals',
+  },
+  {
+    id: 'fundamentals-second-largest',
+    title: 'Second Largest Number',
+    difficulty: 'Easy',
+    description: `Find the second largest number in a list.
+
+If there is no second largest (all elements are the same), return None.
+
+This problem tests:
+- List traversal
+- Tracking multiple values
+- Edge case handling`,
+    examples: [
+      {
+        input: 'nums = [5, 2, 8, 1, 9]',
+        output: '8',
+        explanation: 'Largest is 9, second largest is 8',
+      },
+      {
+        input: 'nums = [5, 5, 5]',
+        output: 'None',
+        explanation: 'All elements are the same',
+      },
+    ],
+    constraints: ['1 <= len(nums) <= 10^4', 'Cannot use sorting'],
+    hints: [
+      'Track both largest and second largest',
+      'Update both values as you iterate',
+      'Handle duplicates correctly',
+    ],
+    starterCode: `def second_largest(nums):
+    """
+    Find second largest number in a list.
+    
+    Args:
+        nums: List of numbers
+        
+    Returns:
+        Second largest number or None
+        
+    Examples:
+        >>> second_largest([5, 2, 8, 1, 9])
+        8
+    """
+    pass`,
+    testCases: [
+      {
+        input: [[5, 2, 8, 1, 9]],
+        expected: 8,
+      },
+      {
+        input: [[10, 20, 5, 15]],
+        expected: 15,
+      },
+      {
+        input: [[5, 5, 5]],
+        expected: null,
+      },
+    ],
+    solution: `def second_largest(nums):
+    if not nums:
+        return None
+    
+    # Remove duplicates and sort
+    unique_nums = list(set(nums))
+    
+    if len(unique_nums) < 2:
+        return None
+    
+    unique_nums.sort()
+    return unique_nums[-2]
+
+# Single pass approach
+def second_largest_optimized(nums):
+    if len(nums) < 2:
+        return None
+    
+    largest = second = float('-inf')
+    
+    for num in nums:
+        if num > largest:
+            second = largest
+            largest = num
+        elif num > second and num != largest:
+            second = num
+    
+    return None if second == float('-inf') else second`,
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(n) for set approach, O(1) for optimized',
+    order: 18,
+    topic: 'Python Fundamentals',
+  },
+  {
+    id: 'fundamentals-list-sum',
+    title: 'Sum of List Elements',
+    difficulty: 'Easy',
+    description: `Calculate the sum of all elements in a list without using the built-in sum() function.
+
+This problem tests:
+- Loop iteration
+- Accumulator pattern
+- Basic arithmetic`,
+    examples: [
+      {
+        input: 'nums = [1, 2, 3, 4, 5]',
+        output: '15',
+        explanation: '1 + 2 + 3 + 4 + 5 = 15',
+      },
+      {
+        input: 'nums = [-1, -2, 3]',
+        output: '0',
+        explanation: '-1 + -2 + 3 = 0',
+      },
+    ],
+    constraints: ['0 <= len(nums) <= 10^4', 'Cannot use built-in sum()'],
+    hints: [
+      'Initialize a total variable to 0',
+      'Loop through each element',
+      'Add each element to the total',
+    ],
+    starterCode: `def list_sum(nums):
+    """
+    Calculate sum of list elements.
+    
+    Args:
+        nums: List of numbers
+        
+    Returns:
+        Sum of all elements
+        
+    Examples:
+        >>> list_sum([1, 2, 3, 4, 5])
+        15
+    """
+    pass`,
+    testCases: [
+      {
+        input: [[1, 2, 3, 4, 5]],
+        expected: 15,
+      },
+      {
+        input: [[-1, -2, 3]],
+        expected: 0,
+      },
+      {
+        input: [[]],
+        expected: 0,
+      },
+    ],
+    solution: `def list_sum(nums):
+    total = 0
+    for num in nums:
+        total += num
+    return total
+
+# Using reduce
+from functools import reduce
+def list_sum_reduce(nums):
+    return reduce(lambda x, y: x + y, nums, 0)
+
+# Recursive approach
+def list_sum_recursive(nums):
+    if not nums:
+        return 0
+    return nums[0] + list_sum_recursive(nums[1:])`,
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1) iterative, O(n) recursive',
+    order: 19,
+    topic: 'Python Fundamentals',
+  },
+  {
+    id: 'fundamentals-flatten-list',
+    title: 'Flatten Nested List',
+    difficulty: 'Medium',
+    description: `Flatten a nested list structure into a single-level list.
+
+**Example:** [[1, 2], [3, [4, 5]], 6] → [1, 2, 3, 4, 5, 6]
+
+This problem tests:
+- Recursion
+- Type checking
+- List operations`,
+    examples: [
+      {
+        input: 'nested = [[1, 2], [3, 4]]',
+        output: '[1, 2, 3, 4]',
+      },
+      {
+        input: 'nested = [[1, 2], [3, [4, 5]], 6]',
+        output: '[1, 2, 3, 4, 5, 6]',
+      },
+    ],
+    constraints: ['List can be nested to any depth', 'Elements are integers'],
+    hints: [
+      'Use recursion to handle nested lists',
+      'Check if element is a list using isinstance()',
+      'Recursively flatten sub-lists',
+    ],
+    starterCode: `def flatten_list(nested):
+    """
+    Flatten a nested list.
+    
+    Args:
+        nested: Nested list structure
+        
+    Returns:
+        Flattened list
+        
+    Examples:
+        >>> flatten_list([[1, 2], [3, 4]])
+        [1, 2, 3, 4]
+        >>> flatten_list([[1, 2], [3, [4, 5]], 6])
+        [1, 2, 3, 4, 5, 6]
+    """
+    pass`,
+    testCases: [
+      {
+        input: [
+          [
+            [1, 2],
+            [3, 4],
+          ],
+        ],
+        expected: [1, 2, 3, 4],
+      },
+      {
+        input: [[[1, 2], [3, [4, 5]], 6]],
+        expected: [1, 2, 3, 4, 5, 6],
+      },
+      {
+        input: [[[1]]],
+        expected: [1],
+      },
+    ],
+    solution: `def flatten_list(nested):
+    result = []
+    for item in nested:
+        if isinstance(item, list):
+            # Recursively flatten nested lists
+            result.extend(flatten_list(item))
+        else:
+            result.append(item)
+    return result
+
+# Using list comprehension with recursion
+def flatten_list_alt(nested):
+    return [item for sublist in nested 
+            for item in (flatten_list_alt(sublist) if isinstance(sublist, list) else [sublist])]
+
+# Iterative approach using stack
+def flatten_list_iterative(nested):
+    stack = list(nested)
+    result = []
+    
+    while stack:
+        item = stack.pop(0)
+        if isinstance(item, list):
+            stack = item + stack
+        else:
+            result.append(item)
+    
+    return result`,
+    timeComplexity: 'O(n) where n is total number of elements',
+    spaceComplexity: 'O(d) where d is maximum nesting depth',
+    order: 20,
     topic: 'Python Fundamentals',
   },
 ];

@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 
 // Dracula theme
@@ -48,6 +49,34 @@ export function ClientOnlySyntaxHighlighter({
   code,
   customStyle,
 }: ClientOnlySyntaxHighlighterProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    // Return a placeholder with the same styling during SSR
+    return (
+      <pre
+        style={{
+          margin: 0,
+          borderRadius: '0.5rem',
+          background: '#282a36',
+          color: '#f8f8f2',
+          padding: '1rem',
+          overflow: 'auto',
+          fontFamily: 'ui-monospace, monospace',
+          fontSize: '0.875rem',
+          lineHeight: '1.5',
+          ...customStyle,
+        }}
+      >
+        <code>{code}</code>
+      </pre>
+    );
+  }
+
   return (
     <SyntaxHighlighter
       language={language}

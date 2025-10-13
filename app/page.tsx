@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 
 import { allProblems } from '@/lib/problems';
-import { moduleCategories } from '@/lib/modules';
+import { moduleCategories, topicSections } from '@/lib/modules';
 import { getCompletedProblems } from '@/lib/helpers/storage';
 import {
   getCompletedDiscussionQuestionsCount,
@@ -308,16 +308,12 @@ export default function Home() {
       </div>
 
       {/* Learning Path */}
-      <div className="space-y-6">
+      <div className="space-y-12">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-3xl font-bold text-[#f8f8f2]">
               📚 Learning Path
             </h2>
-            <p className="mt-2 text-[#f8f8f2]">
-              Follow this structured curriculum from fundamentals to advanced
-              topics
-            </p>
           </div>
           <Link
             href="/problems"
@@ -327,238 +323,263 @@ export default function Home() {
           </Link>
         </div>
 
-        <div className="space-y-5">
-          {moduleCategories.map((moduleCategory, index) => {
-            const progress = moduleProgress[moduleCategory.id] || {
-              completed: 0,
-              total: moduleCategory.module.sections.length,
-            };
-            const progressPercent =
-              progress.total > 0
-                ? Math.round((progress.completed / progress.total) * 100)
-                : 0;
-            const isCompleted =
-              progress.completed > 0 && progress.completed === progress.total;
+        {/* Render each topic section */}
+        {topicSections.map((topicSection, sectionIndex) => (
+          <div key={topicSection.id} className="space-y-6">
+            {/* Section Header */}
+            <div>
+              <h3 className="text-2xl font-bold text-[#f8f8f2]">
+                {topicSection.icon} {topicSection.title}
+              </h3>
+              <p className="mt-1 text-sm text-[#f8f8f2]/80">
+                {topicSection.description}
+              </p>
+            </div>
 
-            // Get problems progress for this topic (match by title, not id)
-            const problemsProgress = getTopicProblemsProgress(
-              moduleCategory.title,
-            );
-            const problemsPercent =
-              problemsProgress.total > 0
-                ? Math.round(
-                    (problemsProgress.completed / problemsProgress.total) * 100,
-                  )
-                : 0;
+            {/* Modules in this section */}
+            <div className="space-y-5">
+              {topicSection.modules.map((moduleCategory, index) => {
+                const progress = moduleProgress[moduleCategory.id] || {
+                  completed: 0,
+                  total: moduleCategory.module.sections.length,
+                };
+                const progressPercent =
+                  progress.total > 0
+                    ? Math.round((progress.completed / progress.total) * 100)
+                    : 0;
+                const isCompleted =
+                  progress.completed > 0 &&
+                  progress.completed === progress.total;
 
-            // Get discussion progress for this module
-            // Calculate total from module data
-            let discussionTotal = 0;
-            moduleCategory.module.sections.forEach((section) => {
-              if (section.quiz) {
-                discussionTotal += section.quiz.length;
-              }
-            });
+                // Get problems progress for this topic (match by title, not id)
+                const problemsProgress = getTopicProblemsProgress(
+                  moduleCategory.title,
+                );
+                const problemsPercent =
+                  problemsProgress.total > 0
+                    ? Math.round(
+                        (problemsProgress.completed / problemsProgress.total) *
+                          100,
+                      )
+                    : 0;
 
-            const discussionProgress = moduleDiscussionProgress[
-              moduleCategory.id
-            ] || {
-              completed: 0,
-              total: discussionTotal,
-            };
+                // Get discussion progress for this module
+                // Calculate total from module data
+                let discussionTotal = 0;
+                moduleCategory.module.sections.forEach((section) => {
+                  if (section.quiz) {
+                    discussionTotal += section.quiz.length;
+                  }
+                });
 
-            // Ensure we use the calculated total if state doesn't have it yet
-            const finalDiscussionProgress = {
-              completed: discussionProgress.completed,
-              total: discussionTotal,
-            };
+                const discussionProgress = moduleDiscussionProgress[
+                  moduleCategory.id
+                ] || {
+                  completed: 0,
+                  total: discussionTotal,
+                };
 
-            const discussionPercent =
-              finalDiscussionProgress.total > 0
-                ? Math.round(
-                    (finalDiscussionProgress.completed /
-                      finalDiscussionProgress.total) *
-                      100,
-                  )
-                : 0;
+                // Ensure we use the calculated total if state doesn't have it yet
+                const finalDiscussionProgress = {
+                  completed: discussionProgress.completed,
+                  total: discussionTotal,
+                };
 
-            // Get multiple choice progress for this module
-            // Calculate total from module data
-            let mcTotal = 0;
-            moduleCategory.module.sections.forEach((section) => {
-              if (section.multipleChoice) {
-                mcTotal += section.multipleChoice.length;
-              }
-            });
+                const discussionPercent =
+                  finalDiscussionProgress.total > 0
+                    ? Math.round(
+                        (finalDiscussionProgress.completed /
+                          finalDiscussionProgress.total) *
+                          100,
+                      )
+                    : 0;
 
-            const mcProgress = moduleMultipleChoiceProgress[
-              moduleCategory.id
-            ] || {
-              completed: 0,
-              total: mcTotal,
-            };
+                // Get multiple choice progress for this module
+                // Calculate total from module data
+                let mcTotal = 0;
+                moduleCategory.module.sections.forEach((section) => {
+                  if (section.multipleChoice) {
+                    mcTotal += section.multipleChoice.length;
+                  }
+                });
 
-            // Ensure we use the calculated total if state doesn't have it yet
-            const finalMcProgress = {
-              completed: mcProgress.completed,
-              total: mcTotal,
-            };
+                const mcProgress = moduleMultipleChoiceProgress[
+                  moduleCategory.id
+                ] || {
+                  completed: 0,
+                  total: mcTotal,
+                };
 
-            const mcPercent =
-              finalMcProgress.total > 0
-                ? Math.round(
-                    (finalMcProgress.completed / finalMcProgress.total) * 100,
-                  )
-                : 0;
+                // Ensure we use the calculated total if state doesn't have it yet
+                const finalMcProgress = {
+                  completed: mcProgress.completed,
+                  total: mcTotal,
+                };
 
-            return (
-              <div
-                key={moduleCategory.id}
-                className="rounded-xl border-2 border-[#44475a] bg-[#44475a] p-6 shadow-lg"
-              >
-                <div className="flex items-center gap-6">
-                  {/* Number */}
-                  <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-[#bd93f9] text-xl font-bold text-[#282a36]">
-                    {index + 1}
-                  </div>
+                const mcPercent =
+                  finalMcProgress.total > 0
+                    ? Math.round(
+                        (finalMcProgress.completed / finalMcProgress.total) *
+                          100,
+                      )
+                    : 0;
 
-                  {/* Icon */}
-                  <div className="text-4xl">{moduleCategory.icon}</div>
+                return (
+                  <div
+                    key={moduleCategory.id}
+                    className="rounded-xl border-2 border-[#44475a] bg-[#44475a] p-6 shadow-lg"
+                  >
+                    <div className="flex items-center gap-6">
+                      {/* Number */}
+                      <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-[#bd93f9] text-xl font-bold text-[#282a36]">
+                        {index + 1}
+                      </div>
 
-                  {/* Content */}
-                  <div className="flex-1">
-                    <div className="mb-1 flex items-center gap-2">
-                      <h3 className="text-xl font-bold text-[#f8f8f2]">
-                        {moduleCategory.title}
-                      </h3>
-                      {isCompleted && (
-                        <span className="rounded-full border-2 border-[#50fa7b] bg-[#50fa7b]/20 px-2 py-0.5 text-xs font-semibold text-[#50fa7b]">
-                          ✓ Module Complete
-                        </span>
-                      )}
-                      {finalMcProgress.completed === finalMcProgress.total &&
-                        finalMcProgress.total > 0 && (
-                          <span className="rounded-full border-2 border-[#8be9fd] bg-[#8be9fd]/20 px-2 py-0.5 text-xs font-semibold text-[#8be9fd]">
-                            ✓ All Multiple Choice Complete
+                      {/* Icon */}
+                      <div className="text-4xl">{moduleCategory.icon}</div>
+
+                      {/* Content */}
+                      <div className="flex-1">
+                        <div className="mb-1 flex items-center gap-2">
+                          <h3 className="text-xl font-bold text-[#f8f8f2]">
+                            {moduleCategory.title}
+                          </h3>
+                          {isCompleted && (
+                            <span className="rounded-full border-2 border-[#50fa7b] bg-[#50fa7b]/20 px-2 py-0.5 text-xs font-semibold text-[#50fa7b]">
+                              ✓ Module Complete
+                            </span>
+                          )}
+                          {finalMcProgress.completed ===
+                            finalMcProgress.total &&
+                            finalMcProgress.total > 0 && (
+                              <span className="rounded-full border-2 border-[#8be9fd] bg-[#8be9fd]/20 px-2 py-0.5 text-xs font-semibold text-[#8be9fd]">
+                                ✓ All Multiple Choice Complete
+                              </span>
+                            )}
+                          {finalDiscussionProgress.completed ===
+                            finalDiscussionProgress.total &&
+                            finalDiscussionProgress.total > 0 && (
+                              <span className="rounded-full border-2 border-[#f1fa8c] bg-[#f1fa8c]/20 px-2 py-0.5 text-xs font-semibold text-[#f1fa8c]">
+                                ✓ All Discussions Complete
+                              </span>
+                            )}
+                          {problemsProgress.completed ===
+                            problemsProgress.total &&
+                            problemsProgress.total > 0 && (
+                              <span className="rounded-full border-2 border-[#50fa7b] bg-[#50fa7b]/20 px-2 py-0.5 text-xs font-semibold text-[#50fa7b]">
+                                ✓ All Problems Solved
+                              </span>
+                            )}
+                        </div>
+                        <p className="text-sm text-[#f8f8f2]">
+                          {moduleCategory.description}
+                        </p>
+                      </div>
+
+                      {/* Metadata and Actions */}
+                      <div className="flex flex-shrink-0 items-center gap-3">
+                        <div className="rounded-full border-2 border-[#f8f8f2] bg-[#f8f8f2]/10 px-3 py-1 text-xs font-semibold text-[#f8f8f2]">
+                          {moduleCategory.module.sections.length} sections
+                        </div>
+                        <div className="rounded-full border-2 border-[#f8f8f2] bg-[#f8f8f2]/10 px-3 py-1 text-xs font-semibold text-[#f8f8f2]">
+                          {moduleCategory.problemCount} problems
+                        </div>
+                        <Link
+                          href={`/modules/${moduleCategory.id}`}
+                          className="rounded-lg bg-[#bd93f9] px-4 py-2 text-sm font-semibold text-[#282a36] transition-colors hover:bg-[#ff79c6]"
+                        >
+                          Learn
+                        </Link>
+                        <Link
+                          href={`/topics/${moduleCategory.id}`}
+                          className="rounded-lg border-2 border-[#bd93f9] bg-transparent px-4 py-2 text-sm font-semibold text-[#bd93f9] transition-colors hover:bg-[#bd93f9] hover:text-[#282a36]"
+                        >
+                          Practice
+                        </Link>
+                      </div>
+                    </div>
+
+                    {/* Progress Bars - Always show */}
+                    <div className="mt-4 grid gap-3 md:grid-cols-2 lg:grid-cols-4">
+                      {/* Module Progress */}
+                      <div>
+                        <div className="mb-1 flex items-center justify-between text-xs">
+                          <span className="font-semibold text-[#bd93f9]">
+                            📚 Modules: {progress.completed} / {progress.total}
                           </span>
-                        )}
-                      {finalDiscussionProgress.completed ===
-                        finalDiscussionProgress.total &&
-                        finalDiscussionProgress.total > 0 && (
-                          <span className="rounded-full border-2 border-[#f1fa8c] bg-[#f1fa8c]/20 px-2 py-0.5 text-xs font-semibold text-[#f1fa8c]">
-                            ✓ All Discussions Complete
+                          <span className="text-[#6272a4]">
+                            {progressPercent}%
                           </span>
-                        )}
-                      {problemsProgress.completed === problemsProgress.total &&
-                        problemsProgress.total > 0 && (
-                          <span className="rounded-full border-2 border-[#50fa7b] bg-[#50fa7b]/20 px-2 py-0.5 text-xs font-semibold text-[#50fa7b]">
-                            ✓ All Problems Solved
+                        </div>
+                        <div className="h-1.5 overflow-hidden rounded-full bg-[#282a36]">
+                          <div
+                            className="h-full rounded-full bg-gradient-to-r from-[#bd93f9] to-[#ff79c6] transition-all duration-300"
+                            style={{ width: `${progressPercent}%` }}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Multiple Choice Progress */}
+                      <div>
+                        <div className="mb-1 flex items-center justify-between text-xs">
+                          <span className="font-semibold text-[#8be9fd]">
+                            📝 Multiple Choice: {finalMcProgress.completed} /{' '}
+                            {finalMcProgress.total}
                           </span>
-                        )}
-                    </div>
-                    <p className="text-sm text-[#f8f8f2]">
-                      {moduleCategory.description}
-                    </p>
-                  </div>
+                          <span className="text-[#6272a4]">{mcPercent}%</span>
+                        </div>
+                        <div className="h-1.5 overflow-hidden rounded-full bg-[#282a36]">
+                          <div
+                            className="h-full rounded-full bg-[#8be9fd] transition-all duration-300"
+                            style={{ width: `${mcPercent}%` }}
+                          />
+                        </div>
+                      </div>
 
-                  {/* Metadata and Actions */}
-                  <div className="flex flex-shrink-0 items-center gap-3">
-                    <div className="rounded-full border-2 border-[#f8f8f2] bg-[#f8f8f2]/10 px-3 py-1 text-xs font-semibold text-[#f8f8f2]">
-                      {moduleCategory.module.sections.length} sections
-                    </div>
-                    <div className="rounded-full border-2 border-[#f8f8f2] bg-[#f8f8f2]/10 px-3 py-1 text-xs font-semibold text-[#f8f8f2]">
-                      {moduleCategory.problemCount} problems
-                    </div>
-                    <Link
-                      href={`/modules/${moduleCategory.id}`}
-                      className="rounded-lg bg-[#bd93f9] px-4 py-2 text-sm font-semibold text-[#282a36] transition-colors hover:bg-[#ff79c6]"
-                    >
-                      Learn
-                    </Link>
-                    <Link
-                      href={`/topics/${moduleCategory.id}`}
-                      className="rounded-lg border-2 border-[#bd93f9] bg-transparent px-4 py-2 text-sm font-semibold text-[#bd93f9] transition-colors hover:bg-[#bd93f9] hover:text-[#282a36]"
-                    >
-                      Practice
-                    </Link>
-                  </div>
-                </div>
+                      {/* Discussion Progress */}
+                      <div>
+                        <div className="mb-1 flex items-center justify-between text-xs">
+                          <span className="font-semibold text-[#f1fa8c]">
+                            🎥 Discussions: {finalDiscussionProgress.completed}{' '}
+                            / {finalDiscussionProgress.total}
+                          </span>
+                          <span className="text-[#6272a4]">
+                            {discussionPercent}%
+                          </span>
+                        </div>
+                        <div className="h-1.5 overflow-hidden rounded-full bg-[#282a36]">
+                          <div
+                            className="h-full rounded-full bg-[#f1fa8c] transition-all duration-300"
+                            style={{ width: `${discussionPercent}%` }}
+                          />
+                        </div>
+                      </div>
 
-                {/* Progress Bars - Always show */}
-                <div className="mt-4 grid gap-3 md:grid-cols-2 lg:grid-cols-4">
-                  {/* Module Progress */}
-                  <div>
-                    <div className="mb-1 flex items-center justify-between text-xs">
-                      <span className="font-semibold text-[#bd93f9]">
-                        📚 Modules: {progress.completed} / {progress.total}
-                      </span>
-                      <span className="text-[#6272a4]">{progressPercent}%</span>
-                    </div>
-                    <div className="h-1.5 overflow-hidden rounded-full bg-[#282a36]">
-                      <div
-                        className="h-full rounded-full bg-gradient-to-r from-[#bd93f9] to-[#ff79c6] transition-all duration-300"
-                        style={{ width: `${progressPercent}%` }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Multiple Choice Progress */}
-                  <div>
-                    <div className="mb-1 flex items-center justify-between text-xs">
-                      <span className="font-semibold text-[#8be9fd]">
-                        📝 Multiple Choice: {finalMcProgress.completed} /{' '}
-                        {finalMcProgress.total}
-                      </span>
-                      <span className="text-[#6272a4]">{mcPercent}%</span>
-                    </div>
-                    <div className="h-1.5 overflow-hidden rounded-full bg-[#282a36]">
-                      <div
-                        className="h-full rounded-full bg-[#8be9fd] transition-all duration-300"
-                        style={{ width: `${mcPercent}%` }}
-                      />
+                      {/* Problems Progress */}
+                      <div>
+                        <div className="mb-1 flex items-center justify-between text-xs">
+                          <span className="font-semibold text-[#50fa7b]">
+                            💻 Problems: {problemsProgress.completed} /{' '}
+                            {problemsProgress.total}
+                          </span>
+                          <span className="text-[#6272a4]">
+                            {problemsPercent}%
+                          </span>
+                        </div>
+                        <div className="h-1.5 overflow-hidden rounded-full bg-[#282a36]">
+                          <div
+                            className="h-full rounded-full bg-[#50fa7b] transition-all duration-300"
+                            style={{ width: `${problemsPercent}%` }}
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
-
-                  {/* Discussion Progress */}
-                  <div>
-                    <div className="mb-1 flex items-center justify-between text-xs">
-                      <span className="font-semibold text-[#f1fa8c]">
-                        🎥 Discussions: {finalDiscussionProgress.completed} /{' '}
-                        {finalDiscussionProgress.total}
-                      </span>
-                      <span className="text-[#6272a4]">
-                        {discussionPercent}%
-                      </span>
-                    </div>
-                    <div className="h-1.5 overflow-hidden rounded-full bg-[#282a36]">
-                      <div
-                        className="h-full rounded-full bg-[#f1fa8c] transition-all duration-300"
-                        style={{ width: `${discussionPercent}%` }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Problems Progress */}
-                  <div>
-                    <div className="mb-1 flex items-center justify-between text-xs">
-                      <span className="font-semibold text-[#50fa7b]">
-                        💻 Problems: {problemsProgress.completed} /{' '}
-                        {problemsProgress.total}
-                      </span>
-                      <span className="text-[#6272a4]">{problemsPercent}%</span>
-                    </div>
-                    <div className="h-1.5 overflow-hidden rounded-full bg-[#282a36]">
-                      <div
-                        className="h-full rounded-full bg-[#50fa7b] transition-all duration-300"
-                        style={{ width: `${problemsPercent}%` }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+                );
+              })}
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

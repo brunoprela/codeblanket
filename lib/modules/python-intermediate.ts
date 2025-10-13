@@ -164,6 +164,7 @@ new_path = Path('folder') / 'subfolder' / 'file.txt'
       videoUrl: 'https://www.youtube.com/watch?v=Uh2ebFW8OYM',
       quiz: [
         {
+          id: 'q1',
           question: 'What does the "with" statement do when opening files?',
           options: [
             'Opens file faster',
@@ -176,6 +177,7 @@ new_path = Path('folder') / 'subfolder' / 'file.txt'
             'The with statement (context manager) automatically closes the file when the block exits, even if an exception occurs.',
         },
         {
+          id: 'q2',
           question:
             'Which mode should you use to add content to the end of a file?',
           options: ["'r'", "'w'", "'a'", "'x'"],
@@ -342,6 +344,7 @@ except Exception:
       videoUrl: 'https://www.youtube.com/watch?v=NIWwJbo-9_8',
       quiz: [
         {
+          id: 'q1',
           question: 'When does the "finally" block execute?',
           options: [
             'Only if no exception occurs',
@@ -354,6 +357,7 @@ except Exception:
             'The finally block always executes, whether an exception occurred or not, making it ideal for cleanup code.',
         },
         {
+          id: 'q2',
           question: 'What is the purpose of custom exceptions?',
           options: [
             'Make code run faster',
@@ -520,6 +524,7 @@ validate_json_schema(user_data, ['name', 'age', 'email'])
       videoUrl: 'https://www.youtube.com/watch?v=pTT7HMqDnJw',
       quiz: [
         {
+          id: 'q1',
           question: 'What does json.dump() vs json.dumps() do?',
           options: [
             'dump() is faster',
@@ -532,6 +537,7 @@ validate_json_schema(user_data, ['name', 'age', 'email'])
             'json.dump() writes directly to a file object, while json.dumps() returns a JSON string.',
         },
         {
+          id: 'q2',
           question: 'What Python value becomes null in JSON?',
           options: ['0', 'False', 'None', '""'],
           correctAnswer: 2,
@@ -713,6 +719,7 @@ result = re.sub(r'\\b\\w+\\b', capitalize_match, text)  # "HELLO WORLD"
       videoUrl: 'https://www.youtube.com/watch?v=K8L6KVGG-7o',
       quiz: [
         {
+          id: 'q1',
           question: 'What does \\d+ match?',
           options: [
             'Exactly one digit',
@@ -725,6 +732,7 @@ result = re.sub(r'\\b\\w+\\b', capitalize_match, text)  # "HELLO WORLD"
             '\\d matches a digit, and + means one or more occurrences.',
         },
         {
+          id: 'q2',
           question: 'What is the purpose of raw strings (r"...") in regex?',
           options: [
             'Makes regex case-insensitive',
@@ -923,6 +931,7 @@ if (today.month, today.day) < (birthdate.month, birthdate.day):
       videoUrl: 'https://www.youtube.com/watch?v=eirjjyP2qcQ',
       quiz: [
         {
+          id: 'q1',
           question: 'What does timedelta represent?',
           options: [
             'A specific point in time',
@@ -935,6 +944,7 @@ if (today.month, today.day) < (birthdate.month, birthdate.day):
             'timedelta represents a duration - the difference between two dates or times.',
         },
         {
+          id: 'q2',
           question: 'What is the advantage of storing times in UTC?',
           options: [
             'Takes less space',

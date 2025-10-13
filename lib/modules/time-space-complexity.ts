@@ -272,6 +272,53 @@ def binary_search(arr, target):
           ],
         },
       ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question:
+            'What is the time complexity of this code?\n\n```python\nfor i in range(n):\n    for j in range(n):\n        print(i, j)\n```',
+          options: ['O(n)', 'O(n²)', 'O(2n)', 'O(n log n)'],
+          correctAnswer: 1,
+          explanation:
+            'This is O(n²) because we have nested loops where both iterate n times. The outer loop runs n times, and for each iteration, the inner loop runs n times, resulting in n × n = n² total operations.',
+        },
+        {
+          id: 'mc2',
+          question:
+            'Which of these has the best (fastest) time complexity for large inputs?',
+          options: ['O(2ⁿ)', 'O(n²)', 'O(n log n)', 'O(n³)'],
+          correctAnswer: 2,
+          explanation:
+            'O(n log n) is the fastest among these options. The hierarchy from best to worst is: O(n log n) < O(n²) < O(n³) < O(2ⁿ). Exponential time O(2ⁿ) grows extremely fast and is the slowest.',
+        },
+        {
+          id: 'mc3',
+          question:
+            'What is the time complexity of binary search on a sorted array?',
+          options: ['O(1)', 'O(log n)', 'O(n)', 'O(n log n)'],
+          correctAnswer: 1,
+          explanation:
+            'Binary search is O(log n) because it halves the search space with each comparison. After k comparisons, we have n/2^k elements left. When n/2^k = 1, we have k = log₂(n) comparisons.',
+        },
+        {
+          id: 'mc4',
+          question:
+            'If we simplify O(3n² + 2n + 5) using Big O rules, what do we get?',
+          options: ['O(3n²)', 'O(n² + n)', 'O(n²)', 'O(n)'],
+          correctAnswer: 2,
+          explanation:
+            'We drop constants (3, 2, 5) and lower-order terms (2n, 5), keeping only the fastest-growing term. So O(3n² + 2n + 5) simplifies to O(n²).',
+        },
+        {
+          id: 'mc5',
+          question:
+            'What is the time complexity of this code?\n\n```python\nfor i in range(n):\n    print(i)\nfor j in range(n):\n    print(j)\n```',
+          options: ['O(n)', 'O(n²)', 'O(2n)', 'O(log n)'],
+          correctAnswer: 0,
+          explanation:
+            'This is O(n). We have two sequential loops (not nested), each running n times. Total operations: n + n = 2n, which simplifies to O(n) after dropping the constant.',
+        },
+      ],
     },
     {
       id: 'space-complexity',
@@ -424,6 +471,62 @@ def fib_iterative(n):
             'Fibonacci: O(2^n) → O(n) time by using O(n) space',
             'Common when speed matters more than memory',
           ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question:
+            'What is the space complexity of this function?\n\n```python\ndef sum_array(arr):\n    total = 0\n    for num in arr:\n        total += num\n    return total\n```',
+          options: ['O(n)', 'O(1)', 'O(log n)', 'O(n²)'],
+          correctAnswer: 1,
+          explanation:
+            'This is O(1) space. We only use a constant amount of extra space (the variable "total") regardless of the input array size. The input array itself is not counted in auxiliary space complexity.',
+        },
+        {
+          id: 'mc2',
+          question:
+            'What is the space complexity of a recursive function that has a maximum call stack depth of n?',
+          options: ['O(1)', 'O(log n)', 'O(n)', 'O(n²)'],
+          correctAnswer: 2,
+          explanation:
+            'The space complexity is O(n). Each recursive call adds a frame to the call stack, and if the maximum depth is n, we need O(n) space to store all those stack frames in memory.',
+        },
+        {
+          id: 'mc3',
+          question: 'Which statement about space complexity is TRUE?',
+          options: [
+            'Space complexity always equals time complexity',
+            'Recursive functions always use O(1) space',
+            'Creating a hash map with n entries uses O(n) space',
+            'Space complexity is less important than time complexity',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'Creating a hash map with n entries uses O(n) space. Space and time complexity are independent, recursive functions typically use O(depth) stack space, and space complexity is often just as important as time complexity.',
+        },
+        {
+          id: 'mc4',
+          question:
+            'What is the typical space complexity of merge sort (not in-place)?',
+          options: ['O(1)', 'O(log n)', 'O(n)', 'O(n log n)'],
+          correctAnswer: 2,
+          explanation:
+            'Merge sort uses O(n) space for the temporary arrays needed during the merge step. While the recursion depth is O(log n), the dominant space factor is the O(n) auxiliary arrays.',
+        },
+        {
+          id: 'mc5',
+          question:
+            'In a time-space tradeoff, what does it mean to "trade space for time"?',
+          options: [
+            'Use less memory to run faster',
+            'Use more memory to run faster',
+            'Use less memory but run slower',
+            'Keep both time and space the same',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Trading space for time means using more memory (extra data structures like caches, hash maps, etc.) to achieve faster execution. A classic example is memoization, where we store computed results to avoid recalculating them.',
         },
       ],
     },
@@ -586,6 +689,53 @@ def merge_sort(arr):
           ],
         },
       ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question:
+            'What is the time complexity of this code?\n\n```python\ndef func(arr):\n    for i in range(len(arr)):\n        for j in range(i):\n            print(arr[i], arr[j])\n```',
+          options: ['O(n)', 'O(n log n)', 'O(n²)', 'O(2n)'],
+          correctAnswer: 2,
+          explanation:
+            'This is O(n²). The inner loop runs 0 + 1 + 2 + ... + (n-1) times total, which equals n(n-1)/2. This simplifies to O(n²) after dropping constants and lower-order terms.',
+        },
+        {
+          id: 'mc2',
+          question:
+            'What is the time complexity of calling sorted() on a Python list?',
+          options: ['O(n)', 'O(n log n)', 'O(n²)', 'O(log n)'],
+          correctAnswer: 1,
+          explanation:
+            "Python's sorted() function uses Timsort, which has O(n log n) time complexity in the average and worst case. This is an important built-in operation to remember.",
+        },
+        {
+          id: 'mc3',
+          question:
+            'If you have a loop that runs n times and inside it you sort an array of size n, what is the total time complexity?',
+          options: ['O(n)', 'O(n log n)', 'O(n²)', 'O(n² log n)'],
+          correctAnswer: 3,
+          explanation:
+            'The loop runs n times, and each iteration sorts an array of size n (O(n log n)). We multiply these: O(n) × O(n log n) = O(n² log n). This is worse than O(n²)!',
+        },
+        {
+          id: 'mc4',
+          question:
+            'What is the time complexity of this recursive Fibonacci?\n\n```python\ndef fib(n):\n    if n <= 1: return n\n    return fib(n-1) + fib(n-2)\n```',
+          options: ['O(n)', 'O(n²)', 'O(2ⁿ)', 'O(log n)'],
+          correctAnswer: 2,
+          explanation:
+            'This is O(2ⁿ) exponential time. Each call makes two recursive calls, creating a binary tree of depth n. The total number of calls is approximately 2ⁿ.',
+        },
+        {
+          id: 'mc5',
+          question:
+            'Which data structure provides O(1) average case lookup time?',
+          options: ['Array', 'Linked List', 'Hash Table', 'Binary Search Tree'],
+          correctAnswer: 2,
+          explanation:
+            'Hash tables (dictionaries/hash maps) provide O(1) average case lookup time. Arrays provide O(1) access by index, but O(n) search. Linked lists are O(n) for lookup. BSTs are O(log n) average case.',
+        },
+      ],
     },
     {
       id: 'best-average-worst',
@@ -721,6 +871,75 @@ Always state which case you're analyzing:
             'Dynamic array: occasional O(n) resize spread over many O(1) appends',
             'Total cost O(n) for n appends → O(1) amortized per append',
           ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What does Big O notation typically represent?',
+          options: [
+            'Best case complexity',
+            'Average case complexity',
+            'Worst case complexity',
+            'All three cases equally',
+          ],
+          correctAnswer: 2,
+          explanation:
+            "By convention, Big O notation represents worst case complexity unless stated otherwise. This provides a guarantee that performance won't be worse than the stated complexity.",
+        },
+        {
+          id: 'mc2',
+          question:
+            'For linear search, which statement is correct about its complexities?',
+          options: [
+            'Best: O(1), Worst: O(n)',
+            'Best: O(n), Worst: O(n²)',
+            'Best: O(log n), Worst: O(n)',
+            'Best: O(1), Worst: O(log n)',
+          ],
+          correctAnswer: 0,
+          explanation:
+            'Linear search has best case O(1) when the target is the first element, and worst case O(n) when the target is last or not present. We must check every element in the worst case.',
+        },
+        {
+          id: 'mc3',
+          question: 'Why is quicksort O(n²) in the worst case?',
+          options: [
+            'When the array is randomly shuffled',
+            'When the pivot always splits the array evenly',
+            'When the pivot is always the minimum or maximum element',
+            'When using the median-of-three pivot selection',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'Quicksort degrades to O(n²) when the pivot is consistently the smallest or largest element, causing unbalanced partitions. This happens with already sorted arrays using first/last element as pivot.',
+        },
+        {
+          id: 'mc4',
+          question: 'What is amortized analysis?',
+          options: [
+            'Analyzing the average case over random inputs',
+            'Analyzing the worst case only',
+            'Analyzing the average cost per operation over a sequence of operations',
+            'Analyzing the best case scenario',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'Amortized analysis considers the average cost per operation over a sequence of operations, not individual operations. Example: dynamic array append is O(1) amortized despite occasional O(n) resizing.',
+        },
+        {
+          id: 'mc5',
+          question:
+            'Hash table lookups are O(1) average case but O(n) worst case. Why do we still use them?',
+          options: [
+            'The worst case never happens in practice',
+            'O(n) is fast enough for any application',
+            'With good hash functions, average case O(1) is typical and valuable',
+            'They use less memory than other data structures',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'We use hash tables because with good hash functions and proper load factors, the average case O(1) performance is what we typically experience. The worst case is rare in well-implemented hash tables.',
         },
       ],
     },
@@ -909,6 +1128,77 @@ def two_sum_sorted(arr, target):  # O(n)
             'For small n, O(n²) might be faster in practice',
             'Consider input size and characteristics',
           ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question:
+            'How can using a hash map improve an O(n²) nested loop algorithm?',
+          options: [
+            'By reducing space complexity',
+            'By providing O(1) lookups to eliminate the inner loop',
+            'By sorting the data faster',
+            'By using less memory',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'A hash map provides O(1) lookups, which can replace an inner O(n) loop with a single O(1) operation. For example, in two-sum, instead of checking every other element (O(n²)), we can check if the complement exists in the hash map (O(n)).',
+        },
+        {
+          id: 'mc2',
+          question:
+            'What is memoization and what complexity problem does it solve?',
+          options: [
+            'Sorting data to improve search time',
+            'Caching function results to avoid redundant calculations',
+            'Using less memory in recursive functions',
+            'Converting recursive to iterative solutions',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Memoization caches the results of expensive function calls and returns the cached result when the same inputs occur again. It can dramatically reduce time complexity (e.g., Fibonacci from O(2ⁿ) to O(n)) at the cost of O(n) space.',
+        },
+        {
+          id: 'mc3',
+          question:
+            'When would you prefer an O(n log n) algorithm over an O(n²) algorithm?',
+          options: [
+            'Never, O(n²) is always faster',
+            'For very small inputs only',
+            'For large inputs where better scaling matters',
+            'When you need to use less memory',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'For large inputs, O(n log n) scales much better than O(n²). While O(n²) might be faster for very small inputs due to lower constants, O(n log n) becomes dramatically faster as n grows (e.g., n=1000: n log n ≈ 10,000 vs n² = 1,000,000).',
+        },
+        {
+          id: 'mc4',
+          question:
+            'What optimization technique does this demonstrate?\n\n```python\nprefix_sum = [0]\nfor num in arr:\n    prefix_sum.append(prefix_sum[-1] + num)\n```',
+          options: [
+            'Memoization',
+            'Two pointers',
+            'Precomputation/preprocessing',
+            'Binary search',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'This is precomputation - calculating prefix sums upfront (O(n)) to enable O(1) range sum queries later. This trades O(n) space and preprocessing time for much faster subsequent queries.',
+        },
+        {
+          id: 'mc5',
+          question: 'Which is a valid time-space tradeoff?',
+          options: [
+            'Using less memory always makes algorithms faster',
+            'Using more memory can sometimes make algorithms faster',
+            'Time and space complexity must always be equal',
+            'Optimization always improves both time and space',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Time-space tradeoffs often involve using more memory to achieve better time complexity. Examples include hash maps for O(1) lookups, memoization for avoiding recalculation, and prefix sums for fast range queries.',
         },
       ],
     },

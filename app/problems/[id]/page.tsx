@@ -140,14 +140,14 @@ function ProblemPageContent({ id }: { id: string }) {
             <div className="mb-6">
               <div className="mb-3 flex flex-wrap items-center gap-2">
                 <Link
-                  href="/problems"
+                  href={`/problems?from=${from}`}
                   className={`rounded-full px-3 py-1 text-xs font-bold transition-opacity hover:opacity-80 ${difficultyColors[problem.difficulty]}`}
                   title={`View all ${problem.difficulty} problems`}
                 >
                   {problem.difficulty}
                 </Link>
                 <Link
-                  href={`/topics/${topicSlug}`}
+                  href={`/topics/${topicSlug}?from=${from}`}
                   className="rounded-full border-2 border-[#bd93f9] bg-[#bd93f9]/10 px-3 py-1 text-xs font-semibold text-[#bd93f9] transition-colors hover:border-[#ff79c6] hover:bg-[#ff79c6]/10 hover:text-[#ff79c6]"
                   title={`View all ${problem.topic} problems`}
                 >
@@ -209,12 +209,12 @@ function ProblemPageContent({ id }: { id: string }) {
             <div className="prose prose-sm max-w-none">
               <div className="mb-6 text-[#f8f8f2]">
                 {problem.description.split('\n\n').map((paragraph, idx) => (
-                  <p
+                  <div
                     key={idx}
                     className="mb-4 leading-relaxed whitespace-pre-wrap"
                   >
                     {formatText(paragraph)}
-                  </p>
+                  </div>
                 ))}
               </div>
 

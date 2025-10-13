@@ -354,20 +354,6 @@ export const moduleCategories: ModuleCategory[] = [
  */
 export const topicSections: TopicSection[] = [
   {
-    id: 'algorithms-data-structures',
-    title: 'Algorithms & Data Structures',
-    description:
-      'Master fundamental algorithms and data structures for coding interviews',
-    icon: '🧠',
-    modules: moduleCategories.filter(
-      (m) =>
-        m.id !== 'python-fundamentals' &&
-        m.id !== 'python-intermediate' &&
-        m.id !== 'python-advanced' &&
-        m.id !== 'python-oop',
-    ),
-  },
-  {
     id: 'python',
     title: 'Python',
     description:
@@ -379,6 +365,20 @@ export const topicSections: TopicSection[] = [
         m.id === 'python-intermediate' ||
         m.id === 'python-advanced' ||
         m.id === 'python-oop',
+    ),
+  },
+  {
+    id: 'algorithms-data-structures',
+    title: 'Algorithms & Data Structures',
+    description:
+      'Master fundamental algorithms and data structures for coding interviews',
+    icon: '🧠',
+    modules: moduleCategories.filter(
+      (m) =>
+        m.id !== 'python-fundamentals' &&
+        m.id !== 'python-intermediate' &&
+        m.id !== 'python-advanced' &&
+        m.id !== 'python-oop',
     ),
   },
 ];

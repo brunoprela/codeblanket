@@ -853,7 +853,7 @@ export default function ModulePage({
 
                         return (
                           <div
-                            key={question.id}
+                            key={questionKey}
                             className="rounded-lg border-2 border-[#44475a] bg-[#282a36] p-5"
                           >
                             <div className="mb-4 text-lg leading-relaxed font-semibold text-[#f8f8f2]">

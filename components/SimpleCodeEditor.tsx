@@ -149,8 +149,17 @@ stdout_value
           // Run the function with test input
           const result = await pyodide.runPythonAsync(`
 import json
+from collections import defaultdict, Counter
+
 args = json.loads('''${inputStr}''')
 result = ${functionName}(*args)
+
+# Convert special types to regular dict/list for comparison
+if isinstance(result, (defaultdict, Counter)):
+    result = dict(result)
+elif isinstance(result, list):
+    result = [dict(item) if isinstance(item, (defaultdict, Counter)) else item for item in result]
+
 json.dumps(result)
           `);
 
@@ -158,7 +167,7 @@ json.dumps(result)
           const actual = JSON.parse(result);
 
           testResults.push({
-            passed: JSON.stringify(actual) === JSON.stringify(test.expected),
+            passed: deepEqual(actual, test.expected),
             input: test.input,
             expected: test.expected,
             actual,
@@ -502,4 +511,39 @@ function formatValue(value: any): string {
   if (value === undefined) return 'undefined';
   if (typeof value === 'string') return `"${value}"`;
   return JSON.stringify(value);
+}
+
+// Deep equality comparison for test results
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function deepEqual(a: any, b: any): boolean {
+  // Handle primitives and null/undefined
+  if (a === b) return true;
+  if (a == null || b == null) return false;
+  if (typeof a !== typeof b) return false;
+
+  // Handle arrays
+  if (Array.isArray(a) && Array.isArray(b)) {
+    if (a.length !== b.length) return false;
+    return a.every((item, index) => deepEqual(item, b[index]));
+  }
+
+  // Handle objects/dictionaries (including defaultdict, Counter, etc.)
+  if (typeof a === 'object' && typeof b === 'object') {
+    // Extract actual object data (handles Python defaultdict, Counter, etc.)
+    const objA = typeof a === 'object' && a !== null ? a : {};
+    const objB = typeof b === 'object' && b !== null ? b : {};
+
+    const keysA = Object.keys(objA);
+    const keysB = Object.keys(objB);
+
+    if (keysA.length !== keysB.length) return false;
+
+    return keysA.every((key) => {
+      if (!keysB.includes(key)) return false;
+      return deepEqual(objA[key], objB[key]);
+    });
+  }
+
+  // Fallback for other types
+  return false;
 }
