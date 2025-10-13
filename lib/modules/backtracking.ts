@@ -74,6 +74,50 @@ def backtrack(path, choices):
 3. **Constraint satisfaction** (N-Queens, Sudoku)
 4. **Path finding** (mazes, word search)
 5. **Partition** problems`,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Explain what backtracking is and how it differs from brute force. What makes it more efficient?',
+          sampleAnswer:
+            'Backtracking is a systematic way to explore all possible solutions by making choices incrementally and abandoning paths that cannot lead to valid solutions. It differs from brute force in that it prunes the search space - when we detect a path cannot succeed, we backtrack immediately rather than exploring all possibilities. For example, in N-Queens, if placing a queen creates a conflict, we backtrack without trying to place remaining queens on that board. Brute force would try all placements. The efficiency comes from pruning: we avoid exploring exponentially many invalid paths. Backtracking is essentially DFS with pruning - explore, check constraints, backtrack if invalid, continue if valid.',
+          keyPoints: [
+            'Incremental choice-making with pruning',
+            'Abandon invalid paths early',
+            'vs Brute force: explores all possibilities',
+            'Prunes search space by checking constraints',
+            'DFS with constraint checking',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'Describe the three steps of backtracking pattern. Why is the "undo" step crucial?',
+          sampleAnswer:
+            'The three steps are: choose (make a choice), explore (recurse with that choice), unchoose (undo the choice). The undo step is crucial because it restores the state for exploring other branches. Without undo, previous choices pollute the state for sibling branches. For example, in permutations, after exploring with element A in position 1, we must remove A before trying B in position 1. The undo ensures each branch starts from the same parent state. This is what enables systematic exploration of the entire solution space - each path is independent. The pattern: modify state, recurse, restore state.',
+          keyPoints: [
+            'Three steps: choose, explore, unchoose',
+            'Undo restores state for other branches',
+            'Without undo: state pollution',
+            'Enables independent exploration of branches',
+            'Pattern: modify, recurse, restore',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'Walk me through when you would use backtracking vs other approaches like greedy or dynamic programming.',
+          sampleAnswer:
+            'Use backtracking when you need to find all solutions or explore all possibilities with constraints - problems where greedy does not work and DP does not apply. Greedy makes locally optimal choices and cannot backtrack - use when local optimum leads to global optimum. DP solves overlapping subproblems by memoization - use when problem has optimal substructure. Backtracking is for: generating all combinations/permutations, constraint satisfaction like N-Queens, finding all paths. For example, subset sum: backtracking finds all subsets that sum to target. DP finds if any subset exists. Backtracking explores decision trees with pruning when you need exhaustive search.',
+          keyPoints: [
+            'Backtracking: all solutions, constraints, exploration',
+            'Greedy: local optimum, no backtracking',
+            'DP: overlapping subproblems, memoization',
+            'Backtracking for: all solutions, constraint satisfaction',
+            'Use when exhaustive search needed with pruning',
+          ],
+        },
+      ],
     },
     {
       id: 'patterns',
@@ -274,6 +318,50 @@ def exist(board, word):
                 return True
     return False
 \`\`\``,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Compare the subset and permutation patterns. What is the key difference in how they explore choices?',
+          sampleAnswer:
+            'Subsets explore include/exclude decisions for each element - binary choice at each step. Permutations explore which element to place at each position - n choices initially, n-1 next, etc. Key difference: subsets maintain element order (no rearrangement), permutations try all arrangements. In subsets, once we skip an element, we never go back to it. In permutations, we try each element at each position using a "used" array or swapping. Subsets generate 2^n results (each element in or out). Permutations generate n! results (all arrangements). The recursion tree shape differs: subsets are binary tree, permutations are n-ary tree with shrinking branches.',
+          keyPoints: [
+            'Subsets: include/exclude binary choice',
+            'Permutations: which element at this position',
+            'Subsets: maintain order, 2^n results',
+            'Permutations: all arrangements, n! results',
+            'Tree shape: binary vs n-ary',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'Explain the constraint satisfaction pattern with N-Queens. How do you check if a placement is valid?',
+          sampleAnswer:
+            'N-Queens places N queens on NxN board so none attack each other. We place one queen per row, trying each column. Before placing, check if valid: no queen in same column, no queen on same diagonal. Track used columns with set. For diagonals, use math: row-col identifies one diagonal direction (45 degrees), row+col identifies the other (135 degrees). These are unique per diagonal. So maintain sets for columns, diag1 (row-col), diag2 (row+col). Place queen if position not in any set, add to sets, recurse to next row, then remove from sets (backtrack). This constraint checking prunes invalid placements early. Without it, we would explore all N^N placements.',
+          keyPoints: [
+            'One queen per row, try each column',
+            'Check: column, two diagonals',
+            'Track: column set, diag1 (row-col), diag2 (row+col)',
+            'Place, add to sets, recurse, remove from sets',
+            'Pruning: N^N → much fewer valid placements',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'Describe the path-finding pattern for word search. Why do we need to mark visited cells?',
+          sampleAnswer:
+            'Word search finds if word exists in grid starting from each cell, moving adjacent (up/down/left/right). From each cell, try all 4 directions recursively if char matches next in word. We mark visited cells to prevent cycles - without marking, we could use same cell multiple times, which violates the problem. Mark current cell as visited before recursing, unmark after returning (backtrack). This ensures each path uses each cell at most once. The visited marking is temporary per path - when we backtrack and try a different direction, previous cells become available again. This is classic backtracking state management: modify (mark), recurse, restore (unmark).',
+          keyPoints: [
+            'Try starting from each cell',
+            'Recurse in 4 directions if char matches',
+            'Mark visited to prevent cycles',
+            'Unmark after recursion (backtrack)',
+            'Temporary marking per path',
+          ],
+        },
+      ],
     },
     {
       id: 'complexity',
@@ -355,6 +443,50 @@ def backtrack(state):
     memo[state] = result
     return result
 \`\`\``,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Explain why permutations are O(n! × n) while subsets are O(2^n × n). What causes the factorial vs exponential difference?',
+          sampleAnswer:
+            'Permutations generate all arrangements of n elements: n choices for first position, n-1 for second, n-2 for third, etc. This gives n × (n-1) × (n-2) × ... × 1 = n! permutations. Each takes O(n) to copy, giving O(n! × n). Subsets make binary include/exclude decision for each element: 2 choices per element for n elements gives 2^n subsets. Each takes O(n) to copy, giving O(2^n × n). The difference: permutations have shrinking choices at each level (n, n-1, n-2...), subsets have fixed 2 choices per level. For n=5: permutations = 120, subsets = 32. Factorial grows much faster than exponential for larger n.',
+          keyPoints: [
+            'Permutations: n choices, then n-1, n-2... = n!',
+            'Subsets: 2 choices per element = 2^n',
+            'Both: O(n) to copy each solution',
+            'Factorial vs exponential: shrinking vs fixed choices',
+            'n=5: 120 perms vs 32 subsets',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'Walk me through N-Queens complexity. Why is it O(n!) rather than O(n^n)?',
+          sampleAnswer:
+            'N-Queens places one queen per row, trying each column. First row has n choices, but second row has fewer valid choices due to constraints (column and diagonal conflicts). On average, later rows have exponentially fewer valid choices. Without any pruning, it would be O(n^n) - n choices per row for n rows. With constraint checking, we prune invalid placements early, reducing to approximately O(n!) - similar to permutations but even less due to diagonal constraints. The exact complexity is hard to express but empirically closer to n! than n^n. For n=8, n^n would be 16 million, n! is 40 thousand, and actual is even less due to pruning. Constraint checking massively reduces search space.',
+          keyPoints: [
+            'Without pruning: O(n^n) - n choices per row',
+            'With constraints: invalid placements pruned',
+            'Reduces to approximately O(n!)',
+            'Actually less than n! due to diagonal constraints',
+            'n=8: n^n=16M, n!=40K, actual even less',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'Describe early pruning optimization. How much does it improve backtracking performance?',
+          sampleAnswer:
+            'Early pruning checks constraints before recursing rather than after building complete solution. Bad approach: build entire solution, then check if valid. Good approach: check validity at each step, backtrack immediately if invalid. For example, in N-Queens, check column and diagonal conflicts before placing queen. If invalid, do not recurse to next row. This prevents exploring entire subtrees that cannot succeed. The improvement is exponential - instead of exploring b^d nodes (b = branching, d = depth), we might explore b^(d/2) or less. For N-Queens, without pruning, we explore n^n placements. With pruning, much less. Early pruning is the core of what makes backtracking practical.',
+          keyPoints: [
+            'Check constraints before recursing, not after',
+            'Prevents exploring invalid subtrees',
+            'Bad: build complete solution, then check',
+            'Good: check at each step, backtrack early',
+            'Improvement: exponential reduction in search space',
+          ],
+        },
+      ],
     },
     {
       id: 'templates',
@@ -516,6 +648,50 @@ def constraint_backtrack_template(n):
     backtrack(0)
     return result
 \`\`\``,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Walk me through the basic backtracking template. What does each part accomplish?',
+          sampleAnswer:
+            'The basic template has: result list, helper function, and base case. Helper takes current state (path, used elements, etc.). Base case: if complete solution (path length equals target), add copy of path to result and return. Otherwise, iterate through choices, for each valid choice: add to path (choose), recurse (explore), remove from path (unchoose). The iteration represents branching at each node. Choose-explore-unchoose is the core pattern - ensures state is independent for each branch. Return result after helper explores all paths. This template adapts to subsets, combinations, permutations by changing what choices are and what complete means.',
+          keyPoints: [
+            'Result list, helper function, base case',
+            'Base: complete solution → add to result',
+            'Loop through choices',
+            'Choose, recurse, unchoose pattern',
+            'Adapts to different problem types',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'Explain the subset template with start index. Why is start index important for avoiding duplicates?',
+          sampleAnswer:
+            'Subset template recursively decides include or exclude for each element, using start index to track progress. At each recursion, we have two branches: include nums[start] then recurse with start+1, or skip nums[start] and recurse with start+1. Start index ensures we only consider elements at or after current position, preventing duplicates. Without start index, we would reconsider earlier elements and generate [1,2] and [2,1] as separate subsets - but they are the same subset. Start index maintains order: once we pass an element, we never go back. This gives us exactly 2^n unique subsets. Alternative: pass remaining elements as parameter.',
+          keyPoints: [
+            'Start index tracks progress through array',
+            'Two branches: include or exclude current',
+            'Recurse with start+1 in both branches',
+            'Prevents reconsidering earlier elements',
+            'Avoids duplicates by maintaining order',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'Describe the permutation template with used array. Why swap and track used array?',
+          sampleAnswer:
+            'Permutation template generates all arrangements. Two approaches: used array or swapping. Used array: maintain boolean array tracking which elements are used. At each position, try each unused element: mark used, add to path, recurse, remove from path, mark unused. This explores all arrangements by trying each element at each position. Swapping approach: swap current position with each position from current to end, recurse, swap back. This implicitly tracks used elements via array partitioning. Used array is clearer but needs O(n) extra space. Swapping is in-place but harder to understand. Both generate n! permutations by trying all orderings.',
+          keyPoints: [
+            'Two approaches: used array or swapping',
+            'Used array: track which elements used',
+            'Try each unused at each position',
+            'Swapping: swap, recurse, swap back',
+            'Both: O(n!) permutations',
+          ],
+        },
+      ],
     },
     {
       id: 'interview',
@@ -645,6 +821,52 @@ What options do we have at each step?
    - LeetCode Backtracking tag (100+ problems)
    - Draw decision trees
    - Practice recognizing patterns`,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'How do you recognize that a problem needs backtracking? What keywords or patterns signal this?',
+          sampleAnswer:
+            'Several signals indicate backtracking. First, "all possible" or "find all" - generating all solutions. Second, "combinations", "permutations", "subsets" - explicit generation problems. Third, constraint satisfaction: "N-Queens", "Sudoku", "valid placements". Fourth, "can you find a path" or "does there exist" with complex constraints. Fifth, when greedy does not work and you need exhaustive search with pruning. The key question: do I need to explore all possibilities with ability to abandon invalid paths? If yes, backtracking. Examples: "generate all combinations of size k", "find all solutions to puzzle", "count ways to partition".',
+          keyPoints: [
+            'Keywords: all possible, find all',
+            'Explicit: combinations, permutations, subsets',
+            'Constraint satisfaction: N-Queens, Sudoku',
+            'Path finding with constraints',
+            'Need exhaustive search with pruning',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'Walk me through your approach to a backtracking problem in an interview, from identification to explaining complexity.',
+          sampleAnswer:
+            'First, I identify the pattern: "generate all subsets, so this is backtracking subset pattern". I clarify: duplicates in input? Empty subset allowed? Then I explain approach: "I will use recursive backtracking with start index. At each step, two choices: include current element or skip it. Base case: when start index reaches end, add current path to result". I discuss complexity: "2^n subsets, each takes O(n) to copy, so O(2^n × n) time. O(n) space for recursion depth". I draw decision tree for small example: [1,2] branches into include 1 or not, then include 2 or not, giving [], [2], [1], [1,2]. While coding, I explain choose-explore-unchoose pattern. Finally, I mention optimizations like early pruning if problem has constraints.',
+          keyPoints: [
+            'Identify pattern and explain why backtracking',
+            'Clarify: duplicates, edge cases',
+            'Explain approach with base case and choices',
+            'State complexity with reasoning',
+            'Draw decision tree for example',
+            'Code with choose-explore-unchoose commentary',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'What are the most common mistakes in backtracking problems and how do you avoid them?',
+          sampleAnswer:
+            'First: forgetting to copy path when adding to result. Paths are references; without copy, all results point to same list that gets modified. Use path[:] or path.copy(). Second: forgetting to backtrack (unchoose). State must be restored for sibling branches. Third: wrong base case - not checking if solution complete. Fourth: not checking constraints before recursing, leading to wasted exploration. Fifth: modifying input accidentally. Sixth: off-by-one with indices, especially start parameter. My strategy: always use choose-explore-unchoose pattern explicitly, test with small examples, verify state restoration, add constraint checks before recursing. Drawing the recursion tree helps catch logic errors.',
+          keyPoints: [
+            'Copy path when adding to result',
+            'Always backtrack (unchoose)',
+            'Check correct base case',
+            'Check constraints before recursing',
+            'Do not modify input accidentally',
+            'Test small examples, draw recursion tree',
+          ],
+        },
+      ],
     },
   ],
   keyTakeaways: [

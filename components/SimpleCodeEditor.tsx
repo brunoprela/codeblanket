@@ -1,7 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Editor, { loader } from '@monaco-editor/react';
+import SimpleEditor from 'react-simple-code-editor';
+import { highlight, languages } from 'prismjs';
+import 'prismjs/components/prism-python';
 
 import { TestCase, TestResult } from '@/lib/types';
 import { getPyodide } from '@/lib/pyodide';
@@ -12,28 +14,19 @@ import {
   markProblemIncomplete,
 } from '@/lib/helpers/storage';
 
-interface PythonCodeRunnerProps {
+interface SimpleCodeEditorProps {
   starterCode: string;
   testCases: TestCase[];
   problemId?: string;
   onSuccess?: () => void;
 }
 
-export function PythonCodeRunner({
+export function SimpleCodeEditor({
   starterCode,
   testCases,
   problemId,
   onSuccess,
-}: PythonCodeRunnerProps) {
-  // Configure Monaco Editor to use CDN
-  useEffect(() => {
-    loader.config({
-      paths: {
-        vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.54.0/min/vs',
-      },
-    });
-  }, []);
-
+}: SimpleCodeEditorProps) {
   // Custom hooks for managing state
   const {
     isReady: pyodideReady,
@@ -50,14 +43,25 @@ export function PythonCodeRunner({
   const [results, setResults] = useState<TestResult[]>([]);
   const [isRunning, setIsRunning] = useState(false);
   const [isResultsCollapsed, setIsResultsCollapsed] = useState(false);
+  const [consoleOutput, setConsoleOutput] = useState<string[]>([]);
 
   const runCode = async () => {
     setIsRunning(true);
     setResults([]);
+    setConsoleOutput([]);
 
     try {
       const pyodide = await getPyodide();
       const testResults: TestResult[] = [];
+      const capturedOutput: string[] = [];
+
+      // Setup console output capture
+      await pyodide.runPythonAsync(`
+import sys
+from io import StringIO
+sys.stdout = StringIO()
+sys.stderr = StringIO()
+`);
 
       // Extract function name from code
       const functionMatch = code.match(/def\s+(\w+)\s*\(/);
@@ -72,7 +76,20 @@ export function PythonCodeRunner({
       // Execute user's code to define the function
       await pyodide.runPythonAsync(code);
 
-      // Run each test case
+      // Capture any print output from user code
+      const userOutput = await pyodide.runPythonAsync(`
+stdout_value = sys.stdout.getvalue()
+stderr_value = sys.stderr.getvalue()
+# Reset for test cases
+sys.stdout = StringIO()
+sys.stderr = StringIO()
+stdout_value
+`);
+      if (userOutput) {
+        capturedOutput.push(userOutput);
+      }
+
+      // Run predefined test cases
       for (const test of testCases) {
         const startTime = performance.now();
 
@@ -110,7 +127,16 @@ json.dumps(result)
         }
       }
 
+      // Capture final console output (including any manual test prints)
+      const finalOutput = await pyodide.runPythonAsync(`
+sys.stdout.getvalue() + sys.stderr.getvalue()
+`);
+      if (finalOutput) {
+        capturedOutput.push(finalOutput);
+      }
+
       setResults(testResults);
+      setConsoleOutput(capturedOutput);
 
       // Check if all tests passed
       if (testResults.every((r) => r.passed)) {
@@ -142,6 +168,7 @@ json.dumps(result)
   const handleReset = () => {
     resetCodeStorage();
     setResults([]);
+    setConsoleOutput([]);
 
     if (problemId) {
       markProblemIncomplete(problemId);
@@ -187,91 +214,27 @@ json.dumps(result)
 
       {/* Code Editor */}
       <div className="flex-1 overflow-hidden">
-        <Editor
-          height="100%"
-          language="python"
-          value={code}
-          onChange={(value) => setCode(value || '')}
-          theme="dracula"
-          loading={
-            <div className="flex h-[500px] items-center justify-center bg-[#282a36]">
-              <div className="text-[#6272a4]">Loading editor...</div>
-            </div>
-          }
-          options={{
-            minimap: { enabled: false },
-            fontSize: 15,
-            lineNumbers: 'on',
-            scrollBeyondLastLine: false,
-            scrollBeyondLastColumn: 0,
-            automaticLayout: true,
-            tabSize: 4,
-            wordWrap: 'on',
-            padding: { top: 16, bottom: 0 },
-            scrollbar: {
-              alwaysConsumeMouseWheel: false,
-              vertical: 'auto',
-              horizontal: 'auto',
-              verticalScrollbarSize: 10,
-              horizontalScrollbarSize: 10,
-            },
-            overviewRulerLanes: 0,
-            fixedOverflowWidgets: true,
-            // Disable features that require web workers
-            quickSuggestions: false,
-            parameterHints: { enabled: false },
-            suggestOnTriggerCharacters: false,
-            acceptSuggestionOnEnter: 'off',
-            tabCompletion: 'off',
-            wordBasedSuggestions: 'off',
-          }}
-          beforeMount={(monaco) => {
-            // Configure Monaco environment to prevent worker loading
-            self.MonacoEnvironment = {
-              getWorkerUrl: function () {
-                return 'data:text/javascript;charset=utf-8,' + encodeURIComponent(
-                  'self.onmessage = function() {};'
-                );
-              }
-            };
-
-            // Define Dracula theme for Monaco
-            monaco.editor.defineTheme('dracula', {
-              base: 'vs-dark',
-              inherit: true,
-              rules: [
-                { token: 'comment', foreground: '6272a4', fontStyle: 'italic' },
-                { token: 'keyword', foreground: 'ff79c6' },
-                { token: 'operator', foreground: 'ff79c6' },
-                { token: 'string', foreground: 'f1fa8c' },
-                { token: 'number', foreground: 'bd93f9' },
-                { token: 'function', foreground: '50fa7b' },
-                { token: 'class', foreground: '8be9fd' },
-                { token: 'type', foreground: '8be9fd' },
-                { token: 'variable', foreground: 'f8f8f2' },
-                { token: 'parameter', foreground: 'ffb86c' },
-                { token: 'constant', foreground: 'bd93f9' },
-              ],
-              colors: {
-                'editor.background': '#282a36',
-                'editor.foreground': '#f8f8f2',
-                'editor.lineHighlightBackground': '#44475a',
-                'editor.selectionBackground': '#44475a',
-                'editorCursor.foreground': '#f8f8f2',
-                'editorLineNumber.foreground': '#6272a4',
-                'editorLineNumber.activeForeground': '#f8f8f2',
-                'editor.inactiveSelectionBackground': '#44475a',
-                'editorWhitespace.foreground': '#44475a',
-                'editorIndentGuide.background': '#44475a',
-                'editorIndentGuide.activeBackground': '#6272a4',
-              },
-            });
-          }}
-          onMount={(editor, monaco) => {
-            // Set Dracula theme after mount
-            monaco.editor.setTheme('dracula');
-          }}
-        />
+        <div className="h-full overflow-auto bg-[#282a36] p-4">
+          <pre className="language-python" style={{ margin: 0, background: 'transparent' }}>
+            <SimpleEditor
+              value={code}
+              onValueChange={setCode}
+              highlight={(code) => highlight(code, languages.python, 'python')}
+              padding={16}
+              style={{
+                fontFamily: '"Fira Code", "Fira Mono", "SF Mono", Monaco, Inconsolata, "Roboto Mono", Consolas, "Courier New", monospace',
+                fontSize: 15,
+                minHeight: '100%',
+                backgroundColor: 'transparent',
+                color: '#f8f8f2',
+                outline: 'none',
+                lineHeight: '1.6',
+                caretColor: '#f8f8f2',
+              }}
+              textareaClassName="focus:outline-none"
+            />
+          </pre>
+        </div>
       </div>
 
       {/* Action Buttons */}
@@ -369,7 +332,8 @@ json.dumps(result)
                         Got:
                       </span>
                       <span
-                        className={`font-semibold ${result.passed ? 'text-[#50fa7b]' : 'text-[#ff5555]'}`}
+                        className={`font-semibold ${result.passed ? 'text-[#50fa7b]' : 'text-[#ff5555]'
+                          }`}
                       >
                         {formatValue(result.actual)}
                       </span>
@@ -380,7 +344,7 @@ json.dumps(result)
                         <div className="mb-1 font-semibold text-[#ff5555]">
                           Error:
                         </div>
-                        <pre className="text-xs whitespace-pre-wrap text-[#ff5555]">
+                        <pre className="whitespace-pre-wrap text-xs text-[#ff5555]">
                           {result.error}
                         </pre>
                       </div>
@@ -390,6 +354,22 @@ json.dumps(result)
               ))}
             </div>
           )}
+        </div>
+      )}
+
+      {/* Console Output */}
+      {consoleOutput.length > 0 && (
+        <div className="max-h-[30vh] min-h-0 flex-shrink-0 overflow-y-auto border-t border-[#44475a] bg-[#282a36] p-4">
+          <div className="mb-3 rounded-lg bg-[#44475a] px-4 py-2">
+            <div className="font-semibold text-[#f8f8f2]">📟 Console Output</div>
+          </div>
+          <div className="rounded-lg bg-[#282a36] border border-[#44475a] p-4 font-mono text-sm">
+            {consoleOutput.map((output, i) => (
+              <pre key={i} className="whitespace-pre-wrap text-[#f8f8f2]">
+                {output}
+              </pre>
+            ))}
+          </div>
         </div>
       )}
     </div>
@@ -403,3 +383,4 @@ function formatValue(value: any): string {
   if (typeof value === 'string') return `"${value}"`;
   return JSON.stringify(value);
 }
+

@@ -286,7 +286,7 @@ function ProblemCard({
   isCompleted: boolean;
 }) {
   return (
-    <Link href={`/problems/${problem.id}`} className="mb-6 block">
+    <Link href={`/problems/${problem.id}?from=problems`} className="mb-6 block">
       <div className="group cursor-pointer rounded-lg border-2 border-[#44475a] bg-[#44475a] p-6 transition-all hover:border-[#bd93f9] hover:shadow-xl">
         <div className="flex items-start justify-between">
           <div className="flex-1">

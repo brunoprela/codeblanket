@@ -8,7 +8,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { getModuleById } from '@/lib/modules';
 import { formatText } from '@/lib/utils/formatText';
 
-// Custom Dracula theme matching our app's color scheme
+// Custom Dracula theme matching Monaco Editor's Dracula theme
 const draculaTheme = {
   'code[class*="language-"]': {
     color: '#f8f8f2',
@@ -28,36 +28,57 @@ const draculaTheme = {
     padding: '1rem',
     margin: '0',
     overflow: 'auto',
+    borderRadius: '0.5rem',
   },
+  // Comments
   comment: { color: '#6272a4', fontStyle: 'italic' },
   prolog: { color: '#6272a4' },
   doctype: { color: '#6272a4' },
   cdata: { color: '#6272a4' },
-  punctuation: { color: '#f8f8f2' },
-  property: { color: '#50fa7b' },
+
+  // Keywords and operators
+  keyword: { color: '#ff79c6' },
+  operator: { color: '#ff79c6' },
+  atrule: { color: '#ff79c6' },
   tag: { color: '#ff79c6' },
-  constant: { color: '#bd93f9' },
-  symbol: { color: '#bd93f9' },
-  deleted: { color: '#ff5555' },
-  boolean: { color: '#bd93f9' },
-  number: { color: '#bd93f9' },
-  selector: { color: '#50fa7b' },
-  'attr-name': { color: '#50fa7b' },
+
+  // Strings and regex
   string: { color: '#f1fa8c' },
   char: { color: '#f1fa8c' },
-  builtin: { color: '#8be9fd' },
-  inserted: { color: '#50fa7b' },
-  operator: { color: '#ff79c6' },
-  entity: { color: '#f8f8f2' },
-  url: { color: '#f1fa8c' },
-  variable: { color: '#f8f8f2' },
-  atrule: { color: '#ff79c6' },
-  'attr-value': { color: '#f1fa8c' },
-  function: { color: '#50fa7b' },
-  'class-name': { color: '#8be9fd' },
-  keyword: { color: '#ff79c6' },
   regex: { color: '#f1fa8c' },
+  'attr-value': { color: '#f1fa8c' },
+  url: { color: '#f1fa8c' },
+
+  // Numbers and booleans
+  number: { color: '#bd93f9' },
+  boolean: { color: '#bd93f9' },
+  constant: { color: '#bd93f9' },
+  symbol: { color: '#bd93f9' },
+
+  // Functions and methods
+  function: { color: '#50fa7b' },
+  selector: { color: '#50fa7b' },
+  property: { color: '#50fa7b' },
+  'attr-name': { color: '#50fa7b' },
+  inserted: { color: '#50fa7b' },
+
+  // Classes and types
+  'class-name': { color: '#8be9fd' },
+  builtin: { color: '#8be9fd' },
+
+  // Parameters and important
+  parameter: { color: '#ffb86c' },
   important: { color: '#ffb86c', fontWeight: 'bold' },
+
+  // Variables and entities
+  variable: { color: '#f8f8f2' },
+  entity: { color: '#f8f8f2' },
+  punctuation: { color: '#f8f8f2' },
+
+  // Deleted text
+  deleted: { color: '#ff5555' },
+
+  // Formatting
   bold: { fontWeight: 'bold' },
   italic: { fontStyle: 'italic' },
   namespace: { opacity: 0.7 },
@@ -84,6 +105,9 @@ export default function ModulePage({
   const [completedSections, setCompletedSections] = useState<Set<string>>(
     new Set(),
   );
+
+  // State for showing quiz solutions
+  const [showSolutions, setShowSolutions] = useState<Set<string>>(new Set());
 
   // Load completed sections from localStorage
   useEffect(() => {
@@ -151,6 +175,19 @@ export default function ModulePage({
         newSet.delete(sectionId);
       } else {
         newSet.add(sectionId);
+      }
+      return newSet;
+    });
+  };
+
+  const toggleSolution = (sectionId: string, questionId: string) => {
+    const key = `${sectionId}-${questionId}`;
+    setShowSolutions((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(key)) {
+        newSet.delete(key);
+      } else {
+        newSet.add(key);
       }
       return newSet;
     });
@@ -236,7 +273,7 @@ export default function ModulePage({
             </div>
           )}
           <Link
-            href={`/topics/${moduleData.id}`}
+            href={`/topics/${moduleData.id}?from=modules/${slug}`}
             className="ml-auto rounded-lg bg-[#bd93f9] px-6 py-2 font-semibold text-[#282a36] transition-colors hover:bg-[#ff79c6]"
           >
             📝 Practice Problems →
@@ -274,11 +311,10 @@ export default function ModulePage({
                       e.stopPropagation();
                       toggleSectionComplete(section.id);
                     }}
-                    className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded border-2 transition-colors ${
-                      isCompleted
-                        ? 'border-[#50fa7b] bg-[#50fa7b] text-[#282a36]'
-                        : 'border-[#6272a4] bg-transparent text-transparent hover:border-[#50fa7b]'
-                    }`}
+                    className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded border-2 transition-colors ${isCompleted
+                      ? 'border-[#50fa7b] bg-[#50fa7b] text-[#282a36]'
+                      : 'border-[#6272a4] bg-transparent text-transparent hover:border-[#50fa7b]'
+                      }`}
                     title={
                       isCompleted ? 'Mark as incomplete' : 'Mark as completed'
                     }
@@ -302,9 +338,8 @@ export default function ModulePage({
 
                   {/* Expand/Collapse Arrow */}
                   <div
-                    className={`flex-shrink-0 text-[#bd93f9] transition-transform ${
-                      isExpanded ? 'rotate-180' : ''
-                    }`}
+                    className={`flex-shrink-0 text-[#bd93f9] transition-transform ${isExpanded ? 'rotate-180' : ''
+                      }`}
                   >
                     <svg
                       className="h-6 w-6"
@@ -589,6 +624,126 @@ export default function ModulePage({
                         </div>
                       </div>
                     )}
+
+                    {/* Quiz Section */}
+                    {section.quiz && section.quiz.length > 0 && (
+                      <div className="mt-8 rounded-lg border-2 border-[#f1fa8c] bg-[#f1fa8c]/5 p-6">
+                        <h3 className="mb-4 flex items-center gap-2 text-xl font-bold text-[#f1fa8c]">
+                          <svg
+                            className="h-6 w-6"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
+                          </svg>
+                          Discussion Questions
+                        </h3>
+                        <p className="mb-6 text-sm text-[#6272a4]">
+                          Think through these questions or discuss them on
+                          camera. Click to reveal sample answers.
+                        </p>
+
+                        <div className="space-y-5">
+                          {section.quiz.map((question, qIndex) => {
+                            const questionKey = `${section.id}-${question.id}`;
+                            const showSolution =
+                              showSolutions.has(questionKey);
+
+                            return (
+                              <div
+                                key={question.id}
+                                className="rounded-lg border-2 border-[#44475a] bg-[#282a36] p-5"
+                              >
+                                <div className="mb-4 text-lg font-semibold leading-relaxed text-[#f8f8f2]">
+                                  <span className="mr-2 text-[#bd93f9]">
+                                    {qIndex + 1}.
+                                  </span>
+                                  {question.question}
+                                </div>
+
+                                {question.hint && !showSolution && (
+                                  <div className="mb-4 rounded-lg border border-[#6272a4] bg-[#6272a4]/10 p-3 text-sm text-[#8be9fd]">
+                                    <span className="font-semibold">
+                                      💡 Hint:{' '}
+                                    </span>
+                                    {question.hint}
+                                  </div>
+                                )}
+
+                                <button
+                                  onClick={() =>
+                                    toggleSolution(section.id, question.id)
+                                  }
+                                  className="rounded-lg bg-[#bd93f9] px-4 py-2 text-sm font-semibold text-[#282a36] transition-colors hover:bg-[#ff79c6]"
+                                >
+                                  {showSolution
+                                    ? '🔒 Hide Sample Answer'
+                                    : '🔓 Reveal Sample Answer'}
+                                </button>
+
+                                {/* Sample Answer & Key Points */}
+                                {showSolution && (
+                                  <div className="mt-4 space-y-4">
+                                    {/* Sample Answer */}
+                                    <div className="rounded-lg border-2 border-[#50fa7b] bg-[#50fa7b]/10 p-4">
+                                      <div className="mb-2 flex items-center gap-2 font-semibold text-[#50fa7b]">
+                                        <svg
+                                          className="h-5 w-5"
+                                          fill="none"
+                                          stroke="currentColor"
+                                          viewBox="0 0 24 24"
+                                        >
+                                          <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                          />
+                                        </svg>
+                                        Sample Answer
+                                      </div>
+                                      <p className="text-sm leading-relaxed text-[#f8f8f2]">
+                                        {question.sampleAnswer}
+                                      </p>
+                                    </div>
+
+                                    {/* Key Points */}
+                                    {question.keyPoints.length > 0 && (
+                                      <div className="rounded-lg border-2 border-[#8be9fd] bg-[#8be9fd]/10 p-4">
+                                        <div className="mb-2 font-semibold text-[#8be9fd]">
+                                          ✓ Key Points to Cover:
+                                        </div>
+                                        <ul className="space-y-1.5 text-sm text-[#f8f8f2]">
+                                          {question.keyPoints.map(
+                                            (point, index) => (
+                                              <li
+                                                key={index}
+                                                className="flex items-start gap-2"
+                                              >
+                                                <span className="mt-1 text-[#8be9fd]">
+                                                  •
+                                                </span>
+                                                <span>{point}</span>
+                                              </li>
+                                            ),
+                                          )}
+                                        </ul>
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -621,7 +776,7 @@ export default function ModulePage({
           ← All Topics
         </Link>
         <Link
-          href={`/topics/${moduleData.id}`}
+          href={`/topics/${moduleData.id}?from=modules/${slug}`}
           className="rounded-lg bg-[#bd93f9] px-6 py-3 font-semibold text-[#282a36] transition-colors hover:bg-[#ff79c6]"
         >
           Practice {moduleData.title} Problems →

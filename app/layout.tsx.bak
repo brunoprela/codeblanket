@@ -21,10 +21,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script src="/monaco-fix.js" />
+      </head>
       <body className={inter.className} suppressHydrationWarning>
         <Script
           src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"
-          strategy="lazyOnload"
+          strategy="beforeInteractive"
         />
 
         <StorageInitializer />

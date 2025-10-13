@@ -16,7 +16,9 @@ import { linkedListProblems } from './linked-list';
 import { mathGeometryProblems } from './math-geometry';
 import { segmentTreeProblems } from './segment-tree';
 import { slidingWindowProblems } from './sliding-window';
+import { sortingProblems } from './sorting';
 import { stackProblems } from './stack';
+import { timeSpaceComplexityProblems } from './time-space-complexity';
 import { treesProblems } from './trees';
 import { triesProblems } from './tries';
 import { twoPointersProblems } from './two-pointers';
@@ -31,6 +33,15 @@ export interface ProblemCategory {
 }
 
 export const problemCategories: ProblemCategory[] = [
+  {
+    id: 'time-space-complexity',
+    title: 'Time & Space Complexity',
+    description:
+      'Master the art of analyzing algorithm efficiency and understanding Big O notation',
+    icon: '⏱️',
+    problemCount: timeSpaceComplexityProblems.length,
+    problems: timeSpaceComplexityProblems,
+  },
   {
     id: 'advanced-graphs',
     title: 'Advanced Graphs',
@@ -183,6 +194,15 @@ export const problemCategories: ProblemCategory[] = [
     problems: slidingWindowProblems,
   },
   {
+    id: 'sorting',
+    title: 'Sorting Algorithms',
+    description:
+      'Master fundamental sorting algorithms and understand their time complexity and use cases',
+    icon: '🔄',
+    problemCount: sortingProblems.length,
+    problems: sortingProblems,
+  },
+  {
     id: 'stack',
     title: 'Stack',
     description:
@@ -238,7 +258,9 @@ export const allProblems: Problem[] = [
   ...mathGeometryProblems,
   ...segmentTreeProblems,
   ...slidingWindowProblems,
+  ...sortingProblems,
   ...stackProblems,
+  ...timeSpaceComplexityProblems,
   ...treesProblems,
   ...triesProblems,
   ...twoPointersProblems,

@@ -10,6 +10,12 @@ export interface TestCase {
   explanation?: string;
 }
 
+export interface CustomTestCase {
+  id: string;
+  code: string; // Python code for the test case
+  name?: string; // Optional name for the test case
+}
+
 export interface Example {
   input: string;
   output: string;
@@ -53,11 +59,20 @@ export interface TestResult {
  * Module system types
  */
 
+export interface QuizQuestion {
+  id: string;
+  question: string;
+  hint?: string;
+  sampleAnswer: string;
+  keyPoints: string[];
+}
+
 export interface ModuleSection {
   id: string;
   title: string;
   content: string;
   codeExample?: string;
+  quiz: QuizQuestion[];
 }
 
 export interface Module {

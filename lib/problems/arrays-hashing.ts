@@ -51,6 +51,13 @@ def contains_duplicate(nums: List[int]) -> bool:
     """
     # Your code here
     pass
+
+
+# Write your own test cases below
+# print() statements will appear in the Console Output section
+# Example:
+# print(contains_duplicate([1, 2, 3]))  # Should print False
+# print(contains_duplicate([1, 2, 1]))  # Should print True
 `,
     testCases: [
       {

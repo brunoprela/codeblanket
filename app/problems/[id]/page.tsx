@@ -1,20 +1,17 @@
 'use client';
 
-import { notFound } from 'next/navigation';
+import { notFound, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect, use, Suspense } from 'react';
 
 import { getProblemById } from '@/lib/problems';
-import { PythonCodeRunner } from '@/components/PythonCodeRunner';
+import { SimpleCodeEditor } from '@/components/SimpleCodeEditor';
 import { isProblemCompleted } from '@/lib/helpers/storage';
 import { formatText } from '@/lib/utils/formatText';
 
-export default function ProblemPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = use(params);
+function ProblemPageContent({ id }: { id: string }) {
+  const searchParams = useSearchParams();
+  const from = searchParams.get('from') || 'problems';
   const problem = getProblemById(id);
   const [isCompleted, setIsCompleted] = useState(false);
 
@@ -71,7 +68,10 @@ export default function ProblemPage({
     'Math & Geometry': 'math-geometry',
     'Segment Tree': 'segment-tree',
     'Sliding Window': 'sliding-window',
+    Sorting: 'sorting',
+    'Sorting Algorithms': 'sorting',
     Stack: 'stack',
+    'Time & Space Complexity': 'time-space-complexity',
     Trees: 'trees',
     Tries: 'tries',
     'Two Pointers': 'two-pointers',
@@ -85,13 +85,28 @@ export default function ProblemPage({
       .replace(/[&/()/]/g, '-')
       .replace(/--+/g, '-');
 
+  // Determine back button URL and text based on 'from' parameter
+  let backUrl = '/problems';
+  let backText = 'Problem List';
+  
+  if (from.startsWith('modules/')) {
+    backUrl = `/${from}`;
+    backText = 'Back to Module';
+  } else if (from.startsWith('topics/')) {
+    backUrl = `/${from}`;
+    backText = 'Back to Topic';
+  } else if (from === 'problems') {
+    backUrl = '/problems';
+    backText = 'Problem List';
+  }
+
   return (
     <div className="flex h-full flex-col overflow-hidden">
       {/* Top Bar */}
       <div className="flex-shrink-0 border-b border-[#44475a] bg-[#282a36] px-4 py-3">
         <div className="flex items-center justify-between">
           <Link
-            href="/problems"
+            href={backUrl}
             className="flex items-center text-sm font-medium text-[#bd93f9] transition-colors hover:text-[#ff79c6]"
           >
             <svg
@@ -107,7 +122,7 @@ export default function ProblemPage({
                 d="M15 19l-7-7 7-7"
               />
             </svg>
-            Problem List
+            {backText}
           </Link>
         </div>
       </div>
@@ -303,7 +318,7 @@ export default function ProblemPage({
 
         {/* Right Panel - Code Editor */}
         <div className="flex w-1/2 flex-col overflow-hidden bg-[#282a36]">
-          <PythonCodeRunner
+          <SimpleCodeEditor
             starterCode={problem.starterCode}
             testCases={problem.testCases}
             problemId={problem.id}
@@ -312,5 +327,19 @@ export default function ProblemPage({
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ProblemPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = use(params);
+
+  return (
+    <Suspense fallback={<div className="flex h-full items-center justify-center bg-[#282a36] text-[#f8f8f2]">Loading...</div>}>
+      <ProblemPageContent id={id} />
+    </Suspense>
   );
 }

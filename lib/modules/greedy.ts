@@ -78,6 +78,50 @@ Greedy **fails** for coins [25, 20, 5, 1]:
 4. **Smallest First**: Select smallest available item
 5. **Best Ratio**: Select best value/weight ratio
 6. **Closest First**: Select nearest/closest element`,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Explain what greedy algorithms are and when they produce optimal solutions. What makes a problem suitable for greedy?',
+          sampleAnswer:
+            'Greedy algorithms make locally optimal choices at each step hoping to find global optimum. At each decision point, choose what looks best right now without considering future consequences. Greedy works when problem has greedy choice property (local optimum leads to global) and optimal substructure (optimal solution contains optimal solutions to subproblems). For example, making change with coins: always take largest coin possible. Activity selection: always pick earliest ending activity. Greedy fails when local optimum does not guarantee global optimum. For example, 0/1 knapsack needs DP because taking highest value item first might leave no room for better combination. Key: greedy is fast O(n log n) but only works for specific problems. Must prove greedy choice is safe.',
+          keyPoints: [
+            'Make locally optimal choice at each step',
+            'Works when: greedy choice property + optimal substructure',
+            'Local optimum must lead to global optimum',
+            'Fast O(n log n) but limited applicability',
+            'Must prove correctness, does not always work',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'Compare greedy vs dynamic programming. When would you choose each approach?',
+          sampleAnswer:
+            'Greedy makes irreversible choice at each step, no backtracking. DP considers all options, stores results. Greedy is O(n) or O(n log n), DP is O(n²) or higher. Choose greedy when: local optimum provably leads to global (activity selection, Huffman coding), problem has greedy choice property. Choose DP when: need to consider all possibilities (knapsack, LCS), local choice might not be optimal. For example, coin change for making value: greedy (always largest coin) works for standard coins but fails for arbitrary denominations - need DP. Activity selection: greedy (earliest end) is provably optimal. The key: greedy is preferred when it works (faster, simpler) but DP is more general. Try to prove greedy works; if cannot, use DP.',
+          keyPoints: [
+            'Greedy: one choice per step, no backtrack',
+            'DP: try all options, memoize results',
+            'Greedy: O(n log n), DP: O(n²) or higher',
+            'Greedy when: local → global provably',
+            'DP when: need all possibilities',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'Walk me through common greedy patterns. How do you recognize which pattern to apply?',
+          sampleAnswer:
+            'Common patterns: Interval scheduling (earliest end time), knapsack fractional (best ratio), two-pointer (extremes first), sorting (process in order). Recognize by problem structure. Intervals + maximize count → sort by end time. Maximize/minimize with constraints → try sorting. Array with extremes → two pointers. Resource allocation → priority queue. For example, "maximum units on truck with capacity" → greedy by unit density (sort by units per box). "Minimum arrows to burst balloons" → sort intervals by end, count groups. "Assign cookies to children" → sort both, match smallest. The pattern: identify what to sort by and what greedy choice to make. Drawing examples often reveals the pattern.',
+          keyPoints: [
+            'Patterns: interval (end time), fractional (ratio), extremes (two pointers)',
+            'Intervals + count → sort by end',
+            'Maximize/minimize → try sorting',
+            'Resource allocation → priority queue',
+            'Draw examples to reveal pattern',
+          ],
+        },
+      ],
     },
     {
       id: 'patterns',
@@ -310,6 +354,50 @@ def jump_game_ii(nums: List[int]) -> int:
             current_end = farthest
     
     return jumps`,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Explain the activity selection pattern. Why does sorting by end time give optimal solution?',
+          sampleAnswer:
+            'Activity selection maximizes non-overlapping activities. Greedy: sort by end time, pick activity if it starts after last picked ends. Why optimal? Finishing early leaves maximum room for future activities. Proof by exchange argument: suppose optimal solution differs from greedy. Replace first activity in optimal with greedy choice (earliest ending). This cannot make solution worse because earliest ending leaves more room. Continue replacing - greedy matches optimal. For example, activities with ends [3,5,6,8]: picking 3 leaves room for 5,6,8. Picking 5 first blocks 3. Earliest end is provably best choice. This pattern extends to interval scheduling, meeting rooms.',
+          keyPoints: [
+            'Maximize non-overlapping activities',
+            'Sort by end time, greedy select',
+            'Earliest end leaves most room',
+            'Proof: exchange argument shows optimality',
+            'Pattern: interval problems with count',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'Describe the fractional knapsack pattern. How does it differ from 0/1 knapsack?',
+          sampleAnswer:
+            'Fractional knapsack: can take partial items, maximize value with weight limit. Greedy: sort by value/weight ratio, take items in order, take fraction of last if needed. This is optimal for fractional. 0/1 knapsack: must take whole items, greedy fails. For example, capacity 50, items: [60kg,$100], [10kg,$20], [20kg,$30]. Fractional: take all of 10kg ($20), all of 20kg ($30), 20kg of 60kg ($33.33) = $83.33 optimal. Greedy by ratio works. 0/1: cannot take fraction of 60kg item, need DP. Key difference: fractional allows splitting, making greedy safe. 0/1 needs considering combinations. Fractional is O(n log n), 0/1 is O(n×W).',
+          keyPoints: [
+            'Fractional: can split items, greedy optimal',
+            'Sort by value/weight ratio',
+            '0/1: must take whole, greedy fails, need DP',
+            'Splitting makes greedy safe',
+            'Fractional O(n log n), 0/1 O(n×W)',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'Walk me through the jump game greedy pattern. Why does tracking farthest reachable work?',
+          sampleAnswer:
+            'Jump game: reach end of array, each element is max jump length. Greedy: iterate, track farthest reachable from current position. At each index i, farthest = max(farthest, i + nums[i]). If current position exceeds farthest, cannot proceed. If farthest >= end, can reach. For minimum jumps: track current range end, when reach end of range, increment jumps and update range to farthest. Works because if we can reach index i, we can reach all indices before i. So tracking farthest from all reachable positions guarantees we find if end is reachable. For minimum jumps, greedily extending range as far as possible minimizes jump count. This is provably optimal.',
+          keyPoints: [
+            'Track farthest reachable position',
+            'At i: farthest = max(farthest, i + nums[i])',
+            'Can reach end if farthest >= end',
+            'Min jumps: greedily extend range',
+            'Provably optimal: can reach implies can reach all before',
+          ],
+        },
+      ],
     },
     {
       id: 'proof',
@@ -388,6 +476,50 @@ Greedy (by ratio) fails:
 - Optimal: 100 + 120 = 220 ✗
 
 Need DP for 0/1 knapsack!`,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'How do you prove a greedy algorithm is correct? What techniques can you use?',
+          sampleAnswer:
+            'Three main proof techniques. First, greedy stays ahead: show greedy is always at least as good as optimal after each step. Second, exchange argument: suppose optimal differs from greedy, exchange optimal choice with greedy choice, show this does not worsen solution. Third, induction: prove greedy works for base case, then show if greedy works for k steps, it works for k+1. For activity selection: exchange argument - replacing earliest end in optimal with greedy choice leaves more room. For Huffman: induction - merging two lowest frequency nodes is optimal at each step. Without proof, greedy might be wrong. For example, greedy fails for 0/1 knapsack but works for fractional. Must prove correctness.',
+          keyPoints: [
+            'Three techniques: stays ahead, exchange, induction',
+            'Stays ahead: greedy ≥ optimal at each step',
+            'Exchange: swap optimal choice with greedy, no worse',
+            'Induction: prove base, then k → k+1',
+            'Without proof, greedy might be wrong',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'Explain why greedy fails for 0/1 knapsack. What property is missing?',
+          sampleAnswer:
+            'Greedy fails because local choice (highest ratio) does not guarantee global optimum when items are indivisible. Example: capacity 50, items: [10kg,$60 ratio=6], [20kg,$100 ratio=5], [30kg,$120 ratio=4]. Greedy picks 10kg then 20kg for $160. Optimal picks 20kg+30kg for $220. The problem: after picking 10kg item, cannot fit 30kg item, but 30kg item is part of optimal. Greedy lacks look-ahead. Missing property: greedy choice property does not hold - locally best choice (highest ratio) blocks better global combination. For fractional knapsack, can take partial items, so greedy works (take fractions to fill capacity). For 0/1, need DP to consider all item combinations.',
+          keyPoints: [
+            'Local best does not guarantee global when indivisible',
+            'Example: highest ratio blocks better combination',
+            'Lacks look-ahead to see better combos',
+            'Greedy choice property does not hold',
+            'Fractional works (can split), 0/1 needs DP',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'Describe when sorting enables greedy solutions. What should you sort by?',
+          sampleAnswer:
+            'Sorting reveals structure that makes greedy safe. Sort by: end time for intervals (activity selection), ratio for fractional knapsack, difficulty or deadline for scheduling, size for matching problems. Sorting orders choices so greedy can process best-first. For example, activity selection: after sorting by end time, earliest ending is provably best choice - picking it leaves most room. Without sorting, would need to search for earliest ending each time or might pick wrong activity. Sorting is O(n log n) but enables O(n) greedy processing. Pattern: if greedy should pick "best" choice but best is not obvious, sorting often reveals it. Sort puts related items together, enables greedy invariants.',
+          keyPoints: [
+            'Sorting reveals structure for greedy',
+            'Sort by: end time, ratio, deadline, size',
+            'Orders choices for best-first processing',
+            'Example: sort by end → earliest is provably best',
+            'O(n log n) sort enables O(n) greedy',
+          ],
+        },
+      ],
     },
     {
       id: 'complexity',
@@ -450,6 +582,50 @@ Stop when answer found or impossible.
 
 **4. In-place Operations**
 Modify input instead of creating copies.`,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Compare greedy time complexity vs other approaches. Why is greedy usually faster?',
+          sampleAnswer:
+            'Greedy is typically O(n log n) from sorting + O(n) for one pass = O(n log n) total. DP is O(n²) or O(n×W) for knapsack. Backtracking is exponential O(2^n). Greedy is faster because: makes one irreversible choice per step, no backtracking or trying all options. For example, activity selection: greedy is O(n log n), brute force trying all combinations is O(2^n). Coin change: greedy is O(n) for standard coins, DP is O(n×amount). Greedy trades generality for speed - only works for specific problems but when it works, it is fastest. The one-pass nature after sorting makes it efficient. No memoization overhead, no recursion depth.',
+          keyPoints: [
+            'Greedy: O(n log n) sort + O(n) pass',
+            'DP: O(n²), Backtracking: O(2^n)',
+            'Faster: one choice, no backtracking',
+            'Example: activity O(n log n) vs brute O(2^n)',
+            'Trades generality for speed',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'Explain space complexity of greedy algorithms. Why is it usually O(1) or O(n)?',
+          sampleAnswer:
+            'Greedy usually uses O(1) extra space: just a few variables to track current choice, best value, etc. Sometimes O(n) for: sorting requires space (though often in-place), storing result array, using priority queue. For example, activity selection: O(1) extra (just track last end time). Jump game: O(1) (track farthest reachable). Huffman coding: O(n) for priority queue. Meeting rooms: O(n) for heap. Compared to DP which is O(n) or O(n²) for table, greedy is more space efficient. In-place sorting and single-pass processing keep space low. If problem allows modifying input or returning indices instead of copying data, can achieve O(1).',
+          keyPoints: [
+            'Usually O(1): few variables',
+            'Sometimes O(n): result array, priority queue',
+            'Examples: activity O(1), Huffman O(n)',
+            'vs DP: O(n) or O(n²) for table',
+            'In-place processing keeps space low',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'When is greedy not the right approach? What signals should make you reconsider?',
+          sampleAnswer:
+            'Reconsider greedy when: local optimum clearly does not lead to global (0/1 knapsack), problem asks for "all possible" not "optimal" (need backtracking), constraints prevent greedy choice (dependencies between choices), optimization involves combinations not sequences. Signals: cannot find greedy choice property proof, simple greedy gives wrong answer on examples, problem is known NP-hard (usually need approximation or DP). For example, if problem asks "count all ways", that is DP or backtracking not greedy. If simple greedy fails on small example, likely need DP. Test greedy on examples first - if fails, abandon greedy. Good practice: always test greedy candidate on edge cases before full implementation.',
+          keyPoints: [
+            'Reconsider: local ≠ global, need "all solutions"',
+            'Signals: cannot prove greedy, wrong on examples',
+            'Known NP-hard usually not greedy',
+            '"Count all ways" → DP or backtracking',
+            'Test on examples first before implementing',
+          ],
+        },
+      ],
     },
     {
       id: 'templates',
@@ -544,6 +720,50 @@ def sort_greedy(items):
     
     return result
 \`\`\``,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Walk me through the greedy interval template. What are the key steps?',
+          sampleAnswer:
+            'Greedy interval template for maximizing count has four steps. First, sort intervals by end time. Second, initialize count and last_end (first interval end). Third, iterate from second interval: if current.start >= last_end (non-overlapping), increment count and update last_end to current.end. Fourth, return count. The key: sorting by end time ensures earliest ending is always processed first, which is provably optimal. For example, [[1,3], [2,5], [4,6]]: sort by end gives [[1,3], [2,5], [4,6]]. Pick [1,3], skip [2,5] (overlaps), pick [4,6] (4 >= 3). Count is 2. This template works for activity selection, non-overlapping intervals, minimum arrows to burst balloons.',
+          keyPoints: [
+            'Step 1: sort by end time',
+            'Step 2: track count and last_end',
+            'Step 3: if non-overlap, increment count',
+            'Earliest ending is provably optimal',
+            'Works: activity, non-overlap, arrows',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'Explain the two-pointer greedy template. When is this pattern applicable?',
+          sampleAnswer:
+            'Two-pointer greedy processes from both ends toward middle, making greedy choice at each step. Applicable when: array is sorted (or sortable), decision involves comparing extremes, want to match/pair/distribute elements. Template: sort array, left at start, right at end. While left < right: check condition, move pointer based on greedy choice. For example, assign cookies: sort children and cookies, try to satisfy smallest child with smallest adequate cookie. Two pointers enable greedy matching. Container with most water: try largest width first, move pointer with smaller height (greedy choice). The pattern: sorted + extremes + pairing → two pointers. Enables O(n) greedy after O(n log n) sort.',
+          keyPoints: [
+            'Process from both ends toward middle',
+            'Applicable: sorted, compare extremes, matching',
+            'Template: sort, left/right pointers, move based on choice',
+            'Example: assign cookies, container water',
+            'O(n) greedy after O(n log n) sort',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'Describe the priority queue greedy template. What problems benefit from this?',
+          sampleAnswer:
+            'Priority queue greedy processes items by priority, using heap for efficient access to next best choice. Use when: need to repeatedly pick best available item, items arrive over time, resource allocation with priorities. Template: create max or min heap, add items, repeatedly pop best and process. For example, Huffman coding: repeatedly merge two lowest frequency nodes (min heap). Meeting rooms II: track earliest ending meeting (min heap). Task scheduler: process most frequent task first (max heap). The heap maintains best choice in O(log n) rather than O(n) scan. This is crucial when many greedy choices need to be made. Total complexity: O(n log n) for n heap operations.',
+          keyPoints: [
+            'Use heap for next best choice',
+            'Applicable: repeated picks, arrivals, priorities',
+            'Template: heap, add items, pop best',
+            'Examples: Huffman, meeting rooms, task scheduler',
+            'O(log n) per choice vs O(n) scan',
+          ],
+        },
+      ],
     },
     {
       id: 'interview',
@@ -661,6 +881,50 @@ If greedy fails, switch to DP.
 - Gas Station
 - Jump Game II
 - Task Scheduler`,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'How do you recognize a greedy problem? What keywords or patterns signal this?',
+          sampleAnswer:
+            'Keywords: "maximize", "minimize", "optimal", "scheduling", "selection". Patterns: intervals with counting, resource allocation, matching/pairing, sequence optimization. Recognize by: can you make irreversible choice that is locally best? Does sorting reveal structure? For example, "maximize number of meetings" suggests interval greedy. "Minimum cost" with simple constraints suggests greedy. "Assign tasks optimally" suggests sorting and greedy matching. Contrast with: "count all ways" (DP), "find all combinations" (backtracking), "with capacity constraint and indivisible items" (DP knapsack). If problem feels like optimization with obvious best choice at each step, try greedy. But always verify with examples and proof.',
+          keyPoints: [
+            'Keywords: maximize, minimize, optimal, scheduling',
+            'Patterns: intervals, allocation, matching',
+            'Can make irreversible local best choice?',
+            'Does sorting help?',
+            'Verify with examples and proof',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'Walk me through your greedy interview approach from recognition to verification.',
+          sampleAnswer:
+            'First, recognize greedy from keywords and structure. Second, identify greedy choice: what should I pick at each step? Should I sort? Third, explain approach: sort by X, iterate, make greedy choice Y. Fourth, verify on examples: does it give correct answer? Fifth, attempt to prove: use exchange argument or stays ahead. Sixth, state complexity: O(n log n) sort + O(n) pass. Seventh, code clearly showing greedy choice. Eighth, test edge cases. Ninth, if greedy fails verification, discuss why (like 0/1 knapsack) and mention alternative (DP). This demonstrates: understanding greedy, ability to verify, knowing when it fails. Even failed greedy attempt followed by correct alternative shows depth.',
+          keyPoints: [
+            'Recognize, identify greedy choice',
+            'Explain: sort, iterate, choose',
+            'Verify on examples, attempt proof',
+            'State complexity, code clearly',
+            'If fails, explain why and give alternative',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'What are common greedy mistakes and how do you avoid them?',
+          sampleAnswer:
+            'First: assuming greedy works without proof (test examples first). Second: sorting by wrong criteria (e.g., start instead of end for activity selection). Third: making wrong greedy choice (not identifying true local optimum). Fourth: forgetting to update state after greedy choice. Fifth: applying greedy to problem that needs DP (0/1 knapsack). Sixth: not handling ties properly in sorting. My strategy: always test on 2-3 examples before implementing, try to prove or find counterexample, know classic failures (0/1 knapsack), sort by the right key (draw examples to verify), clearly identify and document greedy choice. Most mistakes come from wrong greedy choice or applying to wrong problem.',
+          keyPoints: [
+            'Assuming works without testing',
+            'Sorting by wrong key',
+            'Wrong greedy choice',
+            'Applying to problem needing DP',
+            'Test examples, attempt proof, know classic failures',
+          ],
+        },
+      ],
     },
   ],
   keyTakeaways: [

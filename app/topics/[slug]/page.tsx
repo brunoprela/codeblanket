@@ -15,6 +15,10 @@ export default function TopicProblemsPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = use(params);
+  const searchParams = new URLSearchParams(
+    typeof window !== 'undefined' ? window.location.search : '',
+  );
+  const from = searchParams.get('from') || '';
   const [completedProblems, setCompletedProblems] = useState<Set<string>>(
     new Set(),
   );
@@ -72,15 +76,19 @@ export default function TopicProblemsPage({
     Hard: 'bg-[#ff5555] text-[#282a36] border-[#ff5555]',
   };
 
+  // Determine back URL based on where we came from
+  const backUrl = from.startsWith('modules/') ? `/${from}` : '/';
+  const backText = from.startsWith('modules/') ? 'Back to Module' : 'Back to Topics';
+
   return (
     <div className="container mx-auto max-w-6xl px-4 py-12">
       {/* Header */}
       <div className="mb-8 space-y-4">
         <Link
-          href="/"
+          href={backUrl}
           className="inline-flex items-center text-[#bd93f9] transition-colors hover:text-[#ff79c6]"
         >
-          ← Back to Topics
+          ← {backText}
         </Link>
         <div className="flex items-center gap-4">
           <span className="text-5xl">{category.icon}</span>
@@ -110,6 +118,8 @@ export default function TopicProblemsPage({
                   problem={problem}
                   difficultyColors={difficultyColors}
                   isCompleted={completedProblems.has(problem.id)}
+                  topicSlug={slug}
+                  from={from}
                 />
               ))}
             </div>
@@ -131,6 +141,8 @@ export default function TopicProblemsPage({
                   problem={problem}
                   difficultyColors={difficultyColors}
                   isCompleted={completedProblems.has(problem.id)}
+                  topicSlug={slug}
+                  from={from}
                 />
               ))}
             </div>
@@ -150,6 +162,8 @@ export default function TopicProblemsPage({
                   problem={problem}
                   difficultyColors={difficultyColors}
                   isCompleted={completedProblems.has(problem.id)}
+                  topicSlug={slug}
+                  from={from}
                 />
               ))}
             </div>
@@ -170,14 +184,21 @@ function ProblemCard({
   problem,
   difficultyColors,
   isCompleted,
+  topicSlug,
+  from,
 }: {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   problem: any;
   difficultyColors: Record<Difficulty, string>;
   isCompleted: boolean;
+  topicSlug: string;
+  from: string;
 }) {
+  // Preserve the original "from" if it came from modules, otherwise use topics
+  const problemFrom = from || `topics/${topicSlug}`;
+  
   return (
-    <Link href={`/problems/${problem.id}`} className="mb-6 block">
+    <Link href={`/problems/${problem.id}?from=${problemFrom}`} className="mb-6 block">
       <div className="group cursor-pointer rounded-lg border-2 border-[#44475a] bg-[#44475a] p-6 transition-all hover:border-[#bd93f9] hover:shadow-xl">
         <div className="flex items-start justify-between">
           <div className="flex-1">

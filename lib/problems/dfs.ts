@@ -127,7 +127,7 @@ def max_depth_iterative(root: Optional[TreeNode]) -> int:
     timeComplexity: 'O(N)',
     spaceComplexity: 'O(H) where H is height',
     order: 1,
-    topic: 'DFS',
+    topic: 'Depth-First Search (DFS)',
     leetcodeUrl: 'https://leetcode.com/problems/maximum-depth-of-binary-tree/',
     youtubeUrl: 'https://www.youtube.com/watch?v=hTM3phVI6YQ',
   },
@@ -297,7 +297,7 @@ def has_path_sum_with_path(root: Optional[TreeNode], target_sum: int) -> bool:
     timeComplexity: 'O(N)',
     spaceComplexity: 'O(H) where H is height',
     order: 2,
-    topic: 'DFS',
+    topic: 'Depth-First Search (DFS)',
     leetcodeUrl: 'https://leetcode.com/problems/path-sum/',
     youtubeUrl: 'https://www.youtube.com/watch?v=LSKQyOz_P8I',
   },
@@ -433,7 +433,7 @@ def pacific_atlantic(heights: List[List[int]]) -> List[List[int]]:
     timeComplexity: 'O(M × N) - visit each cell at most twice',
     spaceComplexity: 'O(M × N) for recursion stack and visited sets',
     order: 3,
-    topic: 'DFS',
+    topic: 'Depth-First Search (DFS)',
     leetcodeUrl: 'https://leetcode.com/problems/pacific-atlantic-water-flow/',
     youtubeUrl: 'https://www.youtube.com/watch?v=s-VkcjHqkGI',
   },
@@ -443,7 +443,7 @@ def pacific_atlantic(heights: List[List[int]]) -> List[List[int]]:
     id: 'balanced-binary-tree',
     title: 'Balanced Binary Tree',
     difficulty: 'Easy',
-    topic: 'DFS',
+    topic: 'Depth-First Search (DFS)',
     description: `Given a binary tree, determine if it is **height-balanced**.
 
 A height-balanced binary tree is a binary tree in which the depth of the two subtrees of every node never differs by more than one.`,
@@ -516,7 +516,7 @@ def is_balanced(root: Optional[TreeNode]) -> bool:
     id: 'sum-root-to-leaf',
     title: 'Sum Root to Leaf Numbers',
     difficulty: 'Easy',
-    topic: 'DFS',
+    topic: 'Depth-First Search (DFS)',
     description: `You are given the \`root\` of a binary tree containing digits from \`0\` to \`9\` only.
 
 Each root-to-leaf path in the tree represents a number.
@@ -590,7 +590,7 @@ def sum_numbers(root: Optional[TreeNode]) -> int:
     id: 'diameter-of-binary-tree-dfs',
     title: 'Diameter of Binary Tree',
     difficulty: 'Easy',
-    topic: 'DFS',
+    topic: 'Depth-First Search (DFS)',
     description: `Given the \`root\` of a binary tree, return the length of the **diameter** of the tree.
 
 The **diameter** of a binary tree is the **length** of the longest path between any two nodes in a tree. This path may or may not pass through the \`root\`.
@@ -658,7 +658,7 @@ def diameter_of_binary_tree(root: Optional[TreeNode]) -> int:
     id: 'binary-tree-right-side-view',
     title: 'Binary Tree Right Side View',
     difficulty: 'Medium',
-    topic: 'DFS',
+    topic: 'Depth-First Search (DFS)',
     description: `Given the \`root\` of a binary tree, imagine yourself standing on the **right side** of it, return the values of the nodes you can see ordered from top to bottom.`,
     examples: [
       {
@@ -729,7 +729,7 @@ def right_side_view(root: Optional[TreeNode]) -> List[int]:
     id: 'all-paths-source-target-dfs',
     title: 'All Paths From Source to Target',
     difficulty: 'Medium',
-    topic: 'DFS',
+    topic: 'Depth-First Search (DFS)',
     description: `Given a directed acyclic graph (**DAG**) of \`n\` nodes labeled from \`0\` to \`n - 1\`, find all possible paths from node \`0\` to node \`n - 1\` and return them in **any order**.
 
 The graph is given as follows: \`graph[i]\` is a list of all nodes you can visit from node \`i\` (i.e., there is a directed edge from node \`i\` to node \`graph[i][j]\`).`,
@@ -803,7 +803,7 @@ def all_paths_source_target(graph: List[List[int]]) -> List[List[int]]:
     id: 'longest-increasing-path',
     title: 'Longest Increasing Path in a Matrix',
     difficulty: 'Medium',
-    topic: 'DFS',
+    topic: 'Depth-First Search (DFS)',
     description: `Given an \`m x n\` integers \`matrix\`, return the length of the longest increasing path in \`matrix\`.
 
 From each cell, you can either move in four directions: left, right, up, or down. You **may not** move **diagonally** or move **outside the boundary** (i.e., wrap-around is not allowed).`,

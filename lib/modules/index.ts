@@ -18,7 +18,9 @@ import { linkedListModule } from './linked-list';
 import { mathGeometryModule } from './math-geometry';
 import { segmentTreeModule } from './segment-tree';
 import { slidingWindowModule } from './sliding-window';
+import { sortingModule } from './sorting';
 import { stackModule } from './stack';
+import { timeSpaceComplexityModule } from './time-space-complexity';
 import { treesModule } from './trees';
 import { triesModule } from './tries';
 import { twoPointersModule } from './two-pointers';
@@ -44,7 +46,9 @@ export const allModules: Module[] = [
   mathGeometryModule,
   segmentTreeModule,
   slidingWindowModule,
+  sortingModule,
   stackModule,
+  timeSpaceComplexityModule,
   treesModule,
   triesModule,
   twoPointersModule,
@@ -55,6 +59,17 @@ export const allModules: Module[] = [
  * Ordered in logical learning progression from fundamentals to advanced topics
  */
 export const moduleCategories: ModuleCategory[] = [
+  // 0. Core Concepts - Understanding complexity
+  {
+    id: timeSpaceComplexityModule.id,
+    title: timeSpaceComplexityModule.title,
+    description: timeSpaceComplexityModule.description,
+    icon: timeSpaceComplexityModule.icon,
+    module: timeSpaceComplexityModule,
+    problemCount:
+      problemCategories.find((cat) => cat.id === 'time-space-complexity')
+        ?.problems.length || 0,
+  },
   // 1. Fundamentals - Start with basic data structures
   {
     id: arraysHashingModule.id,
@@ -115,6 +130,16 @@ export const moduleCategories: ModuleCategory[] = [
     problemCount:
       problemCategories.find((cat) => cat.id === 'binary-search')?.problems
         .length || 0,
+  },
+  {
+    id: sortingModule.id,
+    title: sortingModule.title,
+    description: sortingModule.description,
+    icon: sortingModule.icon,
+    module: sortingModule,
+    problemCount:
+      problemCategories.find((cat) => cat.id === 'sorting')?.problems.length ||
+      0,
   },
   // 4. Basic data structures
   {

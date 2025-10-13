@@ -88,6 +88,50 @@ Sort by start time (or end time) to:
 - Process intervals in order
 - Detect overlaps efficiently
 - Merge adjacent intervals`,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Explain what intervals are and why sorting is almost always the first step. What does sorting enable?',
+          sampleAnswer:
+            'Intervals represent ranges with start and end points, like [1,3] means 1 to 3. Sorting by start time is usually first step because it establishes order, making overlaps detectable. After sorting, if current interval starts before previous ends, they overlap. Without sorting, you would need to compare every pair - O(n²). With sorting, one pass detects all overlaps - O(n). Sorting also enables greedy algorithms: process intervals in order, make local decisions. For example, merge intervals: after sorting, only need to check current vs last merged. Meeting rooms: after sorting, compare consecutive intervals for conflicts. The pattern: sort enables linear-time algorithms instead of quadratic brute force. Sorting cost O(n log n) is worth it for O(n) processing.',
+          keyPoints: [
+            'Intervals: ranges with start and end',
+            'Sort by start time establishes order',
+            'Enables O(n) overlap detection vs O(n²)',
+            'Greedy algorithms process in order',
+            'Sort O(n log n) worth it for O(n) processing',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'Describe how to detect if two intervals overlap. What is the overlap condition?',
+          sampleAnswer:
+            'Two intervals [a_start, a_end] and [b_start, b_end] overlap if they share any points. The overlap condition: a_start < b_end AND b_start < a_end. Or equivalently, NOT (a_end <= b_start OR b_end <= a_start). Intuition: they do NOT overlap if a completely before b (a_end <= b_start) or b completely before a (b_end <= a_start). Otherwise they overlap. For example, [1,3] and [2,5] overlap because 1 < 5 AND 2 < 3. [1,2] and [3,4] do not overlap because 2 <= 3 (first ends before second starts). This condition works regardless of which interval starts first. After sorting, can simplify: if current.start < previous.end, they overlap. The overlap check is fundamental to all interval problems.',
+          keyPoints: [
+            'Overlap: a_start < b_end AND b_start < a_end',
+            'Or: NOT (a before b OR b before a)',
+            'After sorting: current.start < previous.end',
+            'Works regardless of which starts first',
+            'Fundamental to all interval problems',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'Walk me through common interval problems. What patterns do you see?',
+          sampleAnswer:
+            'Common problems: Merge Intervals (combine overlapping), Meeting Rooms I (can attend all?), Meeting Rooms II (min rooms needed), Insert Interval (add and merge), Interval List Intersections (find common parts). Patterns: Most start with sorting by start time. Merge pattern: iterate, track current merged interval, extend or add new. Counting pattern: track active intervals using start/end events or heap. Greedy pattern: sort by end time, select maximum non-overlapping. For example, Merge Intervals sorts then iterates comparing current with last merged. Meeting Rooms II uses min heap to track end times of ongoing meetings. Insert Interval handles three phases: before, overlapping, after. Recognize which pattern by what problem asks: merge, count overlaps, select maximum, find intersections.',
+          keyPoints: [
+            'Common: merge, meeting rooms, insert, intersections',
+            'Pattern 1: merge by extending or adding',
+            'Pattern 2: count active with events or heap',
+            'Pattern 3: greedy with end-time sorting',
+            'Recognize pattern from problem requirement',
+          ],
+        },
+      ],
     },
     {
       id: 'operations',
@@ -344,6 +388,51 @@ def find_min_rooms(intervals: List[List[int]]) -> int:
             e += 1
     
     return max_rooms`,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Explain the merge operation for intervals. How do you determine the new merged interval?',
+          sampleAnswer:
+            'Merge combines overlapping intervals into one. After sorting, iterate through intervals. Track current merged interval. For each interval: if it overlaps with current (start <= current.end), extend current by taking max of end times. If no overlap (start > current.end), current is complete, add to result, start new current. At end, add final current. The key: merged interval start is min of all starts (first interval start after sorting), end is max of all ends (keep extending). For example, [1,3], [2,6], [8,10]: merge [1,3] and [2,6] into [1,6] (max of 3,6 is 6), then [8,10] separate. The operation squashes overlapping intervals into minimal set of non-overlapping intervals.',
+          keyPoints: [
+            'After sort, iterate tracking current merged',
+            'Overlap: extend current.end to max(current.end, interval.end)',
+            'No overlap: add current, start new',
+            'Merged start: first start, end: max of all ends',
+            'Output: minimal non-overlapping set',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'Describe the insert operation. How do you handle the three phases: before, overlapping, after?',
+          sampleAnswer:
+            'Insert adds new interval and merges overlaps. Three phases: Phase 1 (before): add all intervals that end before new starts (interval.end < new.start). Phase 2 (overlapping): merge all intervals that overlap with new. Track min start and max end of merged interval. Intervals overlap if interval.start <= new.end (since we are extending new). Phase 3 (after): add all remaining intervals that start after new ends. The beauty: we process intervals in one pass, identifying which phase based on start/end comparisons. For example, insert [4,8] into [[1,2], [3,5], [6,7], [9,10]]: before=[1,2], merge [3,5], [4,8], [6,7] into [3,8], after=[9,10]. Result: [[1,2], [3,8], [9,10]].',
+          keyPoints: [
+            'Phase 1: add intervals ending before new starts',
+            'Phase 2: merge overlapping, track min start, max end',
+            'Phase 3: add intervals starting after new ends',
+            'One pass: identify phase by comparisons',
+            'Overlap check: interval.start <= new.end',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'Walk me through the interval scheduling problem using min heap. Why use a heap?',
+          sampleAnswer:
+            'Meeting Rooms II: find minimum rooms needed for overlapping meetings. Sort meetings by start time. Use min heap to track end times of ongoing meetings. For each meeting: if heap not empty and earliest ending meeting (heap top) ends before current starts, that room is free (pop heap). Add current meeting end time to heap (allocate room). Heap size at any point is number of active meetings (rooms needed). Return max heap size seen. Why heap? It efficiently tracks which meeting ends earliest - the one we should check first for freeing up. Without heap, we would need to scan all active meetings O(n) each time. With heap, pop and push are O(log n). Total: O(n log n) for sort + O(n log n) for heap operations = O(n log n).',
+          keyPoints: [
+            'Sort by start, heap tracks end times',
+            'Earliest ending meeting at heap top',
+            'Pop if ends before current starts (room free)',
+            'Push current end (allocate room)',
+            'Heap size = active meetings = rooms needed',
+            'Why heap: O(log n) vs O(n) to find earliest',
+          ],
+        },
+      ],
     },
     {
       id: 'patterns',
@@ -477,6 +566,50 @@ def interval_intersection(A, B):
     
     return result
 \`\`\``,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Explain the greedy interval selection pattern. Why sort by end time instead of start time?',
+          sampleAnswer:
+            'Interval selection maximizes non-overlapping intervals chosen. Classic example: activity selection, non-overlapping intervals. Greedy: sort by end time, iterate, select interval if it starts after last selected ends. Why end time? Finishing early leaves more room for future intervals. If we sort by start time, we might pick long interval that blocks many short ones. Proof: if optimal solution differs, we can replace its first interval with our choice (earliest ending) without making solution worse. For example, intervals [[1,5], [2,3], [4,6]]: sort by end gives [2,3], [4,6] (2 selected). Sort by start gives [1,5], [4,6] but [1,5] blocks [2,3]. Greedy by end time is provably optimal for maximizing count.',
+          keyPoints: [
+            'Goal: maximize non-overlapping intervals',
+            'Greedy: sort by end, select if non-overlapping',
+            'End time: finishing early leaves more room',
+            'Start time: might pick long blocking interval',
+            'Provably optimal for maximizing count',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'Describe using event-based counting for interval overlap problems. How does it work?',
+          sampleAnswer:
+            'Event-based treats interval as two events: start (+1) and end (-1). Create list of all events with times and types. Sort events by time. Sweep through events, maintain active count. Start event increments count, end event decrements. Track maximum count seen - this is maximum overlapping intervals. For Meeting Rooms II: max count is minimum rooms needed. For example, meetings [[0,30], [5,10], [15,20]]: events [(0,+1), (5,+1), (10,-1), (15,+1), (20,-1), (30,-1)]. Sweep: 0→1, 5→2 (max), 10→1, 15→2 (max), 20→1, 30→0. Max is 2 rooms. This avoids heap, simpler to code, same O(n log n) complexity.',
+          keyPoints: [
+            'Two events per interval: start (+1), end (-1)',
+            'Sort all events by time',
+            'Sweep: maintain active count',
+            'Track maximum count = max overlap',
+            'Alternative to heap, same complexity',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'Walk me through interval intersection. How do you find common parts of two sorted interval lists?',
+          sampleAnswer:
+            'Given two sorted interval lists, find all intersections. Use two pointers, one per list. At each step: check if current intervals from both lists overlap. If overlap, intersection is [max(start1, start2), min(end1, end2)] - add to result. Move pointer of interval that ends first (it cannot intersect with future intervals from other list). If no overlap, move pointer of interval that starts first. Continue until either pointer reaches end. For example, A=[[0,2],[5,10]], B=[[1,5],[8,12]]: compare [0,2] and [1,5], overlap [1,2]. Move A pointer (ends at 2). Compare [5,10] and [1,5], overlap [5,5]. Move B pointer (ends at 5). Compare [5,10] and [8,12], overlap [8,10]. Done. The two-pointer technique efficiently finds all intersections in O(n+m).',
+          keyPoints: [
+            'Two pointers, one per sorted list',
+            'Check overlap: intersection is [max(starts), min(ends)]',
+            'Move pointer of interval ending first',
+            'Continue until either list exhausted',
+            'O(n+m) using two pointers',
+          ],
+        },
+      ],
     },
     {
       id: 'complexity',
@@ -553,6 +686,50 @@ For insertion, stop once past new interval.
 
 **3. Custom Sorting**
 Sort by end time for scheduling problems.`,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Compare time complexity of different interval approaches: sorting vs heap vs events. When is each best?',
+          sampleAnswer:
+            'Sorting approach: O(n log n) sort + O(n) iterate = O(n log n) total. Works for merge, basic overlap detection. Heap approach: O(n log n) sort + O(n log n) heap operations = O(n log n) total. Best for tracking dynamic set like meeting rooms (need earliest ending). Event-based: O(n) create events + O(n log n) sort + O(n) sweep = O(n log n) total. Simpler than heap for max overlap. All are O(n log n) asymptotically, but constants differ. Sorting is simplest, use when one pass after sort suffices. Heap when need priority queue (earliest/latest). Events when counting overlaps. Space: sorting O(1) extra, heap O(n), events O(n). Choose based on problem needs, not just complexity.',
+          keyPoints: [
+            'All common approaches: O(n log n) time',
+            'Sorting: simplest, O(1) space',
+            'Heap: O(n) space, dynamic priority',
+            'Events: O(n) space, counting overlaps',
+            'Choose by problem needs, not just complexity',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'Explain when interval problems require O(n²) time. What signals this?',
+          sampleAnswer:
+            'Some interval problems cannot avoid O(n²). Signal: need to compare every pair or track interactions between all intervals. Examples: find all pairs of overlapping intervals (must compare all pairs), interval queries without preprocessing, problems where order matters for all pairs. However, many apparent O(n²) problems reduce to O(n log n) with sorting. Rule: if can sort and process in order, likely O(n log n). If need all pairwise comparisons with no structure to exploit, likely O(n²). For example, "which intervals overlap with interval i?" is O(n) per query without preprocessing, O(n²) for all queries. With sorting and binary search, O(n log n) preprocess + O(log n) per query. Always try sorting first - it converts many O(n²) to O(n log n).',
+          keyPoints: [
+            'O(n²) when: all pairs, no exploitable structure',
+            'Examples: all overlapping pairs, no sorting helps',
+            'Many apparent O(n²) reduce to O(n log n)',
+            'Sorting converts many O(n²) to O(n log n)',
+            'Try sorting first as optimization',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'Describe space complexity tradeoffs in interval problems. When do you need O(n) vs O(1) extra space?',
+          sampleAnswer:
+            'O(1) extra space: in-place merge after sorting, reusing input array. Only need a few variables to track current interval. Possible when output size is at most input size. O(n) extra space: heap for meeting rooms (stores end times), event list (2n events), result array when output size unbounded. Cannot avoid when: need data structure (heap, set), result is separate from input, cannot modify input. For example, merge intervals can be O(1) if allowed to modify input and output fits in input. Meeting rooms II needs O(n) heap. Choose O(1) when possible (cleaner, less memory), but O(n) is fine for most interview problems. Clarify if in-place required. Often the clarity of O(n) space outweighs O(1) complexity.',
+          keyPoints: [
+            'O(1): in-place merge, reuse input, few variables',
+            'O(n): heap, event list, unbounded output',
+            'O(n) needed: data structures, separate result',
+            'In-place often more complex to implement',
+            'Clarity vs space: O(n) often acceptable',
+          ],
+        },
+      ],
     },
     {
       id: 'templates',
@@ -660,6 +837,50 @@ def overlaps(a, b):
 def overlaps(a, b):
     return not (a[1] < b[0] or b[1] < a[0])
 \`\`\``,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Walk me through the merge intervals template. What are the key steps?',
+          sampleAnswer:
+            'Merge intervals template has four steps. First, sort intervals by start time. Second, initialize result with first interval. Third, iterate from second interval: if current overlaps with last in result (current.start <= last.end), merge by updating last.end to max(last.end, current.end). If no overlap, append current to result. Fourth, return result. The key insight: after sorting, only need to check current against last merged interval, not all previous intervals. For example, [[1,3], [2,6], [8,10]]: start with [1,3]. [2,6] overlaps (2 <= 3), merge to [1,6]. [8,10] no overlap (8 > 6), append. Result: [[1,6], [8,10]]. This template is foundation for many interval problems.',
+          keyPoints: [
+            'Step 1: sort by start time',
+            'Step 2: result starts with first interval',
+            'Step 3: iterate, merge or append',
+            'Merge: update last.end to max',
+            'Only check against last merged',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'Explain the meeting rooms heap template. How do you track end times efficiently?',
+          sampleAnswer:
+            'Meeting rooms template uses min heap for end times. First, sort meetings by start time. Second, create min heap. Third, for each meeting: if heap not empty and heap top (earliest ending meeting) ends before or at current start, pop heap (room freed). Push current meeting end time to heap (allocate room). Fourth, heap size is rooms needed. Return max heap size or final heap size. The min heap automatically gives us earliest ending meeting at top in O(log n). For example, [[0,30], [5,10], [15,20]]: heap=[30], then [10,30], then [20,30] (10 popped), max size 2. The heap efficiently tracks which meeting ends next without scanning all active meetings.',
+          keyPoints: [
+            'Sort by start, min heap for end times',
+            'For each: pop if top ends before current',
+            'Push current end (allocate room)',
+            'Heap size = active meetings',
+            'Min heap: O(log n) to get earliest',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'Describe the overlap check helper function. Why is it useful to abstract this?',
+          sampleAnswer:
+            'Overlap check helper: overlaps(a, b) returns True if intervals overlap. Implementation: return not (a.end <= b.start or b.end <= a.start). Or alternatively: a.start < b.end and b.start < a.end. Abstracting to helper function: makes code cleaner, reusable across problems, easier to test, centralizes overlap logic. If overlap logic changes (inclusive vs exclusive ends), only update one place. Many interval problems need overlap check repeatedly: merge, intersection, conflict detection. For example, in My Calendar problem, check if new interval overlaps with any existing. Helper makes this simple: any(overlaps(new, existing) for existing in booked). Without helper, repeat complex condition everywhere, risking bugs. Clean code principle: abstract repeated logic.',
+          keyPoints: [
+            'Helper: overlaps(a, b) checks overlap',
+            'Implementation: not (a.end <= b.start or b.end <= a.start)',
+            'Benefits: cleaner, reusable, testable',
+            'Centralize logic: change once, effect everywhere',
+            'Many problems need repeated overlap checks',
+          ],
+        },
+      ],
     },
     {
       id: 'interview',
@@ -785,6 +1006,51 @@ Be clear on inclusive/exclusive ends.
 - Interval List Intersections
 - Employee Free Time
 - My Calendar II`,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'How do you recognize an interval problem? What keywords or patterns signal this?',
+          sampleAnswer:
+            'Keywords: "intervals", "ranges", "meetings", "events", "schedule", "overlapping", "merge", "insert". Problem types: merge overlapping ranges, schedule meetings, find free time, count conflicts, maximize selected intervals. Data format: array of [start, end] pairs. If you see pairs representing ranges and need to process relationships between them, likely interval problem. For example, "given meeting times, find minimum conference rooms" is intervals. "Merge overlapping time ranges" is intervals. Pattern: data is ranges, need to handle overlaps or sequential processing. Key question: does problem involve ranges with start/end that might overlap or need ordering? If yes, probably interval problem with sorting as first step.',
+          keyPoints: [
+            'Keywords: intervals, ranges, meetings, schedule, overlap',
+            'Data: array of [start, end] pairs',
+            'Types: merge, schedule, conflicts, maximize',
+            'Pattern: ranges with potential overlaps',
+            'First step usually: sort by start time',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'Walk me through your interval interview approach from recognition to implementation.',
+          sampleAnswer:
+            'First, recognize its interval problem from keywords. Second, clarify: are intervals closed/open, can they be negative, are they sorted, what to return. Third, explain approach: sort by start time (or end time for greedy), then iterate processing overlaps/merges. Fourth, state complexity: O(n log n) for sort dominates, O(n) for processing. Fifth, discuss implementation: use helper function for overlap check, consider heap vs events for counting. Sixth, draw example: show a few intervals, demonstrate sorting, show merging/processing. Seventh, code clearly with sort first, iterate with clear overlap logic. Test with edge cases: empty, single interval, all overlap, none overlap. Finally, discuss optimization: can we avoid sort? Is O(1) space possible? This systematic approach demonstrates depth.',
+          keyPoints: [
+            'Recognize keywords, clarify requirements',
+            'Explain: sort by start, process overlaps',
+            'Complexity: O(n log n) sort dominates',
+            'Draw example, show sorting and processing',
+            'Code: sort, iterate, overlap logic',
+            'Test edges, discuss optimizations',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'What are common interval mistakes and how do you avoid them?',
+          sampleAnswer:
+            'First: forgetting to sort - leads to missing overlaps. Second: wrong overlap condition - off-by-one with <= vs <. Third: not handling empty input. Fourth: modifying last interval incorrectly during merge (updating wrong end). Fifth: for heap solution, forgetting to pop freed rooms. Sixth: sorting by wrong field (start vs end). Seventh: inclusive vs exclusive interval ends not clarified. My strategy: always sort first, use overlap helper function, test with: empty, single, all overlap, none overlap, adjacent intervals ([1,2], [2,3]). Draw diagram to verify overlap logic. For merge, carefully track which interval is current. Heap problems: clearly understand what heap stores (end times). Most bugs come from overlap logic - nail that first.',
+          keyPoints: [
+            'Forget to sort → missing overlaps',
+            'Wrong overlap condition (off-by-one)',
+            'Modify wrong interval during merge',
+            'Test: empty, single, all/none overlap, adjacent',
+            'Use overlap helper, draw diagram',
+          ],
+        },
+      ],
     },
   ],
   keyTakeaways: [

@@ -38,6 +38,49 @@ export const dfsModule: Module = {
 - Finding connected components
 - Generating permutations/combinations
 - Backtracking problems`,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Explain DFS (Depth-First Search). How does it work and what makes it "depth-first"?',
+          sampleAnswer:
+            'DFS explores as far as possible along each branch before backtracking. Start at root/source, explore one child completely before siblings. "Depth-first" means go deep before wide. Implementation: recursive (natural fit, uses call stack) or iterative (explicit stack). For example, tree [1, [2, [4, 5]], [3]]: DFS visits 1→2→4(backtrack)→5(backtrack to 2, then 1)→3. Compare BFS: 1→2→3→4→5 (level by level). DFS uses stack (LIFO), BFS uses queue (FIFO). Time O(V+E) for graphs, O(n) for trees. Space O(h) for recursive (call stack height), O(V) for visited set. Natural for: tree traversal, cycle detection, topological sort, path finding.',
+          keyPoints: [
+            'Explore deep before wide, uses stack',
+            'Recursive (call stack) or iterative (explicit stack)',
+            'LIFO: last child visited first',
+            'O(V+E) time, O(h) space for trees',
+            'Uses: traversal, cycles, topo sort, paths',
+          ],
+        },
+        {
+          id: 'q2',
+          question: 'Compare DFS vs BFS. When would you choose each?',
+          sampleAnswer:
+            'DFS: stack (LIFO), goes deep, O(h) space for trees. BFS: queue (FIFO), goes wide, O(w) space where w is max width. Choose DFS when: exploring all paths, backtracking, tree problems, topological sort, cycle detection, space matters (trees are deep not wide). Choose BFS when: shortest path needed, level-order traversal, closest nodes matter, trees are wide not deep. For example, shortest path in unweighted graph → BFS guarantees first found is shortest. All paths in tree → DFS natural recursion. Finding if graph has cycle → DFS detects back edges. Level order → BFS processes by levels. Space: DFS O(h) good for deep narrow, BFS O(w) good for shallow wide. DFS simpler to code recursively.',
+          keyPoints: [
+            'DFS: stack, deep, O(h) space',
+            'BFS: queue, wide, O(w) space',
+            'DFS when: all paths, backtracking, topology',
+            'BFS when: shortest path, level order',
+            'Choice depends on: problem, tree shape',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'What are the three standard tree traversals (inorder, preorder, postorder)? When do you use each?',
+          sampleAnswer:
+            'Preorder: root, left, right. Visit node before children. Use: copy tree, prefix expression, serialize tree. Inorder: left, root, right. For BST, gives sorted order. Use: BST sorted output, expression trees (infix). Postorder: left, right, root. Visit children before node. Use: delete tree (children first), postfix expression, tree height. For tree [1, [2, [4, 5]], [3]]: preorder 1,2,4,5,3. Inorder 4,2,5,1,3. Postorder 4,5,2,3,1. Recursive implementation natural: preorder process before recursion, inorder process between left and right recursion, postorder process after recursion. Memory: BST inorder is sorted, useful for validation.',
+          keyPoints: [
+            'Preorder: root, left, right (copy, serialize)',
+            'Inorder: left, root, right (BST sorted)',
+            'Postorder: left, right, root (delete, height)',
+            'BST inorder gives sorted sequence',
+            'Order determines when node is processed',
+          ],
+        },
+      ],
     },
     {
       id: 'tree-dfs',
@@ -180,6 +223,50 @@ def is_same_tree(p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
     return (p.val == q.val and 
             is_same_tree(p.left, q.left) and 
             is_same_tree(p.right, q.right))`,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Explain recursive DFS on trees. Why is recursion a natural fit for tree traversal?',
+          sampleAnswer:
+            'Recursive DFS: base case (node is None), recursive case (process node, recurse on children). Natural fit because: trees are recursive structures (subtrees are also trees), call stack handles backtracking automatically, code mirrors problem structure. For example, max depth: if None return 0, else 1 + max(depth(left), depth(right)). Three lines capture entire algorithm. Compare iterative: need explicit stack, manual tracking. Recursion elegance: base case simple, recursive step processes current and delegates to recursion. The call stack is implicit DFS stack. For same tree problem: check val, recursively check left and right subtrees. Each recursive call handles one subtree - clean separation. Drawback: stack overflow for very deep trees (10K+ nodes in linear chain).',
+          keyPoints: [
+            'Base case (None) + recursive case',
+            'Natural: trees are recursive structures',
+            'Call stack handles backtracking automatically',
+            'Code mirrors problem structure elegantly',
+            'Drawback: stack overflow on very deep trees',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'Walk me through implementing max depth and same tree using recursive DFS. What is the pattern?',
+          sampleAnswer:
+            'Pattern: 1) Check base case (None node). 2) Process current node. 3) Recurse on children. 4) Combine results. Max depth: base None → 0, recursive 1 + max(left, right). Each node adds 1, max of children gives deepest. Same tree: base both None → True, one None → False, values differ → False, recursive check left and right, combine with AND. For example, max depth [1, [2, [4, 5]], 3]: depth(1) = 1 + max(depth(left=2), depth(right=3)). depth(2) = 1 + max(depth(4)=1, depth(5)=1) = 2. depth(1) = 1 + max(2, 1) = 3. The pattern: recursive calls on subtrees, combine results at current node. This works for: sum, max, min, count, validation.',
+          keyPoints: [
+            'Pattern: base case, process, recurse, combine',
+            'Max depth: 1 + max(left, right)',
+            'Same tree: check val, AND of left and right',
+            'Combine: max, min, sum, AND, OR',
+            'Each node processes and delegates to children',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'Describe path sum problem. How does DFS naturally track the path?',
+          sampleAnswer:
+            'Path sum: given target, find root-to-leaf path with sum equal to target. DFS natural because: 1) Explores paths one at a time. 2) Backtracking automatically removes nodes. 3) Track running sum as parameter. Algorithm: if leaf and sum == target → True, else recurse left and right with reduced target. For tree [5, [4, [11, [7, 2]]], [8, [13, 4]]], target=22: path 5→4→11→2 sums to 22. DFS explores 5(target=17)→4(target=13)→11(target=2)→7(no match), backtrack, try 2(match!). The call stack naturally tracks the path. For all paths: accumulate path list, when leaf matches add copy to result, backtrack by popping. The key: DFS + recursion gives path tracking for free via call stack.',
+          keyPoints: [
+            'Track running sum as parameter',
+            'Leaf check: sum == target',
+            'Recurse with reduced target',
+            'Call stack tracks path automatically',
+            'Backtracking: return from recursion removes node',
+          ],
+        },
+      ],
     },
     {
       id: 'graph-dfs',
@@ -380,6 +467,49 @@ def is_connected(graph: dict, n: int) -> bool:
     
     dfs(0)
     return len(visited) == n`,
+      quiz: [
+        {
+          id: 'q1',
+          question: 'Explain DFS on graphs. What is different from tree DFS?',
+          sampleAnswer:
+            'Graph DFS similar to tree but: 1) Need visited set (graphs have cycles). 2) Multiple edges to same node possible. 3) No clear parent-child (undirected or cycles). 4) Start node may not reach all (disconnected). Tree DFS: no visited needed (no cycles), parent known. Graph DFS: visited set prevents infinite loops, track visited in set or array. For example, graph 0→1, 1→2, 2→0 (cycle): without visited, 0→1→2→0→1... infinite. With visited: mark 0, visit 1, mark 1, visit 2, mark 2, try 0 (already visited, skip). Time O(V+E) visit each vertex once, each edge once. Space O(V) for visited. For disconnected graphs: run DFS from each unvisited node (connected components).',
+          keyPoints: [
+            'Graph needs visited set (cycles exist)',
+            'Tree: no cycles, visited not needed',
+            'Mark visited before recursing',
+            'O(V+E) time, O(V) space',
+            'Disconnected: run DFS from each unvisited',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'Describe cycle detection using DFS. How do you differentiate back edge from tree edge?',
+          sampleAnswer:
+            'Cycle detection: use three states: unvisited, visiting (in current path), visited (finished). Cycle exists if we reach a "visiting" node (back edge to ancestor). Algorithm: mark node as visiting, recurse on neighbors, mark as visited when done. If neighbor is visiting → cycle. For example, 0→1→2→0: visit 0 (visiting), visit 1 (visiting), visit 2 (visiting), try 0 (visiting! cycle found). For DAG: never encounter visiting node. Directed graph: visiting state tracks current path. Undirected: simpler, just check if neighbor is visited and not parent. The key: visiting state means node is in current DFS path (ancestor), detecting back edge proves cycle.',
+          keyPoints: [
+            'Three states: unvisited, visiting, visited',
+            'Cycle: reach node in "visiting" state',
+            'Visiting = in current DFS path',
+            'Back edge to ancestor = cycle',
+            'Undirected: simpler, check visited except parent',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'Explain connected components using DFS. How do you count them?',
+          sampleAnswer:
+            'Connected components: groups of nodes reachable from each other. Count: for each unvisited node, run DFS (marks entire component), increment counter. For example, graph with nodes 0,1,2,3,4,5 and edges 0-1, 2-3-4: two components. Algorithm: visited = set(), count = 0; for each node: if not visited, DFS(node), count++. First DFS from 0 marks 0,1. Second DFS from 2 marks 2,3,4. Result: 2 components. Each DFS explores one component completely. Time O(V+E) total (each node/edge visited once across all DFS calls). This works for undirected graphs. For directed: strongly connected components need different algorithm (Tarjan, Kosaraju).',
+          keyPoints: [
+            'Count: DFS from each unvisited node',
+            'Each DFS marks one component',
+            'Increment counter per DFS call',
+            'O(V+E) total across all DFS',
+            'Directed: use Tarjan/Kosaraju for SCC',
+          ],
+        },
+      ],
     },
     {
       id: 'iterative-dfs',
@@ -484,6 +614,50 @@ def postorder_iterative(root):
     
     return result[::-1]  # Reverse the result
 \`\`\``,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Explain iterative DFS using explicit stack. Why use iterative over recursive?',
+          sampleAnswer:
+            'Iterative DFS: use explicit stack instead of call stack. Push root, loop: pop node, process, push children (right then left for same order as recursive). For example, tree [1, [2, [4, 5]], 3]: stack=[1], pop 1 push 3,2, stack=[3,2], pop 2 push 5,4, etc. Result: 1,2,4,5,3 (same as recursive preorder). Use iterative when: deep trees (avoid stack overflow), need control over stack, language lacks good recursion support, debugging easier with explicit state. Tradeoff: more code (explicit stack management) vs recursive elegance. For graphs: same pattern, add visited set. Iterative gives you: no recursion depth limit, explicit stack inspection, easier to convert to BFS (replace stack with queue).',
+          keyPoints: [
+            'Explicit stack replaces call stack',
+            'Push root, loop: pop, process, push children',
+            'Push right before left for left-first order',
+            'Use when: deep trees, stack overflow concerns',
+            'Tradeoff: more code vs recursive elegance',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'Walk me through converting recursive DFS to iterative. What changes?',
+          sampleAnswer:
+            'Conversion steps: 1) Replace recursion with explicit stack. 2) Push root to stack. 3) Loop while stack not empty. 4) Pop node, process. 5) Push children (order matters). For example, recursive max depth: depth(node) = 1 + max(depth(left), depth(right)). Iterative: stack = [(node, depth)], loop: pop (node, d), if leaf update max, push children with d+1. The state (current depth) that was in recursive parameters goes into stack tuples. Recursive return values become: accumulated in variables (max, sum) or checked in conditions. The key: what was in call stack (parameters, local vars) goes into explicit stack as tuples. Backtracking: happens automatically when popping.',
+          keyPoints: [
+            'Call stack → explicit stack',
+            'Parameters → stack tuples (node, state)',
+            'Return values → accumulate in variables',
+            'Push children to continue exploration',
+            'Order: push right before left',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'Compare recursive vs iterative DFS complexity. Which is more space-efficient?',
+          sampleAnswer:
+            'Time: both O(V+E) for graphs, O(n) for trees - same, visit each node once. Space: depends on tree shape. Recursive: O(h) where h is height (call stack). Iterative: O(h) for balanced, O(n) worst case (stack holds level). For balanced tree: both O(log n). For skewed tree: both O(n). The difference: recursive uses call stack (limited, typically few MB), iterative uses heap (more memory available). For very deep trees (100K nodes in chain): recursive stackoverflow, iterative works. Most cases: recursive simpler and same space. Use iterative only if: proven stack overflow, need explicit control, or converting to BFS.',
+          keyPoints: [
+            'Time: both O(V+E) or O(n)',
+            'Space: both O(h) typically',
+            'Recursive: call stack (limited)',
+            'Iterative: heap stack (more memory)',
+            'Very deep: iterative safer, else prefer recursive',
+          ],
+        },
+      ],
     },
     {
       id: 'complexity',
@@ -523,6 +697,50 @@ def postorder_iterative(root):
 - Use visited set to avoid revisiting
 - Clear visited set if running multiple DFS
 - Consider BFS if you need shortest path`,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Analyze DFS time and space complexity for different structures.',
+          sampleAnswer:
+            'Trees: Time O(n) visit each node once. Space O(h) for call stack where h is height. Balanced tree: O(log n) space. Skewed tree (linear): O(n) space. Graphs: Time O(V+E) visit each vertex and edge once. Space O(V) for visited set plus O(h) for call stack, worst case O(V). Matrix (grid): Time O(rows × cols) visit each cell. Space O(rows × cols) for visited (can optimize with in-place marking). For example, complete binary tree with 1M nodes: height = log(1M) ≈ 20, space O(20). Linked list tree with 1M nodes: height = 1M, space O(1M). Graph with 1000 vertices, 5000 edges: time O(6000), space O(1000).',
+          keyPoints: [
+            'Trees: O(n) time, O(h) space',
+            'Balanced: O(log n) space, skewed: O(n)',
+            'Graphs: O(V+E) time, O(V) space',
+            'Matrix: O(rows×cols) time and space',
+            'Space depends on recursion depth',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'Compare DFS space for recursive vs iterative across different tree shapes.',
+          sampleAnswer:
+            'Balanced tree: recursive O(log n), iterative O(log n) - same. Skewed tree: recursive O(n), iterative O(n) - same. Complete tree: recursive O(log n), iterative O(w) where w is max width - iterative can be worse. For example, complete binary tree level k has 2^k nodes. At bottom, width is n/2, so iterative O(n) space. Recursive only O(log n) for depth. General: recursive space = height, iterative space = maximum stack size (can be all children of a level). The key: recursive follows one path at a time (height), iterative may have multiple branches in stack. For DFS, iterative is usually O(h) too. For BFS (queue), iterative is O(width).',
+          keyPoints: [
+            'Balanced: both O(log n)',
+            'Skewed: both O(n)',
+            'Complete: recursive O(log n) better',
+            'Recursive: O(height), iterative: O(max stack)',
+            'DFS iterative usually also O(h)',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'How does visited set affect space complexity? When can you optimize it?',
+          sampleAnswer:
+            'Visited set: O(V) space for V vertices. Cannot avoid for graphs with cycles (infinite loop without it). Trees: do not need visited (no cycles). Optimization 1: for grids, mark visited in-place (change cell value to avoid separate set). Saves O(rows×cols). Optimization 2: for trees, no visited needed. Optimization 3: for graphs where you can modify input, mark nodes in-place. For example, grid "1"→"0" after visiting, saves visited set. Cannot optimize when: cannot modify input, need to preserve state, need to run multiple DFS (must clear visited each time). Tradeoff: in-place marking destroys input.',
+          keyPoints: [
+            'Visited set: O(V) space',
+            'Trees: no visited needed',
+            'Grid: mark in-place saves O(rows×cols)',
+            'Cannot optimize: cannot modify, multiple runs',
+            'Tradeoff: space vs preserving input',
+          ],
+        },
+      ],
     },
     {
       id: 'patterns',
@@ -598,6 +816,50 @@ def count_components(graph):
             count += 1
     return count
 \`\`\``,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'What are common DFS patterns? How do you recognize when to use each?',
+          sampleAnswer:
+            'Pattern 1: Tree traversal (inorder, preorder, postorder) - recognize by tree structure, need all nodes. Pattern 2: Path sum/path finding - recognize by root-to-leaf path, target sum. Pattern 3: Cycle detection - recognize by graph, "has cycle" question. Pattern 4: Connected components - recognize by "count islands", "num components". Pattern 5: Topological sort - recognize by DAG, "course schedule", dependencies. Pattern 6: Validate BST - recognize by tree properties, need check ordering. For example, "count number of islands in grid" → component pattern, DFS from each unvisited land cell. "Detect cycle in graph" → cycle detection pattern, three-state DFS. "Binary tree maximum path sum" → tree DFS with global variable.',
+          keyPoints: [
+            'Traversal: visit all nodes in order',
+            'Path finding: root-to-leaf with target',
+            'Cycle detection: graph validation',
+            'Components: count disconnected parts',
+            'Topological sort: DAG ordering',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'Describe flood fill algorithm. How is it a DFS application?',
+          sampleAnswer:
+            'Flood fill: change color of connected region (4-directional or 8-directional). Example: paint bucket in image editor. Algorithm: DFS from start pixel, if pixel has old color, change to new color, recurse on neighbors. For grid [[1,1,1],[1,1,0],[1,0,1]], start (1,1), old=1, new=2: DFS marks (1,1)→(0,0)→(0,1)→(0,2)→(1,0)→(2,0). All connected 1s become 2s. This is DFS because: explores region depth-first, backtracking automatic, visits each cell once, marks visited by changing color. Time O(rows×cols), space O(rows×cols) for recursion. Application: image processing, game AI, region detection. Optimization: iterative with stack to avoid recursion limit.',
+          keyPoints: [
+            'Change color of connected region',
+            'DFS from start, mark visited by recoloring',
+            'Recurse 4 or 8 directions',
+            'O(rows×cols) time and space',
+            'Applications: paint, games, region detection',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'Walk me through solving "number of islands" problem with DFS. What is the pattern?',
+          sampleAnswer:
+            'Number of islands: count connected components of 1s in grid. Pattern: iterate each cell, if land (1) and unvisited, increment counter and DFS to mark entire island. Algorithm: for each cell (i,j): if grid[i][j]==1, islands++, dfs(i,j). DFS marks (i,j) as visited (set to 0 or use visited set), recurses on 4 neighbors. For example, grid [[1,1,0],[0,1,0],[0,0,1]]: cell (0,0)=1, islands=1, DFS marks (0,0),(0,1),(1,1) as one island. Cell (2,2)=1, islands=2, DFS marks only (2,2). Result: 2 islands. Time O(rows×cols) visit each cell once. Space O(rows×cols) recursion worst case (entire grid is one island). This pattern works for all "count components" problems.',
+          keyPoints: [
+            'Count connected components in grid',
+            'Iterate: if unvisited land, DFS + count++',
+            'DFS marks entire component',
+            'O(rows×cols) time and space',
+            'Pattern for all "count regions" problems',
+          ],
+        },
+      ],
     },
     {
       id: 'interview-strategy',
@@ -672,6 +934,52 @@ def count_components(graph):
 - Draw small example
 - Trace through recursion
 - Handle edge cases (empty, single node)`,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'How do you recognize a DFS problem? What keywords and patterns signal DFS?',
+          sampleAnswer:
+            'Keywords: "traverse", "visit all", "path", "connected", "cycle", "component", "island", "region", "validate". Patterns: 1) Tree traversal (inorder, preorder, postorder). 2) Path finding (root-to-leaf). 3) Graph exploration (all nodes, components). 4) Backtracking (permutations, combinations). 5) Cycle detection. 6) Topological sort. Signals: tree/graph structure, need to explore deeply, no "shortest" requirement (else BFS). For example, "validate binary search tree" → tree DFS. "Find all root-to-leaf paths" → DFS with path tracking. "Count connected components" → DFS from each unvisited. "Course schedule" → cycle detection DFS. If problem needs shortest path or level-order → BFS. If exploring all possibilities → DFS.',
+          keyPoints: [
+            'Keywords: traverse, path, connected, cycle, component',
+            'Patterns: tree traversal, paths, exploration',
+            'Tree/graph + explore deeply → DFS',
+            'Need shortest → BFS',
+            'Explore all possibilities → DFS',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'Walk me through your DFS interview approach from recognition to implementation.',
+          sampleAnswer:
+            'First, recognize DFS from keywords (tree, path, component, cycle). Second, identify pattern (traversal? path sum? cycle?). Third, choose recursive vs iterative (recursive simpler unless deep). Fourth, define base case (None/null, leaf, visited). Fifth, define recursive case (process node, recurse on children/neighbors). Sixth, handle visited set for graphs. Seventh, test with examples and edges. Finally, analyze complexity. For example, "validate BST": recognize tree DFS, pattern is tree property validation, recursive approach, base case is None (True), recursive case check val in range and recurse with updated ranges, test with valid/invalid BSTs, O(n) time O(h) space. Show: recognition, pattern, implementation, testing.',
+          keyPoints: [
+            'Recognize: keywords, tree/graph',
+            'Pattern: traversal, path, cycle, component',
+            'Choose: recursive (simpler) or iterative',
+            'Define: base case, recursive case',
+            'Graphs: add visited set',
+            'Test and analyze complexity',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'What are the most common mistakes in DFS problems? How do you avoid them?',
+          sampleAnswer:
+            'First: forgetting visited set in graphs (infinite loop on cycles). Second: wrong base case (None not handled → crash). Third: modifying global state without reset (multiple test cases fail). Fourth: marking visited at wrong time (before vs after recursion matters). Fifth: not handling disconnected graphs (only explore from one start). Sixth: stack overflow on deep trees (use iterative). My strategy: 1) Always check None first. 2) Use visited set for graphs. 3) Mark visited before recursing (avoid re-visiting). 4) For problems needing all paths, backtrack by unmarking. 5) Test: empty, single node, cycle, disconnected. 6) For very deep, consider iterative. Most mistakes from missing visited set or wrong base case.',
+          keyPoints: [
+            'Mistakes: no visited, wrong base, global state',
+            'Visited timing: mark before recursing',
+            'Handle: None, cycles, disconnected',
+            'Very deep: use iterative',
+            'Test: empty, single, cycle, disconnected',
+            'Most common: missing visited set',
+          ],
+        },
+      ],
     },
   ],
   keyTakeaways: [

@@ -116,7 +116,10 @@ export async function importProgress(file: File): Promise<void> {
         // Also restore to localStorage for immediate access
         Object.entries(importedData.data).forEach(([key, value]) => {
           try {
-            localStorage.setItem(key, JSON.stringify(value));
+            // If value is already a string (like code), store it directly
+            // Otherwise, stringify it (like arrays, objects)
+            const valueToStore = typeof value === 'string' ? value : JSON.stringify(value);
+            localStorage.setItem(key, valueToStore);
           } catch (error) {
             console.error(`Failed to restore ${key} to localStorage:`, error);
           }

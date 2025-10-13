@@ -42,6 +42,50 @@ Instead of recalculating results from scratch for each subarray, we maintain a "
 - Expand window when condition not met
 - Shrink window when condition met
 - Example: Longest substring without repeating characters`,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Explain the core concept of the sliding window technique. Why is it called a "window" and what makes it "slide"?',
+          sampleAnswer:
+            'The sliding window technique uses two pointers to define a contiguous subarray or substring - that is the "window". We start with both pointers at the beginning, then expand the window by moving the right pointer to include more elements. When certain conditions are met, we shrink the window by moving the left pointer. This creates a sliding motion - the window slides across the array or string. It is powerful because instead of checking all possible subarrays O(n²), we maintain one window and adjust it as we go in O(n) time. The key is that we process each element at most twice - once when entering the window, once when leaving.',
+          keyPoints: [
+            'Two pointers define a contiguous subarray/substring',
+            'Expand: move right pointer',
+            'Shrink: move left pointer',
+            'Sliding motion across data',
+            'O(n) vs O(n²) for all subarrays',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'Compare fixed-size vs variable-size windows. When would you use each approach?',
+          sampleAnswer:
+            'Fixed-size windows have a predetermined size k - like max sum of k consecutive elements. I expand until reaching size k, then slide by adding right and removing left simultaneously. This is straightforward and great when the problem specifies exact window size. Variable-size windows adjust based on conditions - like longest substring without repeating characters. I expand right to include elements while condition holds, then shrink left when condition breaks. This is more complex but handles optimization problems where we seek maximum or minimum window satisfying constraints. Fixed-size: problem gives exact size. Variable-size: we optimize to find best size.',
+          keyPoints: [
+            'Fixed: predetermined size k',
+            'Fixed: slide by add right, remove left',
+            'Variable: adjust based on conditions',
+            'Variable: expand and shrink as needed',
+            'Fixed: exact size given, Variable: optimize size',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'Walk me through a simple example of sliding window solving a problem in O(n) that would be O(n²) with brute force.',
+          sampleAnswer:
+            'Take max sum of k=3 consecutive elements in [2, 1, 5, 1, 3, 2]. Brute force computes sum of every 3-element window: [2,1,5]=8, [1,5,1]=7, [5,1,3]=9, [1,3,2]=6. That is 4 windows each taking 3 adds, total 12 operations. Sliding window: compute first window [2,1,5]=8. Then slide: remove 2, add 1 → [1,5,1]=7. Remove 1, add 3 → [5,1,3]=9. Remove 5, add 2 → [1,3,2]=6. Each slide is 2 operations, total 3+6=9 operations. For large n, brute force is O(n×k) vs sliding window O(n). We reuse previous sum instead of recalculating from scratch each time.',
+          keyPoints: [
+            'Brute force: recalculate each window',
+            'Sliding window: reuse previous calculation',
+            'Remove leaving element, add entering element',
+            'Brute force: O(n×k), Sliding window: O(n)',
+            'Efficiency from incremental updates',
+          ],
+        },
+      ],
     },
     {
       id: 'patterns',
@@ -278,6 +322,50 @@ def min_window_substring(s: str, t: str) -> str:
             left += 1
     
     return s[result[0]:result[1] + 1] if min_len != float('inf') else ""`,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Describe the shrinkable window pattern. When do you expand and when do you shrink?',
+          sampleAnswer:
+            'In the shrinkable window pattern, I expand by moving right pointer to include more elements, making the window larger. I shrink by moving left pointer when the window violates some condition. For longest substring without repeating characters, I expand right to add characters, but when I hit a duplicate, I shrink left until removing the previous occurrence of that character. The key pattern: expand right in the outer loop unconditionally, shrink left in an inner while loop when condition breaks. This maintains the invariant that the window always satisfies our constraints. The answer is typically the maximum window size seen during expansion.',
+          keyPoints: [
+            'Expand right: add elements unconditionally',
+            'Shrink left: while condition violated',
+            'Outer loop: right pointer',
+            'Inner while: left pointer',
+            'Answer: maximum window size',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'Explain the non-shrinkable window pattern and how it differs from shrinkable. When would you use each?',
+          sampleAnswer:
+            'Non-shrinkable window maintains maximum window size once achieved and never shrinks below it. Instead of a while loop to shrink, I use an if statement to move left just once. This keeps window size at least as large as the best seen so far. For example, in longest substring with at most k distinct characters, once I have found a window of size 5, I never let it shrink below 5 - I just slide it forward looking for larger valid windows. Use non-shrinkable when you want maximum window satisfying constraints and do not need to track all valid windows. Use shrinkable when you need minimum window or need to process all valid windows.',
+          keyPoints: [
+            'Maintains maximum window size achieved',
+            'If statement instead of while to move left',
+            'Never shrinks below best size',
+            'Slides forward at fixed size',
+            'Use for maximum window problems',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'Walk through the minimum window substring problem. How does the sliding window with character counting work?',
+          sampleAnswer:
+            'For minimum window containing all characters of a target string, I use two hash maps: one for target character counts and one for current window counts. I expand right, adding characters to window count. When window contains all target characters (use a counter to check), I shrink left to minimize window while maintaining validity. For each valid window, I track the minimum. The trick is efficiently checking validity - I maintain a "formed" counter that tracks how many unique characters have reached their required count. When formed equals number of unique chars in target, window is valid. This avoids checking all characters each time.',
+          keyPoints: [
+            'Two hash maps: target counts and window counts',
+            'Expand right: add to window',
+            'Shrink left: while window valid',
+            '"formed" counter for efficient validity check',
+            'Track minimum valid window',
+          ],
+        },
+      ],
     },
     {
       id: 'complexity',
@@ -335,6 +423,50 @@ for right in range(len(arr)):  # N iterations
 - Outer loop: N iterations
 - Inner loop: N iterations TOTAL (not per outer iteration)
 - **Total: O(N + N) = O(N)**`,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Explain why sliding window is O(n) even though there is a nested loop. How does amortized analysis apply here?',
+          sampleAnswer:
+            'Sliding window looks like O(n²) with nested loops - outer loop moves right pointer n times, inner loop moves left pointer. But amortized analysis shows it is O(n). The key insight: left pointer moves at most n times total across the entire algorithm, not n times per right pointer iteration. Each element enters the window once (right pointer) and leaves at most once (left pointer), giving 2n operations total. So outer loop contributes O(n), inner loop across all iterations contributes O(n), total is O(2n) = O(n). The inner loop iterations are amortized - distributed across all outer iterations, not concentrated.',
+          keyPoints: [
+            'Looks like nested loops: O(n²)?',
+            'Left pointer moves n times TOTAL',
+            'Each element enters once, leaves once',
+            '2n operations total: O(n)',
+            'Amortized: inner loop cost distributed',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'Compare the space complexity of different sliding window problems. When do you need extra space and when can you solve in O(1)?',
+          sampleAnswer:
+            'Space complexity depends on what you track in the window. For simple sum or count, O(1) space - just variables for left, right, sum. For character or element frequency, O(k) space where k is alphabet size or unique elements - need hash map to count. For subarray problems tracking indices or elements, potentially O(n) if storing all elements in window. Fixed-size numeric windows can be O(1). Variable-size windows with character constraints need O(k) for hash map. The question to ask: what information must I maintain about window contents? Minimal tracking enables O(1), frequency tracking needs O(k).',
+          keyPoints: [
+            'Simple sum/count: O(1) space',
+            'Character frequency: O(k) for hash map',
+            'Tracking elements: O(n) worst case',
+            'Fixed numeric windows: O(1)',
+            'Depends on what you track in window',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'Why is it critical to process the right pointer before checking conditions? Walk me through what happens if you do it wrong.',
+          sampleAnswer:
+            'Processing right pointer first means adding the element to the window before checking if conditions break. This is correct because we want to include the element, then determine if we need to shrink. If I check conditions before processing right, I am checking the window without the new element, which is the previous window state. For example, in longest substring without repeating, if I check for duplicate before adding current character, I miss that current character might be the duplicate. Then I add it anyway, leaving duplicates in window. Correct order: add to window, update state, check conditions, shrink if needed. This maintains the invariant that we process each position exactly once.',
+          keyPoints: [
+            'Add element first, then check conditions',
+            'Checking before adding tests previous window',
+            'Wrong order: might miss violations',
+            'Correct: add, update, check, shrink',
+            'Maintains invariant: each position processed once',
+          ],
+        },
+      ],
     },
     {
       id: 'templates',
@@ -473,6 +605,50 @@ def sliding_window_set(arr: List[int], k: int) -> int:
     
     return result
 \`\`\``,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Walk me through the fixed-size window template. What is the key pattern for initialization and sliding?',
+          sampleAnswer:
+            'For fixed-size windows of size k, the template is: first, build the initial window by iterating 0 to k-1 and computing the initial sum or state. Second, start sliding from index k: for each new position, add the element entering at right and subtract the element leaving at left. Update the answer if current window is better. The key pattern: one loop to build initial window, one loop starting at k to slide. Each slide is constant time: subtract left, add right, check answer. This avoids recalculating the entire window each time. Common for problems like max sum of k elements, average of k elements, or any fixed-size aggregate.',
+          keyPoints: [
+            'Build initial window: loop 0 to k-1',
+            'Slide from index k onward',
+            'Each slide: subtract left, add right',
+            'Update answer each iteration',
+            'Avoid recalculating entire window',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'Explain the variable-size shrinkable window template. What goes in the outer loop vs the inner while loop?',
+          sampleAnswer:
+            'The shrinkable template has right pointer in outer for loop, left pointer in inner while loop. Outer loop: for right in range(n), add arr[right] to window, update state. Inner while loop: while condition violated, remove arr[left] from window, increment left. After inner while, check and update answer using current window. The key structure: unconditionally expand right, conditionally shrink left while needed. This ensures we explore all possible windows and the inner while maintains validity. Used for maximum window problems where we want largest valid window, like longest substring without repeating characters or max consecutive ones after k flips.',
+          keyPoints: [
+            'Outer for: right pointer, expand',
+            'Inner while: left pointer, shrink',
+            'Add right unconditionally',
+            'Shrink left while condition breaks',
+            'Update answer after shrinking',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'Compare the shrinkable vs non-shrinkable templates. How does changing while to if affect the solution?',
+          sampleAnswer:
+            'Shrinkable uses "while condition violated" to move left - shrinks as much as needed to restore validity. Non-shrinkable uses "if condition violated" to move left once - maintains max window size achieved. For example, longest substring with k distinct: shrinkable shrinks fully when exceeding k distinct, exploring all valid windows. Non-shrinkable moves left just once when exceeding k, keeping window size at maximum found so far and just sliding forward. Shrinkable finds exact maximum and tracks all valid windows. Non-shrinkable is optimization that works when we only need final maximum size and can skip smaller valid windows. While gives thorough exploration, if gives efficient maximum tracking.',
+          keyPoints: [
+            'While: shrink fully, restore validity',
+            'If: move once, maintain max size',
+            'Shrinkable: explore all valid windows',
+            'Non-shrinkable: track maximum, skip smaller',
+            'While for thorough, if for optimization',
+          ],
+        },
+      ],
     },
     {
       id: 'advanced',
@@ -605,6 +781,50 @@ def find_anagram_indices(s: str, p: str) -> List[int]:
     
     return result
 \`\`\``,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Explain the monotonic deque technique for sliding window maximum. Why use a deque instead of just tracking the max?',
+          sampleAnswer:
+            'For sliding window maximum, just tracking current max fails when the max element leaves the window - we do not know the next maximum. Monotonic deque solves this by maintaining indices in decreasing order of their values. When a new element enters, we remove elements from the back that are smaller than it (they can never be maximum while the new element is in window). When elements leave the window, we remove from front if their index is outside window. The front always has the maximum for current window. This gives O(n) total time because each element is added and removed from deque at most once. Deque enables both ends operations in O(1).',
+          keyPoints: [
+            'Need to track next maximum when current leaves',
+            'Deque maintains indices in decreasing value order',
+            'Remove smaller elements from back',
+            'Remove out-of-window indices from front',
+            'O(n) total: each element in/out once',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'Walk me through sliding window with multiple conditions. How do you track vowels and consonants simultaneously?',
+          sampleAnswer:
+            'For multiple conditions like k vowels and m consonants in window, I track both counts separately using variables or a hash map. As I expand right, I check if the new character is vowel or consonant and update respective count. When shrinking left, I decrement the appropriate count. The window is valid when both conditions are satisfied simultaneously. I check "if vowels == k and consonants == m" to know validity. The key is maintaining independent counters for each condition and checking all conditions together. This extends to any number of simultaneous constraints - just add more counters and check all conditions in your validity check.',
+          keyPoints: [
+            'Track each condition with separate counter',
+            'Update appropriate counter on add/remove',
+            'Check all conditions together for validity',
+            'Independent counters for each constraint',
+            'Extends to any number of conditions',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'Describe the pattern for finding all anagrams using sliding window. What makes this more efficient than checking each substring?',
+          sampleAnswer:
+            'For finding all anagrams of pattern in string, I use fixed-size window of length equal to pattern length. I maintain two frequency maps: one for pattern (built once), one for current window (updated as window slides). I slide through the string, adding the entering character and removing the leaving character from window map. After each slide, I compare window map with pattern map - if equal, found an anagram. This is O(n) because each comparison is O(26) for alphabet size, constant time. Brute force would generate and sort each substring: O(n × m log m) where m is pattern length. Sliding window avoids repeated sorting by maintaining frequency incrementally.',
+          keyPoints: [
+            'Fixed window size = pattern length',
+            'Two frequency maps: pattern and window',
+            'Slide: update window map incrementally',
+            'Compare maps: O(26) constant time',
+            'O(n) vs O(n × m log m) brute force',
+          ],
+        },
+      ],
     },
     {
       id: 'common-pitfalls',
@@ -697,6 +917,50 @@ while window_is_VALID:  # Keep shrinking while still valid
     min_length = min(min_length, right - left + 1)  # Update inside while
     left += 1
 \`\`\``,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Explain the off-by-one error with window size calculation. Why is it right - left + 1 and not right - left?',
+          sampleAnswer:
+            'Window size is right - left + 1 because indices are inclusive. If left = 2 and right = 5, the window contains indices 2, 3, 4, 5 which is 4 elements. If I just do right - left, I get 5 - 2 = 3, missing one element. The +1 accounts for the element at the left index itself. Another way to think: if left equals right, window has one element, so size should be 1, not 0. Common mistake is writing right - left and wondering why all answers are off by one. This is similar to calculating array length from indices: end - start + 1 when both ends inclusive.',
+          keyPoints: [
+            'Indices are inclusive: need +1',
+            'Example: left=2, right=5 → 4 elements',
+            'right - left gives 3, wrong',
+            'right - left + 1 gives 4, correct',
+            'When left equals right: size is 1, not 0',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'What is the difference between checking conditions before vs after processing right pointer? Why does order matter?',
+          sampleAnswer:
+            'Processing right pointer means adding arr[right] to window state. I should do this before checking conditions because I want to check the window that includes the new element. If I check conditions first, I am testing the old window without the new element, which is wrong. For example, in longest substring without repeating, if I check for duplicates before adding current character, I miss detecting if current character itself is the duplicate. The correct sequence: add arr[right] to window, update state, check if conditions violated, shrink left if needed. This ensures each element is properly included in the window before evaluation.',
+          keyPoints: [
+            'Process right: add to window first',
+            'Then check conditions on updated window',
+            'Checking before: tests old window',
+            'Wrong order: miss detecting violations',
+            'Correct: add, update, check, shrink',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'Compare the logic for maximum vs minimum window problems. Where do you update the answer and why?',
+          sampleAnswer:
+            'For maximum window problems, I shrink while window is invalid, then update answer outside the while loop with right - left + 1. This captures the maximum valid window at each position. For minimum window problems, I shrink while window is still valid, updating answer inside the while loop before each shrink. This captures progressively smaller valid windows. The key difference: maximum wants largest valid so update after restoring validity. Minimum wants smallest valid so update while shrinking valid window. If I use wrong placement, I either miss the optimal or include invalid windows. The while condition and update placement must match the optimization goal.',
+          keyPoints: [
+            'Maximum: shrink while invalid, update outside while',
+            'Minimum: shrink while valid, update inside while',
+            'Maximum: largest valid window',
+            'Minimum: smallest valid window',
+            'Condition and update placement must match goal',
+          ],
+        },
+      ],
     },
     {
       id: 'interview',
@@ -806,6 +1070,52 @@ What makes a window valid or invalid?
 5. **Resources:**
    - LeetCode Sliding Window tag
    - Practice until you can identify the pattern instantly`,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'How do you recognize in an interview that a problem needs sliding window? What keywords or patterns signal this?',
+          sampleAnswer:
+            'Several signals tell me sliding window. First, keywords: "contiguous", "subarray", "substring", "consecutive" - these scream window. Second, optimization terms: "longest", "shortest", "maximum", "minimum" with constraints - we are seeking optimal window. Third, constraints like "at most k", "at least k" distinct elements - these are window validity conditions. Fourth, if brute force would check all subarrays O(n²) - sliding window likely optimizes to O(n). Fifth, two-pointer vibes with sequential processing. The key question: am I looking for something in a contiguous sequence that can be computed incrementally? If yes, sliding window is probably the answer.',
+          keyPoints: [
+            'Keywords: contiguous, subarray, substring, consecutive',
+            'Optimization: longest, shortest, maximum, minimum',
+            'Constraints: at most k, at least k',
+            'Brute force: O(n²) checking all subarrays',
+            'Incremental computation on contiguous sequence',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'Walk me through explaining a sliding window solution in an interview, from problem recognition to complexity analysis.',
+          sampleAnswer:
+            'First, I identify: "This is a longest substring problem with constraints, so I am thinking sliding window". Then I explain window type: "Variable-size window - I will expand right to include characters and shrink left when constraints break". I describe the state: "I will track character frequency using a hash map". Then the algorithm: "Expand right each iteration, update frequency. When I have duplicates, shrink left until removing the duplicate. Track maximum window size." I code while explaining each part. After coding, I trace an example: "For \'abcabcbb\', right moves to \'abc\' len 3, hits duplicate \'a\'...". Finally complexity: "O(n) time as each element enters and leaves once, O(k) space for hash map where k is alphabet size." Communication throughout is key.',
+          keyPoints: [
+            'Identify problem type and pattern',
+            'Explain window type and expansion/shrinking logic',
+            'Describe state tracking',
+            'Explain algorithm step-by-step while coding',
+            'Trace example',
+            'State time and space complexity',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'What are the most common mistakes in sliding window problems and how do you avoid them?',
+          sampleAnswer:
+            'First mistake: off-by-one in window size calculation - use right - left + 1, not right - left. I verify with simple case: if left equals right, size is 1. Second: processing order - must add arr[right] before checking conditions, or we check old window. Third: update answer placement - outside while for maximum, inside while for minimum. I remember: shrink invalid for max, shrink valid for min. Fourth: forgetting to update state when moving left - must remove arr[left] from tracking. Fifth: manually incrementing right in for loop - let the for loop handle it. Sixth: not initializing properly - hash map, variables. I avoid these by using templates and testing edge cases early.',
+          keyPoints: [
+            'Off-by-one: use right - left + 1',
+            'Order: add right before checking',
+            'Update placement: depends on max vs min',
+            'State: update when moving left',
+            'Do not manually increment right in for loop',
+            'Use templates and test edge cases',
+          ],
+        },
+      ],
     },
   ],
   keyTakeaways: [

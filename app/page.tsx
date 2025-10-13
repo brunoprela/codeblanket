@@ -172,12 +172,9 @@ export default function Home() {
             const problemsPercent =
               problemsProgress.total > 0
                 ? Math.round(
-                    (problemsProgress.completed / problemsProgress.total) * 100,
-                  )
+                  (problemsProgress.completed / problemsProgress.total) * 100,
+                )
                 : 0;
-
-            const hasAnyProgress =
-              progress.completed > 0 || problemsProgress.completed > 0;
 
             return (
               <div
@@ -239,51 +236,41 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Progress Bars */}
-                {hasAnyProgress && (
-                  <div className="mt-4 grid gap-3 md:grid-cols-2">
-                    {/* Module Progress */}
-                    {progress.completed > 0 && (
-                      <div>
-                        <div className="mb-1 flex items-center justify-between text-xs">
-                          <span className="font-semibold text-[#bd93f9]">
-                            📚 Module: {progress.completed} / {progress.total}
-                          </span>
-                          <span className="text-[#6272a4]">
-                            {progressPercent}%
-                          </span>
-                        </div>
-                        <div className="h-1.5 overflow-hidden rounded-full bg-[#282a36]">
-                          <div
-                            className="h-full rounded-full bg-gradient-to-r from-[#bd93f9] to-[#ff79c6] transition-all duration-300"
-                            style={{ width: `${progressPercent}%` }}
-                          />
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Problems Progress */}
-                    {problemsProgress.completed > 0 && (
-                      <div>
-                        <div className="mb-1 flex items-center justify-between text-xs">
-                          <span className="font-semibold text-[#8be9fd]">
-                            💻 Problems: {problemsProgress.completed} /{' '}
-                            {problemsProgress.total}
-                          </span>
-                          <span className="text-[#6272a4]">
-                            {problemsPercent}%
-                          </span>
-                        </div>
-                        <div className="h-1.5 overflow-hidden rounded-full bg-[#282a36]">
-                          <div
-                            className="h-full rounded-full bg-gradient-to-r from-[#8be9fd] to-[#50fa7b] transition-all duration-300"
-                            style={{ width: `${problemsPercent}%` }}
-                          />
-                        </div>
-                      </div>
-                    )}
+                {/* Progress Bars - Always show */}
+                <div className="mt-4 grid gap-3 md:grid-cols-2">
+                  {/* Module Progress */}
+                  <div>
+                    <div className="mb-1 flex items-center justify-between text-xs">
+                      <span className="font-semibold text-[#bd93f9]">
+                        📚 Modules: {progress.completed} / {progress.total}
+                      </span>
+                      <span className="text-[#6272a4]">{progressPercent}%</span>
+                    </div>
+                    <div className="h-1.5 overflow-hidden rounded-full bg-[#282a36]">
+                      <div
+                        className="h-full rounded-full bg-gradient-to-r from-[#bd93f9] to-[#ff79c6] transition-all duration-300"
+                        style={{ width: `${progressPercent}%` }}
+                      />
+                    </div>
                   </div>
-                )}
+
+                  {/* Problems Progress */}
+                  <div>
+                    <div className="mb-1 flex items-center justify-between text-xs">
+                      <span className="font-semibold text-[#8be9fd]">
+                        💻 Problems: {problemsProgress.completed} /{' '}
+                        {problemsProgress.total}
+                      </span>
+                      <span className="text-[#6272a4]">{problemsPercent}%</span>
+                    </div>
+                    <div className="h-1.5 overflow-hidden rounded-full bg-[#282a36]">
+                      <div
+                        className="h-full rounded-full bg-gradient-to-r from-[#8be9fd] to-[#50fa7b] transition-all duration-300"
+                        style={{ width: `${problemsPercent}%` }}
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
             );
           })}

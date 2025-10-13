@@ -20,8 +20,10 @@
     "@monaco-editor/react": "^4.7.0",
     "@types/react-syntax-highlighter": "^15.5.13",
     "next": "15.5.4",
+    "prismjs": "^1.30.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "react-simple-code-editor": "^0.14.1",
     "react-syntax-highlighter": "^15.6.6"
   },
   "devDependencies": {

@@ -91,6 +91,50 @@ max_val = -heapq.heappop(max_heap)  # Returns 5
 - Scheduling tasks by priority
 - Median maintenance
 - Top K frequent elements`,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Explain what a heap is and what makes it different from other tree structures. Why is it always complete?',
+          sampleAnswer:
+            'A heap is a complete binary tree that satisfies the heap property: in a max heap, every parent is greater than or equal to its children; in a min heap, every parent is less than or equal to its children. The key difference from BST is that heap only maintains parent-child ordering, not left-right ordering - left child can be greater than right child. A heap must be complete (all levels filled except possibly last, which fills left to right) because this enables array representation: parent at i, children at 2i+1 and 2i+2. Completeness ensures balanced height of log n and efficient operations. Unlike BST which can become skewed, heaps always maintain log height.',
+          keyPoints: [
+            'Complete binary tree with heap property',
+            'Max heap: parent ≥ children',
+            'Min heap: parent ≤ children',
+            'Complete enables array representation',
+            'Always balanced: height log n',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'Describe how heaps enable O(1) access to min/max element. Why is this useful for priority queues?',
+          sampleAnswer:
+            'In a heap, the root is always the min (min heap) or max (max heap) element due to the heap property - it is at index 0 in the array. No searching needed, just return heap[0] in O(1). This makes heaps perfect for priority queues where you repeatedly need the highest priority (max heap) or lowest priority (min heap) item. For example, in task scheduling, the highest priority task is always at the root. When you remove it with O(log n) pop, the next highest automatically becomes the new root after heapify. This is much better than unsorted array (O(n) find min) or sorted array (O(n) insert). Heaps balance find-min and insert both at O(log n).',
+          keyPoints: [
+            'Root always contains min/max',
+            'O(1) access at index 0',
+            'Perfect for priority queues',
+            'Remove max/min: O(log n)',
+            'Better than unsorted or sorted arrays',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'Walk me through why heaps are commonly implemented as arrays rather than explicit node structures.',
+          sampleAnswer:
+            'Heaps use arrays because the complete binary tree structure maps perfectly to array indices. Parent at i, left child at 2i+1, right child at 2i+2. This arithmetic relationship means we can navigate parent-child without pointers, saving memory and improving cache locality. No null children to track since the tree is complete. Array implementation is more space-efficient (no pointer overhead) and faster (better cache performance from contiguous memory). For example, to bubble up from index 5, parent is at (5-1)//2 = 2, no pointer traversal needed. The only downside is fixed size, but Python heapq uses dynamic arrays. This is why standard libraries use array-based heaps.',
+          keyPoints: [
+            'Complete tree maps to array indices perfectly',
+            'Parent at i, children at 2i+1, 2i+2',
+            'No pointers needed: arithmetic navigation',
+            'Space-efficient, better cache locality',
+            'Standard library implementations use arrays',
+          ],
+        },
+      ],
     },
     {
       id: 'operations',
@@ -319,6 +363,50 @@ def heapq_examples():
     heapq.heappush(max_heap, -5)
     heapq.heappush(max_heap, -1)
     max_val = -heapq.heappop(max_heap)  # 5`,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Explain the bubble-up operation for insertion. Why is it O(log n) and not O(n)?',
+          sampleAnswer:
+            'Bubble-up inserts element at the end of the heap (to maintain complete tree property), then compares with parent. If heap property violated (child greater than parent in max heap), swap with parent and repeat. This continues up the tree until heap property restored or reaching root. It is O(log n) because in a complete binary tree of n nodes, height is log n. We move up at most one level per comparison, so at most log n comparisons and swaps. We do not visit all n nodes, only one path from leaf to root. For example, in a heap of 1000 nodes (height 10), insertion takes at most 10 comparisons, not 1000.',
+          keyPoints: [
+            'Insert at end, then bubble up',
+            'Compare with parent, swap if violates',
+            'Move up one path from leaf to root',
+            'Height is log n in complete tree',
+            'O(log n) comparisons, not O(n)',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'Describe the bubble-down operation for deletion. Why do we swap with the smaller child in a min heap?',
+          sampleAnswer:
+            'Bubble-down removes root (the min), moves last element to root, then restores heap property. At each node, compare with children. In min heap, swap with the smaller child if current is greater than smaller child. We swap with smaller child because after swapping, that child becomes parent - it must be less than the other child to maintain heap property. If we swapped with larger child, the other child would be less than its new parent, violating heap property. This continues down until heap property restored or reaching leaf. Like bubble-up, it is O(log n) because we traverse one path down the tree, at most log n levels.',
+          keyPoints: [
+            'Remove root, move last element to root',
+            'Bubble down: compare with children',
+            'Swap with smaller child (min heap)',
+            'Smaller ensures heap property maintained',
+            'O(log n): one path down',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'Walk me through how to implement a max heap using Python heapq (which only provides min heap). Why does negating work?',
+          sampleAnswer:
+            'Python heapq is min heap only. To simulate max heap, negate all values before insertion: instead of pushing x, push -x. When popping, negate the result: instead of popping x, pop and return -x. This works because negation reverses the ordering: the smallest negative value corresponds to the largest positive value. For example, values [3, 1, 5] become [-3, -1, -5]. Min of negatives is -5, which corresponds to max of originals which is 5. When we pop -5 and negate, we get 5 - the max. The heap structure and operations remain the same, we just transform values to reverse the comparison order.',
+          keyPoints: [
+            'Python heapq only provides min heap',
+            'Max heap: negate values before insertion',
+            'Pop and negate to get max',
+            'Negation reverses ordering',
+            'Min of negatives = max of originals',
+          ],
+        },
+      ],
     },
     {
       id: 'patterns',
@@ -478,6 +566,50 @@ class KthLargest:
             heapq.heappop(self.heap)
         return self.heap[0]  # kth largest
 \`\`\``,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Explain the Top K pattern with min heap. Why use a min heap of size K rather than a max heap?',
+          sampleAnswer:
+            'For Top K largest elements, we maintain a min heap of size K. The key insight: the smallest of the K largest elements is the threshold - anything smaller than this is not in Top K. As we iterate through elements, if element is larger than heap top (smallest in our K), it replaces it by popping and pushing. The min heap of size K efficiently tracks the K largest because the root is the boundary - elements must beat this to enter Top K. A max heap would not work because we would not know the threshold (smallest of K largest). Time is O(n log k) - process n elements, each heap operation is log k. Space is O(k) for the heap. This is better than sorting entire array O(n log n).',
+          keyPoints: [
+            'Top K largest: use min heap of size K',
+            'Heap root = threshold (smallest of K largest)',
+            'Element > root: pop and push',
+            'Max heap would not give threshold',
+            'O(n log k) time, O(k) space',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'Describe the two-heap pattern for finding running median. Why do you need both a max heap and a min heap?',
+          sampleAnswer:
+            'For running median, we split elements into two halves: max heap stores smaller half (root is largest of small), min heap stores larger half (root is smallest of large). The median is at the boundary between halves. If heaps balanced, median is average of two roots. If one heap larger by 1, median is root of larger heap. We need both heaps because median is middle value - we need to access largest of lower half and smallest of upper half in O(1). With two heaps, adding element is O(log n) - insert to appropriate heap and rebalance if needed. Finding median is O(1) - just look at roots. Without two heaps, we would need O(n log n) sorting for each median query.',
+          keyPoints: [
+            'Max heap: lower half, min heap: upper half',
+            'Median at boundary between halves',
+            'Balanced: avg of roots, Unbalanced: root of larger',
+            'Need both: access both halves in O(1)',
+            'Add O(log n), median O(1)',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'Walk me through the K-way merge pattern. How does a heap enable efficient merging of K sorted lists?',
+          sampleAnswer:
+            'K-way merge uses a min heap to merge K sorted lists efficiently. Initialize heap with first element from each list (along with list index and position). The heap root is always the smallest among K candidates. Pop root, add to result, push next element from that list to heap. Repeat until all elements processed. This works because at each step, we need the smallest of K candidates - heap gives this in O(log k). Without heap, comparing K elements would be O(k) per element, giving O(nk) total. With heap, each of n elements involves O(log k) heap operation, giving O(n log k). For merging k sorted arrays of total n elements, this is optimal. The heap efficiently maintains sorted order across K sources.',
+          keyPoints: [
+            'Initialize heap with first from each list',
+            'Pop min, add to result, push next from that list',
+            'Heap root = smallest of K candidates',
+            'O(n log k) vs O(nk) without heap',
+            'Optimal for K-way merge',
+          ],
+        },
+      ],
     },
     {
       id: 'complexity',
@@ -530,6 +662,50 @@ class KthLargest:
 - Operations: O(1) extra space
 - Recursive heapify: O(log N) call stack (if implemented recursively)
 - Iterative heapify: O(1) extra space`,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Compare the complexity of heapify (building a heap from array) vs inserting elements one by one. Why is heapify O(n)?',
+          sampleAnswer:
+            'Inserting n elements one by one takes O(n log n) - each insert is O(log n) and we do n inserts. Heapify builds heap from array in O(n) by starting from bottom level and bubbling down. The key insight: most nodes are near bottom with short bubble-down distance. Half the nodes are leaves (no bubbling), quarter are one level up (1 step), eighth are two levels up (2 steps), etc. The work sum is n/2×0 + n/4×1 + n/8×2 + ... This geometric series sums to O(n), not O(n log n). Heapify is faster for batch initialization. Use heapify when you have all elements upfront. Use repeated insert when adding elements dynamically.',
+          keyPoints: [
+            'Insert one by one: O(n log n)',
+            'Heapify: O(n) by bubbling down from bottom',
+            'Most nodes near bottom, short bubble distance',
+            'Work sum is geometric series = O(n)',
+            'Use heapify for batch, insert for dynamic',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'Explain why Top K problems with heap are O(n log k) not O(n log n). How does heap size affect complexity?',
+          sampleAnswer:
+            'Top K uses heap of size k, not n. Each heap operation (push/pop) takes O(log k) where k is heap size, not O(log n). We process n elements, each taking O(log k) heap operation, giving O(n log k) total. For example, finding top 10 in million elements: O(million × log 10) ≈ O(million × 3.3) - much better than sorting O(million × log million) ≈ O(million × 20). The heap size constraint is crucial. If k is small relative to n, we get near-linear performance. If k = n, it degrades to O(n log n) same as sorting. This is why Top K pattern is powerful - we optimize by bounding heap size.',
+          keyPoints: [
+            'Heap size k, not n',
+            'Each operation: O(log k)',
+            'Total: O(n log k) for n elements',
+            'Small k: near-linear performance',
+            'k = n: degrades to O(n log n)',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'Describe the space complexity of different heap operations. When do we use O(n) space vs O(k)?',
+          sampleAnswer:
+            'Space complexity depends on heap contents. Full heap with all n elements: O(n) space. Top K heap: O(k) space - we only maintain k elements at any time. Two-heap median: O(n) space - we store all elements seen so far split across two heaps. K-way merge: O(k) space for heap plus O(n) for result. Heap operations themselves use O(1) extra space for iterative, O(log n) for recursive due to call stack. The key question: do we store all elements or subset? Top K and K-way merge use bounded heap size for space efficiency. Problems storing all seen elements like median use O(n). Choose pattern based on space constraints.',
+          keyPoints: [
+            'Full heap: O(n) space',
+            'Top K: O(k) space (bounded)',
+            'Two-heap median: O(n) (all elements)',
+            'Operations: O(1) iterative, O(log n) recursive',
+            'Choose based on whether storing all or subset',
+          ],
+        },
+      ],
     },
     {
       id: 'templates',
@@ -662,6 +838,46 @@ def schedule_tasks(tasks: List[tuple]):
     
     return result
 \`\`\``,
+      quiz: [
+        {
+          id: 'heap-templates-1',
+          question:
+            'Why do we use a min heap of size k to find the k largest elements?',
+          hint: 'Think about what gets removed when the heap exceeds size k.',
+          sampleAnswer:
+            'A min heap of size k keeps the k largest elements because when we add a new element and the heap exceeds k, we remove the smallest element. This ensures only the k largest elements remain. The smallest of these k elements (heap root) is larger than all discarded elements.',
+          keyPoints: [
+            'Min heap removes smallest when size > k',
+            'Keeps k largest elements',
+            'Root is kth largest element',
+          ],
+        },
+        {
+          id: 'heap-templates-2',
+          question:
+            'Explain the two-heap technique for finding the median of a stream.',
+          hint: 'Consider how you split elements to maintain balance.',
+          sampleAnswer:
+            'Use a max heap for the smaller half and a min heap for the larger half. Keep them balanced (size difference ≤ 1). The median is either the root of the larger heap (if sizes differ) or the average of both roots (if sizes are equal). This maintains O(log N) insertions and O(1) median queries.',
+          keyPoints: [
+            'Max heap: smaller half, Min heap: larger half',
+            'Balance heaps: size difference ≤ 1',
+            'Median from roots: O(1) access',
+          ],
+        },
+        {
+          id: 'heap-templates-3',
+          question: 'How do you implement a max heap in Python using heapq?',
+          hint: 'Python heapq only provides min heap.',
+          sampleAnswer:
+            'Negate all values when pushing to the heap and negate them again when popping. This converts max heap operations to min heap operations. For example, to add 5, push -5. When popping -5, return 5. This works because -max(values) = min(-values).',
+          keyPoints: [
+            'Python heapq is min heap only',
+            'Negate values: push -value, return -popped',
+            '-max(x) = min(-x)',
+          ],
+        },
+      ],
     },
     {
       id: 'interview',
@@ -792,6 +1008,50 @@ def schedule_tasks(tasks: List[tuple]):
    - LeetCode Heap tag (100+ problems)
    - Understand heapify implementation
    - Practice both min and max heap patterns`,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Walk me through the Top K template. Why maintain heap of size K, and when do you pop?',
+          sampleAnswer:
+            'Top K template maintains min heap of size K for K largest elements. Initialize empty heap. For each element: push to heap, if heap size exceeds K, pop (removes smallest). After processing all, heap contains K largest. We pop when size exceeds K because we only need K elements - the smallest of K largest is the threshold for entry. Popping smallest maintains only elements that beat threshold. At end, heap has exactly K largest. Time O(n log k) - each of n elements involves push and maybe pop, both O(log k). This works because min heap root is smallest of K largest - perfect boundary. For K smallest, use max heap and same logic.',
+          keyPoints: [
+            'Min heap size K for K largest',
+            'Push each element, pop if size > K',
+            'Pop smallest when exceeds K',
+            'Heap root = threshold for entry',
+            'O(n log k) time',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'Explain the two-heap median template. How do you balance the heaps and when do you rebalance?',
+          sampleAnswer:
+            'Two-heap median uses max heap for lower half, min heap for upper half. To add element: compare with max heap root (largest of lower). If less or equal, add to max heap, else add to min heap. Then rebalance: if size difference exceeds 1, move root from larger to smaller heap. Median: if sizes equal, average of roots. If one larger, root of larger heap. Rebalance ensures heaps differ by at most 1 element so median is always at boundary. Key invariant: all elements in max heap ≤ all elements in min heap. This is maintained by comparing with max heap root before inserting. Add is O(log n), median is O(1).',
+          keyPoints: [
+            'Max heap: lower half, Min heap: upper half',
+            'Compare with max heap root to decide heap',
+            'Rebalance if difference > 1',
+            'Median: avg if equal, root of larger if not',
+            'Add O(log n), median O(1)',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'Describe the K-way merge template. What information do you store in the heap besides values?',
+          sampleAnswer:
+            'K-way merge heap stores tuples: (value, list index, position in list). Initialize heap with (first element, list index, 0) for each list. Pop smallest tuple, add value to result. Push next element from that list: (lists[list_idx][pos+1], list_idx, pos+1) if exists. Repeat until heap empty. We store indices because we need to know which list to pull next element from. Python heapq compares tuples by first element (value), so smallest value is at root. If values equal, uses list index as tiebreaker. This enables merging K sorted lists in O(n log k) where n is total elements. Without heap, comparing K heads each time would be O(nk).',
+          keyPoints: [
+            'Store (value, list_idx, position) tuples',
+            'Initialize with first from each list',
+            'Pop smallest, push next from that list',
+            'Indices tell which list to pull from',
+            'O(n log k) vs O(nk) without heap',
+          ],
+        },
+      ],
     },
   ],
   keyTakeaways: [

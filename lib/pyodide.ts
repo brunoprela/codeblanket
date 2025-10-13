@@ -11,6 +11,25 @@ declare global {
   }
 }
 
+/**
+ * Wait for window.loadPyodide to be available
+ * @param timeout Maximum time to wait in milliseconds
+ * @returns Promise that resolves when loadPyodide is available
+ */
+async function waitForPyodideScript(timeout = 10000): Promise<void> {
+  const startTime = Date.now();
+
+  while (!window.loadPyodide) {
+    if (Date.now() - startTime > timeout) {
+      throw new Error(
+        'Pyodide script not loaded. Make sure you have an internet connection and try refreshing the page.',
+      );
+    }
+    // Wait 100ms before checking again
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
+}
+
 export async function getPyodide() {
   // If already loaded, return it
   if (pyodideInstance) {
@@ -29,11 +48,8 @@ export async function getPyodide() {
         throw new Error('Pyodide can only be loaded in the browser');
       }
 
-      if (!window.loadPyodide) {
-        throw new Error(
-          'Pyodide script not loaded. Make sure to include it in your HTML.',
-        );
-      }
+      // Wait for the Pyodide script to be available
+      await waitForPyodideScript();
 
       pyodideInstance = await window.loadPyodide({
         indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.24.1/full/',

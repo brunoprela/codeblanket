@@ -142,7 +142,7 @@ def level_order_flat(root: Optional[TreeNode]) -> List[int]:
     timeComplexity: 'O(N)',
     spaceComplexity: 'O(W) where W is maximum width',
     order: 1,
-    topic: 'BFS',
+    topic: 'Breadth-First Search (BFS)',
     leetcodeUrl:
       'https://leetcode.com/problems/binary-tree-level-order-traversal/',
     youtubeUrl: 'https://www.youtube.com/watch?v=6ZnyEApgFYg',
@@ -335,7 +335,7 @@ def shortest_path_inplace(grid: List[List[int]]) -> int:
     timeComplexity: 'O(N²)',
     spaceComplexity: 'O(N²) for visited set and queue',
     order: 2,
-    topic: 'BFS',
+    topic: 'Breadth-First Search (BFS)',
     leetcodeUrl:
       'https://leetcode.com/problems/shortest-path-in-binary-matrix/',
     youtubeUrl: 'https://www.youtube.com/watch?v=caXJJOMLyHk',
@@ -534,7 +534,7 @@ def oranges_rotting_alt(grid: List[List[int]]) -> int:
     timeComplexity: 'O(M × N)',
     spaceComplexity: 'O(M × N)',
     order: 3,
-    topic: 'BFS',
+    topic: 'Breadth-First Search (BFS)',
     leetcodeUrl: 'https://leetcode.com/problems/rotting-oranges/',
     youtubeUrl: 'https://www.youtube.com/watch?v=y704fEOx0s0',
   },
@@ -544,7 +544,7 @@ def oranges_rotting_alt(grid: List[List[int]]) -> int:
     id: 'n-ary-tree-level-order',
     title: 'N-ary Tree Level Order Traversal',
     difficulty: 'Easy',
-    topic: 'BFS',
+    topic: 'Breadth-First Search (BFS)',
     description: `Given an n-ary tree, return the level order traversal of its nodes' values.
 
 *Nary-Tree input serialization is represented in their level order traversal, each group of children is separated by the null value.*`,
@@ -606,7 +606,7 @@ def level_order_n_ary(root: Node) -> List[List[int]]:
     id: 'average-of-levels',
     title: 'Average of Levels in Binary Tree',
     difficulty: 'Easy',
-    topic: 'BFS',
+    topic: 'Breadth-First Search (BFS)',
     description: `Given the \`root\` of a binary tree, return the average value of the nodes on each level in the form of an array. Answers within \`10^-5\` of the actual answer will be accepted.`,
     examples: [
       {
@@ -668,7 +668,7 @@ def average_of_levels(root: Optional[TreeNode]) -> List[float]:
     id: 'word-ladder',
     title: 'Word Ladder',
     difficulty: 'Medium',
-    topic: 'BFS',
+    topic: 'Breadth-First Search (BFS)',
     description: `A **transformation sequence** from word \`beginWord\` to word \`endWord\` using a dictionary \`wordList\` is a sequence of words \`beginWord -> s1 -> s2 -> ... -> sk\` such that:
 
 - Every adjacent pair of words differs by a single letter.
@@ -744,7 +744,7 @@ def ladder_length(begin_word: str, end_word: str, word_list: List[str]) -> int:
     id: 'open-the-lock',
     title: 'Open the Lock',
     difficulty: 'Medium',
-    topic: 'BFS',
+    topic: 'Breadth-First Search (BFS)',
     description: `You have a lock in front of you with 4 circular wheels. Each wheel has 10 slots: \`'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'\`. The wheels can rotate freely and wrap around: for example we can turn \`'9'\` to be \`'0'\`, or \`'0'\` to be \`'9'\`. Each move consists of turning one wheel one slot.
 
 The lock initially starts at \`'0000'\`, a string representing the state of the 4 wheels.
@@ -815,7 +815,7 @@ def open_lock(deadends: List[str], target: str) -> int:
     id: 'minimum-genetic-mutation',
     title: 'Minimum Genetic Mutation',
     difficulty: 'Medium',
-    topic: 'BFS',
+    topic: 'Breadth-First Search (BFS)',
     description: `A gene string can be represented by an 8-character long string, with choices from \`'A'\`, \`'C'\`, \`'G'\`, and \`'T'\`.
 
 Suppose we need to investigate a mutation from a gene string \`startGene\` to a gene string \`endGene\` where one mutation is defined as one single character changed in the gene string.

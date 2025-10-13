@@ -25,24 +25,20 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-  overscroll-behavior: none;
-  overflow: hidden;
-  height: 100vh;
-  position: fixed;
-  width: 100%;
+  font-conmily: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
 html {
-  overscroll-behavior: none;
-  overflow: hidden;
-  height: 100vh;
+  margin: 0;
+  padding: 0;
 }
 
 /* Prevent over-scrolling in all scroll containers */
 .overflow-y-auto,
 .overflow-auto {
-  overscroll-behavior: contain;
+  overscroll-behavior-y: contain;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -59,13 +55,151 @@ html {
   right: 0;
   width: 20px;
   height: 20px;
-  background: linear-gradient(
-    135deg,
-    transparent 0%,
-    transparent 50%,
-    rgba(156, 163, 175, 0.4) 50%,
-    rgba(156, 163, 175, 0.4) 100%
-  );
+  background: linear-gradient(135deg,
+      transparent 0%,
+      transparent 50%,
+      rgba(156, 163, 175, 0.4) 50%,
+      rgba(156, 163, 175, 0.4) 100%);
   cursor: ns-resize;
   pointer-events: none;
+}
+/* Prism.js Dracula Theme Override */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #6272a4;
+  font-style: italic;
+}
+
+.token.punctuation {
+  color: #f8f8f2;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  color: #bd93f9;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+  color: #f1fa8c;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+  color: #ff79c6;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+  color: #ff79c6;
+}
+
+.token.function,
+.token.class-name {
+  color: #50fa7b;
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+  color: #ffb86c;
+}
+
+/* Enhanced Prism.js Dracula Theme for Python */
+code[class*="language-"],
+pre[class*="language-"] {
+  color: #f8f8f2;
+  background: none;
+  text-shadow: none;
+  font-family: "Fira Code", "Fira Mono", "SF Mono", Monaco, Inconsolata, "Roboto Mono", Consolas, "Courier New", monospace;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.6;
+  tab-size: 4;
+}
+
+/* Comments - Gray Italic */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #6272a4 !important;
+  font-style: italic;
+}
+
+/* Punctuation - Light */
+.token.punctuation {
+  color: #f8f8f2 !important;
+}
+
+/* Keywords - Pink */
+.token.keyword,
+.token.operator,
+.token.important {
+  color: #ff79c6 !important;
+  font-weight: normal;
+}
+
+/* Strings - Yellow */
+.token.string,
+.token.char,
+.token.attr-value,
+.token.regex {
+  color: #f1fa8c !important;
+}
+
+/* Functions - Green */
+.token.function,
+.token.function-name,
+.token.method,
+.token.class-name {
+  color: #50fa7b !important;
+}
+
+/* Numbers and Booleans - Purple */
+.token.number,
+.token.boolean,
+.token.constant,
+.token.symbol {
+  color: #bd93f9 !important;
+}
+
+/* Variables and Parameters - Orange */
+.token.variable,
+.token.parameter,
+.token.property,
+.token.tag {
+  color: #ffb86c !important;
+}
+
+/* Builtin Types and Decorators - Cyan */
+.token.builtin,
+.token.decorator,
+.token.annotation {
+  color: #8be9fd !important;
+}
+
+/* Make sure the editor background matches */
+.npm__react-simple-code-editor__textarea,
+.npm__react-simple-code-editor__textarea:focus {
+  outline: none !important;
+  caret-color: #f8f8f2 !important;
 }

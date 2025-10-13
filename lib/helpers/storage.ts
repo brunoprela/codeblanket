@@ -8,6 +8,7 @@ import { setItem, getItem } from './indexeddb';
 
 const COMPLETED_PROBLEMS_KEY = 'codeblanket_completed_problems';
 const USER_CODE_KEY_PREFIX = 'codeblanket_code_';
+const CUSTOM_TESTS_KEY_PREFIX = 'codeblanket_tests_';
 
 /**
  * Sync to IndexedDB in the background (fire and forget)
@@ -153,5 +154,63 @@ export function clearUserCode(problemId: string): void {
     localStorage.removeItem(`${USER_CODE_KEY_PREFIX}${problemId}`);
   } catch (error) {
     console.error('Failed to clear user code:', error);
+  }
+}
+
+/**
+ * Custom Test Cases Storage
+ */
+
+/**
+ * Saves user's custom test cases for a specific problem to localStorage and syncs to IndexedDB
+ * @param problemId - The unique identifier of the problem
+ * @param testCases - Array of test cases to save
+ */
+export function saveCustomTestCases(
+  problemId: string,
+  testCases: unknown[],
+): void {
+  if (typeof window === 'undefined') return;
+
+  try {
+    const key = `${CUSTOM_TESTS_KEY_PREFIX}${problemId}`;
+    const serialized = JSON.stringify(testCases);
+    localStorage.setItem(key, serialized);
+    // Sync to IndexedDB in background
+    syncToIndexedDB(key, testCases);
+  } catch (error) {
+    console.error('Failed to save custom test cases:', error);
+  }
+}
+
+/**
+ * Retrieves user's saved custom test cases for a specific problem
+ * @param problemId - The unique identifier of the problem
+ * @returns Array of saved test cases, or empty array if none are saved
+ */
+export function getCustomTestCases(problemId: string): unknown[] {
+  if (typeof window === 'undefined') return [];
+
+  try {
+    const key = `${CUSTOM_TESTS_KEY_PREFIX}${problemId}`;
+    const stored = localStorage.getItem(key);
+    return stored ? JSON.parse(stored) : [];
+  } catch (error) {
+    console.error('Failed to load custom test cases:', error);
+    return [];
+  }
+}
+
+/**
+ * Removes saved custom test cases for a specific problem
+ * @param problemId - The unique identifier of the problem
+ */
+export function clearCustomTestCases(problemId: string): void {
+  if (typeof window === 'undefined') return;
+
+  try {
+    localStorage.removeItem(`${CUSTOM_TESTS_KEY_PREFIX}${problemId}`);
+  } catch (error) {
+    console.error('Failed to clear custom test cases:', error);
   }
 }
