@@ -5,16 +5,16 @@
 import { Module } from '@/lib/types';
 
 export const sortingModule: Module = {
-    id: 'sorting',
-    title: 'Sorting Algorithms',
-    description:
-        'Master the fundamental sorting algorithms and understand their time complexity, space usage, and when to use each.',
-    icon: '🔄',
-    sections: [
-        {
-            id: 'introduction',
-            title: 'Why Sorting Matters',
-            content: `Sorting is one of the most fundamental operations in computer science. It's the process of arranging data in a specific order (usually ascending or descending), and it serves as the foundation for many other algorithms.
+  id: 'sorting',
+  title: 'Sorting Algorithms',
+  description:
+    'Master the fundamental sorting algorithms and understand their time complexity, space usage, and when to use each.',
+  icon: '🔄',
+  sections: [
+    {
+      id: 'introduction',
+      title: 'Why Sorting Matters',
+      content: `Sorting is one of the most fundamental operations in computer science. It's the process of arranging data in a specific order (usually ascending or descending), and it serves as the foundation for many other algorithms.
 
 **Why Learn Sorting?**
 - **Ubiquitous:** Used everywhere - databases, search engines, operating systems
@@ -61,54 +61,121 @@ Sorting algorithms can be categorized by:
 - **Simple algorithms:** Easy to understand, bad performance (O(n²))
 - **Advanced algorithms:** Complex to understand, great performance (O(n log n))
 - **Specialized algorithms:** Only work for specific data types, can be O(n)`,
-            quiz: [
-                {
-                    id: 'q1',
-                    question:
-                        'Explain what we mean by a "stable" sorting algorithm. Why would stability matter in practice?',
-                    hint: 'Think about what happens to equal elements.',
-                    sampleAnswer:
-                        'A stable sorting algorithm preserves the relative order of equal elements. If you have two items with the same value, and item A came before item B in the original array, then after a stable sort, A will still come before B. This matters when you are sorting by one field but want to preserve the order of another field. For example, if you have students sorted by name and you want to sort them by grade, a stable sort will keep students with the same grade in alphabetical order. Merge sort and insertion sort are stable, but quicksort and heapsort are not. In production, stability often matters for user-facing features where order needs to be predictable.',
-                    keyPoints: [
-                        'Stable: equal elements maintain relative order',
-                        'Important for multi-level sorting',
-                        'Example: sort by grade, preserve alphabetical order within same grade',
-                        'Merge sort, insertion sort are stable; quicksort, heapsort are not',
-                    ],
-                },
-                {
-                    id: 'q2',
-                    question:
-                        'Walk me through the difference between in-place and not in-place sorting. What is the tradeoff?',
-                    sampleAnswer:
-                        'In-place sorting means the algorithm sorts the array using only O(1) extra space - it rearranges elements within the original array without creating a copy. Not in-place sorting uses O(n) additional space, typically by creating temporary arrays. The tradeoff is space versus implementation simplicity. Quicksort is in-place - it sorts by swapping elements within the array, using minimal extra memory. Merge sort is not in-place - it creates temporary arrays during the merge step, requiring O(n) space. In-place is better when memory is limited, but not-in-place algorithms like merge sort can be easier to implement correctly and are stable. For large datasets, the O(n) space overhead of merge sort can be significant.',
-                    keyPoints: [
-                        'In-place: O(1) extra space, sorts within original array',
-                        'Not in-place: O(n) extra space, creates temporary copies',
-                        'In-place saves memory but can be more complex',
-                        'Examples: Quicksort (in-place), Merge sort (not in-place)',
-                    ],
-                },
-                {
-                    id: 'q3',
-                    question:
-                        'Why would you ever use a simple O(n²) sorting algorithm like insertion sort when O(n log n) algorithms exist?',
-                    sampleAnswer:
-                        'There are actually several good reasons. First, for small arrays (say under 20 elements), insertion sort can be faster than quicksort or mergesort because it has very low overhead - no recursive calls, no complex partitioning. Second, insertion sort is adaptive - it runs in O(n) time on already-sorted or nearly-sorted data. If you know your data is mostly sorted, insertion sort is excellent. Third, it is stable and in-place, which matters for certain use cases. Fourth, it is extremely simple to implement correctly. In fact, many production implementations of quicksort switch to insertion sort for small subarrays. Python\'s Timsort uses insertion sort as one of its building blocks.',
-                    keyPoints: [
-                        'Faster for small arrays due to low overhead',
-                        'Adaptive: O(n) on nearly-sorted data',
-                        'Stable and in-place simultaneously',
-                        'Simple to implement correctly',
-                        'Used in hybrid algorithms like Timsort',
-                    ],
-                },
-            ],
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Explain what we mean by a "stable" sorting algorithm. Why would stability matter in practice?',
+          hint: 'Think about what happens to equal elements.',
+          sampleAnswer:
+            'A stable sorting algorithm preserves the relative order of equal elements. If you have two items with the same value, and item A came before item B in the original array, then after a stable sort, A will still come before B. This matters when you are sorting by one field but want to preserve the order of another field. For example, if you have students sorted by name and you want to sort them by grade, a stable sort will keep students with the same grade in alphabetical order. Merge sort and insertion sort are stable, but quicksort and heapsort are not. In production, stability often matters for user-facing features where order needs to be predictable.',
+          keyPoints: [
+            'Stable: equal elements maintain relative order',
+            'Important for multi-level sorting',
+            'Example: sort by grade, preserve alphabetical order within same grade',
+            'Merge sort, insertion sort are stable; quicksort, heapsort are not',
+          ],
         },
         {
-            id: 'comparison-sorts',
-            title: 'Comparison-Based Sorting Algorithms',
-            content: `**Comparison sorts** work by comparing pairs of elements. There's a theoretical lower bound: any comparison-based sort must be at least **O(n log n)** in the average case.
+          id: 'q2',
+          question:
+            'Walk me through the difference between in-place and not in-place sorting. What is the tradeoff?',
+          sampleAnswer:
+            'In-place sorting means the algorithm sorts the array using only O(1) extra space - it rearranges elements within the original array without creating a copy. Not in-place sorting uses O(n) additional space, typically by creating temporary arrays. The tradeoff is space versus implementation simplicity. Quicksort is in-place - it sorts by swapping elements within the array, using minimal extra memory. Merge sort is not in-place - it creates temporary arrays during the merge step, requiring O(n) space. In-place is better when memory is limited, but not-in-place algorithms like merge sort can be easier to implement correctly and are stable. For large datasets, the O(n) space overhead of merge sort can be significant.',
+          keyPoints: [
+            'In-place: O(1) extra space, sorts within original array',
+            'Not in-place: O(n) extra space, creates temporary copies',
+            'In-place saves memory but can be more complex',
+            'Examples: Quicksort (in-place), Merge sort (not in-place)',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'Why would you ever use a simple O(n²) sorting algorithm like insertion sort when O(n log n) algorithms exist?',
+          sampleAnswer:
+            "There are actually several good reasons. First, for small arrays (say under 20 elements), insertion sort can be faster than quicksort or mergesort because it has very low overhead - no recursive calls, no complex partitioning. Second, insertion sort is adaptive - it runs in O(n) time on already-sorted or nearly-sorted data. If you know your data is mostly sorted, insertion sort is excellent. Third, it is stable and in-place, which matters for certain use cases. Fourth, it is extremely simple to implement correctly. In fact, many production implementations of quicksort switch to insertion sort for small subarrays. Python's Timsort uses insertion sort as one of its building blocks.",
+          keyPoints: [
+            'Faster for small arrays due to low overhead',
+            'Adaptive: O(n) on nearly-sorted data',
+            'Stable and in-place simultaneously',
+            'Simple to implement correctly',
+            'Used in hybrid algorithms like Timsort',
+          ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What is a stable sorting algorithm?',
+          options: [
+            'Never crashes',
+            'Preserves relative order of equal elements',
+            'Always O(N log N)',
+            'Uses no extra space',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Stable sort preserves the relative order of equal elements. If A comes before B and they\'re equal, A stays before B after sorting. Important for multi-level sorting.',
+        },
+        {
+          id: 'mc2',
+          question: 'What does "in-place" sorting mean?',
+          options: [
+            'Sorts very fast',
+            'Uses only O(1) extra space, sorts within original array',
+            'Always stable',
+            'Never uses recursion',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'In-place sorting uses O(1) extra space, modifying the original array without creating copies. Saves memory but may be more complex. Example: Quicksort (in-place), Merge sort (not in-place).',
+        },
+        {
+          id: 'mc3',
+          question: 'When would you use O(N²) insertion sort over O(N log N) algorithms?',
+          options: [
+            'Never',
+            'Small arrays, nearly-sorted data, or when stability + in-place both needed',
+            'Always',
+            'Only for testing',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Insertion sort excels when: 1) Array is small (<20 elements) - low overhead, 2) Data is nearly sorted - adaptive O(N) time, 3) Need both stable and in-place. Used in Timsort and hybrid algorithms.',
+        },
+        {
+          id: 'mc4',
+          question: 'What is the theoretical lower bound for comparison-based sorts?',
+          options: [
+            'O(N)',
+            'O(N log N) in average case',
+            'O(N²)',
+            'O(log N)',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Any comparison-based sort (comparing pairs) must be Ω(N log N) in average case. This is proven using decision tree analysis. Non-comparison sorts like counting sort can beat this.',
+        },
+        {
+          id: 'mc5',
+          question: 'Why does sorting matter in computer science?',
+          options: [
+            'Only for interviews',
+            'Foundation for many algorithms (binary search), ubiquitous in real systems, teaches fundamental techniques',
+            'Random requirement',
+            'Historical reasons',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Sorting is fundamental: 1) Required for binary search and many algorithms, 2) Used everywhere (databases, search engines), 3) Teaches divide-and-conquer, recursion, optimization, 4) Common in interviews.',
+        },
+      ],
+    },
+    {
+      id: 'comparison-sorts',
+      title: 'Comparison-Based Sorting Algorithms',
+      content: `**Comparison sorts** work by comparing pairs of elements. There's a theoretical lower bound: any comparison-based sort must be at least **O(n log n)** in the average case.
 
 **1. Bubble Sort - O(n²)**
 
@@ -248,53 +315,120 @@ def heap_sort(arr):
 - **Space:** O(1) - in-place
 - **Stable:** No
 - **Use case:** When you need O(n log n) guarantee and can't afford O(n) space`,
-            quiz: [
-                {
-                    id: 'q1',
-                    question:
-                        'Compare merge sort and quick sort. When would you choose one over the other?',
-                    hint: 'Think about stability, space, and performance guarantees.',
-                    sampleAnswer:
-                        'Both are O(n log n) on average, but they have different tradeoffs. Merge sort is stable and has guaranteed O(n log n) worst-case performance, but requires O(n) extra space. Quick sort is typically faster in practice due to better cache performance and lower constants, is in-place (O(log n) space for recursion), but has O(n²) worst case and is not stable. I would choose merge sort when: 1) Stability is required, 2) I need guaranteed O(n log n) performance, 3) Memory is not a concern, or 4) Sorting linked lists. I would choose quick sort when: 1) Average performance matters more than worst-case, 2) Memory is limited, 3) Stability is not needed. In practice, quicksort with randomized pivots is usually the go-to for general purpose sorting.',
-                    keyPoints: [
-                        'Merge sort: stable, O(n log n) guaranteed, O(n) space',
-                        'Quick sort: faster in practice, in-place, O(n²) worst case, unstable',
-                        'Choose merge for stability and guaranteed performance',
-                        'Choose quick for speed and memory efficiency',
-                    ],
-                },
-                {
-                    id: 'q2',
-                    question:
-                        'Explain why the worst case of quicksort is O(n²). How can you avoid this?',
-                    sampleAnswer:
-                        'Quicksort degrades to O(n²) when the pivot choices are consistently bad - when the pivot is always the smallest or largest element. This creates unbalanced partitions where one side has n-1 elements and the other has 0. You end up with n levels of recursion instead of log n, and each level does O(n) work, giving O(n²) total. This happens when sorting already-sorted data with a naive pivot selection like choosing the first or last element. You can avoid this by: 1) Using randomized pivot selection, 2) Median-of-three pivot selection (choose median of first, middle, last), or 3) Using three-way partitioning for arrays with many duplicates. Randomization essentially guarantees O(n log n) average performance regardless of input.',
-                    keyPoints: [
-                        'Worst case when pivot always creates unbalanced partitions',
-                        'Happens on sorted data with poor pivot selection',
-                        'Results in n levels × O(n) work = O(n²)',
-                        'Avoid with: randomized pivots, median-of-three, three-way partitioning',
-                    ],
-                },
-                {
-                    id: 'q3',
-                    question:
-                        'Why is insertion sort O(n) on already-sorted data but O(n²) on random data?',
-                    sampleAnswer:
-                        'Insertion sort is adaptive - its performance depends on how sorted the input already is. On already-sorted data, each element is already in the correct position. The inner while loop never executes because arr[j] is never greater than key. So we just scan through the array once, doing O(1) work per element, giving O(n) total. On random or reverse-sorted data, each element might need to be compared with and moved past many elements to find its correct position. On average, each element moves halfway back, which is O(n) comparisons and shifts for each of n elements, giving O(n²). This adaptive property makes insertion sort excellent for nearly-sorted data or online sorting where elements arrive one at a time.',
-                    keyPoints: [
-                        'Adaptive: performance depends on initial order',
-                        'Already sorted: inner loop never runs → O(n)',
-                        'Random data: each element shifts ~n/2 positions → O(n²)',
-                        'Makes it great for nearly-sorted data and online sorting',
-                    ],
-                },
-            ],
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Compare merge sort and quick sort. When would you choose one over the other?',
+          hint: 'Think about stability, space, and performance guarantees.',
+          sampleAnswer:
+            'Both are O(n log n) on average, but they have different tradeoffs. Merge sort is stable and has guaranteed O(n log n) worst-case performance, but requires O(n) extra space. Quick sort is typically faster in practice due to better cache performance and lower constants, is in-place (O(log n) space for recursion), but has O(n²) worst case and is not stable. I would choose merge sort when: 1) Stability is required, 2) I need guaranteed O(n log n) performance, 3) Memory is not a concern, or 4) Sorting linked lists. I would choose quick sort when: 1) Average performance matters more than worst-case, 2) Memory is limited, 3) Stability is not needed. In practice, quicksort with randomized pivots is usually the go-to for general purpose sorting.',
+          keyPoints: [
+            'Merge sort: stable, O(n log n) guaranteed, O(n) space',
+            'Quick sort: faster in practice, in-place, O(n²) worst case, unstable',
+            'Choose merge for stability and guaranteed performance',
+            'Choose quick for speed and memory efficiency',
+          ],
         },
         {
-            id: 'non-comparison-sorts',
-            title: 'Non-Comparison Sorting Algorithms',
-            content: `**Non-comparison sorts** don't compare elements directly. They exploit properties of the data (like range of integers) to achieve **O(n)** time complexity!
+          id: 'q2',
+          question:
+            'Explain why the worst case of quicksort is O(n²). How can you avoid this?',
+          sampleAnswer:
+            'Quicksort degrades to O(n²) when the pivot choices are consistently bad - when the pivot is always the smallest or largest element. This creates unbalanced partitions where one side has n-1 elements and the other has 0. You end up with n levels of recursion instead of log n, and each level does O(n) work, giving O(n²) total. This happens when sorting already-sorted data with a naive pivot selection like choosing the first or last element. You can avoid this by: 1) Using randomized pivot selection, 2) Median-of-three pivot selection (choose median of first, middle, last), or 3) Using three-way partitioning for arrays with many duplicates. Randomization essentially guarantees O(n log n) average performance regardless of input.',
+          keyPoints: [
+            'Worst case when pivot always creates unbalanced partitions',
+            'Happens on sorted data with poor pivot selection',
+            'Results in n levels × O(n) work = O(n²)',
+            'Avoid with: randomized pivots, median-of-three, three-way partitioning',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'Why is insertion sort O(n) on already-sorted data but O(n²) on random data?',
+          sampleAnswer:
+            'Insertion sort is adaptive - its performance depends on how sorted the input already is. On already-sorted data, each element is already in the correct position. The inner while loop never executes because arr[j] is never greater than key. So we just scan through the array once, doing O(1) work per element, giving O(n) total. On random or reverse-sorted data, each element might need to be compared with and moved past many elements to find its correct position. On average, each element moves halfway back, which is O(n) comparisons and shifts for each of n elements, giving O(n²). This adaptive property makes insertion sort excellent for nearly-sorted data or online sorting where elements arrive one at a time.',
+          keyPoints: [
+            'Adaptive: performance depends on initial order',
+            'Already sorted: inner loop never runs → O(n)',
+            'Random data: each element shifts ~n/2 positions → O(n²)',
+            'Makes it great for nearly-sorted data and online sorting',
+          ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What is the best, average, and worst case complexity of Quicksort?',
+          options: [
+            'All O(N log N)',
+            'Best: O(N log N), Average: O(N log N), Worst: O(N²)',
+            'All O(N²)',
+            'Best: O(N), Average: O(N log N), Worst: O(N²)',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Quicksort: Best O(N log N) with balanced pivots, Average O(N log N), Worst O(N²) when pivot is always min/max (sorted input). Randomization makes worst case unlikely.',
+        },
+        {
+          id: 'mc2',
+          question: 'Why is Merge Sort guaranteed O(N log N) but uses O(N) space?',
+          options: [
+            'Poor implementation',
+            'Divide-and-conquer always splits evenly, but merge step needs temporary arrays',
+            'Random',
+            'Space can be reduced to O(1)',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Merge sort divides array in half each time (log N levels), each level processes N elements = O(N log N). The merge step creates temporary arrays to combine sorted halves = O(N) space.',
+        },
+        {
+          id: 'mc3',
+          question: 'What makes Heap Sort useful despite being slower than Quicksort in practice?',
+          options: [
+            'It is not useful',
+            'Guaranteed O(N log N) worst case, in-place O(1) space',
+            'Stable',
+            'Adaptive',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Heap sort guarantees O(N log N) worst case (unlike quicksort\'s O(N²)) and is in-place O(1) space (unlike merge sort\'s O(N)). Good when memory is limited and worst-case matters.',
+        },
+        {
+          id: 'mc4',
+          question: 'Which sorting algorithm is stable among comparison sorts?',
+          options: [
+            'Quicksort',
+            'Merge sort',
+            'Heap sort',
+            'All comparison sorts',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Merge sort is stable - equal elements maintain relative order during merge. Quicksort and Heap sort are unstable due to swapping. Insertion and Bubble are also stable.',
+        },
+        {
+          id: 'mc5',
+          question: 'Why does Quicksort often outperform Merge Sort in practice despite same average complexity?',
+          options: [
+            'Better complexity',
+            'In-place (cache-friendly), fewer memory operations, lower constant factors',
+            'Random',
+            'Always slower',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Quicksort is in-place (better cache locality), has fewer memory operations (no array copies), and has lower constant factors. Merge sort creates temporary arrays repeatedly, causing overhead.',
+        },
+      ],
+    },
+    {
+      id: 'non-comparison-sorts',
+      title: 'Non-Comparison Sorting Algorithms',
+      content: `**Non-comparison sorts** don't compare elements directly. They exploit properties of the data (like range of integers) to achieve **O(n)** time complexity!
 
 **1. Counting Sort - O(n + k)**
 
@@ -436,55 +570,122 @@ def bucket_sort(arr):
 - **Counting Sort:** Sorting grades (0-100), sorting by age
 - **Radix Sort:** Sorting IP addresses, sorting strings
 - **Bucket Sort:** Sorting floating-point numbers, external sorting`,
-            quiz: [
-                {
-                    id: 'q1',
-                    question:
-                        'Explain why counting sort is O(n + k) instead of O(n). When does this become a problem?',
-                    hint: 'Think about what k represents.',
-                    sampleAnswer:
-                        'Counting sort is O(n + k) where n is the number of elements and k is the range of values. The n comes from iterating through the input array to count occurrences and then to build the output. The k comes from initializing the count array of size k and iterating through it to reconstruct the sorted array. This becomes a problem when k is much larger than n. For example, if you have 100 numbers ranging from 0 to 1 million, you need a count array of size 1 million, and you have to iterate through all 1 million positions even though only 100 of them have non-zero counts. In this case, k >> n, so O(n + k) ≈ O(k), which is worse than O(n log n) comparison sorts.',
-                    keyPoints: [
-                        'O(n) to count occurrences and reconstruct array',
-                        'O(k) to initialize and iterate through count array',
-                        'Problem when k >> n (large range, few elements)',
-                        'Example: 100 numbers in range [0, 1M] wastes space and time',
-                    ],
-                },
-                {
-                    id: 'q2',
-                    question:
-                        'How does radix sort achieve O(n) time when the theoretical lower bound for comparison-based sorting is O(n log n)?',
-                    sampleAnswer:
-                        'Radix sort gets around the O(n log n) lower bound because it is not a comparison-based sort - it never compares two elements directly. Instead, it exploits the structure of the data by sorting digit by digit. The lower bound of O(n log n) only applies to algorithms that work by comparing elements. Radix sort looks at the individual digits, which is a fundamentally different approach. It is O(d × n) where d is the number of digits. For fixed-length integers, d is constant, so it is effectively O(n). However, this only works for specific types of data - integers, strings, etc. You cannot use radix sort to sort arbitrary objects with a comparison function, which is why comparison-based sorts are still important.',
-                    keyPoints: [
-                        'Not comparison-based - never compares two elements',
-                        'Exploits data structure by processing digits',
-                        'O(n log n) lower bound only for comparison sorts',
-                        'O(d × n) where d is number of digits; O(n) for fixed d',
-                        'Only works for specific data types',
-                    ],
-                },
-                {
-                    id: 'q3',
-                    question:
-                        'When would you choose bucket sort over quicksort? What properties of the data make bucket sort effective?',
-                    sampleAnswer:
-                        'I would choose bucket sort when the data is uniformly distributed across a known range. Bucket sort works by dividing the range into buckets and distributing elements into those buckets, assuming they will spread out evenly. If the data is uniform, each bucket gets roughly n/k elements, and sorting each bucket takes O(n/k × log(n/k)) time, which averages out to O(n) overall. This is better than quicksort\'s O(n log n). However, if the distribution is skewed and all elements fall into a few buckets, bucket sort degrades to O(n²). So I would use bucket sort for things like sorting random floating-point numbers between 0 and 1, or sorting uniformly distributed sensor data. For general-purpose sorting without knowing the distribution, quicksort is safer.',
-                    keyPoints: [
-                        'Choose bucket sort for uniformly distributed data',
-                        'Uniform distribution → elements spread evenly across buckets',
-                        'Achieves O(n) average time vs quicksort\'s O(n log n)',
-                        'Degrades to O(n²) if data is skewed',
-                        'Good for: random floats, uniform data; Bad for: unknown distribution',
-                    ],
-                },
-            ],
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Explain why counting sort is O(n + k) instead of O(n). When does this become a problem?',
+          hint: 'Think about what k represents.',
+          sampleAnswer:
+            'Counting sort is O(n + k) where n is the number of elements and k is the range of values. The n comes from iterating through the input array to count occurrences and then to build the output. The k comes from initializing the count array of size k and iterating through it to reconstruct the sorted array. This becomes a problem when k is much larger than n. For example, if you have 100 numbers ranging from 0 to 1 million, you need a count array of size 1 million, and you have to iterate through all 1 million positions even though only 100 of them have non-zero counts. In this case, k >> n, so O(n + k) ≈ O(k), which is worse than O(n log n) comparison sorts.',
+          keyPoints: [
+            'O(n) to count occurrences and reconstruct array',
+            'O(k) to initialize and iterate through count array',
+            'Problem when k >> n (large range, few elements)',
+            'Example: 100 numbers in range [0, 1M] wastes space and time',
+          ],
         },
         {
-            id: 'practical-considerations',
-            title: 'Practical Sorting Strategies',
-            content: `**Hybrid Algorithms: The Best of Both Worlds**
+          id: 'q2',
+          question:
+            'How does radix sort achieve O(n) time when the theoretical lower bound for comparison-based sorting is O(n log n)?',
+          sampleAnswer:
+            'Radix sort gets around the O(n log n) lower bound because it is not a comparison-based sort - it never compares two elements directly. Instead, it exploits the structure of the data by sorting digit by digit. The lower bound of O(n log n) only applies to algorithms that work by comparing elements. Radix sort looks at the individual digits, which is a fundamentally different approach. It is O(d × n) where d is the number of digits. For fixed-length integers, d is constant, so it is effectively O(n). However, this only works for specific types of data - integers, strings, etc. You cannot use radix sort to sort arbitrary objects with a comparison function, which is why comparison-based sorts are still important.',
+          keyPoints: [
+            'Not comparison-based - never compares two elements',
+            'Exploits data structure by processing digits',
+            'O(n log n) lower bound only for comparison sorts',
+            'O(d × n) where d is number of digits; O(n) for fixed d',
+            'Only works for specific data types',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'When would you choose bucket sort over quicksort? What properties of the data make bucket sort effective?',
+          sampleAnswer:
+            "I would choose bucket sort when the data is uniformly distributed across a known range. Bucket sort works by dividing the range into buckets and distributing elements into those buckets, assuming they will spread out evenly. If the data is uniform, each bucket gets roughly n/k elements, and sorting each bucket takes O(n/k × log(n/k)) time, which averages out to O(n) overall. This is better than quicksort's O(n log n). However, if the distribution is skewed and all elements fall into a few buckets, bucket sort degrades to O(n²). So I would use bucket sort for things like sorting random floating-point numbers between 0 and 1, or sorting uniformly distributed sensor data. For general-purpose sorting without knowing the distribution, quicksort is safer.",
+          keyPoints: [
+            'Choose bucket sort for uniformly distributed data',
+            'Uniform distribution → elements spread evenly across buckets',
+            "Achieves O(n) average time vs quicksort's O(n log n)",
+            'Degrades to O(n²) if data is skewed',
+            'Good for: random floats, uniform data; Bad for: unknown distribution',
+          ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'How do non-comparison sorts achieve O(N) time?',
+          options: [
+            'Magic',
+            'Exploit data properties (range, digits) instead of comparing elements',
+            'Always faster',
+            'Use parallel processing',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Non-comparison sorts like counting sort exploit known properties of data (e.g., integers 0-k, fixed digits). They count/distribute rather than compare, bypassing the O(N log N) comparison lower bound.',
+        },
+        {
+          id: 'mc2',
+          question: 'When should you use Counting Sort?',
+          options: [
+            'Always',
+            'When sorting integers in a small known range [0, k] where k is not too large',
+            'For any data',
+            'Never',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Counting sort is O(N + k) time and space. Use when k (range) is small relative to N. For integers 0-k, count occurrences and reconstruct. If k >> N, space becomes prohibitive.',
+        },
+        {
+          id: 'mc3',
+          question: 'What is the time complexity of Radix Sort for d-digit numbers?',
+          options: [
+            'O(N log N)',
+            'O(d × N) - sort by each digit, O(N) for fixed d',
+            'O(N²)',
+            'O(N)',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Radix sort processes d digits, using counting sort O(N) per digit = O(d × N). For fixed d (like 32-bit integers), this is O(N), beating comparison sorts.',
+        },
+        {
+          id: 'mc4',
+          question: 'What makes Bucket Sort effective?',
+          options: [
+            'Always works',
+            'Uniformly distributed data spreads evenly across buckets, each small subset sorts in O(N/k log N/k) ≈ O(N)',
+            'Random',
+            'Stable',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Bucket sort distributes N elements into k buckets. If uniform, each bucket has ~N/k elements. Sorting each is O(N/k log N/k), totaling O(N) average. Skewed data degrades to O(N²).',
+        },
+        {
+          id: 'mc5',
+          question: 'What is the main limitation of non-comparison sorts?',
+          options: [
+            'Too slow',
+            'Only work for specific data types (integers in range, fixed digits) with additional constraints',
+            'Always unstable',
+            'Use too much space',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Non-comparison sorts are specialized: counting sort needs known range, radix needs digit representation, bucket needs uniform distribution. Can\'t sort arbitrary objects or use custom comparators.',
+        },
+      ],
+    },
+    {
+      id: 'practical-considerations',
+      title: 'Practical Sorting Strategies',
+      content: `**Hybrid Algorithms: The Best of Both Worlds**
 
 Real-world sorting implementations use **hybrid algorithms** that combine multiple techniques:
 
@@ -621,56 +822,123 @@ if all(0 <= x <= 100 for x in grades):
 4. **Consider alternatives:**
    - "If we only need top-k, a heap would be more efficient"
    - "For integers in small range, counting sort is O(n)"`,
-            quiz: [
-                {
-                    id: 'q1',
-                    question:
-                        'Explain what makes Timsort adaptive and why this is useful for real-world data.',
-                    sampleAnswer:
-                        'Timsort is adaptive because it detects and exploits existing order in the data. Instead of treating all data the same, it looks for "runs" - sequences that are already sorted (either ascending or descending). When it finds these runs, it takes advantage of them rather than breaking them apart and resorting from scratch. For already-sorted data, Timsort runs in O(n) time, just verifying the order. For partially-sorted data, it does less work than algorithms like quicksort which don\'t recognize the existing order. This is incredibly useful in practice because real-world data is often partially sorted - think of adding new records to a database, logging events with timestamps, or updating ranked lists. Timsort handles these cases very efficiently.',
-                    keyPoints: [
-                        'Adaptive: performance improves with existing order',
-                        'Detects and preserves sorted runs',
-                        'O(n) for already-sorted data',
-                        'Real-world data often has patterns and partial order',
-                        'Much faster than non-adaptive algorithms on real data',
-                    ],
-                },
-                {
-                    id: 'q2',
-                    question:
-                        'You need to find the top 10 elements from a million-element array. Would you sort the entire array? Why or why not?',
-                    hint: 'Think about what complexity you actually need.',
-                    sampleAnswer:
-                        'No, I would not sort the entire array. Sorting takes O(n log n) time, which for a million elements is about 20 million operations. Instead, I would use a min-heap of size 10. I iterate through the array once, and for each element, if it is larger than the smallest element in my heap (the heap root), I remove the root and add the new element. This takes O(n log k) time where k is 10, so about 1 million × 3 = 3 million operations. That is almost 7 times faster. The key insight is that I do not need a fully sorted array - I just need the top k elements. Using a heap for partial sorting is way more efficient than full sorting. In Python, heapq.nlargest() does exactly this.',
-                    keyPoints: [
-                        'Full sort: O(n log n) - wasteful for top-k problem',
-                        'Min-heap approach: O(n log k) where k=10',
-                        'For k << n, heap is much faster',
-                        'Don\'t do more work than necessary',
-                        'Use heapq.nlargest() or heapq.nsmallest()',
-                    ],
-                },
-                {
-                    id: 'q3',
-                    question:
-                        'Walk me through when you would choose an unstable sort over a stable sort, given that stability seems strictly better.',
-                    sampleAnswer:
-                        'Stability is not always free - it can come with performance or implementation complexity costs. I would choose an unstable sort when: 1) Stability does not matter for my use case - if I am sorting primitive values like integers where there is no "secondary" ordering to preserve. 2) Performance is critical and the unstable sort is faster - quicksort is generally faster than merge sort due to better cache locality and lower constants, even though it is unstable. 3) Memory is constrained - heapsort is O(1) space and O(n log n) guaranteed time, which is hard to beat if stability is not needed. In practice, if you are sorting simple values and stability is not a requirement, using the faster unstable sort is the right engineering decision. The key is knowing what you need.',
-                    keyPoints: [
-                        'Stability can have performance/space costs',
-                        'Unstable OK when: sorting primitives, no secondary ordering matters',
-                        'Quicksort often faster than merge sort',
-                        'Heapsort: in-place + O(n log n) guarantee',
-                        'Choose based on requirements, not "stability is always better"',
-                    ],
-                },
-            ],
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Explain what makes Timsort adaptive and why this is useful for real-world data.',
+          sampleAnswer:
+            'Timsort is adaptive because it detects and exploits existing order in the data. Instead of treating all data the same, it looks for "runs" - sequences that are already sorted (either ascending or descending). When it finds these runs, it takes advantage of them rather than breaking them apart and resorting from scratch. For already-sorted data, Timsort runs in O(n) time, just verifying the order. For partially-sorted data, it does less work than algorithms like quicksort which don\'t recognize the existing order. This is incredibly useful in practice because real-world data is often partially sorted - think of adding new records to a database, logging events with timestamps, or updating ranked lists. Timsort handles these cases very efficiently.',
+          keyPoints: [
+            'Adaptive: performance improves with existing order',
+            'Detects and preserves sorted runs',
+            'O(n) for already-sorted data',
+            'Real-world data often has patterns and partial order',
+            'Much faster than non-adaptive algorithms on real data',
+          ],
         },
         {
-            id: 'interview-problems',
-            title: 'Common Sorting Interview Patterns',
-            content: `**Pattern 1: Custom Sorting / Comparators**
+          id: 'q2',
+          question:
+            'You need to find the top 10 elements from a million-element array. Would you sort the entire array? Why or why not?',
+          hint: 'Think about what complexity you actually need.',
+          sampleAnswer:
+            'No, I would not sort the entire array. Sorting takes O(n log n) time, which for a million elements is about 20 million operations. Instead, I would use a min-heap of size 10. I iterate through the array once, and for each element, if it is larger than the smallest element in my heap (the heap root), I remove the root and add the new element. This takes O(n log k) time where k is 10, so about 1 million × 3 = 3 million operations. That is almost 7 times faster. The key insight is that I do not need a fully sorted array - I just need the top k elements. Using a heap for partial sorting is way more efficient than full sorting. In Python, heapq.nlargest() does exactly this.',
+          keyPoints: [
+            'Full sort: O(n log n) - wasteful for top-k problem',
+            'Min-heap approach: O(n log k) where k=10',
+            'For k << n, heap is much faster',
+            "Don't do more work than necessary",
+            'Use heapq.nlargest() or heapq.nsmallest()',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'Walk me through when you would choose an unstable sort over a stable sort, given that stability seems strictly better.',
+          sampleAnswer:
+            'Stability is not always free - it can come with performance or implementation complexity costs. I would choose an unstable sort when: 1) Stability does not matter for my use case - if I am sorting primitive values like integers where there is no "secondary" ordering to preserve. 2) Performance is critical and the unstable sort is faster - quicksort is generally faster than merge sort due to better cache locality and lower constants, even though it is unstable. 3) Memory is constrained - heapsort is O(1) space and O(n log n) guaranteed time, which is hard to beat if stability is not needed. In practice, if you are sorting simple values and stability is not a requirement, using the faster unstable sort is the right engineering decision. The key is knowing what you need.',
+          keyPoints: [
+            'Stability can have performance/space costs',
+            'Unstable OK when: sorting primitives, no secondary ordering matters',
+            'Quicksort often faster than merge sort',
+            'Heapsort: in-place + O(n log n) guarantee',
+            'Choose based on requirements, not "stability is always better"',
+          ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What is Timsort and why does Python use it?',
+          options: [
+            'Random algorithm',
+            'Hybrid of merge sort + insertion sort, stable, adaptive O(N) on sorted data, O(N log N) worst case',
+            'Just quicksort',
+            'New algorithm',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Timsort combines merge sort (stable, O(N log N)) with insertion sort (fast on small/sorted data). It\'s adaptive: O(N) on sorted data, O(N log N) worst case. Used in Python and Java for stability and real-world performance.',
+        },
+        {
+          id: 'mc2',
+          question: 'When should you use Introsort over Quicksort?',
+          options: [
+            'Never',
+            'Need O(N log N) worst-case guarantee - switches to heapsort if recursion too deep',
+            'Always',
+            'Random',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Introsort starts with quicksort (fast average case), monitors recursion depth, switches to heapsort if too deep (preventing O(N²) worst case). Used in C++ STL for guaranteed O(N log N).',
+        },
+        {
+          id: 'mc3',
+          question: 'Why do production sorts often switch to insertion sort for small subarrays?',
+          options: [
+            'Random choice',
+            'Insertion sort has lower overhead, runs faster than quicksort/mergesort on small N (<10-20)',
+            'Always better',
+            'Stability',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'For small N, insertion sort\'s simplicity (no recursion, minimal operations) beats quicksort/mergesort\'s overhead. Hybrid algorithms use quick/merge for large N, insertion for small subarrays.',
+        },
+        {
+          id: 'mc4',
+          question: 'What should you consider when choosing a sorting algorithm?',
+          options: [
+            'Only speed',
+            'Data size, stability requirement, memory constraints, data distribution, worst-case guarantees',
+            'Random',
+            'Nothing',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Consider: 1) Size (small→insertion, large→quick/merge), 2) Stability needed? (merge), 3) Memory limited? (heap/quick), 4) Nearly sorted? (insertion/timsort), 5) Worst-case matters? (heap/introsort).',
+        },
+        {
+          id: 'mc5',
+          question: 'What makes a sorting algorithm "adaptive"?',
+          options: [
+            'Uses AI',
+            'Performance improves on partially sorted data (e.g., insertion O(N) on sorted, O(N²) on random)',
+            'Always fast',
+            'Random',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Adaptive algorithms exploit existing order. Insertion sort: O(N) on sorted (no shifts), O(N²) on random (many shifts). Timsort detects runs. Non-adaptive (quicksort) takes same time regardless.',
+        },
+      ],
+    },
+    {
+      id: 'interview-problems',
+      title: 'Common Sorting Interview Patterns',
+      content: `**Pattern 1: Custom Sorting / Comparators**
 
 Often you need to sort by custom criteria:
 
@@ -820,72 +1088,138 @@ def merge_intervals(intervals):
 | Top-k elements | Heap | O(n log k) |
 | Small integer range | Counting Sort | O(n + k) |
 | Fixed-length keys | Radix Sort | O(d × n) |`,
-            quiz: [
-                {
-                    id: 'q1',
-                    question:
-                        'When would sorting actually make a problem easier to solve? Give me a concrete example.',
-                    sampleAnswer:
-                        'Sorting can turn an O(n²) problem into O(n log n) + O(n) = O(n log n). A great example is finding duplicate numbers. Without sorting, you need nested loops to compare every pair - O(n²). But if you sort first, duplicates end up adjacent. Then you just scan once checking if arr[i] == arr[i+1] - that is O(n). Total is O(n log n) for sort plus O(n) for scan, which is O(n log n) overall - much better than O(n²). Another example is the two-sum problem on sorted arrays - you can use two pointers to find a pair in O(n) after sorting. The pattern is: if you can solve it in linear time on sorted data, and sorting costs O(n log n), that is often better than the naive approach.',
-                    keyPoints: [
-                        'Sorting can reduce O(n²) to O(n log n)',
-                        'Example: find duplicates via adjacent elements',
-                        'Sorted data enables two-pointer technique',
-                        'Pattern: O(n log n) sort + O(n) scan < O(n²) naive',
-                    ],
-                },
-                {
-                    id: 'q2',
-                    question:
-                        'Explain the quick select algorithm. How is it related to quicksort, and what is its advantage?',
-                    hint: 'Think about finding the kth largest element.',
-                    sampleAnswer:
-                        'Quick select finds the kth largest (or smallest) element without fully sorting the array. It is based on quicksort\'s partition step. You partition the array around a pivot, which puts the pivot in its final sorted position. If the pivot is at position k, you found the kth element. If k is less than pivot position, recurse on the left partition. If k is greater, recurse on the right partition. Unlike quicksort which recurses on both sides, quick select only recurses on one side. This gives O(n) average time instead of O(n log n), because n + n/2 + n/4 + ... converges to 2n = O(n). The advantage over sorting is that you get O(n) average time versus O(n log n) - significant for large arrays when you only need one element.',
-                    keyPoints: [
-                        'Based on quicksort partition step',
-                        'Only recurse on one partition (where k is)',
-                        'Average case: O(n) vs quicksort\'s O(n log n)',
-                        'Used for finding kth largest/smallest element',
-                        'Much faster than full sort when you need one element',
-                    ],
-                },
-                {
-                    id: 'q3',
-                    question:
-                        'You need to merge k sorted linked lists. Walk through your approach and complexity.',
-                    sampleAnswer:
-                        'The optimal approach is to use a min heap. I would put the first node from each of the k lists into a min heap. Then repeatedly: 1) Extract the minimum from the heap (smallest overall), 2) Add it to the result list, 3) If that node had a next node, add the next node to the heap. The heap always contains at most k elements. Each of the n total nodes goes into the heap once and comes out once, and each heap operation is O(log k), giving O(n log k) total time. Space is O(k) for the heap. This is better than merging lists pairwise which would be O(n × k). The key insight is that I only need to compare the k current candidate nodes, not all n nodes, so a heap of size k is perfect.',
-                    keyPoints: [
-                        'Use min heap of size k',
-                        'Heap contains first unmerged node from each list',
-                        'Extract min, add to result, add its next to heap',
-                        'Time: O(n log k) - each of n nodes does O(log k) heap ops',
-                        'Space: O(k) for heap',
-                        'Better than pairwise merge: O(n log k) vs O(n × k)',
-                    ],
-                },
-            ],
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'When would sorting actually make a problem easier to solve? Give me a concrete example.',
+          sampleAnswer:
+            'Sorting can turn an O(n²) problem into O(n log n) + O(n) = O(n log n). A great example is finding duplicate numbers. Without sorting, you need nested loops to compare every pair - O(n²). But if you sort first, duplicates end up adjacent. Then you just scan once checking if arr[i] == arr[i+1] - that is O(n). Total is O(n log n) for sort plus O(n) for scan, which is O(n log n) overall - much better than O(n²). Another example is the two-sum problem on sorted arrays - you can use two pointers to find a pair in O(n) after sorting. The pattern is: if you can solve it in linear time on sorted data, and sorting costs O(n log n), that is often better than the naive approach.',
+          keyPoints: [
+            'Sorting can reduce O(n²) to O(n log n)',
+            'Example: find duplicates via adjacent elements',
+            'Sorted data enables two-pointer technique',
+            'Pattern: O(n log n) sort + O(n) scan < O(n²) naive',
+          ],
         },
-    ],
-    keyTakeaways: [
-        'Comparison sorts are at least O(n log n) average case - fundamental lower bound',
-        'Simple sorts (bubble, selection, insertion) are O(n²) but useful for small data',
-        'Efficient sorts (merge, quick, heap) are O(n log n) with different tradeoffs',
-        'Non-comparison sorts (counting, radix, bucket) can achieve O(n) for specific data types',
-        'Stability matters when sorting by multiple criteria or preserving order',
-        'Real-world implementations use hybrid algorithms like Timsort and Introsort',
-        'Quick sort is fastest in practice but has O(n²) worst case; merge sort guarantees O(n log n)',
-        'For top-k problems, use heaps (O(n log k)) instead of full sorting (O(n log n))',
-    ],
-    timeComplexity: 'Varies by algorithm: O(n²) to O(n log n) to O(n)',
-    spaceComplexity: 'Varies by algorithm: O(1) to O(n)',
-    relatedProblems: [
-        'merge-sorted-arrays',
-        'sort-array-parity',
-        'insertion-sort-list',
-        'sort-list',
-        'wiggle-sort',
-        'count-smaller',
-    ],
+        {
+          id: 'q2',
+          question:
+            'Explain the quick select algorithm. How is it related to quicksort, and what is its advantage?',
+          hint: 'Think about finding the kth largest element.',
+          sampleAnswer:
+            "Quick select finds the kth largest (or smallest) element without fully sorting the array. It is based on quicksort's partition step. You partition the array around a pivot, which puts the pivot in its final sorted position. If the pivot is at position k, you found the kth element. If k is less than pivot position, recurse on the left partition. If k is greater, recurse on the right partition. Unlike quicksort which recurses on both sides, quick select only recurses on one side. This gives O(n) average time instead of O(n log n), because n + n/2 + n/4 + ... converges to 2n = O(n). The advantage over sorting is that you get O(n) average time versus O(n log n) - significant for large arrays when you only need one element.",
+          keyPoints: [
+            'Based on quicksort partition step',
+            'Only recurse on one partition (where k is)',
+            "Average case: O(n) vs quicksort's O(n log n)",
+            'Used for finding kth largest/smallest element',
+            'Much faster than full sort when you need one element',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'You need to merge k sorted linked lists. Walk through your approach and complexity.',
+          sampleAnswer:
+            'The optimal approach is to use a min heap. I would put the first node from each of the k lists into a min heap. Then repeatedly: 1) Extract the minimum from the heap (smallest overall), 2) Add it to the result list, 3) If that node had a next node, add the next node to the heap. The heap always contains at most k elements. Each of the n total nodes goes into the heap once and comes out once, and each heap operation is O(log k), giving O(n log k) total time. Space is O(k) for the heap. This is better than merging lists pairwise which would be O(n × k). The key insight is that I only need to compare the k current candidate nodes, not all n nodes, so a heap of size k is perfect.',
+          keyPoints: [
+            'Use min heap of size k',
+            'Heap contains first unmerged node from each list',
+            'Extract min, add to result, add its next to heap',
+            'Time: O(n log k) - each of n nodes does O(log k) heap ops',
+            'Space: O(k) for heap',
+            'Better than pairwise merge: O(n log k) vs O(n × k)',
+          ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What is a common sorting interview pattern?',
+          options: [
+            'Always use quicksort',
+            'Custom comparators, kth element, merge operations, frequency sorting, interval sorting',
+            'Random',
+            'Never sort',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Common patterns: 1) Custom comparators (sort by multiple criteria), 2) Kth largest (quickselect O(N)), 3) Merge k sorted arrays (heap), 4) Frequency sort (count→sort→build), 5) Interval sorting.',
+        },
+        {
+          id: 'mc2',
+          question: 'What is Quickselect and when do you use it?',
+          options: [
+            'Sorting algorithm',
+            'Finding kth largest/smallest in O(N) average by partitioning without fully sorting',
+            'Binary search',
+            'Random algorithm',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Quickselect finds kth element in O(N) average by partitioning like quicksort but only recursing on one side. Beats sorting O(N log N) when you only need kth element, not full sorted array.',
+        },
+        {
+          id: 'mc3',
+          question: 'How do you merge k sorted arrays efficiently?',
+          options: [
+            'Merge one by one',
+            'Min heap of k elements, repeatedly extract min and add next from same array - O(N log k)',
+            'Sort everything',
+            'Cannot do efficiently',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Use min heap with k elements (one from each array). Extract min (O(log k)), add next from that array. Process all N elements with O(log k) operations = O(N log k). Better than merging pairs O(N k).',
+        },
+        {
+          id: 'mc4',
+          question: 'What is the typical pattern for frequency-based sorting?',
+          options: [
+            'Just sort',
+            'Count frequencies (hash map) → sort by frequency → build result',
+            'Random',
+            'Linear scan',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Frequency sort pattern: 1) Count occurrences with hash map O(N), 2) Sort by frequency O(unique log unique), 3) Build output array O(N). Total O(N log N) worst case.',
+        },
+        {
+          id: 'mc5',
+          question: 'What should you clarify in a sorting interview?',
+          options: [
+            'Nothing',
+            'Input size, stability needed, memory constraints, data distribution, in-place requirement',
+            'Just code fast',
+            'Random',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Clarify: 1) Size (affects algorithm choice), 2) Stability (merge vs quick), 3) Memory limits (in-place?), 4) Data properties (nearly sorted? integers in range?), 5) Custom comparator? These determine optimal approach.',
+        },
+      ],
+    },
+  ],
+  keyTakeaways: [
+    'Comparison sorts are at least O(n log n) average case - fundamental lower bound',
+    'Simple sorts (bubble, selection, insertion) are O(n²) but useful for small data',
+    'Efficient sorts (merge, quick, heap) are O(n log n) with different tradeoffs',
+    'Non-comparison sorts (counting, radix, bucket) can achieve O(n) for specific data types',
+    'Stability matters when sorting by multiple criteria or preserving order',
+    'Real-world implementations use hybrid algorithms like Timsort and Introsort',
+    'Quick sort is fastest in practice but has O(n²) worst case; merge sort guarantees O(n log n)',
+    'For top-k problems, use heaps (O(n log k)) instead of full sorting (O(n log n))',
+  ],
+  timeComplexity: 'Varies by algorithm: O(n²) to O(n log n) to O(n)',
+  spaceComplexity: 'Varies by algorithm: O(1) to O(n)',
+  relatedProblems: [
+    'merge-sorted-arrays',
+    'sort-array-parity',
+    'insertion-sort-list',
+    'sort-list',
+    'wiggle-sort',
+    'count-smaller',
+  ],
 };
-

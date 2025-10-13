@@ -86,6 +86,73 @@ Instead of recalculating results from scratch for each subarray, we maintain a "
           ],
         },
       ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What is the primary advantage of the sliding window technique?',
+          options: [
+            'It uses less memory',
+            'It reduces time complexity from O(n²) or O(n×k) to O(n)',
+            'It works on unsorted data',
+            'It uses recursion',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'The sliding window technique reduces time complexity by avoiding recalculation of overlapping subarrays. Instead of computing each window from scratch, it incrementally updates by adding/removing elements.',
+        },
+        {
+          id: 'mc2',
+          question: 'What are the two main types of sliding window patterns?',
+          options: [
+            'Fast and slow',
+            'Fixed-size and variable-size',
+            'Forward and backward',
+            'Recursive and iterative',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'The two main patterns are fixed-size (window size is constant k) and variable-size (window size adjusts based on conditions to optimize for longest/shortest sequences).',
+        },
+        {
+          id: 'mc3',
+          question: 'When should you consider using a sliding window?',
+          options: [
+            'When sorting an array',
+            'When finding contiguous subarrays/substrings with specific properties',
+            'When implementing binary search',
+            'When building a tree structure',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Sliding window is ideal for problems involving contiguous sequences with keywords like "longest", "shortest", "maximum", or "minimum" with constraints on consecutive elements.',
+        },
+        {
+          id: 'mc4',
+          question: 'How many times is each element processed in a sliding window algorithm?',
+          options: [
+            'Once',
+            'At most twice (when entering and leaving the window)',
+            'n times',
+            'log n times',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Each element is processed at most twice: once when the right pointer includes it in the window, and once when the left pointer removes it. This is why sliding window achieves O(n) time.',
+        },
+        {
+          id: 'mc5',
+          question: 'What data structure is commonly used with variable-size sliding windows?',
+          options: [
+            'Stack',
+            'Queue',
+            'Hash map or hash set to track window state',
+            'Binary tree',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'Variable-size windows often use hash maps or sets to track window state, such as character frequencies or checking for duplicates, enabling O(1) condition checks.',
+        },
+      ],
     },
     {
       id: 'patterns',
@@ -366,6 +433,73 @@ def min_window_substring(s: str, t: str) -> str:
           ],
         },
       ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'In a fixed-size sliding window of size k, how do you slide the window?',
+          options: [
+            'Recalculate the entire window sum',
+            'Add the new element on the right and subtract the old element on the left',
+            'Only move the right pointer',
+            'Sort the window elements',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'To slide a fixed-size window, add the new element entering on the right and subtract the element leaving on the left. This maintains the window size and updates in O(1) time.',
+        },
+        {
+          id: 'mc2',
+          question: 'For variable-size windows, when do you expand vs shrink the window?',
+          options: [
+            'Always expand first, then shrink',
+            'Expand when condition not met, shrink when condition violated',
+            'Random based on problem',
+            'Expand and shrink simultaneously',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Expand the window (move right pointer) to include more elements when searching for a valid window. Shrink (move left pointer) when the window violates constraints, trying to minimize while maintaining validity.',
+        },
+        {
+          id: 'mc3',
+          question: 'What is the longest substring without repeating characters problem pattern?',
+          options: [
+            'Fixed-size window',
+            'Variable-size window maximizing length',
+            'Two pointers opposite direction',
+            'Binary search',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'This is a variable-size window pattern where you maximize the window length. Expand to add characters, shrink when you encounter a duplicate, tracking the maximum valid window size.',
+        },
+        {
+          id: 'mc4',
+          question: 'In minimum window substring, what auxiliary data structure is typically used?',
+          options: [
+            'Stack',
+            'Queue',
+            'Hash map to count character frequencies',
+            'Binary tree',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'Minimum window substring uses hash maps: one for target character counts and one for current window counts. This enables O(1) updates and validity checks.',
+        },
+        {
+          id: 'mc5',
+          question: 'What is the key difference between longest and shortest window problems?',
+          options: [
+            'Longest expands more, shortest shrinks more',
+            'Longest maximizes valid windows, shortest minimizes valid windows',
+            'They are the same',
+            'Longest is easier',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Longest window problems maximize the size of valid windows by expanding when possible and recording maximum. Shortest window problems minimize by shrinking valid windows as much as possible while maintaining validity.',
+        },
+      ],
     },
     {
       id: 'complexity',
@@ -465,6 +599,63 @@ for right in range(len(arr)):  # N iterations
             'Correct: add, update, check, shrink',
             'Maintains invariant: each position processed once',
           ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What is the time complexity of a fixed-size sliding window algorithm?',
+          options: ['O(k)', 'O(n)', 'O(n*k)', 'O(n²)'],
+          correctAnswer: 1,
+          explanation:
+            'Fixed-size sliding window is O(n) because after computing the initial window in O(k), each of the remaining n-k windows is updated in O(1) time, giving O(k + n - k) = O(n).',
+        },
+        {
+          id: 'mc2',
+          question: 'Why is variable-size sliding window O(n) despite having a nested while loop?',
+          options: [
+            'The while loop never executes',
+            'The left pointer moves at most n times total across all iterations',
+            'It uses memoization',
+            'It is actually O(n²)',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Although there\'s a nested while loop, the left pointer can only move from 0 to n-1 throughout the entire algorithm. So the inner loop executes O(n) times total, not per outer iteration.',
+        },
+        {
+          id: 'mc3',
+          question: 'What is the space complexity when using a hash set to track characters in a window?',
+          options: ['O(1)', 'O(k) where k is window size or character set size', 'O(n)', 'O(n²)'],
+          correctAnswer: 1,
+          explanation:
+            'Space is O(k) where k is the size of the window or character set. For lowercase English letters, k ≤ 26, so it\'s O(26) = O(1) constant space.',
+        },
+        {
+          id: 'mc4',
+          question: 'How does sliding window improve upon brute force for maximum sum of k elements?',
+          options: [
+            'From O(n²) to O(n)',
+            'From O(n*k) to O(n)',
+            'From O(n) to O(log n)',
+            'No improvement',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Brute force recalculates each k-element window sum in O(k) time for O(n) windows, giving O(n*k). Sliding window reuses the previous sum and updates in O(1), achieving O(n).',
+        },
+        {
+          id: 'mc5',
+          question: 'For longest substring without repeating characters, what is the brute force complexity vs sliding window?',
+          options: [
+            'O(n²) vs O(n)',
+            'O(n³) vs O(n)',
+            'O(n) vs O(log n)',
+            'Same complexity',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Brute force checks all O(n²) substrings and verifies each in O(n) time for duplicates, giving O(n³). Sliding window with hash set does a single pass in O(n).',
         },
       ],
     },
@@ -649,6 +840,73 @@ def sliding_window_set(arr: List[int], k: int) -> int:
           ],
         },
       ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'In a fixed-size window template, when do you start sliding the window?',
+          options: [
+            'From index 0',
+            'From index k (after building initial window)',
+            'From index k-1',
+            'After checking all elements',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'You start sliding from index k because indices 0 to k-1 were used to build the initial window. From index k onward, each new element entering triggers a slide.',
+        },
+        {
+          id: 'mc2',
+          question: 'What is the difference between the shrinkable and non-shrinkable window templates?',
+          options: [
+            'One uses while to shrink, the other uses if to move left once',
+            'One is faster than the other',
+            'One works on strings, the other on arrays',
+            'They are the same',
+          ],
+          correctAnswer: 0,
+          explanation:
+            'Shrinkable uses "while" to fully restore validity by shrinking multiple times if needed. Non-shrinkable uses "if" to move left pointer once, maintaining maximum window size and just sliding forward.',
+        },
+        {
+          id: 'mc3',
+          question: 'In the variable-size shrinkable template, where do you update the answer?',
+          options: [
+            'Before adding the right element',
+            'Inside the while loop',
+            'After the while loop, using the current valid window',
+            'At the end of the algorithm',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'You update the answer after the while loop because that\'s when you have a valid window. The while loop restores validity, then you check if this valid window is better than your current answer.',
+        },
+        {
+          id: 'mc4',
+          question: 'When using a hash set to track unique elements in a window, what operation is performed when shrinking?',
+          options: [
+            'Add elements',
+            'Sort the set',
+            'Remove arr[left] from set, then increment left',
+            'Clear the entire set',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'When shrinking, you remove the element at the left pointer from the set (to remove it from the window), then increment the left pointer to move the window boundary.',
+        },
+        {
+          id: 'mc5',
+          question: 'What is a common pattern for minimum window problems vs maximum window problems?',
+          options: [
+            'They use the same template',
+            'Minimum expands until valid then shrinks to minimize; maximum expands while valid and tracks maximum',
+            'Minimum is always harder',
+            'Maximum problems don\'t use sliding window',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Minimum window problems expand until finding a valid window, then shrink as much as possible while maintaining validity to minimize. Maximum window problems expand while remaining valid and track the maximum size achieved.',
+        },
+      ],
     },
     {
       id: 'advanced',
@@ -825,6 +1083,73 @@ def find_anagram_indices(s: str, p: str) -> List[int]:
           ],
         },
       ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What data structure is used for sliding window maximum with O(n) time?',
+          options: [
+            'Stack',
+            'Monotonic deque',
+            'Hash map',
+            'Binary tree',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'A monotonic deque maintains elements in decreasing order of values, allowing O(1) access to the maximum. Each element is added and removed at most once, achieving O(n) total time.',
+        },
+        {
+          id: 'mc2',
+          question: 'For "at most k distinct characters", what auxiliary structure do you typically use?',
+          options: [
+            'Array',
+            'Hash map to count character frequencies',
+            'Binary search tree',
+            'Linked list',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'A hash map tracks character frequencies in the current window. When the map size exceeds k, you have too many distinct characters and need to shrink the window.',
+        },
+        {
+          id: 'mc3',
+          question: 'What is the prefix sum technique and how does it relate to sliding windows?',
+          options: [
+            'They are unrelated',
+            'Prefix sum can solve subarray sum problems that sliding window cannot handle (negative numbers)',
+            'Prefix sum is slower than sliding window',
+            'They always give the same solution',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Prefix sum with hash map handles subarray sum problems with negative numbers, which pure sliding window cannot. Sliding window requires monotonic behavior (window sum increases/decreases predictably).',
+        },
+        {
+          id: 'mc4',
+          question: 'In anagram detection problems, how do you verify if two character frequency maps are equal?',
+          options: [
+            'Compare each character count',
+            'Use Counter equality (window_count == p_count)',
+            'Manually iterate',
+            'Sort both strings',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Python\'s Counter objects can be directly compared for equality, checking if all character frequencies match. This is cleaner and more efficient than manual iteration.',
+        },
+        {
+          id: 'mc5',
+          question: 'What makes a problem suitable for sliding window vs other techniques?',
+          options: [
+            'Any array problem',
+            'Problems involving contiguous sequences with local properties',
+            'Only sorted array problems',
+            'Problems requiring global information',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Sliding window works for contiguous sequences where the window state can be incrementally updated. Problems requiring non-local or global information typically need other techniques.',
+        },
+      ],
     },
     {
       id: 'common-pitfalls',
@@ -959,6 +1284,73 @@ while window_is_VALID:  # Keep shrinking while still valid
             'Minimum: smallest valid window',
             'Condition and update placement must match goal',
           ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'Why is window size calculated as right - left + 1 instead of right - left?',
+          options: [
+            'It is a convention',
+            'Because indices are inclusive on both ends',
+            'To make it more complicated',
+            'It doesn\'t matter',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'When both left and right indices are inclusive, the number of elements is right - left + 1. For example, from index 2 to 5 inclusive contains elements at 2, 3, 4, 5 which is 4 elements, not 3.',
+        },
+        {
+          id: 'mc2',
+          question: 'What is a common mistake when cleaning up hash maps in sliding windows?',
+          options: [
+            'Adding too many elements',
+            'Not deleting entries with 0 count, affecting size checks',
+            'Using the wrong data structure',
+            'Clearing the entire map',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'After decrementing a count to 0, you must delete the entry from the map. Otherwise, len(freq) includes keys with 0 count, giving incorrect distinct element counts.',
+        },
+        {
+          id: 'mc3',
+          question: 'For a fixed-size window, what is a common mistake in the implementation?',
+          options: [
+            'Starting from index 0 and recalculating each window',
+            'Using too much memory',
+            'Not checking the input',
+            'Using the wrong loop',
+          ],
+          correctAnswer: 0,
+          explanation:
+            'A common mistake is starting from index 0 and recalculating the entire window sum each time (O(n*k)). The correct approach is to calculate the first window once, then slide from index k, updating in O(1).',
+        },
+        {
+          id: 'mc4',
+          question: 'What is the difference in where you update the answer for maximum vs minimum window problems?',
+          options: [
+            'No difference',
+            'Maximum updates outside while loop, minimum updates inside while loop',
+            'Maximum uses if, minimum uses while',
+            'They both update at the end',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Maximum window problems update answer outside the while loop (after restoring validity). Minimum window problems update inside the while loop (while shrinking a valid window to find the smallest).',
+        },
+        {
+          id: 'mc5',
+          question: 'Why should you not manually increment the right pointer in a for loop?',
+          options: [
+            'It causes syntax errors',
+            'The for loop already increments it, manual increment causes skipping elements',
+            'It is too slow',
+            'It uses too much memory',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'The for loop automatically increments the right pointer. If you manually increment it again (right += 1), you skip elements and break the algorithm logic.',
         },
       ],
     },
@@ -1114,6 +1506,73 @@ What makes a window valid or invalid?
             'Do not manually increment right in for loop',
             'Use templates and test edge cases',
           ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What keywords in a problem statement strongly suggest using sliding window?',
+          options: [
+            'Recursive, tree, graph',
+            'Contiguous, subarray, substring, consecutive',
+            'Binary, sorted, search',
+            'Hash, frequency, count',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Keywords like "contiguous", "subarray", "substring", and "consecutive" strongly indicate sliding window is applicable, as they describe sequential elements that form a window.',
+        },
+        {
+          id: 'mc2',
+          question: 'When explaining a sliding window solution, what should you communicate first?',
+          options: [
+            'The code implementation',
+            'The complexity analysis',
+            'Problem recognition and chosen window type (fixed vs variable)',
+            'Test cases',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'Start by recognizing the problem pattern and explaining which window type you\'ll use and why. This shows your thought process and sets up the solution clearly.',
+        },
+        {
+          id: 'mc3',
+          question: 'What is a good practice strategy for mastering sliding window?',
+          options: [
+            'Only practice hard problems',
+            'Start with fixed-size, then variable maximum, then variable minimum, then advanced',
+            'Practice randomly',
+            'Memorize all solutions',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Progress from simpler fixed-size windows to variable-size (maximum first, then minimum), and finally advanced techniques. This builds understanding incrementally.',
+        },
+        {
+          id: 'mc4',
+          question: 'How long should a medium sliding window problem take in an interview?',
+          options: [
+            '5-10 minutes',
+            '15-25 minutes',
+            '30-40 minutes',
+            '45-60 minutes',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Medium sliding window problems typically take 15-25 minutes including explanation, coding, and testing. This accounts for clear communication and verification.',
+        },
+        {
+          id: 'mc5',
+          question: 'What is the key insight that makes sliding window O(n) instead of O(n²)?',
+          options: [
+            'Using better data structures',
+            'Each element enters and leaves the window at most once',
+            'Parallel processing',
+            'Using recursion',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'The key insight is that each element is processed at most twice: once when the right pointer includes it, once when the left pointer removes it. This gives O(n) total operations, not O(n²).',
         },
       ],
     },

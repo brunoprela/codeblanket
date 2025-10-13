@@ -141,6 +141,9 @@ def level_order_flat(root: Optional[TreeNode]) -> List[int]:
     return result`,
     timeComplexity: 'O(N)',
     spaceComplexity: 'O(W) where W is maximum width',
+    
+    leetcodeUrl: 'https://leetcode.com/problems/binary-tree-level-order-traversal/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=6ZnyEApgFYg',
     order: 1,
     topic: 'Breadth-First Search (BFS)',
     leetcodeUrl:
@@ -334,6 +337,9 @@ def shortest_path_inplace(grid: List[List[int]]) -> int:
     return -1`,
     timeComplexity: 'O(N²)',
     spaceComplexity: 'O(N²) for visited set and queue',
+    
+    leetcodeUrl: 'https://leetcode.com/problems/shortest-path-in-binary-matrix/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=caXJJOMLyHk',
     order: 2,
     topic: 'Breadth-First Search (BFS)',
     leetcodeUrl:
@@ -533,6 +539,9 @@ def oranges_rotting_alt(grid: List[List[int]]) -> int:
     return max_minutes if fresh_count == 0 else -1`,
     timeComplexity: 'O(M × N)',
     spaceComplexity: 'O(M × N)',
+    
+    leetcodeUrl: 'https://leetcode.com/problems/rotting-oranges/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=y704fEOx0s0',
     order: 3,
     topic: 'Breadth-First Search (BFS)',
     leetcodeUrl: 'https://leetcode.com/problems/rotting-oranges/',

@@ -150,6 +150,9 @@ def invert_tree_iterative(root: Optional[TreeNode]) -> Optional[TreeNode]:
     return root`,
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(h) where h is the height of the tree',
+    
+    leetcodeUrl: 'https://leetcode.com/problems/invert-binary-tree/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=OnSn2XEQ4MY',
     order: 1,
     topic: 'Trees',
     leetcodeUrl: 'https://leetcode.com/problems/invert-binary-tree/',
@@ -326,6 +329,9 @@ def is_valid_bst_iterative(root: Optional[TreeNode]) -> bool:
     return True`,
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(h) where h is the height of the tree',
+    
+    leetcodeUrl: 'https://leetcode.com/problems/validate-binary-search-tree/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=s6ATEkipzow',
     order: 2,
     topic: 'Trees',
     leetcodeUrl: 'https://leetcode.com/problems/validate-binary-search-tree/',
@@ -503,6 +509,9 @@ def max_path_sum_nonlocal(root: Optional[TreeNode]) -> int:
     return max_sum`,
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(h) where h is the height of the tree',
+    
+    leetcodeUrl: 'https://leetcode.com/problems/binary-tree-maximum-path-sum/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=Hr5cWUld4vU',
     order: 3,
     topic: 'Trees',
     leetcodeUrl: 'https://leetcode.com/problems/binary-tree-maximum-path-sum/',
@@ -792,75 +801,6 @@ def lowest_common_ancestor(root: TreeNode, p: TreeNode, q: TreeNode) -> TreeNode
     leetcodeUrl:
       'https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/',
     youtubeUrl: 'https://www.youtube.com/watch?v=gs2LMfuOR9k',
-  },
-
-  // MEDIUM - Binary Tree Level Order Traversal
-  {
-    id: 'binary-tree-level-order-traversal',
-    title: 'Binary Tree Level Order Traversal',
-    difficulty: 'Medium',
-    topic: 'Trees',
-    description: `Given the \`root\` of a binary tree, return the level order traversal of its nodes' values. (i.e., from left to right, level by level).`,
-    examples: [
-      {
-        input: 'root = [3,9,20,null,null,15,7]',
-        output: '[[3],[9,20],[15,7]]',
-      },
-      {
-        input: 'root = [1]',
-        output: '[[1]]',
-      },
-      {
-        input: 'root = []',
-        output: '[]',
-      },
-    ],
-    constraints: [
-      'The number of nodes in the tree is in the range [0, 2000]',
-      '-1000 <= Node.val <= 1000',
-    ],
-    hints: ['Use BFS with a queue', 'Track level size to group nodes by level'],
-    starterCode: `from typing import Optional, List
-from collections import deque
-
-class TreeNode:
-    def __init__(self, val=0, left=None, right=None):
-        self.val = val
-        self.left = left
-        self.right = right
-
-def level_order(root: Optional[TreeNode]) -> List[List[int]]:
-    """
-    Level order traversal of binary tree.
-    
-    Args:
-        root: Root of tree
-        
-    Returns:
-        List of levels, each level is a list of values
-    """
-    # Write your code here
-    pass
-`,
-    testCases: [
-      {
-        input: [[3, 9, 20, null, null, 15, 7]],
-        expected: [[3], [9, 20], [15, 7]],
-      },
-      {
-        input: [[1]],
-        expected: [[1]],
-      },
-      {
-        input: [[]],
-        expected: [],
-      },
-    ],
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(n)',
-    leetcodeUrl:
-      'https://leetcode.com/problems/binary-tree-level-order-traversal/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=6ZnyEApgFYg',
   },
 
   // MEDIUM - Construct Binary Tree from Inorder and Preorder

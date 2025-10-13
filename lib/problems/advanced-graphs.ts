@@ -149,6 +149,9 @@ def network_delay_time_bf(times: List[List[int]], n: int, k: int) -> int:
     return max_dist if max_dist != float('inf') else -1`,
     timeComplexity: 'O((E + V) log V) with Dijkstra',
     spaceComplexity: 'O(E + V)',
+    
+    leetcodeUrl: 'https://leetcode.com/problems/network-delay-time/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=EaphyqKU4PQ',
     order: 1,
     topic: 'Advanced Graphs',
     leetcodeUrl: 'https://leetcode.com/problems/network-delay-time/',
@@ -356,6 +359,9 @@ def find_cheapest_price_dijkstra(n: int, flights: List[List[int]], src: int, dst
     return -1`,
     timeComplexity: 'O(k * E) with Bellman-Ford',
     spaceComplexity: 'O(n)',
+    
+    leetcodeUrl: 'https://leetcode.com/problems/cheapest-flights-within-k-stops/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=5eIK3zUdYmE',
     order: 2,
     topic: 'Advanced Graphs',
     leetcodeUrl:
@@ -541,6 +547,9 @@ def minimum_effort_path_binary_search(heights: List[List[int]]) -> int:
     return left`,
     timeComplexity: 'O(m*n*log(m*n)) with Dijkstra',
     spaceComplexity: 'O(m*n)',
+    
+    leetcodeUrl: 'https://leetcode.com/problems/path-with-minimum-effort/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=XQlxCCx2vI4',
     order: 3,
     topic: 'Advanced Graphs',
     leetcodeUrl: 'https://leetcode.com/problems/path-with-minimum-effort/',

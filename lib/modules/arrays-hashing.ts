@@ -72,6 +72,66 @@ Many O(n²) brute force solutions can be optimized to O(n) using hash tables to 
           ],
         },
       ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What is the primary advantage of hash tables over arrays?',
+          options: [
+            'Hash tables use less memory',
+            'Hash tables maintain sorted order',
+            'Hash tables provide O(1) average-case lookup',
+            'Hash tables can only store unique values',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'Hash tables provide O(1) average-case lookup, insert, and delete operations, compared to O(n) for unsorted arrays. This makes them ideal for problems requiring frequent lookups or existence checks.',
+        },
+        {
+          id: 'mc2',
+          question:
+            'In the two sum problem, why does using a hash table reduce time complexity from O(n²) to O(n)?',
+          options: [
+            'Hash tables sort the data automatically',
+            'Hash tables eliminate the need for a nested loop by providing O(1) lookups',
+            'Hash tables reduce the input size',
+            'Hash tables only store unique elements',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'The brute force approach uses nested loops to check all pairs (O(n²)). With a hash table, we can check if the complement exists in O(1) time, allowing us to solve the problem in a single pass through the array.',
+        },
+        {
+          id: 'mc3',
+          question:
+            'Which data structure should you use for counting element frequencies?',
+          options: [
+            'List',
+            'Set',
+            'Counter or Dictionary',
+            'Tuple',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'Counter (from collections) or a regular dictionary is perfect for counting frequencies. Sets only track existence, lists require O(n) search, and tuples are immutable.',
+        },
+        {
+          id: 'mc4',
+          question: 'What percentage of interview problems use arrays or hash tables?',
+          options: ['10-20%', '20-30%', '30-40%', '50-60%'],
+          correctAnswer: 2,
+          explanation:
+            'Arrays and hash tables appear in approximately 30-40% of all coding interview problems, making them the most fundamental data structures to master.',
+        },
+        {
+          id: 'mc5',
+          question:
+            'What is the space complexity when using a hash table to solve the two sum problem?',
+          options: ['O(1)', 'O(log n)', 'O(n)', 'O(n²)'],
+          correctAnswer: 2,
+          explanation:
+            'We store up to n elements in the hash table in the worst case (when no pair is found or the pair is at the end), resulting in O(n) space complexity.',
+        },
+      ],
     },
     {
       id: 'arrays',
@@ -178,6 +238,65 @@ def max_subarray_sum(nums: List[int]) -> int:
             'Track maximum as we go',
             'Incremental update vs recalculation',
           ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What is the time complexity of accessing an element by index in an array?',
+          options: ['O(1)', 'O(log n)', 'O(n)', 'O(n log n)'],
+          correctAnswer: 0,
+          explanation:
+            'Array access by index is O(1) constant time because the memory address can be calculated directly using: base_address + (index × element_size).',
+        },
+        {
+          id: 'mc2',
+          question: 'What does Kadane\'s algorithm solve?',
+          options: [
+            'Maximum element in array',
+            'Maximum subarray sum',
+            'Minimum subarray sum',
+            'Array sorting',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Kadane\'s algorithm finds the maximum sum of any contiguous subarray in O(n) time by maintaining the maximum sum ending at each position.',
+        },
+        {
+          id: 'mc3',
+          question: 'What is the time complexity of building a prefix sum array?',
+          options: ['O(1)', 'O(log n)', 'O(n)', 'O(n²)'],
+          correctAnswer: 2,
+          explanation:
+            'Building a prefix sum array requires iterating through the array once to compute cumulative sums, which takes O(n) time. Once built, range queries can be answered in O(1).',
+        },
+        {
+          id: 'mc4',
+          question:
+            'Why is inserting an element at the beginning of an array O(n) instead of O(1)?',
+          options: [
+            'The array must be sorted',
+            'All existing elements must be shifted to the right',
+            'The array must be resized',
+            'The element must be hashed first',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Inserting at the beginning requires shifting all n existing elements one position to the right to make room, resulting in O(n) time complexity.',
+        },
+        {
+          id: 'mc5',
+          question:
+            'In the sliding window technique, how is the window sum updated when moving to the next position?',
+          options: [
+            'Recalculate the entire sum',
+            'Add the new element and subtract the old element',
+            'Use binary search',
+            'Use a hash table',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'The sliding window technique updates the sum in O(1) by adding the element entering the window and subtracting the element leaving the window, avoiding recalculation.',
         },
       ],
     },
@@ -305,6 +424,63 @@ def group_anagrams(strs: List[str]) -> List[List[str]]:
           ],
         },
       ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What is the average-case time complexity for hash table insert, delete, and search operations?',
+          options: ['O(1)', 'O(log n)', 'O(n)', 'O(n log n)'],
+          correctAnswer: 0,
+          explanation:
+            'Hash tables provide O(1) average-case complexity for insert, delete, and search operations through direct index computation using a hash function.',
+        },
+        {
+          id: 'mc2',
+          question: 'What causes hash table operations to degrade to O(n) worst case?',
+          options: [
+            'The table is too small',
+            'Many hash collisions occur',
+            'The keys are not sorted',
+            'The table is empty',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'When many keys hash to the same index (collisions), the hash table degenerates to a linked list in that bucket, causing O(n) worst-case lookup time.',
+        },
+        {
+          id: 'mc3',
+          question: 'In Python, which is the best data structure for grouping elements with automatic list initialization?',
+          options: ['dict', 'set', 'defaultdict', 'Counter'],
+          correctAnswer: 2,
+          explanation:
+            'defaultdict from collections automatically initializes missing keys with a default value (like an empty list), preventing KeyError and simplifying grouping logic.',
+        },
+        {
+          id: 'mc4',
+          question: 'What is the purpose of the load factor in a hash table?',
+          options: [
+            'To determine the hash function',
+            'To determine when to resize the table',
+            'To count the number of elements',
+            'To sort the elements',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'The load factor (typically 0.75) determines when the hash table should resize. When load factor is exceeded, the table resizes to maintain O(1) operations.',
+        },
+        {
+          id: 'mc5',
+          question: 'For finding the first non-repeating character in a string, what is the optimal approach?',
+          options: [
+            'Sort the string',
+            'Use nested loops',
+            'Two passes with hash map: count frequencies, then find first with count 1',
+            'Use binary search',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'Two passes with a hash map is optimal: first pass counts character frequencies in O(n), second pass checks counts in order to find first character with count 1, total O(n) time.',
+        },
+      ],
     },
     {
       id: 'complexity',
@@ -396,6 +572,68 @@ Finding if array has duplicate:
             'Cost: O(n) space',
             'Classic space-time tradeoff',
           ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What is the time complexity of checking if an element exists in an unsorted array?',
+          options: ['O(1)', 'O(log n)', 'O(n)', 'O(n²)'],
+          correctAnswer: 2,
+          explanation:
+            'Checking existence in an unsorted array requires linear search, which is O(n) since we may need to check every element. A hash set would reduce this to O(1).',
+        },
+        {
+          id: 'mc2',
+          question: 'When comparing arrays vs hash tables for removing duplicates, what is the time complexity difference?',
+          options: [
+            'Both are O(n)',
+            'Array: O(n), Hash table: O(n²)',
+            'Array: O(n²), Hash table: O(n)',
+            'Array: O(n log n), Hash table: O(log n)',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'Without a hash table, checking if each element is a duplicate requires scanning previous elements (O(n²)). With a hash set, we get O(1) lookups for O(n) total time.',
+        },
+        {
+          id: 'mc3',
+          question: 'What is the space complexity overhead difference between arrays and hash tables?',
+          options: [
+            'Hash tables use less space',
+            'They use the same space',
+            'Hash tables use more space due to hash structure overhead',
+            'Arrays use more space',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'Hash tables require additional memory for the hash structure, pointers, and maintaining load factor. Arrays store elements contiguously with minimal overhead.',
+        },
+        {
+          id: 'mc4',
+          question: 'For a problem requiring both fast lookups and maintaining order, which combination is best?',
+          options: [
+            'Just use an array',
+            'Just use a hash table',
+            'Use both: hash table for lookups, array for order',
+            'Use a set',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'When you need both fast lookups (O(1)) and ordered access, use a hash table for lookups and maintain a separate array or list for the ordered elements.',
+        },
+        {
+          id: 'mc5',
+          question: 'When should you prefer sorting an array over using a hash table?',
+          options: [
+            'When you need O(1) lookups',
+            'When memory is extremely limited and O(n log n) time is acceptable',
+            'When counting frequencies',
+            'When finding duplicates quickly',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Sorting (O(n log n) time, O(1) space with in-place sort) is preferable when memory is severely constrained and the slower time complexity is acceptable.',
         },
       ],
     },
@@ -537,6 +775,68 @@ idx = index_map.get(target, -1)
           ],
         },
       ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What is the frequency counting pattern best used for?',
+          options: [
+            'Sorting elements',
+            'Counting occurrences of elements',
+            'Binary search',
+            'Reversing arrays',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'The frequency counting pattern uses a hash map to count how many times each element appears, useful for problems like finding most frequent element or checking anagrams.',
+        },
+        {
+          id: 'mc2',
+          question: 'In the complement lookup pattern (two sum), what do you store in the hash table?',
+          options: [
+            'The target value',
+            'All possible sums',
+            'Elements seen so far (with their indices)',
+            'The largest element',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'The complement pattern stores elements you\'ve seen so far in the hash table. For each new element, you check if its complement (target - current) exists in the table.',
+        },
+        {
+          id: 'mc3',
+          question: 'When grouping anagrams, what should be used as the hash map key?',
+          options: [
+            'The first word in each group',
+            'The sorted characters or character count signature',
+            'The length of the word',
+            'Random numbers',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'All anagrams share the same sorted characters (e.g., "eat", "tea", "ate" → "aet") or character counts, making it a perfect key to group them together.',
+        },
+        {
+          id: 'mc4',
+          question: 'What is the time complexity of the deduplication pattern using a hash set?',
+          options: ['O(1)', 'O(log n)', 'O(n)', 'O(n²)'],
+          correctAnswer: 2,
+          explanation:
+            'The deduplication pattern iterates through elements once, checking each against the hash set in O(1), resulting in O(n) total time instead of O(n²) with nested loops.',
+        },
+        {
+          id: 'mc5',
+          question: 'Why is defaultdict useful for the grouping pattern?',
+          options: [
+            'It sorts keys automatically',
+            'It automatically initializes missing keys with a default value',
+            'It uses less memory',
+            'It is faster than regular dict',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'defaultdict automatically creates a default value (like an empty list) for missing keys, eliminating the need to check if a key exists before appending to it.',
+        },
+      ],
     },
     {
       id: 'advanced',
@@ -674,6 +974,73 @@ key = tuple(sorted(lst))
           ],
         },
       ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'When would you use multiple hash tables instead of one?',
+          options: [
+            'To save memory',
+            'When tracking different relationships or bidirectional mappings',
+            'To make the code simpler',
+            'Never, one is always enough',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Multiple hash tables are useful when tracking different relationships (like LRU cache needing both key→node and ordering) or bidirectional mappings (name→ID and ID→name).',
+        },
+        {
+          id: 'mc2',
+          question: 'What makes an object hashable in Python?',
+          options: [
+            'It must be a string',
+            'It must be immutable and have a consistent hash value',
+            'It must be a number',
+            'It must be small',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Hashable objects must be immutable and provide a consistent hash value. Mutable objects like lists cannot be hashable because their hash would change when modified.',
+        },
+        {
+          id: 'mc3',
+          question: 'What problem does the rolling hash technique solve?',
+          options: [
+            'Sorting strings',
+            'Finding duplicates',
+            'Efficiently computing hash values for sliding window of characters',
+            'Reversing arrays',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'Rolling hash (used in Rabin-Karp) efficiently updates the hash value when sliding a window by removing the leaving character and adding the entering character in O(1).',
+        },
+        {
+          id: 'mc4',
+          question: 'What is coordinate compression used for?',
+          options: [
+            'Reducing file sizes',
+            'Mapping large values to small sequential indices',
+            'Hashing passwords',
+            'Sorting arrays',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Coordinate compression maps a set of potentially large or sparse values to a small dense range (0, 1, 2, ...), useful when values are large but their relative order matters.',
+        },
+        {
+          id: 'mc5',
+          question: 'Why are tuples used as hash keys instead of lists?',
+          options: [
+            'Tuples are faster',
+            'Tuples are immutable and therefore hashable',
+            'Tuples use less memory',
+            'Lists are deprecated',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Tuples are immutable, making them hashable and safe to use as dictionary keys. Lists are mutable and would break hash table invariants if their contents changed.',
+        },
+      ],
     },
     {
       id: 'interview',
@@ -802,6 +1169,73 @@ A: "Yes, by sorting first, but that's O(n log n) vs O(n)"
             'Check indices to avoid using same element twice',
             'Test edge cases: empty, no solution',
           ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What keyword in a problem statement strongly suggests using a hash table?',
+          options: [
+            'Sorted',
+            'Binary',
+            'Count, frequency, or group',
+            'Recursive',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'Keywords like "count", "frequency", "group", "unique", "duplicate", or "exists" strongly indicate that hash tables will be useful for O(1) lookups and tracking.',
+        },
+        {
+          id: 'mc2',
+          question: 'In an interview, when should you mention the brute force approach?',
+          options: [
+            'Never mention it, go straight to optimal',
+            'Only if asked',
+            'Always state it first, then explain why you can optimize',
+            'Only for easy problems',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'Always state the brute force approach first (even if just briefly) to show you understand the problem, then explain why it\'s not optimal and how you can improve it.',
+        },
+        {
+          id: 'mc3',
+          question: 'What is a common mistake when implementing two sum with a hash table?',
+          options: [
+            'Using O(n) space',
+            'Using the same element twice by not checking indices',
+            'Iterating through the array',
+            'Using a dictionary',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'A common mistake is using the same array element twice. You must ensure the complement you find is at a different index than the current element.',
+        },
+        {
+          id: 'mc4',
+          question: 'How should you respond if asked "What about hash collisions?"',
+          options: [
+            'Say hash collisions never happen',
+            'Explain that Python\'s hash function is robust, average case is O(1) but worst case is O(n)',
+            'Say you would use a different data structure',
+            'Say you would sort the data instead',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Acknowledge that collisions exist and affect worst-case complexity (O(n)), but Python\'s hash function is well-designed for average-case O(1) performance.',
+        },
+        {
+          id: 'mc5',
+          question: 'What is the typical time range for solving a medium hash table problem in an interview?',
+          options: [
+            '5-10 minutes',
+            '15-20 minutes',
+            '25-30 minutes',
+            '45-60 minutes',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Medium hash table problems typically take 15-20 minutes to solve in an interview, including clarification, explanation, coding, and testing phases.',
         },
       ],
     },

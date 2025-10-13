@@ -3,8 +3,9 @@
  */
 
 const DB_NAME = 'CodeBlanketDB';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 const STORE_NAME = 'progress';
+const VIDEO_STORE_NAME = 'videos';
 
 interface ProgressData {
   id: string;
@@ -33,6 +34,9 @@ async function openDB(): Promise<IDBDatabase> {
       const db = (event.target as IDBOpenDBRequest).result;
       if (!db.objectStoreNames.contains(STORE_NAME)) {
         db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+      }
+      if (!db.objectStoreNames.contains(VIDEO_STORE_NAME)) {
+        db.createObjectStore(VIDEO_STORE_NAME, { keyPath: 'id' });
       }
     };
   });
@@ -222,4 +226,188 @@ export async function migrateFromLocalStorage(): Promise<void> {
   } catch (error) {
     console.error('Migration error:', error);
   }
+}
+
+/**
+ * Save video blob to IndexedDB with unique video ID
+ */
+export async function saveVideo(
+  videoId: string,
+  videoBlob: Blob,
+): Promise<void> {
+  try {
+    const db = await openDB();
+    const transaction = db.transaction(VIDEO_STORE_NAME, 'readwrite');
+    const store = transaction.objectStore(VIDEO_STORE_NAME);
+
+    const data = {
+      id: videoId,
+      video: videoBlob,
+      timestamp: Date.now(),
+    };
+
+    return new Promise((resolve, reject) => {
+      const request = store.put(data);
+      request.onsuccess = () => resolve();
+      request.onerror = () => reject(request.error);
+    });
+  } catch (error) {
+    console.error('IndexedDB saveVideo error:', error);
+    throw error;
+  }
+}
+
+/**
+ * Get all videos for a specific question
+ */
+export async function getVideosForQuestion(
+  questionIdPrefix: string,
+): Promise<Array<{ id: string; blob: Blob; timestamp: number }>> {
+  try {
+    const db = await openDB();
+    const transaction = db.transaction(VIDEO_STORE_NAME, 'readonly');
+    const store = transaction.objectStore(VIDEO_STORE_NAME);
+
+    return new Promise((resolve, reject) => {
+      const request = store.getAll();
+      request.onsuccess = () => {
+        const allVideos = request.result || [];
+        const filtered = allVideos
+          .filter((item) => item.id.startsWith(questionIdPrefix))
+          .map((item) => ({
+            id: item.id,
+            blob: item.video,
+            timestamp: item.timestamp,
+          }))
+          .sort((a, b) => a.timestamp - b.timestamp);
+        resolve(filtered);
+      };
+      request.onerror = () => reject(request.error);
+    });
+  } catch (error) {
+    console.error('IndexedDB getVideosForQuestion error:', error);
+    return [];
+  }
+}
+
+/**
+ * Delete a specific video from IndexedDB
+ */
+export async function deleteVideo(videoId: string): Promise<void> {
+  try {
+    const db = await openDB();
+    const transaction = db.transaction(VIDEO_STORE_NAME, 'readwrite');
+    const store = transaction.objectStore(VIDEO_STORE_NAME);
+
+    return new Promise((resolve, reject) => {
+      const request = store.delete(videoId);
+      request.onsuccess = () => resolve();
+      request.onerror = () => reject(request.error);
+    });
+  } catch (error) {
+    console.error('IndexedDB deleteVideo error:', error);
+    throw error;
+  }
+}
+
+/**
+ * Get total count of unique questions with at least one video
+ */
+export async function getCompletedDiscussionQuestionsCount(): Promise<number> {
+  try {
+    const db = await openDB();
+    const transaction = db.transaction(VIDEO_STORE_NAME, 'readonly');
+    const store = transaction.objectStore(VIDEO_STORE_NAME);
+
+    return new Promise((resolve, reject) => {
+      const request = store.getAll();
+      request.onsuccess = () => {
+        const allVideos = request.result || [];
+        // Extract unique question prefixes (before the timestamp)
+        const uniqueQuestions = new Set<string>();
+        allVideos.forEach((item) => {
+          // Video ID format: moduleSlug-sectionId-questionId-timestamp
+          // We need to extract: moduleSlug-sectionId-questionId
+          const parts = item.id.split('-');
+          if (parts.length >= 4) {
+            const questionPrefix = parts.slice(0, -1).join('-');
+            uniqueQuestions.add(questionPrefix);
+          }
+        });
+        resolve(uniqueQuestions.size);
+      };
+      request.onerror = () => reject(request.error);
+    });
+  } catch (error) {
+    console.error(
+      'IndexedDB getCompletedDiscussionQuestionsCount error:',
+      error,
+    );
+    return 0;
+  }
+}
+
+/**
+ * Get total count of all discussion questions across all modules
+ */
+export function getTotalDiscussionQuestionsCount(
+  modules: Array<{ module: { sections: Array<{ quiz?: unknown[] }> } }>,
+): number {
+  let total = 0;
+  modules.forEach((moduleCategory) => {
+    moduleCategory.module.sections.forEach((section) => {
+      if (section.quiz) {
+        total += section.quiz.length;
+      }
+    });
+  });
+  return total;
+}
+
+/**
+ * Get total count of all multiple choice questions across all modules
+ */
+export function getTotalMultipleChoiceQuestionsCount(
+  modules: Array<{
+    module: { sections: Array<{ multipleChoice?: unknown[] }> };
+  }>,
+): number {
+  let total = 0;
+  modules.forEach((moduleCategory) => {
+    moduleCategory.module.sections.forEach((section) => {
+      if (section.multipleChoice) {
+        total += section.multipleChoice.length;
+      }
+    });
+  });
+  return total;
+}
+
+/**
+ * Get count of completed multiple choice questions across all modules
+ */
+export function getCompletedMultipleChoiceQuestionsCount(
+  modules: Array<{
+    id: string;
+    module: { sections: Array<{ id: string; multipleChoice?: unknown[] }> };
+  }>,
+): number {
+  let completed = 0;
+  modules.forEach((moduleCategory) => {
+    moduleCategory.module.sections.forEach((section) => {
+      if (section.multipleChoice && section.multipleChoice.length > 0) {
+        const storageKey = `mc-quiz-${moduleCategory.id}-${section.id}`;
+        const stored = localStorage.getItem(storageKey);
+        if (stored) {
+          try {
+            const completedQuestions = JSON.parse(stored);
+            completed += completedQuestions.length;
+          } catch (e) {
+            console.error('Failed to parse MC quiz progress:', e);
+          }
+        }
+      }
+    });
+  });
+  return completed;
 }

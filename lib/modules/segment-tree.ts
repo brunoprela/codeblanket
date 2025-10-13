@@ -75,6 +75,73 @@ Given an array, perform these operations efficiently:
           ],
         },
       ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What problem does Segment Tree solve?',
+          options: [
+            'Sorting',
+            'Efficient range queries (sum/min/max) and updates - O(log N) for both',
+            'Searching',
+            'Hashing',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Segment Tree enables O(log N) range queries and point/range updates. Useful when you need both operations efficiently, unlike prefix sum (fast query, slow update) or simple array (slow query, fast update).',
+        },
+        {
+          id: 'mc2',
+          question: 'When should you use Segment Tree over Fenwick Tree?',
+          options: [
+            'Always',
+            'Need operations without inverse (min, max, GCD) or lazy propagation for range updates',
+            'Never',
+            'Random',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Use Segment Tree for: 1) Non-invertible operations (min, max, GCD), 2) Lazy propagation for efficient range updates, 3) More complex custom operations. Fenwick is simpler but limited to invertible operations.',
+        },
+        {
+          id: 'mc3',
+          question: 'What is the time complexity of Segment Tree operations?',
+          options: [
+            'O(N)',
+            'Query: O(log N), Update: O(log N), Build: O(N)',
+            'All O(1)',
+            'O(N²)',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Segment Tree: Build O(N), Query O(log N) (traverse tree height), Point Update O(log N) (update path to root). Space: O(N) for 4N array representation.',
+        },
+        {
+          id: 'mc4',
+          question: 'Why use Segment Tree over Prefix Sum for range queries?',
+          options: [
+            'Faster queries',
+            'Supports updates - prefix sum O(N) rebuild after update, segment tree O(log N) update',
+            'Less space',
+            'Simpler',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Prefix sum: O(1) query but O(N) update (rebuild array). Segment Tree: O(log N) query and O(log N) update. Use segment tree when you need both queries and updates on dynamic data.',
+        },
+        {
+          id: 'mc5',
+          question: 'What types of operations can Segment Tree efficiently handle?',
+          options: [
+            'Only sum',
+            'Any associative operation: sum, min, max, GCD, OR, AND, XOR',
+            'Only min/max',
+            'None',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Segment Tree works for any associative operation where combine(a, combine(b, c)) = combine(combine(a, b), c). Examples: sum, min, max, GCD, bitwise OR/AND/XOR.',
+        },
+      ],
     },
     {
       id: 'structure',
@@ -172,6 +239,73 @@ def build(arr, tree, node, start, end):
             'Internal nodes: N-1',
             'Total: 2N-1 nodes',
           ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'How is a Segment Tree typically stored?',
+          options: [
+            'Linked nodes',
+            'Array of size 4N with tree[1] as root, children at 2i and 2i+1',
+            'Hash map',
+            'Stack',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Segment Tree uses array representation: tree[1] is root, for node i, left child is 2i, right child is 2i+1. Size 4N ensures space for complete binary tree.',
+        },
+        {
+          id: 'mc2',
+          question: 'What does each node in a Segment Tree represent?',
+          options: [
+            'Single element',
+            'An interval [L, R] with aggregate value (sum/min/max) for that range',
+            'Random value',
+            'Index',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Each node stores: 1) Interval [L, R] it represents, 2) Aggregate value (sum/min/max) for that range. Leaf nodes are single elements [i, i]. Internal nodes combine children intervals.',
+        },
+        {
+          id: 'mc3',
+          question: 'What is the height of a Segment Tree for array of size N?',
+          options: [
+            'O(N)',
+            'O(log N) - complete binary tree',
+            'O(√N)',
+            'O(N²)',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Segment Tree is complete binary tree, so height is O(log N). Each level doubles nodes until reaching N leaves. This log height enables O(log N) operations.',
+        },
+        {
+          id: 'mc4',
+          question: 'How do you find children of node i in array representation?',
+          options: [
+            'i+1, i+2',
+            'Left child: 2i, Right child: 2i+1',
+            'Random',
+            'i-1, i-2',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Array heap property: for node at index i, left child at 2i, right child at 2i+1, parent at i//2. This allows O(1) navigation without pointers.',
+        },
+        {
+          id: 'mc5',
+          question: 'Why do we allocate 4N space for Segment Tree?',
+          options: [
+            'Random choice',
+            'Ensures space for complete binary tree - worst case when N not power of 2',
+            'Always need exactly 4N',
+            'Optimization',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Complete binary tree with N leaves has at most 2N-1 nodes. For safety with any N (not just powers of 2) and simple indexing, 4N guarantees sufficient space.',
         },
       ],
     },
@@ -331,6 +465,73 @@ print(st.query(1, 3))  # Sum of [10, 5, 7] = 22`,
           ],
         },
       ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What are the three cases when processing a range query?',
+          options: [
+            'Random',
+            'No overlap (return identity), Complete overlap (return node value), Partial overlap (recurse both children)',
+            'Always recurse',
+            'Just return value',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Range query cases: 1) No overlap (query range doesn\'t intersect node) → return identity (0 for sum, INF for min), 2) Complete overlap (node fully in query) → return node value, 3) Partial overlap → recurse on both children and combine.',
+        },
+        {
+          id: 'mc2',
+          question: 'How do you update a single element in Segment Tree?',
+          options: [
+            'Update all nodes',
+            'Traverse from root to leaf updating path nodes O(log N)',
+            'Rebuild tree',
+            'Update leaf only',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Point update: traverse path from root to target leaf (O(log N) height). At each node, check if it contains target index. Update leaf, then propagate changes up by recalculating parent values.',
+        },
+        {
+          id: 'mc3',
+          question: 'What is lazy propagation?',
+          options: [
+            'Slow algorithm',
+            'Defer range updates using lazy array - only push changes when needed for O(log N) range update',
+            'Random optimization',
+            'Bad practice',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Lazy propagation: for range updates, store pending updates in lazy array instead of immediately updating all affected nodes. Push updates down only when accessing nodes. Reduces range update from O(N) to O(log N).',
+        },
+        {
+          id: 'mc4',
+          question: 'How do you build a Segment Tree?',
+          options: [
+            'Random',
+            'Recursive: leaves get array values, parents combine children - O(N) time',
+            'Iterative only',
+            'Cannot build',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Build recursively: 1) Base case: leaf node [i,i] gets arr[i], 2) Recursive: compute left and right subtrees, combine values. Visits each of 2N-1 nodes once = O(N) time.',
+        },
+        {
+          id: 'mc5',
+          question: 'What does "combine" function do in Segment Tree?',
+          options: [
+            'Sorts nodes',
+            'Merges two child values: sum (a+b), min (min(a,b)), max (max(a,b)), etc.',
+            'Random',
+            'Deletes nodes',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Combine function merges children based on operation: sum→a+b, min→min(a,b), max→max(a,b), GCD→gcd(a,b). Must be associative. Determines what aggregate the tree maintains.',
+        },
+      ],
     },
     {
       id: 'variations',
@@ -451,6 +652,73 @@ class LazySegmentTree:
           ],
         },
       ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What variation do you use for range minimum query?',
+          options: [
+            'Same as sum',
+            'Change combine to min(left, right) instead of left + right',
+            'Different tree structure',
+            'Cannot do RMQ',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'RMQ: just change combine function from sum (left+right) to min (min(left,right)). Identity changes from 0 to INF. Same structure, different operation.',
+        },
+        {
+          id: 'mc2',
+          question: 'How does lazy propagation work for range updates?',
+          options: [
+            'Updates immediately',
+            'Store pending updates in lazy array, push down only when needed',
+            'Rebuilds tree',
+            'Random',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Lazy propagation: maintain lazy[node] array for pending updates. When updating range, mark affected nodes as lazy. Push updates down only when querying/updating those nodes. Reduces range update to O(log N).',
+        },
+        {
+          id: 'mc3',
+          question: 'What operations can Segment Tree handle?',
+          options: [
+            'Only sum',
+            'Any associative operation: sum, min, max, GCD, XOR, etc.',
+            'Only min/max',
+            'None',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Segment Tree works with any associative operation where order of combining doesn\'t matter: sum, product, min, max, GCD, LCM, XOR, OR, AND. Just change the combine function.',
+        },
+        {
+          id: 'mc4',
+          question: '2D Segment Tree is used for what?',
+          options: [
+            'Sorting',
+            'Range queries on 2D matrix (rectangle sum, min, etc.)',
+            'Graph traversal',
+            'Random',
+          ],
+          correctAnswer: 1,
+          explanation:
+            '2D Segment Tree handles 2D range queries like rectangle sum in O(log²N) time. Build tree of trees: outer for rows, inner for columns. Updates and queries work in both dimensions.',
+        },
+        {
+          id: 'mc5',
+          question: 'When would you use Persistent Segment Tree?',
+          options: [
+            'Random',
+            'Need to query previous versions of array after updates (version control)',
+            'Always',
+            'Never',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Persistent Segment Tree maintains all versions after updates by creating new nodes instead of modifying. Query any historical version. Used in time-travel queries, undo/redo, or range queries at specific timestamps.',
+        },
+      ],
     },
     {
       id: 'complexity',
@@ -528,6 +796,73 @@ class LazySegmentTree:
             'Tree of trees structure',
             'Query/Update: O(log M * log N)',
           ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What is the time complexity of Segment Tree operations?',
+          options: [
+            'All O(N)',
+            'Build: O(N), Query: O(log N), Update: O(log N)',
+            'All O(log N)',
+            'Build: O(log N), Query: O(N)',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Build: O(N) visits each node once. Query: O(log N) traverses tree height. Point Update: O(log N) updates path to root. Range Update with lazy prop: O(log N).',
+        },
+        {
+          id: 'mc2',
+          question: 'What is the space complexity of Segment Tree?',
+          options: [
+            'O(log N)',
+            'O(N) - specifically 4N for array representation',
+            'O(N²)',
+            'O(1)',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Segment Tree needs O(N) space. Array representation uses 4N to handle all cases safely (complete binary tree with N leaves needs at most 2N-1 nodes, 4N is safe upper bound).',
+        },
+        {
+          id: 'mc3',
+          question: 'Why is range query O(log N)?',
+          options: [
+            'Random',
+            'At most O(log N) nodes visited per level, and tree height is O(log N)',
+            'Always fast',
+            'Uses binary search',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Range query visits at most 2 nodes per level (one for each subtree boundary). Tree height is O(log N), so total nodes visited is O(log N).',
+        },
+        {
+          id: 'mc4',
+          question: 'How does lazy propagation reduce range update complexity?',
+          options: [
+            'Makes it slower',
+            'Defers updates - mark O(log N) nodes instead of updating O(N) affected leaves',
+            'Random',
+            'No difference',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Without lazy prop: range update touches O(N) leaves. With lazy prop: mark O(log N) ancestor nodes, push updates only when needed. Reduces from O(N) to O(log N).',
+        },
+        {
+          id: 'mc5',
+          question: 'What makes Segment Tree efficient?',
+          options: [
+            'Random',
+            'Precomputed intervals at all levels enable O(log N) range queries by combining logarithmic nodes',
+            'Always O(1)',
+            'Uses sorting',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Segment Tree precomputes all interval combinations. Any range can be decomposed into O(log N) precomputed intervals. Combining these is fast (single operation per interval).',
         },
       ],
     },
@@ -624,6 +959,73 @@ class LazySegmentTree:
             'Iterative: faster, saves stack, harder to implement',
             'Choose based on confidence level',
           ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What signals suggest using Segment Tree in an interview?',
+          options: [
+            'Sorting only',
+            'Multiple range queries + updates on array, keywords: range sum/min/max, dynamic array',
+            'Binary search',
+            'Random',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Segment Tree signals: 1) Multiple range queries needed, 2) Array is dynamic (updates), 3) Keywords like "range sum", "range minimum", 4) Need O(log N) for both query and update.',
+        },
+        {
+          id: 'mc2',
+          question: 'What should you clarify in a Segment Tree interview?',
+          options: [
+            'Nothing',
+            'Operation type (sum/min/max), update type (point/range), constraints (N size, query count)',
+            'Random',
+            'Language only',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Clarify: 1) What operation (determines combine function), 2) Point or range updates (range needs lazy prop), 3) Constraints on N and Q (affects if segment tree needed), 4) Memory limits (4N space).',
+        },
+        {
+          id: 'mc3',
+          question: 'What is a common mistake when implementing Segment Tree?',
+          options: [
+            'Using recursion',
+            'Off-by-one errors in range bounds, forgetting to push lazy updates',
+            'Good naming',
+            'Comments',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Common mistakes: 1) Off-by-one in [L, R] vs [L, R) ranges, 2) Forgetting to push lazy values before querying, 3) Wrong node indexing (2i vs 2i+1), 4) Not handling identity values for operations.',
+        },
+        {
+          id: 'mc4',
+          question: 'When would you use Fenwick Tree instead of Segment Tree?',
+          options: [
+            'Always',
+            'Simpler code, operation has inverse (sum), don\'t need lazy propagation',
+            'Never',
+            'Random',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Use Fenwick when: 1) Operation is invertible (sum, XOR), 2) Only point updates (no lazy prop needed), 3) Want simpler code (half the lines). Use Segment Tree for min/max/GCD or range updates.',
+        },
+        {
+          id: 'mc5',
+          question: 'What is good interview communication for Segment Tree?',
+          options: [
+            'Just code',
+            'Explain why Segment Tree (O(log N) query+update), clarify operation, walk through build/query, discuss complexity',
+            'No explanation',
+            'Random',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Communication: 1) Justify why Segment Tree over alternatives, 2) Explain tree structure briefly, 3) Walk through one query example, 4) Mention time O(log N) and space O(N), 5) Code with clear comments.',
         },
       ],
     },

@@ -1,0 +1,1974 @@
+/**
+ * Python Object-Oriented Programming problems
+ */
+
+import { Problem } from '../types';
+
+export const pythonOOPProblems: Problem[] = [
+    {
+        id: 'class-bankaccount',
+        title: 'Bank Account Class',
+        difficulty: 'Easy',
+        description: `Implement a \`BankAccount\` class with proper encapsulation and methods.
+
+The class should:
+- Store account holder name and balance (private)
+- Provide deposit() and withdraw() methods
+- Prevent negative balance with withdraw()
+- Implement __str__ for readable output
+- Use properties for controlled access
+
+**Requirements:**
+- Balance should be private (_balance)
+- Withdraw should return True/False for success
+- Deposit should only accept positive amounts`,
+        examples: [
+            {
+                input: 'account = BankAccount("Alice", 1000); account.withdraw(200)',
+                output: 'True, balance becomes 800',
+            },
+            {
+                input: 'account.withdraw(2000)',
+                output: 'False, insufficient funds',
+            },
+        ],
+        constraints: [
+            'Balance must be non-negative',
+            'Deposit must be positive',
+            'Use encapsulation (private attributes)',
+        ],
+        hints: [
+            'Use _balance for private attribute',
+            'Check balance before withdrawing',
+            'Return True/False to indicate success',
+        ],
+        starterCode: `class BankAccount:
+    """
+    Bank account with deposit and withdraw operations.
+    """
+    
+    def __init__(self, name, initial_balance=0):
+        """
+        Initialize account.
+        
+        Args:
+            name: Account holder name
+            initial_balance: Starting balance (default 0)
+        """
+        # Your code here
+        pass
+    
+    def deposit(self, amount):
+        """
+        Deposit money into account.
+        
+        Args:
+            amount: Amount to deposit
+            
+        Raises:
+            ValueError: If amount is not positive
+        """
+        # Your code here
+        pass
+    
+    def withdraw(self, amount):
+        """
+        Withdraw money from account.
+        
+        Args:
+            amount: Amount to withdraw
+            
+        Returns:
+            True if successful, False if insufficient funds
+        """
+        # Your code here
+        pass
+    
+    @property
+    def balance(self):
+        """Get current balance."""
+        # Your code here
+        pass
+    
+    def __str__(self):
+        """String representation."""
+        # Your code here
+        pass
+
+
+# Test
+account = BankAccount("Alice", 1000)
+print(account)  # BankAccount(Alice, balance=1000)
+account.deposit(500)
+print(account.balance)  # 1500
+print(account.withdraw(200))  # True
+print(account.balance)  # 1300
+print(account.withdraw(2000))  # False
+`,
+        testCases: [
+            {
+                input: ['Alice', 1000, 500, 200],
+                expected: 1300,
+            },
+            {
+                input: ['Bob', 100, 0, 200],
+                expected: false, // withdraw fails
+            },
+        ],
+        solution: `class BankAccount:
+    def __init__(self, name, initial_balance=0):
+        self.name = name
+        self._balance = initial_balance
+    
+    def deposit(self, amount):
+        if amount <= 0:
+            raise ValueError("Deposit amount must be positive")
+        self._balance += amount
+    
+    def withdraw(self, amount):
+        if amount > self._balance:
+            return False
+        self._balance -= amount
+        return True
+    
+    @property
+    def balance(self):
+        return self._balance
+    
+    def __str__(self):
+        return f"BankAccount({self.name}, balance={self._balance})"`,
+        timeComplexity: 'O(1) for all operations',
+        spaceComplexity: 'O(1)',
+        order: 1,
+        topic: 'Python Object-Oriented Programming',
+    },
+    {
+        id: 'inheritance-shapes',
+        title: 'Shape Hierarchy with Inheritance',
+        difficulty: 'Medium',
+        description: `Create a shape class hierarchy using inheritance and polymorphism.
+
+Implement:
+- Abstract base class \`Shape\` with abstract methods area() and perimeter()
+- \`Circle\` subclass with radius
+- \`Rectangle\` subclass with width and height
+- \`Square\` subclass inheriting from Rectangle
+
+**Requirements:**
+- Shape should be abstract (cannot instantiate)
+- All shapes implement area() and perimeter()
+- Square should reuse Rectangle logic
+- Demonstrate polymorphism with a list of shapes`,
+        examples: [
+            {
+                input: 'Circle(radius=5)',
+                output: 'area() returns 78.54, perimeter() returns 31.42',
+            },
+            {
+                input: 'Square(side=4)',
+                output: 'area() returns 16, perimeter() returns 16',
+            },
+        ],
+        constraints: [
+            'Use ABC and abstractmethod',
+            'All shapes must implement required methods',
+            'Square should inherit from Rectangle',
+        ],
+        hints: [
+            'Use abc.ABC and @abstractmethod',
+            'Circle: area = π * r², perimeter = 2 * π * r',
+            'Rectangle: area = w * h, perimeter = 2(w + h)',
+            'Square: just set width = height = side',
+        ],
+        starterCode: `from abc import ABC, abstractmethod
+import math
+
+class Shape(ABC):
+    """
+    Abstract base class for shapes.
+    """
+    
+    @abstractmethod
+    def area(self):
+        """Calculate area."""
+        pass
+    
+    @abstractmethod
+    def perimeter(self):
+        """Calculate perimeter."""
+        pass
+
+
+class Circle(Shape):
+    """Circle shape."""
+    
+    def __init__(self, radius):
+        # Your code here
+        pass
+    
+    def area(self):
+        # Your code here
+        pass
+    
+    def perimeter(self):
+        # Your code here
+        pass
+
+
+class Rectangle(Shape):
+    """Rectangle shape."""
+    
+    def __init__(self, width, height):
+        # Your code here
+        pass
+    
+    def area(self):
+        # Your code here
+        pass
+    
+    def perimeter(self):
+        # Your code here
+        pass
+
+
+class Square(Rectangle):
+    """Square shape (special case of rectangle)."""
+    
+    def __init__(self, side):
+        # Your code here
+        pass
+
+
+# Test polymorphism
+shapes = [
+    Circle(5),
+    Rectangle(4, 6),
+    Square(4)
+]
+
+for shape in shapes:
+    print(f"{shape.__class__.__name__}: area={shape.area():.2f}, perimeter={shape.perimeter():.2f}")
+`,
+        testCases: [
+            {
+                input: ['Circle', 5],
+                expected: 78.54, // area
+            },
+            {
+                input: ['Rectangle', 4, 6],
+                expected: 24, // area
+            },
+            {
+                input: ['Square', 4],
+                expected: 16, // area
+            },
+        ],
+        solution: `from abc import ABC, abstractmethod
+import math
+
+class Shape(ABC):
+    @abstractmethod
+    def area(self):
+        pass
+    
+    @abstractmethod
+    def perimeter(self):
+        pass
+
+
+class Circle(Shape):
+    def __init__(self, radius):
+        self.radius = radius
+    
+    def area(self):
+        return math.pi * self.radius ** 2
+    
+    def perimeter(self):
+        return 2 * math.pi * self.radius
+
+
+class Rectangle(Shape):
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+    
+    def area(self):
+        return self.width * self.height
+    
+    def perimeter(self):
+        return 2 * (self.width + self.height)
+
+
+class Square(Rectangle):
+    def __init__(self, side):
+        super().__init__(side, side)`,
+        timeComplexity: 'O(1) for all operations',
+        spaceComplexity: 'O(1)',
+        order: 2,
+        topic: 'Python Object-Oriented Programming',
+    },
+    {
+        id: 'polymorphism-animals',
+        title: 'Animal Polymorphism System',
+        difficulty: 'Medium',
+        description: `Create an animal class hierarchy that demonstrates polymorphism, inheritance, and composition.
+
+Implement:
+- Base \`Animal\` class with name, age, and speak() method
+- \`Dog\` and \`Cat\` subclasses with specific speak() implementations
+- \`Owner\` class that "has-a" relationship with animals (composition)
+- Method to make all owned animals speak
+
+**Key Concepts:**
+- Inheritance: Dog and Cat inherit from Animal
+- Polymorphism: Different speak() implementations
+- Composition: Owner has a list of animals
+- Encapsulation: Private attributes with properties`,
+        examples: [
+            {
+                input: 'owner.add_animal(Dog("Buddy", 5)); owner.make_all_speak()',
+                output: 'Buddy says Woof!',
+            },
+        ],
+        constraints: [
+            'Use inheritance for Dog and Cat',
+            'Use composition for Owner',
+            'Demonstrate polymorphism in make_all_speak()',
+        ],
+        hints: [
+            'Animal is the base class',
+            'Each subclass overrides speak()',
+            'Owner stores animals in a list',
+            'Loop through animals and call speak()',
+        ],
+        starterCode: `class Animal:
+    """
+    Base class for all animals.
+    """
+    
+    def __init__(self, name, age):
+        # Your code here
+        pass
+    
+    def speak(self):
+        """
+        Make the animal speak.
+        Should be overridden by subclasses.
+        """
+        # Your code here
+        pass
+    
+    def __str__(self):
+        # Your code here
+        pass
+
+
+class Dog(Animal):
+    """Dog that barks."""
+    
+    def speak(self):
+        # Your code here
+        pass
+
+
+class Cat(Animal):
+    """Cat that meows."""
+    
+    def speak(self):
+        # Your code here
+        pass
+
+
+class Owner:
+    """
+    Person who owns animals (composition).
+    """
+    
+    def __init__(self, name):
+        # Your code here
+        pass
+    
+    def add_animal(self, animal):
+        """Add an animal to owner's collection."""
+        # Your code here
+        pass
+    
+    def make_all_speak(self):
+        """Make all owned animals speak (demonstrates polymorphism)."""
+        # Your code here
+        pass
+    
+    @property
+    def animal_count(self):
+        """Get number of animals owned."""
+        # Your code here
+        pass
+
+
+# Test
+owner = Owner("Alice")
+owner.add_animal(Dog("Buddy", 5))
+owner.add_animal(Cat("Whiskers", 3))
+owner.add_animal(Dog("Max", 2))
+
+print(f"{owner.name} has {owner.animal_count} animals")
+owner.make_all_speak()
+`,
+        testCases: [
+            {
+                input: ['Dog', 'Buddy'],
+                expected: 'Buddy says Woof!',
+            },
+            {
+                input: ['Cat', 'Whiskers'],
+                expected: 'Whiskers says Meow!',
+            },
+        ],
+        solution: `class Animal:
+    def __init__(self, name, age):
+        self._name = name
+        self._age = age
+    
+    @property
+    def name(self):
+        return self._name
+    
+    @property
+    def age(self):
+        return self._age
+    
+    def speak(self):
+        return f"{self._name} makes a sound"
+    
+    def __str__(self):
+        return f"{self.__class__.__name__}(name={self._name}, age={self._age})"
+
+
+class Dog(Animal):
+    def speak(self):
+        return f"{self.name} says Woof!"
+
+
+class Cat(Animal):
+    def speak(self):
+        return f"{self.name} says Meow!"
+
+
+class Owner:
+    def __init__(self, name):
+        self.name = name
+        self._animals = []
+    
+    def add_animal(self, animal):
+        if not isinstance(animal, Animal):
+            raise TypeError("Can only add Animal instances")
+        self._animals.append(animal)
+    
+    def make_all_speak(self):
+        for animal in self._animals:
+            print(animal.speak())
+    
+    @property
+    def animal_count(self):
+        return len(self._animals)`,
+        timeComplexity: 'O(n) for make_all_speak where n is number of animals',
+        spaceComplexity: 'O(n) to store n animals',
+        order: 3,
+        topic: 'Python Object-Oriented Programming',
+    },
+    {
+        id: 'oop-vehicle-factory',
+        title: 'Vehicle Factory Pattern',
+        difficulty: 'Medium',
+        description: `Implement a factory pattern for creating different types of vehicles.
+
+Create:
+- Abstract \`Vehicle\` base class with speed and fuel_type properties
+- \`Car\`, \`Motorcycle\`, and \`Truck\` subclasses
+- \`VehicleFactory\` class with a static method \`create_vehicle(type)\`
+- Factory should return the appropriate vehicle type based on string input
+
+**Pattern:** Factory pattern centralizes object creation logic.`,
+        examples: [
+            {
+                input: 'VehicleFactory.create_vehicle("car")',
+                output: 'Returns Car instance',
+            },
+        ],
+        constraints: [
+            'Use abstract base class',
+            'Factory method must be static or class method',
+            'Handle invalid vehicle types',
+        ],
+        hints: [
+            'Use @staticmethod or @classmethod for factory',
+            'Use a dictionary to map types to classes',
+            'Raise ValueError for unknown types',
+        ],
+        starterCode: `from abc import ABC, abstractmethod
+
+class Vehicle(ABC):
+    """Abstract vehicle base class."""
+    
+    @abstractmethod
+    def start(self):
+        pass
+    
+    @abstractmethod
+    def get_info(self):
+        pass
+
+
+class Car(Vehicle):
+    """Car implementation."""
+    pass
+
+
+class Motorcycle(Vehicle):
+    """Motorcycle implementation."""
+    pass
+
+
+class Truck(Vehicle):
+    """Truck implementation."""
+    pass
+
+
+class VehicleFactory:
+    """Factory for creating vehicles."""
+    
+    @staticmethod
+    def create_vehicle(vehicle_type):
+        """
+        Create vehicle of specified type.
+        
+        Args:
+            vehicle_type: Type of vehicle ('car', 'motorcycle', 'truck')
+            
+        Returns:
+            Vehicle instance
+            
+        Raises:
+            ValueError: If vehicle_type is unknown
+        """
+        pass
+
+
+# Test
+car = VehicleFactory.create_vehicle('car')
+print(car.get_info())
+`,
+        testCases: [
+            {
+                input: ['car'],
+                expected: 'Car',
+            },
+            {
+                input: ['motorcycle'],
+                expected: 'Motorcycle',
+            },
+        ],
+        solution: `from abc import ABC, abstractmethod
+
+class Vehicle(ABC):
+    def __init__(self, speed, fuel_type):
+        self.speed = speed
+        self.fuel_type = fuel_type
+    
+    @abstractmethod
+    def start(self):
+        pass
+    
+    @abstractmethod
+    def get_info(self):
+        pass
+
+
+class Car(Vehicle):
+    def __init__(self):
+        super().__init__(speed=120, fuel_type='gasoline')
+    
+    def start(self):
+        return "Car engine starting"
+    
+    def get_info(self):
+        return f"Car: {self.speed} km/h, {self.fuel_type}"
+
+
+class Motorcycle(Vehicle):
+    def __init__(self):
+        super().__init__(speed=180, fuel_type='gasoline')
+    
+    def start(self):
+        return "Motorcycle engine starting"
+    
+    def get_info(self):
+        return f"Motorcycle: {self.speed} km/h, {self.fuel_type}"
+
+
+class Truck(Vehicle):
+    def __init__(self):
+        super().__init__(speed=90, fuel_type='diesel')
+    
+    def start(self):
+        return "Truck engine starting"
+    
+    def get_info(self):
+        return f"Truck: {self.speed} km/h, {self.fuel_type}"
+
+
+class VehicleFactory:
+    _vehicles = {
+        'car': Car,
+        'motorcycle': Motorcycle,
+        'truck': Truck
+    }
+    
+    @staticmethod
+    def create_vehicle(vehicle_type):
+        vehicle_class = VehicleFactory._vehicles.get(vehicle_type.lower())
+        if vehicle_class is None:
+            raise ValueError(f"Unknown vehicle type: {vehicle_type}")
+        return vehicle_class()`,
+        timeComplexity: 'O(1)',
+        spaceComplexity: 'O(1)',
+        order: 4,
+        topic: 'Python Object-Oriented Programming',
+    },
+    {
+        id: 'oop-observer-pattern',
+        title: 'Observer Pattern Implementation',
+        difficulty: 'Hard',
+        description: `Implement the Observer pattern where subjects notify observers of state changes.
+
+Create:
+- \`Subject\` class that maintains list of observers
+- Methods: \`attach(observer)\`, \`detach(observer)\`, \`notify()\`
+- \`Observer\` interface with \`update(subject)\` method
+- Concrete observer that reacts to subject changes
+
+**Use Case:** Event systems, MVC patterns, pub-sub systems.`,
+        examples: [
+            {
+                input: 'subject.state = 10; subject.notify()',
+                output: 'All observers receive update',
+            },
+        ],
+        constraints: [
+            'Subject maintains observer list',
+            'Observers implement update method',
+            'Support multiple observers',
+        ],
+        hints: [
+            'Store observers in a list',
+            'Loop through observers in notify()',
+            'Pass self to observer.update()',
+        ],
+        starterCode: `from abc import ABC, abstractmethod
+
+class Observer(ABC):
+    """Observer interface."""
+    
+    @abstractmethod
+    def update(self, subject):
+        """Called when subject changes."""
+        pass
+
+
+class Subject:
+    """Subject that observers watch."""
+    
+    def __init__(self):
+        self._observers = []
+        self._state = None
+    
+    @property
+    def state(self):
+        return self._state
+    
+    @state.setter
+    def state(self, value):
+        self._state = value
+        self.notify()
+    
+    def attach(self, observer):
+        """Add an observer."""
+        pass
+    
+    def detach(self, observer):
+        """Remove an observer."""
+        pass
+    
+    def notify(self):
+        """Notify all observers of state change."""
+        pass
+
+
+class ConcreteObserver(Observer):
+    """Concrete observer implementation."""
+    
+    def __init__(self, name):
+        self.name = name
+    
+    def update(self, subject):
+        """React to subject state change."""
+        pass
+
+
+# Test
+subject = Subject()
+observer1 = ConcreteObserver("Observer1")
+observer2 = ConcreteObserver("Observer2")
+
+subject.attach(observer1)
+subject.attach(observer2)
+subject.state = 10  # Should notify both observers
+`,
+        testCases: [
+            {
+                input: [10, 2], // state, num observers
+                expected: 'notified',
+            },
+        ],
+        solution: `from abc import ABC, abstractmethod
+
+class Observer(ABC):
+    @abstractmethod
+    def update(self, subject):
+        pass
+
+
+class Subject:
+    def __init__(self):
+        self._observers = []
+        self._state = None
+    
+    @property
+    def state(self):
+        return self._state
+    
+    @state.setter
+    def state(self, value):
+        self._state = value
+        self.notify()
+    
+    def attach(self, observer):
+        if observer not in self._observers:
+            self._observers.append(observer)
+    
+    def detach(self, observer):
+        if observer in self._observers:
+            self._observers.remove(observer)
+    
+    def notify(self):
+        for observer in self._observers:
+            observer.update(self)
+
+
+class ConcreteObserver(Observer):
+    def __init__(self, name):
+        self.name = name
+    
+    def update(self, subject):
+        print(f"{self.name} received update: state = {subject.state}")`,
+        timeComplexity: 'O(n) for notify where n is number of observers',
+        spaceComplexity: 'O(n) to store observers',
+        order: 5,
+        topic: 'Python Object-Oriented Programming',
+    },
+    {
+        id: 'oop-builder-pattern',
+        title: 'Builder Pattern for Complex Objects',
+        difficulty: 'Medium',
+        description: `Implement the Builder pattern for constructing complex \`House\` objects step by step.
+
+Create:
+- \`House\` class with multiple optional attributes (walls, roof, windows, doors, garage)
+- \`HouseBuilder\` class with fluent interface (method chaining)
+- Builder methods return self for chaining
+- \`build()\` method returns the constructed House
+
+**Pattern:** Builder separates object construction from representation.`,
+        examples: [
+            {
+                input: 'HouseBuilder().add_walls().add_roof().add_garage().build()',
+                output: 'House with walls, roof, and garage',
+            },
+        ],
+        constraints: [
+            'Use method chaining (fluent interface)',
+            'All parts are optional',
+            'build() returns House instance',
+        ],
+        hints: [
+            'Return self from builder methods',
+            'Store parts in builder, not House',
+            'Create House in build() method',
+        ],
+        starterCode: `class House:
+    """House with various components."""
+    
+    def __init__(self, walls=False, roof=False, windows=0, doors=0, garage=False):
+        self.walls = walls
+        self.roof = roof
+        self.windows = windows
+        self.doors = doors
+        self.garage = garage
+    
+    def __str__(self):
+        parts = []
+        if self.walls:
+            parts.append("walls")
+        if self.roof:
+            parts.append("roof")
+        if self.windows:
+            parts.append(f"{self.windows} windows")
+        if self.doors:
+            parts.append(f"{self.doors} doors")
+        if self.garage:
+            parts.append("garage")
+        return f"House with: {', '.join(parts) if parts else 'nothing'}"
+
+
+class HouseBuilder:
+    """Builder for constructing houses."""
+    
+    def __init__(self):
+        # Initialize builder state
+        pass
+    
+    def add_walls(self):
+        """Add walls to house."""
+        # Return self for chaining
+        pass
+    
+    def add_roof(self):
+        """Add roof to house."""
+        pass
+    
+    def add_windows(self, count):
+        """Add windows to house."""
+        pass
+    
+    def add_doors(self, count):
+        """Add doors to house."""
+        pass
+    
+    def add_garage(self):
+        """Add garage to house."""
+        pass
+    
+    def build(self):
+        """Build and return the house."""
+        pass
+
+
+# Test fluent interface
+house = (HouseBuilder()
+         .add_walls()
+         .add_roof()
+         .add_windows(4)
+         .add_doors(2)
+         .add_garage()
+         .build())
+print(house)
+`,
+        testCases: [
+            {
+                input: ['walls', 'roof', 'garage'],
+                expected: 'House',
+            },
+        ],
+        solution: `class House:
+    def __init__(self, walls=False, roof=False, windows=0, doors=0, garage=False):
+        self.walls = walls
+        self.roof = roof
+        self.windows = windows
+        self.doors = doors
+        self.garage = garage
+    
+    def __str__(self):
+        parts = []
+        if self.walls:
+            parts.append("walls")
+        if self.roof:
+            parts.append("roof")
+        if self.windows:
+            parts.append(f"{self.windows} windows")
+        if self.doors:
+            parts.append(f"{self.doors} doors")
+        if self.garage:
+            parts.append("garage")
+        return f"House with: {', '.join(parts) if parts else 'nothing'}"
+
+
+class HouseBuilder:
+    def __init__(self):
+        self._walls = False
+        self._roof = False
+        self._windows = 0
+        self._doors = 0
+        self._garage = False
+    
+    def add_walls(self):
+        self._walls = True
+        return self
+    
+    def add_roof(self):
+        self._roof = True
+        return self
+    
+    def add_windows(self, count):
+        self._windows = count
+        return self
+    
+    def add_doors(self, count):
+        self._doors = count
+        return self
+    
+    def add_garage(self):
+        self._garage = True
+        return self
+    
+    def build(self):
+        return House(
+            walls=self._walls,
+            roof=self._roof,
+            windows=self._windows,
+            doors=self._doors,
+            garage=self._garage
+        )`,
+        timeComplexity: 'O(1)',
+        spaceComplexity: 'O(1)',
+        order: 6,
+        topic: 'Python Object-Oriented Programming',
+    },
+    {
+        id: 'oop-strategy-pattern',
+        title: 'Strategy Pattern for Sorting',
+        difficulty: 'Medium',
+        description: `Implement the Strategy pattern to allow dynamic selection of sorting algorithms.
+
+Create:
+- \`SortStrategy\` interface with \`sort(data)\` method
+- Concrete strategies: \`BubbleSort\`, \`QuickSort\`, \`MergeSort\`
+- \`DataProcessor\` class that accepts and uses a strategy
+- Ability to change strategy at runtime
+
+**Pattern:** Strategy encapsulates interchangeable algorithms.`,
+        examples: [
+            {
+                input: 'processor.set_strategy(QuickSort()); processor.sort([3,1,2])',
+                output: '[1, 2, 3] using QuickSort',
+            },
+        ],
+        constraints: [
+            'Strategies implement common interface',
+            'Strategy can be changed at runtime',
+            'DataProcessor delegates to strategy',
+        ],
+        hints: [
+            'Store strategy as instance variable',
+            'Call strategy.sort() from processor',
+            'Each strategy implements differently',
+        ],
+        starterCode: `from abc import ABC, abstractmethod
+
+class SortStrategy(ABC):
+    """Strategy interface for sorting."""
+    
+    @abstractmethod
+    def sort(self, data):
+        """Sort the data using this strategy."""
+        pass
+
+
+class BubbleSort(SortStrategy):
+    """Bubble sort strategy."""
+    
+    def sort(self, data):
+        # Implement bubble sort
+        pass
+
+
+class QuickSort(SortStrategy):
+    """Quick sort strategy."""
+    
+    def sort(self, data):
+        # Implement quick sort (simplified)
+        pass
+
+
+class MergeSort(SortStrategy):
+    """Merge sort strategy."""
+    
+    def sort(self, data):
+        # Implement merge sort (simplified)
+        pass
+
+
+class DataProcessor:
+    """Processor that uses a sorting strategy."""
+    
+    def __init__(self, strategy=None):
+        self._strategy = strategy
+    
+    def set_strategy(self, strategy):
+        """Change the sorting strategy."""
+        pass
+    
+    def sort(self, data):
+        """Sort data using current strategy."""
+        pass
+
+
+# Test
+processor = DataProcessor()
+processor.set_strategy(QuickSort())
+result = processor.sort([3, 1, 4, 1, 5, 9, 2, 6])
+print(result)
+
+processor.set_strategy(BubbleSort())
+result = processor.sort([3, 1, 4, 1, 5, 9, 2, 6])
+print(result)
+`,
+        testCases: [
+            {
+                input: [[3, 1, 2], 'QuickSort'],
+                expected: [1, 2, 3],
+            },
+        ],
+        solution: `from abc import ABC, abstractmethod
+
+class SortStrategy(ABC):
+    @abstractmethod
+    def sort(self, data):
+        pass
+
+
+class BubbleSort(SortStrategy):
+    def sort(self, data):
+        arr = data.copy()
+        n = len(arr)
+        for i in range(n):
+            for j in range(0, n - i - 1):
+                if arr[j] > arr[j + 1]:
+                    arr[j], arr[j + 1] = arr[j + 1], arr[j]
+        return arr
+
+
+class QuickSort(SortStrategy):
+    def sort(self, data):
+        return sorted(data)  # Simplified using built-in
+
+
+class MergeSort(SortStrategy):
+    def sort(self, data):
+        if len(data) <= 1:
+            return data.copy()
+        
+        mid = len(data) // 2
+        left = self.sort(data[:mid])
+        right = self.sort(data[mid:])
+        
+        return self._merge(left, right)
+    
+    def _merge(self, left, right):
+        result = []
+        i = j = 0
+        
+        while i < len(left) and j < len(right):
+            if left[i] <= right[j]:
+                result.append(left[i])
+                i += 1
+            else:
+                result.append(right[j])
+                j += 1
+        
+        result.extend(left[i:])
+        result.extend(right[j:])
+        return result
+
+
+class DataProcessor:
+    def __init__(self, strategy=None):
+        self._strategy = strategy
+    
+    def set_strategy(self, strategy):
+        self._strategy = strategy
+    
+    def sort(self, data):
+        if self._strategy is None:
+            raise ValueError("No strategy set")
+        return self._strategy.sort(data)`,
+        timeComplexity:
+            'Depends on strategy (O(n²) for bubble, O(n log n) for others)',
+        spaceComplexity: 'O(n)',
+        order: 7,
+        topic: 'Python Object-Oriented Programming',
+    },
+    {
+        id: 'oop-composite-pattern',
+        title: 'Composite Pattern for File System',
+        difficulty: 'Hard',
+        description: `Implement the Composite pattern to represent a file system hierarchy.
+
+Create:
+- \`FileSystemItem\` abstract base class with \`get_size()\` method
+- \`File\` class (leaf) with size attribute
+- \`Directory\` class (composite) that can contain files and directories
+- Methods: \`add(item)\`, \`remove(item)\`, \`get_size()\` (sum of all contents)
+
+**Pattern:** Composite lets clients treat individual objects and compositions uniformly.`,
+        examples: [
+            {
+                input: 'dir.add(File(100)); dir.add(File(200)); dir.get_size()',
+                output: '300',
+            },
+        ],
+        constraints: [
+            'Both File and Directory inherit from FileSystemItem',
+            'Directory can contain files and other directories',
+            'get_size() recursively calculates total size',
+        ],
+        hints: [
+            'Directory stores children in a list',
+            'File returns its size directly',
+            "Directory sums children's sizes",
+        ],
+        starterCode: `from abc import ABC, abstractmethod
+
+class FileSystemItem(ABC):
+    """Abstract base for files and directories."""
+    
+    def __init__(self, name):
+        self.name = name
+    
+    @abstractmethod
+    def get_size(self):
+        """Get size in bytes."""
+        pass
+
+
+class File(FileSystemItem):
+    """File with fixed size."""
+    
+    def __init__(self, name, size):
+        super().__init__(name)
+        self.size = size
+    
+    def get_size(self):
+        # Return file size
+        pass
+
+
+class Directory(FileSystemItem):
+    """Directory that can contain files and directories."""
+    
+    def __init__(self, name):
+        super().__init__(name)
+        self.children = []
+    
+    def add(self, item):
+        """Add a file or directory."""
+        pass
+    
+    def remove(self, item):
+        """Remove a file or directory."""
+        pass
+    
+    def get_size(self):
+        """Get total size of all contents."""
+        pass
+
+
+# Test
+root = Directory("root")
+docs = Directory("documents")
+pics = Directory("pictures")
+
+docs.add(File("resume.pdf", 1024))
+docs.add(File("cover_letter.pdf", 512))
+pics.add(File("photo1.jpg", 2048))
+pics.add(File("photo2.jpg", 1536))
+
+root.add(docs)
+root.add(pics)
+root.add(File("readme.txt", 256))
+
+print(f"Total size: {root.get_size()} bytes")
+`,
+        testCases: [
+            {
+                input: [1024, 512, 256], // file sizes
+                expected: 1792, // sum
+            },
+        ],
+        solution: `from abc import ABC, abstractmethod
+
+class FileSystemItem(ABC):
+    def __init__(self, name):
+        self.name = name
+    
+    @abstractmethod
+    def get_size(self):
+        pass
+
+
+class File(FileSystemItem):
+    def __init__(self, name, size):
+        super().__init__(name)
+        self.size = size
+    
+    def get_size(self):
+        return self.size
+
+
+class Directory(FileSystemItem):
+    def __init__(self, name):
+        super().__init__(name)
+        self.children = []
+    
+    def add(self, item):
+        if not isinstance(item, FileSystemItem):
+            raise TypeError("Can only add FileSystemItem")
+        self.children.append(item)
+    
+    def remove(self, item):
+        if item in self.children:
+            self.children.remove(item)
+    
+    def get_size(self):
+        return sum(child.get_size() for child in self.children)`,
+        timeComplexity: 'O(n) where n is total number of items',
+        spaceComplexity: 'O(d) where d is depth of directory tree',
+        order: 8,
+        topic: 'Python Object-Oriented Programming',
+    },
+    {
+        id: 'oop-template-method',
+        title: 'Template Method Pattern',
+        difficulty: 'Medium',
+        description: `Implement the Template Method pattern for a data processing pipeline.
+
+Create:
+- Abstract \`DataProcessor\` class with template method \`process()\`
+- Template method calls: \`load_data()\`, \`parse_data()\`, \`analyze_data()\`, \`save_results()\`
+- Subclasses: \`CSVProcessor\` and \`JSONProcessor\` that implement specific steps
+- Template method defines the algorithm structure
+
+**Pattern:** Template method defines skeleton, subclasses fill in steps.`,
+        examples: [
+            {
+                input: 'CSVProcessor().process()',
+                output: 'Executes CSV-specific steps in defined order',
+            },
+        ],
+        constraints: [
+            'Template method is concrete in base class',
+            'Hook methods are abstract',
+            "Subclasses don't override template method",
+        ],
+        hints: [
+            'Template method calls other methods',
+            'Make step methods abstract',
+            'Each processor implements steps differently',
+        ],
+        starterCode: `from abc import ABC, abstractmethod
+
+class DataProcessor(ABC):
+    """Template for data processing pipeline."""
+    
+    def process(self):
+        """Template method defining the algorithm structure."""
+        # Define the steps here
+        pass
+    
+    @abstractmethod
+    def load_data(self):
+        """Load data from source."""
+        pass
+    
+    @abstractmethod
+    def parse_data(self, raw_data):
+        """Parse raw data."""
+        pass
+    
+    @abstractmethod
+    def analyze_data(self, parsed_data):
+        """Analyze parsed data."""
+        pass
+    
+    @abstractmethod
+    def save_results(self, results):
+        """Save analysis results."""
+        pass
+
+
+class CSVProcessor(DataProcessor):
+    """Process CSV data."""
+    
+    def load_data(self):
+        # Simulate loading CSV
+        pass
+    
+    def parse_data(self, raw_data):
+        # Parse CSV format
+        pass
+    
+    def analyze_data(self, parsed_data):
+        # Analyze data
+        pass
+    
+    def save_results(self, results):
+        # Save results
+        pass
+
+
+class JSONProcessor(DataProcessor):
+    """Process JSON data."""
+    
+    def load_data(self):
+        pass
+    
+    def parse_data(self, raw_data):
+        pass
+    
+    def analyze_data(self, parsed_data):
+        pass
+    
+    def save_results(self, results):
+        pass
+
+
+# Test
+csv_processor = CSVProcessor()
+csv_processor.process()
+`,
+        testCases: [
+            {
+                input: ['CSV'],
+                expected: 'processed',
+            },
+        ],
+        solution: `from abc import ABC, abstractmethod
+
+class DataProcessor(ABC):
+    def process(self):
+        """Template method defining the algorithm structure."""
+        print("Starting processing pipeline...")
+        raw_data = self.load_data()
+        parsed_data = self.parse_data(raw_data)
+        results = self.analyze_data(parsed_data)
+        self.save_results(results)
+        print("Processing complete!")
+        return results
+    
+    @abstractmethod
+    def load_data(self):
+        pass
+    
+    @abstractmethod
+    def parse_data(self, raw_data):
+        pass
+    
+    @abstractmethod
+    def analyze_data(self, parsed_data):
+        pass
+    
+    @abstractmethod
+    def save_results(self, results):
+        pass
+
+
+class CSVProcessor(DataProcessor):
+    def load_data(self):
+        print("Loading CSV data...")
+        return "name,age\\nAlice,30\\nBob,25"
+    
+    def parse_data(self, raw_data):
+        print("Parsing CSV...")
+        lines = raw_data.split('\\n')
+        header = lines[0].split(',')
+        data = [dict(zip(header, line.split(','))) for line in lines[1:]]
+        return data
+    
+    def analyze_data(self, parsed_data):
+        print("Analyzing CSV data...")
+        avg_age = sum(int(row['age']) for row in parsed_data) / len(parsed_data)
+        return {'average_age': avg_age}
+    
+    def save_results(self, results):
+        print(f"Saving results: {results}")
+
+
+class JSONProcessor(DataProcessor):
+    def load_data(self):
+        print("Loading JSON data...")
+        return '{"users": [{"name": "Alice", "age": 30}]}'
+    
+    def parse_data(self, raw_data):
+        print("Parsing JSON...")
+        import json
+        return json.loads(raw_data)
+    
+    def analyze_data(self, parsed_data):
+        print("Analyzing JSON data...")
+        users = parsed_data['users']
+        return {'user_count': len(users)}
+    
+    def save_results(self, results):
+        print(f"Saving results: {results}")`,
+        timeComplexity: 'O(n) where n is data size',
+        spaceComplexity: 'O(n)',
+        order: 9,
+        topic: 'Python Object-Oriented Programming',
+    },
+    {
+        id: 'oop-multiple-inheritance-mixin',
+        title: 'Multiple Inheritance with Mixins',
+        difficulty: 'Hard',
+        description: `Create a flexible class system using mixins for shared functionality.
+
+Implement:
+- \`SerializableMixin\` with \`to_dict()\` and \`from_dict()\` methods
+- \`TimestampMixin\` that adds created_at and updated_at timestamps
+- \`User\` class that inherits from both mixins
+- Proper MRO (Method Resolution Order) handling
+
+**Pattern:** Mixins provide reusable functionality without deep inheritance hierarchies.`,
+        examples: [
+            {
+                input: 'user = User("alice"); user.to_dict()',
+                output: 'Dictionary with user data and timestamp',
+            },
+        ],
+        constraints: [
+            'Mixins should be independent',
+            'User class combines both mixins',
+            'Demonstrate proper MRO',
+        ],
+        hints: [
+            "Mixins typically don't have __init__",
+            'Use super() for cooperative inheritance',
+            'Check class.mro() for resolution order',
+        ],
+        starterCode: `from datetime import datetime
+import json
+
+class SerializableMixin:
+    """Mixin for JSON serialization."""
+    
+    def to_dict(self):
+        """Convert object to dictionary."""
+        pass
+    
+    @classmethod
+    def from_dict(cls, data):
+        """Create object from dictionary."""
+        pass
+
+
+class TimestampMixin:
+    """Mixin for automatic timestamps."""
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.created_at = datetime.now()
+        self.updated_at = datetime.now()
+    
+    def touch(self):
+        """Update the updated_at timestamp."""
+        pass
+
+
+class User(SerializableMixin, TimestampMixin):
+    """User class with serialization and timestamps."""
+    
+    def __init__(self, username, email=None):
+        super().__init__()
+        self.username = username
+        self.email = email
+
+
+# Test
+user = User("alice", "alice@example.com")
+print(user.to_dict())
+
+user.touch()
+print(user.updated_at)
+
+# Test MRO
+print(User.mro())
+`,
+        testCases: [
+            {
+                input: ['alice', 'alice@example.com'],
+                expected: 'dict',
+            },
+        ],
+        solution: `from datetime import datetime
+import json
+
+class SerializableMixin:
+    def to_dict(self):
+        result = {}
+        for key, value in self.__dict__.items():
+            if isinstance(value, datetime):
+                result[key] = value.isoformat()
+            else:
+                result[key] = value
+        return result
+    
+    @classmethod
+    def from_dict(cls, data):
+        # Create instance without calling __init__
+        instance = cls.__new__(cls)
+        for key, value in data.items():
+            # Try to parse datetime strings
+            if isinstance(value, str):
+                try:
+                    value = datetime.fromisoformat(value)
+                except (ValueError, AttributeError):
+                    pass
+            setattr(instance, key, value)
+        return instance
+    
+    def to_json(self):
+        return json.dumps(self.to_dict())
+
+
+class TimestampMixin:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.created_at = datetime.now()
+        self.updated_at = datetime.now()
+    
+    def touch(self):
+        self.updated_at = datetime.now()
+
+
+class User(SerializableMixin, TimestampMixin):
+    def __init__(self, username, email=None):
+        super().__init__()
+        self.username = username
+        self.email = email`,
+        timeComplexity: 'O(n) where n is number of attributes',
+        spaceComplexity: 'O(n)',
+        order: 10,
+        topic: 'Python Object-Oriented Programming',
+    },
+    {
+        id: 'oop-dataclass-comparison',
+        title: 'Custom Comparison with Dataclasses',
+        difficulty: 'Medium',
+        description: `Use Python's \`@dataclass\` decorator to create classes with automatic comparison methods.
+
+Implement:
+- \`Point\` dataclass with x and y coordinates
+- Enable ordering (use \`order=True\`)
+- Add custom \`distance_from_origin()\` method
+- Create \`Rectangle\` dataclass with two Point corners
+- Implement \`area()\` property
+
+**Modern Pattern:** Dataclasses reduce boilerplate for data-holding classes.`,
+        examples: [
+            {
+                input: 'Point(3, 4).distance_from_origin()',
+                output: '5.0',
+            },
+        ],
+        constraints: [
+            'Use @dataclass decorator',
+            'Points should be comparable',
+            'Rectangle uses Points',
+        ],
+        hints: [
+            'Import from dataclasses',
+            'Use order=True for comparisons',
+            'Add methods normally to dataclasses',
+        ],
+        starterCode: `from dataclasses import dataclass
+import math
+
+@dataclass(order=True)
+class Point:
+    """2D point with comparison support."""
+    x: float
+    y: float
+    
+    def distance_from_origin(self):
+        """Calculate distance from origin."""
+        pass
+    
+    def distance_to(self, other):
+        """Calculate distance to another point."""
+        pass
+
+
+@dataclass
+class Rectangle:
+    """Rectangle defined by two corner points."""
+    top_left: Point
+    bottom_right: Point
+    
+    @property
+    def width(self):
+        """Calculate rectangle width."""
+        pass
+    
+    @property
+    def height(self):
+        """Calculate rectangle height."""
+        pass
+    
+    @property
+    def area(self):
+        """Calculate rectangle area."""
+        pass
+
+
+# Test
+p1 = Point(0, 0)
+p2 = Point(3, 4)
+print(p2.distance_from_origin())
+print(p1 < p2)  # Comparison works automatically
+
+rect = Rectangle(Point(0, 10), Point(10, 0))
+print(f"Area: {rect.area}")
+`,
+        testCases: [
+            {
+                input: [3, 4],
+                expected: 5.0,
+            },
+        ],
+        solution: `from dataclasses import dataclass
+import math
+
+@dataclass(order=True)
+class Point:
+    x: float
+    y: float
+    
+    def distance_from_origin(self):
+        return math.sqrt(self.x ** 2 + self.y ** 2)
+    
+    def distance_to(self, other):
+        return math.sqrt((self.x - other.x) ** 2 + (self.y - other.y) ** 2)
+
+
+@dataclass
+class Rectangle:
+    top_left: Point
+    bottom_right: Point
+    
+    @property
+    def width(self):
+        return abs(self.bottom_right.x - self.top_left.x)
+    
+    @property
+    def height(self):
+        return abs(self.top_left.y - self.bottom_right.y)
+    
+    @property
+    def area(self):
+        return self.width * self.height
+    
+    def contains_point(self, point):
+        return (self.top_left.x <= point.x <= self.bottom_right.x and
+                self.bottom_right.y <= point.y <= self.top_left.y)`,
+        timeComplexity: 'O(1) for all operations',
+        spaceComplexity: 'O(1)',
+        order: 11,
+        topic: 'Python Object-Oriented Programming',
+    },
+    {
+        id: 'oop-protocol-duck-typing',
+        title: 'Protocol and Duck Typing',
+        difficulty: 'Medium',
+        description: `Implement Protocol (structural subtyping) for duck typing with type hints.
+
+Create:
+- \`Drawable\` Protocol with \`draw()\` method
+- Multiple classes that implement draw() without inheriting
+- \`Canvas\` class that accepts any Drawable
+- Use typing.Protocol for static type checking
+
+**Pattern:** "If it walks like a duck and quacks like a duck, it's a duck."`,
+        examples: [
+            {
+                input: 'canvas.render(Circle()); canvas.render(Square())',
+                output: 'Both work without common base class',
+            },
+        ],
+        constraints: [
+            'Use typing.Protocol',
+            "Classes don't inherit from Drawable",
+            'Canvas works with any object that has draw()',
+        ],
+        hints: [
+            'Import Protocol from typing',
+            'Protocol defines interface, not inheritance',
+            'Classes implicitly satisfy protocol',
+        ],
+        starterCode: `from typing import Protocol
+
+class Drawable(Protocol):
+    """Protocol for drawable objects."""
+    
+    def draw(self) -> str:
+        """Draw the object and return description."""
+        ...
+
+
+class Circle:
+    """Circle that can be drawn (no inheritance!)."""
+    
+    def __init__(self, radius):
+        self.radius = radius
+    
+    def draw(self) -> str:
+        pass
+
+
+class Square:
+    """Square that can be drawn (no inheritance!)."""
+    
+    def __init__(self, side):
+        self.side = side
+    
+    def draw(self) -> str:
+        pass
+
+
+class Triangle:
+    """Triangle that can be drawn (no inheritance!)."""
+    
+    def __init__(self, base, height):
+        self.base = base
+        self.height = height
+    
+    def draw(self) -> str:
+        pass
+
+
+class Canvas:
+    """Canvas that can render any Drawable."""
+    
+    def __init__(self):
+        self.objects = []
+    
+    def add(self, obj: Drawable):
+        """Add a drawable object."""
+        pass
+    
+    def render(self) -> str:
+        """Render all objects."""
+        pass
+
+
+# Test duck typing
+canvas = Canvas()
+canvas.add(Circle(5))
+canvas.add(Square(4))
+canvas.add(Triangle(3, 4))
+
+print(canvas.render())
+`,
+        testCases: [
+            {
+                input: ['Circle', 5],
+                expected: 'Circle drawn',
+            },
+        ],
+        solution: `from typing import Protocol
+
+class Drawable(Protocol):
+    def draw(self) -> str:
+        ...
+
+
+class Circle:
+    def __init__(self, radius):
+        self.radius = radius
+    
+    def draw(self) -> str:
+        return f"Drawing circle with radius {self.radius}"
+
+
+class Square:
+    def __init__(self, side):
+        self.side = side
+    
+    def draw(self) -> str:
+        return f"Drawing square with side {self.side}"
+
+
+class Triangle:
+    def __init__(self, base, height):
+        self.base = base
+        self.height = height
+    
+    def draw(self) -> str:
+        return f"Drawing triangle with base {self.base} and height {self.height}"
+
+
+class Canvas:
+    def __init__(self):
+        self.objects = []
+    
+    def add(self, obj: Drawable):
+        # Type checker ensures obj has draw() method
+        self.objects.append(obj)
+    
+    def render(self) -> str:
+        return '\\n'.join(obj.draw() for obj in self.objects)`,
+        timeComplexity: 'O(n) for rendering n objects',
+        spaceComplexity: 'O(n)',
+        order: 12,
+        topic: 'Python Object-Oriented Programming',
+    },
+    {
+        id: 'oop-enum-state-machine',
+        title: 'State Machine with Enum',
+        difficulty: 'Medium',
+        description: `Implement a state machine using Python's \`Enum\` for a traffic light system.
+
+Create:
+- \`TrafficLightState\` Enum with RED, YELLOW, GREEN
+- \`TrafficLight\` class that manages state transitions
+- Transition rules: RED → GREEN → YELLOW → RED
+- Time duration for each state
+- \`next_state()\` method with validation
+
+**Pattern:** Enums provide type-safe state management.`,
+        examples: [
+            {
+                input: 'light.next_state() from RED',
+                output: 'Changes to GREEN',
+            },
+        ],
+        constraints: [
+            'Use enum.Enum',
+            'Enforce valid transitions only',
+            'Each state has a duration',
+        ],
+        hints: [
+            'Import Enum from enum',
+            'Use dictionary for transition rules',
+            'Store current_state in traffic light',
+        ],
+        starterCode: `from enum import Enum
+
+class TrafficLightState(Enum):
+    """Traffic light states."""
+    RED = 1
+    YELLOW = 2
+    GREEN = 3
+
+
+class TrafficLight:
+    """Traffic light with state machine."""
+    
+    # State transitions
+    TRANSITIONS = {
+        TrafficLightState.RED: TrafficLightState.GREEN,
+        TrafficLightState.GREEN: TrafficLightState.YELLOW,
+        TrafficLightState.YELLOW: TrafficLightState.RED,
+    }
+    
+    # Duration for each state (seconds)
+    DURATIONS = {
+        TrafficLightState.RED: 30,
+        TrafficLightState.YELLOW: 5,
+        TrafficLightState.GREEN: 25,
+    }
+    
+    def __init__(self):
+        self.current_state = TrafficLightState.RED
+    
+    def next_state(self):
+        """Transition to next state."""
+        pass
+    
+    def get_duration(self):
+        """Get duration for current state."""
+        pass
+    
+    def can_transition_to(self, state):
+        """Check if transition to state is valid."""
+        pass
+    
+    def __str__(self):
+        return f"Traffic Light: {self.current_state.name}"
+
+
+# Test
+light = TrafficLight()
+print(light)  # RED
+print(f"Duration: {light.get_duration()}s")
+
+light.next_state()
+print(light)  # GREEN
+
+light.next_state()
+print(light)  # YELLOW
+
+light.next_state()
+print(light)  # RED again
+`,
+        testCases: [
+            {
+                input: ['RED'],
+                expected: 'GREEN',
+            },
+        ],
+        solution: `from enum import Enum
+
+class TrafficLightState(Enum):
+    RED = 1
+    YELLOW = 2
+    GREEN = 3
+
+
+class TrafficLight:
+    TRANSITIONS = {
+        TrafficLightState.RED: TrafficLightState.GREEN,
+        TrafficLightState.GREEN: TrafficLightState.YELLOW,
+        TrafficLightState.YELLOW: TrafficLightState.RED,
+    }
+    
+    DURATIONS = {
+        TrafficLightState.RED: 30,
+        TrafficLightState.YELLOW: 5,
+        TrafficLightState.GREEN: 25,
+    }
+    
+    def __init__(self):
+        self.current_state = TrafficLightState.RED
+    
+    def next_state(self):
+        self.current_state = self.TRANSITIONS[self.current_state]
+        return self.current_state
+    
+    def get_duration(self):
+        return self.DURATIONS[self.current_state]
+    
+    def can_transition_to(self, state):
+        return self.TRANSITIONS[self.current_state] == state
+    
+    def force_state(self, state):
+        """Force transition to any state (e.g., for maintenance)."""
+        if not isinstance(state, TrafficLightState):
+            raise TypeError("State must be TrafficLightState")
+        self.current_state = state
+    
+    def __str__(self):
+        return f"Traffic Light: {self.current_state.name}"`,
+        timeComplexity: 'O(1)',
+        spaceComplexity: 'O(1)',
+        order: 13,
+        topic: 'Python Object-Oriented Programming',
+    },
+];

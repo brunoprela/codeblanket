@@ -44,7 +44,9 @@ export function SimpleCodeEditor({
   const [isRunning, setIsRunning] = useState(false);
   const [isResultsCollapsed, setIsResultsCollapsed] = useState(false);
   const [consoleOutput, setConsoleOutput] = useState<string[]>([]);
-  const [executionMode, setExecutionMode] = useState<'run' | 'test' | null>(null);
+  const [executionMode, setExecutionMode] = useState<'run' | 'test' | null>(
+    null,
+  );
 
   // Run code without tests (just execute and show console output)
   const runCodeOnly = async () => {
@@ -286,14 +288,18 @@ sys.stdout.getvalue() + sys.stderr.getvalue()
       {/* Code Editor */}
       <div className="flex-1 overflow-hidden">
         <div className="h-full overflow-auto bg-[#282a36] p-4">
-          <pre className="language-python" style={{ margin: 0, background: 'transparent' }}>
+          <pre
+            className="language-python"
+            style={{ margin: 0, background: 'transparent' }}
+          >
             <SimpleEditor
               value={code}
               onValueChange={setCode}
               highlight={(code) => highlight(code, languages.python, 'python')}
               padding={16}
               style={{
-                fontFamily: '"Fira Code", "Fira Mono", "SF Mono", Monaco, Inconsolata, "Roboto Mono", Consolas, "Courier New", monospace',
+                fontFamily:
+                  '"Fira Code", "Fira Mono", "SF Mono", Monaco, Inconsolata, "Roboto Mono", Consolas, "Courier New", monospace',
                 fontSize: 15,
                 minHeight: '100%',
                 backgroundColor: 'transparent',
@@ -388,10 +394,11 @@ sys.stdout.getvalue() + sys.stderr.getvalue()
               {results.map((result, i) => (
                 <div
                   key={i}
-                  className={`rounded-lg border-2 p-4 ${result.passed
-                    ? 'border-[#50fa7b] bg-[#50fa7b]/10'
-                    : 'border-[#ff5555] bg-[#ff5555]/10'
-                    }`}
+                  className={`rounded-lg border-2 p-4 ${
+                    result.passed
+                      ? 'border-[#50fa7b] bg-[#50fa7b]/10'
+                      : 'border-[#ff5555] bg-[#ff5555]/10'
+                  }`}
                 >
                   <div className="mb-3 flex items-center justify-between">
                     <div className="text-lg font-semibold text-[#f8f8f2]">
@@ -428,8 +435,9 @@ sys.stdout.getvalue() + sys.stderr.getvalue()
                         Got:
                       </span>
                       <span
-                        className={`font-semibold ${result.passed ? 'text-[#50fa7b]' : 'text-[#ff5555]'
-                          }`}
+                        className={`font-semibold ${
+                          result.passed ? 'text-[#50fa7b]' : 'text-[#ff5555]'
+                        }`}
                       >
                         {formatValue(result.actual)}
                       </span>
@@ -440,7 +448,7 @@ sys.stdout.getvalue() + sys.stderr.getvalue()
                         <div className="mb-1 font-semibold text-[#ff5555]">
                           Error:
                         </div>
-                        <pre className="whitespace-pre-wrap text-xs text-[#ff5555]">
+                        <pre className="text-xs whitespace-pre-wrap text-[#ff5555]">
                           {result.error}
                         </pre>
                       </div>
@@ -461,11 +469,16 @@ sys.stdout.getvalue() + sys.stderr.getvalue()
               <span className="text-lg">📟</span>
               <div className="font-semibold text-[#f8f8f2]">Console Output</div>
               {executionMode && (
-                <span className={`rounded px-2 py-0.5 text-xs font-semibold ${executionMode === 'run'
-                    ? 'bg-[#bd93f9]/20 text-[#bd93f9]'
-                    : 'bg-[#50fa7b]/20 text-[#50fa7b]'
-                  }`}>
-                  {executionMode === 'run' ? 'Code Execution' : 'Test Execution'}
+                <span
+                  className={`rounded px-2 py-0.5 text-xs font-semibold ${
+                    executionMode === 'run'
+                      ? 'bg-[#bd93f9]/20 text-[#bd93f9]'
+                      : 'bg-[#50fa7b]/20 text-[#50fa7b]'
+                  }`}
+                >
+                  {executionMode === 'run'
+                    ? 'Code Execution'
+                    : 'Test Execution'}
                 </span>
               )}
             </div>
@@ -490,4 +503,3 @@ function formatValue(value: any): string {
   if (typeof value === 'string') return `"${value}"`;
   return JSON.stringify(value);
 }
-

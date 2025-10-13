@@ -1,18 +1,18 @@
 import { Module } from '@/lib/types';
 
 export const graphsModule: Module = {
-  id: 'graphs',
-  title: 'Graphs',
-  description:
-    'Master graph traversal, pathfinding, and connectivity problems for complex network structures.',
-  icon: '🕸️',
-  timeComplexity: 'O(V + E) for traversals',
-  spaceComplexity: 'O(V) for visited tracking',
-  sections: [
-    {
-      id: 'introduction',
-      title: 'Introduction to Graphs',
-      content: `A **graph** is a data structure consisting of **vertices (nodes)** connected by **edges**. Graphs model relationships and networks: social networks, maps, dependencies, etc.
+    id: 'graphs',
+    title: 'Graphs',
+    description:
+        'Master graph traversal, pathfinding, and connectivity problems for complex network structures.',
+    icon: '🕸️',
+    timeComplexity: 'O(V + E) for traversals',
+    spaceComplexity: 'O(V) for visited tracking',
+    sections: [
+        {
+            id: 'introduction',
+            title: 'Introduction to Graphs',
+            content: `A **graph** is a data structure consisting of **vertices (nodes)** connected by **edges**. Graphs model relationships and networks: social networks, maps, dependencies, etc.
 
 **Graph Terminology:**
 
@@ -75,55 +75,122 @@ edges = [(0,1), (0,2), (1,3), (2,3)]
 - Dependencies (tasks, packages)
 - Networks (computers, websites)
 - State machines and game trees`,
-      quiz: [
-        {
-          id: 'q1',
-          question:
-            'Explain what a graph is and how it differs from a tree. When would you use a graph over a tree?',
-          sampleAnswer:
-            'A graph is a collection of nodes (vertices) connected by edges. Unlike trees, graphs can have cycles, multiple paths between nodes, and disconnected components. Trees are special graphs: connected, acyclic, with exactly n-1 edges for n nodes. Use graphs when relationships are not strictly hierarchical - for example, social networks where friendships are bidirectional and can form cycles, or road maps where multiple routes exist between cities. Trees model hierarchical relationships like file systems or org charts. Graphs model peer relationships, networks, dependencies, and any scenario where cycles or multiple connections are natural. Graphs are more general; trees are constrained graphs.',
-          keyPoints: [
-            'Graph: nodes connected by edges',
-            'Can have cycles, multiple paths, disconnected components',
-            'Trees: special graphs (connected, acyclic, n-1 edges)',
-            'Use graphs: non-hierarchical relationships, cycles',
-            'Trees: hierarchical, Graphs: peer relationships',
-          ],
+            quiz: [
+                {
+                    id: 'q1',
+                    question:
+                        'Explain what a graph is and how it differs from a tree. When would you use a graph over a tree?',
+                    sampleAnswer:
+                        'A graph is a collection of nodes (vertices) connected by edges. Unlike trees, graphs can have cycles, multiple paths between nodes, and disconnected components. Trees are special graphs: connected, acyclic, with exactly n-1 edges for n nodes. Use graphs when relationships are not strictly hierarchical - for example, social networks where friendships are bidirectional and can form cycles, or road maps where multiple routes exist between cities. Trees model hierarchical relationships like file systems or org charts. Graphs model peer relationships, networks, dependencies, and any scenario where cycles or multiple connections are natural. Graphs are more general; trees are constrained graphs.',
+                    keyPoints: [
+                        'Graph: nodes connected by edges',
+                        'Can have cycles, multiple paths, disconnected components',
+                        'Trees: special graphs (connected, acyclic, n-1 edges)',
+                        'Use graphs: non-hierarchical relationships, cycles',
+                        'Trees: hierarchical, Graphs: peer relationships',
+                    ],
+                },
+                {
+                    id: 'q2',
+                    question:
+                        'Compare adjacency list and adjacency matrix representations. When would you choose each?',
+                    sampleAnswer:
+                        'Adjacency list stores for each node a list of its neighbors. Space is O(V + E) where V is vertices, E is edges. Good for sparse graphs where E << V^2. Checking if edge exists is O(degree), adding edge is O(1). Adjacency matrix is VxV grid where matrix[i][j] = 1 if edge exists. Space is O(V^2) regardless of edges. Good for dense graphs or when you frequently check if edge exists (O(1) lookup). For example, social network with 1M users but each connected to ~100: list uses 100M entries, matrix needs 1T entries - list wins. For complete graph where everyone connects to everyone: matrix is better. In practice, most real graphs are sparse, so adjacency list is more common.',
+                    keyPoints: [
+                        'List: O(V + E) space, good for sparse',
+                        'Matrix: O(V^2) space, good for dense',
+                        'List: O(degree) edge check, Matrix: O(1)',
+                        'Most real graphs sparse → list preferred',
+                        'Matrix: when frequent edge existence checks',
+                    ],
+                },
+                {
+                    id: 'q3',
+                    question:
+                        'Describe directed vs undirected graphs. Give real-world examples where each is appropriate.',
+                    sampleAnswer:
+                        'Directed graphs have edges with direction: A→B does not imply B→A. Used for asymmetric relationships like Twitter follows (I follow you, you might not follow me), web page links, task dependencies (task A must complete before B). Undirected graphs have bidirectional edges: A-B means both A to B and B to A. Used for symmetric relationships like Facebook friendships (mutual), road connections (bidirectional travel), collaboration networks. In code, directed graphs store edges once, undirected store twice (both directions) or check both ways. Directed enables modeling one-way relationships and detecting cycles in dependencies. Undirected is simpler when relationships are naturally symmetric.',
+                    keyPoints: [
+                        'Directed: edges have direction (asymmetric)',
+                        'Examples: Twitter follows, web links, task dependencies',
+                        'Undirected: bidirectional edges (symmetric)',
+                        'Examples: friendships, roads, collaborations',
+                        'Choice depends on relationship symmetry',
+                    ],
+                },
+            ],
+            multipleChoice: [
+                {
+                    id: 'mc1',
+                    question: 'What is a graph?',
+                    options: [
+                        'A tree',
+                        'Vertices (nodes) connected by edges modeling relationships/networks',
+                        'An array',
+                        'A sorted list',
+                    ],
+                    correctAnswer: 1,
+                    explanation:
+                        'A graph consists of vertices (nodes) connected by edges. Graphs model networks like social connections, maps, dependencies, etc. Unlike trees, graphs can have cycles.',
+                },
+                {
+                    id: 'mc2',
+                    question: 'What is the most common graph representation and why?',
+                    options: [
+                        'Adjacency matrix',
+                        'Adjacency list - space efficient O(V+E), fast neighbor iteration',
+                        'Edge list',
+                        'Array',
+                    ],
+                    correctAnswer: 1,
+                    explanation:
+                        'Adjacency list is most common: space O(V+E) vs matrix O(V²), fast to iterate neighbors. Most real graphs are sparse, making list more efficient.',
+                },
+                {
+                    id: 'mc3',
+                    question: 'What is a DAG?',
+                    options: [
+                        'A weighted graph',
+                        'Directed Acyclic Graph - directed with no cycles',
+                        'A tree',
+                        'Dense graph',
+                    ],
+                    correctAnswer: 1,
+                    explanation:
+                        'DAG = Directed Acyclic Graph. Edges have direction and no cycles exist. Used for dependency graphs, scheduling, compilation order. Enables topological sorting.',
+                },
+                {
+                    id: 'mc4',
+                    question: 'When should you use adjacency matrix over adjacency list?',
+                    options: [
+                        'Always',
+                        'Dense graphs where checking edge existence is frequent (O(1) lookup)',
+                        'Sparse graphs',
+                        'Never',
+                    ],
+                    correctAnswer: 1,
+                    explanation:
+                        'Use matrix when graph is dense (many edges) and need fast O(1) edge lookup. Matrix uses O(V²) space - inefficient for sparse graphs where list is better.',
+                },
+                {
+                    id: 'mc5',
+                    question: 'What is the difference between directed and undirected graphs?',
+                    options: [
+                        'No difference',
+                        'Directed: edges have direction (A→B), Undirected: edges are bidirectional (A↔B)',
+                        'Directed is faster',
+                        'Undirected has more edges',
+                    ],
+                    correctAnswer: 1,
+                    explanation:
+                        'Directed: edges go one way (A→B doesn\'t mean B→A). Undirected: edges go both ways (A-B means both A→B and B→A). Social networks often undirected, web pages directed.',
+                },
+            ],
         },
         {
-          id: 'q2',
-          question:
-            'Compare adjacency list and adjacency matrix representations. When would you choose each?',
-          sampleAnswer:
-            'Adjacency list stores for each node a list of its neighbors. Space is O(V + E) where V is vertices, E is edges. Good for sparse graphs where E << V^2. Checking if edge exists is O(degree), adding edge is O(1). Adjacency matrix is VxV grid where matrix[i][j] = 1 if edge exists. Space is O(V^2) regardless of edges. Good for dense graphs or when you frequently check if edge exists (O(1) lookup). For example, social network with 1M users but each connected to ~100: list uses 100M entries, matrix needs 1T entries - list wins. For complete graph where everyone connects to everyone: matrix is better. In practice, most real graphs are sparse, so adjacency list is more common.',
-          keyPoints: [
-            'List: O(V + E) space, good for sparse',
-            'Matrix: O(V^2) space, good for dense',
-            'List: O(degree) edge check, Matrix: O(1)',
-            'Most real graphs sparse → list preferred',
-            'Matrix: when frequent edge existence checks',
-          ],
-        },
-        {
-          id: 'q3',
-          question:
-            'Describe directed vs undirected graphs. Give real-world examples where each is appropriate.',
-          sampleAnswer:
-            'Directed graphs have edges with direction: A→B does not imply B→A. Used for asymmetric relationships like Twitter follows (I follow you, you might not follow me), web page links, task dependencies (task A must complete before B). Undirected graphs have bidirectional edges: A-B means both A to B and B to A. Used for symmetric relationships like Facebook friendships (mutual), road connections (bidirectional travel), collaboration networks. In code, directed graphs store edges once, undirected store twice (both directions) or check both ways. Directed enables modeling one-way relationships and detecting cycles in dependencies. Undirected is simpler when relationships are naturally symmetric.',
-          keyPoints: [
-            'Directed: edges have direction (asymmetric)',
-            'Examples: Twitter follows, web links, task dependencies',
-            'Undirected: bidirectional edges (symmetric)',
-            'Examples: friendships, roads, collaborations',
-            'Choice depends on relationship symmetry',
-          ],
-        },
-      ],
-    },
-    {
-      id: 'traversals',
-      title: 'Graph Traversals: BFS and DFS',
-      content: `**Two main traversal algorithms:**
+            id: 'traversals',
+            title: 'Graph Traversals: BFS and DFS',
+            content: `**Two main traversal algorithms:**
 
 **1. Breadth-First Search (BFS)**
 
@@ -259,7 +326,7 @@ Path: 1 → 2 → 4 → 3 → 5
 **Choosing:**
 - **BFS**: Shortest path, level info, closer nodes first
 - **DFS**: Memory efficient, cycle detection, exploring all paths`,
-      codeExample: `from collections import deque
+            codeExample: `from collections import deque
 from typing import Dict, List, Set
 
 
@@ -359,55 +426,122 @@ def has_cycle_dfs(graph: Dict[int, List[int]]) -> bool:
                 return True
     
     return False`,
-      quiz: [
-        {
-          id: 'q1',
-          question:
-            'Compare BFS and DFS for graphs. When would you choose one over the other?',
-          sampleAnswer:
-            'BFS explores level by level using a queue, visiting all neighbors before going deeper. DFS explores as deep as possible using a stack (or recursion), going down one path before backtracking. BFS finds shortest path in unweighted graphs - guaranteed to find closest node first. Use BFS for: shortest path, level-order problems, finding closest node. DFS is better for: detecting cycles, topological sort, exhaustive search (like finding all paths). BFS uses O(width) space for queue, DFS uses O(depth) for stack. In dense graphs, BFS might use more memory. For finding if path exists, either works. For optimization problems, choice depends on whether shortest or any path matters.',
-          keyPoints: [
-            'BFS: level by level, queue, finds shortest path',
-            'DFS: deep first, stack/recursion, exhaustive search',
-            'BFS: closest node, level problems',
-            'DFS: cycles, topological sort, all paths',
-            'Space: BFS O(width), DFS O(depth)',
-          ],
+            quiz: [
+                {
+                    id: 'q1',
+                    question:
+                        'Compare BFS and DFS for graphs. When would you choose one over the other?',
+                    sampleAnswer:
+                        'BFS explores level by level using a queue, visiting all neighbors before going deeper. DFS explores as deep as possible using a stack (or recursion), going down one path before backtracking. BFS finds shortest path in unweighted graphs - guaranteed to find closest node first. Use BFS for: shortest path, level-order problems, finding closest node. DFS is better for: detecting cycles, topological sort, exhaustive search (like finding all paths). BFS uses O(width) space for queue, DFS uses O(depth) for stack. In dense graphs, BFS might use more memory. For finding if path exists, either works. For optimization problems, choice depends on whether shortest or any path matters.',
+                    keyPoints: [
+                        'BFS: level by level, queue, finds shortest path',
+                        'DFS: deep first, stack/recursion, exhaustive search',
+                        'BFS: closest node, level problems',
+                        'DFS: cycles, topological sort, all paths',
+                        'Space: BFS O(width), DFS O(depth)',
+                    ],
+                },
+                {
+                    id: 'q2',
+                    question:
+                        'Explain cycle detection in graphs. How does the approach differ for directed vs undirected graphs?',
+                    sampleAnswer:
+                        'For undirected graphs, use DFS with visited set. If we reach a visited node that is not our immediate parent, there is a cycle - we found two different paths to same node. Track parent to avoid false positive from bidirectional edge. For directed graphs, we need three states: unvisited, visiting (in current DFS path), and visited (completely done). If we reach a node in "visiting" state, there is a cycle - we came back to an ancestor in current path. After exploring a node, mark it visited. The key difference: undirected needs parent tracking, directed needs recursion stack tracking. Both use DFS because we need to track current path.',
+                    keyPoints: [
+                        'Undirected: DFS, detect visited node (not parent)',
+                        'Track parent to avoid false positive',
+                        'Directed: three states (unvisited, visiting, visited)',
+                        'Visiting state = in current DFS path',
+                        'Reach visiting node = cycle found',
+                    ],
+                },
+                {
+                    id: 'q3',
+                    question:
+                        'Walk me through topological sort. Why does it only work for DAGs (Directed Acyclic Graphs)?',
+                    sampleAnswer:
+                        'Topological sort produces linear ordering where for every edge u→v, u comes before v. Use DFS: visit all nodes, after finishing a node (all descendants explored), add it to result. Reverse the result for topological order. Why only DAGs? If there is a cycle A→B→C→A, we cannot order them linearly - each should come before the next, creating contradiction. For example, task dependencies: if A depends on B, B on C, C on A, we cannot determine start order. Acyclic ensures no circular dependencies. Applications: task scheduling, course prerequisites, build systems. Kahn algorithm alternative uses BFS and in-degrees - repeatedly remove nodes with zero incoming edges.',
+                    keyPoints: [
+                        'Linear ordering: for edge u→v, u before v',
+                        'DFS: add node after finishing, then reverse',
+                        'Only DAGs: cycles create ordering contradiction',
+                        'Example: circular task dependencies impossible',
+                        'Alternative: Kahn algorithm with BFS and in-degrees',
+                    ],
+                },
+            ],
+            multipleChoice: [
+                {
+                    id: 'mc1',
+                    question: 'What is the key difference between BFS and DFS?',
+                    options: [
+                        'Speed',
+                        'BFS explores level-by-level (queue), DFS explores depth-first (stack/recursion)',
+                        'Space only',
+                        'They are the same',
+                    ],
+                    correctAnswer: 1,
+                    explanation:
+                        'BFS uses queue to explore level-by-level (closest first). DFS uses stack/recursion to explore depth-first (go deep before backtracking). Different exploration orders.',
+                },
+                {
+                    id: 'mc2',
+                    question: 'When should you use BFS over DFS?',
+                    options: [
+                        'Always',
+                        'Shortest path unweighted, level-order, closest nodes first',
+                        'Any traversal',
+                        'Never',
+                    ],
+                    correctAnswer: 1,
+                    explanation:
+                        'Use BFS for: shortest path in unweighted graph (finds closest), level-order traversal, minimum moves. BFS explores by distance from start.',
+                },
+                {
+                    id: 'mc3',
+                    question: 'When should you use DFS over BFS?',
+                    options: [
+                        'Never',
+                        'Pathfinding, cycle detection, topological sort, connected components',
+                        'Shortest path only',
+                        'Random',
+                    ],
+                    correctAnswer: 1,
+                    explanation:
+                        'Use DFS for: any path (not shortest), cycle detection, topological sort, connected components, backtracking. DFS explores deeply, better for path existence.',
+                },
+                {
+                    id: 'mc4',
+                    question: 'What data structure does BFS use?',
+                    options: [
+                        'Stack',
+                        'Queue (FIFO) - explores level-by-level',
+                        'Heap',
+                        'Array',
+                    ],
+                    correctAnswer: 1,
+                    explanation:
+                        'BFS uses queue (FIFO). Add neighbors to queue, process in order added. This ensures level-by-level exploration (all distance k before k+1).',
+                },
+                {
+                    id: 'mc5',
+                    question: 'Why track visited nodes in graph traversals?',
+                    options: [
+                        'For speed',
+                        'Prevents infinite loops in cycles, ensures O(V+E) time',
+                        'Random requirement',
+                        'Memory optimization',
+                    ],
+                    correctAnswer: 1,
+                    explanation:
+                        'Visited set prevents revisiting nodes. Without it, cycles cause infinite loops. With it, each node processed once, giving O(V+E) time complexity.',
+                },
+            ],
         },
         {
-          id: 'q2',
-          question:
-            'Explain cycle detection in graphs. How does the approach differ for directed vs undirected graphs?',
-          sampleAnswer:
-            'For undirected graphs, use DFS with visited set. If we reach a visited node that is not our immediate parent, there is a cycle - we found two different paths to same node. Track parent to avoid false positive from bidirectional edge. For directed graphs, we need three states: unvisited, visiting (in current DFS path), and visited (completely done). If we reach a node in "visiting" state, there is a cycle - we came back to an ancestor in current path. After exploring a node, mark it visited. The key difference: undirected needs parent tracking, directed needs recursion stack tracking. Both use DFS because we need to track current path.',
-          keyPoints: [
-            'Undirected: DFS, detect visited node (not parent)',
-            'Track parent to avoid false positive',
-            'Directed: three states (unvisited, visiting, visited)',
-            'Visiting state = in current DFS path',
-            'Reach visiting node = cycle found',
-          ],
-        },
-        {
-          id: 'q3',
-          question:
-            'Walk me through topological sort. Why does it only work for DAGs (Directed Acyclic Graphs)?',
-          sampleAnswer:
-            'Topological sort produces linear ordering where for every edge u→v, u comes before v. Use DFS: visit all nodes, after finishing a node (all descendants explored), add it to result. Reverse the result for topological order. Why only DAGs? If there is a cycle A→B→C→A, we cannot order them linearly - each should come before the next, creating contradiction. For example, task dependencies: if A depends on B, B on C, C on A, we cannot determine start order. Acyclic ensures no circular dependencies. Applications: task scheduling, course prerequisites, build systems. Kahn algorithm alternative uses BFS and in-degrees - repeatedly remove nodes with zero incoming edges.',
-          keyPoints: [
-            'Linear ordering: for edge u→v, u before v',
-            'DFS: add node after finishing, then reverse',
-            'Only DAGs: cycles create ordering contradiction',
-            'Example: circular task dependencies impossible',
-            'Alternative: Kahn algorithm with BFS and in-degrees',
-          ],
-        },
-      ],
-    },
-    {
-      id: 'patterns',
-      title: 'Common Graph Patterns',
-      content: `**Pattern 1: Connected Components**
+            id: 'patterns',
+            title: 'Common Graph Patterns',
+            content: `**Pattern 1: Connected Components**
 
 Find all connected groups in undirected graph.
 
@@ -550,55 +684,122 @@ class UnionFind:
         
         return True
 \`\`\``,
-      quiz: [
-        {
-          id: 'q1',
-          question:
-            'Explain the connected components pattern. Why do we need to check all nodes, not just start from one?',
-          sampleAnswer:
-            'Connected components finds all separate groups in an undirected graph. We iterate through all nodes, running DFS or BFS from each unvisited node. Each DFS/BFS explores one complete component. We need to check all nodes because the graph might be disconnected - not all nodes reachable from one starting point. For example, social network might have isolated friend groups with no connections between them. Starting from one node only finds that person connected group. By checking all nodes and tracking visited, we ensure we discover all components. Each time we start a new DFS from unvisited node, we have found a new component. Count increases with each new starting point.',
-          keyPoints: [
-            'Find all separate groups in graph',
-            'DFS/BFS from each unvisited node',
-            'Graph might be disconnected',
-            'One start point only finds one component',
-            'New DFS start = new component found',
-          ],
+            quiz: [
+                {
+                    id: 'q1',
+                    question:
+                        'Explain the connected components pattern. Why do we need to check all nodes, not just start from one?',
+                    sampleAnswer:
+                        'Connected components finds all separate groups in an undirected graph. We iterate through all nodes, running DFS or BFS from each unvisited node. Each DFS/BFS explores one complete component. We need to check all nodes because the graph might be disconnected - not all nodes reachable from one starting point. For example, social network might have isolated friend groups with no connections between them. Starting from one node only finds that person connected group. By checking all nodes and tracking visited, we ensure we discover all components. Each time we start a new DFS from unvisited node, we have found a new component. Count increases with each new starting point.',
+                    keyPoints: [
+                        'Find all separate groups in graph',
+                        'DFS/BFS from each unvisited node',
+                        'Graph might be disconnected',
+                        'One start point only finds one component',
+                        'New DFS start = new component found',
+                    ],
+                },
+                {
+                    id: 'q2',
+                    question:
+                        'Describe Kahn algorithm for topological sort. How does tracking in-degrees help?',
+                    sampleAnswer:
+                        'Kahn algorithm uses BFS and tracks in-degrees (number of incoming edges) for each node. Start with nodes having in-degree 0 (no dependencies) - add them to queue. Process queue: remove node, add to result, decrease in-degree of all neighbors by 1. If a neighbor in-degree becomes 0, add it to queue. This ensures we only process a node after all its prerequisites are processed. The in-degree tracking tells us when all dependencies are satisfied. If we finish and some nodes remain unprocessed, there is a cycle. For task scheduling, in-degree 0 means task has no prerequisites and can start immediately. As we complete tasks, dependent tasks become ready. This is intuitive and easier to understand than DFS topological sort.',
+                    keyPoints: [
+                        'BFS with in-degree tracking',
+                        'Start with in-degree 0 nodes (no dependencies)',
+                        'Process node, decrease neighbor in-degrees',
+                        'In-degree 0 = all dependencies satisfied',
+                        'Unprocessed nodes at end = cycle exists',
+                    ],
+                },
+                {
+                    id: 'q3',
+                    question:
+                        'Walk me through bipartite checking with coloring. Why does odd-length cycle prevent bipartiteness?',
+                    sampleAnswer:
+                        'Bipartite graph can be colored with two colors such that no adjacent nodes have same color. Use BFS/DFS: color starting node with color 0, color all neighbors with color 1, their neighbors with color 0, etc. If we ever try to color a node but it already has different color, graph is not bipartite. Odd-length cycle prevents bipartiteness because as we alternate colors around cycle, we end up trying to give same node two different colors. For example, triangle ABC: A is color 0, B is color 1, C is color 0, but C connects to A (also color 0) - conflict! Even cycles work: alternate colors around cycle ends correctly. Applications: matching problems, scheduling with conflicts.',
+                    keyPoints: [
+                        'Two-color the graph, no adjacent same color',
+                        'BFS/DFS: alternate colors',
+                        'Already-colored node with different color = not bipartite',
+                        'Odd cycle: colors conflict when cycle closes',
+                        'Even cycles: colors alternate correctly',
+                    ],
+                },
+            ],
+            multipleChoice: [
+                {
+                    id: 'mc1',
+                    question: 'How do you find connected components in an undirected graph?',
+                    options: [
+                        'Sort nodes',
+                        'Run BFS/DFS from each unvisited node, each traversal finds one component',
+                        'Use heap',
+                        'Random selection',
+                    ],
+                    correctAnswer: 1,
+                    explanation:
+                        'Connected components: iterate through nodes, for each unvisited node, run BFS/DFS (marks all reachable nodes). Each traversal finds one component. Count of traversals = number of components.',
+                },
+                {
+                    id: 'mc2',
+                    question: 'How do you detect a cycle in a directed graph?',
+                    options: [
+                        'BFS only',
+                        'DFS with recursion stack - if we visit a node already in current path, cycle exists',
+                        'Sort',
+                        'Cannot detect',
+                    ],
+                    correctAnswer: 1,
+                    explanation:
+                        'Directed cycle: DFS with recursion stack. Track nodes in current path. If we reach a node already in path (not just visited), found a cycle back to ancestor.',
+                },
+                {
+                    id: 'mc3',
+                    question: 'What makes topological sort possible for DAGs but not cyclic graphs?',
+                    options: [
+                        'Speed',
+                        'DAGs have no cycles - can order linearly where all edges go forward',
+                        'Random',
+                        'Size',
+                    ],
+                    correctAnswer: 1,
+                    explanation:
+                        'Topological sort orders nodes so all edges go from earlier to later. Cycles make this impossible (circular dependency). DAGs (acyclic) guarantee such ordering exists.',
+                },
+                {
+                    id: 'mc4',
+                    question: 'How do you check if a graph is bipartite?',
+                    options: [
+                        'Count nodes',
+                        'Try 2-coloring with BFS/DFS - if adjacent nodes get same color, not bipartite',
+                        'Sort edges',
+                        'Random testing',
+                    ],
+                    correctAnswer: 1,
+                    explanation:
+                        'Bipartite: attempt to 2-color graph. BFS/DFS alternating colors. If we try to color a node but it already has different color, graph has odd cycle and is not bipartite.',
+                },
+                {
+                    id: 'mc5',
+                    question: 'What is Union-Find used for in graph problems?',
+                    options: [
+                        'Sorting',
+                        'Efficiently tracking connected components, detecting cycles in undirected graphs',
+                        'Shortest path',
+                        'Random',
+                    ],
+                    correctAnswer: 1,
+                    explanation:
+                        'Union-Find (Disjoint Set): efficiently merge components (union) and check if nodes connected (find). O(α(N)) amortized per operation. Used for Kruskal MST, cycle detection.',
+                },
+            ],
         },
         {
-          id: 'q2',
-          question:
-            'Describe Kahn algorithm for topological sort. How does tracking in-degrees help?',
-          sampleAnswer:
-            'Kahn algorithm uses BFS and tracks in-degrees (number of incoming edges) for each node. Start with nodes having in-degree 0 (no dependencies) - add them to queue. Process queue: remove node, add to result, decrease in-degree of all neighbors by 1. If a neighbor in-degree becomes 0, add it to queue. This ensures we only process a node after all its prerequisites are processed. The in-degree tracking tells us when all dependencies are satisfied. If we finish and some nodes remain unprocessed, there is a cycle. For task scheduling, in-degree 0 means task has no prerequisites and can start immediately. As we complete tasks, dependent tasks become ready. This is intuitive and easier to understand than DFS topological sort.',
-          keyPoints: [
-            'BFS with in-degree tracking',
-            'Start with in-degree 0 nodes (no dependencies)',
-            'Process node, decrease neighbor in-degrees',
-            'In-degree 0 = all dependencies satisfied',
-            'Unprocessed nodes at end = cycle exists',
-          ],
-        },
-        {
-          id: 'q3',
-          question:
-            'Walk me through bipartite checking with coloring. Why does odd-length cycle prevent bipartiteness?',
-          sampleAnswer:
-            'Bipartite graph can be colored with two colors such that no adjacent nodes have same color. Use BFS/DFS: color starting node with color 0, color all neighbors with color 1, their neighbors with color 0, etc. If we ever try to color a node but it already has different color, graph is not bipartite. Odd-length cycle prevents bipartiteness because as we alternate colors around cycle, we end up trying to give same node two different colors. For example, triangle ABC: A is color 0, B is color 1, C is color 0, but C connects to A (also color 0) - conflict! Even cycles work: alternate colors around cycle ends correctly. Applications: matching problems, scheduling with conflicts.',
-          keyPoints: [
-            'Two-color the graph, no adjacent same color',
-            'BFS/DFS: alternate colors',
-            'Already-colored node with different color = not bipartite',
-            'Odd cycle: colors conflict when cycle closes',
-            'Even cycles: colors alternate correctly',
-          ],
-        },
-      ],
-    },
-    {
-      id: 'complexity',
-      title: 'Complexity Analysis',
-      content: `**Graph Algorithm Complexities:**
+            id: 'complexity',
+            title: 'Complexity Analysis',
+            content: `**Graph Algorithm Complexities:**
 
 **Traversals (BFS/DFS):**
 - **Time**: O(V + E)
@@ -655,55 +856,122 @@ class UnionFind:
 - BFS optimal for unweighted shortest paths
 - DFS uses less memory than BFS
 - Union-Find nearly constant time operations`,
-      quiz: [
-        {
-          id: 'q1',
-          question:
-            'Explain why BFS and DFS are both O(V + E) time. Walk me through what each part represents.',
-          sampleAnswer:
-            'Both visit every vertex once and explore every edge once, giving O(V + E). V represents visiting each vertex: we mark it visited, process it, add to queue or call recursion. E represents exploring edges: for each vertex, we check all its neighbors via edges. In adjacency list, summing all neighbor lists gives exactly E edges total. For example, graph with 5 vertices and 7 edges: we visit 5 vertices (V work) and check 7 edges (E work), so 5 + 7 = 12 operations. The + not × because we do V work (visiting) and separately E work (edge checking), not nested. This is why adjacency list is efficient - we only examine edges that exist, not all V^2 possible edges.',
-          keyPoints: [
-            'Visit each vertex once = O(V)',
-            'Explore each edge once = O(E)',
-            'Sum of all adjacency lists = E',
-            'V + E not V × E: separate operations',
-            'Adjacency list: only check existing edges',
-          ],
+            quiz: [
+                {
+                    id: 'q1',
+                    question:
+                        'Explain why BFS and DFS are both O(V + E) time. Walk me through what each part represents.',
+                    sampleAnswer:
+                        'Both visit every vertex once and explore every edge once, giving O(V + E). V represents visiting each vertex: we mark it visited, process it, add to queue or call recursion. E represents exploring edges: for each vertex, we check all its neighbors via edges. In adjacency list, summing all neighbor lists gives exactly E edges total. For example, graph with 5 vertices and 7 edges: we visit 5 vertices (V work) and check 7 edges (E work), so 5 + 7 = 12 operations. The + not × because we do V work (visiting) and separately E work (edge checking), not nested. This is why adjacency list is efficient - we only examine edges that exist, not all V^2 possible edges.',
+                    keyPoints: [
+                        'Visit each vertex once = O(V)',
+                        'Explore each edge once = O(E)',
+                        'Sum of all adjacency lists = E',
+                        'V + E not V × E: separate operations',
+                        'Adjacency list: only check existing edges',
+                    ],
+                },
+                {
+                    id: 'q2',
+                    question:
+                        'Compare time complexity of Dijkstra vs Bellman-Ford. When would you choose the slower one?',
+                    sampleAnswer:
+                        'Dijkstra is O(E log V) with min-heap, Bellman-Ford is O(V × E). Dijkstra is faster but requires non-negative edge weights. Bellman-Ford handles negative weights and detects negative cycles. Choose Bellman-Ford when: graph has negative edges, need to detect negative cycles, or graph is small so cubic time acceptable. For example, currency exchange with fees (negative edges) or finding arbitrage (negative cycle detection). Dijkstra fails with negative edges because greedy approach assumes once a node is finalized, no better path exists. Negative edges can create better paths to already-finalized nodes. Most real graphs (roads, networks) have non-negative weights, so Dijkstra is usually preferred.',
+                    keyPoints: [
+                        'Dijkstra: O(E log V), needs non-negative weights',
+                        'Bellman-Ford: O(V × E), handles negative weights',
+                        'Bellman-Ford: detects negative cycles',
+                        'Use Bellman-Ford: negative edges, detect cycles',
+                        'Dijkstra fails with negative: greedy assumption broken',
+                    ],
+                },
+                {
+                    id: 'q3',
+                    question:
+                        'Explain Union-Find complexity with path compression and union by rank. Why is it nearly constant?',
+                    sampleAnswer:
+                        'Union-Find with optimizations achieves O(α(n)) per operation where α is inverse Ackermann function - grows so slowly it is effectively constant for all practical n (less than 5 for n < 10^80). Path compression: during find, make all nodes point directly to root, flattening tree. Union by rank: attach smaller tree under larger, keeping trees shallow. Together, these prevent deep trees. Without optimizations, trees can be O(n) deep, making operations O(n). With both optimizations, trees stay very flat (height < 5 practically), giving nearly O(1) operations. This makes Union-Find extremely efficient for dynamic connectivity - can handle millions of operations in linear time.',
+                    keyPoints: [
+                        'With optimizations: O(α(n)) ≈ O(1) practical',
+                        'Path compression: flatten tree during find',
+                        'Union by rank: attach smaller tree under larger',
+                        'Prevents deep trees (height < 5 practically)',
+                        'Without optimizations: O(n) per operation',
+                    ],
+                },
+            ],
+            multipleChoice: [
+                {
+                    id: 'mc1',
+                    question: 'What is the time complexity of BFS/DFS traversal?',
+                    options: [
+                        'O(V)',
+                        'O(V + E) - visit all vertices and edges once',
+                        'O(E)',
+                        'O(V²)',
+                    ],
+                    correctAnswer: 1,
+                    explanation:
+                        'BFS/DFS: O(V + E). Visit each vertex once (O(V)), explore each edge once (O(E)). Total: O(V + E). Space: O(V) for visited set.',
+                },
+                {
+                    id: 'mc2',
+                    question: 'What is the time complexity of Dijkstra\'s algorithm with min heap?',
+                    options: [
+                        'O(V + E)',
+                        'O((V + E) log V) - heap operations for all edges',
+                        'O(V²)',
+                        'O(E log E)',
+                    ],
+                    correctAnswer: 1,
+                    explanation:
+                        'Dijkstra with min heap: each edge causes heap operation O(log V). Process O(V + E) edges total. Time: O((V + E) log V). Better than O(V²) for sparse graphs.',
+                },
+                {
+                    id: 'mc3',
+                    question: 'When do you need Bellman-Ford instead of Dijkstra?',
+                    options: [
+                        'Always',
+                        'When graph has negative weight edges',
+                        'For faster execution',
+                        'Random choice',
+                    ],
+                    correctAnswer: 1,
+                    explanation:
+                        'Dijkstra fails with negative weights. Bellman-Ford handles negative edges and detects negative cycles. Time: O(V*E) vs Dijkstra O((V+E) log V).',
+                },
+                {
+                    id: 'mc4',
+                    question: 'What is the space complexity of graph traversals?',
+                    options: [
+                        'O(1)',
+                        'O(V) for visited set and queue/stack',
+                        'O(E)',
+                        'O(V²)',
+                    ],
+                    correctAnswer: 1,
+                    explanation:
+                        'Graph traversals: O(V) space for visited set + queue/stack can hold up to O(V) nodes. DFS recursion: O(H) where H is depth.',
+                },
+                {
+                    id: 'mc5',
+                    question: 'Why is adjacency list better than adjacency matrix for sparse graphs?',
+                    options: [
+                        'Faster edge lookup',
+                        'Space: O(V+E) vs O(V²), and most real graphs are sparse',
+                        'Random',
+                        'Always better',
+                    ],
+                    correctAnswer: 1,
+                    explanation:
+                        'Sparse graphs have few edges (E << V²). List uses O(V+E) space, matrix O(V²). Social networks, web graphs are sparse, making list much more efficient.',
+                },
+            ],
         },
         {
-          id: 'q2',
-          question:
-            'Compare time complexity of Dijkstra vs Bellman-Ford. When would you choose the slower one?',
-          sampleAnswer:
-            'Dijkstra is O(E log V) with min-heap, Bellman-Ford is O(V × E). Dijkstra is faster but requires non-negative edge weights. Bellman-Ford handles negative weights and detects negative cycles. Choose Bellman-Ford when: graph has negative edges, need to detect negative cycles, or graph is small so cubic time acceptable. For example, currency exchange with fees (negative edges) or finding arbitrage (negative cycle detection). Dijkstra fails with negative edges because greedy approach assumes once a node is finalized, no better path exists. Negative edges can create better paths to already-finalized nodes. Most real graphs (roads, networks) have non-negative weights, so Dijkstra is usually preferred.',
-          keyPoints: [
-            'Dijkstra: O(E log V), needs non-negative weights',
-            'Bellman-Ford: O(V × E), handles negative weights',
-            'Bellman-Ford: detects negative cycles',
-            'Use Bellman-Ford: negative edges, detect cycles',
-            'Dijkstra fails with negative: greedy assumption broken',
-          ],
-        },
-        {
-          id: 'q3',
-          question:
-            'Explain Union-Find complexity with path compression and union by rank. Why is it nearly constant?',
-          sampleAnswer:
-            'Union-Find with optimizations achieves O(α(n)) per operation where α is inverse Ackermann function - grows so slowly it is effectively constant for all practical n (less than 5 for n < 10^80). Path compression: during find, make all nodes point directly to root, flattening tree. Union by rank: attach smaller tree under larger, keeping trees shallow. Together, these prevent deep trees. Without optimizations, trees can be O(n) deep, making operations O(n). With both optimizations, trees stay very flat (height < 5 practically), giving nearly O(1) operations. This makes Union-Find extremely efficient for dynamic connectivity - can handle millions of operations in linear time.',
-          keyPoints: [
-            'With optimizations: O(α(n)) ≈ O(1) practical',
-            'Path compression: flatten tree during find',
-            'Union by rank: attach smaller tree under larger',
-            'Prevents deep trees (height < 5 practically)',
-            'Without optimizations: O(n) per operation',
-          ],
-        },
-      ],
-    },
-    {
-      id: 'templates',
-      title: 'Code Templates',
-      content: `**Template 1: BFS**
+            id: 'templates',
+            title: 'Code Templates',
+            content: `**Template 1: BFS**
 \`\`\`python
 from collections import deque
 
@@ -833,55 +1101,122 @@ def topological_sort(graph):
     
     return result if len(result) == len(graph) else []
 \`\`\``,
-      quiz: [
-        {
-          id: 'q1',
-          question:
-            'Walk me through the BFS template. Why do we use a queue and how does the visited set prevent issues?',
-          sampleAnswer:
-            'BFS uses queue for level-order traversal: process all nodes at distance d before distance d+1. Start by adding source to queue and marking visited. While queue not empty: dequeue node, process it, enqueue unvisited neighbors and mark them visited. Queue ensures FIFO - first discovered are first processed, guaranteeing level-order. Visited set prevents two issues: infinite loops (cycles cause revisiting) and redundant work (processing same node multiple times). Mark visited when enqueueing, not when dequeueing - prevents adding same node to queue multiple times. This template finds shortest path in unweighted graphs because we explore by distance from source.',
-          keyPoints: [
-            'Queue: FIFO for level-order traversal',
-            'Mark visited when enqueueing',
-            'Prevents: infinite loops and redundant work',
-            'Process level d before d+1',
-            'Finds shortest path in unweighted graphs',
-          ],
+            quiz: [
+                {
+                    id: 'q1',
+                    question:
+                        'Walk me through the BFS template. Why do we use a queue and how does the visited set prevent issues?',
+                    sampleAnswer:
+                        'BFS uses queue for level-order traversal: process all nodes at distance d before distance d+1. Start by adding source to queue and marking visited. While queue not empty: dequeue node, process it, enqueue unvisited neighbors and mark them visited. Queue ensures FIFO - first discovered are first processed, guaranteeing level-order. Visited set prevents two issues: infinite loops (cycles cause revisiting) and redundant work (processing same node multiple times). Mark visited when enqueueing, not when dequeueing - prevents adding same node to queue multiple times. This template finds shortest path in unweighted graphs because we explore by distance from source.',
+                    keyPoints: [
+                        'Queue: FIFO for level-order traversal',
+                        'Mark visited when enqueueing',
+                        'Prevents: infinite loops and redundant work',
+                        'Process level d before d+1',
+                        'Finds shortest path in unweighted graphs',
+                    ],
+                },
+                {
+                    id: 'q2',
+                    question:
+                        'Explain the DFS recursive template. How does the visited set interact with recursion?',
+                    sampleAnswer:
+                        'DFS explores as deep as possible before backtracking. Mark current node visited, process it, then recursively visit each unvisited neighbor. The recursion stack implicitly tracks current path - when a recursive call returns, we backtrack to try other branches. Visited set ensures we do not revisit nodes, preventing infinite loops in cycles. Mark visited before recursing to neighbors - this is the "choose" step. Unlike backtracking where we unmark (unchoose), in graph traversal we keep nodes marked because we do not need to revisit. The combination of recursion (for path) and visited set (for seen nodes) enables complete graph exploration without redundancy.',
+                    keyPoints: [
+                        'Recursive: explore deep first',
+                        'Mark visited before recursing to neighbors',
+                        'Recursion stack tracks current path',
+                        'Visited set prevents revisiting (no unmark needed)',
+                        'Returns = backtrack to try other branches',
+                    ],
+                },
+                {
+                    id: 'q3',
+                    question:
+                        'Describe the topological sort DFS template. Why do we add to result after exploring neighbors?',
+                    sampleAnswer:
+                        'Topological sort DFS visits all nodes, recursively exploring neighbors first, then adding current node to result after finishing. This post-order traversal ensures dependencies are added before dependents. Reverse the result to get topological order. Why add after exploring? Consider edge A→B: we must output A before B. When visiting A, we recurse to B first. B finishes and gets added. Then A finishes and gets added. Result has [B, A], reverse gives [A, B] - correct! Adding before recursing would give wrong order. The key insight: node is added when all descendants are processed - exactly when all dependencies are satisfied. This is why DFS naturally produces reverse topological order.',
+                    keyPoints: [
+                        'Post-order: add after exploring all neighbors',
+                        'Ensures dependencies added before dependents',
+                        'Reverse result for topological order',
+                        'Node added when all descendants processed',
+                        'DFS naturally produces reverse topological order',
+                    ],
+                },
+            ],
+            multipleChoice: [
+                {
+                    id: 'mc1',
+                    question: 'What data structure does BFS template use?',
+                    options: [
+                        'Stack',
+                        'Queue (deque) for level-by-level exploration',
+                        'Heap',
+                        'Array',
+                    ],
+                    correctAnswer: 1,
+                    explanation:
+                        'BFS template uses queue (collections.deque). Add start, while queue: pop, process, add unvisited neighbors. Queue ensures level-by-level exploration.',
+                },
+                {
+                    id: 'mc2',
+                    question: 'What is the key difference between iterative and recursive DFS templates?',
+                    options: [
+                        'Speed',
+                        'Iterative uses explicit stack, recursive uses call stack',
+                        'Complexity',
+                        'They are the same',
+                    ],
+                    correctAnswer: 1,
+                    explanation:
+                        'DFS: recursive uses call stack (cleaner code), iterative uses explicit stack (more control, avoids stack overflow). Both explore depth-first, same complexity.',
+                },
+                {
+                    id: 'mc3',
+                    question: 'In Union-Find template, what do path compression and union by rank do?',
+                    options: [
+                        'Nothing',
+                        'Flatten trees during find and attach smaller under larger for O(α(N)) amortized',
+                        'Sort elements',
+                        'Random optimization',
+                    ],
+                    correctAnswer: 1,
+                    explanation:
+                        'Path compression: flatten tree during find (make nodes point to root). Union by rank: attach smaller tree under larger. Together give O(α(N)) ≈ O(1) per operation.',
+                },
+                {
+                    id: 'mc4',
+                    question: 'What is common to all graph traversal templates?',
+                    options: [
+                        'Sorting',
+                        'Visited set to track processed nodes and prevent cycles',
+                        'Heap usage',
+                        'Random selection',
+                    ],
+                    correctAnswer: 1,
+                    explanation:
+                        'All graph templates use visited set to: 1) prevent infinite loops in cycles, 2) ensure each node processed once, 3) achieve O(V+E) complexity.',
+                },
+                {
+                    id: 'mc5',
+                    question: 'When would you modify the basic BFS template?',
+                    options: [
+                        'Never',
+                        'Track distance/level, find shortest path, level-order specific logic',
+                        'Always',
+                        'Random',
+                    ],
+                    correctAnswer: 1,
+                    explanation:
+                        'Modify BFS for: tracking distance (distance array), shortest path (parent pointers), level-order processing (track level), multi-source BFS (start with multiple nodes).',
+                },
+            ],
         },
         {
-          id: 'q2',
-          question:
-            'Explain the DFS recursive template. How does the visited set interact with recursion?',
-          sampleAnswer:
-            'DFS explores as deep as possible before backtracking. Mark current node visited, process it, then recursively visit each unvisited neighbor. The recursion stack implicitly tracks current path - when a recursive call returns, we backtrack to try other branches. Visited set ensures we do not revisit nodes, preventing infinite loops in cycles. Mark visited before recursing to neighbors - this is the "choose" step. Unlike backtracking where we unmark (unchoose), in graph traversal we keep nodes marked because we do not need to revisit. The combination of recursion (for path) and visited set (for seen nodes) enables complete graph exploration without redundancy.',
-          keyPoints: [
-            'Recursive: explore deep first',
-            'Mark visited before recursing to neighbors',
-            'Recursion stack tracks current path',
-            'Visited set prevents revisiting (no unmark needed)',
-            'Returns = backtrack to try other branches',
-          ],
-        },
-        {
-          id: 'q3',
-          question:
-            'Describe the topological sort DFS template. Why do we add to result after exploring neighbors?',
-          sampleAnswer:
-            'Topological sort DFS visits all nodes, recursively exploring neighbors first, then adding current node to result after finishing. This post-order traversal ensures dependencies are added before dependents. Reverse the result to get topological order. Why add after exploring? Consider edge A→B: we must output A before B. When visiting A, we recurse to B first. B finishes and gets added. Then A finishes and gets added. Result has [B, A], reverse gives [A, B] - correct! Adding before recursing would give wrong order. The key insight: node is added when all descendants are processed - exactly when all dependencies are satisfied. This is why DFS naturally produces reverse topological order.',
-          keyPoints: [
-            'Post-order: add after exploring all neighbors',
-            'Ensures dependencies added before dependents',
-            'Reverse result for topological order',
-            'Node added when all descendants processed',
-            'DFS naturally produces reverse topological order',
-          ],
-        },
-      ],
-    },
-    {
-      id: 'interview',
-      title: 'Interview Strategy',
-      content: `**Recognition Signals:**
+            id: 'interview',
+            title: 'Interview Strategy',
+            content: `**Recognition Signals:**
 
 **Use Graph algorithms when you see:**
 - "Network", "graph", "tree" (tree is special graph)
@@ -993,63 +1328,130 @@ Be careful with in-place modifications.
    - LeetCode Graph tag (200+ problems)
    - Practice both DFS and BFS variants
    - Draw graphs for visualization`,
-      quiz: [
-        {
-          id: 'q1',
-          question:
-            'How do you recognize when a problem needs graph algorithms? What keywords or patterns signal this?',
-          sampleAnswer:
-            'Several signals indicate graph problems. Explicit mentions: "network", "graph", "connections", "dependencies", "path". Implicit: relationships between entities (social connections, prerequisites), grid traversal (islands, word search - grids are implicit graphs), scheduling with dependencies. Keywords like "reachable", "connected", "shortest path", "cycle", "order tasks" suggest graphs. For example, "find shortest path between cities" is clearly graph. "Can you finish all courses given prerequisites" is graph (topological sort). "Count number of islands in grid" is graph (connected components on grid). Ask: are there entities with relationships? Do I need to traverse connections? Is there a network structure?',
-          keyPoints: [
-            'Explicit: network, graph, connections, dependencies',
-            'Implicit: entity relationships, grid traversal',
-            'Keywords: reachable, connected, shortest, cycle, order',
-            'Prerequisites → topological sort',
-            'Grid problems → graph on grid',
-          ],
+            quiz: [
+                {
+                    id: 'q1',
+                    question:
+                        'How do you recognize when a problem needs graph algorithms? What keywords or patterns signal this?',
+                    sampleAnswer:
+                        'Several signals indicate graph problems. Explicit mentions: "network", "graph", "connections", "dependencies", "path". Implicit: relationships between entities (social connections, prerequisites), grid traversal (islands, word search - grids are implicit graphs), scheduling with dependencies. Keywords like "reachable", "connected", "shortest path", "cycle", "order tasks" suggest graphs. For example, "find shortest path between cities" is clearly graph. "Can you finish all courses given prerequisites" is graph (topological sort). "Count number of islands in grid" is graph (connected components on grid). Ask: are there entities with relationships? Do I need to traverse connections? Is there a network structure?',
+                    keyPoints: [
+                        'Explicit: network, graph, connections, dependencies',
+                        'Implicit: entity relationships, grid traversal',
+                        'Keywords: reachable, connected, shortest, cycle, order',
+                        'Prerequisites → topological sort',
+                        'Grid problems → graph on grid',
+                    ],
+                },
+                {
+                    id: 'q2',
+                    question:
+                        'Walk me through your approach to a graph problem in an interview. What questions do you ask?',
+                    sampleAnswer:
+                        'First, clarify the graph structure: directed or undirected? Weighted or unweighted? Can it have cycles? How is it represented (adjacency list, matrix, edges list)? Then identify the problem type: shortest path, connectivity, cycle detection, topological sort? Based on type, choose algorithm: BFS for shortest path in unweighted, Dijkstra for weighted, DFS for cycles, Union-Find for connectivity. State complexity: O(V + E) for BFS/DFS. Discuss edge cases: empty graph, disconnected, self-loops. Draw small example: 4 nodes, show algorithm steps. Code with clear structure: build graph, run algorithm, return result. Mention optimizations: early termination, bidirectional search.',
+                    keyPoints: [
+                        'Clarify: directed/undirected, weighted, cycles, representation',
+                        'Identify problem type: path, connectivity, cycle, topological',
+                        'Choose algorithm based on type',
+                        'State complexity with reasoning',
+                        'Draw example, show steps',
+                        'Code clearly, discuss optimizations',
+                    ],
+                },
+                {
+                    id: 'q3',
+                    question:
+                        'What are common pitfalls in graph problems and how do you avoid them?',
+                    sampleAnswer:
+                        'First: forgetting to handle disconnected graphs - must iterate through all nodes, not just start from one. Second: not marking visited, causing infinite loops in cycles. Third: marking visited at wrong time in BFS (mark when enqueueing, not dequeueing). Fourth: for undirected graphs, adding edges both directions or checking both. Fifth: off-by-one in adjacency matrix vs list indexing. Sixth: not handling empty graph or single node. Seventh: in topological sort, not checking if all nodes processed (indicates cycle). My strategy: draw the graph, trace algorithm on paper, test with cycle and disconnected cases, verify visited logic, check directed vs undirected handling.',
+                    keyPoints: [
+                        'Handle disconnected graphs (check all nodes)',
+                        'Mark visited to prevent infinite loops',
+                        'BFS: mark when enqueueing',
+                        'Undirected: edges both ways',
+                        'Test: cycles, disconnected, empty graph',
+                        'Topological: verify all nodes processed',
+                    ],
+                },
+            ],
+            multipleChoice: [
+                {
+                    id: 'mc1',
+                    question: 'What keywords signal a graph problem?',
+                    options: [
+                        'Array, list',
+                        'Network, graph, nodes/edges, dependencies, connections, paths',
+                        'Sorting',
+                        'Random',
+                    ],
+                    correctAnswer: 1,
+                    explanation:
+                        'Keywords: "network", "graph", "nodes/edges", "dependencies", "connections", "paths", "islands", "relationships". These indicate graph structure and traversal.',
+                },
+                {
+                    id: 'mc2',
+                    question: 'What should you clarify first in a graph interview?',
+                    options: [
+                        'Complexity only',
+                        'Directed/undirected? Weighted? Cycles? Connected? Representation?',
+                        'Language',
+                        'Nothing',
+                    ],
+                    correctAnswer: 1,
+                    explanation:
+                        'Clarify: 1) Directed vs undirected, 2) Weighted edges?, 3) Cycles allowed?, 4) Connected or multiple components?, 5) Representation (adjacency list/matrix). These determine algorithm choice.',
+                },
+                {
+                    id: 'mc3',
+                    question: 'What is a common mistake in graph problems?',
+                    options: [
+                        'Using traversal',
+                        'Forgetting visited set - causes infinite loops in cycles',
+                        'Good naming',
+                        'Complexity analysis',
+                    ],
+                    correctAnswer: 1,
+                    explanation:
+                        'Most common: forgetting visited set. Without it, cycles cause infinite loops. Always track visited nodes to prevent revisiting and ensure O(V+E) complexity.',
+                },
+                {
+                    id: 'mc4',
+                    question: 'When should you choose BFS over DFS in an interview?',
+                    options: [
+                        'Always',
+                        'Shortest path unweighted, level-order, minimum steps',
+                        'Any problem',
+                        'Never',
+                    ],
+                    correctAnswer: 1,
+                    explanation:
+                        'Choose BFS for: shortest path in unweighted graph, level-order traversal, minimum steps/moves. BFS explores by distance, finding closest first.',
+                },
+                {
+                    id: 'mc5',
+                    question: 'What is good practice for graph interview communication?',
+                    options: [
+                        'Just code',
+                        'Clarify, explain approach (BFS/DFS/pattern), walk through example, discuss complexity',
+                        'Write fast',
+                        'Skip explanation',
+                    ],
+                    correctAnswer: 1,
+                    explanation:
+                        'Structure: 1) Clarify graph properties, 2) Identify pattern (traversal, shortest path, connected components), 3) Explain algorithm choice, 4) Walk through example, 5) Complexity analysis.',
+                },
+            ],
         },
-        {
-          id: 'q2',
-          question:
-            'Walk me through your approach to a graph problem in an interview. What questions do you ask?',
-          sampleAnswer:
-            'First, clarify the graph structure: directed or undirected? Weighted or unweighted? Can it have cycles? How is it represented (adjacency list, matrix, edges list)? Then identify the problem type: shortest path, connectivity, cycle detection, topological sort? Based on type, choose algorithm: BFS for shortest path in unweighted, Dijkstra for weighted, DFS for cycles, Union-Find for connectivity. State complexity: O(V + E) for BFS/DFS. Discuss edge cases: empty graph, disconnected, self-loops. Draw small example: 4 nodes, show algorithm steps. Code with clear structure: build graph, run algorithm, return result. Mention optimizations: early termination, bidirectional search.',
-          keyPoints: [
-            'Clarify: directed/undirected, weighted, cycles, representation',
-            'Identify problem type: path, connectivity, cycle, topological',
-            'Choose algorithm based on type',
-            'State complexity with reasoning',
-            'Draw example, show steps',
-            'Code clearly, discuss optimizations',
-          ],
-        },
-        {
-          id: 'q3',
-          question:
-            'What are common pitfalls in graph problems and how do you avoid them?',
-          sampleAnswer:
-            'First: forgetting to handle disconnected graphs - must iterate through all nodes, not just start from one. Second: not marking visited, causing infinite loops in cycles. Third: marking visited at wrong time in BFS (mark when enqueueing, not dequeueing). Fourth: for undirected graphs, adding edges both directions or checking both. Fifth: off-by-one in adjacency matrix vs list indexing. Sixth: not handling empty graph or single node. Seventh: in topological sort, not checking if all nodes processed (indicates cycle). My strategy: draw the graph, trace algorithm on paper, test with cycle and disconnected cases, verify visited logic, check directed vs undirected handling.',
-          keyPoints: [
-            'Handle disconnected graphs (check all nodes)',
-            'Mark visited to prevent infinite loops',
-            'BFS: mark when enqueueing',
-            'Undirected: edges both ways',
-            'Test: cycles, disconnected, empty graph',
-            'Topological: verify all nodes processed',
-          ],
-        },
-      ],
-    },
-  ],
-  keyTakeaways: [
-    'Graphs consist of vertices (nodes) connected by edges; can be directed/undirected, weighted/unweighted',
-    'BFS explores level-by-level using queue; finds shortest path in unweighted graphs',
-    'DFS explores deeply using stack/recursion; better for cycle detection and memory efficiency',
-    'Adjacency list (dict of lists) is most common representation: O(V + E) space',
-    'Most graph algorithms are O(V + E) time - linear in graph size',
-    'Connected components: run DFS/BFS from each unvisited node',
-    "Topological sort: order nodes in DAG using Kahn's algorithm (BFS with in-degrees)",
-    'Union-Find provides near-constant time connectivity queries with path compression',
-  ],
-  relatedProblems: ['number-of-islands', 'course-schedule', 'clone-graph'],
+    ],
+    keyTakeaways: [
+        'Graphs consist of vertices (nodes) connected by edges; can be directed/undirected, weighted/unweighted',
+        'BFS explores level-by-level using queue; finds shortest path in unweighted graphs',
+        'DFS explores deeply using stack/recursion; better for cycle detection and memory efficiency',
+        'Adjacency list (dict of lists) is most common representation: O(V + E) space',
+        'Most graph algorithms are O(V + E) time - linear in graph size',
+        'Connected components: run DFS/BFS from each unvisited node',
+        "Topological sort: order nodes in DAG using Kahn's algorithm (BFS with in-degrees)",
+        'Union-Find provides near-constant time connectivity queries with path compression',
+    ],
+    relatedProblems: ['number-of-islands', 'course-schedule', 'clone-graph'],
 };

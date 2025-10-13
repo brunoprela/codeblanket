@@ -26,7 +26,7 @@ async function waitForPyodideScript(timeout = 10000): Promise<void> {
       );
     }
     // Wait 100ms before checking again
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 100));
   }
 }
 

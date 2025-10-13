@@ -77,6 +77,68 @@ Imagine two people searching through a sorted list of prices to find two items t
           ],
         },
       ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What is the primary benefit of the two pointers technique?',
+          options: [
+            'It reduces space complexity to O(1)',
+            'It reduces time complexity from O(n²) to O(n)',
+            'It only works on sorted arrays',
+            'It uses recursion',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'The two pointers technique typically reduces time complexity from O(n²) (nested loops checking all pairs) to O(n) by making smart decisions about which pointer to move based on the data properties.',
+        },
+        {
+          id: 'mc2',
+          question: 'Which type of data structure property makes two pointers most effective?',
+          options: [
+            'Unsorted arrays',
+            'Sorted or sortable data',
+            'Hash tables',
+            'Binary trees',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Two pointers works best with sorted or sortable data because the sorted property allows us to make predictable decisions about which pointer to move to progress toward the solution.',
+        },
+        {
+          id: 'mc3',
+          question: 'What are the three main movement patterns for two pointers?',
+          options: [
+            'Left, right, and center',
+            'Fast, slow, and medium',
+            'Opposite direction, same direction, and sliding window',
+            'Forward, backward, and circular',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'The three main patterns are: opposite direction (converging from both ends), same direction (fast & slow pointers), and sliding window (defining an expanding/shrinking window).',
+        },
+        {
+          id: 'mc4',
+          question: 'When should you consider using two pointers instead of nested loops?',
+          options: [
+            'Only for very small arrays',
+            'When you need to find pairs/triplets or work with sorted data',
+            'When working with trees',
+            'Only for string manipulation',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Two pointers is ideal for finding pairs/triplets with certain properties, working with sorted data, palindromes, in-place operations, or anytime you catch yourself thinking about nested loops.',
+        },
+        {
+          id: 'mc5',
+          question: 'What is the space complexity of most two-pointer solutions?',
+          options: ['O(n)', 'O(log n)', 'O(1)', 'O(n²)'],
+          correctAnswer: 2,
+          explanation:
+            'Most two-pointer solutions use O(1) constant space since they only need a few pointer variables and often modify the array in-place without creating new data structures.',
+        },
+      ],
     },
     {
       id: 'patterns',
@@ -185,6 +247,73 @@ Imagine two people searching through a sorted list of prices to find two items t
             'Need two for in-place modification',
             'Build deduplicated section at array start',
           ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'In the opposite direction pattern, when do the pointers stop moving?',
+          options: [
+            'When they point to the same element or cross',
+            'When they reach the middle of the array',
+            'After n iterations',
+            'When one pointer reaches the end',
+          ],
+          correctAnswer: 0,
+          explanation:
+            'In the opposite direction pattern, pointers continue until they meet (point to the same element) or cross each other (left > right). This ensures all elements are considered.',
+        },
+        {
+          id: 'mc2',
+          question: 'What is the key characteristic of the fast and slow pointer pattern?',
+          options: [
+            'Both pointers move at the same speed',
+            'Pointers move from opposite ends',
+            'Pointers start at the same position but move at different speeds',
+            'One pointer is always twice as fast as the other',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'The fast and slow pointer pattern has both pointers starting at the beginning (or same position) but moving at different speeds - often the fast pointer moves every iteration while the slow only moves conditionally.',
+        },
+        {
+          id: 'mc3',
+          question: 'For the two sum problem on a sorted array, if the current sum is too large, which pointer should you move?',
+          options: [
+            'Move the left pointer right',
+            'Move the right pointer left',
+            'Move both pointers',
+            'It doesn\'t matter',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'If the sum is too large, you need smaller numbers. Since the array is sorted, moving the right pointer left gives you a smaller value, reducing the sum.',
+        },
+        {
+          id: 'mc4',
+          question: 'What problem type is the sliding window pattern best suited for?',
+          options: [
+            'Finding pairs in sorted arrays',
+            'Checking palindromes',
+            'Subarray problems with size or property constraints',
+            'Removing duplicates',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'Sliding window is ideal for subarray problems where you need to maintain a window with certain constraints (fixed size, max sum, unique characters, etc.), expanding or shrinking as needed.',
+        },
+        {
+          id: 'mc5',
+          question: 'In the remove duplicates problem, what does the slow pointer represent?',
+          options: [
+            'The current element being checked',
+            'The position where the next unique element should be written',
+            'The last duplicate found',
+            'The middle of the array',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'The slow pointer marks the end of the unique elements section - it points to the last unique element, so the next unique element will be written at slow + 1.',
         },
       ],
     },
@@ -353,6 +482,63 @@ def remove_duplicates(nums: List[int]) -> int:
           ],
         },
       ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What is the time complexity of the two sum algorithm using two pointers on a sorted array?',
+          options: ['O(1)', 'O(log n)', 'O(n)', 'O(n²)'],
+          correctAnswer: 2,
+          explanation:
+            'The two pointers algorithm runs in O(n) time because each pointer traverses the array at most once, and combined they cover all elements in a single pass.',
+        },
+        {
+          id: 'mc2',
+          question: 'In the two sum algorithm, when the current sum equals the target, what should you do?',
+          options: [
+            'Continue searching for more pairs',
+            'Return the indices immediately',
+            'Move both pointers',
+            'Sort the array again',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'When you find a pair whose sum equals the target, you can return the indices immediately since you\'ve found the solution.',
+        },
+        {
+          id: 'mc3',
+          question: 'In the remove duplicates algorithm, what is the initial value of the slow pointer?',
+          options: ['-1', '0', '1', 'len(array) - 1'],
+          correctAnswer: 1,
+          explanation:
+            'The slow pointer starts at 0 (the first element) since the first element is always unique. The fast pointer typically starts at 1 to begin comparing.',
+        },
+        {
+          id: 'mc4',
+          question: 'What is the return value of the remove duplicates function?',
+          options: [
+            'The modified array',
+            'The number of unique elements',
+            'A list of duplicates',
+            'True or False',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'The function returns slow + 1, which represents the length/count of unique elements. The array is modified in-place, and the first slow + 1 elements contain the unique values.',
+        },
+        {
+          id: 'mc5',
+          question: 'Why is sorting a prerequisite for the two sum two-pointers algorithm?',
+          options: [
+            'To make the code simpler',
+            'To provide predictable behavior when moving pointers',
+            'To reduce space complexity',
+            'It is not actually required',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Sorting ensures that moving a pointer in one direction consistently increases or decreases values, allowing reliable decisions about which pointer to move based on whether the sum is too large or too small.',
+        },
+      ],
     },
     {
       id: 'complexity',
@@ -453,6 +639,63 @@ Beyond Big-O notation:
             'Complex lookups needed → hash map',
             'Trade-off: space vs convenience',
           ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What is the time complexity of the two pointers technique?',
+          options: ['O(1)', 'O(log n)', 'O(n)', 'O(n²)'],
+          correctAnswer: 2,
+          explanation:
+            'The two pointers technique is O(n) because each pointer traverses the array at most once. Even with two pointers, the combined movement is linear, not quadratic.',
+        },
+        {
+          id: 'mc2',
+          question: 'What is the space complexity of most two-pointer algorithms?',
+          options: ['O(1)', 'O(log n)', 'O(n)', 'O(n²)'],
+          correctAnswer: 0,
+          explanation:
+            'Most two-pointer algorithms use O(1) constant space as they only require a few pointer variables and often modify arrays in-place without additional data structures.',
+        },
+        {
+          id: 'mc3',
+          question: 'How does the time complexity change if you need to sort the array first before using two pointers?',
+          options: [
+            'Stays O(n)',
+            'Becomes O(n log n)',
+            'Becomes O(n²)',
+            'Becomes O(log n)',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'If sorting is required first, the overall time complexity becomes O(n log n) because sorting dominates. The two pointers part is still O(n), but O(n log n) + O(n) = O(n log n).',
+        },
+        {
+          id: 'mc4',
+          question: 'Why is two pointers more cache-friendly than nested loops?',
+          options: [
+            'It uses less memory',
+            'It accesses elements sequentially',
+            'It runs faster on all computers',
+            'It uses recursion',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Two pointers accesses array elements sequentially, which is cache-friendly because it takes advantage of spatial locality. Nested loops may jump around more, leading to more cache misses.',
+        },
+        {
+          id: 'mc5',
+          question: 'When comparing two pointers vs hash map for the two sum problem, what is the key trade-off?',
+          options: [
+            'Time vs readability',
+            'Space (O(1) vs O(n)) vs need for sorted input',
+            'Speed vs accuracy',
+            'Complexity vs simplicity',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Two pointers uses O(1) space but requires sorted input, while hash map uses O(n) space but works on unsorted input. The trade-off is space efficiency versus the requirement to sort.',
         },
       ],
     },
@@ -601,6 +844,68 @@ def partition(nums: List[int], pivot: int) -> int:
             'Remove/move → same direction',
             'Find pairs/symmetric → opposite direction',
           ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'In the "pair with sum" template, what do you return when no pair is found?',
+          options: [
+            'null',
+            'Empty array or [-1, -1]',
+            'The closest pair',
+            'An error',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'When no pair sums to the target, the function typically returns an empty array [] or [-1, -1] to indicate no solution was found.',
+        },
+        {
+          id: 'mc2',
+          question: 'In the "remove element" template, what does the slow pointer represent?',
+          options: [
+            'Elements to be removed',
+            'The next position to write a kept element',
+            'The current element being checked',
+            'The end of the array',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'The slow pointer marks the position where the next element that should be kept (not removed) will be written.',
+        },
+        {
+          id: 'mc3',
+          question: 'For the 3Sum problem, what is the overall time complexity?',
+          options: ['O(n)', 'O(n log n)', 'O(n²)', 'O(n³)'],
+          correctAnswer: 2,
+          explanation:
+            '3Sum requires sorting (O(n log n)) plus an outer loop (O(n)) with two pointers inside (O(n)), giving O(n) × O(n) = O(n²). The sorting is dominated by the nested operations.',
+        },
+        {
+          id: 'mc4',
+          question: 'In the partition template, when do you swap elements?',
+          options: [
+            'After every iteration',
+            'When left finds an element for right section AND right finds one for left section',
+            'Only at the end',
+            'When pointers meet',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'You swap when the left pointer finds an element that belongs in the right section AND the right pointer finds an element that belongs in the left section - both conditions must be true.',
+        },
+        {
+          id: 'mc5',
+          question: 'What pattern would you use for the "move zeros to end" problem?',
+          options: [
+            'Opposite direction',
+            'Sliding window',
+            'Same direction (fast & slow)',
+            'Binary search',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'Move zeros uses the same direction pattern where slow marks position for next non-zero, and fast scans ahead to find non-zero elements to move.',
         },
       ],
     },
@@ -767,6 +1072,63 @@ def max_area(height: List[int]) -> int:
           ],
         },
       ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'In the Container With Most Water problem, which pointer should you move?',
+          options: [
+            'Always move the left pointer',
+            'Always move the right pointer',
+            'Move the pointer at the shorter line',
+            'Move the pointer at the taller line',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'Always move the pointer at the shorter line because the area is limited by the shorter height. Moving the taller pointer can only decrease or maintain the area, while moving the shorter pointer gives a chance to find a taller line.',
+        },
+        {
+          id: 'mc2',
+          question: 'What is the time complexity of the 3Sum problem using two pointers?',
+          options: ['O(n)', 'O(n log n)', 'O(n²)', 'O(n³)'],
+          correctAnswer: 2,
+          explanation:
+            '3Sum uses an outer loop O(n) with two pointers inside O(n), resulting in O(n²) time. Although sorting takes O(n log n), it\'s dominated by the O(n²) nested operations.',
+        },
+        {
+          id: 'mc3',
+          question: 'In Floyd\'s cycle detection, what is the speed ratio between fast and slow pointers?',
+          options: [
+            'Fast is 3x slow',
+            'Fast is 2x slow',
+            'They move at same speed',
+            'Fast is 4x slow',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'In Floyd\'s cycle detection algorithm, the slow pointer moves 1 step at a time while the fast pointer moves 2 steps at a time - a 2:1 speed ratio.',
+        },
+        {
+          id: 'mc4',
+          question: 'For the Dutch National Flag problem (sort 0s, 1s, 2s), how many pointers are typically used?',
+          options: ['One', 'Two', 'Three', 'Four'],
+          correctAnswer: 2,
+          explanation:
+            'The Dutch National Flag problem uses three pointers: one for the boundary of 0s, one for the boundary of 2s, and one for the current element being examined.',
+        },
+        {
+          id: 'mc5',
+          question: 'In 3Sum, why must you skip duplicate values?',
+          options: [
+            'To improve time complexity',
+            'To avoid returning duplicate triplets in the result',
+            'To reduce space complexity',
+            'Because the algorithm breaks otherwise',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Skipping duplicates prevents returning multiple instances of the same triplet. For example, if the array has [1,1,1], you want to return each unique combination only once.',
+        },
+      ],
     },
     {
       id: 'strategy',
@@ -927,6 +1289,73 @@ A: "Use fast and slow pointers - Floyd's algorithm"
             'Verify loop conditions and pointer updates',
             'Explain process out loud',
           ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What is the first thing you should check to recognize a two-pointer problem?',
+          options: [
+            'If the array is small',
+            'If the data is sorted or can be sorted',
+            'If recursion is needed',
+            'If a hash map would work',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'The first signal for two pointers is whether the data is sorted or can be sorted. Sorted data enables predictable pointer movement decisions based on comparisons.',
+        },
+        {
+          id: 'mc2',
+          question: 'Which keywords in a problem statement suggest using two pointers?',
+          options: [
+            'Recursive, stack, tree',
+            'Pair, two numbers, remove, partition, in-place',
+            'Hash, frequency, count',
+            'Binary, search, logarithmic',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Keywords like "pair", "two numbers", "remove", "partition", and "in-place" strongly suggest two pointers. These indicate pair-finding or in-place modification patterns.',
+        },
+        {
+          id: 'mc3',
+          question: 'What is a common mistake when implementing two pointers?',
+          options: [
+            'Using too much memory',
+            'Incorrect loop termination conditions (e.g., left <= right vs left < right)',
+            'Making it too fast',
+            'Not using recursion',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'A common mistake is incorrect loop termination conditions, like using left <= right when you should use left < right, or vice versa. This can cause infinite loops or missed cases.',
+        },
+        {
+          id: 'mc4',
+          question: 'How much time should you spend planning before coding a two-pointer solution in an interview?',
+          options: [
+            'No time, start coding immediately',
+            '2-3 minutes',
+            '10-15 minutes',
+            'Half the interview time',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'You should spend 2-3 minutes planning your approach, choosing the right pattern, and thinking through edge cases before writing code. This prevents costly mistakes.',
+        },
+        {
+          id: 'mc5',
+          question: 'What edge cases should you always test with two-pointer solutions?',
+          options: [
+            'Only test with large inputs',
+            'Empty array, single element, all same values, target at boundaries',
+            'Only test the happy path',
+            'Only test when there is a bug',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Always test edge cases: empty array (what if there\'s no input?), single element (do pointers work?), all same values (duplicates), and targets at boundaries (first/last elements).',
         },
       ],
     },

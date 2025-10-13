@@ -114,6 +114,9 @@ def is_valid_alt(s: str) -> bool:
     return len(stack) == 0`,
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(n)',
+    
+    leetcodeUrl: 'https://leetcode.com/problems/valid-parentheses/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=WTzjTskDFMg',
     order: 1,
     topic: 'Stack',
     leetcodeUrl: 'https://leetcode.com/problems/valid-parentheses/',
@@ -264,6 +267,9 @@ class MinStackAlt:
         return self.stack[-1][1]`,
     timeComplexity: 'O(1) for all operations',
     spaceComplexity: 'O(n)',
+    
+    leetcodeUrl: 'https://leetcode.com/problems/min-stack/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=qkLl7nAwDPo',
     order: 2,
     topic: 'Stack',
     leetcodeUrl: 'https://leetcode.com/problems/min-stack/',
@@ -428,6 +434,9 @@ def largest_rectangle_area_brute(heights: List[int]) -> int:
     return max_area`,
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(n)',
+    
+    leetcodeUrl: 'https://leetcode.com/problems/largest-rectangle-in-histogram/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=zx5Sw9130L0',
     order: 3,
     topic: 'Stack',
     leetcodeUrl:

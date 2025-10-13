@@ -126,6 +126,9 @@ def max_depth_iterative(root: Optional[TreeNode]) -> int:
     return max_depth`,
     timeComplexity: 'O(N)',
     spaceComplexity: 'O(H) where H is height',
+    
+    leetcodeUrl: 'https://leetcode.com/problems/maximum-depth-of-binary-tree/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=hTM3phVI6YQ',
     order: 1,
     topic: 'Depth-First Search (DFS)',
     leetcodeUrl: 'https://leetcode.com/problems/maximum-depth-of-binary-tree/',
@@ -296,6 +299,9 @@ def has_path_sum_with_path(root: Optional[TreeNode], target_sum: int) -> bool:
     return dfs(root, target_sum, [])`,
     timeComplexity: 'O(N)',
     spaceComplexity: 'O(H) where H is height',
+    
+    leetcodeUrl: 'https://leetcode.com/problems/path-sum/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=LSKQyOz_P8I',
     order: 2,
     topic: 'Depth-First Search (DFS)',
     leetcodeUrl: 'https://leetcode.com/problems/path-sum/',
@@ -432,6 +438,9 @@ def pacific_atlantic(heights: List[List[int]]) -> List[List[int]]:
     return [[r, c] for r, c in pacific & atlantic]`,
     timeComplexity: 'O(M × N) - visit each cell at most twice',
     spaceComplexity: 'O(M × N) for recursion stack and visited sets',
+    
+    leetcodeUrl: 'https://leetcode.com/problems/pacific-atlantic-water-flow/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=s-VkcjHqkGI',
     order: 3,
     topic: 'Depth-First Search (DFS)',
     leetcodeUrl: 'https://leetcode.com/problems/pacific-atlantic-water-flow/',
@@ -585,74 +594,6 @@ def sum_numbers(root: Optional[TreeNode]) -> int:
     youtubeUrl: 'https://www.youtube.com/watch?v=Jg4E4KZstFE',
   },
 
-  // EASY - Diameter of Binary Tree
-  {
-    id: 'diameter-of-binary-tree-dfs',
-    title: 'Diameter of Binary Tree',
-    difficulty: 'Easy',
-    topic: 'Depth-First Search (DFS)',
-    description: `Given the \`root\` of a binary tree, return the length of the **diameter** of the tree.
-
-The **diameter** of a binary tree is the **length** of the longest path between any two nodes in a tree. This path may or may not pass through the \`root\`.
-
-The **length** of a path between two nodes is represented by the number of edges between them.`,
-    examples: [
-      {
-        input: 'root = [1,2,3,4,5]',
-        output: '3',
-        explanation: 'The path [4,2,1,3] or [5,2,1,3] has length 3.',
-      },
-      {
-        input: 'root = [1,2]',
-        output: '1',
-      },
-    ],
-    constraints: [
-      'The number of nodes in the tree is in the range [1, 10^4]',
-      '-100 <= Node.val <= 100',
-    ],
-    hints: [
-      'Calculate height of each subtree',
-      'Diameter at node = left_height + right_height',
-      'Track max diameter globally',
-    ],
-    starterCode: `from typing import Optional
-
-class TreeNode:
-    def __init__(self, val=0, left=None, right=None):
-        self.val = val
-        self.left = left
-        self.right = right
-
-def diameter_of_binary_tree(root: Optional[TreeNode]) -> int:
-    """
-    Find diameter of binary tree.
-    
-    Args:
-        root: Root of tree
-        
-    Returns:
-        Diameter (longest path)
-    """
-    # Write your code here
-    pass
-`,
-    testCases: [
-      {
-        input: [[1, 2, 3, 4, 5]],
-        expected: 3,
-      },
-      {
-        input: [[1, 2]],
-        expected: 1,
-      },
-    ],
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(h)',
-    leetcodeUrl: 'https://leetcode.com/problems/diameter-of-binary-tree/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=bkxqA8Rfv04',
-  },
-
   // MEDIUM - Binary Tree Right Side View
   {
     id: 'binary-tree-right-side-view',
@@ -722,80 +663,6 @@ def right_side_view(root: Optional[TreeNode]) -> List[int]:
     spaceComplexity: 'O(h)',
     leetcodeUrl: 'https://leetcode.com/problems/binary-tree-right-side-view/',
     youtubeUrl: 'https://www.youtube.com/watch?v=d4zLyf32e3I',
-  },
-
-  // MEDIUM - All Paths From Source to Target (DFS)
-  {
-    id: 'all-paths-source-target-dfs',
-    title: 'All Paths From Source to Target',
-    difficulty: 'Medium',
-    topic: 'Depth-First Search (DFS)',
-    description: `Given a directed acyclic graph (**DAG**) of \`n\` nodes labeled from \`0\` to \`n - 1\`, find all possible paths from node \`0\` to node \`n - 1\` and return them in **any order**.
-
-The graph is given as follows: \`graph[i]\` is a list of all nodes you can visit from node \`i\` (i.e., there is a directed edge from node \`i\` to node \`graph[i][j]\`).`,
-    examples: [
-      {
-        input: 'graph = [[1,2],[3],[3],[]]',
-        output: '[[0,1,3],[0,2,3]]',
-        explanation: 'There are two paths: 0 -> 1 -> 3 and 0 -> 2 -> 3.',
-      },
-      {
-        input: 'graph = [[4,3,1],[3,2,4],[3],[4],[]]',
-        output: '[[0,4],[0,3,4],[0,1,3,4],[0,1,2,3,4],[0,1,4]]',
-      },
-    ],
-    constraints: [
-      'n == graph.length',
-      '2 <= n <= 15',
-      '0 <= graph[i][j] < n',
-      'graph[i][j] != i (no self-loops)',
-      'All elements of graph[i] are unique',
-      'The input graph is guaranteed to be a DAG',
-    ],
-    hints: [
-      'Use DFS with path tracking',
-      'When reaching target, add path to result',
-      'Backtrack after exploring',
-    ],
-    starterCode: `from typing import List
-
-def all_paths_source_target(graph: List[List[int]]) -> List[List[int]]:
-    """
-    Find all paths from 0 to n-1.
-    
-    Args:
-        graph: Adjacency list
-        
-    Returns:
-        All paths from source to target
-    """
-    # Write your code here
-    pass
-`,
-    testCases: [
-      {
-        input: [[[1, 2], [3], [3], []]],
-        expected: [
-          [0, 1, 3],
-          [0, 2, 3],
-        ],
-      },
-      {
-        input: [[[4, 3, 1], [3, 2, 4], [3], [4], []]],
-        expected: [
-          [0, 4],
-          [0, 3, 4],
-          [0, 1, 3, 4],
-          [0, 1, 2, 3, 4],
-          [0, 1, 4],
-        ],
-      },
-    ],
-    timeComplexity: 'O(2^n * n)',
-    spaceComplexity: 'O(n)',
-    leetcodeUrl:
-      'https://leetcode.com/problems/all-paths-from-source-to-target/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=bSfxLRBXQPU',
   },
 
   // MEDIUM - Longest Path in DAG

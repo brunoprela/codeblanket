@@ -78,7 +78,9 @@ export default function TopicProblemsPage({
 
   // Determine back URL based on where we came from
   const backUrl = from.startsWith('modules/') ? `/${from}` : '/';
-  const backText = from.startsWith('modules/') ? 'Back to Module' : 'Back to Topics';
+  const backText = from.startsWith('modules/')
+    ? 'Back to Module'
+    : 'Back to Topics';
 
   return (
     <div className="container mx-auto max-w-6xl px-4 py-12">
@@ -194,11 +196,15 @@ function ProblemCard({
   topicSlug: string;
   from: string;
 }) {
-  // Preserve the original "from" if it came from modules, otherwise use topics
-  const problemFrom = from || `topics/${topicSlug}`;
-  
+  // Always use topics page as the back destination when viewing problems from topics page
+  // This ensures users return to the topic problems list, not the module page
+  const problemFrom = `topics/${topicSlug}`;
+
   return (
-    <Link href={`/problems/${problem.id}?from=${problemFrom}`} className="mb-6 block">
+    <Link
+      href={`/problems/${problem.id}?from=${problemFrom}`}
+      className="mb-6 block"
+    >
       <div className="group cursor-pointer rounded-lg border-2 border-[#44475a] bg-[#44475a] p-6 transition-all hover:border-[#bd93f9] hover:shadow-xl">
         <div className="flex items-start justify-between">
           <div className="flex-1">

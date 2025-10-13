@@ -75,6 +75,10 @@ function ProblemPageContent({ id }: { id: string }) {
     Trees: 'trees',
     Tries: 'tries',
     'Two Pointers': 'two-pointers',
+    'Python Fundamentals': 'python-fundamentals',
+    'Python Intermediate': 'python-intermediate',
+    'Python Advanced': 'python-advanced',
+    'Python Object-Oriented Programming': 'python-oop',
   };
 
   const topicSlug =
@@ -88,7 +92,7 @@ function ProblemPageContent({ id }: { id: string }) {
   // Determine back button URL and text based on 'from' parameter
   let backUrl = '/problems';
   let backText = 'Problem List';
-  
+
   if (from.startsWith('modules/')) {
     backUrl = `/${from}`;
     backText = 'Back to Module';
@@ -338,7 +342,13 @@ export default function ProblemPage({
   const { id } = use(params);
 
   return (
-    <Suspense fallback={<div className="flex h-full items-center justify-center bg-[#282a36] text-[#f8f8f2]">Loading...</div>}>
+    <Suspense
+      fallback={
+        <div className="flex h-full items-center justify-center bg-[#282a36] text-[#f8f8f2]">
+          Loading...
+        </div>
+      }
+    >
       <ProblemPageContent id={id} />
     </Suspense>
   );

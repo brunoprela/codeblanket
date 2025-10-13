@@ -123,6 +123,9 @@ def climb_stairs_memo(n: int) -> int:
     return dp(n)`,
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(1) with optimization',
+    
+    leetcodeUrl: 'https://leetcode.com/problems/climbing-stairs/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=Y0lT9Fck7qI',
     order: 1,
     topic: 'Dynamic Programming',
     leetcodeUrl: 'https://leetcode.com/problems/climbing-stairs/',
@@ -285,6 +288,9 @@ def rob_memo(nums: List[int]) -> int:
     return dp(len(nums) - 1)`,
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(1) with optimization',
+    
+    leetcodeUrl: 'https://leetcode.com/problems/house-robber/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=73r3KWiEvyk',
     order: 2,
     topic: 'Dynamic Programming',
     leetcodeUrl: 'https://leetcode.com/problems/house-robber/',
@@ -474,6 +480,9 @@ def coin_change_optimized(coins: List[int], amount: int) -> int:
     return dp[amount] if dp[amount] != float('inf') else -1`,
     timeComplexity: 'O(amount * len(coins))',
     spaceComplexity: 'O(amount)',
+    
+    leetcodeUrl: 'https://leetcode.com/problems/coin-change/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=H9bfqozjoqs',
     order: 3,
     topic: 'Dynamic Programming',
     leetcodeUrl: 'https://leetcode.com/problems/coin-change/',

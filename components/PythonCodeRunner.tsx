@@ -229,10 +229,11 @@ json.dumps(result)
             // Configure Monaco environment to prevent worker loading
             self.MonacoEnvironment = {
               getWorkerUrl: function () {
-                return 'data:text/javascript;charset=utf-8,' + encodeURIComponent(
-                  'self.onmessage = function() {};'
+                return (
+                  'data:text/javascript;charset=utf-8,' +
+                  encodeURIComponent('self.onmessage = function() {};')
                 );
-              }
+              },
             };
 
             // Define Dracula theme for Monaco
@@ -329,10 +330,11 @@ json.dumps(result)
               {results.map((result, i) => (
                 <div
                   key={i}
-                  className={`rounded-lg border-2 p-4 ${result.passed
-                    ? 'border-[#50fa7b] bg-[#50fa7b]/10'
-                    : 'border-[#ff5555] bg-[#ff5555]/10'
-                    }`}
+                  className={`rounded-lg border-2 p-4 ${
+                    result.passed
+                      ? 'border-[#50fa7b] bg-[#50fa7b]/10'
+                      : 'border-[#ff5555] bg-[#ff5555]/10'
+                  }`}
                 >
                   <div className="mb-3 flex items-center justify-between">
                     <div className="text-lg font-semibold text-[#f8f8f2]">

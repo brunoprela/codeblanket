@@ -124,6 +124,9 @@ def can_jump_simple(nums: List[int]) -> bool:
     return True`,
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(1)',
+    
+    leetcodeUrl: 'https://leetcode.com/problems/jump-game/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=Yan0cv2cLy8',
     order: 1,
     topic: 'Greedy',
     leetcodeUrl: 'https://leetcode.com/problems/jump-game/',
@@ -255,6 +258,9 @@ def max_profit_oneliner(prices: List[int]) -> int:
     return sum(max(prices[i] - prices[i-1], 0) for i in range(1, len(prices)))`,
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(1)',
+    
+    leetcodeUrl: 'https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=3SJ3pUkPQMc',
     order: 2,
     topic: 'Greedy',
     leetcodeUrl:
@@ -413,6 +419,9 @@ def can_complete_circuit_two_pass(gas: List[int], cost: List[int]) -> int:
     return start`,
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(1)',
+    
+    leetcodeUrl: 'https://leetcode.com/problems/gas-station/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=lJwbPZGo05A',
     order: 3,
     topic: 'Greedy',
     leetcodeUrl: 'https://leetcode.com/problems/gas-station/',
@@ -734,71 +743,5 @@ def partition_labels(s: str) -> List[int]:
     spaceComplexity: 'O(1)',
     leetcodeUrl: 'https://leetcode.com/problems/partition-labels/',
     youtubeUrl: 'https://www.youtube.com/watch?v=B7m8UmZE-vw',
-  },
-
-  // MEDIUM - Container With Most Water
-  {
-    id: 'container-most-water',
-    title: 'Container With Most Water',
-    difficulty: 'Medium',
-    topic: 'Greedy',
-    description: `You are given an integer array \`height\` of length \`n\`. There are \`n\` vertical lines drawn such that the two endpoints of the \`i-th\` line are \`(i, 0)\` and \`(i, height[i])\`.
-
-Find two lines that together with the x-axis form a container, such that the container contains the most water.
-
-Return the maximum amount of water a container can store.
-
-**Notice** that you may not slant the container.`,
-    examples: [
-      {
-        input: 'height = [1,8,6,2,5,4,8,3,7]',
-        output: '49',
-        explanation:
-          'The lines at index 1 and 8 form a container with area 49.',
-      },
-      {
-        input: 'height = [1,1]',
-        output: '1',
-      },
-    ],
-    constraints: [
-      'n == height.length',
-      '2 <= n <= 10^5',
-      '0 <= height[i] <= 10^4',
-    ],
-    hints: [
-      'Use two pointers at both ends',
-      'Move pointer with smaller height inward',
-      'Track maximum area',
-    ],
-    starterCode: `from typing import List
-
-def max_area(height: List[int]) -> int:
-    """
-    Find maximum water container area.
-    
-    Args:
-        height: Array of line heights
-        
-    Returns:
-        Maximum area
-    """
-    # Write your code here
-    pass
-`,
-    testCases: [
-      {
-        input: [[1, 8, 6, 2, 5, 4, 8, 3, 7]],
-        expected: 49,
-      },
-      {
-        input: [[1, 1]],
-        expected: 1,
-      },
-    ],
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(1)',
-    leetcodeUrl: 'https://leetcode.com/problems/container-with-most-water/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=UuiTKBwPgAo',
   },
 ];

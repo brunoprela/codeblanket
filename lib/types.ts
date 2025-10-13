@@ -67,12 +67,21 @@ export interface QuizQuestion {
   keyPoints: string[];
 }
 
+export interface MultipleChoiceQuestion {
+  id: string;
+  question: string;
+  options: string[];
+  correctAnswer: number; // Index of correct option (0-based)
+  explanation: string;
+}
+
 export interface ModuleSection {
   id: string;
   title: string;
   content: string;
   codeExample?: string;
   quiz: QuizQuestion[];
+  multipleChoice?: MultipleChoiceQuestion[];
 }
 
 export interface Module {
@@ -94,4 +103,12 @@ export interface ModuleCategory {
   icon: string;
   module: Module;
   problemCount: number;
+}
+
+export interface TopicSection {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  modules: ModuleCategory[];
 }

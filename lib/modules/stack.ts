@@ -87,6 +87,68 @@ item = stack.pop()   # pop() - O(1), returns 2
           ],
         },
       ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What does LIFO stand for in the context of stacks?',
+          options: [
+            'Last-In-First-Out',
+            'Last-In-Forever-Out',
+            'Linear-In-First-Out',
+            'List-In-First-Out',
+          ],
+          correctAnswer: 0,
+          explanation:
+            'LIFO stands for Last-In-First-Out, meaning the most recently added element is the first one to be removed, like a stack of plates where you only take from the top.',
+        },
+        {
+          id: 'mc2',
+          question: 'What is the time complexity of push and pop operations on a stack?',
+          options: ['O(1)', 'O(log n)', 'O(n)', 'O(n²)'],
+          correctAnswer: 0,
+          explanation:
+            'Both push and pop are O(1) constant time operations because they only interact with the top of the stack, requiring no searching or traversal.',
+        },
+        {
+          id: 'mc3',
+          question: 'Which Python data structure is commonly used to implement a stack?',
+          options: [
+            'Dictionary',
+            'Set',
+            'List (using append and pop)',
+            'Tuple',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'Python lists work perfectly as stacks using append() for push and pop() for pop operations, both of which are O(1) at the end of the list.',
+        },
+        {
+          id: 'mc4',
+          question: 'What real-world example best demonstrates the LIFO principle?',
+          options: [
+            'A queue at a store',
+            'Browser back button history',
+            'A sorted list',
+            'A hash table',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'The browser back button works like a stack - you navigate back to the most recently visited page first, which is exactly the LIFO (Last-In-First-Out) principle.',
+        },
+        {
+          id: 'mc5',
+          question: 'What type of problems are stacks uniquely good at solving?',
+          options: [
+            'Sorting problems',
+            'Parsing and matching pairs problems',
+            'Finding minimum elements',
+            'Binary search',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Stacks excel at parsing and matching pairs (like parentheses validation) because they naturally track the most recent opening symbol to match with closing symbols.',
+        },
+      ],
     },
     {
       id: 'patterns',
@@ -250,6 +312,68 @@ def valid_parentheses(s: str) -> bool:
           ],
         },
       ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'In the matching pairs pattern, what do you push onto the stack?',
+          options: [
+            'Closing brackets',
+            'Opening brackets',
+            'All characters',
+            'Only matched pairs',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'You push opening brackets onto the stack. When you encounter a closing bracket, you pop from the stack to check if it matches the most recent opening bracket.',
+        },
+        {
+          id: 'mc2',
+          question: 'What is a monotonic stack?',
+          options: [
+            'A stack that only stores one type of element',
+            'A stack that maintains elements in increasing or decreasing order',
+            'A stack with fixed size',
+            'A stack that never empties',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'A monotonic stack maintains elements in either increasing or decreasing order, popping elements that violate this property. It\'s used for problems like finding the next greater element.',
+        },
+        {
+          id: 'mc3',
+          question: 'For the next greater element problem, what type of monotonic stack do you use?',
+          options: [
+            'Increasing stack',
+            'Decreasing stack',
+            'Random stack',
+            'Sorted stack',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Use a decreasing (or non-increasing) monotonic stack. When you find an element larger than the stack top, you pop elements - they have found their next greater element.',
+        },
+        {
+          id: 'mc4',
+          question: 'How does a min stack achieve O(1) getMin() operation?',
+          options: [
+            'By sorting the stack',
+            'By maintaining a separate stack tracking minimum at each level',
+            'By using binary search',
+            'By keeping the minimum at the bottom',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'A min stack uses two stacks: one for values and one for tracking the minimum at each level. When you push/pop from the main stack, you also push/pop from the min stack.',
+        },
+        {
+          id: 'mc5',
+          question: 'What is the time complexity of the next greater element algorithm using a monotonic stack?',
+          options: ['O(1)', 'O(log n)', 'O(n)', 'O(n²)'],
+          correctAnswer: 2,
+          explanation:
+            'The time complexity is O(n) because each element is pushed onto and popped from the stack at most once, resulting in a single pass through the array.',
+        },
+      ],
     },
     {
       id: 'complexity',
@@ -330,6 +454,73 @@ Stacks enable O(N) solutions to problems that would otherwise require O(N²) nes
             'Rare expensive operations averaged over many cheap ones',
             'Enables O(n) total time claims',
           ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What is the time complexity of push() and pop() operations on a stack?',
+          options: [
+            'O(log N)',
+            'O(1)',
+            'O(N)',
+            'O(N log N)',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Push and pop operations on a stack are O(1) constant time because they only access the top element without traversing the rest of the stack.',
+        },
+        {
+          id: 'mc2',
+          question: 'How does a monotonic stack achieve O(N) time complexity?',
+          options: [
+            'By sorting the elements',
+            'Each element is pushed and popped at most once',
+            'By using binary search',
+            'By processing elements backwards',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Each element is pushed exactly once and popped at most once during the entire algorithm, giving 2N total operations, which is O(N) amortized.',
+        },
+        {
+          id: 'mc3',
+          question: 'What is the worst-case space complexity of a stack solution for valid parentheses?',
+          options: [
+            'O(1)',
+            'O(N)',
+            'O(log N)',
+            'O(N²)',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Worst case occurs when all brackets are opening brackets (e.g., "(((("), requiring O(N) space to store them all in the stack.',
+        },
+        {
+          id: 'mc4',
+          question: 'Why is amortized analysis important for stack problems?',
+          options: [
+            'It makes the code faster',
+            'Individual operations vary but average to O(1) across many operations',
+            'It reduces space complexity',
+            'It is not important',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Amortized analysis shows that even though some operations might seem expensive (like popping many elements), each element is processed a constant number of times total, averaging to O(1) per operation.',
+        },
+        {
+          id: 'mc5',
+          question: 'How do stacks transform O(N²) problems into O(N)?',
+          options: [
+            'By sorting the data first',
+            'By remembering information to avoid repeated backward scans',
+            'By using parallel processing',
+            'They cannot do this',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Stacks maintain useful state information, eliminating the need for nested loops that repeatedly scan backwards. Each element is processed a constant number of times.',
         },
       ],
     },
@@ -474,6 +665,73 @@ def is_valid_parentheses(s: str) -> bool:
             'Example: parentheses matching',
             'Rule: need position info → indices, need value comparison → values',
           ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What should you check before calling pop() on a stack?',
+          options: [
+            'If the stack is sorted',
+            'If the stack is empty',
+            'If the stack is full',
+            'The stack size',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Always check if the stack is empty before popping to avoid errors. Attempting to pop from an empty stack raises an IndexError in Python.',
+        },
+        {
+          id: 'mc2',
+          question: 'In a monotonic stack template, what determines whether to pop elements?',
+          options: [
+            'The stack is full',
+            'Comparing current element with stack top violates monotonic property',
+            'Random chance',
+            'The stack size exceeds n',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'You pop elements when the current element violates the monotonic property (e.g., current is greater than stack top in a decreasing monotonic stack).',
+        },
+        {
+          id: 'mc3',
+          question: 'When should you store indices in the stack instead of values?',
+          options: [
+            'Always store indices',
+            'When you need to calculate positions, distances, or widths',
+            'When values are too large',
+            'Never store indices',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Store indices when you need to calculate positions (for filling result arrays), distances, or widths (like in histogram problems). Store values when you only need comparisons.',
+        },
+        {
+          id: 'mc4',
+          question: 'What is the correct way to implement peek() in Python using a list?',
+          options: [
+            'stack[0]',
+            'stack[-1]',
+            'stack.peek()',
+            'stack.top()',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'In Python, stack[-1] accesses the last element (top of stack) without removing it. Lists don\'t have a built-in peek() method.',
+        },
+        {
+          id: 'mc5',
+          question: 'In the min stack template, when do you push to the min stack?',
+          options: [
+            'Only when pushing a new minimum',
+            'Every time you push to the main stack',
+            'Only at the beginning',
+            'Never, it auto-updates',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'You push to the min stack every time you push to the main stack, storing the minimum value at that level. This maintains O(1) getMin() at all stack states.',
         },
       ],
     },
@@ -758,6 +1016,73 @@ heights = [0] + heights + [0]  # Add sentinels for easier computation
           ],
         },
       ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What is the most common mistake when popping from a stack?',
+          options: [
+            'Popping too slowly',
+            'Not checking if the stack is empty before popping',
+            'Popping twice',
+            'Using the wrong data structure',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'The most common mistake is not checking if the stack is empty before popping, which causes an IndexError in Python. Always check with "if not stack:" before popping.',
+        },
+        {
+          id: 'mc2',
+          question: 'In valid parentheses checking, what must you verify when encountering a closing bracket?',
+          options: [
+            'Only that the stack is not empty',
+            'Both that the stack is not empty AND that the popped bracket matches',
+            'That the string is sorted',
+            'That the stack size is even',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'You must check both conditions: the stack is not empty (there is an opening bracket) AND the popped opening bracket matches the current closing bracket type.',
+        },
+        {
+          id: 'mc3',
+          question: 'Why should indices be stored instead of values in monotonic stack problems?',
+          options: [
+            'Indices are smaller',
+            'To calculate distances, widths, or fill result arrays at correct positions',
+            'Values take too much memory',
+            'It is always required',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Storing indices allows calculating distances (current index - stack top), widths in histogram problems, or filling result arrays at the correct positions.',
+        },
+        {
+          id: 'mc4',
+          question: 'What happens if you forget to return the final stack check in parentheses validation?',
+          options: [
+            'The code runs faster',
+            'It may return True for strings with unmatched opening brackets',
+            'Nothing, it works the same',
+            'The stack crashes',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Without checking "len(stack) == 0" at the end, strings with extra opening brackets (like "((") would incorrectly return True because the loop completes without errors.',
+        },
+        {
+          id: 'mc5',
+          question: 'In monotonic stack problems, what is a common off-by-one error?',
+          options: [
+            'Using > instead of >=',
+            'Incorrect width calculation: forgetting the +1 or -1 in index arithmetic',
+            'Pushing too many elements',
+            'Popping too few elements',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Common off-by-one errors occur in width calculations, such as forgetting that width = right - left - 1 (exclusive) vs right - left + 1 (inclusive) depending on the problem.',
+        },
+      ],
     },
     {
       id: 'interview',
@@ -895,6 +1220,73 @@ What property does your stack maintain at each step?
             'Handle edge cases: empty, all same',
             'Defensive coding and clear communication',
           ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What keywords in a problem statement suggest using a stack?',
+          options: [
+            'Sorted, binary, search',
+            'Valid, matching, balanced, next greater',
+            'Tree, graph, connected',
+            'Minimum, maximum, optimize',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Keywords like "valid", "matching", "balanced" (for parentheses), or "next greater" (for monotonic stack) are strong signals that a stack-based solution is appropriate.',
+        },
+        {
+          id: 'mc2',
+          question: 'How long should a medium stack problem take in an interview?',
+          options: [
+            '5-10 minutes',
+            '15-20 minutes',
+            '30-45 minutes',
+            '60+ minutes',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Medium stack problems typically take 15-20 minutes including explanation, coding, and testing. Stack problems often have clear patterns once recognized.',
+        },
+        {
+          id: 'mc3',
+          question: 'What should you explain first when solving a stack problem in an interview?',
+          options: [
+            'The code implementation',
+            'Why you chose a stack and which pattern you are using',
+            'The test cases',
+            'The complexity analysis',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Start by explaining why a stack is appropriate and which pattern (matching pairs, monotonic stack, etc.) you are using. This shows your problem recognition skills.',
+        },
+        {
+          id: 'mc4',
+          question: 'What is a good response when asked "Can you solve it without a stack?"',
+          options: [
+            'Say it is impossible',
+            'Discuss alternatives like counters for simple cases, but explain stack trade-offs',
+            'Refuse to answer',
+            'Say stacks are always required',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Some problems (like simple parentheses counting) have non-stack solutions, but monotonic stack problems typically need the stack. Discuss the trade-offs and explain why the stack solution is cleaner.',
+        },
+        {
+          id: 'mc5',
+          question: 'What is the recommended practice approach for mastering stacks?',
+          options: [
+            'Only solve hard problems',
+            'Start with basics (valid parentheses), then monotonic stack, then advanced',
+            'Practice randomly',
+            'Memorize all solutions',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Progress from basic problems (valid parentheses, implement stack) to monotonic stack problems, then advanced applications. This builds understanding incrementally.',
         },
       ],
     },

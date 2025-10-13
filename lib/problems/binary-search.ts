@@ -7,6 +7,9 @@ export const binarySearchProblems: Problem[] = [
     title: 'Binary Search',
     difficulty: 'Easy',
     topic: 'Binary Search',
+    
+    leetcodeUrl: 'https://leetcode.com/problems/binary-search/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=s4DPM8ct1pI',
     order: 1,
     description: `Given an array of integers \`nums\` which is sorted in ascending order, and an integer \`target\`, write a function to search \`target\` in \`nums\`. If \`target\` exists, then return its index. Otherwise, return \`-1\`.
 

@@ -150,6 +150,73 @@ root.right = TreeNode(3)
           ],
         },
       ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What makes trees hierarchical structures?',
+          options: [
+            'They are stored in memory sequentially',
+            'Each node can have multiple children, creating parent-child relationships in levels',
+            'They are always sorted',
+            'They use arrays internally',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Trees are hierarchical because nodes can have multiple children, creating parent-child relationships across levels. This branching structure differs from linear structures like arrays or linked lists.',
+        },
+        {
+          id: 'mc2',
+          question: 'What is the maximum number of children a node can have in a binary tree?',
+          options: [
+            'Unlimited',
+            '2',
+            '3',
+            '1',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Binary trees limit each node to at most 2 children: left and right. This constraint enables specific algorithms like BST with efficient O(log N) search.',
+        },
+        {
+          id: 'mc3',
+          question: 'What property defines a Binary Search Tree?',
+          options: [
+            'All nodes have exactly 2 children',
+            'Left subtree < node < right subtree for all nodes',
+            'All leaves are at the same level',
+            'Height is always balanced',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'BST property: for every node, all values in left subtree are less than node value, and all values in right subtree are greater. This ordering enables O(log N) search in balanced trees.',
+        },
+        {
+          id: 'mc4',
+          question: 'What is a leaf node?',
+          options: [
+            'The root node',
+            'A node with no children',
+            'A node with one child',
+            'A node with two children',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'A leaf node is a node with no children - it is at the bottom of the tree. Leaves are terminal nodes in tree traversals.',
+        },
+        {
+          id: 'mc5',
+          question: 'In a balanced BST with 1000 nodes, approximately how many comparisons are needed to search for a value?',
+          options: [
+            '1000',
+            '10',
+            '100',
+            '500',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'A balanced tree with 1000 nodes has height log₂(1000) ≈ 10. Search makes one comparison per level, so at most 10 comparisons are needed (since 2^10 = 1024).',
+        },
+      ],
     },
     {
       id: 'traversals',
@@ -406,6 +473,73 @@ def level_order_traversal(root: Optional[TreeNode]) -> List[List[int]]:
           ],
         },
       ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What order does inorder traversal visit nodes in a BST?',
+          options: [
+            'Random order',
+            'Ascending sorted order',
+            'Descending order',
+            'Level order',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Inorder traversal (left, node, right) visits nodes in ascending sorted order for a Binary Search Tree. This is because it processes left (smaller values) before node before right (larger values).',
+        },
+        {
+          id: 'mc2',
+          question: 'Which traversal processes the parent node before its children?',
+          options: [
+            'Inorder',
+            'Preorder',
+            'Postorder',
+            'Level order',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Preorder traversal (node, left, right) processes the parent before its children, making it useful for copying trees or creating prefix expressions where parent context is needed first.',
+        },
+        {
+          id: 'mc3',
+          question: 'What data structure does BFS use for tree traversal?',
+          options: [
+            'Stack',
+            'Queue',
+            'Array',
+            'Hash map',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'BFS uses a queue to explore nodes level by level. Nodes are added to the queue and processed in FIFO order, ensuring each level is completed before moving to the next.',
+        },
+        {
+          id: 'mc4',
+          question: 'What is the space complexity of recursive DFS?',
+          options: [
+            'O(1)',
+            'O(H) where H is tree height',
+            'O(N)',
+            'O(log N)',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Recursive DFS uses O(H) space for the call stack where H is tree height. In the worst case (skewed tree), H = N. In a balanced tree, H = log N.',
+        },
+        {
+          id: 'mc5',
+          question: 'When is BFS preferred over DFS?',
+          options: [
+            'When solutions are deep in the tree',
+            'When finding shortest path or solutions near the root',
+            'When space is limited',
+            'Always',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'BFS is preferred for finding shortest paths (minimum depth to leaf) or when solutions are likely near the root. BFS guarantees finding nodes level by level in order of distance from root.',
+        },
+      ],
     },
     {
       id: 'patterns',
@@ -623,6 +757,73 @@ def bottom_up(root):
           ],
         },
       ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What are the three essential steps in the recursive DFS pattern?',
+          options: [
+            'Initialize, loop, return',
+            'Base case, recurse on children, compute current result',
+            'Sort, search, merge',
+            'Read, write, update',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'The recursive DFS pattern consists of: 1) Base case (null check, return default), 2) Recurse on children (get results from subtrees), 3) Compute current result (combine children results with current node).',
+        },
+        {
+          id: 'mc2',
+          question: 'Why is passing bounds necessary when validating a BST?',
+          options: [
+            'To make it faster',
+            'To ensure nodes satisfy BST property relative to all ancestors, not just parent',
+            'To save memory',
+            'It is not necessary',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Without bounds, checking only node > left and node < right misses violations deeper in the tree. Bounds ensure each node satisfies BST property relative to all ancestors, maintaining the global BST property.',
+        },
+        {
+          id: 'mc3',
+          question: 'What is backtracking in the path pattern and why is it crucial?',
+          options: [
+            'Going backwards in the tree',
+            'Removing nodes from the path after recursion to maintain correct state',
+            'Deleting nodes',
+            'Reversing the tree',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Backtracking removes the current node from the path after exploring its subtree. This ensures the path is correct when exploring the other subtree. Without backtracking, the path would incorrectly contain nodes from both subtrees.',
+        },
+        {
+          id: 'mc4',
+          question: 'What is the difference between top-down and bottom-up tree traversal?',
+          options: [
+            'Top-down goes left, bottom-up goes right',
+            'Top-down passes info from parent to children, bottom-up gathers info from children to parent',
+            'They are the same',
+            'Top-down is faster',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Top-down (preorder-style) passes information down from parent to children (e.g., tracking depth). Bottom-up (postorder-style) gathers information from children to compute parent result (e.g., calculating height).',
+        },
+        {
+          id: 'mc5',
+          question: 'When comparing two trees for structure and values, what is the base case?',
+          options: [
+            'Both are leaves',
+            'Both are null (return true) or one is null (return false)',
+            'Values are equal',
+            'Trees are balanced',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Base case: if both trees are null, they are equal (return true). If only one is null, they differ in structure (return false). Then check if values match and recurse on subtrees.',
+        },
+      ],
     },
     {
       id: 'complexity',
@@ -734,6 +935,73 @@ Where:
             'No node visited multiple times',
             'All traversals: O(n) time',
           ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What is the time complexity of search in a balanced BST?',
+          options: [
+            'O(N)',
+            'O(log N)',
+            'O(1)',
+            'O(N²)',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'In a balanced BST with height log N, each comparison eliminates half the remaining nodes, giving O(log N) time complexity for search, insert, and delete operations.',
+        },
+        {
+          id: 'mc2',
+          question: 'What happens to BST operation complexity in a skewed (unbalanced) tree?',
+          options: [
+            'Stays O(log N)',
+            'Degrades to O(N)',
+            'Becomes O(1)',
+            'Becomes O(N²)',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'In a skewed tree, height can be N (like a linked list). Operations must traverse from root to leaf, taking O(N) time. This is why balance is crucial for BST efficiency.',
+        },
+        {
+          id: 'mc3',
+          question: 'What is the space complexity of recursive DFS?',
+          options: [
+            'O(1)',
+            'O(H) where H is tree height',
+            'O(N)',
+            'O(W) where W is width',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Recursive DFS uses O(H) space for the call stack where H is height. The stack stores nodes along one path from root to current node. In balanced trees H = log N, in skewed trees H = N.',
+        },
+        {
+          id: 'mc4',
+          question: 'What is the space complexity of BFS (level-order traversal)?',
+          options: [
+            'O(H) where H is height',
+            'O(W) where W is maximum width',
+            'O(1)',
+            'O(log N)',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'BFS uses a queue that stores all nodes at the current level. Maximum queue size is the width W of the tree. In a complete binary tree, this can be N/2 nodes at the bottom level.',
+        },
+        {
+          id: 'mc5',
+          question: 'Why are all basic tree traversals O(N) time complexity?',
+          options: [
+            'They use nested loops',
+            'They visit each of N nodes exactly once, doing constant work per node',
+            'They are slow',
+            'They require sorting',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'All traversals (inorder, preorder, postorder, level-order) visit each node exactly once and perform constant work at each node. Total work is N × O(1) = O(N).',
         },
       ],
     },
@@ -931,6 +1199,73 @@ def inorder_iterative(root):
           ],
         },
       ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What are the three parts of the basic recursive DFS template?',
+          options: [
+            'Start, middle, end',
+            'Null check (base case), recursive calls on children, combine results',
+            'Initialize, process, return',
+            'Read, compute, write',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'The DFS template has three parts: 1) Null check for base case, 2) Recursive calls on children to divide the problem, 3) Combine results from children with current node to conquer.',
+        },
+        {
+          id: 'mc2',
+          question: 'In the BFS template, why do we track level size separately?',
+          options: [
+            'To make it faster',
+            'To separate levels within the queue since it mixes current level with children',
+            'To save memory',
+            'It is not necessary',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Level size lets us process exactly one level at a time. Without it, we cannot tell when one level ends since the queue mixes current level nodes with their children added during processing.',
+        },
+        {
+          id: 'mc3',
+          question: 'When should you use a top-down recursive pattern?',
+          options: [
+            'Always',
+            'When current node needs context from ancestors (pass down as parameters)',
+            'When it is faster',
+            'Never',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Use top-down when nodes need context from ancestors, like passing bounds for BST validation or accumulated sum for path problems. Information flows down as parameters.',
+        },
+        {
+          id: 'mc4',
+          question: 'When should you use a bottom-up recursive pattern?',
+          options: [
+            'When it uses less memory',
+            'When parent needs results computed by children (return up)',
+            'Always for trees',
+            'Only for balanced trees',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Use bottom-up when parent needs results from children, like computing tree height or checking if balanced. Children compute and return values that parent uses.',
+        },
+        {
+          id: 'mc5',
+          question: 'What is the key advantage of iterative DFS/BFS templates over recursive?',
+          options: [
+            'They are always faster',
+            'Explicit stack/queue control and avoid stack overflow for deep trees',
+            'They use less code',
+            'They are easier to understand',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Iterative templates give explicit control over the stack/queue and avoid stack overflow issues with very deep recursion. They are especially useful for very deep or unbalanced trees.',
+        },
+      ],
     },
     {
       id: 'interview',
@@ -1111,6 +1446,73 @@ def inorder_iterative(root):
             'Draw pointers for structure modifications',
             'Test: null, single node cases',
           ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What keywords in a problem description indicate a tree algorithm is needed?',
+          options: [
+            'Array, sort, search',
+            'Binary tree, BST, parent-child, root-to-leaf, inorder',
+            'Hash map, frequency, count',
+            'String, substring, pattern',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Keywords like "binary tree", "BST", hierarchical relationships ("parent-child", "ancestor"), traversals ("inorder", "preorder"), and structural properties ("balanced", "symmetric", "depth") indicate tree problems.',
+        },
+        {
+          id: 'mc2',
+          question: 'What should you clarify first in a tree interview problem?',
+          options: [
+            'The test cases',
+            'Whether it\'s a binary tree or BST, and what to return',
+            'The programming language',
+            'How many nodes',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Always clarify whether it\'s a binary tree (any values) or BST (ordered values), if there are null nodes, and what the function should return. BST problems can use ordering for optimization.',
+        },
+        {
+          id: 'mc3',
+          question: 'What is the most common mistake in tree problems?',
+          options: [
+            'Using wrong variable names',
+            'Forgetting null checks, causing null pointer errors',
+            'Using too much memory',
+            'Making it too fast',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Forgetting to check if a node is null before accessing its properties causes null pointer errors. Always start recursive functions with "if not root: return default_value".',
+        },
+        {
+          id: 'mc4',
+          question: 'When explaining tree solution complexity, what should you mention?',
+          options: [
+            'Only time complexity',
+            'Time O(N) to visit all nodes, Space O(H) for recursion stack where H is height',
+            'Only space complexity',
+            'That trees are slow',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Mention time complexity O(N) for visiting all nodes and space complexity O(H) for the recursion stack, where H ranges from log N (balanced) to N (skewed tree).',
+        },
+        {
+          id: 'mc5',
+          question: 'What is a recommended practice progression for tree mastery?',
+          options: [
+            'Start with the hardest problems',
+            'Start with basics (traversals, depth), then BST, then paths, then advanced',
+            'Only practice BST problems',
+            'Skip practice and memorize solutions',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Progress from basic traversals and depth problems, to BST operations, to path problems, and finally advanced topics like serialization and LCA. This builds intuition incrementally.',
         },
       ],
     },

@@ -22,6 +22,10 @@ import { timeSpaceComplexityProblems } from './time-space-complexity';
 import { treesProblems } from './trees';
 import { triesProblems } from './tries';
 import { twoPointersProblems } from './two-pointers';
+import { pythonFundamentalsProblems } from './python-fundamentals';
+import { pythonIntermediateProblems } from './python-intermediate';
+import { pythonAdvancedProblems } from './python-advanced';
+import { pythonOOPProblems } from './python-oop';
 
 export interface ProblemCategory {
   id: string;
@@ -238,6 +242,42 @@ export const problemCategories: ProblemCategory[] = [
     problemCount: twoPointersProblems.length,
     problems: twoPointersProblems,
   },
+  {
+    id: 'python-fundamentals',
+    title: 'Python Fundamentals',
+    description:
+      'Learn core Python concepts including data types, control flow, functions, and basic data structures',
+    icon: '📚',
+    problemCount: pythonFundamentalsProblems.length,
+    problems: pythonFundamentalsProblems,
+  },
+  {
+    id: 'python-intermediate',
+    title: 'Python Intermediate',
+    description:
+      'Build practical Python skills with file handling, error management, regular expressions, and more',
+    icon: '🔧',
+    problemCount: pythonIntermediateProblems.length,
+    problems: pythonIntermediateProblems,
+  },
+  {
+    id: 'python-advanced',
+    title: 'Python Advanced',
+    description:
+      'Master advanced Python features including decorators, generators, context managers, and metaclasses',
+    icon: '🐍',
+    problemCount: pythonAdvancedProblems.length,
+    problems: pythonAdvancedProblems,
+  },
+  {
+    id: 'python-oop',
+    title: 'Python Object-Oriented Programming',
+    description:
+      'Master object-oriented programming in Python including classes, inheritance, and polymorphism',
+    icon: '🏗️',
+    problemCount: pythonOOPProblems.length,
+    problems: pythonOOPProblems,
+  },
 ];
 
 export const allProblems: Problem[] = [
@@ -264,6 +304,10 @@ export const allProblems: Problem[] = [
   ...treesProblems,
   ...triesProblems,
   ...twoPointersProblems,
+  ...pythonFundamentalsProblems,
+  ...pythonIntermediateProblems,
+  ...pythonAdvancedProblems,
+  ...pythonOOPProblems,
 ];
 
 export function getProblemById(id: string): Problem | undefined {

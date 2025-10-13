@@ -1,4 +1,4 @@
-import { Module, ModuleCategory } from '../types';
+import { Module, ModuleCategory, TopicSection } from '../types';
 import { problemCategories } from '../problems';
 
 import { advancedGraphsModule } from './advanced-graphs';
@@ -24,6 +24,10 @@ import { timeSpaceComplexityModule } from './time-space-complexity';
 import { treesModule } from './trees';
 import { triesModule } from './tries';
 import { twoPointersModule } from './two-pointers';
+import { pythonFundamentalsModule } from './python-fundamentals';
+import { pythonIntermediateModule } from './python-intermediate';
+import { pythonAdvancedModule } from './python-advanced';
+import { pythonOOPModule } from './python-oop';
 
 /**
  * All available modules
@@ -52,6 +56,10 @@ export const allModules: Module[] = [
   treesModule,
   triesModule,
   twoPointersModule,
+  pythonFundamentalsModule,
+  pythonIntermediateModule,
+  pythonAdvancedModule,
+  pythonOOPModule,
 ];
 
 /**
@@ -294,6 +302,84 @@ export const moduleCategories: ModuleCategory[] = [
     problemCount:
       problemCategories.find((cat) => cat.id === 'math-geometry')?.problems
         .length || 0,
+  },
+  // 12. Python Fundamentals
+  {
+    id: pythonFundamentalsModule.id,
+    title: pythonFundamentalsModule.title,
+    description: pythonFundamentalsModule.description,
+    icon: pythonFundamentalsModule.icon,
+    module: pythonFundamentalsModule,
+    problemCount:
+      problemCategories.find((cat) => cat.id === 'python-fundamentals')
+        ?.problems.length || 0,
+  },
+  // 13. Python Intermediate
+  {
+    id: pythonIntermediateModule.id,
+    title: pythonIntermediateModule.title,
+    description: pythonIntermediateModule.description,
+    icon: pythonIntermediateModule.icon,
+    module: pythonIntermediateModule,
+    problemCount:
+      problemCategories.find((cat) => cat.id === 'python-intermediate')
+        ?.problems.length || 0,
+  },
+  // 14. Python Advanced
+  {
+    id: pythonAdvancedModule.id,
+    title: pythonAdvancedModule.title,
+    description: pythonAdvancedModule.description,
+    icon: pythonAdvancedModule.icon,
+    module: pythonAdvancedModule,
+    problemCount:
+      problemCategories.find((cat) => cat.id === 'python-advanced')?.problems
+        .length || 0,
+  },
+  // 15. Python OOP
+  {
+    id: pythonOOPModule.id,
+    title: pythonOOPModule.title,
+    description: pythonOOPModule.description,
+    icon: pythonOOPModule.icon,
+    module: pythonOOPModule,
+    problemCount:
+      problemCategories.find((cat) => cat.id === 'python-oop')?.problems
+        .length || 0,
+  },
+];
+
+/**
+ * Topic sections organizing modules by subject area
+ */
+export const topicSections: TopicSection[] = [
+  {
+    id: 'algorithms-data-structures',
+    title: 'Algorithms & Data Structures',
+    description:
+      'Master fundamental algorithms and data structures for coding interviews',
+    icon: '🧠',
+    modules: moduleCategories.filter(
+      (m) =>
+        m.id !== 'python-fundamentals' &&
+        m.id !== 'python-intermediate' &&
+        m.id !== 'python-advanced' &&
+        m.id !== 'python-oop',
+    ),
+  },
+  {
+    id: 'python',
+    title: 'Python',
+    description:
+      'From fundamentals to advanced patterns: master Python programming',
+    icon: '🐍',
+    modules: moduleCategories.filter(
+      (m) =>
+        m.id === 'python-fundamentals' ||
+        m.id === 'python-intermediate' ||
+        m.id === 'python-advanced' ||
+        m.id === 'python-oop',
+    ),
   },
 ];
 

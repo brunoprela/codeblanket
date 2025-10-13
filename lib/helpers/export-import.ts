@@ -118,7 +118,8 @@ export async function importProgress(file: File): Promise<void> {
           try {
             // If value is already a string (like code), store it directly
             // Otherwise, stringify it (like arrays, objects)
-            const valueToStore = typeof value === 'string' ? value : JSON.stringify(value);
+            const valueToStore =
+              typeof value === 'string' ? value : JSON.stringify(value);
             localStorage.setItem(key, valueToStore);
           } catch (error) {
             console.error(`Failed to restore ${key} to localStorage:`, error);

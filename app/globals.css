@@ -55,11 +55,13 @@ html {
   right: 0;
   width: 20px;
   height: 20px;
-  background: linear-gradient(135deg,
-      transparent 0%,
-      transparent 50%,
-      rgba(156, 163, 175, 0.4) 50%,
-      rgba(156, 163, 175, 0.4) 100%);
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    transparent 50%,
+    rgba(156, 163, 175, 0.4) 50%,
+    rgba(156, 163, 175, 0.4) 100%
+  );
   cursor: ns-resize;
   pointer-events: none;
 }
@@ -121,12 +123,14 @@ html {
 }
 
 /* Enhanced Prism.js Dracula Theme for Python */
-code[class*="language-"],
-pre[class*="language-"] {
+code[class*='language-'],
+pre[class*='language-'] {
   color: #f8f8f2;
   background: none;
   text-shadow: none;
-  font-family: "Fira Code", "Fira Mono", "SF Mono", Monaco, Inconsolata, "Roboto Mono", Consolas, "Courier New", monospace;
+  font-family:
+    'Fira Code', 'Fira Mono', 'SF Mono', Monaco, Inconsolata, 'Roboto Mono',
+    Consolas, 'Courier New', monospace;
   text-align: left;
   white-space: pre;
   word-spacing: normal;
