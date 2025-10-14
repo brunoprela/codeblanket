@@ -118,6 +118,58 @@ Edit `lib/problems/binary-search.ts` and add a new problem object:
 - **Pyodide Version**: Update CDN URL in `app/layout.tsx`
 - **Editor Theme**: Change `theme` prop in `PythonCodeRunner.tsx`
 
+## 🚀 Deployment
+
+### Deploy to Vercel
+
+The easiest way to deploy this Next.js app is using [Vercel](https://vercel.com):
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/brunoprela/codeblanket-frontend)
+
+#### Manual Deployment Steps:
+
+1. **Install Vercel CLI** (optional):
+   ```bash
+   npm i -g vercel
+   ```
+
+2. **Connect to Vercel**:
+   ```bash
+   vercel login
+   ```
+
+3. **Deploy**:
+   ```bash
+   vercel
+   ```
+
+4. **Production deployment**:
+   ```bash
+   vercel --prod
+   ```
+
+#### Automatic Deployment:
+
+1. Push your code to GitHub
+2. Import your repository in [Vercel Dashboard](https://vercel.com/dashboard)
+3. Vercel will automatically detect Next.js and configure the build
+4. Every push to `main` will trigger a new deployment
+
+#### Environment Variables:
+
+If you need environment variables:
+1. Go to your project in Vercel Dashboard
+2. Navigate to **Settings** → **Environment Variables**
+3. Add your variables (see `.env.example` for reference)
+
+### Build Configuration:
+
+The project includes `vercel.json` with optimized settings:
+- Build command: `pnpm run build`
+- Framework detection: Next.js 15
+- Security headers configured
+- Pyodide CDN proxying for better performance
+
 ## 🐛 Troubleshooting
 
 **Python not loading?**
@@ -131,6 +183,13 @@ Edit `lib/problems/binary-search.ts` and add a new problem object:
 - Ensure function name matches the problem's expected function name
 - Check for Python syntax errors
 - Make sure you're returning the correct data type
+
+**Vercel Build Failing?**
+
+- Ensure `pnpm-lock.yaml` is committed
+- Check build logs in Vercel Dashboard
+- Run `pnpm run build` locally first
+- Verify all dependencies are in `package.json`
 
 ## 📄 License
 
