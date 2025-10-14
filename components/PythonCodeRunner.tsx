@@ -80,13 +80,16 @@ export function PythonCodeRunner({
           // Convert JavaScript input to Python-compatible format
           const inputStr = JSON.stringify(test.input);
 
+          // Use specified function name or default function name
+          const testFunctionName = test.functionName || functionName;
+
           // Run the function with test input
           const result = await pyodide.runPythonAsync(`
 import json
 from collections import defaultdict, Counter
 
 args = json.loads('''${inputStr}''')
-result = ${functionName}(*args)
+result = ${testFunctionName}(*args)
 
 # Convert special types to regular dict/list for comparison
 if isinstance(result, (defaultdict, Counter)):
@@ -339,11 +342,10 @@ json.dumps(result)
               {results.map((result, i) => (
                 <div
                   key={i}
-                  className={`rounded-lg border-2 p-4 ${
-                    result.passed
+                  className={`rounded-lg border-2 p-4 ${result.passed
                       ? 'border-[#50fa7b] bg-[#50fa7b]/10'
                       : 'border-[#ff5555] bg-[#ff5555]/10'
-                  }`}
+                    }`}
                 >
                   <div className="mb-3 flex items-center justify-between">
                     <div className="text-lg font-semibold text-[#f8f8f2]">

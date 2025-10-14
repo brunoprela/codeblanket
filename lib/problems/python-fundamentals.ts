@@ -1831,4 +1831,986 @@ def flatten_list_iterative(nested):
     order: 20,
     topic: 'Python Fundamentals',
   },
+  {
+    id: 'fundamentals-is-palindrome-number',
+    title: 'Palindrome Number',
+    difficulty: 'Easy',
+    description: `Determine if an integer is a palindrome without converting it to a string.
+
+A palindrome number reads the same backward as forward.
+
+**Examples:**
+- 121 → True
+- -121 → False (negative numbers are not palindromes)
+- 10 → False
+
+This problem tests:
+- Number manipulation
+- Mathematical operations
+- Logic without string conversion`,
+    examples: [
+      {
+        input: 'x = 121',
+        output: 'True',
+      },
+      {
+        input: 'x = -121',
+        output: 'False',
+        explanation: 'Negative numbers are not palindromes',
+      },
+      {
+        input: 'x = 10',
+        output: 'False',
+      },
+    ],
+    constraints: ['-2^31 <= x <= 2^31 - 1'],
+    hints: [
+      'Extract digits using modulo and division',
+      'Build the reversed number',
+      'Compare with original',
+    ],
+    starterCode: `def is_palindrome_number(x):
+    """
+    Check if number is palindrome without string conversion.
+    
+    Args:
+        x: Integer to check
+        
+    Returns:
+        True if palindrome, False otherwise
+        
+    Examples:
+        >>> is_palindrome_number(121)
+        True
+        >>> is_palindrome_number(-121)
+        False
+    """
+    pass`,
+    testCases: [
+      {
+        input: [121],
+        expected: true,
+      },
+      {
+        input: [-121],
+        expected: false,
+      },
+      {
+        input: [10],
+        expected: false,
+      },
+      {
+        input: [0],
+        expected: true,
+      },
+    ],
+    solution: `def is_palindrome_number(x):
+    # Negative numbers are not palindromes
+    if x < 0:
+        return False
+    
+    # Single digit numbers are palindromes
+    if x < 10:
+        return True
+    
+    # Numbers ending in 0 (except 0 itself) are not palindromes
+    if x % 10 == 0:
+        return False
+    
+    # Reverse the number
+    original = x
+    reversed_num = 0
+    
+    while x > 0:
+        digit = x % 10
+        reversed_num = reversed_num * 10 + digit
+        x //= 10
+    
+    return original == reversed_num`,
+    timeComplexity: 'O(log n) - number of digits',
+    spaceComplexity: 'O(1)',
+    order: 21,
+    topic: 'Python Fundamentals',
+  },
+  {
+    id: 'fundamentals-reverse-integer',
+    title: 'Reverse Integer',
+    difficulty: 'Easy',
+    description: `Reverse the digits of a signed integer.
+
+If reversing causes overflow (outside 32-bit range), return 0.
+
+**Examples:**
+- 123 → 321
+- -123 → -321
+- 120 → 21
+
+This problem tests:
+- Integer manipulation
+- Edge case handling
+- Mathematical operations`,
+    examples: [
+      {
+        input: 'x = 123',
+        output: '321',
+      },
+      {
+        input: 'x = -123',
+        output: '-321',
+      },
+      {
+        input: 'x = 120',
+        output: '21',
+      },
+    ],
+    constraints: ['-2^31 <= x <= 2^31 - 1', 'Return 0 if overflow'],
+    hints: [
+      'Handle negative sign separately',
+      'Use modulo to extract digits',
+      'Check for 32-bit overflow',
+    ],
+    starterCode: `def reverse_integer(x):
+    """
+    Reverse digits of an integer.
+    
+    Args:
+        x: Integer to reverse
+        
+    Returns:
+        Reversed integer, or 0 if overflow
+        
+    Examples:
+        >>> reverse_integer(123)
+        321
+        >>> reverse_integer(-123)
+        -321
+    """
+    pass`,
+    testCases: [
+      {
+        input: [123],
+        expected: 321,
+      },
+      {
+        input: [-123],
+        expected: -321,
+      },
+      {
+        input: [120],
+        expected: 21,
+      },
+      {
+        input: [0],
+        expected: 0,
+      },
+    ],
+    solution: `def reverse_integer(x):
+    # Handle sign
+    sign = -1 if x < 0 else 1
+    x = abs(x)
+    
+    # Reverse digits
+    reversed_num = 0
+    while x > 0:
+        digit = x % 10
+        reversed_num = reversed_num * 10 + digit
+        x //= 10
+    
+    # Apply sign
+    result = sign * reversed_num
+    
+    # Check for 32-bit overflow
+    if result < -2**31 or result > 2**31 - 1:
+        return 0
+    
+    return result
+
+# Alternative using string
+def reverse_integer_str(x):
+    sign = -1 if x < 0 else 1
+    reversed_str = str(abs(x))[::-1]
+    result = sign * int(reversed_str)
+    return result if -2**31 <= result <= 2**31 - 1 else 0`,
+    timeComplexity: 'O(log n)',
+    spaceComplexity: 'O(1)',
+    order: 22,
+    topic: 'Python Fundamentals',
+  },
+  {
+    id: 'fundamentals-perfect-number',
+    title: 'Perfect Number',
+    difficulty: 'Easy',
+    description: `Check if a number is a perfect number.
+
+A perfect number is a positive integer equal to the sum of its proper positive divisors (excluding itself).
+
+**Examples:**
+- 6 → True (divisors: 1, 2, 3; sum = 6)
+- 28 → True (divisors: 1, 2, 4, 7, 14; sum = 28)
+- 12 → False
+
+This problem tests:
+- Finding divisors
+- Mathematical properties
+- Loop optimization`,
+    examples: [
+      {
+        input: 'num = 6',
+        output: 'True',
+        explanation: '1 + 2 + 3 = 6',
+      },
+      {
+        input: 'num = 28',
+        output: 'True',
+        explanation: '1 + 2 + 4 + 7 + 14 = 28',
+      },
+      {
+        input: 'num = 12',
+        output: 'False',
+      },
+    ],
+    constraints: ['1 <= num <= 10^8'],
+    hints: [
+      'Find all divisors up to sqrt(n)',
+      'Add both i and n/i when found',
+      'Compare sum with original number',
+    ],
+    starterCode: `def is_perfect_number(num):
+    """
+    Check if number is perfect.
+    
+    Args:
+        num: Positive integer
+        
+    Returns:
+        True if perfect, False otherwise
+        
+    Examples:
+        >>> is_perfect_number(6)
+        True
+        >>> is_perfect_number(28)
+        True
+    """
+    pass`,
+    testCases: [
+      {
+        input: [6],
+        expected: true,
+      },
+      {
+        input: [28],
+        expected: true,
+      },
+      {
+        input: [12],
+        expected: false,
+      },
+      {
+        input: [1],
+        expected: false,
+      },
+    ],
+    solution: `def is_perfect_number(num):
+    if num <= 1:
+        return False
+    
+    # Find sum of divisors
+    divisor_sum = 1  # 1 is always a divisor
+    
+    # Only check up to sqrt(num)
+    i = 2
+    while i * i <= num:
+        if num % i == 0:
+            divisor_sum += i
+            # Add the paired divisor (but not if it's the square root)
+            if i * i != num:
+                divisor_sum += num // i
+        i += 1
+    
+    return divisor_sum == num`,
+    timeComplexity: 'O(sqrt(n))',
+    spaceComplexity: 'O(1)',
+    order: 23,
+    topic: 'Python Fundamentals',
+  },
+  {
+    id: 'fundamentals-missing-number',
+    title: 'Missing Number',
+    difficulty: 'Easy',
+    description: `Find the missing number in an array containing n distinct numbers from 0 to n.
+
+**Example:** [3, 0, 1] → 2
+
+This problem tests:
+- Mathematical formulas
+- Set operations
+- Array manipulation`,
+    examples: [
+      {
+        input: 'nums = [3, 0, 1]',
+        output: '2',
+        explanation: 'Range is [0,3], missing number is 2',
+      },
+      {
+        input: 'nums = [0, 1]',
+        output: '2',
+      },
+      {
+        input: 'nums = [9,6,4,2,3,5,7,0,1]',
+        output: '8',
+      },
+    ],
+    constraints: ['n == len(nums)', '1 <= n <= 10^4', 'All numbers are unique'],
+    hints: [
+      'Sum of first n numbers: n * (n + 1) / 2',
+      'Subtract sum of array from expected sum',
+      'Or use XOR properties',
+    ],
+    starterCode: `def missing_number(nums):
+    """
+    Find the missing number in range [0, n].
+    
+    Args:
+        nums: List of distinct numbers from 0 to n
+        
+    Returns:
+        The missing number
+        
+    Examples:
+        >>> missing_number([3, 0, 1])
+        2
+    """
+    pass`,
+    testCases: [
+      {
+        input: [[3, 0, 1]],
+        expected: 2,
+      },
+      {
+        input: [[0, 1]],
+        expected: 2,
+      },
+      {
+        input: [[9, 6, 4, 2, 3, 5, 7, 0, 1]],
+        expected: 8,
+      },
+    ],
+    solution: `def missing_number(nums):
+    n = len(nums)
+    # Expected sum of 0 to n
+    expected_sum = n * (n + 1) // 2
+    # Actual sum
+    actual_sum = sum(nums)
+    # Difference is the missing number
+    return expected_sum - actual_sum
+
+# Alternative using XOR
+def missing_number_xor(nums):
+    result = len(nums)
+    for i, num in enumerate(nums):
+        result ^= i ^ num
+    return result
+
+# Alternative using set
+def missing_number_set(nums):
+    return (set(range(len(nums) + 1)) - set(nums)).pop()`,
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1)',
+    order: 24,
+    topic: 'Python Fundamentals',
+  },
+  {
+    id: 'fundamentals-move-zeros',
+    title: 'Move Zeros to End',
+    difficulty: 'Easy',
+    description: `Move all zeros in an array to the end while maintaining the relative order of non-zero elements.
+
+**Must modify the array in-place.**
+
+**Example:** [0, 1, 0, 3, 12] → [1, 3, 12, 0, 0]
+
+This problem tests:
+- In-place array manipulation
+- Two-pointer technique
+- Order preservation`,
+    examples: [
+      {
+        input: 'nums = [0, 1, 0, 3, 12]',
+        output: '[1, 3, 12, 0, 0]',
+      },
+      {
+        input: 'nums = [0]',
+        output: '[0]',
+      },
+    ],
+    constraints: ['1 <= len(nums) <= 10^4', 'Must be in-place with O(1) extra space'],
+    hints: [
+      'Use two pointers',
+      'One pointer for non-zero position',
+      'Swap non-zero elements forward',
+    ],
+    starterCode: `def move_zeros(nums):
+    """
+    Move all zeros to end, maintaining order of non-zeros.
+    Modify array in-place.
+    
+    Args:
+        nums: List of integers
+        
+    Returns:
+        None (modifies nums in-place)
+        
+    Examples:
+        >>> nums = [0, 1, 0, 3, 12]
+        >>> move_zeros(nums)
+        >>> nums
+        [1, 3, 12, 0, 0]
+    """
+    pass`,
+    testCases: [
+      {
+        input: [[0, 1, 0, 3, 12]],
+        expected: [1, 3, 12, 0, 0],
+      },
+      {
+        input: [[0]],
+        expected: [0],
+      },
+      {
+        input: [[1, 2, 3]],
+        expected: [1, 2, 3],
+      },
+    ],
+    solution: `def move_zeros(nums):
+    # Two pointer approach
+    write_pos = 0  # Position to write next non-zero
+    
+    # Move all non-zeros to the front
+    for i in range(len(nums)):
+        if nums[i] != 0:
+            nums[write_pos] = nums[i]
+            write_pos += 1
+    
+    # Fill remaining positions with zeros
+    for i in range(write_pos, len(nums)):
+        nums[i] = 0
+
+# Alternative with swapping
+def move_zeros_swap(nums):
+    write_pos = 0
+    for i in range(len(nums)):
+        if nums[i] != 0:
+            nums[write_pos], nums[i] = nums[i], nums[write_pos]
+            write_pos += 1`,
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1)',
+    order: 25,
+    topic: 'Python Fundamentals',
+  },
+  {
+    id: 'fundamentals-find-single-number',
+    title: 'Single Number',
+    difficulty: 'Easy',
+    description: `Find the element that appears once in an array where every other element appears twice.
+
+**Must use O(1) extra space.**
+
+**Example:** [2, 2, 1] → 1
+
+This problem tests:
+- XOR properties
+- Bit manipulation basics
+- Space optimization`,
+    examples: [
+      {
+        input: 'nums = [2, 2, 1]',
+        output: '1',
+      },
+      {
+        input: 'nums = [4, 1, 2, 1, 2]',
+        output: '4',
+      },
+      {
+        input: 'nums = [1]',
+        output: '1',
+      },
+    ],
+    constraints: ['Each element appears twice except one', 'Must use O(1) space'],
+    hints: [
+      'XOR has special properties: a ^ a = 0, a ^ 0 = a',
+      'XOR all numbers together',
+      'Pairs cancel out, leaving the single number',
+    ],
+    starterCode: `def single_number(nums):
+    """
+    Find the number that appears once.
+    
+    Args:
+        nums: List where each element appears twice except one
+        
+    Returns:
+        The single number
+        
+    Examples:
+        >>> single_number([2, 2, 1])
+        1
+        >>> single_number([4, 1, 2, 1, 2])
+        4
+    """
+    pass`,
+    testCases: [
+      {
+        input: [[2, 2, 1]],
+        expected: 1,
+      },
+      {
+        input: [[4, 1, 2, 1, 2]],
+        expected: 4,
+      },
+      {
+        input: [[1]],
+        expected: 1,
+      },
+    ],
+    solution: `def single_number(nums):
+    # XOR all numbers together
+    # Numbers appearing twice cancel out (a ^ a = 0)
+    # Result is the single number (a ^ 0 = a)
+    result = 0
+    for num in nums:
+        result ^= num
+    return result
+
+# Using reduce
+from functools import reduce
+import operator
+def single_number_reduce(nums):
+    return reduce(operator.xor, nums)`,
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1)',
+    order: 26,
+    topic: 'Python Fundamentals',
+  },
+  {
+    id: 'fundamentals-armstrong-number',
+    title: 'Armstrong Number',
+    difficulty: 'Easy',
+    description: `Check if a number is an Armstrong number (Narcissistic number).
+
+An Armstrong number is equal to the sum of its digits each raised to the power of the number of digits.
+
+**Examples:**
+- 153 → True (1³ + 5³ + 3³ = 153)
+- 9474 → True (9⁴ + 4⁴ + 7⁴ + 4⁴ = 9474)
+
+This problem tests:
+- Digit extraction
+- Power operations
+- Mathematical properties`,
+    examples: [
+      {
+        input: 'n = 153',
+        output: 'True',
+        explanation: '1³ + 5³ + 3³ = 1 + 125 + 27 = 153',
+      },
+      {
+        input: 'n = 123',
+        output: 'False',
+        explanation: '1³ + 2³ + 3³ = 36 ≠ 123',
+      },
+    ],
+    constraints: ['0 <= n <= 10^9'],
+    hints: [
+      'Count number of digits first',
+      'Extract each digit',
+      'Sum digit raised to power of digit count',
+    ],
+    starterCode: `def is_armstrong_number(n):
+    """
+    Check if number is an Armstrong number.
+    
+    Args:
+        n: Non-negative integer
+        
+    Returns:
+        True if Armstrong number, False otherwise
+        
+    Examples:
+        >>> is_armstrong_number(153)
+        True
+        >>> is_armstrong_number(123)
+        False
+    """
+    pass`,
+    testCases: [
+      {
+        input: [153],
+        expected: true,
+      },
+      {
+        input: [9474],
+        expected: true,
+      },
+      {
+        input: [123],
+        expected: false,
+      },
+      {
+        input: [0],
+        expected: true,
+      },
+    ],
+    solution: `def is_armstrong_number(n):
+    # Convert to string to get digits and count
+    digits_str = str(n)
+    num_digits = len(digits_str)
+    
+    # Calculate sum of each digit raised to power of digit count
+    armstrong_sum = sum(int(digit) ** num_digits for digit in digits_str)
+    
+    return armstrong_sum == n
+
+# Mathematical approach without string conversion
+def is_armstrong_number_math(n):
+    if n == 0:
+        return True
+    
+    # Count digits
+    temp = n
+    num_digits = 0
+    while temp > 0:
+        num_digits += 1
+        temp //= 10
+    
+    # Calculate sum
+    temp = n
+    armstrong_sum = 0
+    while temp > 0:
+        digit = temp % 10
+        armstrong_sum += digit ** num_digits
+        temp //= 10
+    
+    return armstrong_sum == n`,
+    timeComplexity: 'O(log n) - number of digits',
+    spaceComplexity: 'O(1)',
+    order: 27,
+    topic: 'Python Fundamentals',
+  },
+  {
+    id: 'fundamentals-list-product',
+    title: 'Product Except Self',
+    difficulty: 'Medium',
+    description: `Return an array where each element is the product of all elements except itself.
+
+**Constraint:** Cannot use division operator.
+
+**Example:** [1, 2, 3, 4] → [24, 12, 8, 6]
+
+This problem tests:
+- Array manipulation
+- Prefix/suffix products
+- Space optimization`,
+    examples: [
+      {
+        input: 'nums = [1, 2, 3, 4]',
+        output: '[24, 12, 8, 6]',
+        explanation: '[2×3×4, 1×3×4, 1×2×4, 1×2×3]',
+      },
+      {
+        input: 'nums = [-1, 1, 0, -3, 3]',
+        output: '[0, 0, 9, 0, 0]',
+      },
+    ],
+    constraints: ['2 <= len(nums) <= 10^5', 'Cannot use division'],
+    hints: [
+      'Calculate prefix products (left to right)',
+      'Calculate suffix products (right to left)',
+      'Multiply prefix and suffix for each position',
+    ],
+    starterCode: `def product_except_self(nums):
+    """
+    Return array of products except self.
+    
+    Args:
+        nums: List of integers
+        
+    Returns:
+        List where result[i] = product of all except nums[i]
+        
+    Examples:
+        >>> product_except_self([1, 2, 3, 4])
+        [24, 12, 8, 6]
+    """
+    pass`,
+    testCases: [
+      {
+        input: [[1, 2, 3, 4]],
+        expected: [24, 12, 8, 6],
+      },
+      {
+        input: [[-1, 1, 0, -3, 3]],
+        expected: [0, 0, 9, 0, 0],
+      },
+      {
+        input: [[1, 2]],
+        expected: [2, 1],
+      },
+    ],
+    solution: `def product_except_self(nums):
+    n = len(nums)
+    result = [1] * n
+    
+    # Calculate prefix products (left to right)
+    prefix = 1
+    for i in range(n):
+        result[i] = prefix
+        prefix *= nums[i]
+    
+    # Calculate suffix products and multiply (right to left)
+    suffix = 1
+    for i in range(n - 1, -1, -1):
+        result[i] *= suffix
+        suffix *= nums[i]
+    
+    return result
+
+# Two-pass approach with extra space
+def product_except_self_verbose(nums):
+    n = len(nums)
+    
+    # Build prefix products
+    prefix = [1] * n
+    for i in range(1, n):
+        prefix[i] = prefix[i-1] * nums[i-1]
+    
+    # Build suffix products
+    suffix = [1] * n
+    for i in range(n-2, -1, -1):
+        suffix[i] = suffix[i+1] * nums[i+1]
+    
+    # Multiply prefix and suffix
+    return [prefix[i] * suffix[i] for i in range(n)]`,
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1) excluding output array',
+    order: 28,
+    topic: 'Python Fundamentals',
+  },
+  {
+    id: 'fundamentals-longest-common-prefix',
+    title: 'Longest Common Prefix',
+    difficulty: 'Easy',
+    description: `Find the longest common prefix string amongst an array of strings.
+
+Return empty string if no common prefix.
+
+**Example:** ["flower", "flow", "flight"] → "fl"
+
+This problem tests:
+- String comparison
+- Iteration strategies
+- Edge case handling`,
+    examples: [
+      {
+        input: 'strs = ["flower", "flow", "flight"]',
+        output: '"fl"',
+      },
+      {
+        input: 'strs = ["dog", "racecar", "car"]',
+        output: '""',
+        explanation: 'No common prefix',
+      },
+    ],
+    constraints: ['1 <= len(strs) <= 200', '0 <= len(strs[i]) <= 200'],
+    hints: [
+      'Compare characters at same position across all strings',
+      'Stop when characters differ',
+      'Handle empty strings',
+    ],
+    starterCode: `def longest_common_prefix(strs):
+    """
+    Find longest common prefix in array of strings.
+    
+    Args:
+        strs: List of strings
+        
+    Returns:
+        Longest common prefix string
+        
+    Examples:
+        >>> longest_common_prefix(["flower", "flow", "flight"])
+        "fl"
+    """
+    pass`,
+    testCases: [
+      {
+        input: [['flower', 'flow', 'flight']],
+        expected: 'fl',
+      },
+      {
+        input: [['dog', 'racecar', 'car']],
+        expected: '',
+      },
+      {
+        input: [['']],
+        expected: '',
+      },
+      {
+        input: [['a']],
+        expected: 'a',
+      },
+    ],
+    solution: `def longest_common_prefix(strs):
+    if not strs:
+        return ""
+    
+    # Take first string as reference
+    prefix = strs[0]
+    
+    # Compare with each string
+    for string in strs[1:]:
+        # Reduce prefix until it matches beginning of string
+        while not string.startswith(prefix):
+            prefix = prefix[:-1]
+            if not prefix:
+                return ""
+    
+    return prefix
+
+# Vertical scanning approach
+def longest_common_prefix_vertical(strs):
+    if not strs:
+        return ""
+    
+    # Check each character position
+    for i in range(len(strs[0])):
+        char = strs[0][i]
+        # Check if all strings have same char at position i
+        for string in strs[1:]:
+            if i >= len(string) or string[i] != char:
+                return strs[0][:i]
+    
+    return strs[0]
+
+# Using zip
+def longest_common_prefix_zip(strs):
+    if not strs:
+        return ""
+    
+    result = []
+    for chars in zip(*strs):
+        if len(set(chars)) == 1:
+            result.append(chars[0])
+        else:
+            break
+    
+    return ''.join(result)`,
+    timeComplexity: 'O(S) where S is sum of all characters',
+    spaceComplexity: 'O(1)',
+    order: 29,
+    topic: 'Python Fundamentals',
+  },
+  {
+    id: 'fundamentals-title-case',
+    title: 'Convert to Title Case',
+    difficulty: 'Easy',
+    description: `Convert a string to title case following these rules:
+- First character of each word should be uppercase
+- All other characters should be lowercase
+- Handle multiple spaces between words
+
+**Example:** "hello  world" → "Hello  World"
+
+This problem tests:
+- String manipulation
+- Character case operations
+- Space handling`,
+    examples: [
+      {
+        input: 's = "hello world"',
+        output: '"Hello World"',
+      },
+      {
+        input: 's = "PYTHON programming"',
+        output: '"Python Programming"',
+      },
+      {
+        input: 's = "a  b  c"',
+        output: '"A  B  C"',
+        explanation: 'Preserves multiple spaces',
+      },
+    ],
+    constraints: ['1 <= len(s) <= 10^4', 'Cannot use built-in title() method'],
+    hints: [
+      'Track if previous character was a space',
+      'Capitalize first char and after spaces',
+      'Preserve spacing',
+    ],
+    starterCode: `def to_title_case(s):
+    """
+    Convert string to title case.
+    
+    Args:
+        s: Input string
+        
+    Returns:
+        String in title case
+        
+    Examples:
+        >>> to_title_case("hello world")
+        "Hello World"
+    """
+    pass`,
+    testCases: [
+      {
+        input: ['hello world'],
+        expected: 'Hello World',
+      },
+      {
+        input: ['PYTHON programming'],
+        expected: 'Python Programming',
+      },
+      {
+        input: ['a  b  c'],
+        expected: 'A  B  C',
+      },
+      {
+        input: ['the quick brown fox'],
+        expected: 'The Quick Brown Fox',
+      },
+    ],
+    solution: `def to_title_case(s):
+    result = []
+    capitalize_next = True
+    
+    for char in s:
+        if char == ' ':
+            result.append(char)
+            capitalize_next = True
+        elif capitalize_next:
+            result.append(char.upper())
+            capitalize_next = False
+        else:
+            result.append(char.lower())
+    
+    return ''.join(result)
+
+# Alternative using enumerate
+def to_title_case_alt(s):
+    result = list(s.lower())
+    
+    # Capitalize first character
+    if result and result[0] != ' ':
+        result[0] = result[0].upper()
+    
+    # Capitalize after spaces
+    for i in range(1, len(result)):
+        if result[i-1] == ' ' and result[i] != ' ':
+            result[i] = result[i].upper()
+    
+    return ''.join(result)`,
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(n)',
+    order: 30,
+    topic: 'Python Fundamentals',
+  },
 ];

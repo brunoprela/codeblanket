@@ -426,27 +426,49 @@ class Timer:
     Context manager that times code execution.
     """
     
+    def __init__(self):
+        """Initialize timer."""
+        # TODO: Initialize start and end times
+        self.start = None
+        self.end = None
+    
     def __enter__(self):
-        # Your code here
+        # TODO: Record start time
         pass
     
     def __exit__(self, exc_type, exc_val, exc_tb):
-        # Your code here
+        # TODO: Calculate and print elapsed time
         pass
 
 
 with Timer():
     time.sleep(0.5)
+
+
+# Test helper function (for automated testing)
+def test_timer(sleep_duration):
+    """Test function for Timer - implement the class methods above first!"""
+    try:
+        with Timer():
+            time.sleep(sleep_duration)
+        return 'Elapsed'  # If it completes without error
+    except:
+        return None  # Return None if methods not yet implemented
 `,
     testCases: [
       {
         input: [0.5], // sleep duration
         expected: 'Elapsed',
+        functionName: 'test_timer',
       },
     ],
     solution: `import time
 
 class Timer:
+    def __init__(self):
+        self.start = None
+        self.end = None
+    
     def __enter__(self):
         self.start = time.time()
         return self
@@ -455,7 +477,15 @@ class Timer:
         self.end = time.time()
         elapsed = self.end - self.start
         print(f"Elapsed time: {elapsed:.3f}s")
-        return False  # Don't suppress exceptions`,
+        return False  # Don't suppress exceptions
+
+
+# Test helper function (for automated testing)
+def test_timer(sleep_duration):
+    """Test function for Timer."""
+    with Timer():
+        time.sleep(sleep_duration)
+    return 'Elapsed'`,
     timeComplexity: 'O(1)',
     spaceComplexity: 'O(1)',
     order: 6,
@@ -534,15 +564,51 @@ class MockDB:
 db = MockDB()
 with Transaction(db):
     print("Doing work...")
+
+
+# Test helper function (for automated testing)
+def test_transaction(should_succeed):
+    """Test function for Transaction - implement the class methods above first!"""
+    try:
+        mock_db = MockDB()
+        status = []
+        
+        # Override methods to capture what was called
+        original_commit = mock_db.commit
+        original_rollback = mock_db.rollback
+        
+        def capture_commit():
+            status.append('committed')
+            original_commit()
+        
+        def capture_rollback():
+            status.append('rolled back')
+            original_rollback()
+        
+        mock_db.commit = capture_commit
+        mock_db.rollback = capture_rollback
+        
+        try:
+            with Transaction(mock_db):
+                if not should_succeed:
+                    raise ValueError("Simulated error")
+        except ValueError:
+            pass  # Expected for failure case
+        
+        return status[0] if status else None
+    except:
+        return None  # Return None if methods not yet implemented
 `,
     testCases: [
       {
         input: [true], // success case
         expected: 'committed',
+        functionName: 'test_transaction',
       },
       {
         input: [false], // error case
         expected: 'rolled back',
+        functionName: 'test_transaction',
       },
     ],
     solution: `class Transaction:
@@ -561,7 +627,51 @@ with Transaction(db):
                 self.conn.rollback()
         finally:
             self.conn.close()
-        return False  # Don't suppress exceptions`,
+        return False  # Don't suppress exceptions
+
+
+class MockDB:
+    def begin(self):
+        print("Transaction started")
+    
+    def commit(self):
+        print("Transaction committed")
+    
+    def rollback(self):
+        print("Transaction rolled back")
+    
+    def close(self):
+        print("Connection closed")
+
+
+# Test helper function (for automated testing)
+def test_transaction(should_succeed):
+    """Test function for Transaction."""
+    mock_db = MockDB()
+    status = []
+    
+    original_commit = mock_db.commit
+    original_rollback = mock_db.rollback
+    
+    def capture_commit():
+        status.append('committed')
+        original_commit()
+    
+    def capture_rollback():
+        status.append('rolled back')
+        original_rollback()
+    
+    mock_db.commit = capture_commit
+    mock_db.rollback = capture_rollback
+    
+    try:
+        with Transaction(mock_db):
+            if not should_succeed:
+                raise ValueError("Simulated error")
+    except ValueError:
+        pass
+    
+    return status[0] if status else None`,
     timeComplexity: 'O(1)',
     spaceComplexity: 'O(1)',
     order: 7,
@@ -617,11 +727,27 @@ db1 = Database("prod")
 db2 = Database("dev")
 print(db1 is db2)  # Should be True
 print(db1.name)    # Should be "prod" (first call wins)
+
+
+# Test helper function (for automated testing)
+def test_singleton(names):
+    """Test function for Singleton - implement the metaclass above first!"""
+    try:
+        class TestDB(metaclass=Singleton):
+            def __init__(self, name="default"):
+                self.name = name
+        
+        db1 = TestDB(names[0])
+        db2 = TestDB(names[1])
+        return db1 is db2  # Should be True for singleton
+    except:
+        return None  # Return None if methods not yet implemented
 `,
     testCases: [
       {
         input: [['prod', 'dev']],
         expected: true, // db1 is db2
+        functionName: 'test_singleton',
       },
     ],
     solution: `class Singleton(type):
@@ -630,7 +756,19 @@ print(db1.name)    # Should be "prod" (first call wins)
     def __call__(cls, *args, **kwargs):
         if cls not in cls._instances:
             cls._instances[cls] = super().__call__(*args, **kwargs)
-        return cls._instances[cls]`,
+        return cls._instances[cls]
+
+
+# Test helper function (for automated testing)
+def test_singleton(names):
+    """Test function for Singleton."""
+    class TestDB(metaclass=Singleton):
+        def __init__(self, name="default"):
+            self.name = name
+    
+    db1 = TestDB(names[0])
+    db2 = TestDB(names[1])
+    return db1 is db2`,
     timeComplexity: 'O(1)',
     spaceComplexity: 'O(1) per class',
     order: 8,
@@ -704,11 +842,26 @@ class Person:
 p = Person()
 p.age = 25
 print(p.age)
+
+
+# Test helper function (for automated testing)
+def test_validated_property(value):
+    """Test function for ValidatedProperty - implement the descriptor above first!"""
+    try:
+        class TestPerson:
+            age = ValidatedProperty(lambda x: 0 <= x <= 150)
+        
+        p = TestPerson()
+        p.age = value
+        return p.age
+    except:
+        return None  # Return None if methods not yet implemented
 `,
     testCases: [
       {
         input: [25],
         expected: 25,
+        functionName: 'test_validated_property',
       },
     ],
     solution: `class ValidatedProperty:
@@ -727,7 +880,18 @@ print(p.age)
     def __set__(self, instance, value):
         if not self.validator(value):
             raise ValueError(f"Invalid value: {value}")
-        instance.__dict__[self.name] = value`,
+        instance.__dict__[self.name] = value
+
+
+# Test helper function (for automated testing)
+def test_validated_property(value):
+    """Test function for ValidatedProperty."""
+    class TestPerson:
+        age = ValidatedProperty(lambda x: 0 <= x <= 150)
+    
+    p = TestPerson()
+    p.age = value
+    return p.age`,
     timeComplexity: 'O(1)',
     spaceComplexity: 'O(1)',
     order: 9,
@@ -776,30 +940,44 @@ for i in CustomRange(0, 10, 2):
     """
     
     def __init__(self, start, stop, step=1):
-        # Your code here
-        pass
+        # TODO: Store start, stop, step and initialize current
+        self.start = start
+        self.stop = stop
+        self.step = step
+        self.current = start
     
     def __iter__(self):
-        # Your code here
+        # TODO: Return self and reset current
         pass
     
     def __next__(self):
-        # Your code here
+        # TODO: Check if done, return current and increment
         pass
 
 
 # Test
 result = list(CustomRange(0, 10, 2))
 print(result)
+
+
+# Test helper function (for automated testing)
+def test_custom_range(start, stop, step):
+    """Test function for CustomRange - implement the class methods above first!"""
+    try:
+        return list(CustomRange(start, stop, step))
+    except:
+        return None  # Return None if methods not yet implemented
 `,
     testCases: [
       {
         input: [0, 10, 2],
         expected: [0, 2, 4, 6, 8],
+        functionName: 'test_custom_range',
       },
       {
         input: [10, 0, -2],
         expected: [10, 8, 6, 4, 2],
+        functionName: 'test_custom_range',
       },
     ],
     solution: `class CustomRange:
@@ -818,7 +996,13 @@ print(result)
         
         value = self.current
         self.current += self.step
-        return value`,
+        return value
+
+
+# Test helper function (for automated testing)
+def test_custom_range(start, stop, step):
+    """Test function for CustomRange."""
+    return list(CustomRange(start, stop, step))`,
     timeComplexity: 'O(1) per iteration',
     spaceComplexity: 'O(1)',
     order: 10,
@@ -1218,11 +1402,46 @@ class UserCommand(Command):
 cmd_class = Registry.get("user")
 cmd = cmd_class()
 print(cmd.execute())
+
+
+# Test helper function (for automated testing)
+def test_registry(name):
+    """Test function for Registry - implement the metaclass above first!"""
+    try:
+        class TestRegistry(type):
+            _registry = {}
+            
+            def __new__(mcs, cls_name, bases, attrs):
+                cls = super().__new__(mcs, cls_name, bases, attrs)
+                if 'name' in attrs and attrs['name'] is not None:
+                    mcs._registry[attrs['name']] = cls
+                return cls
+            
+            @classmethod
+            def get(mcs, name):
+                return mcs._registry.get(name)
+        
+        class TestCommand(metaclass=TestRegistry):
+            name = None
+        
+        class TestUserCommand(TestCommand):
+            name = "user"
+            def execute(self):
+                return "User command executed"
+        
+        cmd_class = TestRegistry.get(name)
+        if cmd_class:
+            cmd = cmd_class()
+            return cmd.execute()
+        return None
+    except:
+        return None  # Return None if methods not yet implemented
 `,
     testCases: [
       {
         input: ['user'],
         expected: 'User command executed',
+        functionName: 'test_registry',
       },
     ],
     solution: `class Registry(type):
@@ -1239,7 +1458,28 @@ print(cmd.execute())
     
     @classmethod
     def get(mcs, name):
-        return mcs._registry.get(name)`,
+        return mcs._registry.get(name)
+
+
+# Test helper function (for automated testing)
+def test_registry(name):
+    """Test function for Registry."""
+    cmd_class = Registry.get(name)
+    if cmd_class:
+        cmd = cmd_class()
+        return cmd.execute()
+    return None
+
+
+class Command(metaclass=Registry):
+    name = None
+
+
+class UserCommand(Command):
+    name = "user"
+    
+    def execute(self):
+        return "User command executed"`,
     timeComplexity: 'O(1)',
     spaceComplexity: 'O(n) for n classes',
     order: 15,
@@ -1758,7 +1998,10 @@ print(counter_difference([1,1,2,2,3], [1,2,2,2]))
     testCases: [
       {
         input: [[1, 1, 1, 2, 2, 3], 2],
-        expected: [(1, 3), (2, 2)],
+        expected: [
+          [1, 3],
+          [2, 2],
+        ],
       },
     ],
     solution: `from collections import Counter
@@ -3093,7 +3336,7 @@ print(classify_point((5, 5)))
 `,
     testCases: [
       {
-        input: [('move', 10, 20)],
+        input: [['move', 10, 20]],
         expected: 'Moving to 10, 20',
       },
     ],

@@ -8,6 +8,7 @@ export interface TestCase {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   expected: any;
   explanation?: string;
+  functionName?: string; // Optional function name to call for testing (useful for class-based problems)
 }
 
 export interface CustomTestCase {

@@ -5,11 +5,11 @@
 import { Problem } from '../types';
 
 export const pythonIntermediateProblems: Problem[] = [
-  {
-    id: 'intermediate-file-word-frequency',
-    title: 'File Word Frequency Counter',
-    difficulty: 'Medium',
-    description: `Read a text file and count the frequency of each word.
+    {
+        id: 'intermediate-file-word-frequency',
+        title: 'File Word Frequency Counter',
+        difficulty: 'Medium',
+        description: `Read a text file and count the frequency of each word.
 
 **Note:** A virtual test file is created for you in the browser environment using Pyodide's filesystem.
 
@@ -29,23 +29,23 @@ The dog was not that lazy.
 \`\`\`python
 {'the': 3, 'dog': 2, 'lazy': 2, 'quick': 1, 'brown': 1, ...}
 \`\`\``,
-    examples: [
-      {
-        input: 'filename = "text.txt"',
-        output: "{'the': 3, 'dog': 2, 'lazy': 2, ...}",
-      },
-    ],
-    constraints: [
-      'Handle FileNotFoundError',
-      'Case-insensitive',
-      'Remove punctuation',
-    ],
-    hints: [
-      'Use string.punctuation for punctuation',
-      'Convert to lowercase before counting',
-      'Use try-except for file operations',
-    ],
-    starterCode: `# Setup: Create virtual test file (for browser environment)
+        examples: [
+            {
+                input: 'filename = "text.txt"',
+                output: "{'the': 3, 'dog': 2, 'lazy': 2, ...}",
+            },
+        ],
+        constraints: [
+            'Handle FileNotFoundError',
+            'Case-insensitive',
+            'Remove punctuation',
+        ],
+        hints: [
+            'Use string.punctuation for punctuation',
+            'Convert to lowercase before counting',
+            'Use try-except for file operations',
+        ],
+        starterCode: `# Setup: Create virtual test file (for browser environment)
 with open('test.txt', 'w') as f:
     f.write("""The quick brown fox jumps over the lazy dog.
 The dog was not that lazy.""")
@@ -77,25 +77,25 @@ try:
 except FileNotFoundError as e:
     print(f"Error: {e}")
 `,
-    testCases: [
-      {
-        input: ['test.txt'],
-        expected: {
-          the: 3,
-          dog: 2,
-          lazy: 2,
-          brown: 1,
-          fox: 1,
-          jumps: 1,
-          not: 1,
-          over: 1,
-          quick: 1,
-          that: 1,
-          was: 1,
-        },
-      },
-    ],
-    solution: `# Setup: Create virtual test file (for browser environment)
+        testCases: [
+            {
+                input: ['test.txt'],
+                expected: {
+                    the: 3,
+                    dog: 2,
+                    lazy: 2,
+                    brown: 1,
+                    fox: 1,
+                    jumps: 1,
+                    not: 1,
+                    over: 1,
+                    quick: 1,
+                    that: 1,
+                    was: 1,
+                },
+            },
+        ],
+        solution: `# Setup: Create virtual test file (for browser environment)
 with open('test.txt', 'w') as f:
     f.write("""The quick brown fox jumps over the lazy dog.
 The dog was not that lazy.""")
@@ -123,16 +123,16 @@ def count_word_frequency(filename):
                                key=lambda x: (-x[1], x[0])))
     
     return sorted_words`,
-    timeComplexity: 'O(n) where n is file size',
-    spaceComplexity: 'O(w) where w is number of unique words',
-    order: 1,
-    topic: 'Python Intermediate',
-  },
-  {
-    id: 'intermediate-custom-validator',
-    title: 'Data Validator with Custom Exceptions',
-    difficulty: 'Medium',
-    description: `Create a data validator that validates user input and raises custom exceptions.
+        timeComplexity: 'O(n) where n is file size',
+        spaceComplexity: 'O(w) where w is number of unique words',
+        order: 1,
+        topic: 'Python Intermediate',
+    },
+    {
+        id: 'intermediate-custom-validator',
+        title: 'Data Validator with Custom Exceptions',
+        difficulty: 'Medium',
+        description: `Create a data validator that validates user input and raises custom exceptions.
 
 **Custom Exceptions:**
 - \`InvalidEmailError\` - for invalid email format
@@ -145,27 +145,27 @@ def count_word_frequency(filename):
 - Phone: format XXX-XXX-XXXX (X = digit)
 
 Create a \`validate_user_data\` function that checks all fields.`,
-    examples: [
-      {
-        input: 'validate_user_data("test@email.com", 25, "555-123-4567")',
-        output: 'Returns True if all valid',
-      },
-      {
-        input: 'validate_user_data("invalid", 25, "555-123-4567")',
-        output: 'Raises InvalidEmailError',
-      },
-    ],
-    constraints: [
-      'Create custom exception classes',
-      'Validate all three fields',
-      'Provide descriptive error messages',
-    ],
-    hints: [
-      'Inherit from Exception class',
-      'Use regex for phone validation',
-      'Check email contains @ and .',
-    ],
-    starterCode: `import re
+        examples: [
+            {
+                input: 'validate_user_data("test@email.com", 25, "555-123-4567")',
+                output: 'Returns True if all valid',
+            },
+            {
+                input: 'validate_user_data("invalid", 25, "555-123-4567")',
+                output: 'Raises InvalidEmailError',
+            },
+        ],
+        constraints: [
+            'Create custom exception classes',
+            'Validate all three fields',
+            'Provide descriptive error messages',
+        ],
+        hints: [
+            'Inherit from Exception class',
+            'Use regex for phone validation',
+            'Check email contains @ and .',
+        ],
+        starterCode: `import re
 
 class InvalidEmailError(Exception):
     """Raised when email format is invalid."""
@@ -213,17 +213,17 @@ try:
 except (InvalidEmailError, InvalidAgeError, InvalidPhoneError) as e:
     print(f"Validation error: {e}")
 `,
-    testCases: [
-      {
-        input: ['test@example.com', 25, '555-123-4567'],
-        expected: true,
-      },
-      {
-        input: ['invalid', 25, '555-123-4567'],
-        expected: 'InvalidEmailError',
-      },
-    ],
-    solution: `import re
+        testCases: [
+            {
+                input: ['test@example.com', 25, '555-123-4567'],
+                expected: true,
+            },
+            {
+                input: ['invalid', 25, '555-123-4567'],
+                expected: 'InvalidEmailError',
+            },
+        ],
+        solution: `import re
 
 class InvalidEmailError(Exception):
     """Raised when email format is invalid."""
@@ -255,16 +255,16 @@ def validate_user_data(email, age, phone):
         raise InvalidPhoneError(f"Phone must be XXX-XXX-XXXX format, got: {phone}")
     
     return True`,
-    timeComplexity: 'O(1)',
-    spaceComplexity: 'O(1)',
-    order: 2,
-    topic: 'Python Intermediate',
-  },
-  {
-    id: 'intermediate-json-config',
-    title: 'JSON Configuration Manager',
-    difficulty: 'Medium',
-    description: `Create a configuration manager that reads, writes, and updates JSON configuration files.
+        timeComplexity: 'O(1)',
+        spaceComplexity: 'O(1)',
+        order: 2,
+        topic: 'Python Intermediate',
+    },
+    {
+        id: 'intermediate-json-config',
+        title: 'JSON Configuration Manager',
+        difficulty: 'Medium',
+        description: `Create a configuration manager that reads, writes, and updates JSON configuration files.
 
 **Features:**
 - Load configuration from JSON file
@@ -280,23 +280,23 @@ db_host = config.get("database.host")  # Nested key
 config.set("database.port", 5432)
 config.save()
 \`\`\``,
-    examples: [
-      {
-        input: 'config.get("database.host")',
-        output: '"localhost"',
-      },
-    ],
-    constraints: [
-      'Support nested keys with dot notation',
-      'Create file if not exists',
-      'Validate JSON format',
-    ],
-    hints: [
-      'Split dot notation into nested keys',
-      'Use dict.get() for safe access',
-      'Handle FileNotFoundError for new files',
-    ],
-    starterCode: `import json
+        examples: [
+            {
+                input: 'config.get("database.host")',
+                output: '"localhost"',
+            },
+        ],
+        constraints: [
+            'Support nested keys with dot notation',
+            'Create file if not exists',
+            'Validate JSON format',
+        ],
+        hints: [
+            'Split dot notation into nested keys',
+            'Use dict.get() for safe access',
+            'Handle FileNotFoundError for new files',
+        ],
+        starterCode: `import json
 
 class ConfigManager:
     """Manage JSON configuration files."""
@@ -313,7 +313,8 @@ class ConfigManager:
     
     def load(self):
         """Load configuration from file."""
-        pass
+        # TODO: Load JSON from file, handle FileNotFoundError
+        return {}  # Return empty dict for now to prevent crashes
     
     def get(self, key, default=None):
         """
@@ -330,6 +331,7 @@ class ConfigManager:
             >>> config.get("database.host")
             "localhost"
         """
+        # TODO: Split key by '.' and navigate nested dicts
         pass
     
     def set(self, key, value):
@@ -340,26 +342,43 @@ class ConfigManager:
             key: Configuration key (supports dot notation)
             value: Value to set
         """
+        # TODO: Split key by '.' and set value in nested dict
         pass
     
     def save(self):
         """Save configuration to file."""
+        # TODO: Write config dict to JSON file
         pass
 
+
+# Create a virtual config file for testing
+with open('config.json', 'w') as f:
+    f.write('{"database": {"host": "localhost", "port": 3306}}')
 
 # Test
 config = ConfigManager("config.json")
 print(config.get("database.host", "localhost"))
 config.set("database.port", 5432)
 config.save()
+
+
+# Test helper function (for automated testing)
+def test_config_manager(filename, key):
+    """Test function for ConfigManager - implement the class methods above first!"""
+    try:
+        config = ConfigManager(filename)
+        return config.get(key, 'localhost')
+    except:
+        return None  # Return None if methods not yet implemented
 `,
-    testCases: [
-      {
-        input: ['config.json', 'database.host'],
-        expected: 'localhost',
-      },
-    ],
-    solution: `import json
+        testCases: [
+            {
+                input: ['config.json', 'database.host'],
+                expected: 'localhost',
+                functionName: 'test_config_manager',
+            },
+        ],
+        solution: `import json
 
 class ConfigManager:
     def __init__(self, filename):
@@ -406,17 +425,29 @@ class ConfigManager:
     
     def save(self):
         with open(self.filename, 'w') as f:
-            json.dump(self.config, f, indent=2)`,
-    timeComplexity: 'O(d) where d is depth of nested keys',
-    spaceComplexity: 'O(n) where n is config size',
-    order: 3,
-    topic: 'Python Intermediate',
-  },
-  {
-    id: 'intermediate-csv-processor',
-    title: 'CSV Data Processor',
-    difficulty: 'Medium',
-    description: `Process CSV data with filtering and aggregation.
+            json.dump(self.config, f, indent=2)
+
+
+# Create a virtual config file for testing
+with open('config.json', 'w') as f:
+    f.write('{"database": {"host": "localhost", "port": 3306}}')
+
+
+# Test helper function (for automated testing)
+def test_config_manager(filename, key):
+    """Test function for ConfigManager."""
+    config = ConfigManager(filename)
+    return config.get(key, 'localhost')`,
+        timeComplexity: 'O(d) where d is depth of nested keys',
+        spaceComplexity: 'O(n) where n is config size',
+        order: 3,
+        topic: 'Python Intermediate',
+    },
+    {
+        id: 'intermediate-csv-processor',
+        title: 'CSV Data Processor',
+        difficulty: 'Medium',
+        description: `Process CSV data with filtering and aggregation.
 
 **Tasks:**
 - Read CSV file
@@ -436,23 +467,23 @@ Create functions to:
 1. Filter by department
 2. Calculate average salary
 3. Export filtered data`,
-    examples: [
-      {
-        input: 'filter_by_department("data.csv", "Engineering")',
-        output: '[{"name": "Alice", "age": 30, ...}, ...]',
-      },
-    ],
-    constraints: [
-      'Use csv.DictReader',
-      'Handle missing fields',
-      'Write output as CSV',
-    ],
-    hints: [
-      'DictReader treats first row as headers',
-      'Convert numeric strings to numbers',
-      'Use csv.DictWriter for output',
-    ],
-    starterCode: `import csv
+        examples: [
+            {
+                input: 'filter_by_department("data.csv", "Engineering")',
+                output: '[{"name": "Alice", "age": 30, ...}, ...]',
+            },
+        ],
+        constraints: [
+            'Use csv.DictReader',
+            'Handle missing fields',
+            'Write output as CSV',
+        ],
+        hints: [
+            'DictReader treats first row as headers',
+            'Convert numeric strings to numbers',
+            'Use csv.DictWriter for output',
+        ],
+        starterCode: `import csv
 
 def filter_by_department(input_file, department):
     """
@@ -503,13 +534,13 @@ print(f"Average salary: {avg:,.2f}")
 
 export_filtered_data("employees.csv", "engineers.csv", "Engineering")
 `,
-    testCases: [
-      {
-        input: ['employees.csv', 'Engineering'],
-        expected: 2,
-      },
-    ],
-    solution: `import csv
+        testCases: [
+            {
+                input: ['employees.csv', 'Engineering'],
+                expected: 2,
+            },
+        ],
+        solution: `import csv
 
 def filter_by_department(input_file, department):
     results = []
@@ -546,16 +577,16 @@ def export_filtered_data(input_file, output_file, department):
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(filtered)`,
-    timeComplexity: 'O(n) where n is number of rows',
-    spaceComplexity: 'O(n) for filtered results',
-    order: 4,
-    topic: 'Python Intermediate',
-  },
-  {
-    id: 'intermediate-email-extractor',
-    title: 'Email Address Extractor',
-    difficulty: 'Medium',
-    description: `Extract and validate email addresses from text using regular expressions.
+        timeComplexity: 'O(n) where n is number of rows',
+        spaceComplexity: 'O(n) for filtered results',
+        order: 4,
+        topic: 'Python Intermediate',
+    },
+    {
+        id: 'intermediate-email-extractor',
+        title: 'Email Address Extractor',
+        difficulty: 'Medium',
+        description: `Extract and validate email addresses from text using regular expressions.
 
 **Requirements:**
 - Extract all email addresses from text
@@ -574,23 +605,23 @@ def export_filtered_data(input_file, output_file, department):
 Contact us at support@example.com or sales@example.com
 For urgent matters: admin@urgent-support.co.uk
 \`\`\``,
-    examples: [
-      {
-        input: 'text with emails',
-        output: "{'example.com': ['support', 'sales'], ...}",
-      },
-    ],
-    constraints: [
-      'Use regex for extraction',
-      'Validate email format',
-      'Group by domain',
-    ],
-    hints: [
-      'Pattern: [a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}',
-      'Use re.findall()',
-      'Split email at @ to get domain',
-    ],
-    starterCode: `import re
+        examples: [
+            {
+                input: 'text with emails',
+                output: "{'example.com': ['support', 'sales'], ...}",
+            },
+        ],
+        constraints: [
+            'Use regex for extraction',
+            'Validate email format',
+            'Group by domain',
+        ],
+        hints: [
+            'Pattern: [a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}',
+            'Use re.findall()',
+            'Split email at @ to get domain',
+        ],
+        starterCode: `import re
 from collections import defaultdict
 
 def extract_emails(text):
@@ -654,13 +685,13 @@ grouped = group_by_domain(emails)
 for domain, users in grouped.items():
     print(f"{domain}: {users}")
 `,
-    testCases: [
-      {
-        input: ['support@example.com sales@example.com'],
-        expected: ['support@example.com', 'sales@example.com'],
-      },
-    ],
-    solution: `import re
+        testCases: [
+            {
+                input: ['support@example.com sales@example.com'],
+                expected: ['support@example.com', 'sales@example.com'],
+            },
+        ],
+        solution: `import re
 from collections import defaultdict
 
 def extract_emails(text):
@@ -703,16 +734,16 @@ def group_by_domain(emails):
         username, domain = email.split('@')
         grouped[domain].append(username)
     return dict(grouped)`,
-    timeComplexity: 'O(n*m) where n is text length, m is number of emails',
-    spaceComplexity: 'O(e) where e is number of emails',
-    order: 5,
-    topic: 'Python Intermediate',
-  },
-  {
-    id: 'intermediate-date-calculator',
-    title: 'Date Range Calculator',
-    difficulty: 'Medium',
-    description: `Create a utility for common date calculations.
+        timeComplexity: 'O(n*m) where n is text length, m is number of emails',
+        spaceComplexity: 'O(e) where e is number of emails',
+        order: 5,
+        topic: 'Python Intermediate',
+    },
+    {
+        id: 'intermediate-date-calculator',
+        title: 'Date Range Calculator',
+        difficulty: 'Medium',
+        description: `Create a utility for common date calculations.
 
 **Functions to Implement:**
 1. Calculate age from birthdate
@@ -723,27 +754,27 @@ def group_by_domain(emails):
 **Date Format:** YYYY-MM-DD (ISO format)
 
 **Business Days:** Monday-Friday only (ignore holidays)`,
-    examples: [
-      {
-        input: 'calculate_age("1990-05-15")',
-        output: '33 (or current age)',
-      },
-      {
-        input: 'business_days_between("2024-01-01", "2024-01-05")',
-        output: '4 (excluding weekend)',
-      },
-    ],
-    constraints: [
-      'Use datetime module',
-      'Handle invalid dates',
-      'ISO format (YYYY-MM-DD)',
-    ],
-    hints: [
-      'Use datetime.strptime() to parse',
-      'timedelta for date arithmetic',
-      'weekday() returns 0-6 (Monday-Sunday)',
-    ],
-    starterCode: `from datetime import datetime, timedelta, date
+        examples: [
+            {
+                input: 'calculate_age("1990-05-15")',
+                output: '33 (or current age)',
+            },
+            {
+                input: 'business_days_between("2024-01-01", "2024-01-05")',
+                output: '4 (excluding weekend)',
+            },
+        ],
+        constraints: [
+            'Use datetime module',
+            'Handle invalid dates',
+            'ISO format (YYYY-MM-DD)',
+        ],
+        hints: [
+            'Use datetime.strptime() to parse',
+            'timedelta for date arithmetic',
+            'weekday() returns 0-6 (Monday-Sunday)',
+        ],
+        starterCode: `from datetime import datetime, timedelta, date
 
 def calculate_age(birthdate_str):
     """
@@ -819,17 +850,17 @@ print(f"Business days: {business_days_between('2024-01-01', '2024-01-10')}")
 print(f"Days in Jan 2024: {len(get_month_dates(2024, 1))}")
 print(f"In range: {is_date_in_range('2024-06-15', '2024-01-01', '2024-12-31')}")
 `,
-    testCases: [
-      {
-        input: ['1990-05-15'],
-        expected: 33,
-      },
-      {
-        input: ['2024-01-01', '2024-01-05'],
-        expected: 4,
-      },
-    ],
-    solution: `from datetime import datetime, timedelta, date
+        testCases: [
+            {
+                input: ['1990-05-15'],
+                expected: 33,
+            },
+            {
+                input: ['2024-01-01', '2024-01-05'],
+                expected: 4,
+            },
+        ],
+        solution: `from datetime import datetime, timedelta, date
 from calendar import monthrange
 
 def calculate_age(birthdate_str):
@@ -878,16 +909,16 @@ def is_date_in_range(check_date_str, start_str, end_str):
     end = datetime.strptime(end_str, "%Y-%m-%d").date()
     
     return start <= check_date <= end`,
-    timeComplexity: 'O(d) for business_days_between where d is days between',
-    spaceComplexity: 'O(d) for get_month_dates',
-    order: 6,
-    topic: 'Python Intermediate',
-  },
-  {
-    id: 'intermediate-log-parser',
-    title: 'Log File Analyzer',
-    difficulty: 'Medium',
-    description: `Parse and analyze log files to extract statistics.
+        timeComplexity: 'O(d) for business_days_between where d is days between',
+        spaceComplexity: 'O(d) for get_month_dates',
+        order: 6,
+        topic: 'Python Intermediate',
+    },
+    {
+        id: 'intermediate-log-parser',
+        title: 'Log File Analyzer',
+        difficulty: 'Medium',
+        description: `Parse and analyze log files to extract statistics.
 
 **Log Format:**
 \`\`\`
@@ -904,23 +935,23 @@ def is_date_in_range(check_date_str, start_str, end_str):
 - Calculate error rate
 
 **Pattern:** \`YYYY-MM-DD HH:MM:SS [LEVEL] message\``,
-    examples: [
-      {
-        input: 'analyze_logs("app.log")',
-        output: "{'ERROR': 2, 'WARNING': 1, 'INFO': 1}",
-      },
-    ],
-    constraints: [
-      'Use regex for parsing',
-      'Handle malformed lines',
-      'Support time range filtering',
-    ],
-    hints: [
-      'Regex pattern: (\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}) \\[(\\w+)\\] (.*)',
-      'Group by log level',
-      'Use datetime for time comparison',
-    ],
-    starterCode: `import re
+        examples: [
+            {
+                input: 'analyze_logs("app.log")',
+                output: "{'ERROR': 2, 'WARNING': 1, 'INFO': 1}",
+            },
+        ],
+        constraints: [
+            'Use regex for parsing',
+            'Handle malformed lines',
+            'Support time range filtering',
+        ],
+        hints: [
+            'Regex pattern: (\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}) \\[(\\w+)\\] (.*)',
+            'Group by log level',
+            'Use datetime for time comparison',
+        ],
+        starterCode: `import re
 from datetime import datetime
 from collections import defaultdict
 
@@ -994,13 +1025,13 @@ filtered = filter_by_time_range("app.log",
                                 "2024-01-15 10:35:00")
 print(f"Logs in range: {len(filtered)}")
 `,
-    testCases: [
-      {
-        input: ['app.log'],
-        expected: { ERROR: 2, WARNING: 1, INFO: 1 },
-      },
-    ],
-    solution: `import re
+        testCases: [
+            {
+                input: ['app.log'],
+                expected: { ERROR: 2, WARNING: 1, INFO: 1 },
+            },
+        ],
+        solution: `import re
 from datetime import datetime
 from collections import defaultdict
 
@@ -1056,16 +1087,16 @@ def filter_by_time_range(filename, start_time, end_time):
                     filtered.append(parsed)
     
     return filtered`,
-    timeComplexity: 'O(n) where n is number of log lines',
-    spaceComplexity: 'O(m) where m is matching lines',
-    order: 7,
-    topic: 'Python Intermediate',
-  },
-  {
-    id: 'intermediate-data-transformer',
-    title: 'Multi-Format Data Transformer',
-    difficulty: 'Hard',
-    description: `Convert data between JSON, CSV, and Python dict formats.
+        timeComplexity: 'O(n) where n is number of log lines',
+        spaceComplexity: 'O(m) where m is matching lines',
+        order: 7,
+        topic: 'Python Intermediate',
+    },
+    {
+        id: 'intermediate-data-transformer',
+        title: 'Multi-Format Data Transformer',
+        difficulty: 'Hard',
+        description: `Convert data between JSON, CSV, and Python dict formats.
 
 **Supported Conversions:**
 - JSON ↔ CSV
@@ -1083,23 +1114,23 @@ def filter_by_time_range(filename, start_time, end_time):
 json_data = [{"name": "Alice", "age": 30}, {"name": "Bob", "age": 25}]
 csv_string = json_to_csv(json_data)
 \`\`\``,
-    examples: [
-      {
-        input: 'json_to_csv([{"name": "Alice", "age": 30}])',
-        output: '"name,age\\nAlice,30"',
-      },
-    ],
-    constraints: [
-      'Handle nested JSON objects',
-      'Preserve data types',
-      'Validate input formats',
-    ],
-    hints: [
-      'Use json.dumps/loads for JSON',
-      'Use csv.DictWriter for CSV',
-      'Flatten nested dicts with dot notation',
-    ],
-    starterCode: `import json
+        examples: [
+            {
+                input: 'json_to_csv([{"name": "Alice", "age": 30}])',
+                output: '"name,age\\nAlice,30"',
+            },
+        ],
+        constraints: [
+            'Handle nested JSON objects',
+            'Preserve data types',
+            'Validate input formats',
+        ],
+        hints: [
+            'Use json.dumps/loads for JSON',
+            'Use csv.DictWriter for CSV',
+            'Flatten nested dicts with dot notation',
+        ],
+        starterCode: `import json
 import csv
 from io import StringIO
 
@@ -1172,13 +1203,13 @@ json_data = csv_to_json(csv_string)
 print("\\nJSON output:")
 print(json_data)
 `,
-    testCases: [
-      {
-        input: [[{ name: 'Alice', age: 30 }]],
-        expected: 'name,age\\nAlice,30',
-      },
-    ],
-    solution: `import json
+        testCases: [
+            {
+                input: [[{ name: 'Alice', age: 30 }]],
+                expected: 'name,age\\nAlice,30',
+            },
+        ],
+        solution: `import json
 import csv
 from io import StringIO
 
@@ -1229,16 +1260,16 @@ def dict_to_json_file(data, filename):
 def json_file_to_dict(filename):
     with open(filename, 'r') as f:
         return json.load(f)`,
-    timeComplexity: 'O(n*k) where n is records, k is keys per record',
-    spaceComplexity: 'O(n*k)',
-    order: 8,
-    topic: 'Python Intermediate',
-  },
-  {
-    id: 'intermediate-bank-account',
-    title: 'Bank Account with File Persistence',
-    difficulty: 'Medium',
-    description: `Create a BankAccount class that persists transactions to a file.
+        timeComplexity: 'O(n*k) where n is records, k is keys per record',
+        spaceComplexity: 'O(n*k)',
+        order: 8,
+        topic: 'Python Intermediate',
+    },
+    {
+        id: 'intermediate-bank-account',
+        title: 'Bank Account with File Persistence',
+        difficulty: 'Medium',
+        description: `Create a BankAccount class that persists transactions to a file.
 
 **Features:**
 - Deposit and withdraw money
@@ -1256,23 +1287,23 @@ def json_file_to_dict(filename):
     "balance": 1100.00
 }
 \`\`\``,
-    examples: [
-      {
-        input: 'account.deposit(100)',
-        output: 'New balance: 1100.00',
-      },
-    ],
-    constraints: [
-      'Prevent negative balance',
-      'Track all transactions',
-      'Persist to file',
-    ],
-    hints: [
-      'Use datetime for timestamps',
-      'Store transactions as list',
-      'Use JSON for persistence',
-    ],
-    starterCode: `import json
+        examples: [
+            {
+                input: 'account.deposit(100)',
+                output: 'New balance: 1100.00',
+            },
+        ],
+        constraints: [
+            'Prevent negative balance',
+            'Track all transactions',
+            'Persist to file',
+        ],
+        hints: [
+            'Use datetime for timestamps',
+            'Store transactions as list',
+            'Use JSON for persistence',
+        ],
+        starterCode: `import json
 from datetime import datetime
 
 class InsufficientFundsError(Exception):
@@ -1296,9 +1327,7 @@ class BankAccount:
         self.balance = initial_balance
         self.transactions = []
         self.filename = filename or f"account_{account_number}.json"
-        
-        # Try to load existing account
-        self.load()
+        # Note: load() intentionally not called in starter to avoid file errors
     
     def deposit(self, amount):
         """
@@ -1310,6 +1339,11 @@ class BankAccount:
         Raises:
             ValueError: If amount is negative
         """
+        # TODO: Implement deposit logic
+        # - Validate amount is positive
+        # - Add to balance
+        # - Add transaction
+        # - Save to file
         pass
     
     def withdraw(self, amount):
@@ -1323,6 +1357,12 @@ class BankAccount:
             ValueError: If amount is negative
             InsufficientFundsError: If balance is insufficient
         """
+        # TODO: Implement withdrawal logic
+        # - Validate amount is positive
+        # - Check sufficient funds
+        # - Subtract from balance
+        # - Add transaction
+        # - Save to file
         pass
     
     def get_balance(self):
@@ -1335,40 +1375,45 @@ class BankAccount:
     
     def save(self):
         """Save account state to file."""
+        # TODO: Implement save logic
+        # - Create dict with account data
+        # - Write to JSON file
         pass
     
     def load(self):
         """Load account state from file."""
+        # TODO: Implement load logic
+        # - Read from JSON file
+        # - Update balance and transactions
+        # - Handle FileNotFoundError
         pass
     
     def _add_transaction(self, trans_type, amount):
         """Add transaction to history."""
+        # TODO: Implement transaction logging
+        # - Create transaction dict with timestamp, type, amount, balance
+        # - Append to transactions list
         pass
 
 
-# Test
-account = BankAccount("12345", 1000.00)
-
-account.deposit(500)
-print(f"Balance after deposit: {account.get_balance():.2f}")
-
-try:
-    account.withdraw(200)
-    print(f"Balance after withdrawal: {account.get_balance():.2f}")
-except InsufficientFundsError as e:
-    print(f"Error: {e}")
-
-print("\\nTransaction History:")
-for trans in account.get_transactions():
-    print(f"{trans['timestamp']}: {trans['type']} {trans['amount']:.2f}")
+# Test helper function (for automated testing)
+def test_bank_account(initial_balance, deposit_amount):
+    """Test function for BankAccount - implement the class methods above first!"""
+    try:
+        account = BankAccount("test123", initial_balance, "test_account.json")
+        account.deposit(deposit_amount)
+        return account.get_balance()
+    except:
+        return None  # Return None if methods not yet implemented
 `,
-    testCases: [
-      {
-        input: [1000, 500],
-        expected: 1500,
-      },
-    ],
-    solution: `import json
+        testCases: [
+            {
+                input: [1000, 500],
+                expected: 1500,
+                functionName: 'test_bank_account',
+            },
+        ],
+        solution: `import json
 from datetime import datetime
 
 class InsufficientFundsError(Exception):
@@ -1382,37 +1427,37 @@ class BankAccount:
         self.balance = initial_balance
         self.transactions = []
         self.filename = filename or f"account_{account_number}.json"
-        
+
         self.load()
-    
+
     def deposit(self, amount):
         if amount < 0:
             raise ValueError("Deposit amount must be positive")
-        
+
         self.balance += amount
         self._add_transaction("deposit", amount)
         self.save()
-    
+
     def withdraw(self, amount):
         if amount < 0:
             raise ValueError("Withdrawal amount must be positive")
-        
+
         if amount > self.balance:
             raise InsufficientFundsError(
                 f"Insufficient funds: balance {self.balance:.2f}, "
                 f"withdrawal {amount:.2f}"
             )
-        
+
         self.balance -= amount
         self._add_transaction("withdrawal", amount)
         self.save()
-    
+
     def get_balance(self):
         return self.balance
-    
+
     def get_transactions(self):
         return self.transactions
-    
+
     def save(self):
         data = {
             "account_number": self.account_number,
@@ -1421,7 +1466,7 @@ class BankAccount:
         }
         with open(self.filename, 'w') as f:
             json.dump(data, f, indent=2)
-    
+
     def load(self):
         try:
             with open(self.filename, 'r') as f:
@@ -1431,7 +1476,7 @@ class BankAccount:
         except FileNotFoundError:
             # New account
             pass
-    
+
     def _add_transaction(self, trans_type, amount):
         transaction = {
             "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -1439,17 +1484,24 @@ class BankAccount:
             "amount": amount,
             "balance": self.balance
         }
-        self.transactions.append(transaction)`,
-    timeComplexity: 'O(1) for deposit/withdraw, O(n) for save',
-    spaceComplexity: 'O(t) where t is number of transactions',
-    order: 9,
-    topic: 'Python Intermediate',
-  },
-  {
-    id: 'intermediate-url-parser',
-    title: 'URL Parser and Validator',
-    difficulty: 'Medium',
-    description: `Parse and validate URLs, extracting components and query parameters.
+        self.transactions.append(transaction)
+
+
+def test_bank_account(initial_balance, deposit_amount):
+    """Test function for BankAccount."""
+    account = BankAccount("test123", initial_balance, "test_account.json")
+    account.deposit(deposit_amount)
+    return account.get_balance()`,
+        timeComplexity: 'O(1) for deposit/withdraw, O(n) for save',
+        spaceComplexity: 'O(t) where t is number of transactions',
+        order: 9,
+        topic: 'Python Intermediate',
+    },
+    {
+        id: 'intermediate-url-parser',
+        title: 'URL Parser and Validator',
+        difficulty: 'Medium',
+        description: `Parse and validate URLs, extracting components and query parameters.
 
 **URL Components:**
 - Protocol (http, https)
@@ -1468,23 +1520,23 @@ https://example.com/path/to/page?id=123&sort=name#section
 - Validate URL format
 - Extract query parameters as dict
 - Rebuild URL from components`,
-    examples: [
-      {
-        input: 'parse_url("https://example.com/page?id=123")',
-        output: "{'protocol': 'https', 'domain': 'example.com', ...}",
-      },
-    ],
-    constraints: [
-      'Use regex for parsing',
-      'Validate URL format',
-      'Handle missing components',
-    ],
-    hints: [
-      'URL pattern: (https?)://([^/]+)(/[^?#]*)?(?:\\?([^#]*))?(?:#(.*))?',
-      'Split query string on & and =',
-      'Use urllib.parse for robust parsing',
-    ],
-    starterCode: `import re
+        examples: [
+            {
+                input: 'parse_url("https://example.com/page?id=123")',
+                output: "{'protocol': 'https', 'domain': 'example.com', ...}",
+            },
+        ],
+        constraints: [
+            'Use regex for parsing',
+            'Validate URL format',
+            'Handle missing components',
+        ],
+        hints: [
+            'URL pattern: (https?)://([^/]+)(/[^?#]*)?(?:\\?([^#]*))?(?:#(.*))?',
+            'Split query string on & and =',
+            'Use urllib.parse for robust parsing',
+        ],
+        starterCode: `import re
 from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
 
 def parse_url(url):
@@ -1574,13 +1626,13 @@ print(f"\\nQuery params: {params}")
 rebuilt = build_url('https', 'example.com', '/page', {'id': '456'}, 'top')
 print(f"\\nRebuilt URL: {rebuilt}")
 `,
-    testCases: [
-      {
-        input: ['https://example.com/page?id=123'],
-        expected: { protocol: 'https', domain: 'example.com' },
-      },
-    ],
-    solution: `import re
+        testCases: [
+            {
+                input: ['https://example.com/page?id=123'],
+                expected: { protocol: 'https', domain: 'example.com' },
+            },
+        ],
+        solution: `import re
 from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
 
 def parse_url(url):
@@ -1635,9 +1687,2568 @@ def build_url(protocol, domain, path='', query_params=None, fragment=''):
     # Build URL using urlunparse
     url_parts = (protocol, domain, path, '', query, fragment)
     return urlunparse(url_parts)`,
-    timeComplexity: 'O(n) where n is URL length',
-    spaceComplexity: 'O(p) where p is number of query parameters',
-    order: 10,
-    topic: 'Python Intermediate',
-  },
+        timeComplexity: 'O(n) where n is URL length',
+        spaceComplexity: 'O(p) where p is number of query parameters',
+        order: 10,
+        topic: 'Python Intermediate',
+    },
+    {
+        id: 'intermediate-decorator-timer',
+        title: 'Function Timer Decorator',
+        difficulty: 'Medium',
+        description: `Create a decorator that measures and logs function execution time.
+
+**Requirements:**
+- Measure execution time in milliseconds
+- Log function name and arguments
+- Support both sync functions
+- Optionally repeat execution N times and average
+
+**Example:**
+\`\`\`python
+@timer(repeat=3)
+def slow_function(n):
+    time.sleep(n)
+    return n * 2
+\`\`\``,
+        examples: [
+            {
+                input: '@timer(repeat=1)\\ndef add(a, b): return a + b',
+                output: 'Function add(2, 3) took 0.02ms',
+            },
+        ],
+        constraints: [
+            'Use functools.wraps',
+            'Preserve function signature',
+            'Handle exceptions',
+        ],
+        hints: [
+            'Use time.perf_counter() for precision',
+            'functools.wraps preserves metadata',
+            'Decorator with arguments needs nested functions',
+        ],
+        starterCode: `import time
+import functools
+
+def timer(repeat=1):
+    """
+    Decorator to measure function execution time.
+    
+    Args:
+        repeat: Number of times to execute and average
+        
+    Returns:
+        Decorated function
+        
+    Examples:
+        >>> @timer(repeat=3)
+        ... def add(a, b):
+        ...     return a + b
+        >>> add(2, 3)
+        5
+    """
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            pass
+        return wrapper
+    return decorator
+
+
+# Test
+@timer(repeat=1)
+def fibonacci(n):
+    """Calculate nth Fibonacci number."""
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+@timer(repeat=5)
+def quick_math(x, y):
+    """Perform quick calculation."""
+    return x ** 2 + y ** 2
+
+result1 = fibonacci(10)
+print(f"Result: {result1}")
+
+result2 = quick_math(3, 4)
+print(f"Result: {result2}")
+`,
+        testCases: [
+            {
+                input: [10],
+                expected: 55,
+            },
+        ],
+        solution: `import time
+import functools
+
+def timer(repeat=1):
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            # Format arguments for display
+            args_repr = [repr(a) for a in args]
+            kwargs_repr = [f"{k}={v!r}" for k, v in kwargs.items()]
+            signature = ", ".join(args_repr + kwargs_repr)
+            
+            # Run function multiple times
+            times = []
+            result = None
+            
+            for _ in range(repeat):
+                start_time = time.perf_counter()
+                result = func(*args, **kwargs)
+                end_time = time.perf_counter()
+                times.append((end_time - start_time) * 1000)  # Convert to ms
+            
+            # Calculate average
+            avg_time = sum(times) / len(times)
+            
+            # Log execution
+            if repeat > 1:
+                print(f"Function {func.__name__}({signature}) "
+                      f"took {avg_time:.4f}ms (avg of {repeat} runs)")
+            else:
+                print(f"Function {func.__name__}({signature}) "
+                      f"took {avg_time:.4f}ms")
+            
+            return result
+        return wrapper
+    return decorator
+
+
+# Alternative: Simple decorator without arguments
+def simple_timer(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        start = time.perf_counter()
+        result = func(*args, **kwargs)
+        end = time.perf_counter()
+        print(f"{func.__name__} took {(end-start)*1000:.4f}ms")
+        return result
+    return wrapper`,
+        timeComplexity: 'O(r*f) where r is repeats, f is function complexity',
+        spaceComplexity: 'O(r) for storing times',
+        order: 11,
+        topic: 'Python Intermediate',
+    },
+    {
+        id: 'intermediate-context-manager',
+        title: 'Custom Context Manager',
+        difficulty: 'Medium',
+        description: `Create a context manager that temporarily changes directory and ensures cleanup.
+
+**Requirements:**
+- Change to specified directory
+- Automatically return to original directory
+- Handle errors gracefully
+- Support both class-based and function-based implementations
+
+**Usage:**
+\`\`\`python
+with ChangeDirectory('/tmp'):
+    # Working in /tmp
+    print(os.getcwd())
+# Automatically back to original directory
+\`\`\``,
+        examples: [
+            {
+                input: 'with ChangeDirectory("/tmp"): pass',
+                output: 'Changes dir and returns automatically',
+            },
+        ],
+        constraints: [
+            'Implement __enter__ and __exit__',
+            'Restore original directory even on error',
+            'Support with statement',
+        ],
+        hints: [
+            'Save os.getcwd() before changing',
+            'Use try/finally in __exit__',
+            'Or use @contextmanager decorator',
+        ],
+        starterCode: `import os
+from contextlib import contextmanager
+
+class ChangeDirectory:
+    """
+    Context manager to temporarily change directory.
+    
+    Examples:
+        >>> with ChangeDirectory('/tmp'):
+        ...     print(os.getcwd())
+        '/tmp'
+    """
+    
+    def __init__(self, path):
+        """
+        Initialize with target directory.
+        
+        Args:
+            path: Directory to change to
+        """
+        # TODO: Store the path and initialize original_dir to None
+        self.path = path
+        self.original_dir = None
+    
+    def __enter__(self):
+        """Enter context - change directory."""
+        # TODO: Save current directory and change to new path
+        pass
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """
+        Exit context - restore directory.
+        
+        Args:
+            exc_type: Exception type if any
+            exc_val: Exception value if any
+            exc_tb: Exception traceback if any
+            
+        Returns:
+            False to propagate exceptions
+        """
+        # TODO: Restore original directory
+        pass
+
+
+@contextmanager
+def change_directory(path):
+    """
+    Function-based context manager using decorator.
+    
+    Args:
+        path: Directory to change to
+        
+    Yields:
+        None
+        
+    Examples:
+        >>> with change_directory('/tmp'):
+        ...     pass
+    """
+    # TODO: Implement using yield
+    pass
+
+
+# Test
+print(f"Original directory: {os.getcwd()}")
+
+try:
+    with ChangeDirectory('/tmp'):
+        print(f"Inside context: {os.getcwd()}")
+        # Could raise exception here
+finally:
+    print(f"After context: {os.getcwd()}")
+
+
+# Test helper function (for automated testing)
+def test_change_directory(target_path):
+    """Test function for ChangeDirectory - implement the class methods above first!"""
+    try:
+        original = os.getcwd()
+        with ChangeDirectory(target_path):
+            changed = os.getcwd()
+        restored = os.getcwd()
+        # Return True if we successfully changed and restored
+        return changed == target_path and restored == original
+    except:
+        return None  # Return None if methods not yet implemented
+`,
+        testCases: [
+            {
+                input: ['/tmp'],
+                expected: true,
+                functionName: 'test_change_directory',
+            },
+        ],
+        solution: `import os
+from contextlib import contextmanager
+
+class ChangeDirectory:
+    def __init__(self, path):
+        self.path = path
+        self.original_dir = None
+    
+    def __enter__(self):
+        self.original_dir = os.getcwd()
+        os.chdir(self.path)
+        return self
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        # Always restore original directory
+        os.chdir(self.original_dir)
+        # Return False to propagate exceptions
+        return False
+
+
+@contextmanager
+def change_directory(path):
+    original_dir = os.getcwd()
+    try:
+        os.chdir(path)
+        yield
+    finally:
+        os.chdir(original_dir)
+
+
+# Test helper function (for automated testing)
+def test_change_directory(target_path):
+    """Test function for ChangeDirectory."""
+    original = os.getcwd()
+    with ChangeDirectory(target_path):
+        changed = os.getcwd()
+    restored = os.getcwd()
+    return changed == target_path and restored == original
+
+
+# More advanced: File opener with automatic cleanup
+class FileOpener:
+    def __init__(self, filename, mode='r'):
+        self.filename = filename
+        self.mode = mode
+        self.file = None
+    
+    def __enter__(self):
+        self.file = open(self.filename, self.mode)
+        return self.file
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if self.file:
+            self.file.close()
+        return False`,
+        timeComplexity: 'O(1)',
+        spaceComplexity: 'O(1)',
+        order: 12,
+        topic: 'Python Intermediate',
+    },
+    {
+        id: 'intermediate-generator-pipeline',
+        title: 'Data Processing Pipeline with Generators',
+        difficulty: 'Medium',
+        description: `Create a memory-efficient data processing pipeline using generators.
+
+**Pipeline Steps:**
+1. Read lines from file (generator)
+2. Filter lines matching pattern (generator)
+3. Transform lines (generator)
+4. Aggregate results
+
+**Benefits:**
+- Memory efficient (processes one item at a time)
+- Lazy evaluation
+- Composable operations
+
+**Example:**
+\`\`\`python
+lines = read_lines('data.txt')
+filtered = filter_lines(lines, pattern='ERROR')
+transformed = transform_lines(filtered, str.upper)
+result = list(transformed)
+\`\`\``,
+        examples: [
+            {
+                input: 'Pipeline processes large file',
+                output: 'Memory-efficient streaming',
+            },
+        ],
+        constraints: [
+            'Use yield keyword',
+            'Chain generators',
+            'Process one item at a time',
+        ],
+        hints: [
+            'yield returns values lazily',
+            'Generators can be chained',
+            'Use generator expressions',
+        ],
+        starterCode: `import re
+
+def read_lines(filename):
+    """
+    Generator that yields lines from file.
+    
+    Args:
+        filename: Path to file
+        
+    Yields:
+        Individual lines from file
+        
+    Examples:
+        >>> for line in read_lines('data.txt'):
+        ...     print(line)
+    """
+    pass
+
+
+def filter_lines(lines, pattern):
+    """
+    Generator that filters lines matching pattern.
+    
+    Args:
+        lines: Iterator of lines
+        pattern: Regex pattern to match
+        
+    Yields:
+        Lines matching pattern
+    """
+    pass
+
+
+def transform_lines(lines, transform_func):
+    """
+    Generator that transforms each line.
+    
+    Args:
+        lines: Iterator of lines
+        transform_func: Function to apply to each line
+        
+    Yields:
+        Transformed lines
+    """
+    pass
+
+
+def batch_lines(lines, batch_size):
+    """
+    Generator that groups lines into batches.
+    
+    Args:
+        lines: Iterator of lines
+        batch_size: Number of lines per batch
+        
+    Yields:
+        Lists of lines (batches)
+        
+    Examples:
+        >>> for batch in batch_lines(lines, 10):
+        ...     process_batch(batch)
+    """
+    pass
+
+
+# Test with virtual file
+# Create test file
+with open('test_data.txt', 'w') as f:
+    f.write("""ERROR: Connection failed
+INFO: System starting
+ERROR: Database timeout
+WARNING: Low memory
+INFO: User logged in
+ERROR: API error
+""")
+
+# Build pipeline
+lines = read_lines('test_data.txt')
+errors = filter_lines(lines, r'ERROR')
+uppercase = transform_lines(errors, str.upper)
+
+print("Filtered and transformed lines:")
+for line in uppercase:
+    print(line)
+
+# Example with batching
+lines2 = read_lines('test_data.txt')
+batches = batch_lines(lines2, 2)
+for i, batch in enumerate(batches, 1):
+    print(f"\\nBatch {i}:")
+    for line in batch:
+        print(f"  {line}", end='')
+`,
+        testCases: [
+            {
+                input: ['test_data.txt', 'ERROR'],
+                expected: 3,
+                functionName: 'test_data_processing',
+            },
+        ],
+        solution: `import re
+
+# Create test file (for browser environment)
+with open('test_data.txt', 'w') as f:
+    f.write("""ERROR: Connection failed
+INFO: System starting
+ERROR: Database timeout
+WARNING: Low memory
+INFO: User logged in
+ERROR: API error
+""")
+
+
+def read_lines(filename):
+    with open(filename, 'r') as f:
+        for line in f:
+            yield line.rstrip('\\n')
+
+
+def filter_lines(lines, pattern):
+    regex = re.compile(pattern)
+    for line in lines:
+        if regex.search(line):
+            yield line
+
+
+def transform_lines(lines, transform_func):
+    for line in lines:
+        yield transform_func(line)
+
+
+def batch_lines(lines, batch_size):
+    batch = []
+    for line in lines:
+        batch.append(line)
+        if len(batch) == batch_size:
+            yield batch
+            batch = []
+    
+    # Yield remaining items
+    if batch:
+        yield batch
+
+
+# Test helper function (for automated testing)
+def test_data_processing(filename, pattern):
+    """Test function for data processing pipeline."""
+    lines = read_lines(filename)
+    filtered = filter_lines(lines, pattern)
+    return len(list(filtered))
+
+
+# Advanced: Generator with send()
+def running_average():
+    """Generator that calculates running average."""
+    total = 0
+    count = 0
+    average = None
+    
+    while True:
+        value = yield average
+        total += value
+        count += 1
+        average = total / count
+
+
+# Advanced: Generator expression examples
+def process_large_file(filename):
+    """Process file using generator expressions."""
+    # Generator expression - memory efficient
+    lines = (line.strip() for line in open(filename))
+    errors = (line for line in lines if 'ERROR' in line)
+    uppercase = (line.upper() for line in errors)
+    
+    return list(uppercase)`,
+        timeComplexity: 'O(n) where n is number of lines',
+        spaceComplexity: 'O(1) for generators, O(b) for batches',
+        order: 13,
+        topic: 'Python Intermediate',
+    },
+    {
+        id: 'intermediate-cache-decorator',
+        title: 'LRU Cache Decorator',
+        difficulty: 'Hard',
+        description: `Implement a Least Recently Used (LRU) cache decorator.
+
+**Features:**
+- Cache function results
+- Limit cache size
+- Evict least recently used items when full
+- Track cache hits/misses
+- Provide cache statistics
+
+**LRU means:** When cache is full, remove the item that was accessed longest ago.
+
+**Example:**
+\`\`\`python
+@lru_cache(maxsize=3)
+def fibonacci(n):
+    if n < 2:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+\`\`\``,
+        examples: [
+            {
+                input: 'Cached fibonacci(10)',
+                output: 'Much faster than uncached',
+            },
+        ],
+        constraints: [
+            'Implement LRU eviction',
+            'Track access order',
+            'Support cache stats',
+        ],
+        hints: [
+            'Use OrderedDict for LRU tracking',
+            'Move accessed items to end',
+            'Check size before adding',
+        ],
+        starterCode: `from functools import wraps
+from collections import OrderedDict
+
+def lru_cache(maxsize=128):
+    """
+    LRU cache decorator.
+    
+    Args:
+        maxsize: Maximum number of cached items
+        
+    Returns:
+        Decorated function with caching
+        
+    Examples:
+        >>> @lru_cache(maxsize=3)
+        ... def add(a, b):
+        ...     return a + b
+    """
+    def decorator(func):
+        cache = OrderedDict()
+        hits = 0
+        misses = 0
+        
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            nonlocal hits, misses
+            # Create cache key from arguments
+            # Implement LRU logic here
+            pass
+        
+        def cache_info():
+            """Return cache statistics."""
+            return {
+                'hits': hits,
+                'misses': misses,
+                'maxsize': maxsize,
+                'currsize': len(cache)
+            }
+        
+        def cache_clear():
+            """Clear the cache."""
+            nonlocal hits, misses
+            cache.clear()
+            hits = misses = 0
+        
+        wrapper.cache_info = cache_info
+        wrapper.cache_clear = cache_clear
+        
+        return wrapper
+    return decorator
+
+
+# Test
+@lru_cache(maxsize=3)
+def fibonacci(n):
+    """Calculate Fibonacci number."""
+    print(f"Computing fibonacci({n})")
+    if n < 2:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+@lru_cache(maxsize=5)
+def expensive_operation(x, y):
+    """Simulate expensive computation."""
+    print(f"Computing expensive_operation({x}, {y})")
+    import time
+    time.sleep(0.1)  # Simulate slow operation
+    return x ** y
+
+# Test Fibonacci
+print("\\nFibonacci sequence:")
+for i in range(8):
+    print(f"fib({i}) = {fibonacci(i)}")
+
+print(f"\\nCache stats: {fibonacci.cache_info()}")
+
+# Test LRU eviction
+print("\\n\\nTesting LRU eviction:")
+for i in range(6):
+    result = expensive_operation(2, i)
+    print(f"2^{i} = {result}")
+
+print(f"\\nCache stats: {expensive_operation.cache_info()}")
+`,
+        testCases: [
+            {
+                input: [10],
+                expected: 55,
+            },
+        ],
+        solution: `from functools import wraps
+from collections import OrderedDict
+
+def lru_cache(maxsize=128):
+    def decorator(func):
+        cache = OrderedDict()
+        hits = 0
+        misses = 0
+        
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            nonlocal hits, misses
+            
+            # Create cache key from arguments
+            key = str(args) + str(sorted(kwargs.items()))
+            
+            # Check if in cache
+            if key in cache:
+                hits += 1
+                # Move to end (most recently used)
+                cache.move_to_end(key)
+                return cache[key]
+            
+            # Not in cache - compute result
+            misses += 1
+            result = func(*args, **kwargs)
+            
+            # Add to cache
+            cache[key] = result
+            cache.move_to_end(key)
+            
+            # Evict least recently used if over size
+            if len(cache) > maxsize:
+                cache.popitem(last=False)  # Remove first (oldest)
+            
+            return result
+        
+        def cache_info():
+            return {
+                'hits': hits,
+                'misses': misses,
+                'maxsize': maxsize,
+                'currsize': len(cache),
+                'hit_rate': hits / (hits + misses) if (hits + misses) > 0 else 0
+            }
+        
+        def cache_clear():
+            nonlocal hits, misses
+            cache.clear()
+            hits = misses = 0
+        
+        wrapper.cache_info = cache_info
+        wrapper.cache_clear = cache_clear
+        
+        return wrapper
+    return decorator
+
+
+# Alternative using Python's built-in
+from functools import lru_cache as builtin_lru_cache
+
+@builtin_lru_cache(maxsize=128)
+def cached_function(n):
+    return n * 2`,
+        timeComplexity: 'O(1) for cache lookup, O(n) for function execution',
+        spaceComplexity: 'O(maxsize)',
+        order: 14,
+        topic: 'Python Intermediate',
+    },
+    {
+        id: 'intermediate-class-property',
+        title: 'Property Decorators and Validation',
+        difficulty: 'Medium',
+        description: `Create a class using property decorators with validation.
+
+**Requirements:**
+- Use @property for getters
+- Use @setter for validation
+- Implement computed properties
+- Add custom validation logic
+
+**Example:**
+\`\`\`python
+class Temperature:
+    @property
+    def celsius(self):
+        return self._celsius
+    
+    @celsius.setter
+    def celsius(self, value):
+        if value < -273.15:
+            raise ValueError("Below absolute zero!")
+        self._celsius = value
+\`\`\``,
+        examples: [
+            {
+                input: 'temp.celsius = 25',
+                output: 'Sets with validation',
+            },
+        ],
+        constraints: [
+            'Use @property decorator',
+            'Validate in setter',
+            'Provide computed properties',
+        ],
+        hints: [
+            '@property creates getter',
+            '@name.setter creates setter',
+            'Computed properties calculate on access',
+        ],
+        starterCode: `class Rectangle:
+    """
+    Rectangle with validated dimensions and computed properties.
+    
+    Examples:
+        >>> rect = Rectangle(5, 10)
+        >>> rect.width
+        5
+        >>> rect.area
+        50
+        >>> rect.width = -5  # Raises ValueError
+    """
+    
+    def __init__(self, width, height):
+        """
+        Initialize rectangle.
+        
+        Args:
+            width: Width (must be positive)
+            height: Height (must be positive)
+        """
+        # TODO: Set width and height using the setters below
+        # This allows validation to happen during initialization
+        self._width = width  # Temporary: use setters instead
+        self._height = height  # Temporary: use setters instead
+    
+    @property
+    def width(self):
+        """Get width."""
+        # TODO: Return the width
+        return self._width
+    
+    @width.setter
+    def width(self, value):
+        """
+        Set width with validation.
+        
+        Args:
+            value: New width
+            
+        Raises:
+            ValueError: If width is not positive
+        """
+        # TODO: Implement validation and set _width
+        # - Check if value is positive
+        # - Raise ValueError if not
+        # - Set self._width if valid
+        pass
+    
+    @property
+    def height(self):
+        """Get height."""
+        # TODO: Return the height
+        return self._height
+    
+    @height.setter
+    def height(self, value):
+        """
+        Set height with validation.
+        
+        Args:
+            value: New height
+            
+        Raises:
+            ValueError: If height is not positive
+        """
+        # TODO: Implement validation and set _height
+        # - Check if value is positive
+        # - Raise ValueError if not
+        # - Set self._height if valid
+        pass
+    
+    @property
+    def area(self):
+        """Calculate and return area (computed property)."""
+        # TODO: Calculate and return width * height
+        pass
+    
+    @property
+    def perimeter(self):
+        """Calculate and return perimeter (computed property)."""
+        # TODO: Calculate and return 2 * (width + height)
+        pass
+    
+    @property
+    def diagonal(self):
+        """Calculate and return diagonal length (computed property)."""
+        # TODO: Calculate and return diagonal using Pythagorean theorem
+        # Hint: import math and use math.sqrt()
+        pass
+    
+    def __str__(self):
+        """String representation."""
+        return f"Rectangle({self.width}x{self.height})"
+
+
+# Test helper function (for automated testing)
+def test_rectangle(width, height):
+    """Test function for Rectangle - implement the class methods above first!"""
+    try:
+        rect = Rectangle(width, height)
+        return rect.area
+    except:
+        return None  # Return None if methods not yet implemented
+`,
+        testCases: [
+            {
+                input: [5, 10],
+                expected: 50,
+                functionName: 'test_rectangle',
+            },
+        ],
+        solution: `import math
+
+class Rectangle:
+    def __init__(self, width, height):
+        self.width = width  # Uses setter
+        self.height = height  # Uses setter
+
+    @property
+    def width(self):
+        return self._width
+
+    @width.setter
+    def width(self, value):
+        if value <= 0:
+            raise ValueError(f"Width must be positive, got {value}")
+        self._width = value
+
+    @property
+    def height(self):
+        return self._height
+
+    @height.setter
+    def height(self, value):
+        if value <= 0:
+            raise ValueError(f"Height must be positive, got {value}")
+        self._height = value
+
+    @property
+    def area(self):
+        return self._width * self._height
+
+    @property
+    def perimeter(self):
+        return 2 * (self._width + self._height)
+
+    @property
+    def diagonal(self):
+        return math.sqrt(self._width ** 2 + self._height ** 2)
+
+    def __str__(self):
+        return f"Rectangle({self.width}x{self.height})"
+
+    def __repr__(self):
+        return f"Rectangle(width={self.width}, height={self.height})"
+
+
+# More advanced example: Temperature converter
+class Temperature:
+    def __init__(self, celsius=0):
+        self._celsius = celsius
+    
+    @property
+    def celsius(self):
+        return self._celsius
+    
+    @celsius.setter
+    def celsius(self, value):
+        if value < -273.15:
+            raise ValueError("Temperature below absolute zero!")
+        self._celsius = value
+    
+    @property
+    def fahrenheit(self):
+        return self._celsius * 9/5 + 32
+    
+    @fahrenheit.setter
+    def fahrenheit(self, value):
+        self.celsius = (value - 32) * 5/9
+    
+    @property
+    def kelvin(self):
+        return self._celsius + 273.15
+
+    @kelvin.setter
+    def kelvin(self, value):
+        self.celsius = value - 273.15
+
+
+def test_rectangle(width, height):
+    """Test function for the Rectangle class."""
+    rect = Rectangle(width, height)
+    return rect.area`,
+        timeComplexity: 'O(1) for all operations',
+        spaceComplexity: 'O(1)',
+        order: 15,
+        topic: 'Python Intermediate',
+    },
+    {
+        id: 'intermediate-sqlite-manager',
+        title: 'SQLite Database Manager',
+        difficulty: 'Hard',
+        description: `Create a simple database manager for SQLite operations.
+
+**Features:**
+- Create tables
+- Insert, update, delete records
+- Query with filters
+- Use context manager for connections
+- Handle transactions
+
+**Example:**
+\`\`\`python
+with DatabaseManager('users.db') as db:
+    db.create_table('users', ['id INTEGER PRIMARY KEY', 'name TEXT', 'age INTEGER'])
+    db.insert('users', {'name': 'Alice', 'age': 30})
+    users = db.query('users', where={'age': 30})
+\`\`\``,
+        examples: [
+            {
+                input: "db.insert('users', {'name': 'Bob', 'age': 25})",
+                output: 'Inserts record into database',
+            },
+        ],
+        constraints: [
+            'Use sqlite3 module',
+            'Implement context manager',
+            'Handle SQL injection safely',
+        ],
+        hints: [
+            'Use parameterized queries (? placeholders)',
+            'Implement __enter__ and __exit__',
+            'Commit transactions in __exit__',
+        ],
+        starterCode: `import sqlite3
+
+class DatabaseManager:
+    """
+    Simple SQLite database manager with context manager support.
+    
+    Examples:
+        >>> with DatabaseManager('test.db') as db:
+        ...     db.create_table('users', ['id INTEGER PRIMARY KEY', 'name TEXT'])
+        ...     db.insert('users', {'name': 'Alice'})
+    """
+    
+    def __init__(self, db_name):
+        """
+        Initialize database manager.
+        
+        Args:
+            db_name: Name of database file
+        """
+        # TODO: Store db_name, initialize connection and cursor to None
+        self.db_name = db_name
+        self.connection = None
+        self.cursor = None
+    
+    def __enter__(self):
+        """Enter context - open connection."""
+        # TODO: Open database connection, set row_factory, create cursor
+        pass
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """Exit context - commit and close connection."""
+        # TODO: Commit if no exceptions, close connection
+        pass
+    
+    def create_table(self, table_name, columns):
+        """
+        Create table if not exists.
+        
+        Args:
+            table_name: Name of table
+            columns: List of column definitions
+            
+        Examples:
+            >>> db.create_table('users', ['id INTEGER PRIMARY KEY', 'name TEXT'])
+        """
+        # TODO: Execute CREATE TABLE IF NOT EXISTS
+        pass
+    
+    def insert(self, table_name, data):
+        """
+        Insert record into table.
+        
+        Args:
+            table_name: Name of table
+            data: Dictionary of column: value pairs
+            
+        Returns:
+            ID of inserted row
+        """
+        # TODO: Execute INSERT and return lastrowid
+        pass
+    
+    def query(self, table_name, columns='*', where=None, order_by=None):
+        """
+        Query records from table.
+        
+        Args:
+            table_name: Name of table
+            columns: Columns to select (default all)
+            where: Dictionary of conditions
+            order_by: Column to order by
+            
+        Returns:
+            List of records as dictionaries
+            
+        Examples:
+            >>> db.query('users', where={'age': 30})
+            [{'id': 1, 'name': 'Alice', 'age': 30}]
+        """
+        # TODO: Build and execute SELECT query
+        pass
+    
+    def update(self, table_name, data, where):
+        """
+        Update records in table.
+        
+        Args:
+            table_name: Name of table
+            data: Dictionary of columns to update
+            where: Dictionary of conditions
+            
+        Returns:
+            Number of rows updated
+        """
+        # TODO: Build and execute UPDATE query
+        pass
+    
+    def delete(self, table_name, where):
+        """
+        Delete records from table.
+        
+        Args:
+            table_name: Name of table
+            where: Dictionary of conditions
+            
+        Returns:
+            Number of rows deleted
+        """
+        # TODO: Build and execute DELETE query
+        pass
+
+
+# Test
+with DatabaseManager('test_users.db') as db:
+    # Create table
+    db.create_table('users', [
+        'id INTEGER PRIMARY KEY AUTOINCREMENT',
+        'name TEXT NOT NULL',
+        'age INTEGER',
+        'email TEXT'
+    ])
+    
+    # Insert records
+    db.insert('users', {'name': 'Alice', 'age': 30, 'email': 'alice@example.com'})
+    db.insert('users', {'name': 'Bob', 'age': 25, 'email': 'bob@example.com'})
+    db.insert('users', {'name': 'Charlie', 'age': 30, 'email': 'charlie@example.com'})
+    
+    # Query all
+    print("All users:")
+    for user in db.query('users'):
+        print(f"  {user}")
+    
+    # Query with filter
+    print("\\nUsers aged 30:")
+    for user in db.query('users', where={'age': 30}):
+        print(f"  {user}")
+    
+    # Update
+    updated = db.update('users', {'age': 26}, where={'name': 'Bob'})
+    print(f"\\nUpdated {updated} record(s)")
+    
+    # Delete
+    deleted = db.delete('users', where={'name': 'Charlie'})
+    print(f"Deleted {deleted} record(s)")
+    
+    # Final query
+    print("\\nFinal users:")
+    for user in db.query('users', order_by='name'):
+        print(f"  {user}")
+
+
+# Test helper function (for automated testing)
+def test_database_manager(table_name, data):
+    """Test function for DatabaseManager - implement the class methods above first!"""
+    try:
+        with DatabaseManager('test.db') as db:
+            # Create test table
+            db.create_table(table_name, [
+                'id INTEGER PRIMARY KEY AUTOINCREMENT',
+                'name TEXT',
+                'age INTEGER'
+            ])
+            # Insert and return the row id
+            return db.insert(table_name, data)
+    except:
+        return None  # Return None if methods not yet implemented
+`,
+        testCases: [
+            {
+                input: ['users', { name: 'Alice', age: 30 }],
+                expected: 1,
+                functionName: 'test_database_manager',
+            },
+        ],
+        solution: `import sqlite3
+
+class DatabaseManager:
+    def __init__(self, db_name):
+        self.db_name = db_name
+        self.connection = None
+        self.cursor = None
+    
+    def __enter__(self):
+        self.connection = sqlite3.connect(self.db_name)
+        self.connection.row_factory = sqlite3.Row  # Access columns by name
+        self.cursor = self.connection.cursor()
+        return self
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if exc_type is None:
+            self.connection.commit()
+        else:
+            self.connection.rollback()
+        self.connection.close()
+        return False
+    
+    def create_table(self, table_name, columns):
+        columns_str = ', '.join(columns)
+        sql = f"CREATE TABLE IF NOT EXISTS {table_name} ({columns_str})"
+        self.cursor.execute(sql)
+    
+    def insert(self, table_name, data):
+        columns = ', '.join(data.keys())
+        placeholders = ', '.join(['?' for _ in data])
+        sql = f"INSERT INTO {table_name} ({columns}) VALUES ({placeholders})"
+        self.cursor.execute(sql, tuple(data.values()))
+        return self.cursor.lastrowid
+    
+    def query(self, table_name, columns='*', where=None, order_by=None):
+        sql = f"SELECT {columns} FROM {table_name}"
+        params = []
+        
+        if where:
+            conditions = ' AND '.join([f"{k} = ?" for k in where.keys()])
+            sql += f" WHERE {conditions}"
+            params.extend(where.values())
+        
+        if order_by:
+            sql += f" ORDER BY {order_by}"
+        
+        self.cursor.execute(sql, params)
+        return [dict(row) for row in self.cursor.fetchall()]
+    
+    def update(self, table_name, data, where):
+        set_clause = ', '.join([f"{k} = ?" for k in data.keys()])
+        where_clause = ' AND '.join([f"{k} = ?" for k in where.keys()])
+        sql = f"UPDATE {table_name} SET {set_clause} WHERE {where_clause}"
+        params = list(data.values()) + list(where.values())
+        self.cursor.execute(sql, params)
+        return self.cursor.rowcount
+    
+    def delete(self, table_name, where):
+        where_clause = ' AND '.join([f"{k} = ?" for k in where.keys()])
+        sql = f"DELETE FROM {table_name} WHERE {where_clause}"
+        self.cursor.execute(sql, tuple(where.values()))
+        return self.cursor.rowcount
+
+
+# Test helper function (for automated testing)
+def test_database_manager(table_name, data):
+    """Test function for DatabaseManager."""
+    with DatabaseManager('test.db') as db:
+        db.create_table(table_name, [
+            'id INTEGER PRIMARY KEY AUTOINCREMENT',
+            'name TEXT',
+            'age INTEGER'
+        ])
+        return db.insert(table_name, data)`,
+        timeComplexity: 'O(n) for queries, O(1) for indexed operations',
+        spaceComplexity: 'O(r) where r is number of results',
+        order: 16,
+        topic: 'Python Intermediate',
+    },
+    {
+        id: 'intermediate-retry-decorator',
+        title: 'Retry Decorator with Exponential Backoff',
+        difficulty: 'Medium',
+        description: `Create a decorator that retries failed function calls with exponential backoff.
+
+**Features:**
+- Retry on exception
+- Exponential backoff (wait time doubles each retry)
+- Maximum retry limit
+- Log retry attempts
+- Specify which exceptions to retry
+
+**Exponential Backoff:** 1s, 2s, 4s, 8s...
+
+**Example:**
+\`\`\`python
+@retry(max_attempts=3, delay=1, backoff=2, exceptions=(ConnectionError,))
+def fetch_data():
+    # Network call that might fail
+    response = requests.get(url)
+    return response.json()
+\`\`\``,
+        examples: [
+            {
+                input: '@retry(max_attempts=3)\\ndef flaky(): ...',
+                output: 'Retries up to 3 times',
+            },
+        ],
+        constraints: [
+            'Use exponential backoff',
+            'Log each retry',
+            'Re-raise if max attempts exceeded',
+        ],
+        hints: [
+            'time.sleep() for delays',
+            'Multiply delay by backoff factor',
+            'Use isinstance() to check exceptions',
+        ],
+        starterCode: `import time
+import functools
+import random
+
+def retry(max_attempts=3, delay=1, backoff=2, exceptions=(Exception,)):
+    """
+    Decorator to retry function with exponential backoff.
+    
+    Args:
+        max_attempts: Maximum number of retry attempts
+        delay: Initial delay between retries (seconds)
+        backoff: Multiplier for delay (exponential backoff)
+        exceptions: Tuple of exceptions to catch and retry
+        
+    Returns:
+        Decorated function
+        
+    Examples:
+        >>> @retry(max_attempts=3, delay=1, backoff=2)
+        ... def flaky_function():
+        ...     if random.random() < 0.7:
+        ...         raise ConnectionError("Failed")
+        ...     return "Success"
+    """
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            pass
+        return wrapper
+    return decorator
+
+
+# Test with simulated flaky function
+@retry(max_attempts=5, delay=0.5, backoff=2, exceptions=(ConnectionError, TimeoutError))
+def flaky_network_call(success_rate=0.3):
+    """
+    Simulate a flaky network call.
+    
+    Args:
+        success_rate: Probability of success (0-1)
+        
+    Returns:
+        Success message
+        
+    Raises:
+        ConnectionError: If call fails
+    """
+    print(f"  Attempting network call...")
+    if random.random() > success_rate:
+        raise ConnectionError("Network error")
+    return "Data fetched successfully"
+
+
+@retry(max_attempts=3, delay=1)
+def divide(a, b):
+    """Division with retry (will fail permanently on ZeroDivisionError)."""
+    print(f"  Attempting {a} / {b}")
+    return a / b
+
+
+# Test
+print("Test 1: Flaky network call (will retry)")
+try:
+    result = flaky_network_call(success_rate=0.4)
+    print(f"Success: {result}")
+except ConnectionError as e:
+    print(f"Failed after all retries: {e}")
+
+print("\\n" + "="*50 + "\\n")
+
+print("Test 2: Immediate success")
+result = flaky_network_call(success_rate=1.0)
+print(f"Success: {result}")
+
+print("\\n" + "="*50 + "\\n")
+
+print("Test 3: Permanent failure (won't help to retry)")
+try:
+    result = divide(10, 0)
+except ZeroDivisionError as e:
+    print(f"Failed: {e}")
+`,
+        testCases: [
+            {
+                input: [10, 5],
+                expected: 2,
+            },
+        ],
+        solution: `import time
+import functools
+import random
+
+def retry(max_attempts=3, delay=1, backoff=2, exceptions=(Exception,)):
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            current_delay = delay
+            last_exception = None
+            
+            for attempt in range(1, max_attempts + 1):
+                try:
+                    return func(*args, **kwargs)
+                except exceptions as e:
+                    last_exception = e
+                    
+                    if attempt == max_attempts:
+                        print(f"Max attempts ({max_attempts}) reached. Giving up.")
+                        raise
+                    
+                    print(f"Attempt {attempt} failed: {e}")
+                    print(f"Retrying in {current_delay:.1f} seconds...")
+                    time.sleep(current_delay)
+                    current_delay *= backoff
+            
+            # Should not reach here, but just in case
+            raise last_exception
+        
+        return wrapper
+    return decorator
+
+
+# Alternative: Retry with jitter (randomized delay)
+def retry_with_jitter(max_attempts=3, base_delay=1, max_delay=60, exceptions=(Exception,)):
+    """Retry with jittered exponential backoff."""
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            for attempt in range(1, max_attempts + 1):
+                try:
+                    return func(*args, **kwargs)
+                except exceptions as e:
+                    if attempt == max_attempts:
+                        raise
+                    
+                    # Exponential backoff with jitter
+                    delay = min(base_delay * (2 ** (attempt - 1)), max_delay)
+                    jitter = random.uniform(0, delay * 0.1)  # Add up to 10% jitter
+                    total_delay = delay + jitter
+                    
+                    print(f"Attempt {attempt} failed. Retrying in {total_delay:.2f}s...")
+                    time.sleep(total_delay)
+        
+        return wrapper
+    return decorator`,
+        timeComplexity: 'O(2^n) for backoff delays where n is attempts',
+        spaceComplexity: 'O(1)',
+        order: 17,
+        topic: 'Python Intermediate',
+    },
+    {
+        id: 'intermediate-command-line-parser',
+        title: 'Command Line Argument Parser',
+        difficulty: 'Medium',
+        description: `Create a command-line tool using argparse to process files.
+
+**Features:**
+- Parse command-line arguments
+- Support required and optional arguments
+- Provide help text
+- Validate inputs
+- Support subcommands
+
+**Example CLI:**
+\`\`\`bash
+python tool.py process --input data.txt --output result.txt --verbose
+python tool.py analyze --file data.csv --format json
+\`\`\``,
+        examples: [
+            {
+                input: 'python tool.py --input file.txt',
+                output: 'Processes file with arguments',
+            },
+        ],
+        constraints: [
+            'Use argparse module',
+            'Support multiple subcommands',
+            'Provide good help text',
+        ],
+        hints: [
+            'ArgumentParser for main parser',
+            'add_argument() for arguments',
+            'add_subparsers() for subcommands',
+        ],
+        starterCode: `import argparse
+import sys
+
+def create_parser():
+    """
+    Create and configure argument parser.
+    
+    Returns:
+        Configured ArgumentParser
+    """
+    pass
+
+
+def process_command(args):
+    """
+    Handle 'process' subcommand.
+    
+    Args:
+        args: Parsed arguments
+    """
+    print(f"Processing file: {args.input}")
+    print(f"Output to: {args.output}")
+    
+    if args.verbose:
+        print("Verbose mode enabled")
+    
+    # Read input file
+    try:
+        with open(args.input, 'r') as f:
+            content = f.read()
+            lines = content.split('\\n')
+            
+            # Process based on operation
+            if args.operation == 'count':
+                print(f"\\nLine count: {len(lines)}")
+                print(f"Word count: {len(content.split())}")
+                print(f"Character count: {len(content)}")
+            
+            elif args.operation == 'uppercase':
+                processed = content.upper()
+                with open(args.output, 'w') as out:
+                    out.write(processed)
+                print(f"\\nConverted to uppercase and saved")
+            
+            elif args.operation == 'reverse':
+                processed = '\\n'.join(reversed(lines))
+                with open(args.output, 'w') as out:
+                    out.write(processed)
+                print(f"\\nReversed lines and saved")
+    
+    except FileNotFoundError:
+        print(f"Error: File '{args.input}' not found")
+        sys.exit(1)
+
+
+def analyze_command(args):
+    """
+    Handle 'analyze' subcommand.
+    
+    Args:
+        args: Parsed arguments
+    """
+    print(f"Analyzing file: {args.file}")
+    print(f"Format: {args.format}")
+    
+    try:
+        with open(args.file, 'r') as f:
+            content = f.read()
+            lines = [line.strip() for line in content.split('\\n') if line.strip()]
+            
+            stats = {
+                'total_lines': len(lines),
+                'total_words': len(content.split()),
+                'total_chars': len(content),
+                'avg_line_length': sum(len(line) for line in lines) / len(lines) if lines else 0
+            }
+            
+            if args.format == 'json':
+                import json
+                print(json.dumps(stats, indent=2))
+            else:
+                for key, value in stats.items():
+                    print(f"{key}: {value:.2f}" if isinstance(value, float) else f"{key}: {value}")
+    
+    except FileNotFoundError:
+        print(f"Error: File '{args.file}' not found")
+        sys.exit(1)
+
+
+def main():
+    """Main entry point."""
+    parser = create_parser()
+    args = parser.parse_args()
+    
+    if hasattr(args, 'func'):
+        args.func(args)
+    else:
+        parser.print_help()
+
+
+# For testing purposes, we'll simulate command-line arguments
+if __name__ == '__main__':
+    # Create test file
+    with open('test_input.txt', 'w') as f:
+        f.write("Hello World\\nThis is a test\\nPython programming\\n")
+    
+    # Test process command
+    print("Test 1: Process with count")
+    sys.argv = ['tool.py', 'process', '--input', 'test_input.txt', 
+                '--output', 'test_output.txt', '--operation', 'count', '--verbose']
+    main()
+    
+    print("\\n" + "="*50 + "\\n")
+    
+    # Test analyze command
+    print("Test 2: Analyze with JSON format")
+    sys.argv = ['tool.py', 'analyze', '--file', 'test_input.txt', '--format', 'json']
+    main()
+`,
+        testCases: [
+            {
+                input: ['test.txt'],
+                expected: true,
+            },
+        ],
+        solution: `import argparse
+import sys
+
+def create_parser():
+    parser = argparse.ArgumentParser(
+        description='File processing and analysis tool',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  %(prog)s process --input data.txt --output result.txt --operation count
+  %(prog)s analyze --file data.txt --format json
+        """
+    )
+    
+    # Create subparsers for different commands
+    subparsers = parser.add_subparsers(dest='command', help='Available commands')
+    
+    # Process subcommand
+    process_parser = subparsers.add_parser('process', help='Process a file')
+    process_parser.add_argument('--input', '-i', required=True,
+                               help='Input file path')
+    process_parser.add_argument('--output', '-o', required=True,
+                               help='Output file path')
+    process_parser.add_argument('--operation', '-op',
+                               choices=['count', 'uppercase', 'reverse'],
+                               default='count',
+                               help='Operation to perform')
+    process_parser.add_argument('--verbose', '-v', action='store_true',
+                               help='Enable verbose output')
+    process_parser.set_defaults(func=process_command)
+    
+    # Analyze subcommand
+    analyze_parser = subparsers.add_parser('analyze', help='Analyze a file')
+    analyze_parser.add_argument('--file', '-f', required=True,
+                               help='File to analyze')
+    analyze_parser.add_argument('--format', choices=['text', 'json'],
+                               default='text',
+                               help='Output format')
+    analyze_parser.set_defaults(func=analyze_command)
+    
+    return parser
+
+
+def process_command(args):
+    # Implementation shown in starter code
+    pass
+
+
+def analyze_command(args):
+    # Implementation shown in starter code
+    pass
+
+
+def main():
+    parser = create_parser()
+    args = parser.parse_args()
+    
+    if hasattr(args, 'func'):
+        args.func(args)
+    else:
+        parser.print_help()`,
+        timeComplexity: 'O(n) where n is file size',
+        spaceComplexity: 'O(n)',
+        order: 18,
+        topic: 'Python Intermediate',
+    },
+    {
+        id: 'intermediate-text-statistics',
+        title: 'Advanced Text Statistics',
+        difficulty: 'Medium',
+        description: `Calculate comprehensive statistics for text documents.
+
+**Statistics to Calculate:**
+- Total words, characters, lines
+- Unique words count
+- Average word/sentence length
+- Most common words
+- Reading level (Flesch-Kincaid)
+- Lexical diversity (unique words / total words)
+
+**Flesch-Kincaid Reading Ease:**
+\`206.835 - 1.015 * (words/sentences) - 84.6 * (syllables/words)\``,
+        examples: [
+            {
+                input: 'analyze_text("The quick brown fox...")',
+                output: 'Comprehensive text statistics',
+            },
+        ],
+        constraints: [
+            'Calculate all statistics',
+            'Handle edge cases',
+            'Estimate syllable count',
+        ],
+        hints: [
+            'Use collections.Counter for word frequency',
+            'Split on sentence punctuation',
+            'Estimate syllables by counting vowel groups',
+        ],
+        starterCode: `import re
+from collections import Counter
+import string
+
+class TextAnalyzer:
+    """
+    Comprehensive text analysis tool.
+    
+    Examples:
+        >>> analyzer = TextAnalyzer(text)
+        >>> stats = analyzer.get_statistics()
+        >>> print(stats['word_count'])
+    """
+    
+    def __init__(self, text):
+        """
+        Initialize analyzer with text.
+        
+        Args:
+            text: Text to analyze
+        """
+        self.text = text
+        self.sentences = self._extract_sentences()
+        self.words = self._extract_words()
+    
+    def _extract_sentences(self):
+        """Extract sentences from text."""
+        pass
+    
+    def _extract_words(self):
+        """Extract and clean words from text."""
+        pass
+    
+    def _count_syllables(self, word):
+        """
+        Estimate syllable count in word.
+        
+        Args:
+            word: Word to analyze
+            
+        Returns:
+            Estimated syllable count
+        """
+        pass
+    
+    def get_word_count(self):
+        """Return total word count."""
+        pass
+    
+    def get_character_count(self, include_spaces=True):
+        """Return character count."""
+        pass
+    
+    def get_unique_word_count(self):
+        """Return count of unique words."""
+        pass
+    
+    def get_average_word_length(self):
+        """Return average word length."""
+        pass
+    
+    def get_average_sentence_length(self):
+        """Return average words per sentence."""
+        pass
+    
+    def get_most_common_words(self, n=10):
+        """
+        Get most common words.
+        
+        Args:
+            n: Number of words to return
+            
+        Returns:
+            List of (word, count) tuples
+        """
+        pass
+    
+    def get_lexical_diversity(self):
+        """
+        Calculate lexical diversity ratio.
+        
+        Returns:
+            Ratio of unique words to total words (0-1)
+        """
+        pass
+    
+    def get_reading_level(self):
+        """
+        Calculate Flesch-Kincaid reading ease score.
+        
+        Returns:
+            Reading ease score (0-100, higher is easier)
+        """
+        pass
+    
+    def get_statistics(self):
+        """
+        Get all statistics as dictionary.
+        
+        Returns:
+            Dictionary of statistics
+        """
+        pass
+
+
+# Test
+sample_text = """
+The quick brown fox jumps over the lazy dog. This is a simple sentence.
+Natural language processing is fascinating. It involves analyzing text data.
+Python makes text analysis easy and efficient. We can calculate many statistics.
+Reading level indicates text complexity. Short sentences are easier to read.
+"""
+
+analyzer = TextAnalyzer(sample_text)
+stats = analyzer.get_statistics()
+
+print("Text Statistics:")
+print("=" * 50)
+for key, value in stats.items():
+    if isinstance(value, float):
+        print(f"{key}: {value:.2f}")
+    elif isinstance(value, list):
+        print(f"{key}:")
+        for item in value[:5]:  # Show first 5
+            print(f"  {item}")
+    else:
+        print(f"{key}: {value}")
+`,
+        testCases: [
+            {
+                input: ['The quick brown fox jumps over the lazy dog.'],
+                expected: 9,
+            },
+        ],
+        solution: `import re
+from collections import Counter
+import string
+
+class TextAnalyzer:
+    def __init__(self, text):
+        self.text = text
+        self.sentences = self._extract_sentences()
+        self.words = self._extract_words()
+    
+    def _extract_sentences(self):
+        # Split on sentence-ending punctuation
+        sentences = re.split(r'[.!?]+', self.text)
+        return [s.strip() for s in sentences if s.strip()]
+    
+    def _extract_words(self):
+        # Remove punctuation and split
+        text_clean = self.text.translate(str.maketrans('', '', string.punctuation))
+        words = text_clean.lower().split()
+        return [w for w in words if w]
+    
+    def _count_syllables(self, word):
+        word = word.lower()
+        vowels = 'aeiouy'
+        syllable_count = 0
+        previous_was_vowel = False
+        
+        for char in word:
+            is_vowel = char in vowels
+            if is_vowel and not previous_was_vowel:
+                syllable_count += 1
+            previous_was_vowel = is_vowel
+        
+        # Adjust for silent 'e'
+        if word.endswith('e'):
+            syllable_count -= 1
+        
+        # Ensure at least one syllable
+        return max(1, syllable_count)
+    
+    def get_word_count(self):
+        return len(self.words)
+    
+    def get_character_count(self, include_spaces=True):
+        if include_spaces:
+            return len(self.text)
+        return len(self.text.replace(' ', ''))
+    
+    def get_unique_word_count(self):
+        return len(set(self.words))
+    
+    def get_average_word_length(self):
+        if not self.words:
+            return 0
+        return sum(len(word) for word in self.words) / len(self.words)
+    
+    def get_average_sentence_length(self):
+        if not self.sentences:
+            return 0
+        return len(self.words) / len(self.sentences)
+    
+    def get_most_common_words(self, n=10):
+        counter = Counter(self.words)
+        return counter.most_common(n)
+    
+    def get_lexical_diversity(self):
+        if not self.words:
+            return 0
+        return len(set(self.words)) / len(self.words)
+    
+    def get_reading_level(self):
+        if not self.sentences or not self.words:
+            return 0
+        
+        total_syllables = sum(self._count_syllables(word) for word in self.words)
+        words_per_sentence = len(self.words) / len(self.sentences)
+        syllables_per_word = total_syllables / len(self.words)
+        
+        # Flesch-Kincaid Reading Ease
+        score = 206.835 - 1.015 * words_per_sentence - 84.6 * syllables_per_word
+        return max(0, min(100, score))  # Clamp to 0-100
+    
+    def get_statistics(self):
+        return {
+            'total_characters': self.get_character_count(),
+            'total_words': self.get_word_count(),
+            'total_sentences': len(self.sentences),
+            'unique_words': self.get_unique_word_count(),
+            'average_word_length': self.get_average_word_length(),
+            'average_sentence_length': self.get_average_sentence_length(),
+            'lexical_diversity': self.get_lexical_diversity(),
+            'reading_ease': self.get_reading_level(),
+            'most_common_words': self.get_most_common_words(10)
+        }`,
+        timeComplexity: 'O(n) where n is text length',
+        spaceComplexity: 'O(w) where w is number of words',
+        order: 19,
+        topic: 'Python Intermediate',
+    },
+    {
+        id: 'intermediate-markdown-parser',
+        title: 'Simple Markdown to HTML Converter',
+        difficulty: 'Hard',
+        description: `Convert Markdown text to HTML.
+
+**Supported Markdown:**
+- Headers: # H1, ## H2, ### H3
+- Bold: **text** or __text__
+- Italic: *text* or _text_
+- Links: [text](url)
+- Lists: - item or * item
+- Code: \`code\`
+- Paragraphs
+
+**Example:**
+\`\`\`markdown
+# Hello World
+
+This is **bold** and this is *italic*.
+
+- Item 1
+- Item 2
+\`\`\``,
+        examples: [
+            {
+                input: '# Hello\\n\\nThis is **bold**',
+                output: '<h1>Hello</h1>\\n<p>This is <strong>bold</strong></p>',
+            },
+        ],
+        constraints: [
+            'Use regex for parsing',
+            'Handle nested formatting',
+            'Escape HTML entities',
+        ],
+        hints: [
+            'Process line by line',
+            'Replace patterns in order',
+            'Use html.escape() for safety',
+        ],
+        starterCode: `import re
+import html
+
+class MarkdownConverter:
+    """
+    Convert Markdown to HTML.
+    
+    Examples:
+        >>> converter = MarkdownConverter()
+        >>> html = converter.convert("# Hello\\n\\nWorld")
+        >>> print(html)
+    """
+    
+    def __init__(self):
+        """Initialize converter with patterns."""
+        self.patterns = self._compile_patterns()
+    
+    def _compile_patterns(self):
+        """
+        Compile regex patterns for Markdown elements.
+        
+        Returns:
+            Dict of pattern name to compiled regex
+        """
+        # TODO: Return dict of compiled regex patterns for headers, bold, italic, etc.
+        return {}  # Return empty dict for now to prevent crashes
+    
+    def _convert_headers(self, text):
+        """Convert Markdown headers to HTML."""
+        # TODO: Use regex to convert # Header to <h1>Header</h1>
+        pass
+    
+    def _convert_bold(self, text):
+        """Convert bold text to HTML."""
+        # TODO: Convert **text** to <strong>text</strong>
+        pass
+    
+    def _convert_italic(self, text):
+        """Convert italic text to HTML."""
+        # TODO: Convert *text* to <em>text</em>
+        pass
+    
+    def _convert_code(self, text):
+        """Convert inline code to HTML."""
+        # TODO: Convert \`code\` to <code>code</code>
+        pass
+    
+    def _convert_links(self, text):
+        """Convert links to HTML."""
+        # TODO: Convert [text](url) to <a href="url">text</a>
+        pass
+    
+    def _convert_lists(self, text):
+        """Convert lists to HTML."""
+        # TODO: Convert - item to <ul><li>item</li></ul>
+        pass
+    
+    def convert(self, markdown_text):
+        """
+        Convert Markdown text to HTML.
+        
+        Args:
+            markdown_text: Markdown formatted text
+            
+        Returns:
+            HTML formatted text
+            
+        Examples:
+            >>> converter.convert("**Bold text**")
+            '<p><strong>Bold text</strong></p>'
+        """
+        # TODO: Apply all conversion methods
+        pass
+
+
+# Test
+converter = MarkdownConverter()
+
+test_markdown = """
+# Welcome to Markdown
+
+This is a paragraph with **bold text** and *italic text*.
+
+## Features
+
+- Easy to write
+- Easy to read
+- Converts to HTML
+
+Here's a [link](https://example.com) and some \`inline code\`.
+
+### Code Example
+
+\`\`\`
+def hello():
+    print("Hello, World!")
+\`\`\`
+"""
+
+print("Markdown Input:")
+print("=" * 50)
+print(test_markdown)
+
+print("\\n\\nHTML Output:")
+print("=" * 50)
+html_output = converter.convert(test_markdown)
+print(html_output)
+
+
+# Test helper function (for automated testing)
+def test_markdown_converter(markdown_text):
+    """Test function for MarkdownConverter - implement the class methods above first!"""
+    try:
+        converter = MarkdownConverter()
+        return converter.convert(markdown_text)
+    except:
+        return None  # Return None if methods not yet implemented
+`,
+        testCases: [
+            {
+                input: ['# Hello'],
+                expected: '<h1>Hello</h1>',
+                functionName: 'test_markdown_converter',
+            },
+        ],
+        solution: `import re
+import html
+
+class MarkdownConverter:
+    def __init__(self):
+        self.patterns = self._compile_patterns()
+    
+    def _compile_patterns(self):
+        return {
+            'header': re.compile(r'^(#{1,6})\\s+(.+)$'),
+            'bold': re.compile(r'\\*\\*(.+?)\\*\\*|__(.+?)__'),
+            'italic': re.compile(r'\\*(.+?)\\*|_(.+?)_'),
+            'code': re.compile(r'\`(.+?)\`'),
+            'link': re.compile(r'\\[(.+?)\\]\\((.+?)\\)'),
+            'list': re.compile(r'^[-*]\\s+(.+)$')
+        }
+    
+    def _convert_headers(self, text):
+        match = self.patterns['header'].match(text)
+        if match:
+            level = len(match.group(1))
+            content = match.group(2)
+            return f"<h{level}>{content}</h{level}>"
+        return None
+    
+    def _convert_bold(self, text):
+        # Replace **text** with <strong>text</strong>
+        text = re.sub(r'\\*\\*(.+?)\\*\\*', r'<strong>\\1</strong>', text)
+        text = re.sub(r'__(.+?)__', r'<strong>\\1</strong>', text)
+        return text
+    
+    def _convert_italic(self, text):
+        # Replace *text* with <em>text</em>
+        # Be careful not to match ** (bold)
+        text = re.sub(r'(?<!\\*)\\*([^*]+?)\\*(?!\\*)', r'<em>\\1</em>', text)
+        text = re.sub(r'(?<!_)_([^_]+?)_(?!_)', r'<em>\\1</em>', text)
+        return text
+    
+    def _convert_code(self, text):
+        return re.sub(r'\`(.+?)\`', r'<code>\\1</code>', text)
+    
+    def _convert_links(self, text):
+        return re.sub(r'\\[(.+?)\\]\\((.+?)\\)', r'<a href="\\2">\\1</a>', text)
+    
+    def _convert_lists(self, text):
+        lines = text.split('\\n')
+        result = []
+        in_list = False
+        
+        for line in lines:
+            if self.patterns['list'].match(line):
+                if not in_list:
+                    result.append('<ul>')
+                    in_list = True
+                match = self.patterns['list'].match(line)
+                item_text = match.group(1)
+                result.append(f'  <li>{item_text}</li>')
+            else:
+                if in_list:
+                    result.append('</ul>')
+                    in_list = False
+                result.append(line)
+        
+        if in_list:
+            result.append('</ul>')
+        
+        return '\\n'.join(result)
+    
+    def convert(self, markdown_text):
+        lines = markdown_text.strip().split('\\n')
+        html_lines = []
+        
+        i = 0
+        while i < len(lines):
+            line = lines[i].strip()
+            
+            # Skip empty lines
+            if not line:
+                i += 1
+                continue
+            
+            # Check for headers
+            header = self._convert_headers(line)
+            if header:
+                html_lines.append(header)
+                i += 1
+                continue
+            
+            # Check for list items
+            if self.patterns['list'].match(line):
+                # Collect all consecutive list items
+                list_lines = []
+                while i < len(lines) and self.patterns['list'].match(lines[i].strip()):
+                    list_lines.append(lines[i].strip())
+                    i += 1
+                
+                html_lines.append('<ul>')
+                for list_line in list_lines:
+                    match = self.patterns['list'].match(list_line)
+                    item_text = match.group(1)
+                    # Apply inline formatting
+                    item_text = self._convert_links(item_text)
+                    item_text = self._convert_code(item_text)
+                    item_text = self._convert_bold(item_text)
+                    item_text = self._convert_italic(item_text)
+                    html_lines.append(f'  <li>{item_text}</li>')
+                html_lines.append('</ul>')
+                continue
+            
+            # Regular paragraph
+            # Apply inline formatting
+            line = self._convert_links(line)
+            line = self._convert_code(line)
+            line = self._convert_bold(line)
+            line = self._convert_italic(line)
+            html_lines.append(f'<p>{line}</p>')
+            
+            i += 1
+        
+        return '\\n'.join(html_lines)
+
+
+# Test helper function (for automated testing)
+def test_markdown_converter(markdown_text):
+    """Test function for MarkdownConverter."""
+    converter = MarkdownConverter()
+    return converter.convert(markdown_text)`,
+        timeComplexity: 'O(n*m) where n is lines, m is pattern matches',
+        spaceComplexity: 'O(n)',
+        order: 20,
+        topic: 'Python Intermediate',
+    },
+    {
+        id: 'intermediate-password-manager',
+        title: 'Password Strength Validator',
+        difficulty: 'Medium',
+        description: `Create a comprehensive password strength validator and generator.
+
+**Validation Criteria:**
+- Minimum length (8+ characters)
+- Contains uppercase and lowercase
+- Contains numbers
+- Contains special characters
+- Not a common password
+- Calculate strength score (0-100)
+
+**Features:**
+- Validate password strength
+- Generate strong passwords
+- Suggest improvements
+- Check against common passwords`,
+        examples: [
+            {
+                input: 'validate_password("P@ssw0rd123")',
+                output: 'Strong (score: 85)',
+            },
+        ],
+        constraints: [
+            'Check all criteria',
+            'Calculate numeric score',
+            'Provide specific feedback',
+        ],
+        hints: [
+            'Use regex for pattern matching',
+            'Award points for each criterion',
+            'Check against common password list',
+        ],
+        starterCode: `import re
+import random
+import string
+
+class PasswordValidator:
+    """
+    Validate and score password strength.
+    
+    Examples:
+        >>> validator = PasswordValidator()
+        >>> result = validator.validate("MyP@ssw0rd")
+        >>> print(result['score'])
+    """
+    
+    # Common passwords to check against
+    COMMON_PASSWORDS = {
+        'password', '123456', '12345678', 'qwerty', 'abc123',
+        'monkey', '1234567', 'letmein', 'trustno1', 'dragon'
+    }
+    
+    def __init__(self, min_length=8):
+        """
+        Initialize validator.
+        
+        Args:
+            min_length: Minimum password length
+        """
+        self.min_length = min_length
+    
+    def validate(self, password):
+        """
+        Validate password and return detailed results.
+        
+        Args:
+            password: Password to validate
+            
+        Returns:
+            Dict with score, strength, and suggestions
+            
+        Examples:
+            >>> validator.validate("P@ssw0rd123")
+            {'score': 85, 'strength': 'Strong', 'passed': True, ...}
+        """
+        pass
+    
+    def _calculate_score(self, password):
+        """Calculate password strength score (0-100)."""
+        pass
+    
+    def _get_strength_level(self, score):
+        """Convert score to strength level."""
+        pass
+    
+    def _get_suggestions(self, password):
+        """Get list of improvements."""
+        pass
+    
+    def generate_password(self, length=12, use_special=True):
+        """
+        Generate a strong random password.
+        
+        Args:
+            length: Password length
+            use_special: Include special characters
+            
+        Returns:
+            Generated password string
+            
+        Examples:
+            >>> validator.generate_password(16)
+            'K9@mPz!vXcQ#w8Rt'
+        """
+        pass
+
+
+# Test
+validator = PasswordValidator()
+
+test_passwords = [
+    "weak",
+    "password123",
+    "MyPassword1",
+    "Str0ng!P@ss",
+    "C0mpl3x!P@ssw0rd#2024"
+]
+
+print("Password Strength Analysis:")
+print("=" * 70)
+
+for pwd in test_passwords:
+    result = validator.validate(pwd)
+    print(f"\\nPassword: {pwd}")
+    print(f"Score: {result['score']}/100")
+    print(f"Strength: {result['strength']}")
+    print(f"Passed: {result['passed']}")
+    
+    if result['suggestions']:
+        print("Suggestions:")
+        for suggestion in result['suggestions']:
+            print(f"  - {suggestion}")
+
+# Generate strong passwords
+print("\\n\\nGenerated Strong Passwords:")
+print("=" * 70)
+for i in range(5):
+    pwd = validator.generate_password(16)
+    result = validator.validate(pwd)
+    print(f"{pwd} (Score: {result['score']})")
+
+
+# Test helper function (for automated testing)
+def test_password_validator(password):
+    """Test function for PasswordValidator - implement the class methods above first!"""
+    try:
+        validator = PasswordValidator()
+        result = validator.validate(password)
+        return result['passed']
+    except:
+        return None  # Return None if methods not yet implemented
+`,
+        testCases: [
+            {
+                input: ['Str0ng!P@ss'],
+                expected: true,
+                functionName: 'test_password_validator',
+            },
+        ],
+        solution: `import re
+import random
+import string
+
+class PasswordValidator:
+    COMMON_PASSWORDS = {
+        'password', '123456', '12345678', 'qwerty', 'abc123',
+        'monkey', '1234567', 'letmein', 'trustno1', 'dragon',
+        'password123', 'password1', 'admin', 'welcome', 'login'
+    }
+    
+    def __init__(self, min_length=8):
+        self.min_length = min_length
+    
+    def validate(self, password):
+        score = self._calculate_score(password)
+        strength = self._get_strength_level(score)
+        suggestions = self._get_suggestions(password)
+        
+        return {
+            'score': score,
+            'strength': strength,
+            'passed': score >= 60,
+            'suggestions': suggestions,
+            'criteria': {
+                'length': len(password) >= self.min_length,
+                'uppercase': bool(re.search(r'[A-Z]', password)),
+                'lowercase': bool(re.search(r'[a-z]', password)),
+                'numbers': bool(re.search(r'[0-9]', password)),
+                'special': bool(re.search(r'[!@#$%^&*(),.?":{}|<>]', password)),
+                'not_common': password.lower() not in self.COMMON_PASSWORDS
+            }
+        }
+    
+    def _calculate_score(self, password):
+        score = 0
+        
+        # Length (max 30 points)
+        if len(password) >= self.min_length:
+            score += min(30, (len(password) - self.min_length + 1) * 5)
+        
+        # Character variety (max 40 points)
+        if re.search(r'[a-z]', password):
+            score += 10
+        if re.search(r'[A-Z]', password):
+            score += 10
+        if re.search(r'[0-9]', password):
+            score += 10
+        if re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
+            score += 10
+        
+        # Complexity bonus (max 20 points)
+        unique_chars = len(set(password))
+        score += min(20, unique_chars)
+        
+        # Penalty for common passwords
+        if password.lower() in self.COMMON_PASSWORDS:
+            score = min(score, 30)
+        
+        # Penalty for repeated characters
+        if re.search(r'(.)\\1{2,}', password):
+            score -= 10
+        
+        return max(0, min(100, score))
+    
+    def _get_strength_level(self, score):
+        if score >= 80:
+            return 'Very Strong'
+        elif score >= 60:
+            return 'Strong'
+        elif score >= 40:
+            return 'Moderate'
+        elif score >= 20:
+            return 'Weak'
+        else:
+            return 'Very Weak'
+    
+    def _get_suggestions(self, password):
+        suggestions = []
+        
+        if len(password) < self.min_length:
+            suggestions.append(f"Increase length to at least {self.min_length} characters")
+        
+        if not re.search(r'[a-z]', password):
+            suggestions.append("Add lowercase letters")
+        
+        if not re.search(r'[A-Z]', password):
+            suggestions.append("Add uppercase letters")
+        
+        if not re.search(r'[0-9]', password):
+            suggestions.append("Add numbers")
+        
+        if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
+            suggestions.append("Add special characters (!@#$%^&*)")
+        
+        if password.lower() in self.COMMON_PASSWORDS:
+            suggestions.append("Avoid common passwords")
+        
+        if re.search(r'(.)\\1{2,}', password):
+            suggestions.append("Avoid repeated characters")
+        
+        if len(password) < 12:
+            suggestions.append("Consider using 12+ characters for better security")
+        
+        return suggestions
+    
+    def generate_password(self, length=12, use_special=True):
+        # Ensure we have at least one of each required type
+        chars = []
+        
+        # Add required characters
+        chars.append(random.choice(string.ascii_lowercase))
+        chars.append(random.choice(string.ascii_uppercase))
+        chars.append(random.choice(string.digits))
+        
+        if use_special:
+            special_chars = '!@#$%^&*(),.?":{}|<>'
+            chars.append(random.choice(special_chars))
+        
+        # Fill remaining with random mix
+        pool = string.ascii_letters + string.digits
+        if use_special:
+            pool += '!@#$%^&*(),.?":{}|<>'
+        
+        remaining_length = length - len(chars)
+        chars.extend(random.choices(pool, k=remaining_length))
+        
+        # Shuffle to avoid predictable pattern
+        random.shuffle(chars)
+        
+        return ''.join(chars)
+
+
+# Test helper function (for automated testing)
+def test_password_validator(password):
+    """Test function for PasswordValidator."""
+    validator = PasswordValidator()
+    result = validator.validate(password)
+    return result['passed']`,
+        timeComplexity: 'O(n) where n is password length',
+        spaceComplexity: 'O(1)',
+        order: 21,
+        topic: 'Python Intermediate',
+    },
 ];
