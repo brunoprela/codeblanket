@@ -5,16 +5,16 @@
 import { Module } from '@/lib/types';
 
 export const queueModule: Module = {
-    id: 'queue',
-    title: 'Queue',
-    description:
-        'Master queue data structure and FIFO operations - essential for BFS, scheduling, and many algorithms.',
-    icon: '📬',
-    sections: [
-        {
-            id: 'introduction',
-            title: 'Introduction to Queues',
-            content: `A **Queue** is a linear data structure that follows the **FIFO (First-In-First-Out)** principle. Think of it like a line at a store - the first person in line is the first to be served.
+  id: 'queue',
+  title: 'Queue',
+  description:
+    'Master queue data structure and FIFO operations - essential for BFS, scheduling, and many algorithms.',
+  icon: '📬',
+  sections: [
+    {
+      id: 'introduction',
+      title: 'Introduction to Queues',
+      content: `A **Queue** is a linear data structure that follows the **FIFO (First-In-First-Out)** principle. Think of it like a line at a store - the first person in line is the first to be served.
 
 **Why Queues Matter:**
 - **Natural Model:** Represents real-world waiting scenarios
@@ -32,116 +32,118 @@ export const queueModule: Module = {
 
 **Key Insight:**
 While Stack is Last-In-First-Out (LIFO), Queue is First-In-First-Out (FIFO). This makes queues perfect for scenarios where order of arrival matters and fairness is important.`,
-            quiz: [
-                {
-                    id: 'q1',
-                    question:
-                        "Explain the FIFO principle and how it differs from a Stack's LIFO principle.",
-                    sampleAnswer:
-                        'FIFO (First-In-First-Out) means the first element added to the queue is the first one removed, like a line at a store. Stack uses LIFO (Last-In-First-Out) where the most recently added element is removed first, like a stack of plates. In a queue, elements are added at the rear and removed from the front. In a stack, elements are added and removed from the same end (top). Queue preserves order of arrival, while stack reverses it. Example: Queue [1,2,3] removes 1 first; Stack [1,2,3] removes 3 first.',
-                    keyPoints: [
-                        'Queue: First-In-First-Out (FIFO)',
-                        'Stack: Last-In-First-Out (LIFO)',
-                        'Queue: add rear, remove front',
-                        'Stack: add/remove from top',
-                        'Queue preserves order, stack reverses',
-                    ],
-                },
-                {
-                    id: 'q2',
-                    question:
-                        'Give three real-world examples where a queue is the natural data structure choice.',
-                    sampleAnswer:
-                        '(1) Printer queue - print jobs are processed in order they were submitted, ensuring fairness. (2) Customer service call center - customers are helped in order they called, first caller gets helped first. (3) BFS algorithm in graphs - explores nodes level by level, processing neighbors in order they were discovered. Other examples: process scheduling in OS, breadth-first tree traversal, keyboard buffer, network packet routing.',
-                    keyPoints: [
-                        'Any "first-come, first-served" scenario',
-                        'BFS algorithm (level-order traversal)',
-                        'Task scheduling and job processing',
-                        'Buffering and data streaming',
-                        'Order matters and fairness is important',
-                    ],
-                },
-                {
-                    id: 'q3',
-                    question: 'What are the performance characteristics of queue operations with deque vs list?',
-                    sampleAnswer: 'With deque: enqueue (append) is O(1), dequeue (popleft) is O(1). With list: enqueue (append) is O(1), but dequeue (pop(0)) is O(n) because all remaining elements must be shifted. For queue operations, deque is significantly better because both operations are O(1). List as queue causes O(n) dequeue, making it inefficient for large queues. Always use collections.deque for queue implementation in Python.',
-                    keyPoints: [
-                        'deque: O(1) for both enqueue and dequeue',
-                        'list: O(1) enqueue, O(n) dequeue (pop(0))',
-                        'list.pop(0) shifts all elements',
-                        'deque is optimized for both ends',
-                        'Use deque for efficient queues',
-                    ],
-                },
-            ],
-            multipleChoice: [
-                {
-                    id: 'mc1',
-                    question: 'What does FIFO stand for?',
-                    options: [
-                        'First-In-First-Out',
-                        'Fast-In-Fast-Out',
-                        'Final-In-Final-Out',
-                        'First-Item-First-Operation',
-                    ],
-                    correctAnswer: 0,
-                    explanation:
-                        'FIFO stands for First-In-First-Out, meaning the first element added is the first one removed, like people in a line.',
-                },
-                {
-                    id: 'mc2',
-                    question: 'Where are elements added and removed in a queue?',
-                    options: [
-                        'Added and removed from the front',
-                        'Added and removed from the rear',
-                        'Added at rear, removed from front',
-                        'Added at front, removed from rear',
-                    ],
-                    correctAnswer: 2,
-                    explanation:
-                        'Elements are enqueued (added) at the rear and dequeued (removed) from the front, maintaining FIFO order.',
-                },
-                {
-                    id: 'mc3',
-                    question: 'Which real-world scenario best represents a queue?',
-                    options: [
-                        'Stack of plates',
-                        'Pile of books',
-                        'Line at a store checkout',
-                        'Undo button in editor',
-                    ],
-                    correctAnswer: 2,
-                    explanation:
-                        'A checkout line is a perfect queue analogy - first person in line is first served (FIFO). Stacks of plates/books use LIFO.',
-                },
-                {
-                    id: 'mc4',
-                    question: 'What are the two primary operations of a queue?',
-                    options: [
-                        'Push and Pop',
-                        'Enqueue and Dequeue',
-                        'Insert and Delete',
-                        'Add and Remove',
-                    ],
-                    correctAnswer: 1,
-                    explanation:
-                        'The two primary queue operations are enqueue (add to rear) and dequeue (remove from front).',
-                },
-                {
-                    id: 'mc5',
-                    question:
-                        'Which data structure is the opposite of a queue in terms of ordering?',
-                    options: ['Array', 'Linked List', 'Stack', 'Tree'],
-                    correctAnswer: 2,
-                    explanation:
-                        'A stack is the opposite of a queue: queue is FIFO (first in, first out) while stack is LIFO (last in, first out).',
-                },
-            ],
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            "Explain the FIFO principle and how it differs from a Stack's LIFO principle.",
+          sampleAnswer:
+            'FIFO (First-In-First-Out) means the first element added to the queue is the first one removed, like a line at a store. Stack uses LIFO (Last-In-First-Out) where the most recently added element is removed first, like a stack of plates. In a queue, elements are added at the rear and removed from the front. In a stack, elements are added and removed from the same end (top). Queue preserves order of arrival, while stack reverses it. Example: Queue [1,2,3] removes 1 first; Stack [1,2,3] removes 3 first.',
+          keyPoints: [
+            'Queue: First-In-First-Out (FIFO)',
+            'Stack: Last-In-First-Out (LIFO)',
+            'Queue: add rear, remove front',
+            'Stack: add/remove from top',
+            'Queue preserves order, stack reverses',
+          ],
         },
         {
-            id: 'operations',
-            title: 'Queue Operations & Implementation',
-            content: `## Core Queue Operations
+          id: 'q2',
+          question:
+            'Give three real-world examples where a queue is the natural data structure choice.',
+          sampleAnswer:
+            '(1) Printer queue - print jobs are processed in order they were submitted, ensuring fairness. (2) Customer service call center - customers are helped in order they called, first caller gets helped first. (3) BFS algorithm in graphs - explores nodes level by level, processing neighbors in order they were discovered. Other examples: process scheduling in OS, breadth-first tree traversal, keyboard buffer, network packet routing.',
+          keyPoints: [
+            'Any "first-come, first-served" scenario',
+            'BFS algorithm (level-order traversal)',
+            'Task scheduling and job processing',
+            'Buffering and data streaming',
+            'Order matters and fairness is important',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'What are the performance characteristics of queue operations with deque vs list?',
+          sampleAnswer:
+            'With deque: enqueue (append) is O(1), dequeue (popleft) is O(1). With list: enqueue (append) is O(1), but dequeue (pop(0)) is O(n) because all remaining elements must be shifted. For queue operations, deque is significantly better because both operations are O(1). List as queue causes O(n) dequeue, making it inefficient for large queues. Always use collections.deque for queue implementation in Python.',
+          keyPoints: [
+            'deque: O(1) for both enqueue and dequeue',
+            'list: O(1) enqueue, O(n) dequeue (pop(0))',
+            'list.pop(0) shifts all elements',
+            'deque is optimized for both ends',
+            'Use deque for efficient queues',
+          ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What does FIFO stand for?',
+          options: [
+            'First-In-First-Out',
+            'Fast-In-Fast-Out',
+            'Final-In-Final-Out',
+            'First-Item-First-Operation',
+          ],
+          correctAnswer: 0,
+          explanation:
+            'FIFO stands for First-In-First-Out, meaning the first element added is the first one removed, like people in a line.',
+        },
+        {
+          id: 'mc2',
+          question: 'Where are elements added and removed in a queue?',
+          options: [
+            'Added and removed from the front',
+            'Added and removed from the rear',
+            'Added at rear, removed from front',
+            'Added at front, removed from rear',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'Elements are enqueued (added) at the rear and dequeued (removed) from the front, maintaining FIFO order.',
+        },
+        {
+          id: 'mc3',
+          question: 'Which real-world scenario best represents a queue?',
+          options: [
+            'Stack of plates',
+            'Pile of books',
+            'Line at a store checkout',
+            'Undo button in editor',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'A checkout line is a perfect queue analogy - first person in line is first served (FIFO). Stacks of plates/books use LIFO.',
+        },
+        {
+          id: 'mc4',
+          question: 'What are the two primary operations of a queue?',
+          options: [
+            'Push and Pop',
+            'Enqueue and Dequeue',
+            'Insert and Delete',
+            'Add and Remove',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'The two primary queue operations are enqueue (add to rear) and dequeue (remove from front).',
+        },
+        {
+          id: 'mc5',
+          question:
+            'Which data structure is the opposite of a queue in terms of ordering?',
+          options: ['Array', 'Linked List', 'Stack', 'Tree'],
+          correctAnswer: 2,
+          explanation:
+            'A stack is the opposite of a queue: queue is FIFO (first in, first out) while stack is LIFO (last in, first out).',
+        },
+      ],
+    },
+    {
+      id: 'operations',
+      title: 'Queue Operations & Implementation',
+      content: `## Core Queue Operations
 
 A queue supports two fundamental operations:
 
@@ -354,118 +356,121 @@ class QueueWithStacks:
 | Space | O(n) | **O(n)** | O(n) |
 
 **Recommendation:** Use \`collections.deque\` for real applications. Know the two-stacks approach for interviews.`,
-            quiz: [
-                {
-                    id: 'q1',
-                    question:
-                        'Why is using a regular Python list for a queue inefficient? What specific operation causes the problem?',
-                    sampleAnswer:
-                        'Using a list for a queue is inefficient because dequeue (removing from front) requires pop(0), which is O(n). When we remove the first element, Python must shift all remaining n-1 elements one position to the left to fill the gap. So if the queue has 1000 elements, removing one requires 999 shift operations. This makes dequeue O(n) instead of O(1). In contrast, enqueue using append() is O(1) because it adds to the end. For a proper queue, use collections.deque which has O(1) operations for both ends.',
-                    keyPoints: [
-                        'pop(0) is O(n) - shifts all elements',
-                        'Must shift n-1 elements after removal',
-                        'Makes queue operations slow',
-                        'deque has O(1) for both ends',
-                        'List good for stack, bad for queue',
-                    ],
-                },
-                {
-                    id: 'q2',
-                    question: 'How do you implement a queue using two stacks? Explain the amortized O(1) complexity.',
-                    sampleAnswer: 'Use two stacks: stack_in for enqueue, stack_out for dequeue. Enqueue: push to stack_in (O(1)). Dequeue: if stack_out is empty, transfer all elements from stack_in to stack_out (reversing order), then pop from stack_out. This transfer happens rarely. Amortized analysis: each element is pushed once to stack_in and moved once to stack_out over its lifetime, giving O(1) amortized per operation. Example: enqueue(1,2,3) → stack_in=[3,2,1]. Dequeue → transfer to stack_out=[1,2,3], pop 1.',
-                    keyPoints: [
-                        'Two stacks: stack_in and stack_out',
-                        'Enqueue pushes to stack_in',
-                        'Dequeue pops from stack_out',
-                        'Transfer from stack_in when stack_out empty',
-                        'Amortized O(1) per operation',
-                        'Each element moved at most twice total',
-                    ],
-                },
-                {
-                    id: 'q3',
-                    question: 'What is a circular queue and when would you use it?',
-                    sampleAnswer: 'A circular queue uses a fixed-size array with two pointers (front and rear) that wrap around to the beginning when reaching the end. It prevents wasted space from regular array queue where front pointer moves right, leaving unused space. Use cases: 1) Fixed buffer size known (streaming data, print spooler), 2) Prevent memory fragmentation, 3) Efficient ring buffer implementation. Implementation: use modulo operator for wrapping: rear = (rear + 1) % capacity. Must track size to distinguish empty (size==0) from full (size==capacity).',
-                    keyPoints: [
-                        'Fixed-size array with wraparound',
-                        'Two pointers: front and rear',
-                        'Use modulo for wraparound: (index + 1) % capacity',
-                        'Prevents wasted space from linear array queue',
-                        'Ideal for fixed buffer size',
-                        'Track size to distinguish empty vs full',
-                    ],
-                },
-            ],
-            multipleChoice: [
-                {
-                    id: 'mc1',
-                    question:
-                        'What is the time complexity of enqueue and dequeue in a properly implemented queue?',
-                    options: [
-                        'Both O(1)',
-                        'Both O(n)',
-                        'Enqueue O(1), Dequeue O(n)',
-                        'Enqueue O(n), Dequeue O(1)',
-                    ],
-                    correctAnswer: 0,
-                    explanation:
-                        'A properly implemented queue (using deque or linked list) has O(1) time complexity for both enqueue and dequeue operations.',
-                },
-                {
-                    id: 'mc2',
-                    question: 'Why is using a Python list as a queue inefficient?',
-                    options: [
-                        'Enqueue (append) is O(n)',
-                        'Dequeue (pop(0)) is O(n) due to shifting',
-                        'It uses too much memory',
-                        'Lists cannot hold queue data',
-                    ],
-                    correctAnswer: 1,
-                    explanation:
-                        'pop(0) removes the first element and shifts all remaining elements left, making it O(n). Use collections.deque for O(1) operations.',
-                },
-                {
-                    id: 'mc3',
-                    question:
-                        "What is Python's recommended data structure for implementing a queue?",
-                    options: ['list', 'tuple', 'collections.deque', 'set'],
-                    correctAnswer: 2,
-                    explanation:
-                        'collections.deque (double-ended queue) provides O(1) append and popleft operations, making it ideal for queues.',
-                },
-                {
-                    id: 'mc4',
-                    question: 'How would you implement a queue using two stacks?',
-                    options: [
-                        'Use one stack for everything',
-                        'Push to stack1, pop from stack1',
-                        'Push to stack1, transfer to stack2 when popping',
-                        "It's impossible",
-                    ],
-                    correctAnswer: 2,
-                    explanation:
-                        'Push all elements to stack1. When dequeuing, if stack2 is empty, transfer all from stack1 to stack2 (reversing order), then pop from stack2.',
-                },
-                {
-                    id: 'mc5',
-                    question:
-                        'What should happen when you try to dequeue from an empty queue?',
-                    options: [
-                        'Return None',
-                        'Return 0',
-                        'Raise an exception or return error indicator',
-                        'Do nothing',
-                    ],
-                    correctAnswer: 2,
-                    explanation:
-                        'Dequeuing from an empty queue should raise an exception (like IndexError) or return a special error indicator to prevent invalid operations.',
-                },
-            ],
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Why is using a regular Python list for a queue inefficient? What specific operation causes the problem?',
+          sampleAnswer:
+            'Using a list for a queue is inefficient because dequeue (removing from front) requires pop(0), which is O(n). When we remove the first element, Python must shift all remaining n-1 elements one position to the left to fill the gap. So if the queue has 1000 elements, removing one requires 999 shift operations. This makes dequeue O(n) instead of O(1). In contrast, enqueue using append() is O(1) because it adds to the end. For a proper queue, use collections.deque which has O(1) operations for both ends.',
+          keyPoints: [
+            'pop(0) is O(n) - shifts all elements',
+            'Must shift n-1 elements after removal',
+            'Makes queue operations slow',
+            'deque has O(1) for both ends',
+            'List good for stack, bad for queue',
+          ],
         },
         {
-            id: 'variations',
-            title: 'Queue Variations',
-            content: `## Common Queue Variations
+          id: 'q2',
+          question:
+            'How do you implement a queue using two stacks? Explain the amortized O(1) complexity.',
+          sampleAnswer:
+            'Use two stacks: stack_in for enqueue, stack_out for dequeue. Enqueue: push to stack_in (O(1)). Dequeue: if stack_out is empty, transfer all elements from stack_in to stack_out (reversing order), then pop from stack_out. This transfer happens rarely. Amortized analysis: each element is pushed once to stack_in and moved once to stack_out over its lifetime, giving O(1) amortized per operation. Example: enqueue(1,2,3) → stack_in=[3,2,1]. Dequeue → transfer to stack_out=[1,2,3], pop 1.',
+          keyPoints: [
+            'Two stacks: stack_in and stack_out',
+            'Enqueue pushes to stack_in',
+            'Dequeue pops from stack_out',
+            'Transfer from stack_in when stack_out empty',
+            'Amortized O(1) per operation',
+            'Each element moved at most twice total',
+          ],
+        },
+        {
+          id: 'q3',
+          question: 'What is a circular queue and when would you use it?',
+          sampleAnswer:
+            'A circular queue uses a fixed-size array with two pointers (front and rear) that wrap around to the beginning when reaching the end. It prevents wasted space from regular array queue where front pointer moves right, leaving unused space. Use cases: 1) Fixed buffer size known (streaming data, print spooler), 2) Prevent memory fragmentation, 3) Efficient ring buffer implementation. Implementation: use modulo operator for wrapping: rear = (rear + 1) % capacity. Must track size to distinguish empty (size==0) from full (size==capacity).',
+          keyPoints: [
+            'Fixed-size array with wraparound',
+            'Two pointers: front and rear',
+            'Use modulo for wraparound: (index + 1) % capacity',
+            'Prevents wasted space from linear array queue',
+            'Ideal for fixed buffer size',
+            'Track size to distinguish empty vs full',
+          ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question:
+            'What is the time complexity of enqueue and dequeue in a properly implemented queue?',
+          options: [
+            'Both O(1)',
+            'Both O(n)',
+            'Enqueue O(1), Dequeue O(n)',
+            'Enqueue O(n), Dequeue O(1)',
+          ],
+          correctAnswer: 0,
+          explanation:
+            'A properly implemented queue (using deque or linked list) has O(1) time complexity for both enqueue and dequeue operations.',
+        },
+        {
+          id: 'mc2',
+          question: 'Why is using a Python list as a queue inefficient?',
+          options: [
+            'Enqueue (append) is O(n)',
+            'Dequeue (pop(0)) is O(n) due to shifting',
+            'It uses too much memory',
+            'Lists cannot hold queue data',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'pop(0) removes the first element and shifts all remaining elements left, making it O(n). Use collections.deque for O(1) operations.',
+        },
+        {
+          id: 'mc3',
+          question:
+            "What is Python's recommended data structure for implementing a queue?",
+          options: ['list', 'tuple', 'collections.deque', 'set'],
+          correctAnswer: 2,
+          explanation:
+            'collections.deque (double-ended queue) provides O(1) append and popleft operations, making it ideal for queues.',
+        },
+        {
+          id: 'mc4',
+          question: 'How would you implement a queue using two stacks?',
+          options: [
+            'Use one stack for everything',
+            'Push to stack1, pop from stack1',
+            'Push to stack1, transfer to stack2 when popping',
+            "It's impossible",
+          ],
+          correctAnswer: 2,
+          explanation:
+            'Push all elements to stack1. When dequeuing, if stack2 is empty, transfer all from stack1 to stack2 (reversing order), then pop from stack2.',
+        },
+        {
+          id: 'mc5',
+          question:
+            'What should happen when you try to dequeue from an empty queue?',
+          options: [
+            'Return None',
+            'Return 0',
+            'Raise an exception or return error indicator',
+            'Do nothing',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'Dequeuing from an empty queue should raise an exception (like IndexError) or return a special error indicator to prevent invalid operations.',
+        },
+      ],
+    },
+    {
+      id: 'variations',
+      title: 'Queue Variations',
+      content: `## Common Queue Variations
 
 Beyond the basic queue, there are several important variations used in different scenarios.
 
@@ -693,122 +698,112 @@ t2.join()
 **Blocking Queue:** When coordinating between threads
 
 **Pro Tip:** For most LeetCode/interview problems, \`collections.deque\` is your best friend!`,
-            quiz: [
-                {
-                    id: 'q1',
-                    question:
-                        'Explain how a circular queue works and why it uses the modulo operator.',
-                    sampleAnswer:
-                        'A circular queue uses a fixed-size array where the rear wraps back to the front when it reaches the end. It uses modulo operator (index + 1) % capacity to wrap indices around. For example, in a queue of capacity 5, after index 4, the next index is (4 + 1) % 5 = 0. This reuses space from dequeued elements instead of shifting array elements or growing the array. Both front and rear pointers wrap around. This is efficient for fixed-size buffers where we want O(1) enqueue/dequeue without wasted space or expensive shifts.',
-                    keyPoints: [
-                        'Fixed-size array that wraps around',
-                        'Modulo operator: (index + 1) % capacity',
-                        'Reuses space from dequeued elements',
-                        'Both front and rear wrap around',
-                        'O(1) operations, no shifting or growing',
-                    ],
-                },
-                {
-                    id: 'q2',
-                    question:
-                        'What is the difference between a regular queue and a priority queue? When would you use each?',
-                    sampleAnswer:
-                        'Regular queue follows strict FIFO - first in is first out. Priority queue dequeues elements by priority, not insertion order. Regular queue uses deque with O(1) enqueue/dequeue. Priority queue uses a heap with O(log n) enqueue/dequeue. Use regular queue for BFS, task processing where order matters (like print queue). Use priority queue when some elements are more important: Dijkstra\'s shortest path (process closest node first), CPU scheduling (high priority tasks first), A* search, event simulation with timestamps. Key difference: FIFO vs priority-based.',
-                    keyPoints: [
-                        'Regular: strict FIFO order',
-                        'Priority: dequeue by priority, not order',
-                        'Regular: O(1) operations with deque',
-                        'Priority: O(log n) with heap',
-                        'Use priority when importance varies',
-                    ],
-                },
-                {
-                    id: 'q3',
-                    question:
-                        'Why is a deque better than a regular queue for sliding window problems?',
-                    sampleAnswer:
-                        'Sliding window problems often need to add/remove from both ends efficiently. Deque provides O(1) operations at both ends: append (add right), appendleft (add left), pop (remove right), popleft (remove left). Regular queue only efficiently removes from front. For example, in "sliding window maximum," we maintain indices in decreasing order of values. When window slides: remove expired indices from front (popleft), remove smaller values from rear before adding new (pop). Both operations are O(1) with deque. Using a regular list would be O(n) for removing from front. Deque is implemented as a doubly-linked list, enabling efficient operations on both ends.',
-                    keyPoints: [
-                        'Deque: O(1) add/remove from both ends',
-                        'Regular queue: only efficient at one end',
-                        'Sliding window: remove old (front), add new (rear)',
-                        'Maintain order/constraints by modifying both ends',
-                        'Deque is doubly-linked list internally',
-                    ],
-                },
-            ],
-            multipleChoice: [
-                {
-                    id: 'mc1',
-                    question: 'What is the main advantage of a circular queue over a regular array-based queue?',
-                    options: [
-                        'It is faster',
-                        'It reuses space from dequeued elements without shifting',
-                        'It uses less memory',
-                        'It maintains sorted order',
-                    ],
-                    correctAnswer: 1,
-                    explanation:
-                        'Circular queues reuse space by wrapping the rear pointer back to the front using modulo arithmetic. This avoids the need to shift elements or grow the array when the rear reaches the end.',
-                },
-                {
-                    id: 'mc2',
-                    question: 'In a priority queue, what data structure is typically used for implementation?',
-                    options: [
-                        'Array',
-                        'Linked List',
-                        'Heap',
-                        'Hash Table',
-                    ],
-                    correctAnswer: 2,
-                    explanation:
-                        'Priority queues are typically implemented using a heap (min-heap or max-heap) which provides O(log n) enqueue and dequeue operations based on priority.',
-                },
-                {
-                    id: 'mc3',
-                    question: 'Which queue variation allows efficient addition and removal from both ends?',
-                    options: [
-                        'Circular Queue',
-                        'Priority Queue',
-                        'Deque (Double-Ended Queue)',
-                        'Blocking Queue',
-                    ],
-                    correctAnswer: 2,
-                    explanation:
-                        'Deque (double-ended queue) supports O(1) operations at both ends: append, appendleft, pop, and popleft.',
-                },
-                {
-                    id: 'mc4',
-                    question: 'What is the time complexity of dequeue operation in a priority queue implemented with a heap?',
-                    options: [
-                        'O(1)',
-                        'O(log n)',
-                        'O(n)',
-                        'O(n log n)',
-                    ],
-                    correctAnswer: 1,
-                    explanation:
-                        'Dequeue (removing the highest priority element) in a heap-based priority queue requires removing the root and reheapifying, which takes O(log n) time.',
-                },
-                {
-                    id: 'mc5',
-                    question: 'Which Python module provides a thread-safe blocking queue?',
-                    options: [
-                        'collections',
-                        'queue',
-                        'threading',
-                        'asyncio',
-                    ],
-                    correctAnswer: 1,
-                    explanation:
-                        'The queue module in Python provides Queue, which is a thread-safe blocking queue useful for producer-consumer patterns in multithreaded applications.',
-                },
-            ],
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Explain how a circular queue works and why it uses the modulo operator.',
+          sampleAnswer:
+            'A circular queue uses a fixed-size array where the rear wraps back to the front when it reaches the end. It uses modulo operator (index + 1) % capacity to wrap indices around. For example, in a queue of capacity 5, after index 4, the next index is (4 + 1) % 5 = 0. This reuses space from dequeued elements instead of shifting array elements or growing the array. Both front and rear pointers wrap around. This is efficient for fixed-size buffers where we want O(1) enqueue/dequeue without wasted space or expensive shifts.',
+          keyPoints: [
+            'Fixed-size array that wraps around',
+            'Modulo operator: (index + 1) % capacity',
+            'Reuses space from dequeued elements',
+            'Both front and rear wrap around',
+            'O(1) operations, no shifting or growing',
+          ],
         },
         {
-            id: 'common-problems',
-            title: 'Common Queue Problems & Patterns',
-            content: `## Essential Queue Patterns
+          id: 'q2',
+          question:
+            'What is the difference between a regular queue and a priority queue? When would you use each?',
+          sampleAnswer:
+            "Regular queue follows strict FIFO - first in is first out. Priority queue dequeues elements by priority, not insertion order. Regular queue uses deque with O(1) enqueue/dequeue. Priority queue uses a heap with O(log n) enqueue/dequeue. Use regular queue for BFS, task processing where order matters (like print queue). Use priority queue when some elements are more important: Dijkstra's shortest path (process closest node first), CPU scheduling (high priority tasks first), A* search, event simulation with timestamps. Key difference: FIFO vs priority-based.",
+          keyPoints: [
+            'Regular: strict FIFO order',
+            'Priority: dequeue by priority, not order',
+            'Regular: O(1) operations with deque',
+            'Priority: O(log n) with heap',
+            'Use priority when importance varies',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'Why is a deque better than a regular queue for sliding window problems?',
+          sampleAnswer:
+            'Sliding window problems often need to add/remove from both ends efficiently. Deque provides O(1) operations at both ends: append (add right), appendleft (add left), pop (remove right), popleft (remove left). Regular queue only efficiently removes from front. For example, in "sliding window maximum," we maintain indices in decreasing order of values. When window slides: remove expired indices from front (popleft), remove smaller values from rear before adding new (pop). Both operations are O(1) with deque. Using a regular list would be O(n) for removing from front. Deque is implemented as a doubly-linked list, enabling efficient operations on both ends.',
+          keyPoints: [
+            'Deque: O(1) add/remove from both ends',
+            'Regular queue: only efficient at one end',
+            'Sliding window: remove old (front), add new (rear)',
+            'Maintain order/constraints by modifying both ends',
+            'Deque is doubly-linked list internally',
+          ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question:
+            'What is the main advantage of a circular queue over a regular array-based queue?',
+          options: [
+            'It is faster',
+            'It reuses space from dequeued elements without shifting',
+            'It uses less memory',
+            'It maintains sorted order',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Circular queues reuse space by wrapping the rear pointer back to the front using modulo arithmetic. This avoids the need to shift elements or grow the array when the rear reaches the end.',
+        },
+        {
+          id: 'mc2',
+          question:
+            'In a priority queue, what data structure is typically used for implementation?',
+          options: ['Array', 'Linked List', 'Heap', 'Hash Table'],
+          correctAnswer: 2,
+          explanation:
+            'Priority queues are typically implemented using a heap (min-heap or max-heap) which provides O(log n) enqueue and dequeue operations based on priority.',
+        },
+        {
+          id: 'mc3',
+          question:
+            'Which queue variation allows efficient addition and removal from both ends?',
+          options: [
+            'Circular Queue',
+            'Priority Queue',
+            'Deque (Double-Ended Queue)',
+            'Blocking Queue',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'Deque (double-ended queue) supports O(1) operations at both ends: append, appendleft, pop, and popleft.',
+        },
+        {
+          id: 'mc4',
+          question:
+            'What is the time complexity of dequeue operation in a priority queue implemented with a heap?',
+          options: ['O(1)', 'O(log n)', 'O(n)', 'O(n log n)'],
+          correctAnswer: 1,
+          explanation:
+            'Dequeue (removing the highest priority element) in a heap-based priority queue requires removing the root and reheapifying, which takes O(log n) time.',
+        },
+        {
+          id: 'mc5',
+          question:
+            'Which Python module provides a thread-safe blocking queue?',
+          options: ['collections', 'queue', 'threading', 'asyncio'],
+          correctAnswer: 1,
+          explanation:
+            'The queue module in Python provides Queue, which is a thread-safe blocking queue useful for producer-consumer patterns in multithreaded applications.',
+        },
+      ],
+    },
+    {
+      id: 'common-problems',
+      title: 'Common Queue Problems & Patterns',
+      content: `## Essential Queue Patterns
 
 Recognizing these patterns helps you identify when to use a queue.
 
@@ -1053,122 +1048,117 @@ print(stack.top())  # 2
 - ✅ Can't decide between queue and stack!
 
 **Remember:** If the problem mentions "level by level", "breadth-first", "order of arrival", or "FIFO" → think Queue!`,
-            quiz: [
-                {
-                    id: 'q1',
-                    question:
-                        'Explain why BFS uses a queue instead of a stack. What would happen if you used a stack?',
-                    sampleAnswer:
-                        'BFS uses a queue because FIFO order ensures we explore all nodes at depth d before any node at depth d+1. Queue processes nodes in the order they were discovered. If we used a stack (LIFO), we would get DFS instead: we would go as deep as possible before backtracking. For example, in a tree, BFS with queue visits root, then all level 1 nodes, then all level 2 nodes (level-order). With a stack, we would visit root, then immediately go deep down one branch before exploring other branches at level 1. The traversal order would be completely different - depth-first rather than breadth-first.',
-                    keyPoints: [
-                        'Queue FIFO: process nodes in discovery order',
-                        'Ensures all depth d before depth d+1',
-                        'Stack would give DFS (depth-first)',
-                        'Stack goes deep immediately, queue goes wide',
-                        'Different traversal order: level-by-level vs deep-first',
-                    ],
-                },
-                {
-                    id: 'q2',
-                    question:
-                        'How do you implement a queue using two stacks? Explain the enqueue and dequeue operations.',
-                    sampleAnswer:
-                        'Two-stacks queue uses stack_in for enqueue and stack_out for dequeue. Enqueue: push to stack_in - O(1). Dequeue: if stack_out is empty, transfer all from stack_in to stack_out (reversing order), then pop from stack_out. Transfer is expensive O(n), but it\'s amortized O(1) because each element is transferred at most once. Example: enqueue 1,2,3 to stack_in [1,2,3]. First dequeue transfers to stack_out [3,2,1], then pops 1. Next dequeues just pop from stack_out (2, then 3) without transfers. The key insight: two reversals (stack_in to stack_out) restore FIFO order.',
-                    keyPoints: [
-                        'stack_in for enqueue, stack_out for dequeue',
-                        'Enqueue: push to stack_in, O(1)',
-                        'Dequeue: pop from stack_out, transfer if empty',
-                        'Transfer is O(n) but amortized O(1)',
-                        'Two stack reversals restore FIFO order',
-                    ],
-                },
-                {
-                    id: 'q3',
-                    question:
-                        'What is the pattern for "sliding window maximum" and why does it use a deque instead of a regular queue?',
-                    sampleAnswer:
-                        'Sliding window maximum finds the max element in each window of size k as it slides. We maintain a deque of indices in decreasing order of their values. For each element: (1) Remove indices outside window from front (dequeue from left), (2) Remove indices with smaller values from back (we pop from right because current element makes them useless), (3) Add current index to back, (4) Front of deque is the max for this window. We need deque not regular queue because we remove from BOTH ends: old indices from front (outside window), useless smaller indices from back (won\'t be max). This is O(n) because each element enters and leaves deque at most once.',
-                    keyPoints: [
-                        'Maintain deque of indices in decreasing value order',
-                        'Remove old indices from front (outside window)',
-                        'Remove smaller indices from back (useless)',
-                        'Need both-end operations: deque not queue',
-                        'O(n): each element processed once',
-                    ],
-                },
-            ],
-            multipleChoice: [
-                {
-                    id: 'mc1',
-                    question: 'What is the most common application of queues in algorithms?',
-                    options: [
-                        'Sorting',
-                        'Breadth-First Search (BFS)',
-                        'Binary search',
-                        'Finding duplicates',
-                    ],
-                    correctAnswer: 1,
-                    explanation:
-                        'Queues are essential for BFS, which explores nodes level by level. The queue maintains the order of nodes to visit, ensuring breadth-first traversal.',
-                },
-                {
-                    id: 'mc2',
-                    question: 'In level-order tree traversal, what determines when to start processing a new level?',
-                    options: [
-                        'When the queue is empty',
-                        'By counting len(queue) at the start of each level',
-                        'When we see a None node',
-                        'After processing the root',
-                    ],
-                    correctAnswer: 1,
-                    explanation:
-                        'We capture len(queue) at the start of each level iteration. This tells us exactly how many nodes are in the current level, allowing us to process them separately.',
-                },
-                {
-                    id: 'mc3',
-                    question: 'What is the amortized time complexity of dequeue in a two-stack queue implementation?',
-                    options: [
-                        'O(1)',
-                        'O(log n)',
-                        'O(n)',
-                        'O(n²)',
-                    ],
-                    correctAnswer: 0,
-                    explanation:
-                        'While individual dequeue operations can be O(n) when transferring elements, the amortized complexity is O(1) because each element is transferred at most once.',
-                },
-                {
-                    id: 'mc4',
-                    question: 'For the "shortest path in unweighted graph" problem, which algorithm should you use?',
-                    options: [
-                        'DFS',
-                        'BFS with queue',
-                        'Dijkstra',
-                        'Binary search',
-                    ],
-                    correctAnswer: 1,
-                    explanation:
-                        'BFS with a queue finds the shortest path in unweighted graphs because it explores nodes level by level, guaranteeing the first time you reach a node is via the shortest path.',
-                },
-                {
-                    id: 'mc5',
-                    question: 'In sliding window maximum, why do we need a deque instead of a priority queue?',
-                    options: [
-                        'Deque is faster',
-                        'Priority queue cannot maintain window order',
-                        'We need O(1) removal from both ends, priority queue is O(log n)',
-                        'Deque uses less memory',
-                    ],
-                    correctAnswer: 2,
-                    explanation:
-                        'We need to efficiently remove elements from both ends: old elements from the front (outside window) and smaller elements from the back. Deque provides O(1) for both, while priority queue would be O(log n).',
-                },
-            ],
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Explain why BFS uses a queue instead of a stack. What would happen if you used a stack?',
+          sampleAnswer:
+            'BFS uses a queue because FIFO order ensures we explore all nodes at depth d before any node at depth d+1. Queue processes nodes in the order they were discovered. If we used a stack (LIFO), we would get DFS instead: we would go as deep as possible before backtracking. For example, in a tree, BFS with queue visits root, then all level 1 nodes, then all level 2 nodes (level-order). With a stack, we would visit root, then immediately go deep down one branch before exploring other branches at level 1. The traversal order would be completely different - depth-first rather than breadth-first.',
+          keyPoints: [
+            'Queue FIFO: process nodes in discovery order',
+            'Ensures all depth d before depth d+1',
+            'Stack would give DFS (depth-first)',
+            'Stack goes deep immediately, queue goes wide',
+            'Different traversal order: level-by-level vs deep-first',
+          ],
         },
         {
-            id: 'complexity',
-            title: 'Time & Space Complexity',
-            content: `## Queue Complexity Analysis
+          id: 'q2',
+          question:
+            'How do you implement a queue using two stacks? Explain the enqueue and dequeue operations.',
+          sampleAnswer:
+            "Two-stacks queue uses stack_in for enqueue and stack_out for dequeue. Enqueue: push to stack_in - O(1). Dequeue: if stack_out is empty, transfer all from stack_in to stack_out (reversing order), then pop from stack_out. Transfer is expensive O(n), but it's amortized O(1) because each element is transferred at most once. Example: enqueue 1,2,3 to stack_in [1,2,3]. First dequeue transfers to stack_out [3,2,1], then pops 1. Next dequeues just pop from stack_out (2, then 3) without transfers. The key insight: two reversals (stack_in to stack_out) restore FIFO order.",
+          keyPoints: [
+            'stack_in for enqueue, stack_out for dequeue',
+            'Enqueue: push to stack_in, O(1)',
+            'Dequeue: pop from stack_out, transfer if empty',
+            'Transfer is O(n) but amortized O(1)',
+            'Two stack reversals restore FIFO order',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'What is the pattern for "sliding window maximum" and why does it use a deque instead of a regular queue?',
+          sampleAnswer:
+            "Sliding window maximum finds the max element in each window of size k as it slides. We maintain a deque of indices in decreasing order of their values. For each element: (1) Remove indices outside window from front (dequeue from left), (2) Remove indices with smaller values from back (we pop from right because current element makes them useless), (3) Add current index to back, (4) Front of deque is the max for this window. We need deque not regular queue because we remove from BOTH ends: old indices from front (outside window), useless smaller indices from back (won't be max). This is O(n) because each element enters and leaves deque at most once.",
+          keyPoints: [
+            'Maintain deque of indices in decreasing value order',
+            'Remove old indices from front (outside window)',
+            'Remove smaller indices from back (useless)',
+            'Need both-end operations: deque not queue',
+            'O(n): each element processed once',
+          ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question:
+            'What is the most common application of queues in algorithms?',
+          options: [
+            'Sorting',
+            'Breadth-First Search (BFS)',
+            'Binary search',
+            'Finding duplicates',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Queues are essential for BFS, which explores nodes level by level. The queue maintains the order of nodes to visit, ensuring breadth-first traversal.',
+        },
+        {
+          id: 'mc2',
+          question:
+            'In level-order tree traversal, what determines when to start processing a new level?',
+          options: [
+            'When the queue is empty',
+            'By counting len(queue) at the start of each level',
+            'When we see a None node',
+            'After processing the root',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'We capture len(queue) at the start of each level iteration. This tells us exactly how many nodes are in the current level, allowing us to process them separately.',
+        },
+        {
+          id: 'mc3',
+          question:
+            'What is the amortized time complexity of dequeue in a two-stack queue implementation?',
+          options: ['O(1)', 'O(log n)', 'O(n)', 'O(n²)'],
+          correctAnswer: 0,
+          explanation:
+            'While individual dequeue operations can be O(n) when transferring elements, the amortized complexity is O(1) because each element is transferred at most once.',
+        },
+        {
+          id: 'mc4',
+          question:
+            'For the "shortest path in unweighted graph" problem, which algorithm should you use?',
+          options: ['DFS', 'BFS with queue', 'Dijkstra', 'Binary search'],
+          correctAnswer: 1,
+          explanation:
+            'BFS with a queue finds the shortest path in unweighted graphs because it explores nodes level by level, guaranteeing the first time you reach a node is via the shortest path.',
+        },
+        {
+          id: 'mc5',
+          question:
+            'In sliding window maximum, why do we need a deque instead of a priority queue?',
+          options: [
+            'Deque is faster',
+            'Priority queue cannot maintain window order',
+            'We need O(1) removal from both ends, priority queue is O(log n)',
+            'Deque uses less memory',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'We need to efficiently remove elements from both ends: old elements from the front (outside window) and smaller elements from the back. Deque provides O(1) for both, while priority queue would be O(log n).',
+        },
+      ],
+    },
+    {
+      id: 'complexity',
+      title: 'Time & Space Complexity',
+      content: `## Queue Complexity Analysis
 
 Understanding the performance characteristics of queue operations is crucial for choosing the right implementation.
 
@@ -1356,122 +1346,111 @@ for i in range(n):
 - Space: O(k) - k is window size
 
 **Remember:** Always use \`collections.deque\` for O(1) operations on both ends!`,
-            quiz: [
-                {
-                    id: 'q1',
-                    question:
-                        'Why is list.pop(0) O(n) but deque.popleft() O(1)? Explain the underlying data structure difference.',
-                    sampleAnswer:
-                        'Lists in Python are implemented as dynamic arrays (contiguous memory). When you pop(0) from the front, all remaining elements must shift left by one position to fill the gap - this is O(n) copying. Deque is implemented as a doubly-linked list of blocks (not a single array). Each block contains multiple elements. Removing from the left just adjusts the head pointer to the next block or next element within the block - no shifting needed. This makes popleft() O(1). Similarly, appendleft() is O(1) because we just add a new block or element at the head. Lists optimize for index access O(1), deques optimize for both-end operations O(1).',
-                    keyPoints: [
-                        'List: dynamic array, contiguous memory',
-                        'list.pop(0): shift all elements, O(n)',
-                        'Deque: doubly-linked list of blocks',
-                        'deque.popleft(): adjust head pointer, O(1)',
-                        'Lists for indexing, deques for both-end operations',
-                    ],
-                },
-                {
-                    id: 'q2',
-                    question:
-                        'What is amortized O(1) and why does the two-stack queue implementation achieve it?',
-                    sampleAnswer:
-                        'Amortized O(1) means that while some operations are expensive, the average cost per operation over many operations is O(1). In two-stack queue, most dequeues are O(1) (just pop from stack_out). Occasionally, when stack_out is empty, we must transfer all n elements from stack_in to stack_out - this single operation is O(n). But here\'s the key: each element is enqueued once, transferred at most once, and dequeued once. So for n operations total, we do at most 3n single-element operations, which averages to O(1) per operation. The expensive transfers are rare and their cost is "spread out" (amortized) over many cheap operations.',
-                    keyPoints: [
-                        'Most operations cheap, occasional expensive one',
-                        'Average cost over many operations is O(1)',
-                        'Each element: enqueued once, transferred once, dequeued once',
-                        'Total 3n operations for n elements = O(1) average',
-                        'Expensive transfers are rare and cost is spread out',
-                    ],
-                },
-                {
-                    id: 'q3',
-                    question:
-                        'Compare the space complexity of BFS vs DFS. Which uses more memory and why?',
-                    sampleAnswer:
-                        'For a tree of depth d with branching factor b, BFS uses O(b^d) space (width of last level) because the queue holds all nodes at the current level. DFS uses O(d) space for the recursion stack or explicit stack (height of tree). BFS is wider, DFS is deeper. For a binary tree of depth 10, BFS can have 2^10 = 1024 nodes in queue at the deepest level. DFS only needs 10 stack frames. BFS uses exponentially more space as depth increases for trees with high branching factor. However, for graphs with cycles, DFS also needs O(V) visited set. In general: BFS = O(width), DFS = O(depth). Use DFS if memory is tight and tree is wide.',
-                    keyPoints: [
-                        'BFS: O(b^d) space, holds entire level in queue',
-                        'DFS: O(d) space, holds path in stack',
-                        'BFS wider, DFS deeper',
-                        'BFS can use exponentially more memory',
-                        'Choose DFS if memory tight and tree is wide',
-                    ],
-                },
-            ],
-            multipleChoice: [
-                {
-                    id: 'mc1',
-                    question: 'What is the time complexity of enqueue operation using collections.deque?',
-                    options: [
-                        'O(1)',
-                        'O(log n)',
-                        'O(n)',
-                        'O(n log n)',
-                    ],
-                    correctAnswer: 0,
-                    explanation:
-                        'deque.append() (enqueue) is O(1) because deque is implemented as a doubly-linked list of blocks, allowing constant-time addition to either end.',
-                },
-                {
-                    id: 'mc2',
-                    question: 'Why should you avoid using list.pop(0) for queue operations?',
-                    options: [
-                        'It does not work correctly',
-                        'It is O(n) because all elements must shift',
-                        'It only works for small lists',
-                        'It uses too much memory',
-                    ],
-                    correctAnswer: 1,
-                    explanation:
-                        'list.pop(0) is O(n) because removing the first element requires shifting all remaining elements left by one position in the underlying array.',
-                },
-                {
-                    id: 'mc3',
-                    question: 'What is the space complexity of BFS traversal on a binary tree with n nodes?',
-                    options: [
-                        'O(1)',
-                        'O(log n)',
-                        'O(n)',
-                        'O(n²)',
-                    ],
-                    correctAnswer: 2,
-                    explanation:
-                        'In the worst case, the queue will hold all nodes at the deepest level. For a complete binary tree, this can be up to n/2 nodes, which is O(n) space.',
-                },
-                {
-                    id: 'mc4',
-                    question: 'In the two-stack queue implementation, what is the amortized time complexity of dequeue?',
-                    options: [
-                        'O(1)',
-                        'O(log n)',
-                        'O(n)',
-                        'O(n log n)',
-                    ],
-                    correctAnswer: 0,
-                    explanation:
-                        'While a single dequeue can be O(n) when transferring elements, the amortized complexity is O(1) because each element is transferred at most once over all operations.',
-                },
-                {
-                    id: 'mc5',
-                    question: 'Which operation is NOT O(1) with collections.deque?',
-                    options: [
-                        'append (add to right)',
-                        'appendleft (add to left)',
-                        'pop (remove from right)',
-                        'Accessing middle element by index',
-                    ],
-                    correctAnswer: 3,
-                    explanation:
-                        'Deque is optimized for both-end operations (all O(1)), but random access to middle elements is O(n) because it is a linked structure, not an array.',
-                },
-            ],
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Why is list.pop(0) O(n) but deque.popleft() O(1)? Explain the underlying data structure difference.',
+          sampleAnswer:
+            'Lists in Python are implemented as dynamic arrays (contiguous memory). When you pop(0) from the front, all remaining elements must shift left by one position to fill the gap - this is O(n) copying. Deque is implemented as a doubly-linked list of blocks (not a single array). Each block contains multiple elements. Removing from the left just adjusts the head pointer to the next block or next element within the block - no shifting needed. This makes popleft() O(1). Similarly, appendleft() is O(1) because we just add a new block or element at the head. Lists optimize for index access O(1), deques optimize for both-end operations O(1).',
+          keyPoints: [
+            'List: dynamic array, contiguous memory',
+            'list.pop(0): shift all elements, O(n)',
+            'Deque: doubly-linked list of blocks',
+            'deque.popleft(): adjust head pointer, O(1)',
+            'Lists for indexing, deques for both-end operations',
+          ],
         },
         {
-            id: 'interview-strategy',
-            title: 'Queue Interview Strategy',
-            content: `## Mastering Queue Interview Problems
+          id: 'q2',
+          question:
+            'What is amortized O(1) and why does the two-stack queue implementation achieve it?',
+          sampleAnswer:
+            'Amortized O(1) means that while some operations are expensive, the average cost per operation over many operations is O(1). In two-stack queue, most dequeues are O(1) (just pop from stack_out). Occasionally, when stack_out is empty, we must transfer all n elements from stack_in to stack_out - this single operation is O(n). But here\'s the key: each element is enqueued once, transferred at most once, and dequeued once. So for n operations total, we do at most 3n single-element operations, which averages to O(1) per operation. The expensive transfers are rare and their cost is "spread out" (amortized) over many cheap operations.',
+          keyPoints: [
+            'Most operations cheap, occasional expensive one',
+            'Average cost over many operations is O(1)',
+            'Each element: enqueued once, transferred once, dequeued once',
+            'Total 3n operations for n elements = O(1) average',
+            'Expensive transfers are rare and cost is spread out',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'Compare the space complexity of BFS vs DFS. Which uses more memory and why?',
+          sampleAnswer:
+            'For a tree of depth d with branching factor b, BFS uses O(b^d) space (width of last level) because the queue holds all nodes at the current level. DFS uses O(d) space for the recursion stack or explicit stack (height of tree). BFS is wider, DFS is deeper. For a binary tree of depth 10, BFS can have 2^10 = 1024 nodes in queue at the deepest level. DFS only needs 10 stack frames. BFS uses exponentially more space as depth increases for trees with high branching factor. However, for graphs with cycles, DFS also needs O(V) visited set. In general: BFS = O(width), DFS = O(depth). Use DFS if memory is tight and tree is wide.',
+          keyPoints: [
+            'BFS: O(b^d) space, holds entire level in queue',
+            'DFS: O(d) space, holds path in stack',
+            'BFS wider, DFS deeper',
+            'BFS can use exponentially more memory',
+            'Choose DFS if memory tight and tree is wide',
+          ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question:
+            'What is the time complexity of enqueue operation using collections.deque?',
+          options: ['O(1)', 'O(log n)', 'O(n)', 'O(n log n)'],
+          correctAnswer: 0,
+          explanation:
+            'deque.append() (enqueue) is O(1) because deque is implemented as a doubly-linked list of blocks, allowing constant-time addition to either end.',
+        },
+        {
+          id: 'mc2',
+          question:
+            'Why should you avoid using list.pop(0) for queue operations?',
+          options: [
+            'It does not work correctly',
+            'It is O(n) because all elements must shift',
+            'It only works for small lists',
+            'It uses too much memory',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'list.pop(0) is O(n) because removing the first element requires shifting all remaining elements left by one position in the underlying array.',
+        },
+        {
+          id: 'mc3',
+          question:
+            'What is the space complexity of BFS traversal on a binary tree with n nodes?',
+          options: ['O(1)', 'O(log n)', 'O(n)', 'O(n²)'],
+          correctAnswer: 2,
+          explanation:
+            'In the worst case, the queue will hold all nodes at the deepest level. For a complete binary tree, this can be up to n/2 nodes, which is O(n) space.',
+        },
+        {
+          id: 'mc4',
+          question:
+            'In the two-stack queue implementation, what is the amortized time complexity of dequeue?',
+          options: ['O(1)', 'O(log n)', 'O(n)', 'O(n log n)'],
+          correctAnswer: 0,
+          explanation:
+            'While a single dequeue can be O(n) when transferring elements, the amortized complexity is O(1) because each element is transferred at most once over all operations.',
+        },
+        {
+          id: 'mc5',
+          question: 'Which operation is NOT O(1) with collections.deque?',
+          options: [
+            'append (add to right)',
+            'appendleft (add to left)',
+            'pop (remove from right)',
+            'Accessing middle element by index',
+          ],
+          correctAnswer: 3,
+          explanation:
+            'Deque is optimized for both-end operations (all O(1)), but random access to middle elements is O(n) because it is a linked structure, not an array.',
+        },
+      ],
+    },
+    {
+      id: 'interview-strategy',
+      title: 'Queue Interview Strategy',
+      content: `## Mastering Queue Interview Problems
 
 Queues are common in interviews, especially for BFS and level-order traversal problems.
 
@@ -1756,132 +1735,137 @@ Before submitting, verify:
 - [ ] Complexity analysis is correct
 
 **Remember:** Queue + BFS is one of the most important patterns in coding interviews. Master level-order traversal and you'll ace many tree/graph problems!`,
-            quiz: [
-                {
-                    id: 'q1',
-                    question:
-                        'What are the key indicators that a problem requires BFS with a queue rather than DFS?',
-                    sampleAnswer:
-                        'Use BFS with queue when: (1) Problem asks for "shortest path" in unweighted graph - BFS guarantees finding shortest path first, (2) Need "level by level" or "layer by layer" processing, (3) Problem mentions "minimum depth/steps/moves", (4) Need to find nodes at distance k from source, (5) "Closest" or "nearest" in unweighted context. Use DFS when: detecting cycles, finding any path (not shortest), exploring all possibilities with backtracking, topological sort. Key difference: BFS explores breadth-first (all neighbors before going deeper), DFS explores depth-first (go as deep as possible). BFS with queue is also better when tree is very deep but we need shallow answer.',
-                    keyPoints: [
-                        'BFS: shortest path in unweighted graphs',
-                        'BFS: level-by-level processing',
-                        'BFS: minimum depth/steps',
-                        'DFS: any path, backtracking, cycles',
-                        'BFS better for shallow answers in deep trees',
-                    ],
-                },
-                {
-                    id: 'q2',
-                    question:
-                        'Walk through the level-order traversal pattern. Why is capturing len(queue) crucial?',
-                    sampleAnswer:
-                        'Level-order processes tree level by level. At start of each iteration, len(queue) tells us how many nodes are in the current level. We loop exactly that many times to process the current level, adding children to queue for the next level. Without capturing len(queue), we would process children immediately instead of waiting for next level. Example: level 0 has root (1 node), len(queue)=1, process 1 node, add 2 children. Level 1: len(queue)=2, process 2 nodes, add 4 children. Level 2: len(queue)=4. The captured length separates levels. Alternative: use sentinel value (like None) to mark level boundaries, but len(queue) is cleaner.',
-                    keyPoints: [
-                        'len(queue) at start = nodes in current level',
-                        'Loop that many times to process just this level',
-                        'Children added for next level, not processed now',
-                        'Separates levels cleanly',
-                        'Without it, would process children immediately',
-                    ],
-                },
-                {
-                    id: 'q3',
-                    question:
-                        'What are the common mistakes when implementing queue-based solutions in interviews?',
-                    sampleAnswer:
-                        'Common mistakes: (1) Using list.pop(0) instead of deque.popleft() - O(n) vs O(1), (2) Forgetting to mark nodes as visited in graph BFS - causes infinite loops, (3) Not capturing len(queue) before level loop - mixes levels, (4) Adding node to queue after checking visited instead of when marking visited - adds duplicates, (5) Using queue.pop() instead of popleft() - processes LIFO not FIFO, (6) Not checking empty queue before popleft() - IndexError, (7) Initializing queue incorrectly (forgetting starting nodes). Prevention: use templates, test with simple example, check visited logic, verify FIFO order.',
-                    keyPoints: [
-                        'Use deque.popleft(), not list.pop(0)',
-                        'Mark visited when adding to queue',
-                        'Capture len(queue) for level-order',
-                        'Use popleft() not pop()',
-                        'Check empty before popleft()',
-                    ],
-                },
-            ],
-            multipleChoice: [
-                {
-                    id: 'mc1',
-                    question: 'Which keyword in a problem description most strongly indicates using BFS with a queue?',
-                    options: [
-                        'Find all paths',
-                        'Shortest path in unweighted graph',
-                        'Detect cycles',
-                        'Generate permutations',
-                    ],
-                    correctAnswer: 1,
-                    explanation:
-                        'BFS with a queue is optimal for finding shortest paths in unweighted graphs because it explores nodes level by level, guaranteeing the first time you reach a node is via the shortest path.',
-                },
-                {
-                    id: 'mc2',
-                    question: 'In the standard BFS template, when should you mark a node as visited?',
-                    options: [
-                        'After dequeuing it',
-                        'When adding it to the queue',
-                        'After processing all its neighbors',
-                        'Before the while loop starts',
-                    ],
-                    correctAnswer: 1,
-                    explanation:
-                        'Mark nodes as visited when adding them to the queue, not when dequeuing. This prevents adding the same node multiple times to the queue before it is processed.',
-                },
-                {
-                    id: 'mc3',
-                    question: 'What is the purpose of capturing len(queue) in level-order traversal?',
-                    options: [
-                        'To check if the queue is empty',
-                        'To know how many nodes are in the current level',
-                        'To calculate total nodes in tree',
-                        'To prevent infinite loops',
-                    ],
-                    correctAnswer: 1,
-                    explanation:
-                        'Capturing len(queue) at the start tells us exactly how many nodes are in the current level, allowing us to process them separately from the next level.',
-                },
-                {
-                    id: 'mc4',
-                    question: 'Which queue problem pattern is typically categorized as Hard difficulty?',
-                    options: [
-                        'Binary Tree Level Order Traversal',
-                        'Implement Queue using Stacks',
-                        'Sliding Window Median',
-                        'Number of Recent Calls',
-                    ],
-                    correctAnswer: 2,
-                    explanation:
-                        'Sliding Window Median requires maintaining two heaps (or balanced data structure) along with a sliding window, making it a Hard problem. Simple level-order and queue implementations are Easy/Medium.',
-                },
-                {
-                    id: 'mc5',
-                    question: 'What is the most important thing to verify before saying your solution is complete in a queue interview?',
-                    options: [
-                        'The code compiles',
-                        'You used the right imports',
-                        'You analyzed time/space complexity correctly',
-                        'You added comments',
-                    ],
-                    correctAnswer: 2,
-                    explanation:
-                        'Always analyze and verify your time and space complexity. Interviewers want to see you understand not just that it works, but why it works and how efficient it is. This demonstrates algorithmic thinking.',
-                },
-            ],
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'What are the key indicators that a problem requires BFS with a queue rather than DFS?',
+          sampleAnswer:
+            'Use BFS with queue when: (1) Problem asks for "shortest path" in unweighted graph - BFS guarantees finding shortest path first, (2) Need "level by level" or "layer by layer" processing, (3) Problem mentions "minimum depth/steps/moves", (4) Need to find nodes at distance k from source, (5) "Closest" or "nearest" in unweighted context. Use DFS when: detecting cycles, finding any path (not shortest), exploring all possibilities with backtracking, topological sort. Key difference: BFS explores breadth-first (all neighbors before going deeper), DFS explores depth-first (go as deep as possible). BFS with queue is also better when tree is very deep but we need shallow answer.',
+          keyPoints: [
+            'BFS: shortest path in unweighted graphs',
+            'BFS: level-by-level processing',
+            'BFS: minimum depth/steps',
+            'DFS: any path, backtracking, cycles',
+            'BFS better for shallow answers in deep trees',
+          ],
         },
-    ],
-    keyTakeaways: [
-        'Queue is a FIFO (First-In-First-Out) data structure',
-        'Two main operations: enqueue (add to rear) and dequeue (remove from front)',
-        'Python: use collections.deque for O(1) operations; avoid list for queue',
-        'Essential for BFS (Breadth-First Search) algorithms',
-        'Common applications: task scheduling, buffering, level-order traversal',
-        'Circular queue uses modular arithmetic to reuse space efficiently',
-        'Priority queue: elements dequeued based on priority, not FIFO order',
-        'Typical complexity: O(1) for enqueue and dequeue operations',
-    ],
-    relatedProblems: [
-        'implement-queue-using-stacks',
-        'design-circular-queue',
-        'sliding-window-maximum',
-    ],
+        {
+          id: 'q2',
+          question:
+            'Walk through the level-order traversal pattern. Why is capturing len(queue) crucial?',
+          sampleAnswer:
+            'Level-order processes tree level by level. At start of each iteration, len(queue) tells us how many nodes are in the current level. We loop exactly that many times to process the current level, adding children to queue for the next level. Without capturing len(queue), we would process children immediately instead of waiting for next level. Example: level 0 has root (1 node), len(queue)=1, process 1 node, add 2 children. Level 1: len(queue)=2, process 2 nodes, add 4 children. Level 2: len(queue)=4. The captured length separates levels. Alternative: use sentinel value (like None) to mark level boundaries, but len(queue) is cleaner.',
+          keyPoints: [
+            'len(queue) at start = nodes in current level',
+            'Loop that many times to process just this level',
+            'Children added for next level, not processed now',
+            'Separates levels cleanly',
+            'Without it, would process children immediately',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'What are the common mistakes when implementing queue-based solutions in interviews?',
+          sampleAnswer:
+            'Common mistakes: (1) Using list.pop(0) instead of deque.popleft() - O(n) vs O(1), (2) Forgetting to mark nodes as visited in graph BFS - causes infinite loops, (3) Not capturing len(queue) before level loop - mixes levels, (4) Adding node to queue after checking visited instead of when marking visited - adds duplicates, (5) Using queue.pop() instead of popleft() - processes LIFO not FIFO, (6) Not checking empty queue before popleft() - IndexError, (7) Initializing queue incorrectly (forgetting starting nodes). Prevention: use templates, test with simple example, check visited logic, verify FIFO order.',
+          keyPoints: [
+            'Use deque.popleft(), not list.pop(0)',
+            'Mark visited when adding to queue',
+            'Capture len(queue) for level-order',
+            'Use popleft() not pop()',
+            'Check empty before popleft()',
+          ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question:
+            'Which keyword in a problem description most strongly indicates using BFS with a queue?',
+          options: [
+            'Find all paths',
+            'Shortest path in unweighted graph',
+            'Detect cycles',
+            'Generate permutations',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'BFS with a queue is optimal for finding shortest paths in unweighted graphs because it explores nodes level by level, guaranteeing the first time you reach a node is via the shortest path.',
+        },
+        {
+          id: 'mc2',
+          question:
+            'In the standard BFS template, when should you mark a node as visited?',
+          options: [
+            'After dequeuing it',
+            'When adding it to the queue',
+            'After processing all its neighbors',
+            'Before the while loop starts',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Mark nodes as visited when adding them to the queue, not when dequeuing. This prevents adding the same node multiple times to the queue before it is processed.',
+        },
+        {
+          id: 'mc3',
+          question:
+            'What is the purpose of capturing len(queue) in level-order traversal?',
+          options: [
+            'To check if the queue is empty',
+            'To know how many nodes are in the current level',
+            'To calculate total nodes in tree',
+            'To prevent infinite loops',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Capturing len(queue) at the start tells us exactly how many nodes are in the current level, allowing us to process them separately from the next level.',
+        },
+        {
+          id: 'mc4',
+          question:
+            'Which queue problem pattern is typically categorized as Hard difficulty?',
+          options: [
+            'Binary Tree Level Order Traversal',
+            'Implement Queue using Stacks',
+            'Sliding Window Median',
+            'Number of Recent Calls',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'Sliding Window Median requires maintaining two heaps (or balanced data structure) along with a sliding window, making it a Hard problem. Simple level-order and queue implementations are Easy/Medium.',
+        },
+        {
+          id: 'mc5',
+          question:
+            'What is the most important thing to verify before saying your solution is complete in a queue interview?',
+          options: [
+            'The code compiles',
+            'You used the right imports',
+            'You analyzed time/space complexity correctly',
+            'You added comments',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'Always analyze and verify your time and space complexity. Interviewers want to see you understand not just that it works, but why it works and how efficient it is. This demonstrates algorithmic thinking.',
+        },
+      ],
+    },
+  ],
+  keyTakeaways: [
+    'Queue is a FIFO (First-In-First-Out) data structure',
+    'Two main operations: enqueue (add to rear) and dequeue (remove from front)',
+    'Python: use collections.deque for O(1) operations; avoid list for queue',
+    'Essential for BFS (Breadth-First Search) algorithms',
+    'Common applications: task scheduling, buffering, level-order traversal',
+    'Circular queue uses modular arithmetic to reuse space efficiently',
+    'Priority queue: elements dequeued based on priority, not FIFO order',
+    'Typical complexity: O(1) for enqueue and dequeue operations',
+  ],
+  relatedProblems: [
+    'implement-queue-using-stacks',
+    'design-circular-queue',
+    'sliding-window-maximum',
+  ],
 };

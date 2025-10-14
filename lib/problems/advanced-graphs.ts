@@ -154,8 +154,6 @@ def network_delay_time_bf(times: List[List[int]], n: int, k: int) -> int:
     youtubeUrl: 'https://www.youtube.com/watch?v=EaphyqKU4PQ',
     order: 1,
     topic: 'Advanced Graphs',
-    leetcodeUrl: 'https://leetcode.com/problems/network-delay-time/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=EaphyqKU4PQ',
   },
   {
     id: 'cheapest-flights-within-k-stops',
@@ -365,9 +363,6 @@ def find_cheapest_price_dijkstra(n: int, flights: List[List[int]], src: int, dst
     youtubeUrl: 'https://www.youtube.com/watch?v=5eIK3zUdYmE',
     order: 2,
     topic: 'Advanced Graphs',
-    leetcodeUrl:
-      'https://leetcode.com/problems/cheapest-flights-within-k-stops/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=5eIK3zUdYmE',
   },
   {
     id: 'path-with-minimum-effort',
@@ -553,8 +548,6 @@ def minimum_effort_path_binary_search(heights: List[List[int]]) -> int:
     youtubeUrl: 'https://www.youtube.com/watch?v=XQlxCCx2vI4',
     order: 3,
     topic: 'Advanced Graphs',
-    leetcodeUrl: 'https://leetcode.com/problems/path-with-minimum-effort/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=XQlxCCx2vI4',
   },
 
   // EASY - Find if Path Exists (Union-Find)
