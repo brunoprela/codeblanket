@@ -1,49 +1,49 @@
 {
-    "$schema": "https://openapi.vercel.sh/vercel.json",
-    "buildCommand": "pnpm run build",
-    "devCommand": "pnpm run dev",
-    "installCommand": "pnpm install",
-    "framework": "nextjs",
-    "headers": [
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "pnpm run build",
+  "devCommand": "pnpm run dev",
+  "installCommand": "pnpm install",
+  "framework": "nextjs",
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
         {
-            "source": "/(.*)",
-            "headers": [
-                {
-                    "key": "X-Content-Type-Options",
-                    "value": "nosniff"
-                },
-                {
-                    "key": "X-Frame-Options",
-                    "value": "DENY"
-                },
-                {
-                    "key": "X-XSS-Protection",
-                    "value": "1; mode=block"
-                },
-                {
-                    "key": "Referrer-Policy",
-                    "value": "strict-origin-when-cross-origin"
-                }
-            ]
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
         },
         {
-            "source": "/pyodide/(.*)",
-            "headers": [
-                {
-                    "key": "Cross-Origin-Embedder-Policy",
-                    "value": "require-corp"
-                },
-                {
-                    "key": "Cross-Origin-Opener-Policy",
-                    "value": "same-origin"
-                }
-            ]
-        }
-    ],
-    "rewrites": [
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
         {
-            "source": "/pyodide/:path*",
-            "destination": "https://cdn.jsdelivr.net/pyodide/v0.26.1/full/:path*"
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
         }
-    ]
+      ]
+    },
+    {
+      "source": "/pyodide/(.*)",
+      "headers": [
+        {
+          "key": "Cross-Origin-Embedder-Policy",
+          "value": "require-corp"
+        },
+        {
+          "key": "Cross-Origin-Opener-Policy",
+          "value": "same-origin"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/pyodide/:path*",
+      "destination": "https://cdn.jsdelivr.net/pyodide/v0.26.1/full/:path*"
+    }
+  ]
 }
