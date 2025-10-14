@@ -49,6 +49,17 @@ CodeBlanket uses a **dual-layer storage system** to ensure your progress is neve
   - `saveUserCode(id, code)` - Save user's code for a problem
   - `getUserCode(id)` - Retrieve saved code
   - `clearUserCode(id)` - Delete saved code
+  - `saveCustomTestCases(id, tests)` - Save custom test cases
+  - `getCustomTestCases(id)` - Retrieve custom test cases
+  - `clearCustomTestCases(id)` - Delete custom test cases
+  - `saveMultipleChoiceProgress(moduleId, sectionId, completedIds)` - Save MC quiz progress
+  - `getMultipleChoiceProgress(moduleId, sectionId)` - Get MC quiz progress
+  - `clearMultipleChoiceProgress(moduleId, sectionId)` - Clear MC quiz progress
+  - `saveCompletedSections(moduleId, sectionIds)` - Save module section completion
+  - `getCompletedSections(moduleId)` - Get completed sections
+  - `markSectionCompleted(moduleId, sectionId)` - Mark section as completed
+  - `markSectionIncomplete(moduleId, sectionId)` - Mark section as incomplete
+  - `isSectionCompleted(moduleId, sectionId)` - Check if section is completed
 
 - **`lib/helpers/indexeddb.ts`** - IndexedDB wrapper (asynchronous)
   - `setItem(key, value)` - Store data in IndexedDB
@@ -57,6 +68,10 @@ CodeBlanket uses a **dual-layer storage system** to ensure your progress is neve
   - `getAllData()` - Export all data
   - `importData(data)` - Import all data
   - `migrateFromLocalStorage()` - One-time migration
+  - `saveVideo(videoId, blob)` - Save video recording to IndexedDB
+  - `getVideosForQuestion(questionIdPrefix)` - Get all videos for a question
+  - `deleteVideo(videoId)` - Delete a specific video
+  - `getCompletedDiscussionQuestionsCount()` - Count unique questions with videos
 
 - **`lib/helpers/export-import.ts`** - Export/Import functionality
   - `exportProgress()` - Download progress as JSON file
@@ -142,16 +157,44 @@ The app creates auto-backups:
 }
 ```
 
-### Module Progress
+### Custom Test Cases
 
 ```json
 {
-  "module-binary-search": {
-    "section1": true,
-    "section2": false
-  }
+  "codeblanket_tests_binary-search": [
+    { "input": "[1, 2, 3], 2", "expected": "1" },
+    { "input": "[1, 2, 3], 4", "expected": "-1" }
+  ]
 }
 ```
+
+### Multiple Choice Quiz Progress
+
+```json
+{
+  "mc-quiz-python-fundamentals-variables": [
+    "question-1",
+    "question-3"
+  ]
+}
+```
+
+### Module Section Completion
+
+```json
+{
+  "module-binary-search-completed": [
+    "section-1",
+    "section-2"
+  ]
+}
+```
+
+### Video Recordings (Discussion Questions)
+
+Stored in IndexedDB video store as Blobs:
+- Video ID format: `{moduleId}-{sectionId}-{questionId}-{timestamp}`
+- Exported as base64-encoded strings in export file
 
 ## Export File Format
 
@@ -160,12 +203,23 @@ The app creates auto-backups:
   "version": "1.0",
   "exportDate": "2024-10-13T12:00:00.000Z",
   "data": {
-    "codeblanket_completed_problems": [...],
-    "codeblanket_code_binary-search": "...",
-    "module-binary-search": {...}
-  }
+    "codeblanket_completed_problems": ["binary-search", "two-sum"],
+    "codeblanket_code_binary-search": "def binary_search(nums, target):\n    ...",
+    "codeblanket_tests_binary-search": [{"input": "...", "expected": "..."}],
+    "mc-quiz-python-fundamentals-variables": ["question-1", "question-2"],
+    "module-binary-search-completed": ["section-1"]
+  },
+  "videos": [
+    {
+      "id": "python-fundamentals-variables-question1-1697203200000",
+      "data": "base64-encoded-video-data...",
+      "timestamp": 1697203200000
+    }
+  ]
 }
 ```
+
+**Note:** Videos are stored as base64-encoded strings, which can make the export file large (potentially 10-100+ MB depending on number and length of videos). The export function will log the total size of videos being exported.
 
 ## Why This Approach?
 

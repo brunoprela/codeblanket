@@ -214,3 +214,169 @@ export function clearCustomTestCases(problemId: string): void {
     console.error('Failed to clear custom test cases:', error);
   }
 }
+
+/**
+ * Multiple Choice Quiz Progress Storage
+ */
+
+/**
+ * Saves multiple choice quiz progress for a specific module/section
+ * @param moduleId - The module identifier
+ * @param sectionId - The section identifier
+ * @param completedQuestionIds - Array of completed question IDs
+ */
+export function saveMultipleChoiceProgress(
+  moduleId: string,
+  sectionId: string,
+  completedQuestionIds: string[],
+): void {
+  if (typeof window === 'undefined') return;
+
+  try {
+    const key = `mc-quiz-${moduleId}-${sectionId}`;
+    const serialized = JSON.stringify(completedQuestionIds);
+    localStorage.setItem(key, serialized);
+    // Sync to IndexedDB in background
+    syncToIndexedDB(key, completedQuestionIds);
+  } catch (error) {
+    console.error('Failed to save multiple choice progress:', error);
+  }
+}
+
+/**
+ * Retrieves multiple choice quiz progress for a specific module/section
+ * @param moduleId - The module identifier
+ * @param sectionId - The section identifier
+ * @returns Array of completed question IDs
+ */
+export function getMultipleChoiceProgress(
+  moduleId: string,
+  sectionId: string,
+): string[] {
+  if (typeof window === 'undefined') return [];
+
+  try {
+    const key = `mc-quiz-${moduleId}-${sectionId}`;
+    const stored = localStorage.getItem(key);
+    return stored ? JSON.parse(stored) : [];
+  } catch (error) {
+    console.error('Failed to load multiple choice progress:', error);
+    return [];
+  }
+}
+
+/**
+ * Clears multiple choice quiz progress for a specific module/section
+ * @param moduleId - The module identifier
+ * @param sectionId - The section identifier
+ */
+export function clearMultipleChoiceProgress(
+  moduleId: string,
+  sectionId: string,
+): void {
+  if (typeof window === 'undefined') return;
+
+  try {
+    const key = `mc-quiz-${moduleId}-${sectionId}`;
+    localStorage.removeItem(key);
+  } catch (error) {
+    console.error('Failed to clear multiple choice progress:', error);
+  }
+}
+
+/**
+ * Module Completion Storage
+ */
+
+/**
+ * Retrieves completed sections for a specific module
+ * @param moduleId - The module identifier
+ * @returns Set of completed section IDs
+ */
+export function getCompletedSections(moduleId: string): Set<string> {
+  if (typeof window === 'undefined') return new Set();
+
+  try {
+    const key = `module-${moduleId}-completed`;
+    const stored = localStorage.getItem(key);
+    return stored ? new Set(JSON.parse(stored)) : new Set();
+  } catch (error) {
+    console.error('Failed to load completed sections:', error);
+    return new Set();
+  }
+}
+
+/**
+ * Saves completed sections for a specific module
+ * @param moduleId - The module identifier
+ * @param completedSectionIds - Array of completed section IDs
+ */
+export function saveCompletedSections(
+  moduleId: string,
+  completedSectionIds: string[],
+): void {
+  if (typeof window === 'undefined') return;
+
+  try {
+    const key = `module-${moduleId}-completed`;
+    const serialized = JSON.stringify(completedSectionIds);
+    localStorage.setItem(key, serialized);
+    // Sync to IndexedDB in background
+    syncToIndexedDB(key, completedSectionIds);
+  } catch (error) {
+    console.error('Failed to save completed sections:', error);
+  }
+}
+
+/**
+ * Marks a section as completed in a module
+ * @param moduleId - The module identifier
+ * @param sectionId - The section identifier
+ */
+export function markSectionCompleted(
+  moduleId: string,
+  sectionId: string,
+): void {
+  if (typeof window === 'undefined') return;
+
+  try {
+    const completed = getCompletedSections(moduleId);
+    completed.add(sectionId);
+    saveCompletedSections(moduleId, [...completed]);
+  } catch (error) {
+    console.error('Failed to mark section completed:', error);
+  }
+}
+
+/**
+ * Marks a section as incomplete in a module
+ * @param moduleId - The module identifier
+ * @param sectionId - The section identifier
+ */
+export function markSectionIncomplete(
+  moduleId: string,
+  sectionId: string,
+): void {
+  if (typeof window === 'undefined') return;
+
+  try {
+    const completed = getCompletedSections(moduleId);
+    completed.delete(sectionId);
+    saveCompletedSections(moduleId, [...completed]);
+  } catch (error) {
+    console.error('Failed to mark section incomplete:', error);
+  }
+}
+
+/**
+ * Checks if a section is marked as completed
+ * @param moduleId - The module identifier
+ * @param sectionId - The section identifier
+ * @returns true if section is completed, false otherwise
+ */
+export function isSectionCompleted(
+  moduleId: string,
+  sectionId: string,
+): boolean {
+  return getCompletedSections(moduleId).has(sectionId);
+}

@@ -188,7 +188,9 @@ export async function migrateFromLocalStorage(): Promise<void> {
     const keysToMigrate = [
       'codeblanket_completed_problems',
       'codeblanket_code_',
-      'module-',
+      'codeblanket_tests_', // Custom test cases
+      'module-', // Module completion
+      'mc-quiz-', // Multiple choice quiz progress
       'codeblanket-',
     ];
 
