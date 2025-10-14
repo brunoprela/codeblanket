@@ -2618,68 +2618,96 @@ names = list(map(lambda u: u['name'], users))
             'Regular: reusable, needs documentation',
             'Lambda is convenience, not replacement',
           ],
-          multipleChoice: [
-            {
-              id: 'mc1',
-              question: 'What is a lambda function?',
-              options: [
-                'A regular function',
-                'An anonymous single-expression function',
-                'A class method',
-                'A module',
-              ],
-              correctAnswer: 1,
-              explanation:
-                'Lambda functions are anonymous (unnamed) functions defined in a single expression using the lambda keyword.',
-            },
-            {
-              id: 'mc2',
-              question: 'What is the syntax for a lambda function?',
-              options: [
-                'lambda x: x*2',
-                'def lambda(x): x*2',
-                'function(x) => x*2',
-                'x => x*2',
-              ],
-              correctAnswer: 0,
-              explanation:
-                'Lambda syntax: lambda parameters: expression. For example: lambda x: x*2',
-            },
-            {
-              id: 'mc3',
-              question: 'Can a lambda function contain multiple statements?',
-              options: [
-                'Yes, any number',
-                'Yes, up to 10',
-                'No, only single expression',
-                'Only if using semicolons',
-              ],
-              correctAnswer: 2,
-              explanation:
-                'Lambda functions can only contain a single expression, not statements. For complex logic, use regular functions.',
-            },
-            {
-              id: 'mc4',
-              question: 'Which function commonly uses lambda as a parameter?',
-              options: ['print()', 'sorted()', 'len()', 'input()'],
-              correctAnswer: 1,
-              explanation:
-                'sorted(), map(), filter(), reduce() commonly use lambda functions for key/operation parameters.',
-            },
-            {
-              id: 'mc5',
-              question: 'When should you avoid lambda functions?',
-              options: [
-                'With sorted()',
-                'For complex multi-step logic',
-                'With map()',
-                'For simple operations',
-              ],
-              correctAnswer: 1,
-              explanation:
-                'Avoid lambdas for complex logic - use regular named functions for readability and debuggability.',
-            },
+        },
+        {
+          id: 'q2',
+          question:
+            'Explain the difference between map() with lambda and list comprehension. Which is more Pythonic?',
+          sampleAnswer:
+            'Both transform lists but with different syntax. map() with lambda: result = list(map(lambda x: x**2, numbers)). List comprehension: result = [x**2 for x in numbers]. List comprehension is more Pythonic because it is more readable, self-contained, and supports filtering inline (e.g., [x**2 for x in numbers if x > 0]). Map with lambda requires wrapping in list() and filter() separately. However, map can be slightly faster for large datasets and more composable with other functional tools. In practice, Python community prefers list/dict comprehensions for readability.',
+          keyPoints: [
+            'map(lambda x: x**2, nums) vs [x**2 for x in nums]',
+            'List comprehension more Pythonic and readable',
+            'Comprehension supports inline filtering',
+            'map() can be faster for very large data',
+            'Python community prefers comprehensions',
           ],
+        },
+        {
+          id: 'q3',
+          question:
+            'What are the limitations of lambda functions and why do they exist?',
+          sampleAnswer:
+            'Lambda limitations: (1) Only single expression, no statements, (2) No assignments inside, (3) No annotations, (4) No docstrings, (5) Harder to debug (shows as <lambda> in tracebacks). These limitations exist by design to keep lambdas simple. They force you to use named functions for complex logic, improving code readability and maintainability. If you need multiple steps, assignments, or complex logic, Python wants you to use def with a descriptive name. This prevents cryptic, unreadable code. Lambdas are for throwaway convenience, not as a replacement for proper functions.',
+          keyPoints: [
+            'Only single expression allowed',
+            'No statements, assignments, or annotations',
+            'No docstrings, harder to debug',
+            'Limitations by design for simplicity',
+            'Forces named functions for complex logic',
+          ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What is a lambda function?',
+          options: [
+            'A regular function',
+            'An anonymous single-expression function',
+            'A class method',
+            'A module',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Lambda functions are anonymous (unnamed) functions defined in a single expression using the lambda keyword.',
+        },
+        {
+          id: 'mc2',
+          question: 'What is the syntax for a lambda function?',
+          options: [
+            'lambda x: x*2',
+            'def lambda(x): x*2',
+            'function(x) => x*2',
+            'x => x*2',
+          ],
+          correctAnswer: 0,
+          explanation:
+            'Lambda syntax: lambda parameters: expression. For example: lambda x: x*2',
+        },
+        {
+          id: 'mc3',
+          question: 'Can a lambda function contain multiple statements?',
+          options: [
+            'Yes, any number',
+            'Yes, up to 10',
+            'No, only single expression',
+            'Only if using semicolons',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'Lambda functions can only contain a single expression, not statements. For complex logic, use regular functions.',
+        },
+        {
+          id: 'mc4',
+          question: 'Which function commonly uses lambda as a parameter?',
+          options: ['print()', 'sorted()', 'len()', 'input()'],
+          correctAnswer: 1,
+          explanation:
+            'sorted(), map(), filter(), reduce() commonly use lambda functions for key/operation parameters.',
+        },
+        {
+          id: 'mc5',
+          question: 'When should you avoid lambda functions?',
+          options: [
+            'With sorted()',
+            'For complex multi-step logic',
+            'With map()',
+            'For simple operations',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Avoid lambdas for complex logic - use regular named functions for readability and debuggability.',
         },
       ],
     },
@@ -3062,73 +3090,6 @@ print(pow(2, 10, 100))  # 24 (2^10 % 100)
             'map/filter useful with existing functions',
             'Comprehensions often faster',
           ],
-          multipleChoice: [
-            {
-              id: 'mc1',
-              question: 'What does enumerate() return?',
-              options: [
-                'Just indices',
-                'Just values',
-                'Tuples of (index, value)',
-                'A dictionary',
-              ],
-              correctAnswer: 2,
-              explanation:
-                'enumerate() returns tuples of (index, value) for each item in an iterable.',
-            },
-            {
-              id: 'mc2',
-              question: 'What does zip() do with two lists?',
-              options: [
-                'Compresses them',
-                'Pairs corresponding elements',
-                'Combines into one list',
-                'Sorts both',
-              ],
-              correctAnswer: 1,
-              explanation:
-                'zip() pairs corresponding elements: zip([1,2], ["a","b"]) → [(1,"a"), (2,"b")]',
-            },
-            {
-              id: 'mc3',
-              question: 'What is the difference between any() and all()?',
-              options: [
-                'No difference',
-                'any() if ANY True, all() if ALL True',
-                'any() is faster',
-                'all() works with numbers only',
-              ],
-              correctAnswer: 1,
-              explanation:
-                'any() returns True if at least one element is truthy; all() only if all are truthy.',
-            },
-            {
-              id: 'mc4',
-              question: 'What does map(func, iterable) return?',
-              options: [
-                'A list',
-                'A map object (iterator)',
-                'A tuple',
-                'A set',
-              ],
-              correctAnswer: 1,
-              explanation:
-                'map() returns a map object (iterator). Use list(map(...)) to get a list.',
-            },
-            {
-              id: 'mc5',
-              question: 'How does isinstance() differ from type()?',
-              options: [
-                'No difference',
-                'isinstance() checks class hierarchy, type() exact type',
-                'isinstance() deprecated',
-                'type() is faster',
-              ],
-              correctAnswer: 1,
-              explanation:
-                'isinstance(obj, Class) checks class hierarchy. type(obj) == Class checks exact type only.',
-            },
-          ],
         },
         {
           id: 'q2',
@@ -3142,6 +3103,86 @@ print(pow(2, 10, 100))  # 24 (2^10 % 100)
             'Works with any iterable',
             'More readable than range(len())',
           ],
+        },
+        {
+          id: 'q3',
+          question: 'Explain why all([]) returns True but any([]) returns False.',
+          sampleAnswer:
+            "all([]) returns True because of vacuous truth in logic: a statement about all elements of an empty set is considered true since there are no counterexamples. Think: 'all numbers in [] are positive' - technically true because there are no numbers to disprove it. any([]) returns False because there's no element to make it True. This matters in code: if all(validations): can pass with empty validations[], but if any(errors): won't trigger with no errors. Be careful with empty sequences - sometimes you want to explicitly check if not items: first.",
+          keyPoints: [
+            'all([]): True - vacuous truth, no counterexamples',
+            'any([]): False - no element to be True',
+            'Based on logical quantifiers',
+            'Can cause bugs if not expected',
+            'Check for empty sequences explicitly when it matters',
+          ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What does enumerate() return?',
+          options: [
+            'Just indices',
+            'Just values',
+            'Tuples of (index, value)',
+            'A dictionary',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'enumerate() returns tuples of (index, value) for each item in an iterable.',
+        },
+        {
+          id: 'mc2',
+          question: 'What does zip() do with two lists?',
+          options: [
+            'Compresses them',
+            'Pairs corresponding elements',
+            'Combines into one list',
+            'Sorts both',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'zip() pairs corresponding elements: zip([1,2], ["a","b"]) → [(1,"a"), (2,"b")]',
+        },
+        {
+          id: 'mc3',
+          question: 'What is the difference between any() and all()?',
+          options: [
+            'No difference',
+            'any() if ANY True, all() if ALL True',
+            'any() is faster',
+            'all() works with numbers only',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'any() returns True if at least one element is truthy; all() only if all are truthy.',
+        },
+        {
+          id: 'mc4',
+          question: 'What does map(func, iterable) return?',
+          options: [
+            'A list',
+            'A map object (iterator)',
+            'A tuple',
+            'A set',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'map() returns a map object (iterator). Use list(map(...)) to get a list.',
+        },
+        {
+          id: 'mc5',
+          question: 'How does isinstance() differ from type()?',
+          options: [
+            'No difference',
+            'isinstance() checks class hierarchy, type() exact type',
+            'isinstance() deprecated',
+            'type() is faster',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'isinstance(obj, Class) checks class hierarchy. type(obj) == Class checks exact type only.',
         },
       ],
     },

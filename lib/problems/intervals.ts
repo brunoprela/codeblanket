@@ -143,8 +143,6 @@ def merge_inplace(intervals: List[List[int]]) -> List[List[int]]:
     youtubeUrl: 'https://www.youtube.com/watch?v=44H3cEC2fFM',
     order: 1,
     topic: 'Intervals',
-    leetcodeUrl: 'https://leetcode.com/problems/merge-intervals/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=44H3cEC2fFM',
   },
   {
     id: 'insert-interval',
@@ -307,8 +305,6 @@ def insert_concise(intervals: List[List[int]], newInterval: List[int]) -> List[L
     youtubeUrl: 'https://www.youtube.com/watch?v=A8NUOmlwOlM',
     order: 2,
     topic: 'Intervals',
-    leetcodeUrl: 'https://leetcode.com/problems/insert-interval/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=A8NUOmlwOlM',
   },
   {
     id: 'meeting-rooms-ii',
@@ -488,8 +484,6 @@ def min_meeting_rooms_events(intervals: List[List[int]]) -> int:
     youtubeUrl: 'https://www.youtube.com/watch?v=FdzJmTCVyJU',
     order: 3,
     topic: 'Intervals',
-    leetcodeUrl: 'https://leetcode.com/problems/meeting-rooms-ii/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=FdzJmTCVyJU',
   },
 
   // EASY - Meeting Rooms

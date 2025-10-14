@@ -321,10 +321,6 @@ def count_smaller(nums: List[int]) -> List[int]:
     return result`,
     timeComplexity: 'O(N log N)',
     spaceComplexity: 'O(N)',
-
-    leetcodeUrl:
-      'https://leetcode.com/problems/count-of-smaller-numbers-after-self/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=2SVLYsq5W8M',
     order: 3,
     topic: 'Segment Tree',
     leetcodeUrl:

@@ -70,8 +70,6 @@ Given a string \`s\`, return \`true\` if it is a **palindrome**, or \`false\` ot
     ],
     timeComplexity: 'O(n) - single pass through the string',
     spaceComplexity: 'O(1) - only using two pointers',
-    leetcodeUrl: 'https://leetcode.com/problems/valid-palindrome/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=jJXJ16kPFWg',
   },
 
   // MEDIUM - Container With Most Water

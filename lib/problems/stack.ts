@@ -119,8 +119,6 @@ def is_valid_alt(s: str) -> bool:
     youtubeUrl: 'https://www.youtube.com/watch?v=WTzjTskDFMg',
     order: 1,
     topic: 'Stack',
-    leetcodeUrl: 'https://leetcode.com/problems/valid-parentheses/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=WTzjTskDFMg',
   },
   {
     id: 'largest-rectangle',
@@ -287,9 +285,6 @@ def largest_rectangle_area_brute(heights: List[int]) -> int:
     youtubeUrl: 'https://www.youtube.com/watch?v=zx5Sw9130L0',
     order: 3,
     topic: 'Stack',
-    leetcodeUrl:
-      'https://leetcode.com/problems/largest-rectangle-in-histogram/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=zx5Sw9130L0',
   },
   // EASY - Baseball Game
   {

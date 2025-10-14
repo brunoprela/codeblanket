@@ -155,8 +155,6 @@ def invert_tree_iterative(root: Optional[TreeNode]) -> Optional[TreeNode]:
     youtubeUrl: 'https://www.youtube.com/watch?v=OnSn2XEQ4MY',
     order: 1,
     topic: 'Trees',
-    leetcodeUrl: 'https://leetcode.com/problems/invert-binary-tree/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=OnSn2XEQ4MY',
   },
   {
     id: 'validate-bst',
@@ -334,8 +332,6 @@ def is_valid_bst_iterative(root: Optional[TreeNode]) -> bool:
     youtubeUrl: 'https://www.youtube.com/watch?v=s6ATEkipzow',
     order: 2,
     topic: 'Trees',
-    leetcodeUrl: 'https://leetcode.com/problems/validate-binary-search-tree/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=s6ATEkipzow',
   },
   {
     id: 'binary-tree-max-path-sum',
@@ -514,8 +510,6 @@ def max_path_sum_nonlocal(root: Optional[TreeNode]) -> int:
     youtubeUrl: 'https://www.youtube.com/watch?v=Hr5cWUld4vU',
     order: 3,
     topic: 'Trees',
-    leetcodeUrl: 'https://leetcode.com/problems/binary-tree-maximum-path-sum/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=Hr5cWUld4vU',
   },
 
   // EASY - Same Tree
@@ -1089,7 +1083,6 @@ Key Difference:
 BST property allows us to determine direction without exploring
 both subtrees, enabling iterative O(1) space solution.
 """`,
-    difficulty: 'Medium',
     leetcodeUrl:
       'https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/',
     youtubeUrl: 'https://www.youtube.com/watch?v=13m9ZCB8gjw',

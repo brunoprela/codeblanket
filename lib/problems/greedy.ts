@@ -129,8 +129,6 @@ def can_jump_simple(nums: List[int]) -> bool:
     youtubeUrl: 'https://www.youtube.com/watch?v=Yan0cv2cLy8',
     order: 1,
     topic: 'Greedy',
-    leetcodeUrl: 'https://leetcode.com/problems/jump-game/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=Yan0cv2cLy8',
   },
   {
     id: 'best-time-to-buy-sell-stock-ii',
@@ -264,9 +262,6 @@ def max_profit_oneliner(prices: List[int]) -> int:
     youtubeUrl: 'https://www.youtube.com/watch?v=3SJ3pUkPQMc',
     order: 2,
     topic: 'Greedy',
-    leetcodeUrl:
-      'https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=3SJ3pUkPQMc',
   },
   {
     id: 'gas-station',
@@ -425,8 +420,6 @@ def can_complete_circuit_two_pass(gas: List[int], cost: List[int]) -> int:
     youtubeUrl: 'https://www.youtube.com/watch?v=lJwbPZGo05A',
     order: 3,
     topic: 'Greedy',
-    leetcodeUrl: 'https://leetcode.com/problems/gas-station/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=lJwbPZGo05A',
   },
 
   // EASY - Assign Cookies

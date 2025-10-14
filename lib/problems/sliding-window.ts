@@ -117,9 +117,6 @@ def max_profit_window(prices: List[int]) -> int:
     youtubeUrl: 'https://www.youtube.com/watch?v=1pkOgXD63yU',
     order: 1,
     topic: 'Sliding Window',
-    leetcodeUrl:
-      'https://leetcode.com/problems/best-time-to-buy-and-sell-stock/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=1pkOgXD63yU',
   },
   {
     id: 'longest-substring-without-repeating',
@@ -252,9 +249,6 @@ def length_of_longest_substring_optimized(s: str) -> int:
     youtubeUrl: 'https://www.youtube.com/watch?v=wiGpQwVHdE0',
     order: 2,
     topic: 'Sliding Window',
-    leetcodeUrl:
-      'https://leetcode.com/problems/longest-substring-without-repeating-characters/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=wiGpQwVHdE0',
   },
   {
     id: 'minimum-window-substring',
@@ -435,8 +429,6 @@ def min_window_alt(s: str, t: str) -> str:
     youtubeUrl: 'https://www.youtube.com/watch?v=jSto0O4AJbM',
     order: 3,
     topic: 'Sliding Window',
-    leetcodeUrl: 'https://leetcode.com/problems/minimum-window-substring/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=jSto0O4AJbM',
   },
   // EASY - Maximum Average Subarray I
   {

@@ -4254,7 +4254,7 @@ def test_password_validator(password):
   {
     id: 'group-anagrams-collections',
     title: 'Group Anagrams',
-    difficulty: 'medium',
+    difficulty: 'Medium',
     category: 'python-intermediate',
     description: `Given an array of strings \`strs\`, group the anagrams together using \`defaultdict\`. You can return the answer in any order.
 
@@ -4292,16 +4292,16 @@ def group_anagrams(strs):
     pass`,
     testCases: [
       {
-        input: 'strs = ["eat","tea","tan","ate","nat","bat"]',
-        expected: '[["bat"],["nat","tan"],["ate","eat","tea"]]',
+        input: [['eat', 'tea', 'tan', 'ate', 'nat', 'bat']],
+        expected: [['bat'], ['nat', 'tan'], ['ate', 'eat', 'tea']],
       },
       {
-        input: 'strs = [""]',
-        expected: '[[""]]',
+        input: [['']],
+        expected: [['']],
       },
       {
-        input: 'strs = ["a"]',
-        expected: '[["a"]]',
+        input: [['a']],
+        expected: [['a']],
       },
     ],
     hints: [
@@ -4353,7 +4353,7 @@ def group_anagrams_alt(strs):
   {
     id: 'sliding-window-maximum-deque',
     title: 'Sliding Window Maximum',
-    difficulty: 'hard',
+    difficulty: 'Hard',
     category: 'python-intermediate',
     description: `Given an array \`nums\` and a sliding window of size \`k\`, find the maximum element in each window as it slides from left to right.
 
@@ -4395,16 +4395,16 @@ def max_sliding_window(nums, k):
     pass`,
     testCases: [
       {
-        input: 'nums = [1,3,-1,-3,5,3,6,7], k = 3',
-        expected: '[3, 3, 5, 5, 6, 7]',
+        input: [[1, 3, -1, -3, 5, 3, 6, 7], 3],
+        expected: [3, 3, 5, 5, 6, 7],
       },
       {
-        input: 'nums = [1], k = 1',
-        expected: '[1]',
+        input: [[1], 1],
+        expected: [1],
       },
       {
-        input: 'nums = [1,-1], k = 1',
-        expected: '[1, -1]',
+        input: [[1, -1], 1],
+        expected: [1, -1],
       },
     ],
     hints: [
@@ -4465,7 +4465,7 @@ def max_sliding_window(nums, k):
   {
     id: 'lru-cache-implementation',
     title: 'LRU Cache Implementation',
-    difficulty: 'medium',
+    difficulty: 'Medium',
     category: 'python-intermediate',
     description: `Design a data structure that follows the constraints of a **Least Recently Used (LRU) cache**.
 
@@ -4505,19 +4505,34 @@ class LRUCache:
         pass`,
     testCases: [
       {
-        input:
-          'cache = LRUCache(2); cache.put(1, 1); cache.put(2, 2); cache.get(1)',
-        expected: '1',
+        input: [
+          ['LRUCache', 2],
+          ['put', 1, 1],
+          ['put', 2, 2],
+          ['get', 1],
+        ],
+        expected: [null, null, null, 1],
       },
       {
-        input:
-          'cache = LRUCache(2); cache.put(1, 1); cache.put(2, 2); cache.put(3, 3); cache.get(2)',
-        expected: '-1',
+        input: [
+          ['LRUCache', 2],
+          ['put', 1, 1],
+          ['put', 2, 2],
+          ['put', 3, 3],
+          ['get', 2],
+        ],
+        expected: [null, null, null, null, -1],
       },
       {
-        input:
-          'cache = LRUCache(2); cache.put(1, 1); cache.put(2, 2); cache.get(1); cache.put(3, 3); cache.get(2)',
-        expected: '-1',
+        input: [
+          ['LRUCache', 2],
+          ['put', 1, 1],
+          ['put', 2, 2],
+          ['get', 1],
+          ['put', 3, 3],
+          ['get', 2],
+        ],
+        expected: [null, null, null, 1, null, -1],
       },
     ],
     hints: [
@@ -4574,7 +4589,7 @@ print(cache.get(4))    # 4`,
   {
     id: 'task-scheduler-with-counter',
     title: 'Task Scheduler',
-    difficulty: 'medium',
+    difficulty: 'Medium',
     category: 'python-intermediate',
     description: `Given a characters array \`tasks\`, where each character represents a unique task and an integer \`n\` representing the cooldown period, return the minimum number of time units needed to complete all tasks.
 
@@ -4619,17 +4634,16 @@ def least_interval(tasks, n):
     pass`,
     testCases: [
       {
-        input: 'tasks = ["A","A","A","B","B","B"], n = 2',
-        expected: '8',
+        input: [['A', 'A', 'A', 'B', 'B', 'B'], 2],
+        expected: 8,
       },
       {
-        input: 'tasks = ["A","A","A","B","B","B"], n = 0',
-        expected: '6',
+        input: [['A', 'A', 'A', 'B', 'B', 'B'], 0],
+        expected: 6,
       },
       {
-        input:
-          'tasks = ["A","A","A","A","A","A","B","C","D","E","F","G"], n = 2',
-        expected: '16',
+        input: [['A', 'A', 'A', 'A', 'A', 'A', 'B', 'C', 'D', 'E', 'F', 'G'], 2],
+        expected: 16,
       },
     ],
     hints: [
@@ -4685,7 +4699,7 @@ def least_interval(tasks, n):
   {
     id: 'design-hit-counter',
     title: 'Design Hit Counter',
-    difficulty: 'medium',
+    difficulty: 'Medium',
     category: 'python-intermediate',
     description: `Design a hit counter that counts the number of hits received in the past 5 minutes (300 seconds).
 
@@ -4723,19 +4737,36 @@ class HitCounter:
         pass`,
     testCases: [
       {
-        input:
-          'counter = HitCounter(); counter.hit(1); counter.hit(2); counter.hit(3); counter.getHits(4)',
-        expected: '3',
+        input: [
+          ['HitCounter'],
+          ['hit', 1],
+          ['hit', 2],
+          ['hit', 3],
+          ['getHits', 4],
+        ],
+        expected: [null, null, null, null, 3],
       },
       {
-        input:
-          'counter = HitCounter(); counter.hit(1); counter.hit(2); counter.hit(3); counter.hit(300); counter.getHits(300)',
-        expected: '4',
+        input: [
+          ['HitCounter'],
+          ['hit', 1],
+          ['hit', 2],
+          ['hit', 3],
+          ['hit', 300],
+          ['getHits', 300],
+        ],
+        expected: [null, null, null, null, null, 4],
       },
       {
-        input:
-          'counter = HitCounter(); counter.hit(1); counter.hit(2); counter.hit(3); counter.hit(300); counter.getHits(301)',
-        expected: '3',
+        input: [
+          ['HitCounter'],
+          ['hit', 1],
+          ['hit', 2],
+          ['hit', 3],
+          ['hit', 300],
+          ['getHits', 301],
+        ],
+        expected: [null, null, null, null, null, 3],
       },
     ],
     hints: [
@@ -4806,7 +4837,7 @@ print(counter.getHits(301))  # 3`,
   {
     id: 'most-common-word',
     title: 'Most Common Word',
-    difficulty: 'easy',
+    difficulty: 'Easy',
     category: 'python-intermediate',
     description: `Given a string \`paragraph\` and an array of banned words, return the most frequent word that is not banned. Words are case-insensitive and punctuation should be ignored.
 
@@ -4843,17 +4874,16 @@ def most_common_word(paragraph, banned):
     pass`,
     testCases: [
       {
-        input:
-          'paragraph = "Bob hit a ball, the hit BALL flew far after it was hit.", banned = ["hit"]',
-        expected: '"ball"',
+        input: ['Bob hit a ball, the hit BALL flew far after it was hit.', ['hit']],
+        expected: 'ball',
       },
       {
-        input: 'paragraph = "a.", banned = []',
-        expected: '"a"',
+        input: ['a.', []],
+        expected: 'a',
       },
       {
-        input: 'paragraph = "a, a, a, a, b,b,b,c, c", banned = ["a"]',
-        expected: '"b"',
+        input: ['a, a, a, a, b,b,b,c, c', ['a']],
+        expected: 'b',
       },
     ],
     hints: [

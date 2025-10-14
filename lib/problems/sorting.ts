@@ -220,7 +220,6 @@ def sort_array_by_parity_v3(nums):
 `,
     timeComplexity: 'O(n) - single pass with two pointers',
     spaceComplexity: 'O(1) for in-place solution, O(n) for creating new arrays',
-    leetcodeUrl: 'https://leetcode.com/problems/sort-array-by-parity/',
   },
 
   // EASY #3 - Insertion Sort List
@@ -363,7 +362,6 @@ def linked_list_to_list(head):
       'O(n²) - for each of n nodes, we may scan through sorted portion (worst case n nodes)',
     spaceComplexity:
       'O(1) - we only rearrange pointers, no extra data structures needed',
-    leetcodeUrl: 'https://leetcode.com/problems/insertion-sort-list/',
   },
 
   // MEDIUM #1 - Sort List
@@ -502,8 +500,6 @@ def linked_list_to_list(head):
       'O(n log n) - divide list log n times, merge takes O(n) each time',
     spaceComplexity:
       'O(log n) for recursion stack - in-place for the linked list itself',
-    leetcodeUrl: 'https://leetcode.com/problems/sort-list/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=TGveA1oFhrc',
   },
 
   // MEDIUM #2 - Wiggle Sort
@@ -725,8 +721,5 @@ def count_smaller_brute(nums):
     timeComplexity:
       'O(n log n) with modified merge sort vs O(n²) brute force - demonstrates advanced sorting applications',
     spaceComplexity: 'O(n) for auxiliary arrays during merge sort',
-    leetcodeUrl:
-      'https://leetcode.com/problems/count-of-smaller-numbers-after-self/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=0XD6w-KXJ3w',
   },
 ];

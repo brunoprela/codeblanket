@@ -29,6 +29,7 @@ export interface Problem {
   id: string;
   title: string;
   difficulty: Difficulty;
+  category?: string;
   description: string;
   examples?: Example[];
   constraints?: string[];
@@ -43,6 +44,9 @@ export interface Problem {
   leetcodeUrl?: string; // Link to LeetCode problem
   youtubeUrl?: string; // Link to YouTube explanation
   approach?: string; // For design problems - detailed approach explanation
+  patterns?: string[]; // Related patterns
+  companies?: string[]; // Companies that ask this problem
+  followUp?: string[]; // Follow-up questions
 }
 
 export interface TestResult {
@@ -67,6 +71,7 @@ export interface QuizQuestion {
   hint?: string;
   sampleAnswer: string;
   keyPoints: string[];
+  multipleChoice?: MultipleChoiceQuestion[];
 }
 
 export interface MultipleChoiceQuestion {
@@ -77,25 +82,37 @@ export interface MultipleChoiceQuestion {
   explanation: string;
 }
 
+export interface DiscussionItem {
+  question: string;
+  answer: string;
+}
+
 export interface ModuleSection {
   id: string;
   title: string;
   content: string;
   codeExample?: string;
+  videoUrl?: string;
   quiz: QuizQuestion[];
   multipleChoice?: MultipleChoiceQuestion[];
+  discussion?: DiscussionItem[];
 }
 
 export interface Module {
   id: string;
   title: string;
   description: string;
+  category?: string;
+  difficulty?: string;
+  estimatedTime?: string;
+  prerequisites?: string[];
   icon: string;
   sections: ModuleSection[];
   keyTakeaways: string[];
+  learningObjectives?: string[];
   timeComplexity?: string;
   spaceComplexity?: string;
-  relatedProblems: string[]; // Array of problem IDs
+  relatedProblems?: string[]; // Array of problem IDs
 }
 
 export interface ModuleCategory {

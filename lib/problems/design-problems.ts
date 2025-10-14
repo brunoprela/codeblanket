@@ -88,8 +88,19 @@ Always insert after head, remove before tail.
 - LinkedList: O(capacity)`,
     testCases: [
       {
-        input: `LRUCache(2)\nput(1, 1)\nput(2, 2)\nget(1)\nput(3, 3)\nget(2)\nput(4, 4)\nget(1)\nget(3)\nget(4)`,
-        expected: `null\nnull\nnull\n1\nnull\n-1\nnull\n-1\n3\n4`,
+        input: [
+          ['LRUCache', 2],
+          ['put', 1, 1],
+          ['put', 2, 2],
+          ['get', 1],
+          ['put', 3, 3],
+          ['get', 2],
+          ['put', 4, 4],
+          ['get', 1],
+          ['get', 3],
+          ['get', 4],
+        ],
+        expected: [null, null, null, 1, null, -1, null, -1, 3, 4],
       },
     ],
     solution: `class ListNode:
@@ -252,8 +263,17 @@ push(1): stack=[(3,3), (5,3), (1,1)]  # min is now 1
 - Approach 2: One stack of size N (but tuples)`,
     testCases: [
       {
-        input: `MinStack()\npush(-2)\npush(0)\npush(-3)\ngetMin()\npop()\ntop()\ngetMin()`,
-        expected: `null\nnull\nnull\nnull\n-3\nnull\n0\n-2`,
+        input: [
+          ['MinStack'],
+          ['push', -2],
+          ['push', 0],
+          ['push', -3],
+          ['getMin'],
+          ['pop'],
+          ['top'],
+          ['getMin'],
+        ],
+        expected: [null, null, null, null, -3, null, 0, -2],
       },
     ],
     solution: `# Approach 1: Two Stacks (Recommended)
@@ -425,8 +445,15 @@ dequeue():
 ## Space Complexity: O(N) where N is number of elements`,
     testCases: [
       {
-        input: `MyQueue()\npush(1)\npush(2)\npeek()\npop()\nempty()`,
-        expected: `null\nnull\nnull\n1\n1\nfalse`,
+        input: [
+          ['MyQueue'],
+          ['push', 1],
+          ['push', 2],
+          ['peek'],
+          ['pop'],
+          ['empty'],
+        ],
+        expected: [null, null, null, 1, 1, false],
       },
     ],
     solution: `class MyQueue:
@@ -557,8 +584,15 @@ Use two queues, always keep data in q1:
 - **Trade-off**: Made push expensive to keep pop cheap`,
     testCases: [
       {
-        input: `MyStack()\npush(1)\npush(2)\ntop()\npop()\nempty()`,
-        expected: `null\nnull\nnull\n2\n2\nfalse`,
+        input: [
+          ['MyStack'],
+          ['push', 1],
+          ['push', 2],
+          ['top'],
+          ['pop'],
+          ['empty'],
+        ],
+        expected: [null, null, null, 2, 2, false],
       },
     ],
     solution: `from collections import deque
@@ -727,8 +761,17 @@ Store (timestamp, count) pairs instead of individual timestamps:
 - **Approach 2**: O(300) = O(1)`,
     testCases: [
       {
-        input: `HitCounter()\nhit(1)\nhit(2)\nhit(3)\ngetHits(4)\nhit(300)\ngetHits(300)\ngetHits(301)`,
-        expected: `null\nnull\nnull\nnull\n3\nnull\n4\n3`,
+        input: [
+          ['HitCounter'],
+          ['hit', 1],
+          ['hit', 2],
+          ['hit', 3],
+          ['getHits', 4],
+          ['hit', 300],
+          ['getHits', 300],
+          ['getHits', 301],
+        ],
+        expected: [null, null, null, null, 3, null, 4, 3],
       },
     ],
     solution: `from collections import deque
@@ -919,8 +962,19 @@ Matches real browser behavior.
 ## Space Complexity: O(N) where N = total pages visited`,
     testCases: [
       {
-        input: `BrowserHistory("home")\nvisit("page1")\nvisit("page2")\nback(1)\nback(1)\nforward(1)\nvisit("page3")\nforward(2)\nback(2)\nback(7)`,
-        expected: `null\nnull\nnull\n"page1"\n"home"\n"page1"\nnull\n"page1"\n"home"\n"home"`,
+        input: [
+          ['BrowserHistory', 'home'],
+          ['visit', 'page1'],
+          ['visit', 'page2'],
+          ['back', 1],
+          ['back', 1],
+          ['forward', 1],
+          ['visit', 'page3'],
+          ['forward', 2],
+          ['back', 2],
+          ['back', 7],
+        ],
+        expected: [null, null, null, 'page1', 'home', 'page1', null, 'page1', 'home', 'home'],
       },
     ],
     solution: `# Approach 1: Two Stacks
@@ -1081,8 +1135,20 @@ put(3, 3): Cache full, evict key 2 (freq=1, LRU)
 ## Space Complexity: O(capacity)`,
     testCases: [
       {
-        input: `LFUCache(2)\nput(1,1)\nput(2,2)\nget(1)\nput(3,3)\nget(2)\nget(3)\nput(4,4)\nget(1)\nget(3)\nget(4)`,
-        expected: `null\nnull\nnull\n1\nnull\n-1\n3\nnull\n-1\n3\n4`,
+        input: [
+          ['LFUCache', 2],
+          ['put', 1, 1],
+          ['put', 2, 2],
+          ['get', 1],
+          ['put', 3, 3],
+          ['get', 2],
+          ['get', 3],
+          ['put', 4, 4],
+          ['get', 1],
+          ['get', 3],
+          ['get', 4],
+        ],
+        expected: [null, null, null, 1, null, -1, 3, null, -1, 3, 4],
       },
     ],
     solution: `from collections import defaultdict, OrderedDict
@@ -1237,8 +1303,17 @@ getNewsFeed(1):   # Get feed for user 1
 ## Space Complexity: O(U * T) where U = users, T = tweets per user`,
     testCases: [
       {
-        input: `Twitter()\npostTweet(1,5)\ngetNewsFeed(1)\nfollow(1,2)\npostTweet(2,6)\ngetNewsFeed(1)\nunfollow(1,2)\ngetNewsFeed(1)`,
-        expected: `null\nnull\n[5]\nnull\nnull\n[6,5]\nnull\n[5]`,
+        input: [
+          ['Twitter'],
+          ['postTweet', 1, 5],
+          ['getNewsFeed', 1],
+          ['follow', 1, 2],
+          ['postTweet', 2, 6],
+          ['getNewsFeed', 1],
+          ['unfollow', 1, 2],
+          ['getNewsFeed', 1],
+        ],
+        expected: [null, null, [5], null, null, [6, 5], null, [5]],
       },
     ],
     solution: `from collections import defaultdict
@@ -1403,8 +1478,24 @@ Instead of DFS + sort on every input, precompute top K at each node during inser
 ## Space Complexity: O(N * L) where N=sentences, L=avg length`,
     testCases: [
       {
-        input: `AutocompleteSystem(["i love you","island","iroman","i love leetcode"],[5,3,2,2])\ninput('i')\ninput(' ')\ninput('a')\ninput('#')`,
-        expected: `null\n["i love you","island","i love leetcode"]\n["i love you","i love leetcode"]\n[]\n[]`,
+        input: [
+          [
+            'AutocompleteSystem',
+            ['i love you', 'island', 'iroman', 'i love leetcode'],
+            [5, 3, 2, 2],
+          ],
+          ['input', 'i'],
+          ['input', ' '],
+          ['input', 'a'],
+          ['input', '#'],
+        ],
+        expected: [
+          null,
+          ['i love you', 'island', 'i love leetcode'],
+          ['i love you', 'i love leetcode'],
+          [],
+          [],
+        ],
       },
     ],
     solution: `class TrieNode:
@@ -1592,8 +1683,15 @@ def shouldAllow(userId, timestamp):
 ## Space Complexity: O(U) where U = number of users`,
     testCases: [
       {
-        input: `RateLimiter(3, 60)\nshouldAllow(1, 0)\nshouldAllow(1, 10)\nshouldAllow(1, 20)\nshouldAllow(1, 30)\nshouldAllow(1, 70)`,
-        expected: `null\ntrue\ntrue\ntrue\nfalse\ntrue`,
+        input: [
+          ['RateLimiter', 3, 60],
+          ['shouldAllow', 1, 0],
+          ['shouldAllow', 1, 10],
+          ['shouldAllow', 1, 20],
+          ['shouldAllow', 1, 30],
+          ['shouldAllow', 1, 70],
+        ],
+        expected: [null, true, true, true, false, true],
       },
     ],
     solution: `from collections import defaultdict, deque
@@ -1790,8 +1888,15 @@ Heap maintains spots sorted by (level, row), so \`heap[0]\` is always closest.
 ## Space Complexity: O(S + V) where S = spots, V = vehicles`,
     testCases: [
       {
-        input: `ParkingLot()\nadd_spot(compact, level=1, row=1)\nadd_spot(large, level=1, row=2)\npark_vehicle(car)\npark_vehicle(truck)\nremove_vehicle(car)`,
-        expected: `Creates parking lot with 2 spots, parks car in compact, truck in large, removes car`,
+        input: [
+          ['ParkingLot'],
+          ['add_spot', 'compact', 1, 1],
+          ['add_spot', 'large', 1, 2],
+          ['park_vehicle', 'car'],
+          ['park_vehicle', 'truck'],
+          ['remove_vehicle', 'car'],
+        ],
+        expected: 'Creates parking lot with 2 spots, parks car in compact, truck in large, removes car',
       },
     ],
     solution: `from enum import Enum
@@ -2056,8 +2161,13 @@ expand("http://short.url/1"):
 ## Space Complexity: O(N) where N = number of URLs`,
     testCases: [
       {
-        input: `URLShortener()\nshorten("https://leetcode.com/problems/design")\nexpand(result)\ngetClickCount(code)`,
-        expected: `null\n"http://short.url/1"\n"https://leetcode.com/problems/design"\n1`,
+        input: [
+          ['URLShortener'],
+          ['shorten', 'https://leetcode.com/problems/design'],
+          ['expand', 'result'],
+          ['getClickCount', 'code'],
+        ],
+        expected: [null, 'http://short.url/1', 'https://leetcode.com/problems/design', 1],
       },
     ],
     solution: `class URLShortener:

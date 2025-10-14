@@ -126,8 +126,6 @@ def reverse_list_recursive(head: Optional[ListNode]) -> Optional[ListNode]:
     youtubeUrl: 'https://www.youtube.com/watch?v=G0_I-ZF0S38',
     order: 1,
     topic: 'Linked List',
-    leetcodeUrl: 'https://leetcode.com/problems/reverse-linked-list/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=G0_I-ZF0S38',
   },
   {
     id: 'linked-list-cycle',
@@ -295,8 +293,6 @@ def detect_cycle_start(head: Optional[ListNode]) -> Optional[ListNode]:
     youtubeUrl: 'https://www.youtube.com/watch?v=gBTe7lFR3vc',
     order: 2,
     topic: 'Linked List',
-    leetcodeUrl: 'https://leetcode.com/problems/linked-list-cycle/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=gBTe7lFR3vc',
   },
   {
     id: 'merge-k-sorted-lists',
@@ -516,8 +512,6 @@ def merge_k_lists_naive(lists: List[Optional[ListNode]]) -> Optional[ListNode]:
     youtubeUrl: 'https://www.youtube.com/watch?v=q5a5OiGbT6Q',
     order: 3,
     topic: 'Linked List',
-    leetcodeUrl: 'https://leetcode.com/problems/merge-k-sorted-lists/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=q5a5OiGbT6Q',
   },
   // EASY - Middle of the Linked List
   {

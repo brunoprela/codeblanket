@@ -131,8 +131,6 @@ def max_depth_iterative(root: Optional[TreeNode]) -> int:
     youtubeUrl: 'https://www.youtube.com/watch?v=hTM3phVI6YQ',
     order: 1,
     topic: 'Depth-First Search (DFS)',
-    leetcodeUrl: 'https://leetcode.com/problems/maximum-depth-of-binary-tree/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=hTM3phVI6YQ',
   },
   {
     id: 'path-sum',
@@ -304,8 +302,6 @@ def has_path_sum_with_path(root: Optional[TreeNode], target_sum: int) -> bool:
     youtubeUrl: 'https://www.youtube.com/watch?v=LSKQyOz_P8I',
     order: 2,
     topic: 'Depth-First Search (DFS)',
-    leetcodeUrl: 'https://leetcode.com/problems/path-sum/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=LSKQyOz_P8I',
   },
   {
     id: 'pacific-atlantic-water-flow',
@@ -443,8 +439,6 @@ def pacific_atlantic(heights: List[List[int]]) -> List[List[int]]:
     youtubeUrl: 'https://www.youtube.com/watch?v=s-VkcjHqkGI',
     order: 3,
     topic: 'Depth-First Search (DFS)',
-    leetcodeUrl: 'https://leetcode.com/problems/pacific-atlantic-water-flow/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=s-VkcjHqkGI',
   },
 
   // EASY - Balanced Binary Tree

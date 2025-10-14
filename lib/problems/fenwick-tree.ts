@@ -179,8 +179,6 @@ def count_inversions(arr: List[int]) -> int:
     youtubeUrl: 'https://www.youtube.com/watch?v=kPaJfAUwViY',
     order: 2,
     topic: 'Fenwick Tree (Binary Indexed Tree)',
-    leetcodeUrl: 'https://leetcode.com/problems/count-of-range-sum/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=kPaJfAUwViY',
   },
   {
     id: 'range-sum-2d-mutable',

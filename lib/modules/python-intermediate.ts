@@ -2714,68 +2714,6 @@ print(timeit.timeit(deque_queue, number=100))
             'defaultdict(int): part of larger logic',
             'Both avoid KeyError for missing keys',
           ],
-          multipleChoice: [
-            {
-              id: 'mc1',
-              question: 'What does Counter do?',
-              options: [
-                'Counts function calls',
-                'Counts occurrences of elements',
-                'Creates numbered lists',
-                'Measures performance',
-              ],
-              correctAnswer: 1,
-              explanation:
-                'Counter counts occurrences of hashable elements: Counter(["a","b","a"]) → Counter({"a":2, "b":1})',
-            },
-            {
-              id: 'mc2',
-              question: 'What is the advantage of defaultdict?',
-              options: [
-                'It is faster',
-                'It never raises KeyError for missing keys',
-                'It sorts keys automatically',
-                'It uses less memory',
-              ],
-              correctAnswer: 1,
-              explanation:
-                'defaultdict provides a default value for missing keys, avoiding KeyError: d = defaultdict(list); d["key"].append(1)',
-            },
-            {
-              id: 'mc3',
-              question: 'What does deque stand for?',
-              options: [
-                'Decimal Queue',
-                'Double-ended queue',
-                'Data Equipment',
-                'Delete Queue',
-              ],
-              correctAnswer: 1,
-              explanation:
-                'deque stands for double-ended queue - allows O(1) append/pop from both ends.',
-            },
-            {
-              id: 'mc4',
-              question: 'Which is faster for queue operations: list or deque?',
-              options: ['list', 'deque', 'Same speed', 'Depends on size'],
-              correctAnswer: 1,
-              explanation:
-                'deque is faster for queue operations - O(1) for both ends vs O(n) for list.pop(0).',
-            },
-            {
-              id: 'mc5',
-              question: 'What is namedtuple?',
-              options: [
-                'A tuple with named fields',
-                'A dictionary',
-                'A list with names',
-                'A class',
-              ],
-              correctAnswer: 0,
-              explanation:
-                'namedtuple creates tuple subclasses with named fields: Point = namedtuple("Point", ["x", "y"])',
-            },
-          ],
         },
         {
           id: 'q2',
@@ -2789,6 +2727,81 @@ print(timeit.timeit(deque_queue, number=100))
             'Essential for BFS and sliding windows',
             'deque optimized for both ends',
           ],
+        },
+        {
+          id: 'q3',
+          question: 'Explain the practical differences between OrderedDict and regular dict in Python 3.7+.',
+          sampleAnswer:
+            'In Python 3.7+, regular dicts maintain insertion order, making OrderedDict less critical. However, OrderedDict still has unique features: (1) move_to_end(key) to reorder items, (2) popitem(last=False/True) to remove from specific end, (3) Explicit ordering semantics - code intent is clearer, (4) Equality checks consider order: OrderedDict(a=1, b=2) != OrderedDict(b=2, a=1), but regular dicts with same items are equal regardless of order. Use OrderedDict when you need these operations or want to explicitly signal that order matters for correctness (e.g., LRU cache implementation).',
+          keyPoints: [
+            'Both maintain insertion order in Python 3.7+',
+            'OrderedDict has move_to_end() and directional popitem()',
+            'OrderedDict equality considers order',
+            'Regular dict equality ignores order',
+            'Use OrderedDict when order operations are needed',
+          ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What does Counter do?',
+          options: [
+            'Counts function calls',
+            'Counts occurrences of elements',
+            'Creates numbered lists',
+            'Measures performance',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Counter counts occurrences of hashable elements: Counter(["a","b","a"]) → Counter({"a":2, "b":1})',
+        },
+        {
+          id: 'mc2',
+          question: 'What is the advantage of defaultdict?',
+          options: [
+            'It is faster',
+            'It never raises KeyError for missing keys',
+            'It sorts keys automatically',
+            'It uses less memory',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'defaultdict provides a default value for missing keys, avoiding KeyError: d = defaultdict(list); d["key"].append(1)',
+        },
+        {
+          id: 'mc3',
+          question: 'What does deque stand for?',
+          options: [
+            'Decimal Queue',
+            'Double-ended queue',
+            'Data Equipment',
+            'Delete Queue',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'deque stands for double-ended queue - allows O(1) append/pop from both ends.',
+        },
+        {
+          id: 'mc4',
+          question: 'Which is faster for queue operations: list or deque?',
+          options: ['list', 'deque', 'Same speed', 'Depends on size'],
+          correctAnswer: 1,
+          explanation:
+            'deque is faster for queue operations - O(1) for both ends vs O(n) for list.pop(0).',
+        },
+        {
+          id: 'mc5',
+          question: 'What is namedtuple?',
+          options: [
+            'A tuple with named fields',
+            'A dictionary',
+            'A list with names',
+            'A class',
+          ],
+          correctAnswer: 0,
+          explanation:
+            'namedtuple creates tuple subclasses with named fields: Point = namedtuple("Point", ["x", "y"])',
         },
       ],
     },
@@ -3159,73 +3172,6 @@ Aim for >80% coverage, but quality > quantity!`,
             'Easy to disable without code changes',
             'Print statements clutter and are hard to manage',
           ],
-          multipleChoice: [
-            {
-              id: 'mc1',
-              question: 'What is the difference between unittest and pytest?',
-              options: [
-                'No difference',
-                'pytest has simpler syntax and better features',
-                'unittest is newer',
-                'pytest only works with classes',
-              ],
-              correctAnswer: 1,
-              explanation:
-                'pytest offers simpler syntax (plain assert), fixtures, parametrization, and better error messages than unittest.',
-            },
-            {
-              id: 'mc2',
-              question: 'What does pytest fixture do?',
-              options: [
-                'Tests the code',
-                'Provides reusable setup/teardown',
-                'Fixes bugs',
-                'Measures performance',
-              ],
-              correctAnswer: 1,
-              explanation:
-                'Fixtures provide reusable setup/teardown logic for tests, like database connections or test data.',
-            },
-            {
-              id: 'mc3',
-              question: 'What is TDD?',
-              options: [
-                'Test-Driven Development',
-                'Test-Debug-Deploy',
-                'Total Development Design',
-                'Technical Design Document',
-              ],
-              correctAnswer: 0,
-              explanation:
-                'TDD (Test-Driven Development): write tests before code, ensuring testability and clear requirements.',
-            },
-            {
-              id: 'mc4',
-              question: 'What does pdb.set_trace() do?',
-              options: [
-                'Traces function calls',
-                'Sets a breakpoint for debugging',
-                'Measures execution time',
-                'Logs errors',
-              ],
-              correctAnswer: 1,
-              explanation:
-                'pdb.set_trace() sets a breakpoint where code execution pauses, allowing interactive debugging.',
-            },
-            {
-              id: 'mc5',
-              question: 'What is pytest parametrize used for?',
-              options: [
-                'Measuring parameters',
-                'Running same test with different inputs',
-                'Setting up fixtures',
-                'Debugging tests',
-              ],
-              correctAnswer: 1,
-              explanation:
-                '@pytest.mark.parametrize runs the same test with multiple input sets, reducing code duplication.',
-            },
-          ],
         },
         {
           id: 'q2',
@@ -3240,6 +3186,87 @@ Aim for >80% coverage, but quality > quantity!`,
             'Negative numbers and duplicates',
             'Type errors and None handling',
           ],
+        },
+        {
+          id: 'q3',
+          question:
+            'Explain the difference between assertions and exceptions for error handling.',
+          sampleAnswer:
+            'Assertions (assert) are for debugging and catching programmer errors during development. They check assumptions that should never fail if code is correct, and can be disabled with python -O. Use for: preconditions, postconditions, invariants. Exceptions (try/except, raise) are for handling runtime errors that might legitimately occur: user input errors, network failures, file not found. They stay enabled in production. Rule: Use assert for "this should never happen if my code is correct", use exceptions for "this might happen due to external factors". Never use assert for input validation in production!',
+          keyPoints: [
+            'assert: debug-time, for programmer errors',
+            'Assertions can be disabled (-O flag)',
+            'Exceptions: runtime, for expected failures',
+            'Exceptions always active in production',
+            'Never use assert for production input validation',
+          ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What is the difference between unittest and pytest?',
+          options: [
+            'No difference',
+            'pytest has simpler syntax and better features',
+            'unittest is newer',
+            'pytest only works with classes',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'pytest offers simpler syntax (plain assert), fixtures, parametrization, and better error messages than unittest.',
+        },
+        {
+          id: 'mc2',
+          question: 'What does pytest fixture do?',
+          options: [
+            'Tests the code',
+            'Provides reusable setup/teardown',
+            'Fixes bugs',
+            'Measures performance',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Fixtures provide reusable setup/teardown logic for tests, like database connections or test data.',
+        },
+        {
+          id: 'mc3',
+          question: 'What is TDD?',
+          options: [
+            'Test-Driven Development',
+            'Test-Debug-Deploy',
+            'Total Development Design',
+            'Technical Design Document',
+          ],
+          correctAnswer: 0,
+          explanation:
+            'TDD (Test-Driven Development): write tests before code, ensuring testability and clear requirements.',
+        },
+        {
+          id: 'mc4',
+          question: 'What does pdb.set_trace() do?',
+          options: [
+            'Traces function calls',
+            'Sets a breakpoint for debugging',
+            'Measures execution time',
+            'Logs errors',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'pdb.set_trace() sets a breakpoint where code execution pauses, allowing interactive debugging.',
+        },
+        {
+          id: 'mc5',
+          question: 'What is pytest parametrize used for?',
+          options: [
+            'Measuring parameters',
+            'Running same test with different inputs',
+            'Setting up fixtures',
+            'Debugging tests',
+          ],
+          correctAnswer: 1,
+          explanation:
+            '@pytest.mark.parametrize runs the same test with multiple input sets, reducing code duplication.',
         },
       ],
     },
@@ -3612,74 +3639,6 @@ Know these pitfalls to debug faster and write cleaner code!`,
             'Fix: Use None, create new object inside',
             'Common with [], {}, but also class instances',
           ],
-          multipleChoice: [
-            {
-              id: 'mc1',
-              question: 'What is wrong with def func(x, lst=[])?',
-              options: [
-                'Nothing',
-                'Mutable default shared across calls',
-                'Lists cannot be default',
-                'Syntax error',
-              ],
-              correctAnswer: 1,
-              explanation:
-                'Mutable defaults are shared. Use None: def func(x, lst=None): lst = lst or []',
-            },
-            {
-              id: 'mc2',
-              question: 'What is the difference between is and ==?',
-              options: [
-                'No difference',
-                'is checks identity, == checks value',
-                'is is faster',
-                '== checks types',
-              ],
-              correctAnswer: 1,
-              explanation:
-                'is checks if same object in memory. == checks if values are equal.',
-            },
-            {
-              id: 'mc3',
-              question:
-                'What is wrong with: for item in list: list.remove(item)?',
-              options: [
-                'Nothing',
-                'Modifying list while iterating skips elements',
-                'Syntax error',
-                'Too slow',
-              ],
-              correctAnswer: 1,
-              explanation:
-                'Never modify list while iterating - indices shift, skipping elements. Use list comprehension.',
-            },
-            {
-              id: 'mc4',
-              question: 'What is the difference between copy() and deepcopy()?',
-              options: [
-                'No difference',
-                'copy() shallow, deepcopy() copies nested too',
-                'deepcopy() faster',
-                'copy() makes backups',
-              ],
-              correctAnswer: 1,
-              explanation:
-                'copy() is shallow. deepcopy() recursively copies all nested objects.',
-            },
-            {
-              id: 'mc5',
-              question: 'What is the difference between / and //?',
-              options: [
-                'No difference',
-                '/ is float division, // is integer division',
-                '// is deprecated',
-                '/ rounds up',
-              ],
-              correctAnswer: 1,
-              explanation:
-                '/ always returns float. // returns integer (floor division): 5//2 = 2, 5/2 = 2.5',
-            },
-          ],
         },
         {
           id: 'q2',
@@ -3693,6 +3652,87 @@ Know these pitfalls to debug faster and write cleaner code!`,
             'Use is only for None, True, False',
             "Small integers cached, don't rely on identity",
           ],
+        },
+        {
+          id: 'q3',
+          question: 'Why is string concatenation in a loop inefficient and how do you fix it?',
+          sampleAnswer:
+            'String concatenation in loops is O(n²) because strings are immutable in Python. Each s += "x" creates a new string by copying all existing characters plus the new one. For n iterations: 1st copy=1 char, 2nd=2 chars, ..., nth=n chars. Total: 1+2+3+...+n = O(n²). Fix: Build a list and use join(): parts = []; for x in items: parts.append(str(x)); result = "".join(parts). This is O(n) because join() only copies characters once. Example: 10,000 concatenations take ~50 million operations with +=, but only 10,000 with join().',
+          keyPoints: [
+            'Strings immutable - each += copies all chars',
+            'Loop concatenation: O(n²) time',
+            'Solution: Build list, use join()',
+            'join() is O(n) - copies once',
+            'Huge performance difference for large strings',
+          ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What is wrong with def func(x, lst=[])?',
+          options: [
+            'Nothing',
+            'Mutable default shared across calls',
+            'Lists cannot be default',
+            'Syntax error',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Mutable defaults are shared. Use None: def func(x, lst=None): lst = lst or []',
+        },
+        {
+          id: 'mc2',
+          question: 'What is the difference between is and ==?',
+          options: [
+            'No difference',
+            'is checks identity, == checks value',
+            'is is faster',
+            '== checks types',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'is checks if same object in memory. == checks if values are equal.',
+        },
+        {
+          id: 'mc3',
+          question:
+            'What is wrong with: for item in list: list.remove(item)?',
+          options: [
+            'Nothing',
+            'Modifying list while iterating skips elements',
+            'Syntax error',
+            'Too slow',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Never modify list while iterating - indices shift, skipping elements. Use list comprehension.',
+        },
+        {
+          id: 'mc4',
+          question: 'What is the difference between copy() and deepcopy()?',
+          options: [
+            'No difference',
+            'copy() shallow, deepcopy() copies nested too',
+            'deepcopy() faster',
+            'copy() makes backups',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'copy() is shallow. deepcopy() recursively copies all nested objects.',
+        },
+        {
+          id: 'mc5',
+          question: 'What is the difference between / and //?',
+          options: [
+            'No difference',
+            '/ is float division, // is integer division',
+            '// is deprecated',
+            '/ rounds up',
+          ],
+          correctAnswer: 1,
+          explanation:
+            '/ always returns float. // returns integer (floor division): 5//2 = 2, 5/2 = 2.5',
         },
       ],
     },

@@ -128,9 +128,6 @@ def climb_stairs_memo(n: int) -> int:
     leetcodeUrl: 'https://leetcode.com/problems/climbing-stairs/',
     youtubeUrl: 'https://www.youtube.com/watch?v=Y0lT9Fck7qI',
     order: 1,
-    topic: 'Dynamic Programming',
-    leetcodeUrl: 'https://leetcode.com/problems/climbing-stairs/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=Y0lT9Fck7qI',
   },
   {
     id: 'house-robber',
@@ -294,9 +291,6 @@ def rob_memo(nums: List[int]) -> int:
     leetcodeUrl: 'https://leetcode.com/problems/house-robber/',
     youtubeUrl: 'https://www.youtube.com/watch?v=73r3KWiEvyk',
     order: 2,
-    topic: 'Dynamic Programming',
-    leetcodeUrl: 'https://leetcode.com/problems/house-robber/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=73r3KWiEvyk',
   },
   {
     id: 'coin-change',
@@ -487,9 +481,6 @@ def coin_change_optimized(coins: List[int], amount: int) -> int:
     leetcodeUrl: 'https://leetcode.com/problems/coin-change/',
     youtubeUrl: 'https://www.youtube.com/watch?v=H9bfqozjoqs',
     order: 3,
-    topic: 'Dynamic Programming',
-    leetcodeUrl: 'https://leetcode.com/problems/coin-change/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=H9bfqozjoqs',
   },
 
   // EASY - Fibonacci Number
@@ -888,7 +879,8 @@ The test cases are generated so that the answer will be less than or equal to \`
   {
     id: 'longest-common-subsequence',
     title: 'Longest Common Subsequence',
-    difficulty: 'medium',
+    difficulty: 'Medium',
+    topic: 'Dynamic Programming',
     description: `Given two strings \`text1\` and \`text2\`, return the length of their longest common subsequence. If there is no common subsequence, return 0.
 
 A **subsequence** of a string is a new string generated from the original string with some characters (can be none) deleted without changing the relative order of the remaining characters.
@@ -947,7 +939,8 @@ Output: 0
   {
     id: 'edit-distance',
     title: 'Edit Distance',
-    difficulty: 'hard',
+    difficulty: 'Hard',
+    topic: 'Dynamic Programming',
     description: `Given two strings \`word1\` and \`word2\`, return the minimum number of operations required to convert \`word1\` to \`word2\`.
 
 You have the following three operations permitted on a word:
@@ -1006,7 +999,8 @@ Output: 5
   {
     id: 'partition-equal-subset-sum',
     title: 'Partition Equal Subset Sum',
-    difficulty: 'medium',
+    difficulty: 'Medium',
+    topic: 'Dynamic Programming',
     description: `Given an integer array \`nums\`, return \`true\` if you can partition the array into two subsets such that the sum of the elements in both subsets is equal or \`false\` otherwise.
 
 **Example 1:**
@@ -1059,7 +1053,8 @@ Explanation: The array cannot be partitioned into equal sum subsets.
   {
     id: 'word-break',
     title: 'Word Break',
-    difficulty: 'medium',
+    difficulty: 'Medium',
+    topic: 'Dynamic Programming',
     description: `Given a string \`s\` and a dictionary of strings \`wordDict\`, return \`true\` if \`s\` can be segmented into a space-separated sequence of one or more dictionary words.
 
 **Note:** The same word in the dictionary may be reused multiple times in the segmentation.
@@ -1120,7 +1115,8 @@ Output: false
   {
     id: 'decode-ways',
     title: 'Decode Ways',
-    difficulty: 'medium',
+    difficulty: 'Medium',
+    topic: 'Dynamic Programming',
     description: `A message containing letters from A-Z can be encoded into numbers using the following mapping:
 
 'A' -> "1"
@@ -1189,7 +1185,8 @@ Explanation: "06" cannot be mapped to "F" because "6" is different from "06".
   {
     id: 'coin-change-2',
     title: 'Coin Change II',
-    difficulty: 'medium',
+    difficulty: 'Medium',
+    topic: 'Dynamic Programming',
     description: `You are given an integer array \`coins\` representing coins of different denominations and an integer \`amount\` representing a total amount of money.
 
 Return the number of combinations that make up that amount. If that amount of money cannot be made up by any combination of the coins, return 0.
@@ -1257,7 +1254,8 @@ Output: 1
   {
     id: 'interleaving-string',
     title: 'Interleaving String',
-    difficulty: 'medium',
+    difficulty: 'Medium',
+    topic: 'Dynamic Programming',
     description: `Given strings \`s1\`, \`s2\`, and \`s3\`, find whether \`s3\` is formed by an interleaving of \`s1\` and \`s2\`.
 
 An interleaving of two strings \`s\` and \`t\` is a configuration where \`s\` and \`t\` are divided into \`n\` and \`m\` substrings respectively, such that:

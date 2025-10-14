@@ -121,8 +121,6 @@ def single_number_oneliner(nums: List[int]) -> int:
     youtubeUrl: 'https://www.youtube.com/watch?v=qMPX1AOa83k',
     order: 1,
     topic: 'Bit Manipulation',
-    leetcodeUrl: 'https://leetcode.com/problems/single-number/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=qMPX1AOa83k',
   },
   {
     id: 'number-of-1-bits',
@@ -259,8 +257,6 @@ def hamming_weight_lookup(n: int) -> int:
     youtubeUrl: 'https://www.youtube.com/watch?v=5Km3utixwZs',
     order: 2,
     topic: 'Bit Manipulation',
-    leetcodeUrl: 'https://leetcode.com/problems/number-of-1-bits/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=5Km3utixwZs',
   },
   {
     id: 'missing-number',
@@ -432,8 +428,6 @@ def missing_number_gauss(nums: List[int]) -> int:
     youtubeUrl: 'https://www.youtube.com/watch?v=WnPLSRLSANE',
     order: 3,
     topic: 'Bit Manipulation',
-    leetcodeUrl: 'https://leetcode.com/problems/missing-number/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=WnPLSRLSANE',
   },
 
   // EASY - Counting Bits

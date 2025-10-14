@@ -2294,7 +2294,7 @@ def test_state_machine(initial_state):
   {
     id: 'complex-number-magic-methods',
     title: 'Complex Number with Magic Methods',
-    difficulty: 'medium',
+    difficulty: 'Medium',
     category: 'python-oop',
     description: `Create a \`ComplexNumber\` class that implements magic methods for arithmetic operations, comparison, and string representation.
 
@@ -2358,18 +2358,26 @@ print(c1 == ComplexNumber(3, 4))  # True
         pass`,
     testCases: [
       {
-        input:
-          'c1 = ComplexNumber(3, 4); c2 = ComplexNumber(1, 2); str(c1 + c2)',
-        expected: '"4 + 6i"',
+        input: [
+          ['ComplexNumber', 3, 4],
+          ['ComplexNumber', 1, 2],
+          ['add'],
+          ['str'],
+        ],
+        expected: '4 + 6i',
       },
       {
-        input: 'c1 = ComplexNumber(3, 4); abs(c1)',
-        expected: '5.0',
+        input: [['ComplexNumber', 3, 4], ['abs']],
+        expected: 5.0,
       },
       {
-        input:
-          'c1 = ComplexNumber(3, 4); c2 = ComplexNumber(1, 2); str(c1 * c2)',
-        expected: '"-5 + 10i"',
+        input: [
+          ['ComplexNumber', 3, 4],
+          ['ComplexNumber', 1, 2],
+          ['multiply'],
+          ['str'],
+        ],
+        expected: '-5 + 10i',
       },
     ],
     hints: [
@@ -2442,7 +2450,7 @@ print(abs(c1))      # 5.0`,
   {
     id: 'custom-list-magic-methods',
     title: 'Custom List with Magic Methods',
-    difficulty: 'medium',
+    difficulty: 'Medium',
     category: 'python-oop',
     description: `Create a \`MyList\` class that behaves like Python's built-in list using magic methods.
 
@@ -2502,16 +2510,16 @@ for item in mylist:
         pass`,
     testCases: [
       {
-        input: 'mylist = MyList([1, 2, 3]); len(mylist)',
-        expected: '3',
+        input: [['MyList', [1, 2, 3]], ['len']],
+        expected: 3,
       },
       {
-        input: 'mylist = MyList([1, 2, 3]); mylist[1]',
-        expected: '2',
+        input: [['MyList', [1, 2, 3]], ['getitem', 1]],
+        expected: 2,
       },
       {
-        input: 'mylist = MyList([1, 2, 3]); 2 in mylist',
-        expected: 'True',
+        input: [['MyList', [1, 2, 3]], ['contains', 2]],
+        expected: true,
       },
     ],
     hints: [
@@ -2572,7 +2580,7 @@ for item in mylist:
   {
     id: 'vector-comparison-magic',
     title: 'Vector with Comparison Magic Methods',
-    difficulty: 'medium',
+    difficulty: 'Medium',
     category: 'python-oop',
     description: `Create a \`Vector\` class that supports comparison operations based on magnitude (length).
 
@@ -2624,16 +2632,16 @@ class Vector:
         pass`,
     testCases: [
       {
-        input: 'v1 = Vector(3, 4); v2 = Vector(0, 5); v1 == v2',
-        expected: 'True',
+        input: [['Vector', 3, 4], ['Vector', 0, 5], ['equals']],
+        expected: true,
       },
       {
-        input: 'v1 = Vector(3, 4); v3 = Vector(1, 1); v1 > v3',
-        expected: 'True',
+        input: [['Vector', 3, 4], ['Vector', 1, 1], ['greater']],
+        expected: true,
       },
       {
-        input: 'v1 = Vector(3, 4); v1.magnitude()',
-        expected: '5.0',
+        input: [['Vector', 3, 4], ['magnitude']],
+        expected: 5.0,
       },
     ],
     hints: [
@@ -2690,7 +2698,7 @@ print(sorted([v1, v3, v2]))  # Sorted by magnitude`,
   {
     id: 'counter-callable-magic',
     title: 'Callable Counter',
-    difficulty: 'easy',
+    difficulty: 'Easy',
     category: 'python-oop',
     description: `Create a \`Counter\` class that tracks how many times it has been called.
 
@@ -2730,17 +2738,16 @@ print(counter())        # 1
         pass`,
     testCases: [
       {
-        input: 'counter = Counter(); counter(); counter(); counter()',
-        expected: '3',
+        input: [['Counter'], ['call'], ['call'], ['call']],
+        expected: 3,
       },
       {
-        input: 'counter = Counter(); counter(); counter.get_count()',
-        expected: '2',
+        input: [['Counter'], ['call'], ['get_count']],
+        expected: 2,
       },
       {
-        input:
-          'counter = Counter(); counter(); counter(); counter.reset(); counter()',
-        expected: '1',
+        input: [['Counter'], ['call'], ['call'], ['reset'], ['call']],
+        expected: 1,
       },
     ],
     hints: [
@@ -2790,7 +2797,7 @@ apply_twice(counter)  # counter is callable!`,
   {
     id: 'hashable-person',
     title: 'Hashable Person Class',
-    difficulty: 'medium',
+    difficulty: 'Medium',
     category: 'python-oop',
     description: `Create a \`Person\` class that can be used in sets and as dictionary keys.
 
@@ -2835,19 +2842,24 @@ print(lookup[p2])      # "Manager" (p2 treated same as p1)
         pass`,
     testCases: [
       {
-        input:
-          'p1 = Person("Alice", 30, "alice@example.com"); p2 = Person("Alice Smith", 30, "alice@example.com"); p1 == p2',
-        expected: 'True',
+        input: [
+          ['Person', 'Alice', 30, 'alice@example.com'],
+          ['Person', 'Alice Smith', 30, 'alice@example.com'],
+          ['equals'],
+        ],
+        expected: true,
       },
       {
-        input:
-          'p1 = Person("Alice", 30, "alice@example.com"); p2 = Person("Alice", 30, "alice@example.com"); len({p1, p2})',
-        expected: '1',
+        input: [
+          ['Person', 'Alice', 30, 'alice@example.com'],
+          ['Person', 'Alice', 30, 'alice@example.com'],
+          ['set_len'],
+        ],
+        expected: 1,
       },
       {
-        input:
-          'p1 = Person("Alice", 30, "alice@example.com"); hash(p1) == hash(p1)',
-        expected: 'True',
+        input: [['Person', 'Alice', 30, 'alice@example.com'], ['hash_equals_self']],
+        expected: true,
       },
     ],
     hints: [

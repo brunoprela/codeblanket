@@ -531,6 +531,5 @@ def is_number_simple(s):
 `,
     timeComplexity: 'O(n) - single pass through the string',
     spaceComplexity: 'O(1) - only tracking a few boolean flags',
-    leetcodeUrl: 'https://leetcode.com/problems/valid-number/',
   },
 ];

@@ -199,8 +199,6 @@ class TrieArray:
     youtubeUrl: 'https://www.youtube.com/watch?v=oobqoCJlHA0',
     order: 1,
     topic: 'Tries',
-    leetcodeUrl: 'https://leetcode.com/problems/implement-trie-prefix-tree/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=oobqoCJlHA0',
   },
   {
     id: 'add-and-search-word',
@@ -403,9 +401,6 @@ class WordDictionaryOptimized:
     youtubeUrl: 'https://www.youtube.com/watch?v=BTf05gs_8iU',
     order: 2,
     topic: 'Tries',
-    leetcodeUrl:
-      'https://leetcode.com/problems/design-add-and-search-words-data-structure/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=BTf05gs_8iU',
   },
   {
     id: 'word-search-ii',
@@ -673,8 +668,6 @@ def find_words_optimized(board: List[List[str]], words: List[str]) -> List[str]:
     youtubeUrl: 'https://www.youtube.com/watch?v=asbcE9mZz_U',
     order: 3,
     topic: 'Tries',
-    leetcodeUrl: 'https://leetcode.com/problems/word-search-ii/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=asbcE9mZz_U',
   },
 
   // EASY - Longest Common Prefix

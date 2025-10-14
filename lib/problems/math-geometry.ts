@@ -124,8 +124,6 @@ Reduces O(n) to O(log n) by halving exponent each step`,
     youtubeUrl: 'https://www.youtube.com/watch?v=g9YQyYi4IQQ',
     order: 2,
     topic: 'Math & Geometry',
-    leetcodeUrl: 'https://leetcode.com/problems/powx-n/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=g9YQyYi4IQQ',
   },
   {
     id: 'happy-number',
@@ -189,8 +187,6 @@ Either reaches 1 or enters a cycle. Detect cycle with two pointers.`,
     youtubeUrl: 'https://www.youtube.com/watch?v=ljz85bxOYJ0',
     order: 3,
     topic: 'Math & Geometry',
-    leetcodeUrl: 'https://leetcode.com/problems/happy-number/',
-    youtubeUrl: 'https://www.youtube.com/watch?v=ljz85bxOYJ0',
   },
 
   // EASY - Plus One
