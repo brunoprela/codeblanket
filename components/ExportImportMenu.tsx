@@ -45,11 +45,13 @@ export default function ExportImportMenu() {
       await importProgress(file);
       setMessage({
         type: 'success',
-        text: 'Progress imported successfully! Refreshing...',
+        text: 'Import complete! Please refresh the page (Cmd/Ctrl+R) to see your data.',
       });
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
+      setIsImporting(false);
+      // Don't auto-reload - let user manually refresh after videos finish importing
+      // setTimeout(() => {
+      //   window.location.reload();
+      // }, 1500);
     } catch (error) {
       console.error('Import failed:', error);
       setMessage({
@@ -245,11 +247,10 @@ export default function ExportImportMenu() {
       {/* Success/Error Message */}
       {message && (
         <div
-          className={`fixed right-4 bottom-4 z-50 rounded-lg border-2 p-4 shadow-xl ${
-            message.type === 'success'
+          className={`fixed right-4 bottom-4 z-50 rounded-lg border-2 p-4 shadow-xl ${message.type === 'success'
               ? 'border-[#50fa7b] bg-[#50fa7b]/10 text-[#50fa7b]'
               : 'border-[#ff5555] bg-[#ff5555]/10 text-[#ff5555]'
-          }`}
+            }`}
         >
           <div className="flex items-center gap-2">
             {message.type === 'success' ? (

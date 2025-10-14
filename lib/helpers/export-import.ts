@@ -141,18 +141,13 @@ function blobToBase64(blob: Blob): Promise<string> {
  */
 export async function exportProgress(): Promise<void> {
   try {
-    // Get data from both IndexedDB and localStorage
-    let data = await getAllData();
+    // Get data from both IndexedDB AND localStorage to ensure nothing is missed
+    const indexedDBData = await getAllData();
+    const localStorageData = getLocalStorageData();
 
-    // If IndexedDB is empty or has very little data, use localStorage as fallback
-    const indexedDBKeys = Object.keys(data);
-    if (indexedDBKeys.length < 2) {
-      console.warn(
-        'IndexedDB has minimal data, including localStorage data in export',
-      );
-      const localStorageData = getLocalStorageData();
-      data = { ...localStorageData, ...data }; // Merge, preferring IndexedDB
-    }
+    // Merge both sources, preferring IndexedDB for duplicates
+    // This ensures we capture module completions and MC quiz progress even if not yet synced
+    const data = { ...localStorageData, ...indexedDBData };
 
     // Get all videos
     const videos = await getAllVideos();
@@ -239,6 +234,7 @@ export async function importProgress(file: File): Promise<void> {
 
         // Import videos if present
         if (importedData.videos && importedData.videos.length > 0) {
+          console.warn(`Importing ${importedData.videos.length} videos...`);
           for (const video of importedData.videos) {
             try {
               const blob = base64ToBlob(video.data);
@@ -247,10 +243,12 @@ export async function importProgress(file: File): Promise<void> {
               console.error(`Failed to import video ${video.id}:`, error);
             }
           }
+          console.warn('Video import complete. Refresh the page to see them.');
         }
 
-        // Trigger storage event to update UI
-        window.dispatchEvent(new Event('storage'));
+        // Don't auto-refresh - let user manually refresh after import completes
+        // This ensures videos are fully imported before the UI tries to load them
+        // window.dispatchEvent(new Event('storage'));
 
         resolve();
       } catch (error) {

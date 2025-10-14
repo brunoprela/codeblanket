@@ -172,10 +172,7 @@ The app creates auto-backups:
 
 ```json
 {
-  "mc-quiz-python-fundamentals-variables": [
-    "question-1",
-    "question-3"
-  ]
+  "mc-quiz-python-fundamentals-variables": ["question-1", "question-3"]
 }
 ```
 
@@ -183,16 +180,14 @@ The app creates auto-backups:
 
 ```json
 {
-  "module-binary-search-completed": [
-    "section-1",
-    "section-2"
-  ]
+  "module-binary-search-completed": ["section-1", "section-2"]
 }
 ```
 
 ### Video Recordings (Discussion Questions)
 
 Stored in IndexedDB video store as Blobs:
+
 - Video ID format: `{moduleId}-{sectionId}-{questionId}-{timestamp}`
 - Exported as base64-encoded strings in export file
 
@@ -205,7 +200,7 @@ Stored in IndexedDB video store as Blobs:
   "data": {
     "codeblanket_completed_problems": ["binary-search", "two-sum"],
     "codeblanket_code_binary-search": "def binary_search(nums, target):\n    ...",
-    "codeblanket_tests_binary-search": [{"input": "...", "expected": "..."}],
+    "codeblanket_tests_binary-search": [{ "input": "...", "expected": "..." }],
     "mc-quiz-python-fundamentals-variables": ["question-1", "question-2"],
     "module-binary-search-completed": ["section-1"]
   },

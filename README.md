@@ -13,7 +13,6 @@ An interactive learning platform focused on mastering binary search algorithms t
 
 ## 🚀 Getting Started
 
-
 ### Prerequisites
 
 - Node.js 18+ (you have v22.13.1 ✅)
@@ -129,16 +128,19 @@ The easiest way to deploy this Next.js app is using [Vercel](https://vercel.com)
 #### Manual Deployment Steps:
 
 1. **Install Vercel CLI** (optional):
+
    ```bash
    npm i -g vercel
    ```
 
 2. **Connect to Vercel**:
+
    ```bash
    vercel login
    ```
 
 3. **Deploy**:
+
    ```bash
    vercel
    ```
@@ -158,6 +160,7 @@ The easiest way to deploy this Next.js app is using [Vercel](https://vercel.com)
 #### Environment Variables:
 
 If you need environment variables:
+
 1. Go to your project in Vercel Dashboard
 2. Navigate to **Settings** → **Environment Variables**
 3. Add your variables (see `.env.example` for reference)
@@ -165,6 +168,7 @@ If you need environment variables:
 ### Build Configuration:
 
 The project includes `vercel.json` with optimized settings:
+
 - Build command: `pnpm run build`
 - Framework detection: Next.js 15
 - Security headers configured

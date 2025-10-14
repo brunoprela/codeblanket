@@ -1,7 +1,9 @@
 # Export/Import System Update - Summary
 
 ## Issue
+
 The export functionality was missing several important data types:
+
 1. **Videos** (discussion question recordings)
 2. **Multiple choice quiz progress**
 3. **Custom test cases**
@@ -11,11 +13,13 @@ The export functionality was missing several important data types:
 ### 1. Updated Export/Import (`lib/helpers/export-import.ts`)
 
 #### New Features:
+
 - **Video Export**: Videos stored in IndexedDB are now converted to base64 and included in exports
 - **Video Import**: Base64 videos are converted back to Blobs and restored to IndexedDB
 - **Expanded Data Coverage**: Added missing prefixes for multiple choice and custom test cases
 
 #### New/Modified Functions:
+
 - `getAllVideos()` - Retrieves all videos from IndexedDB and converts to base64
 - `openVideoStore()` - Opens the IndexedDB video store
 - `blobToBase64()` - Converts video Blobs to base64 strings
@@ -24,19 +28,21 @@ The export functionality was missing several important data types:
 - `importProgress()` - Now restores videos from import
 
 #### Updated Export Data Prefixes:
+
 ```typescript
 const prefixes = [
   'codeblanket_completed_problems',
   'codeblanket_code_',
-  'codeblanket_tests_',  // ✅ NEW: Custom test cases
-  'module-',             // Module completion
-  'mc-quiz-',           // ✅ NEW: Multiple choice quiz progress
+  'codeblanket_tests_', // ✅ NEW: Custom test cases
+  'module-', // Module completion
+  'mc-quiz-', // ✅ NEW: Multiple choice quiz progress
 ];
 ```
 
 ### 2. Updated IndexedDB Helper (`lib/helpers/indexeddb.ts`)
 
 #### Changes:
+
 - Added `codeblanket_tests_` and `mc-quiz-` to migration prefixes
 - Ensures all new data types are migrated from localStorage to IndexedDB
 
@@ -45,11 +51,13 @@ const prefixes = [
 #### New Functions Added:
 
 **Multiple Choice Progress:**
+
 - `saveMultipleChoiceProgress(moduleId, sectionId, completedIds)` - Save MC quiz progress with IndexedDB sync
 - `getMultipleChoiceProgress(moduleId, sectionId)` - Retrieve MC quiz progress
 - `clearMultipleChoiceProgress(moduleId, sectionId)` - Clear MC quiz progress
 
 **Module Section Completion:**
+
 - `getCompletedSections(moduleId)` - Get completed sections for a module
 - `saveCompletedSections(moduleId, sectionIds)` - Save completed sections with IndexedDB sync
 - `markSectionCompleted(moduleId, sectionId)` - Mark a section as completed
@@ -61,6 +69,7 @@ All new functions automatically sync to IndexedDB in the background.
 ### 4. Updated Documentation (`STORAGE.md`)
 
 Added comprehensive documentation for:
+
 - New storage functions
 - Video storage format
 - Multiple choice quiz progress format
@@ -76,7 +85,7 @@ Added comprehensive documentation for:
   "data": {
     "codeblanket_completed_problems": ["binary-search", "two-sum"],
     "codeblanket_code_binary-search": "def binary_search(nums, target):\n    ...",
-    "codeblanket_tests_binary-search": [{"input": "...", "expected": "..."}],
+    "codeblanket_tests_binary-search": [{ "input": "...", "expected": "..." }],
     "mc-quiz-python-fundamentals-variables": ["question-1", "question-2"],
     "module-binary-search-completed": ["section-1"]
   },
@@ -93,24 +102,29 @@ Added comprehensive documentation for:
 ## Data Now Exported
 
 ✅ **Coding Problems:**
+
 - Completed problem IDs
 - User's saved code
 - Custom test cases
 
 ✅ **Multiple Choice Quizzes:**
+
 - Completed question IDs per module/section
 
 ✅ **Discussion Questions:**
+
 - Video recordings (as base64)
 - Video timestamps
 - Video IDs
 
 ✅ **Module Progress:**
+
 - Completed sections per module
 
 ## Important Notes
 
 ### Video Export Size
+
 - Videos are exported as base64-encoded strings
 - This can result in large export files (10-100+ MB)
 - The export function logs the total size when videos are included
@@ -118,14 +132,14 @@ Added comprehensive documentation for:
 
 ### Storage Keys Reference
 
-| Data Type | Key Format | Example |
-|-----------|-----------|---------|
-| Completed Problems | `codeblanket_completed_problems` | Array of problem IDs |
-| User Code | `codeblanket_code_{problemId}` | `codeblanket_code_binary-search` |
-| Custom Tests | `codeblanket_tests_{problemId}` | `codeblanket_tests_binary-search` |
-| MC Quiz Progress | `mc-quiz-{moduleId}-{sectionId}` | `mc-quiz-python-fundamentals-variables` |
-| Module Completion | `module-{moduleId}-completed` | `module-binary-search-completed` |
-| Videos | Stored in IndexedDB `videos` store | Video ID: `{moduleId}-{sectionId}-{questionId}-{timestamp}` |
+| Data Type          | Key Format                         | Example                                                     |
+| ------------------ | ---------------------------------- | ----------------------------------------------------------- |
+| Completed Problems | `codeblanket_completed_problems`   | Array of problem IDs                                        |
+| User Code          | `codeblanket_code_{problemId}`     | `codeblanket_code_binary-search`                            |
+| Custom Tests       | `codeblanket_tests_{problemId}`    | `codeblanket_tests_binary-search`                           |
+| MC Quiz Progress   | `mc-quiz-{moduleId}-{sectionId}`   | `mc-quiz-python-fundamentals-variables`                     |
+| Module Completion  | `module-{moduleId}-completed`      | `module-binary-search-completed`                            |
+| Videos             | Stored in IndexedDB `videos` store | Video ID: `{moduleId}-{sectionId}-{questionId}-{timestamp}` |
 
 ## Testing
 
@@ -163,6 +177,7 @@ To test the updated export/import:
 ## Future Improvements
 
 Consider these enhancements:
+
 1. **Separate Video Export**: Option to export videos separately as video files
 2. **Selective Export**: Let users choose what to export (with/without videos)
 3. **Compression**: Compress videos before encoding to base64
@@ -172,6 +187,7 @@ Consider these enhancements:
 ## Migration Path
 
 All existing data will be automatically included in exports:
+
 - No action required from users
 - Next export will include all new data types
 - Old export files can still be imported (backwards compatible)
@@ -180,4 +196,3 @@ All existing data will be automatically included in exports:
 
 **Last Updated:** 2025-10-14
 **Version:** 1.0
-
