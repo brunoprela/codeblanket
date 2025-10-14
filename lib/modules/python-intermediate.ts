@@ -2730,7 +2730,8 @@ print(timeit.timeit(deque_queue, number=100))
         },
         {
           id: 'q3',
-          question: 'Explain the practical differences between OrderedDict and regular dict in Python 3.7+.',
+          question:
+            'Explain the practical differences between OrderedDict and regular dict in Python 3.7+.',
           sampleAnswer:
             'In Python 3.7+, regular dicts maintain insertion order, making OrderedDict less critical. However, OrderedDict still has unique features: (1) move_to_end(key) to reorder items, (2) popitem(last=False/True) to remove from specific end, (3) Explicit ordering semantics - code intent is clearer, (4) Equality checks consider order: OrderedDict(a=1, b=2) != OrderedDict(b=2, a=1), but regular dicts with same items are equal regardless of order. Use OrderedDict when you need these operations or want to explicitly signal that order matters for correctness (e.g., LRU cache implementation).',
           keyPoints: [
@@ -3655,7 +3656,8 @@ Know these pitfalls to debug faster and write cleaner code!`,
         },
         {
           id: 'q3',
-          question: 'Why is string concatenation in a loop inefficient and how do you fix it?',
+          question:
+            'Why is string concatenation in a loop inefficient and how do you fix it?',
           sampleAnswer:
             'String concatenation in loops is O(n²) because strings are immutable in Python. Each s += "x" creates a new string by copying all existing characters plus the new one. For n iterations: 1st copy=1 char, 2nd=2 chars, ..., nth=n chars. Total: 1+2+3+...+n = O(n²). Fix: Build a list and use join(): parts = []; for x in items: parts.append(str(x)); result = "".join(parts). This is O(n) because join() only copies characters once. Example: 10,000 concatenations take ~50 million operations with +=, but only 10,000 with join().',
           keyPoints: [
@@ -3696,8 +3698,7 @@ Know these pitfalls to debug faster and write cleaner code!`,
         },
         {
           id: 'mc3',
-          question:
-            'What is wrong with: for item in list: list.remove(item)?',
+          question: 'What is wrong with: for item in list: list.remove(item)?',
           options: [
             'Nothing',
             'Modifying list while iterating skips elements',

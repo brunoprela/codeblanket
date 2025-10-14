@@ -4642,7 +4642,10 @@ def least_interval(tasks, n):
         expected: 6,
       },
       {
-        input: [['A', 'A', 'A', 'A', 'A', 'A', 'B', 'C', 'D', 'E', 'F', 'G'], 2],
+        input: [
+          ['A', 'A', 'A', 'A', 'A', 'A', 'B', 'C', 'D', 'E', 'F', 'G'],
+          2,
+        ],
         expected: 16,
       },
     ],
@@ -4874,7 +4877,10 @@ def most_common_word(paragraph, banned):
     pass`,
     testCases: [
       {
-        input: ['Bob hit a ball, the hit BALL flew far after it was hit.', ['hit']],
+        input: [
+          'Bob hit a ball, the hit BALL flew far after it was hit.',
+          ['hit'],
+        ],
         expected: 'ball',
       },
       {

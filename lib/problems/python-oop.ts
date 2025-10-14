@@ -2514,11 +2514,17 @@ for item in mylist:
         expected: 3,
       },
       {
-        input: [['MyList', [1, 2, 3]], ['getitem', 1]],
+        input: [
+          ['MyList', [1, 2, 3]],
+          ['getitem', 1],
+        ],
         expected: 2,
       },
       {
-        input: [['MyList', [1, 2, 3]], ['contains', 2]],
+        input: [
+          ['MyList', [1, 2, 3]],
+          ['contains', 2],
+        ],
         expected: true,
       },
     ],
@@ -2858,7 +2864,10 @@ print(lookup[p2])      # "Manager" (p2 treated same as p1)
         expected: 1,
       },
       {
-        input: [['Person', 'Alice', 30, 'alice@example.com'], ['hash_equals_self']],
+        input: [
+          ['Person', 'Alice', 30, 'alice@example.com'],
+          ['hash_equals_self'],
+        ],
         expected: true,
       },
     ],

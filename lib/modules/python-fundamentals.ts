@@ -3106,7 +3106,8 @@ print(pow(2, 10, 100))  # 24 (2^10 % 100)
         },
         {
           id: 'q3',
-          question: 'Explain why all([]) returns True but any([]) returns False.',
+          question:
+            'Explain why all([]) returns True but any([]) returns False.',
           sampleAnswer:
             "all([]) returns True because of vacuous truth in logic: a statement about all elements of an empty set is considered true since there are no counterexamples. Think: 'all numbers in [] are positive' - technically true because there are no numbers to disprove it. any([]) returns False because there's no element to make it True. This matters in code: if all(validations): can pass with empty validations[], but if any(errors): won't trigger with no errors. Be careful with empty sequences - sometimes you want to explicitly check if not items: first.",
           keyPoints: [
@@ -3161,12 +3162,7 @@ print(pow(2, 10, 100))  # 24 (2^10 % 100)
         {
           id: 'mc4',
           question: 'What does map(func, iterable) return?',
-          options: [
-            'A list',
-            'A map object (iterator)',
-            'A tuple',
-            'A set',
-          ],
+          options: ['A list', 'A map object (iterator)', 'A tuple', 'A set'],
           correctAnswer: 1,
           explanation:
             'map() returns a map object (iterator). Use list(map(...)) to get a list.',

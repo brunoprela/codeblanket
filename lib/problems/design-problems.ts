@@ -974,7 +974,18 @@ Matches real browser behavior.
           ['back', 2],
           ['back', 7],
         ],
-        expected: [null, null, null, 'page1', 'home', 'page1', null, 'page1', 'home', 'home'],
+        expected: [
+          null,
+          null,
+          null,
+          'page1',
+          'home',
+          'page1',
+          null,
+          'page1',
+          'home',
+          'home',
+        ],
       },
     ],
     solution: `# Approach 1: Two Stacks
@@ -1896,7 +1907,8 @@ Heap maintains spots sorted by (level, row), so \`heap[0]\` is always closest.
           ['park_vehicle', 'truck'],
           ['remove_vehicle', 'car'],
         ],
-        expected: 'Creates parking lot with 2 spots, parks car in compact, truck in large, removes car',
+        expected:
+          'Creates parking lot with 2 spots, parks car in compact, truck in large, removes car',
       },
     ],
     solution: `from enum import Enum
@@ -2167,7 +2179,12 @@ expand("http://short.url/1"):
           ['expand', 'result'],
           ['getClickCount', 'code'],
         ],
-        expected: [null, 'http://short.url/1', 'https://leetcode.com/problems/design', 1],
+        expected: [
+          null,
+          'http://short.url/1',
+          'https://leetcode.com/problems/design',
+          1,
+        ],
       },
     ],
     solution: `class URLShortener:
