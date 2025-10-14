@@ -13,6 +13,7 @@ An interactive learning platform focused on mastering binary search algorithms t
 
 ## 🚀 Getting Started
 
+
 ### Prerequisites
 
 - Node.js 18+ (you have v22.13.1 ✅)
