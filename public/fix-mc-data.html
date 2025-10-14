@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Fix MC Data</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #1e1e1e;
+            color: #d4d4d4;
+        }
+
+        button {
+            background: #0e639c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #1177bb;
+        }
+
+        button.danger {
+            background: #f48771;
+        }
+
+        button.danger:hover {
+            background: #ff5555;
+        }
+
+        pre {
+            background: #2d2d2d;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+
+        .warning {
+            color: #f48771;
+        }
+
+        .success {
+            color: #89d185;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Fix Multiple Choice Data Corruption</h1>
+    <p>This tool will clean up your multiple choice progress data by removing questions that don't belong to each
+        section.</p>
+
+    <button onclick="analyzeData()">1. Analyze Data</button>
+    <button onclick="fixData()" class="danger">2. Fix Corrupted Data</button>
+    <button onclick="location.href='/check-mc-data.html'">3. Verify Fix</button>
+
+    <pre id="output">Click "1. Analyze Data" to see what needs fixing...</pre>
+
+    <script>
+        // Map of section IDs to their valid question ID prefixes
+        const sectionPrefixes = {
+            'variables-types': ['pf-variables-mc-'],
+            'control-flow': ['pf-control-mc-'],
+            'data-structures': ['pf-datastructures-mc-'],
+            'functions': ['pf-functions-mc-'],
+            'strings': ['pf-strings-mc-'],
+            'none-handling': ['pf-none-mc-'],
+            'modules-imports': ['mc'],  // This section uses generic mc1, mc2, etc.
+            'list-comprehensions': ['mc'],
+            'lambda-functions': ['mc'],
+            'built-in-functions': ['mc'],
+        };
+
+        function analyzeData() {
+            const output = document.getElementById('output');
+            let result = '<span class="warning">ANALYSIS RESULTS:</span>\n\n';
+
+            const mcKeys = Object.keys(localStorage)
+                .filter(k => k.startsWith('mc-quiz-'))
+                .sort();
+
+            let corruptedCount = 0;
+            const fixes = [];
+
+            mcKeys.forEach(key => {
+                // Extract section ID from key
+                // Format: mc-quiz-{moduleId}-{sectionId}
+                // Example: mc-quiz-python-fundamentals-variables-types
+                let sectionId = null;
+
+                // Try to extract section ID by removing known module prefixes
+                if (key.startsWith('mc-quiz-python-fundamentals-')) {
+                    sectionId = key.replace('mc-quiz-python-fundamentals-', '');
+                } else if (key.startsWith('mc-quiz-python-intermediate-')) {
+                    sectionId = key.replace('mc-quiz-python-intermediate-', '');
+                } else if (key.startsWith('mc-quiz-python-advanced-')) {
+                    sectionId = key.replace('mc-quiz-python-advanced-', '');
+                } else if (key.startsWith('mc-quiz-python-oop-')) {
+                    sectionId = key.replace('mc-quiz-python-oop-', '');
+                } else {
+                    // For other modules, extract everything after the last dash before the section
+                    const parts = key.split('-');
+                    sectionId = parts[parts.length - 1]; // Last part is usually the section
+                }
+
+                const data = JSON.parse(localStorage.getItem(key));
+                if (data.length === 0) return;
+
+                const prefixes = sectionPrefixes[sectionId];
+                if (!prefixes) {
+                    result += `${key}: Unknown section "${sectionId}", skipping\n`;
+                    return;
+                }
+
+                const validQuestions = data.filter(qId => {
+                    return prefixes.some(prefix => qId.startsWith(prefix));
+                });
+
+                if (validQuestions.length !== data.length) {
+                    corruptedCount++;
+                    const invalidQuestions = data.filter(qId => {
+                        return !prefixes.some(prefix => qId.startsWith(prefix));
+                    });
+
+                    result += `<span class="warning">⚠️ ${key}</span>\n`;
+                    result += `  Current: ${data.length} questions\n`;
+                    result += `  Valid: ${validQuestions.length} questions\n`;
+                    result += `  Invalid: ${invalidQuestions.join(', ')}\n\n`;
+
+                    fixes.push({ key, validQuestions });
+                } else {
+                    result += `<span class="success">✓ ${key}</span> - OK (${data.length} questions)\n`;
+                }
+            });
+
+            result += `\n<span class="warning">Found ${corruptedCount} corrupted sections</span>\n`;
+
+            if (corruptedCount > 0) {
+                result += '\nClick "2. Fix Corrupted Data" to clean them up.';
+            }
+
+            output.innerHTML = result;
+
+            // Store fixes for later use
+            window.pendingFixes = fixes;
+        }
+
+        function fixData() {
+            if (!window.pendingFixes || window.pendingFixes.length === 0) {
+                alert('Please run "1. Analyze Data" first!');
+                return;
+            }
+
+            if (!confirm(`This will fix ${window.pendingFixes.length} corrupted sections. Continue?`)) {
+                return;
+            }
+
+            const output = document.getElementById('output');
+            let result = '<span class="success">FIXING DATA...</span>\n\n';
+
+            window.pendingFixes.forEach(fix => {
+                const oldData = JSON.parse(localStorage.getItem(fix.key));
+                localStorage.setItem(fix.key, JSON.stringify(fix.validQuestions));
+
+                result += `<span class="success">✓ Fixed ${fix.key}</span>\n`;
+                result += `  Before: ${oldData.length} questions\n`;
+                result += `  After: ${fix.validQuestions.length} questions\n`;
+                result += `  Removed: ${oldData.length - fix.validQuestions.length} invalid questions\n\n`;
+            });
+
+            result += `\n<span class="success">✅ All done! Refresh your app to see corrected counts.</span>`;
+            output.innerHTML = result;
+
+            window.pendingFixes = [];
+        }
+    </script>
+</body>
+
+</html>

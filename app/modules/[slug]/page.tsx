@@ -201,58 +201,73 @@ export default function ModulePage({
 
     loadProgress();
 
-    // Listen for updates
+    // Listen for updates with debouncing to prevent multiple rapid updates
+    let updateTimeout: NodeJS.Timeout | null = null;
+
     const handleUpdate = async () => {
-      setCompletedProblems(getCompletedProblems());
+      // Debounce updates to prevent counting the same data multiple times
+      if (updateTimeout) {
+        clearTimeout(updateTimeout);
+      }
 
-      // Update multiple choice
-      let mcCompleted = 0;
-      for (const section of moduleData.sections) {
-        if (section.multipleChoice && section.multipleChoice.length > 0) {
-          const storageKey = `mc-quiz-${slug}-${section.id}`;
-          const stored = localStorage.getItem(storageKey);
-          if (stored) {
-            try {
-              const completedQuestions = JSON.parse(stored);
-              mcCompleted += completedQuestions.length;
-            } catch (e) {
-              console.error('Failed to parse MC quiz progress:', e);
+      updateTimeout = setTimeout(async () => {
+        setCompletedProblems(getCompletedProblems());
+
+        // Update multiple choice
+        let mcCompleted = 0;
+        for (const section of moduleData.sections) {
+          if (section.multipleChoice && section.multipleChoice.length > 0) {
+            const storageKey = `mc-quiz-${slug}-${section.id}`;
+            const stored = localStorage.getItem(storageKey);
+            if (stored) {
+              try {
+                const completedQuestions = JSON.parse(stored);
+                // Deduplicate to ensure clean count
+                const uniqueQuestions = [...new Set(completedQuestions)];
+                mcCompleted += uniqueQuestions.length;
+              } catch (e) {
+                console.error('Failed to parse MC quiz progress:', e);
+              }
             }
           }
         }
-      }
-      setCompletedMultipleChoice(mcCompleted);
+        setCompletedMultipleChoice(mcCompleted);
 
-      // Update discussion progress
-      let discussionCompleted = 0;
-      for (const section of moduleData.sections) {
-        if (section.quiz) {
-          for (const question of section.quiz) {
-            const questionId = `${slug}-${section.id}-${question.id}`;
-            const videos = await getVideosForQuestion(questionId);
-            if (videos.length > 0) {
-              discussionCompleted++;
+        // Update discussion progress
+        let discussionCompleted = 0;
+        for (const section of moduleData.sections) {
+          if (section.quiz) {
+            for (const question of section.quiz) {
+              const questionId = `${slug}-${section.id}-${question.id}`;
+              const videos = await getVideosForQuestion(questionId);
+              if (videos.length > 0) {
+                discussionCompleted++;
+              }
             }
           }
         }
-      }
-      setCompletedDiscussions(discussionCompleted);
+        setCompletedDiscussions(discussionCompleted);
+      }, 100); // 100ms debounce
     };
 
-    // Set up polling for localStorage changes (storage event doesn't fire in same window)
-    const pollInterval = setInterval(handleUpdate, 300);
+    // Set up less aggressive polling (1 second instead of 300ms)
+    // This catches changes from other tabs/windows
+    const pollInterval = setInterval(handleUpdate, 1000);
 
     window.addEventListener('focus', handleUpdate);
     window.addEventListener('storage', handleUpdate);
     window.addEventListener('problemCompleted', handleUpdate);
     window.addEventListener('problemReset', handleUpdate);
+    window.addEventListener('mcQuizUpdated', handleUpdate);
 
     return () => {
+      if (updateTimeout) clearTimeout(updateTimeout);
       clearInterval(pollInterval);
       window.removeEventListener('focus', handleUpdate);
       window.removeEventListener('storage', handleUpdate);
       window.removeEventListener('problemCompleted', handleUpdate);
       window.removeEventListener('problemReset', handleUpdate);
+      window.removeEventListener('mcQuizUpdated', handleUpdate);
     };
   }, [slug, moduleData.sections]);
 

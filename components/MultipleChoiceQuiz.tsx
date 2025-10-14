@@ -44,17 +44,43 @@ export function MultipleChoiceQuiz({
       } catch (e) {
         console.error('Failed to load completed questions:', e);
       }
+    } else {
+      // CRITICAL: Reset state when no stored data for this section
+      setCompletedQuestions(new Set());
     }
+
+    // Also reset UI state when changing sections
+    setShowResults({});
+    setSelectedAnswers({});
   }, [moduleId, sectionId]);
 
   // Save completed questions to localStorage
   const saveProgress = (questionId: string) => {
-    const newCompleted = new Set(completedQuestions);
-    newCompleted.add(questionId);
-    setCompletedQuestions(newCompleted);
-
+    // CRITICAL: Always read fresh data from localStorage to avoid cross-contamination
     const storageKey = `mc-quiz-${moduleId}-${sectionId}`;
-    localStorage.setItem(storageKey, JSON.stringify(Array.from(newCompleted)));
+    const stored = localStorage.getItem(storageKey);
+    const currentCompleted = stored
+      ? new Set(JSON.parse(stored))
+      : new Set<string>();
+
+    // Add the new question
+    currentCompleted.add(questionId);
+
+    // Update state
+    setCompletedQuestions(currentCompleted);
+
+    // Save to localStorage
+    localStorage.setItem(
+      storageKey,
+      JSON.stringify(Array.from(currentCompleted)),
+    );
+
+    // Dispatch custom event to trigger updates (storage event doesn't fire in same window)
+    window.dispatchEvent(
+      new CustomEvent('mcQuizUpdated', {
+        detail: { moduleId, sectionId, questionId },
+      }),
+    );
   };
 
   const handleSelectAnswer = (

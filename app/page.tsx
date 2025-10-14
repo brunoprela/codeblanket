@@ -173,122 +173,136 @@ export default function Home() {
     };
     loadMultipleChoiceStats();
 
-    // Listen for completion events
+    // Listen for completion events with debouncing
+    let updateTimeout: NodeJS.Timeout | null = null;
+
     const handleUpdate = async () => {
-      setCompletedProblems(getCompletedProblems());
-
-      const newProgress: Record<string, { completed: number; total: number }> =
-        {};
-      moduleCategories.forEach((moduleCategory) => {
-        const storageKey = `module-${moduleCategory.id}-completed`;
-        const stored = localStorage.getItem(storageKey);
-        const completedSections = stored ? JSON.parse(stored) : [];
-        newProgress[moduleCategory.id] = {
-          completed: completedSections.length,
-          total: moduleCategory.module.sections.length,
-        };
-      });
-      setModuleProgress(newProgress);
-
-      // Update discussion stats
-      const completed = await getCompletedDiscussionQuestionsCount();
-      setCompletedDiscussions(completed);
-
-      // Update discussion progress per module
-      const discussionProgress: Record<
-        string,
-        { completed: number; total: number }
-      > = {};
-
-      for (const moduleCategory of moduleCategories) {
-        let completedCount = 0;
-        let totalCount = 0;
-
-        for (const section of moduleCategory.module.sections) {
-          if (section.quiz) {
-            totalCount += section.quiz.length;
-
-            for (const question of section.quiz) {
-              const questionId = `${moduleCategory.id}-${section.id}-${question.id}`;
-              const videos = await getVideosForQuestion(questionId);
-              if (videos.length > 0) {
-                completedCount++;
-              }
-            }
-          }
-        }
-
-        discussionProgress[moduleCategory.id] = {
-          completed: completedCount,
-          total: totalCount,
-        };
+      // Debounce updates to prevent counting the same data multiple times
+      if (updateTimeout) {
+        clearTimeout(updateTimeout);
       }
 
-      setModuleDiscussionProgress(discussionProgress);
+      updateTimeout = setTimeout(async () => {
+        setCompletedProblems(getCompletedProblems());
 
-      // Update multiple choice stats
-      const mcCompleted =
-        getCompletedMultipleChoiceQuestionsCount(moduleCategories);
-      setCompletedMultipleChoice(mcCompleted);
+        const newProgress: Record<
+          string,
+          { completed: number; total: number }
+        > = {};
+        moduleCategories.forEach((moduleCategory) => {
+          const storageKey = `module-${moduleCategory.id}-completed`;
+          const stored = localStorage.getItem(storageKey);
+          const completedSections = stored ? JSON.parse(stored) : [];
+          newProgress[moduleCategory.id] = {
+            completed: completedSections.length,
+            total: moduleCategory.module.sections.length,
+          };
+        });
+        setModuleProgress(newProgress);
 
-      // Update multiple choice progress per module
-      const mcProgress: Record<string, { completed: number; total: number }> =
-        {};
+        // Update discussion stats
+        const completed = await getCompletedDiscussionQuestionsCount();
+        setCompletedDiscussions(completed);
 
-      for (const moduleCategory of moduleCategories) {
-        let completedCount = 0;
-        let totalCount = 0;
+        // Update discussion progress per module
+        const discussionProgress: Record<
+          string,
+          { completed: number; total: number }
+        > = {};
 
-        for (const section of moduleCategory.module.sections) {
-          if (section.multipleChoice) {
-            totalCount += section.multipleChoice.length;
+        for (const moduleCategory of moduleCategories) {
+          let completedCount = 0;
+          let totalCount = 0;
 
-            const storageKey = `mc-quiz-${moduleCategory.id}-${section.id}`;
-            const stored = localStorage.getItem(storageKey);
-            if (stored) {
-              try {
-                const completedQuestions = JSON.parse(stored);
-                // Deduplicate in case of corrupted data
-                const uniqueQuestions = [...new Set(completedQuestions)];
+          for (const section of moduleCategory.module.sections) {
+            if (section.quiz) {
+              totalCount += section.quiz.length;
 
-                // Fix corrupted data if duplicates found
-                if (uniqueQuestions.length !== completedQuestions.length) {
-                  localStorage.setItem(
-                    storageKey,
-                    JSON.stringify(uniqueQuestions),
-                  );
-                  console.warn(
-                    `Fixed duplicates in ${storageKey}: ${completedQuestions.length} → ${uniqueQuestions.length}`,
-                  );
+              for (const question of section.quiz) {
+                const questionId = `${moduleCategory.id}-${section.id}-${question.id}`;
+                const videos = await getVideosForQuestion(questionId);
+                if (videos.length > 0) {
+                  completedCount++;
                 }
-
-                completedCount += uniqueQuestions.length;
-              } catch (e) {
-                console.error('Failed to parse MC quiz progress:', e);
               }
             }
           }
+
+          discussionProgress[moduleCategory.id] = {
+            completed: completedCount,
+            total: totalCount,
+          };
         }
 
-        mcProgress[moduleCategory.id] = {
-          completed: completedCount,
-          total: totalCount,
-        };
-      }
+        setModuleDiscussionProgress(discussionProgress);
 
-      setModuleMultipleChoiceProgress(mcProgress);
+        // Update multiple choice stats
+        const mcCompleted =
+          getCompletedMultipleChoiceQuestionsCount(moduleCategories);
+        setCompletedMultipleChoice(mcCompleted);
+
+        // Update multiple choice progress per module
+        const mcProgress: Record<string, { completed: number; total: number }> =
+          {};
+
+        for (const moduleCategory of moduleCategories) {
+          let completedCount = 0;
+          let totalCount = 0;
+
+          for (const section of moduleCategory.module.sections) {
+            if (section.multipleChoice) {
+              totalCount += section.multipleChoice.length;
+
+              const storageKey = `mc-quiz-${moduleCategory.id}-${section.id}`;
+              const stored = localStorage.getItem(storageKey);
+              if (stored) {
+                try {
+                  const completedQuestions = JSON.parse(stored);
+                  // Deduplicate in case of corrupted data
+                  const uniqueQuestions = [...new Set(completedQuestions)];
+
+                  // Fix corrupted data if duplicates found
+                  if (uniqueQuestions.length !== completedQuestions.length) {
+                    localStorage.setItem(
+                      storageKey,
+                      JSON.stringify(uniqueQuestions),
+                    );
+                    console.warn(
+                      `Fixed duplicates in ${storageKey}: ${completedQuestions.length} → ${uniqueQuestions.length}`,
+                    );
+                  }
+
+                  completedCount += uniqueQuestions.length;
+                } catch (e) {
+                  console.error('Failed to parse MC quiz progress:', e);
+                }
+              }
+            }
+          }
+
+          mcProgress[moduleCategory.id] = {
+            completed: completedCount,
+            total: totalCount,
+          };
+        }
+
+        setModuleMultipleChoiceProgress(mcProgress);
+      }, 100); // 100ms debounce
     };
 
     window.addEventListener('focus', handleUpdate);
     window.addEventListener('storage', handleUpdate);
     window.addEventListener('problemCompleted', handleUpdate);
     window.addEventListener('problemReset', handleUpdate);
+    window.addEventListener('mcQuizUpdated', handleUpdate);
 
     return () => {
+      if (updateTimeout) clearTimeout(updateTimeout);
       window.removeEventListener('focus', handleUpdate);
       window.removeEventListener('storage', handleUpdate);
       window.removeEventListener('problemCompleted', handleUpdate);
       window.removeEventListener('problemReset', handleUpdate);
+      window.removeEventListener('mcQuizUpdated', handleUpdate);
     };
   }, []);
 

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>MC Data Check</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #1e1e1e;
+            color: #d4d4d4;
+        }
+
+        pre {
+            background: #2d2d2d;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+
+        .key {
+            color: #4fc1ff;
+            font-weight: bold;
+        }
+
+        .warning {
+            color: #f48771;
+        }
+
+        .success {
+            color: #89d185;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Multiple Choice Storage Data</h1>
+    <button onclick="location.reload()">Refresh</button>
+    <pre id="output"></pre>
+
+    <script>
+        const output = document.getElementById('output');
+        const mcKeys = Object.keys(localStorage).filter(k => k.startsWith('mc-quiz-')).sort();
+
+        let totalStored = 0;
+        let totalUnique = 0;
+        let result = 'Found ' + mcKeys.length + ' mc-quiz keys:\n\n';
+
+        mcKeys.forEach(key => {
+            const data = JSON.parse(localStorage.getItem(key));
+            const unique = [...new Set(data)];
+            totalStored += data.length;
+            totalUnique += unique.length;
+
+            const hasDuplicates = data.length !== unique.length;
+
+            result += `<span class="key">${key}</span>\n`;
+            result += `  Stored: ${JSON.stringify(data)}\n`;
+            result += `  Count: ${data.length} stored, ${unique.length} unique`;
+            if (hasDuplicates) {
+                result += ` <span class="warning">⚠️ HAS DUPLICATES!</span>`;
+            } else {
+                result += ` <span class="success">✓</span>`;
+            }
+            result += '\n\n';
+        });
+
+        result += `<span class="key">TOTALS:</span>\n`;
+        result += `Total stored: ${totalStored}\n`;
+        result += `Total unique: ${totalUnique}\n`;
+        if (totalStored !== totalUnique) {
+            result += `<span class="warning">⚠️ ${totalStored - totalUnique} duplicate entries!</span>`;
+        }
+
+        output.innerHTML = result;
+    </script>
+</body>
+
+</html>
