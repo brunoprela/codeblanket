@@ -59,6 +59,21 @@ OOP helps organize complex systems by modeling real-world entities and their rel
             'Prefer composition to avoid fragile hierarchies',
           ],
         },
+        {
+          id: 'q3',
+          question:
+            'What is the difference between class attributes and instance attributes? When should you use each?',
+          hint: 'Think about what is shared vs unique to each object, and memory implications.',
+          sampleAnswer:
+            'Class attributes are shared by ALL instances of a class and defined directly in the class body. Instance attributes are unique to each object and defined in __init__. Use class attributes for: 1) Constants shared by all instances (like Dog.species = "Canis familiaris"), 2) Default values, 3) Counters tracking total instances. Use instance attributes for: 1) Data unique to each object (like self.name, self.age), 2) State that varies per instance. Be careful: if you modify a mutable class attribute (like a list), it affects ALL instances! For example, if all Dogs share Dog.tricks = [], adding a trick to one dog adds it to all dogs—use instance attributes for per-object data.',
+          keyPoints: [
+            'Class attributes: shared by all instances',
+            'Instance attributes: unique per object',
+            'Use class attributes for constants, defaults',
+            'Use instance attributes for per-object state',
+            'Beware: mutable class attributes are shared!',
+          ],
+        },
       ],
       multipleChoice: [
         {
@@ -86,6 +101,45 @@ OOP helps organize complex systems by modeling real-world entities and their rel
           correctAnswer: 2,
           explanation:
             'Inheritance represents "is-a" relationships. A Dog IS AN Animal is a true subtype relationship. The others are "has-a" relationships better modeled with composition.',
+        },
+        {
+          id: 'mc3',
+          question: 'What is polymorphism in OOP?',
+          options: [
+            'Having many classes',
+            'Ability to use objects of different types through a common interface',
+            'Creating multiple instances',
+            'Hiding data from outside access',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Polymorphism allows objects of different types to be used through a common interface, enabling code that works with multiple types.',
+        },
+        {
+          id: 'mc4',
+          question: 'What is the main benefit of abstraction?',
+          options: [
+            'Faster code execution',
+            'Hiding complexity and exposing only essential features',
+            'Using less memory',
+            'Creating more classes',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Abstraction hides complex implementation details and exposes only the essential features, making code easier to understand and use.',
+        },
+        {
+          id: 'mc5',
+          question: 'Which is an example of composition?',
+          options: [
+            'class Dog(Animal)',
+            'class Car: self.engine = Engine()',
+            'class Student(Person)',
+            'class Circle(Shape)',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'class Car with self.engine = Engine() is composition—a Car HAS AN Engine. The others show inheritance (is-a relationships).',
         },
       ],
     },
@@ -222,6 +276,36 @@ Pizza.is_valid_topping('mozzarella')  # True
             'Choose based on sharing and access needs',
           ],
         },
+        {
+          id: 'q2',
+          question:
+            'What are dunder methods (magic methods) and why are they important? Give examples of common ones.',
+          hint: 'Think about operator overloading and special Python behaviors.',
+          sampleAnswer:
+            'Dunder methods (double underscore) like __init__, __str__, __add__ allow you to customize how your objects behave with built-in Python operations. They enable operator overloading and special behaviors. Common ones: __init__ for initialization, __str__ for print(), __repr__ for debugging, __eq__ for ==, __lt__ for <, __add__ for +, __len__ for len(), __getitem__ for indexing. For example, defining __add__ lets you use + with your objects: point1 + point2. They make your classes feel like built-in Python types and enable natural syntax.',
+          keyPoints: [
+            'Double underscore methods for special behaviors',
+            'Enable operator overloading',
+            '__str__ for string representation',
+            '__eq__, __add__ for operators',
+            'Make custom classes feel built-in',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'Explain the difference between @classmethod and @staticmethod. When should you use each?',
+          hint: 'Think about access to class vs instance data, and the first parameter.',
+          sampleAnswer:
+            "@classmethod receives the class (cls) as first parameter and can access/modify class state. Use for factory methods that create instances, or methods that need to access class attributes. @staticmethod receives no special first parameter and can't access class or instance state—it's just a regular function grouped with the class for organization. Use when the function is related to the class but doesn't need access to class/instance data. Example: Pizza.margherita() as classmethod creates a Pizza instance. Pizza.is_valid_topping() as staticmethod just validates a value without needing class state.",
+          keyPoints: [
+            'classmethod: receives cls, accesses class state',
+            'staticmethod: no special parameter, no state access',
+            'Use classmethod for factories, alternative constructors',
+            'Use staticmethod for utility functions',
+            'Example: Date.from_string() vs Date.is_valid_date()',
+          ],
+        },
       ],
       multipleChoice: [
         {
@@ -249,6 +333,45 @@ Pizza.is_valid_topping('mozzarella')  # True
           correctAnswer: 1,
           explanation:
             '@property decorator allows a method to be accessed like an attribute without parentheses, enabling computed values, validation, and controlled access.',
+        },
+        {
+          id: 'mc3',
+          question: 'What is the purpose of the __str__ method?',
+          options: [
+            'To convert the object to an integer',
+            'To define how an object is represented as a string',
+            'To create a new object',
+            'To delete an object',
+          ],
+          correctAnswer: 1,
+          explanation:
+            '__str__ defines how an object should be represented as a human-readable string, used by print() and str().',
+        },
+        {
+          id: 'mc4',
+          question: 'What does @classmethod receive as its first parameter?',
+          options: [
+            'self (the instance)',
+            'cls (the class)',
+            'No parameter',
+            'The parent class',
+          ],
+          correctAnswer: 1,
+          explanation:
+            '@classmethod receives cls (the class) as the first parameter, allowing it to access and modify class state.',
+        },
+        {
+          id: 'mc5',
+          question: 'Which is true about class attributes?',
+          options: [
+            'Each instance has its own copy',
+            'They are shared by all instances of the class',
+            'They cannot be modified',
+            'They must be private',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Class attributes are shared by all instances of the class. Modifying a class attribute affects all instances.',
         },
       ],
     },
@@ -411,6 +534,36 @@ class Car:
             'Prevents diamond problem',
           ],
         },
+        {
+          id: 'q2',
+          question:
+            'When should you use abstract base classes (ABC)? What problem do they solve?',
+          hint: 'Think about enforcing interfaces and preventing incomplete implementations.',
+          sampleAnswer:
+            "Use ABCs to define interfaces that subclasses MUST implement. They prevent instantiation of incomplete classes and enforce a contract. Use when: 1) you have a family of related classes that should share an interface, 2) you want to ensure subclasses implement certain methods, 3) you're building a framework or library. For example, Shape ABC requires area() and perimeter() methods—you can't create a Shape, only concrete subclasses like Circle or Rectangle that implement these methods. This catches errors at instantiation time rather than runtime. ABCs document intent and enable isinstance() checks for interface compliance.",
+          keyPoints: [
+            'Enforce interface contracts',
+            'Prevent instantiation of incomplete classes',
+            'Use @abstractmethod decorator',
+            'Subclasses must implement abstract methods',
+            'Good for frameworks and plugin systems',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            "Explain how super() works in multiple inheritance and why it's important.",
+          hint: 'Consider cooperative multiple inheritance and method chaining.',
+          sampleAnswer:
+            'super() follows the Method Resolution Order (MRO) to call the next method in the chain, not just the immediate parent. This enables cooperative multiple inheritance where each class calls super() to ensure all parents get called in the correct order. Without super(), in multiple inheritance you might call parent methods explicitly (Parent1.__init__(self), Parent2.__init__(self)), but this breaks if the hierarchy changes or causes methods to be called multiple times. super() is especially critical for __init__—it ensures proper initialization order. Always use super() instead of calling parent class methods directly for maintainability and correctness.',
+          keyPoints: [
+            'Follows MRO, not just immediate parent',
+            'Enables cooperative multiple inheritance',
+            'Ensures all parents called in correct order',
+            'Critical for __init__ in multiple inheritance',
+            'More maintainable than explicit parent calls',
+          ],
+        },
       ],
       multipleChoice: [
         {
@@ -438,6 +591,47 @@ class Car:
           correctAnswer: 1,
           explanation:
             'Polymorphism means using the same interface (method name) for different data types. Different classes can implement the same method in their own way.',
+        },
+        {
+          id: 'mc3',
+          question:
+            'What happens if you try to instantiate an abstract base class?',
+          options: [
+            'It works normally',
+            'TypeError is raised',
+            'Returns None',
+            'Creates an empty object',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Python raises a TypeError if you try to instantiate an abstract base class that has abstract methods. You must create a concrete subclass that implements all abstract methods.',
+        },
+        {
+          id: 'mc4',
+          question:
+            'In class Child(Parent1, Parent2), what is the order of parent class checking?',
+          options: [
+            'Parent2, then Parent1',
+            'Parent1, then Parent2',
+            'Random order',
+            'Only checks Parent1',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Python checks parent classes from left to right: Parent1, then Parent2. This is part of the Method Resolution Order (MRO).',
+        },
+        {
+          id: 'mc5',
+          question: 'What does the @abstractmethod decorator do?',
+          options: [
+            'Makes a method private',
+            'Marks a method that must be implemented by subclasses',
+            'Makes a method faster',
+            'Converts a method to a class method',
+          ],
+          correctAnswer: 1,
+          explanation:
+            '@abstractmethod marks a method that subclasses must implement. Classes with abstract methods cannot be instantiated.',
         },
       ],
     },

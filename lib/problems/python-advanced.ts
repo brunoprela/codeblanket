@@ -1557,11 +1557,22 @@ class Person:
 p = Person()
 p.age = 25
 print(p.age)
+
+
+def test_typed_property(age_value):
+    """Test function for TypedProperty."""
+    class Person:
+        age = TypedProperty(int)
+    
+    p = Person()
+    p.age = age_value
+    return p.age
 `,
     testCases: [
       {
         input: [25],
         expected: 25,
+        functionName: 'test_typed_property',
       },
     ],
     solution: `class TypedProperty:
@@ -1583,7 +1594,17 @@ print(p.age)
                 f"{self.name[1:]} must be {self.expected_types}, "
                 f"got {type(value)}"
             )
-        instance.__dict__[self.name] = value`,
+        instance.__dict__[self.name] = value
+
+
+def test_typed_property(age_value):
+    """Test function for TypedProperty."""
+    class Person:
+        age = TypedProperty(int)
+    
+    p = Person()
+    p.age = age_value
+    return p.age`,
     timeComplexity: 'O(1)',
     spaceComplexity: 'O(1)',
     order: 16,
@@ -1717,15 +1738,38 @@ with suppress(ValueError, TypeError):
 
 with suppress(ValueError):
     1 / 0  # Not suppressed (ZeroDivisionError)
+
+
+def test_suppress(suppress_types, error_type):
+    """Test function for suppress context manager."""
+    # Map string names to exception classes
+    exception_map = {
+        'ValueError': ValueError,
+        'TypeError': TypeError,
+        'ZeroDivisionError': ZeroDivisionError
+    }
+    
+    # Get exception classes from strings
+    exceptions_to_suppress = tuple(exception_map[name] for name in suppress_types)
+    error_to_raise = exception_map[error_type]
+    
+    try:
+        with suppress(*exceptions_to_suppress):
+            raise error_to_raise("test error")
+        return 'suppressed'
+    except:
+        return 'not suppressed'
 `,
     testCases: [
       {
         input: [['ValueError'], 'ValueError'],
         expected: 'suppressed',
+        functionName: 'test_suppress',
       },
       {
         input: [['ValueError'], 'TypeError'],
         expected: 'not suppressed',
+        functionName: 'test_suppress',
       },
     ],
     solution: `class suppress:
@@ -1744,7 +1788,28 @@ with suppress(ValueError):
             print(f"Suppressed {exc_type.__name__}")
             return True  # Suppress exception
         
-        return False  # Let exception propagate`,
+        return False  # Let exception propagate
+
+
+def test_suppress(suppress_types, error_type):
+    """Test function for suppress context manager."""
+    # Map string names to exception classes
+    exception_map = {
+        'ValueError': ValueError,
+        'TypeError': TypeError,
+        'ZeroDivisionError': ZeroDivisionError
+    }
+    
+    # Get exception classes from strings
+    exceptions_to_suppress = tuple(exception_map[name] for name in suppress_types)
+    error_to_raise = exception_map[error_type]
+    
+    try:
+        with suppress(*exceptions_to_suppress):
+            raise error_to_raise("test error")
+        return 'suppressed'
+    except:
+        return 'not suppressed'`,
     timeComplexity: 'O(1)',
     spaceComplexity: 'O(1)',
     order: 18,

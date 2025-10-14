@@ -141,39 +141,45 @@ bool("Hi")  # True
       quiz: [
         {
           id: 'pf-variables-q-1',
-          question: 'What is the result of: 5 + 3 * 2?',
-          options: ['16', '11', '10', '13'],
-          correctAnswer: 1,
-          explanation:
-            'Multiplication has higher precedence than addition, so 3 * 2 = 6, then 5 + 6 = 11.',
+          question:
+            'Explain the difference between mutable and immutable types in Python. Why does it matter when assigning variables?',
+          hint: 'Think about what happens when you modify a list vs. a string, and what happens with variable assignment.',
+          sampleAnswer:
+            'In Python, immutable types (like int, float, str, tuple) cannot be changed after creation. When you "modify" them, you actually create a new object. Mutable types (like list, dict, set) can be changed in place. This matters for variable assignment because multiple variables can point to the same mutable object, so changes through one variable affect all references. For example: a = [1, 2]; b = a; b.append(3) will modify the list that both a and b reference.',
+          keyPoints: [
+            'Immutable types: int, float, str, tuple, frozenset',
+            'Mutable types: list, dict, set',
+            'Assignment creates references, not copies',
+            'Use .copy() or copy.deepcopy() for actual copies',
+          ],
         },
         {
           id: 'pf-variables-q-2',
-          question: 'Which of these is NOT a valid variable name in Python?',
-          options: ['my_var', '_private', '2fast', 'myVar'],
-          correctAnswer: 2,
-          explanation:
-            'Variable names cannot start with a number. "2fast" is invalid.',
+          question:
+            'When would you choose to use a float instead of an integer in Python? What are the potential pitfalls of using floats?',
+          hint: 'Consider precision requirements, mathematical operations, and how computers represent decimal numbers.',
+          sampleAnswer:
+            "Use floats when you need decimal precision, like measurements, scientific calculations, or division operations. However, floats have precision limitations due to binary representation. For example, 0.1 + 0.2 doesn't exactly equal 0.3 in Python due to floating-point arithmetic. For financial calculations requiring exact decimal precision, use the Decimal class instead. Use integers when working with counts, indices, or when exact values are critical.",
+          keyPoints: [
+            'Floats are for decimal/fractional values',
+            'Binary representation causes precision issues',
+            'Use Decimal class for exact decimal arithmetic',
+            'Integers are exact and should be preferred when possible',
+          ],
         },
         {
           id: 'pf-variables-q-3',
-          question: 'What is the type of: x = 3.0?',
-          options: ['int', 'float', 'str', 'number'],
-          correctAnswer: 1,
-          explanation:
-            'Numbers with decimal points are float type, even if the decimal part is zero.',
-        },
-      ],
-      discussion: [
-        {
-          question: 'When should you use int vs float?',
-          answer:
-            'Use int for whole numbers (counting, indexing) and float for measurements or calculations requiring precision. Be aware of floating-point precision issues.',
-        },
-        {
-          question: 'Why is dynamic typing useful?',
-          answer:
-            'Dynamic typing makes Python flexible and easy to write. You can reassign variables to different types, which is convenient for prototyping. However, it can lead to runtime errors if not careful.',
+          question:
+            "Explain Python's dynamic typing. What are the advantages and disadvantages compared to statically-typed languages?",
+          hint: 'Think about flexibility, runtime behavior, debugging, and development speed.',
+          sampleAnswer:
+            "Python's dynamic typing means variables don't have fixed types - the same variable can hold different types at different times. This offers flexibility and faster prototyping since you don't declare types. However, it can lead to runtime type errors that statically-typed languages catch at compile time. Tools like type hints (PEP 484) and mypy can add static type checking while maintaining dynamic runtime behavior, giving you the best of both worlds.",
+          keyPoints: [
+            'Variables can change types freely',
+            'No compile-time type checking',
+            'More flexible but can hide bugs until runtime',
+            'Type hints (annotations) can add static checking',
+          ],
         },
       ],
       multipleChoice: [
@@ -199,6 +205,30 @@ bool("Hi")  # True
           correctAnswer: 1,
           explanation:
             'The int() function converts strings to integers in Python.',
+        },
+        {
+          id: 'pf-variables-mc-3',
+          question: 'What is the result of: type(3.0) == type(3)?',
+          options: ['True', 'False', 'TypeError', '3.0'],
+          correctAnswer: 1,
+          explanation:
+            '3.0 is a float and 3 is an int, so they are different types.',
+        },
+        {
+          id: 'pf-variables-mc-4',
+          question: 'Which of the following is NOT a valid variable name?',
+          options: ['my_var', '_private', '2fast', 'myVar2'],
+          correctAnswer: 2,
+          explanation:
+            'Variable names cannot start with a number. "2fast" is invalid.',
+        },
+        {
+          id: 'pf-variables-mc-5',
+          question: 'What does bool("") evaluate to?',
+          options: ['True', 'False', 'None', 'Error'],
+          correctAnswer: 1,
+          explanation:
+            'Empty strings are falsy in Python, so bool("") returns False.',
         },
       ],
     },
@@ -333,36 +363,45 @@ def http_status(status):
       quiz: [
         {
           id: 'pf-control-q-1',
-          question: 'What does range(5) produce?',
-          options: [
-            '1, 2, 3, 4, 5',
-            '0, 1, 2, 3, 4',
-            '0, 1, 2, 3, 4, 5',
-            '1, 2, 3, 4',
+          question:
+            'Explain the difference between break, continue, and pass in Python loops. When would you use each?',
+          hint: 'Think about what happens to loop execution and when you need each control statement.',
+          sampleAnswer:
+            "`break` exits the entire loop immediately. Use it when you've found what you're looking for or a condition makes continuing unnecessary. `continue` skips the rest of the current iteration and moves to the next one. Use it to skip processing for certain values. `pass` does nothing - it's a placeholder for code you'll write later, or when syntax requires a statement but you don't want to do anything. Example: When searching a list, use break once found. When processing numbers, use continue to skip negatives. Use pass when defining an empty function stub.",
+          keyPoints: [
+            'break: exits the loop entirely',
+            'continue: skips to next iteration',
+            'pass: does nothing, placeholder statement',
+            'All serve different purposes in flow control',
           ],
-          correctAnswer: 1,
-          explanation:
-            'range(5) generates numbers from 0 up to (but not including) 5.',
         },
         {
           id: 'pf-control-q-2',
-          question: 'What happens when "break" is used in a loop?',
-          options: [
-            'Skips current iteration',
-            'Exits the loop completely',
-            'Pauses the loop',
-            'Restarts the loop',
+          question:
+            'When should you choose a for loop versus a while loop? Can you convert any while loop to a for loop?',
+          hint: "Consider when iteration count is known vs unknown, and whether you're iterating over a sequence.",
+          sampleAnswer:
+            'Use `for` loops when iterating over a known sequence (list, range, string) or when the number of iterations is predetermined. Use `while` loops when iterations depend on a condition that might change unpredictably, like waiting for user input, reading until end of file, or implementing game loops. While technically any while loop can be rewritten as a for loop (using itertools or custom iterators), it often makes code less readable. For example, "while True" with conditional breaks is clearer than forcing it into a for loop structure.',
+          keyPoints: [
+            'for: iterate over sequences or known ranges',
+            'while: condition-based iteration',
+            'for loops are more Pythonic for sequences',
+            'while loops better for event-driven logic',
           ],
-          correctAnswer: 1,
-          explanation:
-            'break exits the loop immediately, skipping any remaining iterations.',
         },
-      ],
-      discussion: [
         {
-          question: 'When should you use for vs while loops?',
-          answer:
-            'Use for loops when you know the number of iterations (iterating over a sequence). Use while loops when the number of iterations depends on a condition.',
+          id: 'pf-control-q-3',
+          question:
+            'What is the purpose of the else clause in Python loops? How does it differ from putting code after the loop?',
+          hint: "Think about when the else block executes and when it doesn't, especially with break statements.",
+          sampleAnswer:
+            "The `else` clause in loops executes only if the loop completes normally (without hitting a break statement). This is different from code after the loop, which always runs. It's useful for search operations: if you break when finding something, else won't run; if you don't find it, else runs to handle the \"not found\" case. For example: searching for a prime number - if you break after finding a divisor, else doesn't run; if no divisors found, else confirms it's prime. Code after the loop would run regardless of whether you broke out or not.",
+          keyPoints: [
+            'else runs if loop completes without break',
+            'Different from code placed after loop',
+            'Useful for search/validation patterns',
+            'Eliminates need for flag variables',
+          ],
         },
       ],
       multipleChoice: [
@@ -374,6 +413,54 @@ def http_status(status):
           correctAnswer: 1,
           explanation:
             'continue skips the rest of the current iteration, so 1 is not printed.',
+        },
+        {
+          id: 'pf-control-mc-2',
+          question: 'What does range(5) produce?',
+          options: [
+            '[1, 2, 3, 4, 5]',
+            '[0, 1, 2, 3, 4]',
+            '[0, 1, 2, 3, 4, 5]',
+            '(0, 1, 2, 3, 4)',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'range(5) generates numbers from 0 up to (but not including) 5.',
+        },
+        {
+          id: 'pf-control-mc-3',
+          question: 'What happens when "break" is used in a loop?',
+          options: [
+            'Skips current iteration',
+            'Exits the loop completely',
+            'Pauses the loop',
+            'Restarts the loop',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'break exits the loop immediately, skipping any remaining iterations.',
+        },
+        {
+          id: 'pf-control-mc-4',
+          question:
+            'What will this code print?\n\nx = 15\nif x > 10:\n    print("A")\nelif x > 5:\n    print("B")\nelse:\n    print("C")',
+          options: ['"A"', '"B"', '"C"', '"A" and "B"'],
+          correctAnswer: 0,
+          explanation:
+            'The first condition (x > 10) is true, so "A" is printed and the rest is skipped.',
+        },
+        {
+          id: 'pf-control-mc-5',
+          question: 'What is the difference between == and = in Python?',
+          options: [
+            'No difference',
+            '== is comparison, = is assignment',
+            '= is comparison, == is assignment',
+            'Both are assignment',
+          ],
+          correctAnswer: 1,
+          explanation:
+            '== compares values for equality, while = assigns a value to a variable.',
         },
       ],
     },
@@ -518,6 +605,58 @@ unique_lengths = {len(word) for word in ["hi", "hello", "hey"]}
       quiz: [
         {
           id: 'pf-datastructures-q-1',
+          question:
+            'Explain when you should use a list, tuple, set, or dictionary. What are the key trade-offs between them?',
+          hint: 'Consider mutability, ordering, uniqueness, and access patterns.',
+          sampleAnswer:
+            "Use **lists** for ordered, mutable sequences when you need to modify elements, add/remove items, or maintain order. Use **tuples** for immutable sequences, like function returns or dictionary keys, when data shouldn't change. Use **sets** when you need unique elements and don't care about order - great for membership testing and removing duplicates. Use **dictionaries** for key-value mappings when you need fast lookup by key. Trade-offs: lists are flexible but slower for membership tests; tuples are faster and memory-efficient but immutable; sets are fast for membership but unordered; dicts provide fast access but use more memory.",
+          keyPoints: [
+            'Lists: ordered, mutable, allows duplicates',
+            'Tuples: ordered, immutable, hashable',
+            'Sets: unordered, mutable, unique elements only',
+            'Dicts: key-value pairs, fast lookups',
+          ],
+        },
+        {
+          id: 'pf-datastructures-q-2',
+          question:
+            "Why are list comprehensions considered more Pythonic than traditional for loops? Are there cases where you shouldn't use them?",
+          hint: 'Think about readability, performance, and complexity.',
+          sampleAnswer:
+            'List comprehensions are more Pythonic because they\'re concise, readable (for simple operations), and often faster than equivalent for loops. They express the intent "create a list from a transformation" clearly. However, avoid them when: 1) Logic is complex (multiple conditions, nested loops) - they become hard to read, 2) You need side effects during iteration, 3) The expression is very long, 4) You\'re not actually creating a list (use generator expressions instead). Remember: "Explicit is better than implicit" - if a comprehension is confusing, use a traditional loop.',
+          keyPoints: [
+            'More concise and often faster',
+            'Better for simple transformations and filters',
+            'Avoid when logic is complex or needs debugging',
+            'Generator expressions for memory efficiency',
+          ],
+        },
+        {
+          id: 'pf-datastructures-q-3',
+          question:
+            'What is the difference between dict.get() and dict[key]? When would you use each method?',
+          hint: "Consider what happens when a key doesn't exist and when you want different behaviors.",
+          sampleAnswer:
+            'dict[key] raises a KeyError if the key doesn\'t exist, while dict.get(key, default) returns None (or a specified default) if the key is missing. Use dict[key] when you expect the key to exist and want to catch programming errors - the KeyError signals a bug. Use dict.get() when missing keys are valid, like when checking optional configuration settings, or when you want to provide a default value. For example: config.get("debug", False) is cleaner than checking "if \'debug\' in config" first.',
+          keyPoints: [
+            'dict[key]: raises KeyError if missing',
+            'dict.get(key, default): returns default if missing',
+            'Use [key] when absence is an error',
+            'Use .get() for optional values',
+          ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'pf-datastructures-mc-1',
+          question:
+            'What does this list comprehension create?\n\n[x*2 for x in range(5) if x > 2]',
+          options: ['[0, 2, 4, 6, 8]', '[6, 8]', '[3, 4]', '[6, 8, 10]'],
+          correctAnswer: 1,
+          explanation: 'Filters x > 2 (3, 4), then multiplies by 2: [6, 8].',
+        },
+        {
+          id: 'pf-datastructures-mc-2',
           question: 'What is the main difference between lists and tuples?',
           options: [
             'Lists are faster',
@@ -530,29 +669,30 @@ unique_lengths = {len(word) for word in ["hi", "hello", "hey"]}
             'Tuples are immutable (cannot be changed after creation), while lists are mutable.',
         },
         {
-          id: 'pf-datastructures-q-2',
+          id: 'pf-datastructures-mc-3',
           question: 'How do you create an empty set?',
           options: ['{}', 'set()', '[]', 'Set()'],
           correctAnswer: 1,
           explanation:
             '{} creates an empty dictionary. Use set() for an empty set.',
         },
-      ],
-      discussion: [
         {
-          question: 'When should you use a tuple instead of a list?',
-          answer:
-            'Use tuples for fixed collections of heterogeneous data (like coordinates, function returns) or when you want immutability. Use lists for homogeneous, mutable sequences.',
-        },
-      ],
-      multipleChoice: [
-        {
-          id: 'pf-datastructures-mc-1',
+          id: 'pf-datastructures-mc-4',
           question:
-            'What does this list comprehension create?\n\n[x*2 for x in range(5) if x > 2]',
-          options: ['[0, 2, 4, 6, 8]', '[6, 8]', '[3, 4]', '[6, 8, 10]'],
+            'What does this code output?\n\na = {1, 2, 3}\nb = {3, 4, 5}\nprint(a & b)',
+          options: ['{1, 2, 3, 4, 5}', '{3}', '{1, 2, 4, 5}', '{}'],
           correctAnswer: 1,
-          explanation: 'Filters x > 2 (3, 4), then multiplies by 2: [6, 8].',
+          explanation:
+            'The & operator performs set intersection, returning elements common to both sets.',
+        },
+        {
+          id: 'pf-datastructures-mc-5',
+          question:
+            'Which data structure would be most efficient for checking if an item exists?',
+          options: ['List', 'Tuple', 'Set', 'String'],
+          correctAnswer: 2,
+          explanation:
+            'Sets use hash tables, making membership testing O(1) average case, much faster than lists or tuples which are O(n).',
         },
       ],
     },
@@ -696,25 +836,45 @@ print(calculate_area.__doc__)
       quiz: [
         {
           id: 'pf-functions-q-1',
-          question: 'What does *args allow you to do?',
-          options: [
-            'Pass a variable number of keyword arguments',
-            'Pass a variable number of positional arguments',
-            'Make an argument optional',
-            'Pass arguments by reference',
+          question:
+            'Explain the difference between *args and **kwargs. When would you use each, and can you use them together?',
+          hint: 'Think about positional vs keyword arguments, and how they are unpacked.',
+          sampleAnswer:
+            '*args collects a variable number of positional arguments into a tuple, while **kwargs collects keyword arguments into a dictionary. Use *args when you want flexibility in the number of positional arguments (like print() or max()). Use **kwargs when you want to accept arbitrary named parameters (like for configuration options or flexible APIs). You can use them together - the order must be: regular args, *args, keyword-only args, **kwargs. For example: def func(a, b, *args, key=None, **kwargs). This allows maximum flexibility while maintaining clear function signatures.',
+          keyPoints: [
+            '*args: tuple of positional arguments',
+            '**kwargs: dictionary of keyword arguments',
+            'Can be combined in specific order',
+            'Useful for flexible APIs and wrappers',
           ],
-          correctAnswer: 1,
-          explanation:
-            '*args collects variable numbers of positional arguments into a tuple.',
         },
         {
           id: 'pf-functions-q-2',
           question:
-            'What does a function return if no return statement is used?',
-          options: ['0', 'Empty string', 'None', 'Error'],
-          correctAnswer: 2,
-          explanation:
-            'Functions without a return statement implicitly return None.',
+            'What is the difference between parameters and arguments? How do default parameters work, and what pitfall should you avoid?',
+          hint: 'Think about function definition vs function call, and mutable default values.',
+          sampleAnswer:
+            'Parameters are the variables in the function definition; arguments are the actual values passed when calling the function. Default parameters provide fallback values if no argument is supplied. Critical pitfall: NEVER use mutable objects (like lists or dicts) as default parameters! Python evaluates defaults once at function definition, not at each call. So def func(items=[]): creates ONE shared list across all calls. If you append to it, all future calls see those changes. Use def func(items=None): followed by items = items or [] inside the function instead.',
+          keyPoints: [
+            'Parameters: in definition, Arguments: when calling',
+            'Defaults evaluated once at definition time',
+            'Never use mutable defaults (lists, dicts)',
+            'Use None as default, then create new object inside',
+          ],
+        },
+        {
+          id: 'pf-functions-q-3',
+          question:
+            'When should you use a lambda function versus a regular function? What are the limitations of lambdas?',
+          hint: 'Consider readability, debuggability, and complexity.',
+          sampleAnswer:
+            "Use lambdas for short, simple operations that are used once, typically as arguments to functions like map(), filter(), sorted(), or in list comprehensions. They're concise for simple transformations like `sorted(items, key=lambda x: x[1])`. However, lambdas are limited to single expressions (no statements), can't contain assignments, and are harder to debug (they don't have names in tracebacks). For anything more complex than a simple transformation, use a regular function with a descriptive name - readability trumps brevity. If you find yourself writing complex lambdas, define a regular function instead.",
+          keyPoints: [
+            'Lambdas: single expression, anonymous functions',
+            'Best for simple, one-time transformations',
+            'Cannot contain statements or assignments',
+            'Regular functions are more readable and debuggable',
+          ],
         },
       ],
       discussion: [
@@ -732,6 +892,55 @@ print(calculate_area.__doc__)
           options: ['10', '5', '7', 'Error'],
           correctAnswer: 0,
           explanation: 'b defaults to 2, so 5 * 2 = 10.',
+        },
+        {
+          id: 'pf-functions-mc-2',
+          question:
+            'What does a function return if no return statement is used?',
+          options: ['0', 'Empty string', 'None', 'Error'],
+          correctAnswer: 2,
+          explanation:
+            'Functions without a return statement implicitly return None.',
+        },
+        {
+          id: 'pf-functions-mc-3',
+          question: 'What does *args allow you to do?',
+          options: [
+            'Pass a variable number of keyword arguments',
+            'Pass a variable number of positional arguments',
+            'Make an argument optional',
+            'Pass arguments by reference',
+          ],
+          correctAnswer: 1,
+          explanation:
+            '*args collects variable numbers of positional arguments into a tuple.',
+        },
+        {
+          id: 'pf-functions-mc-4',
+          question:
+            'Which is the correct syntax for a lambda function that squares a number?',
+          options: [
+            'lambda x: x ** 2',
+            'lambda(x): x ** 2',
+            'def lambda x: x ** 2',
+            'lambda x => x ** 2',
+          ],
+          correctAnswer: 0,
+          explanation: 'Lambda syntax is: lambda arguments: expression',
+        },
+        {
+          id: 'pf-functions-mc-5',
+          question:
+            'What is the scope of a variable defined inside a function?',
+          options: [
+            'Global scope',
+            'Local scope (function only)',
+            'Module scope',
+            'Class scope',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Variables defined inside a function are local to that function unless declared global.',
         },
       ],
     },
@@ -878,24 +1087,45 @@ text = text.replace("H", "h")  # "hello"
       quiz: [
         {
           id: 'pf-strings-q-1',
-          question: 'What does "Python"[::-1] return?',
-          options: ['"Python"', '"nohtyP"', '"Pytho"', 'Error'],
-          correctAnswer: 1,
-          explanation: '[::-1] reverses the string using negative step.',
+          question:
+            'Why are strings immutable in Python? What are the implications of this design decision?',
+          hint: 'Think about dictionary keys, memory management, and thread safety.',
+          sampleAnswer:
+            'Strings are immutable to allow them to be hashable and used as dictionary keys and set members. Immutability enables string interning (reusing identical strings in memory) for efficiency, makes strings thread-safe without locks, and simplifies Python\'s implementation. The trade-off is that any "modification" creates a new string object. For frequent string modifications, use lists or StringIO/join() instead of concatenation to avoid creating many intermediate string objects.',
+          keyPoints: [
+            'Enables use as dictionary keys (hashable)',
+            'Allows string interning for memory efficiency',
+            'Thread-safe by default',
+            'All "modifications" create new strings',
+          ],
         },
         {
           id: 'pf-strings-q-2',
-          question: 'Which method checks if a string contains only digits?',
-          options: ['isnum()', 'isdigit()', 'isnumber()', 'isint()'],
-          correctAnswer: 1,
-          explanation: 'isdigit() returns True if all characters are digits.',
+          question:
+            'Explain the difference between str.format(), f-strings, and % formatting. Which should you use and why?',
+          hint: 'Consider readability, performance, Python version requirements, and flexibility.',
+          sampleAnswer:
+            'Old-style % formatting (like "Hello %s" % name) is C-style but limited and less readable. str.format() (like "Hello {}".format(name)) is more powerful and readable but verbose. F-strings (like f"Hello {name}") are the modern preferred way (Python 3.6+) - they\'re most readable, fastest, and allow expressions inside braces. Use f-strings for new code unless you need Python 3.5 compatibility. str.format() is still useful when the format string comes from user input or configuration (security concern with f-strings).',
+          keyPoints: [
+            '% formatting: old style, less readable',
+            'str.format(): more flexible, verbose',
+            'f-strings: fastest, most readable (Python 3.6+)',
+            'Prefer f-strings for new code',
+          ],
         },
-      ],
-      discussion: [
         {
-          question: 'Why are strings immutable in Python?',
-          answer:
-            'Immutability allows strings to be used as dictionary keys, enables string interning for memory efficiency, and makes them thread-safe. When you "modify" a string, Python creates a new string object.',
+          id: 'pf-strings-q-3',
+          question:
+            'When would you use str.join() versus string concatenation with +? What about performance considerations?',
+          hint: 'Think about building strings in loops and memory allocation.',
+          sampleAnswer:
+            'Use str.join() when building strings from multiple parts, especially in loops. Since strings are immutable, using + creates a new string object each time, which is O(n²) for n concatenations. str.join() is O(n) as it allocates the final size once. Example: "".join(parts) is much faster than result = ""; for p in parts: result += p. However, for a small fixed number of concatenations (2-3), + is fine and more readable. F-strings are also efficient for combining a few known values.',
+          keyPoints: [
+            'join(): O(n), efficient for multiple strings',
+            '+: O(n²) in loops due to immutability',
+            'Use join() for building strings in loops',
+            '+ is fine for 2-3 static concatenations',
+          ],
         },
       ],
       multipleChoice: [
@@ -911,6 +1141,34 @@ text = text.replace("H", "h")  # "hello"
           ],
           correctAnswer: 0,
           explanation: 'title() capitalizes the first letter of each word.',
+        },
+        {
+          id: 'pf-strings-mc-2',
+          question: 'What does "Python"[::-1] return?',
+          options: ['"Python"', '"nohtyP"', '"Pytho"', 'Error'],
+          correctAnswer: 1,
+          explanation: '[::-1] reverses the string using negative step.',
+        },
+        {
+          id: 'pf-strings-mc-3',
+          question: 'Which method checks if a string contains only digits?',
+          options: ['isnum()', 'isdigit()', 'isnumber()', 'isint()'],
+          correctAnswer: 1,
+          explanation: 'isdigit() returns True if all characters are digits.',
+        },
+        {
+          id: 'pf-strings-mc-4',
+          question: 'What is the result of: "hello" + " " + "world"?',
+          options: ['"hello world"', '"helloworld"', '"hello  world"', 'Error'],
+          correctAnswer: 0,
+          explanation: 'String concatenation with + joins strings together.',
+        },
+        {
+          id: 'pf-strings-mc-5',
+          question: 'What does "abc" * 3 produce?',
+          options: ['"abcabcabc"', '"abc3"', '["abc", "abc", "abc"]', 'Error'],
+          correctAnswer: 0,
+          explanation: 'String multiplication repeats the string n times.',
         },
       ],
     },

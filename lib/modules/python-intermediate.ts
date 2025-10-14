@@ -164,33 +164,46 @@ new_path = Path('folder') / 'subfolder' / 'file.txt'
       videoUrl: 'https://www.youtube.com/watch?v=Uh2ebFW8OYM',
       quiz: [
         {
-          id: 'q1',
-          question: 'What does the "with" statement do when opening files?',
-          options: [
-            'Opens file faster',
-            'Automatically closes the file',
-            'Makes file read-only',
-            'Encrypts the file',
-          ],
-          correctAnswer: 1,
-          explanation:
-            'The with statement (context manager) automatically closes the file when the block exits, even if an exception occurs.',
-        },
-        {
-          id: 'q2',
+          id: 'pi-filehandling-q-1',
           question:
-            'Which mode should you use to add content to the end of a file?',
-          options: ["'r'", "'w'", "'a'", "'x'"],
-          correctAnswer: 2,
-          explanation:
-            "'a' mode opens the file for appending, adding new content to the end without removing existing content.",
+            'Explain the difference between text mode and binary mode when working with files. When should you use each?',
+          hint: 'Think about encoding, data types, and what kinds of files you might read.',
+          sampleAnswer:
+            'Text mode (default) reads files as strings and handles encoding/decoding automatically (usually UTF-8). Use it for .txt, .py, .csv, .json files. Binary mode (rb/wb) reads files as bytes without encoding - use it for images, videos, executables, or when you need exact byte-level control. Binary mode is crucial when file encoding is unknown or for non-text data. Opening a binary file in text mode can corrupt data or raise encoding errors.',
+          keyPoints: [
+            'Text mode: strings, automatic encoding/decoding',
+            'Binary mode: bytes, no encoding',
+            'Use text for human-readable files',
+            'Use binary for images, executables, unknown encoding',
+          ],
         },
-      ],
-      discussion: [
         {
-          question: 'Why use pathlib instead of os.path?',
-          answer:
-            "pathlib provides an object-oriented interface that's more intuitive and readable. It supports the / operator for joining paths and has convenient methods like read_text() and write_text(). It's the modern, recommended approach.",
+          id: 'pi-filehandling-q-2',
+          question:
+            'Why is using "with" statement crucial for file operations? What happens if you forget to close a file?',
+          hint: 'Consider resource management, exceptions, and OS limitations.',
+          sampleAnswer:
+            'The "with" statement (context manager) automatically closes files even if exceptions occur, preventing resource leaks. Without it, files might stay open if your code crashes, potentially causing: 1) Resource exhaustion (OS limits on open files), 2) File locking issues preventing other processes from accessing the file, 3) Data not being flushed to disk (buffered writes), 4) Memory leaks. Always use "with" - it\'s the Pythonic way and ensures proper cleanup.',
+          keyPoints: [
+            'Automatically closes files, even on exceptions',
+            'Prevents resource leaks and file locking',
+            'Ensures buffered data is flushed to disk',
+            'Context manager protocol (__enter__/__exit__)',
+          ],
+        },
+        {
+          id: 'pi-filehandling-q-3',
+          question:
+            'What are the advantages of using pathlib over os.path? Should you still learn os.path?',
+          hint: 'Consider API design, readability, and cross-platform compatibility.',
+          sampleAnswer:
+            'pathlib (Python 3.4+) provides object-oriented path manipulation with cleaner syntax: path / "subdir" / "file.txt" instead of os.path.join(). It has convenient methods like .read_text(), .write_text(), .glob(), and works seamlessly across platforms. However, os.path is still useful for: 1) Legacy code, 2) Some specific operations not in pathlib, 3) When you need string paths for compatibility. Learn both - pathlib for new code, os.path to understand existing code.',
+          keyPoints: [
+            'pathlib: object-oriented, cleaner syntax',
+            'Supports / operator for path joining',
+            'Built-in methods for common operations',
+            'os.path still needed for legacy compatibility',
+          ],
         },
       ],
       multipleChoice: [
@@ -207,6 +220,56 @@ new_path = Path('folder') / 'subfolder' / 'file.txt'
           correctAnswer: 2,
           explanation:
             "'w' mode truncates (empties) existing files before writing.",
+        },
+        {
+          id: 'pi-filehandling-mc-2',
+          question: 'What does the "with" statement do when opening files?',
+          options: [
+            'Opens file faster',
+            'Automatically closes the file',
+            'Makes file read-only',
+            'Encrypts the file',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'The with statement (context manager) automatically closes the file when the block exits, even if an exception occurs.',
+        },
+        {
+          id: 'pi-filehandling-mc-3',
+          question:
+            'Which mode should you use to add content to the end of a file?',
+          options: ["'r'", "'w'", "'a'", "'x'"],
+          correctAnswer: 2,
+          explanation:
+            "'a' mode opens the file for appending, adding new content to the end without removing existing content.",
+        },
+        {
+          id: 'pi-filehandling-mc-4',
+          question:
+            'What is the difference between open() and Path.read_text()?',
+          options: [
+            'No difference',
+            'Path.read_text() automatically handles opening and closing',
+            'open() is faster',
+            'Path.read_text() only works with binary files',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Path.read_text() from pathlib automatically opens, reads, and closes the file in one operation.',
+        },
+        {
+          id: 'pi-filehandling-mc-5',
+          question:
+            "What happens if you try to read a file that doesn't exist?",
+          options: [
+            'Returns empty string',
+            'Returns None',
+            'Raises FileNotFoundError',
+            'Creates the file',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'Attempting to open a non-existent file in read mode raises a FileNotFoundError.',
         },
       ],
     },
@@ -344,37 +407,46 @@ except Exception:
       videoUrl: 'https://www.youtube.com/watch?v=NIWwJbo-9_8',
       quiz: [
         {
-          id: 'q1',
-          question: 'When does the "finally" block execute?',
-          options: [
-            'Only if no exception occurs',
-            'Only if an exception occurs',
-            'Always, regardless of exceptions',
-            'Never',
+          id: 'pi-exceptions-q-1',
+          question:
+            'Explain the difference between catching specific exceptions versus using a bare except or except Exception. When is each appropriate?',
+          hint: 'Think about debugging, KeyboardInterrupt, SystemExit, and error handling granularity.',
+          sampleAnswer:
+            'Always catch specific exceptions (like FileNotFoundError, ValueError) when you know what can go wrong and how to handle it. This makes code more maintainable and prevents hiding bugs. "except Exception" catches most errors but not system-critical ones like KeyboardInterrupt or SystemExit. Bare "except:" catches EVERYTHING including Ctrl+C, which is dangerous. Use specific exceptions for normal error handling, "except Exception" only for top-level logging, and bare except almost never (maybe for ensuring cleanup in critical systems).',
+          keyPoints: [
+            'Specific exceptions: best for known error handling',
+            'except Exception: catches most, but not system exits',
+            'Bare except: dangerous, catches KeyboardInterrupt too',
+            'More specific = better debugging and maintenance',
           ],
-          correctAnswer: 2,
-          explanation:
-            'The finally block always executes, whether an exception occurred or not, making it ideal for cleanup code.',
         },
         {
-          id: 'q2',
-          question: 'What is the purpose of custom exceptions?',
-          options: [
-            'Make code run faster',
-            'Provide domain-specific error handling',
-            'Replace built-in exceptions',
-            'Prevent all errors',
+          id: 'pi-exceptions-q-2',
+          question:
+            'What is the purpose of the finally block? How does it differ from putting code after the try-except block?',
+          hint: 'Consider what happens when exceptions are raised or when return statements execute.',
+          sampleAnswer:
+            "The finally block ALWAYS executes, even if: 1) an exception is raised and not caught, 2) a return statement is executed in try/except, 3) break/continue is used in a loop. Code after try-except only runs if the exception was caught or didn't occur. Use finally for cleanup (closing files, releasing locks, database rollback) that must happen regardless of success or failure. However, context managers (with statement) are often cleaner than try-finally for resource management.",
+          keyPoints: [
+            'finally: always runs, even on return/break',
+            'Code after try-except: only if exception caught',
+            'Use for mandatory cleanup (files, locks, connections)',
+            'Context managers often better than try-finally',
           ],
-          correctAnswer: 1,
-          explanation:
-            'Custom exceptions help represent domain-specific errors in your application, making error handling more meaningful.',
         },
-      ],
-      discussion: [
         {
-          question: 'When should you use a bare except clause?',
-          answer:
-            'Rarely! Bare except catches all exceptions including system exits and keyboard interrupts, which you usually want to propagate. Use specific exceptions or "except Exception" at most. Only use bare except for logging at the top level.',
+          id: 'pi-exceptions-q-3',
+          question:
+            'When should you create custom exceptions? What makes a good custom exception?',
+          hint: 'Consider API design, error handling hierarchy, and what information exceptions should carry.',
+          sampleAnswer:
+            'Create custom exceptions for domain-specific errors that deserve special handling (like ValidationError, InsufficientFundsError, DatabaseConnectionError). Good custom exceptions: 1) Inherit from appropriate base (Exception or a more specific built-in), 2) Have descriptive names ending in "Error", 3) Can carry context (user_id, amount, etc.), 4) Form a logical hierarchy (APIError → HTTPError → NotFoundError). Don\'t create custom exceptions for every error - use built-ins when they fit (ValueError, TypeError). Custom exceptions make error handling more semantic and maintainable.',
+          keyPoints: [
+            'Use for domain-specific errors needing special handling',
+            'Inherit from Exception or specific built-in',
+            'Can carry context data for debugging',
+            'Create hierarchy for related errors',
+          ],
         },
       ],
       multipleChoice: [
@@ -391,6 +463,59 @@ except Exception:
           correctAnswer: 1,
           explanation:
             'Uncaught exceptions cause the program to terminate and print a traceback.',
+        },
+        {
+          id: 'pi-exceptions-mc-2',
+          question: 'When does the "finally" block execute?',
+          options: [
+            'Only if no exception occurs',
+            'Only if an exception occurs',
+            'Always, regardless of exceptions',
+            'Never',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'The finally block always executes, whether an exception occurred or not, making it ideal for cleanup code.',
+        },
+        {
+          id: 'pi-exceptions-mc-3',
+          question: 'What is the purpose of custom exceptions?',
+          options: [
+            'Make code run faster',
+            'Provide domain-specific error handling',
+            'Replace built-in exceptions',
+            'Prevent all errors',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Custom exceptions help represent domain-specific errors in your application, making error handling more meaningful.',
+        },
+        {
+          id: 'pi-exceptions-mc-4',
+          question:
+            'Which is the correct way to catch multiple exception types?',
+          options: [
+            'except ValueError, TypeError:',
+            'except (ValueError, TypeError):',
+            'except ValueError and TypeError:',
+            'except ValueError | TypeError:',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Multiple exception types are caught using a tuple: except (Type1, Type2):',
+        },
+        {
+          id: 'pi-exceptions-mc-5',
+          question: 'What does the "else" clause in try-except do?',
+          options: [
+            'Executes if an exception occurs',
+            'Executes if no exception occurs',
+            'Always executes',
+            'Same as finally',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'The else clause executes only if no exception was raised in the try block.',
         },
       ],
     },
@@ -524,31 +649,46 @@ validate_json_schema(user_data, ['name', 'age', 'email'])
       videoUrl: 'https://www.youtube.com/watch?v=pTT7HMqDnJw',
       quiz: [
         {
-          id: 'q1',
-          question: 'What does json.dump() vs json.dumps() do?',
-          options: [
-            'dump() is faster',
-            'dump() writes to file, dumps() returns string',
-            'dumps() is newer',
-            'They are identical',
+          id: 'pi-jsoncsv-q-1',
+          question:
+            'Explain the difference between json.dump()/json.load() and json.dumps()/json.loads(). When would you use each pair?',
+          hint: 'Think about what the "s" suffix means - string vs file operations.',
+          sampleAnswer:
+            'json.dump() and json.load() work with file objects - dump() writes JSON directly to a file, load() reads from a file. json.dumps() and json.loads() work with strings - dumps() converts Python to JSON string, loads() parses JSON string to Python. Use dump/load when working with files (most common), use dumps/loads when: 1) sending JSON over network/API, 2) storing JSON in databases, 3) debugging (printing JSON), 4) when you need the JSON as a string for manipulation.',
+          keyPoints: [
+            'dump/load: file operations',
+            'dumps/loads: string operations',
+            'dumps = dump + string, loads = load + string',
+            'Use dump/load for files, dumps/loads for APIs/strings',
           ],
-          correctAnswer: 1,
-          explanation:
-            'json.dump() writes directly to a file object, while json.dumps() returns a JSON string.',
         },
         {
-          id: 'q2',
-          question: 'What Python value becomes null in JSON?',
-          options: ['0', 'False', 'None', '""'],
-          correctAnswer: 2,
-          explanation: 'Python None is converted to JSON null.',
+          id: 'pi-jsoncsv-q-2',
+          question:
+            'When should you choose CSV over JSON, and vice versa? What are the trade-offs?',
+          hint: 'Consider data structure, file size, human readability, and Excel compatibility.',
+          sampleAnswer:
+            "Use CSV for: 1) Tabular/flat data with rows and columns, 2) Excel/spreadsheet compatibility, 3) Smaller file sizes for simple data, 4) When everyone has same columns. Use JSON for: 1) Nested/hierarchical data, 2) APIs and web services, 3) Mixed data types (preserves numbers, booleans, nulls), 4) Flexible schemas where objects can have different fields. CSV is simpler but can't handle nesting; JSON is more expressive but larger and requires parsing.",
+          keyPoints: [
+            'CSV: flat tables, Excel, compact',
+            'JSON: nested data, APIs, type preservation',
+            'CSV simpler for spreadsheets',
+            'JSON better for complex, hierarchical data',
+          ],
         },
-      ],
-      discussion: [
         {
-          question: 'When should you use CSV vs JSON?',
-          answer:
-            'Use CSV for tabular data, especially when working with spreadsheets or databases. Use JSON for hierarchical data, APIs, or when you need to preserve data types. JSON is more flexible but CSV is more compact for simple tables.',
+          id: 'pi-jsoncsv-q-3',
+          question:
+            'Why is DictReader/DictWriter often preferred over basic reader/writer in the CSV module?',
+          hint: 'Think about code readability, maintainability, and column ordering.',
+          sampleAnswer:
+            'DictReader/DictWriter use column names (headers) instead of positional indices, making code more readable and maintainable. Benefits: 1) row["name"] is clearer than row[0], 2) Code doesn\'t break if column order changes, 3) Automatic header handling, 4) Easier to work with when columns are added/removed. Trade-offs: slightly more memory/processing, but worth it for code clarity. Only use basic reader/writer for headerless CSV or when performance is absolutely critical.',
+          keyPoints: [
+            'Uses column names instead of indices',
+            'More readable: row["name"] vs row[0]',
+            'Resilient to column reordering',
+            'Slightly more overhead, but worth it',
+          ],
         },
       ],
       multipleChoice: [
@@ -564,6 +704,52 @@ validate_json_schema(user_data, ['name', 'age', 'email'])
           correctAnswer: 1,
           explanation:
             'newline="" prevents the csv module from adding extra blank lines on Windows.',
+        },
+        {
+          id: 'pi-jsoncsv-mc-2',
+          question: 'What does json.dump() vs json.dumps() do?',
+          options: [
+            'dump() is faster',
+            'dump() writes to file, dumps() returns string',
+            'dumps() is newer',
+            'They are identical',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'json.dump() writes directly to a file object, while json.dumps() returns a JSON string.',
+        },
+        {
+          id: 'pi-jsoncsv-mc-3',
+          question: 'What Python value becomes null in JSON?',
+          options: ['0', 'False', 'None', '""'],
+          correctAnswer: 2,
+          explanation: 'Python None is converted to JSON null.',
+        },
+        {
+          id: 'pi-jsoncsv-mc-4',
+          question: 'How do you pretty-print JSON with indentation?',
+          options: [
+            'json.dumps(data, pretty=True)',
+            'json.dumps(data, indent=2)',
+            'json.dumps(data, format="pretty")',
+            'json.pretty(data)',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Use the indent parameter: json.dumps(data, indent=2) for readable JSON.',
+        },
+        {
+          id: 'pi-jsoncsv-mc-5',
+          question: 'What does csv.DictReader do?',
+          options: [
+            'Reads CSV as list of lists',
+            'Reads CSV as list of dictionaries',
+            'Converts CSV to JSON',
+            'Validates CSV data',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'DictReader reads each CSV row as a dictionary with column names as keys.',
         },
       ],
     },
@@ -719,37 +905,46 @@ result = re.sub(r'\\b\\w+\\b', capitalize_match, text)  # "HELLO WORLD"
       videoUrl: 'https://www.youtube.com/watch?v=K8L6KVGG-7o',
       quiz: [
         {
-          id: 'q1',
-          question: 'What does \\d+ match?',
-          options: [
-            'Exactly one digit',
-            'One or more digits',
-            'Zero or more digits',
-            'Any character',
+          id: 'pi-regex-q-1',
+          question:
+            'Explain the difference between re.search(), re.match(), and re.findall(). When would you use each?',
+          hint: 'Think about where in the string they look and what they return.',
+          sampleAnswer:
+            're.match() only checks if the pattern matches at the START of the string - use for validating entire strings (like "does this string look like an email?"). re.search() finds the pattern ANYWHERE in the string, returning the first match - use when you want to find one occurrence. re.findall() returns ALL matches as a list - use when you need multiple occurrences. For validation, use match(). For finding, use search() or findall(). Most common mistake: using match() when you mean search().',
+          keyPoints: [
+            're.match(): checks start of string only',
+            're.search(): finds first match anywhere',
+            're.findall(): returns list of all matches',
+            'match() for validation, search()/findall() for finding',
           ],
-          correctAnswer: 1,
-          explanation:
-            '\\d matches a digit, and + means one or more occurrences.',
         },
         {
-          id: 'q2',
-          question: 'What is the purpose of raw strings (r"...") in regex?',
-          options: [
-            'Makes regex case-insensitive',
-            'Prevents backslash escaping issues',
-            'Makes pattern faster',
-            'Required for all regex',
+          id: 'pi-regex-q-2',
+          question:
+            'Why should you use raw strings (r"...") for regex patterns? What problems does it prevent?',
+          hint: 'Think about backslashes and Python string escaping.',
+          sampleAnswer:
+            'Raw strings treat backslashes literally, preventing double-escaping issues. Without raw strings, to match a literal backslash you\'d need "\\\\\\\\", but with raw strings just r"\\\\". Common patterns like \\d (digit) or \\w (word) work as r"\\d" instead of "\\\\d". Always use raw strings for regex - it makes patterns readable and prevents bugs. Without raw strings, you\'d need to escape every backslash twice: once for Python, once for regex.',
+          keyPoints: [
+            'Prevents double-escaping of backslashes',
+            'Makes patterns more readable',
+            'r"\\d" instead of "\\\\d"',
+            'Always use raw strings for regex',
           ],
-          correctAnswer: 1,
-          explanation:
-            'Raw strings prevent Python from interpreting backslashes, which are common in regex patterns.',
         },
-      ],
-      discussion: [
         {
-          question: 'When should you avoid using regex?',
-          answer:
-            'Avoid regex for simple string operations (use str.startswith(), str.split(), etc.), for parsing complex structures like HTML/XML (use dedicated parsers), or when the pattern becomes too complex to understand. Regex is powerful but can be hard to maintain.',
+          id: 'pi-regex-q-3',
+          question:
+            'When should you avoid using regex? What are better alternatives for common tasks?',
+          hint: 'Consider simplicity, maintainability, and specialized tools.',
+          sampleAnswer:
+            'Avoid regex for: 1) Simple string operations - use str.startswith(), str.endswith(), str.split(), "substring" in string instead, 2) Parsing HTML/XML - use BeautifulSoup or lxml (regex can\'t handle nesting), 3) Complex patterns that become unreadable - break into multiple steps or use parsing libraries, 4) When string methods are clearer and faster. Regex is powerful but has a learning curve and can be hard to debug. If a simple string method works, use that. "Some people, when confronted with a problem, think \'I know, I\'ll use regular expressions.\' Now they have two problems."',
+          keyPoints: [
+            'Use string methods for simple operations',
+            'Use parsers (BeautifulSoup) for HTML/XML',
+            'Break complex patterns into simpler steps',
+            'Regex is powerful but can create maintenance issues',
+          ],
         },
       ],
       multipleChoice: [
@@ -765,6 +960,58 @@ result = re.sub(r'\\b\\w+\\b', capitalize_match, text)  # "HELLO WORLD"
           correctAnswer: 3,
           explanation:
             '^ anchors to start, $ anchors to end, so it matches only "abc" exactly.',
+        },
+        {
+          id: 'pi-regex-mc-2',
+          question: 'What does \\d+ match?',
+          options: [
+            'Exactly one digit',
+            'One or more digits',
+            'Zero or more digits',
+            'Any character',
+          ],
+          correctAnswer: 1,
+          explanation:
+            '\\d matches a digit, and + means one or more occurrences.',
+        },
+        {
+          id: 'pi-regex-mc-3',
+          question: 'What is the purpose of raw strings (r"...") in regex?',
+          options: [
+            'Makes regex case-insensitive',
+            'Prevents backslash escaping issues',
+            'Makes pattern faster',
+            'Required for all regex',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Raw strings prevent Python from interpreting backslashes, which are common in regex patterns.',
+        },
+        {
+          id: 'pi-regex-mc-4',
+          question: 'What is the difference between * and + quantifiers?',
+          options: [
+            'No difference',
+            '* means 0 or more, + means 1 or more',
+            '+ means 0 or more, * means 1 or more',
+            '* is faster',
+          ],
+          correctAnswer: 1,
+          explanation:
+            '* matches zero or more occurrences, while + requires at least one occurrence.',
+        },
+        {
+          id: 'pi-regex-mc-5',
+          question: 'What does re.compile() do?',
+          options: [
+            'Checks if pattern is valid',
+            'Pre-compiles pattern for reuse',
+            'Makes pattern case-insensitive',
+            'Converts string to regex',
+          ],
+          correctAnswer: 1,
+          explanation:
+            're.compile() pre-compiles the pattern, making it more efficient when used multiple times.',
         },
       ],
     },
@@ -931,38 +1178,46 @@ if (today.month, today.day) < (birthdate.month, birthdate.day):
       videoUrl: 'https://www.youtube.com/watch?v=eirjjyP2qcQ',
       quiz: [
         {
-          id: 'q1',
-          question: 'What does timedelta represent?',
-          options: [
-            'A specific point in time',
-            'A duration or difference between times',
-            'A timezone',
-            'A calendar date',
-          ],
-          correctAnswer: 1,
-          explanation:
-            'timedelta represents a duration - the difference between two dates or times.',
-        },
-        {
-          id: 'q2',
-          question: 'What is the advantage of storing times in UTC?',
-          options: [
-            'Takes less space',
-            'Faster processing',
-            'Avoids timezone conversion issues',
-            'Required by Python',
-          ],
-          correctAnswer: 2,
-          explanation:
-            'Storing in UTC avoids daylight saving time issues and makes it easy to convert to any local timezone.',
-        },
-      ],
-      discussion: [
-        {
+          id: 'pi-datetime-q-1',
           question:
-            'Why use datetime instead of just storing timestamps as integers?',
-          answer:
-            'datetime provides timezone awareness, easier date arithmetic, readable formatting, and validation. Raw timestamps are just numbers and require manual calculations for anything beyond basic storage.',
+            'Explain the difference between datetime, date, and time objects. When should you use each?',
+          hint: 'Think about what information each stores and typical use cases.',
+          sampleAnswer:
+            "datetime stores both date AND time (year, month, day, hour, minute, second, microsecond) - use for timestamps, events, logging. date stores only the date (year, month, day) - use for birthdays, schedules, appointments where time doesn't matter. time stores only time (hour, minute, second) - use for recurring events like \"daily at 9 AM\" without a specific date. Most common is datetime since it's the most complete. Use date when you explicitly don't care about time, and time for time-of-day patterns.",
+          keyPoints: [
+            'datetime: full timestamp with date and time',
+            'date: just year/month/day',
+            'time: just hour/minute/second',
+            'datetime is most versatile and commonly used',
+          ],
+        },
+        {
+          id: 'pi-datetime-q-2',
+          question:
+            'Why should you always store timestamps in UTC and convert to local timezone only for display?',
+          hint: 'Consider daylight saving time, consistency, and timezone conversions.',
+          sampleAnswer:
+            "Storing in UTC avoids ambiguity: 1) No daylight saving time issues (clock shifts, missing hours), 2) Consistent reference point globally, 3) Easy to convert to any timezone for display, 4) Prevents bugs when users travel or move. Common mistake: storing local time causes problems when DST changes or when comparing times across timezones. Always: store UTC in database, convert to user's timezone only when displaying. This is a critical best practice for any application with users in multiple locations.",
+          keyPoints: [
+            'UTC avoids DST ambiguity and clock shifts',
+            'Consistent global reference point',
+            'Easy to convert to any local timezone',
+            'Store UTC, display in local timezone',
+          ],
+        },
+        {
+          id: 'pi-datetime-q-3',
+          question:
+            'What is timedelta and how is it used for date arithmetic? Why not just add/subtract integers?',
+          hint: 'Think about handling months, leap years, and DST.',
+          sampleAnswer:
+            'timedelta represents a duration (like "3 days" or "2 hours") and handles date arithmetic correctly - accounting for months with different days, leap years, and DST. You can\'t just add integers because: tomorrow isn\'t always today+1 (DST shifts), next month isn\'t always +30 days (different month lengths), next year isn\'t always +365 days (leap years). Use timedelta for: adding/subtracting time (today + timedelta(days=7)), calculating differences (end_date - start_date), measuring elapsed time. It handles all calendar complexity automatically.',
+          keyPoints: [
+            'Represents duration, not a point in time',
+            'Handles calendar complexity (DST, leap years)',
+            'Use for adding/subtracting time periods',
+            'Returns from subtracting two datetimes',
+          ],
         },
       ],
       multipleChoice: [
@@ -978,6 +1233,58 @@ if (today.month, today.day) < (birthdate.month, birthdate.day):
           correctAnswer: 2,
           explanation:
             'datetime.now() returns a datetime object with both date and time.',
+        },
+        {
+          id: 'pi-datetime-mc-2',
+          question: 'What does timedelta represent?',
+          options: [
+            'A specific point in time',
+            'A duration or difference between times',
+            'A timezone',
+            'A calendar date',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'timedelta represents a duration - the difference between two dates or times.',
+        },
+        {
+          id: 'pi-datetime-mc-3',
+          question: 'What is the advantage of storing times in UTC?',
+          options: [
+            'Takes less space',
+            'Faster processing',
+            'Avoids timezone conversion issues',
+            'Required by Python',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'Storing in UTC avoids daylight saving time issues and makes it easy to convert to any local timezone.',
+        },
+        {
+          id: 'pi-datetime-mc-4',
+          question: 'How do you add 5 days to a datetime object "dt"?',
+          options: [
+            'dt + 5',
+            'dt.add(5)',
+            'dt + timedelta(days=5)',
+            'dt.addDays(5)',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'Use timedelta for date arithmetic: dt + timedelta(days=5)',
+        },
+        {
+          id: 'pi-datetime-mc-5',
+          question: 'What does strftime() do?',
+          options: [
+            'Parses string to datetime',
+            'Formats datetime as string',
+            'Converts timezone',
+            'Returns current time',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'strftime() formats a datetime object as a string with a specified format.',
         },
       ],
     },

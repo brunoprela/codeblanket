@@ -5,11 +5,11 @@
 import { Problem } from '../types';
 
 export const pythonIntermediateProblems: Problem[] = [
-    {
-        id: 'intermediate-file-word-frequency',
-        title: 'File Word Frequency Counter',
-        difficulty: 'Medium',
-        description: `Read a text file and count the frequency of each word.
+  {
+    id: 'intermediate-file-word-frequency',
+    title: 'File Word Frequency Counter',
+    difficulty: 'Medium',
+    description: `Read a text file and count the frequency of each word.
 
 **Note:** A virtual test file is created for you in the browser environment using Pyodide's filesystem.
 
@@ -29,23 +29,23 @@ The dog was not that lazy.
 \`\`\`python
 {'the': 3, 'dog': 2, 'lazy': 2, 'quick': 1, 'brown': 1, ...}
 \`\`\``,
-        examples: [
-            {
-                input: 'filename = "text.txt"',
-                output: "{'the': 3, 'dog': 2, 'lazy': 2, ...}",
-            },
-        ],
-        constraints: [
-            'Handle FileNotFoundError',
-            'Case-insensitive',
-            'Remove punctuation',
-        ],
-        hints: [
-            'Use string.punctuation for punctuation',
-            'Convert to lowercase before counting',
-            'Use try-except for file operations',
-        ],
-        starterCode: `# Setup: Create virtual test file (for browser environment)
+    examples: [
+      {
+        input: 'filename = "text.txt"',
+        output: "{'the': 3, 'dog': 2, 'lazy': 2, ...}",
+      },
+    ],
+    constraints: [
+      'Handle FileNotFoundError',
+      'Case-insensitive',
+      'Remove punctuation',
+    ],
+    hints: [
+      'Use string.punctuation for punctuation',
+      'Convert to lowercase before counting',
+      'Use try-except for file operations',
+    ],
+    starterCode: `# Setup: Create virtual test file (for browser environment)
 with open('test.txt', 'w') as f:
     f.write("""The quick brown fox jumps over the lazy dog.
 The dog was not that lazy.""")
@@ -77,25 +77,25 @@ try:
 except FileNotFoundError as e:
     print(f"Error: {e}")
 `,
-        testCases: [
-            {
-                input: ['test.txt'],
-                expected: {
-                    the: 3,
-                    dog: 2,
-                    lazy: 2,
-                    brown: 1,
-                    fox: 1,
-                    jumps: 1,
-                    not: 1,
-                    over: 1,
-                    quick: 1,
-                    that: 1,
-                    was: 1,
-                },
-            },
-        ],
-        solution: `# Setup: Create virtual test file (for browser environment)
+    testCases: [
+      {
+        input: ['test.txt'],
+        expected: {
+          the: 3,
+          dog: 2,
+          lazy: 2,
+          brown: 1,
+          fox: 1,
+          jumps: 1,
+          not: 1,
+          over: 1,
+          quick: 1,
+          that: 1,
+          was: 1,
+        },
+      },
+    ],
+    solution: `# Setup: Create virtual test file (for browser environment)
 with open('test.txt', 'w') as f:
     f.write("""The quick brown fox jumps over the lazy dog.
 The dog was not that lazy.""")
@@ -123,16 +123,16 @@ def count_word_frequency(filename):
                                key=lambda x: (-x[1], x[0])))
     
     return sorted_words`,
-        timeComplexity: 'O(n) where n is file size',
-        spaceComplexity: 'O(w) where w is number of unique words',
-        order: 1,
-        topic: 'Python Intermediate',
-    },
-    {
-        id: 'intermediate-custom-validator',
-        title: 'Data Validator with Custom Exceptions',
-        difficulty: 'Medium',
-        description: `Create a data validator that validates user input and raises custom exceptions.
+    timeComplexity: 'O(n) where n is file size',
+    spaceComplexity: 'O(w) where w is number of unique words',
+    order: 1,
+    topic: 'Python Intermediate',
+  },
+  {
+    id: 'intermediate-custom-validator',
+    title: 'Data Validator with Custom Exceptions',
+    difficulty: 'Medium',
+    description: `Create a data validator that validates user input and raises custom exceptions.
 
 **Custom Exceptions:**
 - \`InvalidEmailError\` - for invalid email format
@@ -145,27 +145,27 @@ def count_word_frequency(filename):
 - Phone: format XXX-XXX-XXXX (X = digit)
 
 Create a \`validate_user_data\` function that checks all fields.`,
-        examples: [
-            {
-                input: 'validate_user_data("test@email.com", 25, "555-123-4567")',
-                output: 'Returns True if all valid',
-            },
-            {
-                input: 'validate_user_data("invalid", 25, "555-123-4567")',
-                output: 'Raises InvalidEmailError',
-            },
-        ],
-        constraints: [
-            'Create custom exception classes',
-            'Validate all three fields',
-            'Provide descriptive error messages',
-        ],
-        hints: [
-            'Inherit from Exception class',
-            'Use regex for phone validation',
-            'Check email contains @ and .',
-        ],
-        starterCode: `import re
+    examples: [
+      {
+        input: 'validate_user_data("test@email.com", 25, "555-123-4567")',
+        output: 'Returns True if all valid',
+      },
+      {
+        input: 'validate_user_data("invalid", 25, "555-123-4567")',
+        output: 'Raises InvalidEmailError',
+      },
+    ],
+    constraints: [
+      'Create custom exception classes',
+      'Validate all three fields',
+      'Provide descriptive error messages',
+    ],
+    hints: [
+      'Inherit from Exception class',
+      'Use regex for phone validation',
+      'Check email contains @ and .',
+    ],
+    starterCode: `import re
 
 class InvalidEmailError(Exception):
     """Raised when email format is invalid."""
@@ -213,17 +213,17 @@ try:
 except (InvalidEmailError, InvalidAgeError, InvalidPhoneError) as e:
     print(f"Validation error: {e}")
 `,
-        testCases: [
-            {
-                input: ['test@example.com', 25, '555-123-4567'],
-                expected: true,
-            },
-            {
-                input: ['invalid', 25, '555-123-4567'],
-                expected: 'InvalidEmailError',
-            },
-        ],
-        solution: `import re
+    testCases: [
+      {
+        input: ['test@example.com', 25, '555-123-4567'],
+        expected: true,
+      },
+      {
+        input: ['invalid', 25, '555-123-4567'],
+        expected: 'InvalidEmailError',
+      },
+    ],
+    solution: `import re
 
 class InvalidEmailError(Exception):
     """Raised when email format is invalid."""
@@ -255,16 +255,16 @@ def validate_user_data(email, age, phone):
         raise InvalidPhoneError(f"Phone must be XXX-XXX-XXXX format, got: {phone}")
     
     return True`,
-        timeComplexity: 'O(1)',
-        spaceComplexity: 'O(1)',
-        order: 2,
-        topic: 'Python Intermediate',
-    },
-    {
-        id: 'intermediate-json-config',
-        title: 'JSON Configuration Manager',
-        difficulty: 'Medium',
-        description: `Create a configuration manager that reads, writes, and updates JSON configuration files.
+    timeComplexity: 'O(1)',
+    spaceComplexity: 'O(1)',
+    order: 2,
+    topic: 'Python Intermediate',
+  },
+  {
+    id: 'intermediate-json-config',
+    title: 'JSON Configuration Manager',
+    difficulty: 'Medium',
+    description: `Create a configuration manager that reads, writes, and updates JSON configuration files.
 
 **Features:**
 - Load configuration from JSON file
@@ -280,23 +280,23 @@ db_host = config.get("database.host")  # Nested key
 config.set("database.port", 5432)
 config.save()
 \`\`\``,
-        examples: [
-            {
-                input: 'config.get("database.host")',
-                output: '"localhost"',
-            },
-        ],
-        constraints: [
-            'Support nested keys with dot notation',
-            'Create file if not exists',
-            'Validate JSON format',
-        ],
-        hints: [
-            'Split dot notation into nested keys',
-            'Use dict.get() for safe access',
-            'Handle FileNotFoundError for new files',
-        ],
-        starterCode: `import json
+    examples: [
+      {
+        input: 'config.get("database.host")',
+        output: '"localhost"',
+      },
+    ],
+    constraints: [
+      'Support nested keys with dot notation',
+      'Create file if not exists',
+      'Validate JSON format',
+    ],
+    hints: [
+      'Split dot notation into nested keys',
+      'Use dict.get() for safe access',
+      'Handle FileNotFoundError for new files',
+    ],
+    starterCode: `import json
 
 class ConfigManager:
     """Manage JSON configuration files."""
@@ -371,14 +371,14 @@ def test_config_manager(filename, key):
     except:
         return None  # Return None if methods not yet implemented
 `,
-        testCases: [
-            {
-                input: ['config.json', 'database.host'],
-                expected: 'localhost',
-                functionName: 'test_config_manager',
-            },
-        ],
-        solution: `import json
+    testCases: [
+      {
+        input: ['config.json', 'database.host'],
+        expected: 'localhost',
+        functionName: 'test_config_manager',
+      },
+    ],
+    solution: `import json
 
 class ConfigManager:
     def __init__(self, filename):
@@ -438,16 +438,16 @@ def test_config_manager(filename, key):
     """Test function for ConfigManager."""
     config = ConfigManager(filename)
     return config.get(key, 'localhost')`,
-        timeComplexity: 'O(d) where d is depth of nested keys',
-        spaceComplexity: 'O(n) where n is config size',
-        order: 3,
-        topic: 'Python Intermediate',
-    },
-    {
-        id: 'intermediate-csv-processor',
-        title: 'CSV Data Processor',
-        difficulty: 'Medium',
-        description: `Process CSV data with filtering and aggregation.
+    timeComplexity: 'O(d) where d is depth of nested keys',
+    spaceComplexity: 'O(n) where n is config size',
+    order: 3,
+    topic: 'Python Intermediate',
+  },
+  {
+    id: 'intermediate-csv-processor',
+    title: 'CSV Data Processor',
+    difficulty: 'Medium',
+    description: `Process CSV data with filtering and aggregation.
 
 **Tasks:**
 - Read CSV file
@@ -467,23 +467,23 @@ Create functions to:
 1. Filter by department
 2. Calculate average salary
 3. Export filtered data`,
-        examples: [
-            {
-                input: 'filter_by_department("data.csv", "Engineering")',
-                output: '[{"name": "Alice", "age": 30, ...}, ...]',
-            },
-        ],
-        constraints: [
-            'Use csv.DictReader',
-            'Handle missing fields',
-            'Write output as CSV',
-        ],
-        hints: [
-            'DictReader treats first row as headers',
-            'Convert numeric strings to numbers',
-            'Use csv.DictWriter for output',
-        ],
-        starterCode: `import csv
+    examples: [
+      {
+        input: 'filter_by_department("data.csv", "Engineering")',
+        output: '[{"name": "Alice", "age": 30, ...}, ...]',
+      },
+    ],
+    constraints: [
+      'Use csv.DictReader',
+      'Handle missing fields',
+      'Write output as CSV',
+    ],
+    hints: [
+      'DictReader treats first row as headers',
+      'Convert numeric strings to numbers',
+      'Use csv.DictWriter for output',
+    ],
+    starterCode: `import csv
 
 def filter_by_department(input_file, department):
     """
@@ -534,13 +534,13 @@ print(f"Average salary: {avg:,.2f}")
 
 export_filtered_data("employees.csv", "engineers.csv", "Engineering")
 `,
-        testCases: [
-            {
-                input: ['employees.csv', 'Engineering'],
-                expected: 2,
-            },
-        ],
-        solution: `import csv
+    testCases: [
+      {
+        input: ['employees.csv', 'Engineering'],
+        expected: 2,
+      },
+    ],
+    solution: `import csv
 
 def filter_by_department(input_file, department):
     results = []
@@ -577,16 +577,16 @@ def export_filtered_data(input_file, output_file, department):
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(filtered)`,
-        timeComplexity: 'O(n) where n is number of rows',
-        spaceComplexity: 'O(n) for filtered results',
-        order: 4,
-        topic: 'Python Intermediate',
-    },
-    {
-        id: 'intermediate-email-extractor',
-        title: 'Email Address Extractor',
-        difficulty: 'Medium',
-        description: `Extract and validate email addresses from text using regular expressions.
+    timeComplexity: 'O(n) where n is number of rows',
+    spaceComplexity: 'O(n) for filtered results',
+    order: 4,
+    topic: 'Python Intermediate',
+  },
+  {
+    id: 'intermediate-email-extractor',
+    title: 'Email Address Extractor',
+    difficulty: 'Medium',
+    description: `Extract and validate email addresses from text using regular expressions.
 
 **Requirements:**
 - Extract all email addresses from text
@@ -605,23 +605,23 @@ def export_filtered_data(input_file, output_file, department):
 Contact us at support@example.com or sales@example.com
 For urgent matters: admin@urgent-support.co.uk
 \`\`\``,
-        examples: [
-            {
-                input: 'text with emails',
-                output: "{'example.com': ['support', 'sales'], ...}",
-            },
-        ],
-        constraints: [
-            'Use regex for extraction',
-            'Validate email format',
-            'Group by domain',
-        ],
-        hints: [
-            'Pattern: [a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}',
-            'Use re.findall()',
-            'Split email at @ to get domain',
-        ],
-        starterCode: `import re
+    examples: [
+      {
+        input: 'text with emails',
+        output: "{'example.com': ['support', 'sales'], ...}",
+      },
+    ],
+    constraints: [
+      'Use regex for extraction',
+      'Validate email format',
+      'Group by domain',
+    ],
+    hints: [
+      'Pattern: [a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}',
+      'Use re.findall()',
+      'Split email at @ to get domain',
+    ],
+    starterCode: `import re
 from collections import defaultdict
 
 def extract_emails(text):
@@ -685,13 +685,13 @@ grouped = group_by_domain(emails)
 for domain, users in grouped.items():
     print(f"{domain}: {users}")
 `,
-        testCases: [
-            {
-                input: ['support@example.com sales@example.com'],
-                expected: ['support@example.com', 'sales@example.com'],
-            },
-        ],
-        solution: `import re
+    testCases: [
+      {
+        input: ['support@example.com sales@example.com'],
+        expected: ['support@example.com', 'sales@example.com'],
+      },
+    ],
+    solution: `import re
 from collections import defaultdict
 
 def extract_emails(text):
@@ -734,16 +734,16 @@ def group_by_domain(emails):
         username, domain = email.split('@')
         grouped[domain].append(username)
     return dict(grouped)`,
-        timeComplexity: 'O(n*m) where n is text length, m is number of emails',
-        spaceComplexity: 'O(e) where e is number of emails',
-        order: 5,
-        topic: 'Python Intermediate',
-    },
-    {
-        id: 'intermediate-date-calculator',
-        title: 'Date Range Calculator',
-        difficulty: 'Medium',
-        description: `Create a utility for common date calculations.
+    timeComplexity: 'O(n*m) where n is text length, m is number of emails',
+    spaceComplexity: 'O(e) where e is number of emails',
+    order: 5,
+    topic: 'Python Intermediate',
+  },
+  {
+    id: 'intermediate-date-calculator',
+    title: 'Date Range Calculator',
+    difficulty: 'Medium',
+    description: `Create a utility for common date calculations.
 
 **Functions to Implement:**
 1. Calculate age from birthdate
@@ -754,27 +754,27 @@ def group_by_domain(emails):
 **Date Format:** YYYY-MM-DD (ISO format)
 
 **Business Days:** Monday-Friday only (ignore holidays)`,
-        examples: [
-            {
-                input: 'calculate_age("1990-05-15")',
-                output: '33 (or current age)',
-            },
-            {
-                input: 'business_days_between("2024-01-01", "2024-01-05")',
-                output: '4 (excluding weekend)',
-            },
-        ],
-        constraints: [
-            'Use datetime module',
-            'Handle invalid dates',
-            'ISO format (YYYY-MM-DD)',
-        ],
-        hints: [
-            'Use datetime.strptime() to parse',
-            'timedelta for date arithmetic',
-            'weekday() returns 0-6 (Monday-Sunday)',
-        ],
-        starterCode: `from datetime import datetime, timedelta, date
+    examples: [
+      {
+        input: 'calculate_age("1990-05-15")',
+        output: '33 (or current age)',
+      },
+      {
+        input: 'business_days_between("2024-01-01", "2024-01-05")',
+        output: '4 (excluding weekend)',
+      },
+    ],
+    constraints: [
+      'Use datetime module',
+      'Handle invalid dates',
+      'ISO format (YYYY-MM-DD)',
+    ],
+    hints: [
+      'Use datetime.strptime() to parse',
+      'timedelta for date arithmetic',
+      'weekday() returns 0-6 (Monday-Sunday)',
+    ],
+    starterCode: `from datetime import datetime, timedelta, date
 
 def calculate_age(birthdate_str):
     """
@@ -850,17 +850,17 @@ print(f"Business days: {business_days_between('2024-01-01', '2024-01-10')}")
 print(f"Days in Jan 2024: {len(get_month_dates(2024, 1))}")
 print(f"In range: {is_date_in_range('2024-06-15', '2024-01-01', '2024-12-31')}")
 `,
-        testCases: [
-            {
-                input: ['1990-05-15'],
-                expected: 33,
-            },
-            {
-                input: ['2024-01-01', '2024-01-05'],
-                expected: 4,
-            },
-        ],
-        solution: `from datetime import datetime, timedelta, date
+    testCases: [
+      {
+        input: ['1990-05-15'],
+        expected: 33,
+      },
+      {
+        input: ['2024-01-01', '2024-01-05'],
+        expected: 4,
+      },
+    ],
+    solution: `from datetime import datetime, timedelta, date
 from calendar import monthrange
 
 def calculate_age(birthdate_str):
@@ -909,16 +909,16 @@ def is_date_in_range(check_date_str, start_str, end_str):
     end = datetime.strptime(end_str, "%Y-%m-%d").date()
     
     return start <= check_date <= end`,
-        timeComplexity: 'O(d) for business_days_between where d is days between',
-        spaceComplexity: 'O(d) for get_month_dates',
-        order: 6,
-        topic: 'Python Intermediate',
-    },
-    {
-        id: 'intermediate-log-parser',
-        title: 'Log File Analyzer',
-        difficulty: 'Medium',
-        description: `Parse and analyze log files to extract statistics.
+    timeComplexity: 'O(d) for business_days_between where d is days between',
+    spaceComplexity: 'O(d) for get_month_dates',
+    order: 6,
+    topic: 'Python Intermediate',
+  },
+  {
+    id: 'intermediate-log-parser',
+    title: 'Log File Analyzer',
+    difficulty: 'Medium',
+    description: `Parse and analyze log files to extract statistics.
 
 **Log Format:**
 \`\`\`
@@ -935,23 +935,23 @@ def is_date_in_range(check_date_str, start_str, end_str):
 - Calculate error rate
 
 **Pattern:** \`YYYY-MM-DD HH:MM:SS [LEVEL] message\``,
-        examples: [
-            {
-                input: 'analyze_logs("app.log")',
-                output: "{'ERROR': 2, 'WARNING': 1, 'INFO': 1}",
-            },
-        ],
-        constraints: [
-            'Use regex for parsing',
-            'Handle malformed lines',
-            'Support time range filtering',
-        ],
-        hints: [
-            'Regex pattern: (\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}) \\[(\\w+)\\] (.*)',
-            'Group by log level',
-            'Use datetime for time comparison',
-        ],
-        starterCode: `import re
+    examples: [
+      {
+        input: 'analyze_logs("app.log")',
+        output: "{'ERROR': 2, 'WARNING': 1, 'INFO': 1}",
+      },
+    ],
+    constraints: [
+      'Use regex for parsing',
+      'Handle malformed lines',
+      'Support time range filtering',
+    ],
+    hints: [
+      'Regex pattern: (\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}) \\[(\\w+)\\] (.*)',
+      'Group by log level',
+      'Use datetime for time comparison',
+    ],
+    starterCode: `import re
 from datetime import datetime
 from collections import defaultdict
 
@@ -1025,13 +1025,13 @@ filtered = filter_by_time_range("app.log",
                                 "2024-01-15 10:35:00")
 print(f"Logs in range: {len(filtered)}")
 `,
-        testCases: [
-            {
-                input: ['app.log'],
-                expected: { ERROR: 2, WARNING: 1, INFO: 1 },
-            },
-        ],
-        solution: `import re
+    testCases: [
+      {
+        input: ['app.log'],
+        expected: { ERROR: 2, WARNING: 1, INFO: 1 },
+      },
+    ],
+    solution: `import re
 from datetime import datetime
 from collections import defaultdict
 
@@ -1087,16 +1087,16 @@ def filter_by_time_range(filename, start_time, end_time):
                     filtered.append(parsed)
     
     return filtered`,
-        timeComplexity: 'O(n) where n is number of log lines',
-        spaceComplexity: 'O(m) where m is matching lines',
-        order: 7,
-        topic: 'Python Intermediate',
-    },
-    {
-        id: 'intermediate-data-transformer',
-        title: 'Multi-Format Data Transformer',
-        difficulty: 'Hard',
-        description: `Convert data between JSON, CSV, and Python dict formats.
+    timeComplexity: 'O(n) where n is number of log lines',
+    spaceComplexity: 'O(m) where m is matching lines',
+    order: 7,
+    topic: 'Python Intermediate',
+  },
+  {
+    id: 'intermediate-data-transformer',
+    title: 'Multi-Format Data Transformer',
+    difficulty: 'Hard',
+    description: `Convert data between JSON, CSV, and Python dict formats.
 
 **Supported Conversions:**
 - JSON ↔ CSV
@@ -1114,23 +1114,23 @@ def filter_by_time_range(filename, start_time, end_time):
 json_data = [{"name": "Alice", "age": 30}, {"name": "Bob", "age": 25}]
 csv_string = json_to_csv(json_data)
 \`\`\``,
-        examples: [
-            {
-                input: 'json_to_csv([{"name": "Alice", "age": 30}])',
-                output: '"name,age\\nAlice,30"',
-            },
-        ],
-        constraints: [
-            'Handle nested JSON objects',
-            'Preserve data types',
-            'Validate input formats',
-        ],
-        hints: [
-            'Use json.dumps/loads for JSON',
-            'Use csv.DictWriter for CSV',
-            'Flatten nested dicts with dot notation',
-        ],
-        starterCode: `import json
+    examples: [
+      {
+        input: 'json_to_csv([{"name": "Alice", "age": 30}])',
+        output: '"name,age\\nAlice,30"',
+      },
+    ],
+    constraints: [
+      'Handle nested JSON objects',
+      'Preserve data types',
+      'Validate input formats',
+    ],
+    hints: [
+      'Use json.dumps/loads for JSON',
+      'Use csv.DictWriter for CSV',
+      'Flatten nested dicts with dot notation',
+    ],
+    starterCode: `import json
 import csv
 from io import StringIO
 
@@ -1203,13 +1203,13 @@ json_data = csv_to_json(csv_string)
 print("\\nJSON output:")
 print(json_data)
 `,
-        testCases: [
-            {
-                input: [[{ name: 'Alice', age: 30 }]],
-                expected: 'name,age\\nAlice,30',
-            },
-        ],
-        solution: `import json
+    testCases: [
+      {
+        input: [[{ name: 'Alice', age: 30 }]],
+        expected: 'name,age\\nAlice,30',
+      },
+    ],
+    solution: `import json
 import csv
 from io import StringIO
 
@@ -1260,16 +1260,16 @@ def dict_to_json_file(data, filename):
 def json_file_to_dict(filename):
     with open(filename, 'r') as f:
         return json.load(f)`,
-        timeComplexity: 'O(n*k) where n is records, k is keys per record',
-        spaceComplexity: 'O(n*k)',
-        order: 8,
-        topic: 'Python Intermediate',
-    },
-    {
-        id: 'intermediate-bank-account',
-        title: 'Bank Account with File Persistence',
-        difficulty: 'Medium',
-        description: `Create a BankAccount class that persists transactions to a file.
+    timeComplexity: 'O(n*k) where n is records, k is keys per record',
+    spaceComplexity: 'O(n*k)',
+    order: 8,
+    topic: 'Python Intermediate',
+  },
+  {
+    id: 'intermediate-bank-account',
+    title: 'Bank Account with File Persistence',
+    difficulty: 'Medium',
+    description: `Create a BankAccount class that persists transactions to a file.
 
 **Features:**
 - Deposit and withdraw money
@@ -1287,23 +1287,23 @@ def json_file_to_dict(filename):
     "balance": 1100.00
 }
 \`\`\``,
-        examples: [
-            {
-                input: 'account.deposit(100)',
-                output: 'New balance: 1100.00',
-            },
-        ],
-        constraints: [
-            'Prevent negative balance',
-            'Track all transactions',
-            'Persist to file',
-        ],
-        hints: [
-            'Use datetime for timestamps',
-            'Store transactions as list',
-            'Use JSON for persistence',
-        ],
-        starterCode: `import json
+    examples: [
+      {
+        input: 'account.deposit(100)',
+        output: 'New balance: 1100.00',
+      },
+    ],
+    constraints: [
+      'Prevent negative balance',
+      'Track all transactions',
+      'Persist to file',
+    ],
+    hints: [
+      'Use datetime for timestamps',
+      'Store transactions as list',
+      'Use JSON for persistence',
+    ],
+    starterCode: `import json
 from datetime import datetime
 
 class InsufficientFundsError(Exception):
@@ -1406,14 +1406,14 @@ def test_bank_account(initial_balance, deposit_amount):
     except:
         return None  # Return None if methods not yet implemented
 `,
-        testCases: [
-            {
-                input: [1000, 500],
-                expected: 1500,
-                functionName: 'test_bank_account',
-            },
-        ],
-        solution: `import json
+    testCases: [
+      {
+        input: [1000, 500],
+        expected: 1500,
+        functionName: 'test_bank_account',
+      },
+    ],
+    solution: `import json
 from datetime import datetime
 
 class InsufficientFundsError(Exception):
@@ -1492,16 +1492,16 @@ def test_bank_account(initial_balance, deposit_amount):
     account = BankAccount("test123", initial_balance, "test_account.json")
     account.deposit(deposit_amount)
     return account.get_balance()`,
-        timeComplexity: 'O(1) for deposit/withdraw, O(n) for save',
-        spaceComplexity: 'O(t) where t is number of transactions',
-        order: 9,
-        topic: 'Python Intermediate',
-    },
-    {
-        id: 'intermediate-url-parser',
-        title: 'URL Parser and Validator',
-        difficulty: 'Medium',
-        description: `Parse and validate URLs, extracting components and query parameters.
+    timeComplexity: 'O(1) for deposit/withdraw, O(n) for save',
+    spaceComplexity: 'O(t) where t is number of transactions',
+    order: 9,
+    topic: 'Python Intermediate',
+  },
+  {
+    id: 'intermediate-url-parser',
+    title: 'URL Parser and Validator',
+    difficulty: 'Medium',
+    description: `Parse and validate URLs, extracting components and query parameters.
 
 **URL Components:**
 - Protocol (http, https)
@@ -1520,23 +1520,23 @@ https://example.com/path/to/page?id=123&sort=name#section
 - Validate URL format
 - Extract query parameters as dict
 - Rebuild URL from components`,
-        examples: [
-            {
-                input: 'parse_url("https://example.com/page?id=123")',
-                output: "{'protocol': 'https', 'domain': 'example.com', ...}",
-            },
-        ],
-        constraints: [
-            'Use regex for parsing',
-            'Validate URL format',
-            'Handle missing components',
-        ],
-        hints: [
-            'URL pattern: (https?)://([^/]+)(/[^?#]*)?(?:\\?([^#]*))?(?:#(.*))?',
-            'Split query string on & and =',
-            'Use urllib.parse for robust parsing',
-        ],
-        starterCode: `import re
+    examples: [
+      {
+        input: 'parse_url("https://example.com/page?id=123")',
+        output: "{'protocol': 'https', 'domain': 'example.com', ...}",
+      },
+    ],
+    constraints: [
+      'Use regex for parsing',
+      'Validate URL format',
+      'Handle missing components',
+    ],
+    hints: [
+      'URL pattern: (https?)://([^/]+)(/[^?#]*)?(?:\\?([^#]*))?(?:#(.*))?',
+      'Split query string on & and =',
+      'Use urllib.parse for robust parsing',
+    ],
+    starterCode: `import re
 from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
 
 def parse_url(url):
@@ -1626,13 +1626,13 @@ print(f"\\nQuery params: {params}")
 rebuilt = build_url('https', 'example.com', '/page', {'id': '456'}, 'top')
 print(f"\\nRebuilt URL: {rebuilt}")
 `,
-        testCases: [
-            {
-                input: ['https://example.com/page?id=123'],
-                expected: { protocol: 'https', domain: 'example.com' },
-            },
-        ],
-        solution: `import re
+    testCases: [
+      {
+        input: ['https://example.com/page?id=123'],
+        expected: { protocol: 'https', domain: 'example.com' },
+      },
+    ],
+    solution: `import re
 from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
 
 def parse_url(url):
@@ -1687,16 +1687,16 @@ def build_url(protocol, domain, path='', query_params=None, fragment=''):
     # Build URL using urlunparse
     url_parts = (protocol, domain, path, '', query, fragment)
     return urlunparse(url_parts)`,
-        timeComplexity: 'O(n) where n is URL length',
-        spaceComplexity: 'O(p) where p is number of query parameters',
-        order: 10,
-        topic: 'Python Intermediate',
-    },
-    {
-        id: 'intermediate-decorator-timer',
-        title: 'Function Timer Decorator',
-        difficulty: 'Medium',
-        description: `Create a decorator that measures and logs function execution time.
+    timeComplexity: 'O(n) where n is URL length',
+    spaceComplexity: 'O(p) where p is number of query parameters',
+    order: 10,
+    topic: 'Python Intermediate',
+  },
+  {
+    id: 'intermediate-decorator-timer',
+    title: 'Function Timer Decorator',
+    difficulty: 'Medium',
+    description: `Create a decorator that measures and logs function execution time.
 
 **Requirements:**
 - Measure execution time in milliseconds
@@ -1711,23 +1711,23 @@ def slow_function(n):
     time.sleep(n)
     return n * 2
 \`\`\``,
-        examples: [
-            {
-                input: '@timer(repeat=1)\\ndef add(a, b): return a + b',
-                output: 'Function add(2, 3) took 0.02ms',
-            },
-        ],
-        constraints: [
-            'Use functools.wraps',
-            'Preserve function signature',
-            'Handle exceptions',
-        ],
-        hints: [
-            'Use time.perf_counter() for precision',
-            'functools.wraps preserves metadata',
-            'Decorator with arguments needs nested functions',
-        ],
-        starterCode: `import time
+    examples: [
+      {
+        input: '@timer(repeat=1)\\ndef add(a, b): return a + b',
+        output: 'Function add(2, 3) took 0.02ms',
+      },
+    ],
+    constraints: [
+      'Use functools.wraps',
+      'Preserve function signature',
+      'Handle exceptions',
+    ],
+    hints: [
+      'Use time.perf_counter() for precision',
+      'functools.wraps preserves metadata',
+      'Decorator with arguments needs nested functions',
+    ],
+    starterCode: `import time
 import functools
 
 def timer(repeat=1):
@@ -1774,13 +1774,13 @@ print(f"Result: {result1}")
 result2 = quick_math(3, 4)
 print(f"Result: {result2}")
 `,
-        testCases: [
-            {
-                input: [10],
-                expected: 55,
-            },
-        ],
-        solution: `import time
+    testCases: [
+      {
+        input: [10],
+        expected: 55,
+      },
+    ],
+    solution: `import time
 import functools
 
 def timer(repeat=1):
@@ -1828,16 +1828,16 @@ def simple_timer(func):
         print(f"{func.__name__} took {(end-start)*1000:.4f}ms")
         return result
     return wrapper`,
-        timeComplexity: 'O(r*f) where r is repeats, f is function complexity',
-        spaceComplexity: 'O(r) for storing times',
-        order: 11,
-        topic: 'Python Intermediate',
-    },
-    {
-        id: 'intermediate-context-manager',
-        title: 'Custom Context Manager',
-        difficulty: 'Medium',
-        description: `Create a context manager that temporarily changes directory and ensures cleanup.
+    timeComplexity: 'O(r*f) where r is repeats, f is function complexity',
+    spaceComplexity: 'O(r) for storing times',
+    order: 11,
+    topic: 'Python Intermediate',
+  },
+  {
+    id: 'intermediate-context-manager',
+    title: 'Custom Context Manager',
+    difficulty: 'Medium',
+    description: `Create a context manager that temporarily changes directory and ensures cleanup.
 
 **Requirements:**
 - Change to specified directory
@@ -1852,23 +1852,23 @@ with ChangeDirectory('/tmp'):
     print(os.getcwd())
 # Automatically back to original directory
 \`\`\``,
-        examples: [
-            {
-                input: 'with ChangeDirectory("/tmp"): pass',
-                output: 'Changes dir and returns automatically',
-            },
-        ],
-        constraints: [
-            'Implement __enter__ and __exit__',
-            'Restore original directory even on error',
-            'Support with statement',
-        ],
-        hints: [
-            'Save os.getcwd() before changing',
-            'Use try/finally in __exit__',
-            'Or use @contextmanager decorator',
-        ],
-        starterCode: `import os
+    examples: [
+      {
+        input: 'with ChangeDirectory("/tmp"): pass',
+        output: 'Changes dir and returns automatically',
+      },
+    ],
+    constraints: [
+      'Implement __enter__ and __exit__',
+      'Restore original directory even on error',
+      'Support with statement',
+    ],
+    hints: [
+      'Save os.getcwd() before changing',
+      'Use try/finally in __exit__',
+      'Or use @contextmanager decorator',
+    ],
+    starterCode: `import os
 from contextlib import contextmanager
 
 class ChangeDirectory:
@@ -1956,14 +1956,14 @@ def test_change_directory(target_path):
     except:
         return None  # Return None if methods not yet implemented
 `,
-        testCases: [
-            {
-                input: ['/tmp'],
-                expected: true,
-                functionName: 'test_change_directory',
-            },
-        ],
-        solution: `import os
+    testCases: [
+      {
+        input: ['/tmp'],
+        expected: true,
+        functionName: 'test_change_directory',
+      },
+    ],
+    solution: `import os
 from contextlib import contextmanager
 
 class ChangeDirectory:
@@ -2018,16 +2018,16 @@ class FileOpener:
         if self.file:
             self.file.close()
         return False`,
-        timeComplexity: 'O(1)',
-        spaceComplexity: 'O(1)',
-        order: 12,
-        topic: 'Python Intermediate',
-    },
-    {
-        id: 'intermediate-generator-pipeline',
-        title: 'Data Processing Pipeline with Generators',
-        difficulty: 'Medium',
-        description: `Create a memory-efficient data processing pipeline using generators.
+    timeComplexity: 'O(1)',
+    spaceComplexity: 'O(1)',
+    order: 12,
+    topic: 'Python Intermediate',
+  },
+  {
+    id: 'intermediate-generator-pipeline',
+    title: 'Data Processing Pipeline with Generators',
+    difficulty: 'Medium',
+    description: `Create a memory-efficient data processing pipeline using generators.
 
 **Pipeline Steps:**
 1. Read lines from file (generator)
@@ -2047,23 +2047,23 @@ filtered = filter_lines(lines, pattern='ERROR')
 transformed = transform_lines(filtered, str.upper)
 result = list(transformed)
 \`\`\``,
-        examples: [
-            {
-                input: 'Pipeline processes large file',
-                output: 'Memory-efficient streaming',
-            },
-        ],
-        constraints: [
-            'Use yield keyword',
-            'Chain generators',
-            'Process one item at a time',
-        ],
-        hints: [
-            'yield returns values lazily',
-            'Generators can be chained',
-            'Use generator expressions',
-        ],
-        starterCode: `import re
+    examples: [
+      {
+        input: 'Pipeline processes large file',
+        output: 'Memory-efficient streaming',
+      },
+    ],
+    constraints: [
+      'Use yield keyword',
+      'Chain generators',
+      'Process one item at a time',
+    ],
+    hints: [
+      'yield returns values lazily',
+      'Generators can be chained',
+      'Use generator expressions',
+    ],
+    starterCode: `import re
 
 def read_lines(filename):
     """
@@ -2156,14 +2156,14 @@ for i, batch in enumerate(batches, 1):
     for line in batch:
         print(f"  {line}", end='')
 `,
-        testCases: [
-            {
-                input: ['test_data.txt', 'ERROR'],
-                expected: 3,
-                functionName: 'test_data_processing',
-            },
-        ],
-        solution: `import re
+    testCases: [
+      {
+        input: ['test_data.txt', 'ERROR'],
+        expected: 3,
+        functionName: 'test_data_processing',
+      },
+    ],
+    solution: `import re
 
 # Create test file (for browser environment)
 with open('test_data.txt', 'w') as f:
@@ -2238,16 +2238,16 @@ def process_large_file(filename):
     uppercase = (line.upper() for line in errors)
     
     return list(uppercase)`,
-        timeComplexity: 'O(n) where n is number of lines',
-        spaceComplexity: 'O(1) for generators, O(b) for batches',
-        order: 13,
-        topic: 'Python Intermediate',
-    },
-    {
-        id: 'intermediate-cache-decorator',
-        title: 'LRU Cache Decorator',
-        difficulty: 'Hard',
-        description: `Implement a Least Recently Used (LRU) cache decorator.
+    timeComplexity: 'O(n) where n is number of lines',
+    spaceComplexity: 'O(1) for generators, O(b) for batches',
+    order: 13,
+    topic: 'Python Intermediate',
+  },
+  {
+    id: 'intermediate-cache-decorator',
+    title: 'LRU Cache Decorator',
+    difficulty: 'Hard',
+    description: `Implement a Least Recently Used (LRU) cache decorator.
 
 **Features:**
 - Cache function results
@@ -2266,23 +2266,23 @@ def fibonacci(n):
         return n
     return fibonacci(n-1) + fibonacci(n-2)
 \`\`\``,
-        examples: [
-            {
-                input: 'Cached fibonacci(10)',
-                output: 'Much faster than uncached',
-            },
-        ],
-        constraints: [
-            'Implement LRU eviction',
-            'Track access order',
-            'Support cache stats',
-        ],
-        hints: [
-            'Use OrderedDict for LRU tracking',
-            'Move accessed items to end',
-            'Check size before adding',
-        ],
-        starterCode: `from functools import wraps
+    examples: [
+      {
+        input: 'Cached fibonacci(10)',
+        output: 'Much faster than uncached',
+      },
+    ],
+    constraints: [
+      'Implement LRU eviction',
+      'Track access order',
+      'Support cache stats',
+    ],
+    hints: [
+      'Use OrderedDict for LRU tracking',
+      'Move accessed items to end',
+      'Check size before adding',
+    ],
+    starterCode: `from functools import wraps
 from collections import OrderedDict
 
 def lru_cache(maxsize=128):
@@ -2366,13 +2366,13 @@ for i in range(6):
 
 print(f"\\nCache stats: {expensive_operation.cache_info()}")
 `,
-        testCases: [
-            {
-                input: [10],
-                expected: 55,
-            },
-        ],
-        solution: `from functools import wraps
+    testCases: [
+      {
+        input: [10],
+        expected: 55,
+      },
+    ],
+    solution: `from functools import wraps
 from collections import OrderedDict
 
 def lru_cache(maxsize=128):
@@ -2436,16 +2436,16 @@ from functools import lru_cache as builtin_lru_cache
 @builtin_lru_cache(maxsize=128)
 def cached_function(n):
     return n * 2`,
-        timeComplexity: 'O(1) for cache lookup, O(n) for function execution',
-        spaceComplexity: 'O(maxsize)',
-        order: 14,
-        topic: 'Python Intermediate',
-    },
-    {
-        id: 'intermediate-class-property',
-        title: 'Property Decorators and Validation',
-        difficulty: 'Medium',
-        description: `Create a class using property decorators with validation.
+    timeComplexity: 'O(1) for cache lookup, O(n) for function execution',
+    spaceComplexity: 'O(maxsize)',
+    order: 14,
+    topic: 'Python Intermediate',
+  },
+  {
+    id: 'intermediate-class-property',
+    title: 'Property Decorators and Validation',
+    difficulty: 'Medium',
+    description: `Create a class using property decorators with validation.
 
 **Requirements:**
 - Use @property for getters
@@ -2466,23 +2466,23 @@ class Temperature:
             raise ValueError("Below absolute zero!")
         self._celsius = value
 \`\`\``,
-        examples: [
-            {
-                input: 'temp.celsius = 25',
-                output: 'Sets with validation',
-            },
-        ],
-        constraints: [
-            'Use @property decorator',
-            'Validate in setter',
-            'Provide computed properties',
-        ],
-        hints: [
-            '@property creates getter',
-            '@name.setter creates setter',
-            'Computed properties calculate on access',
-        ],
-        starterCode: `class Rectangle:
+    examples: [
+      {
+        input: 'temp.celsius = 25',
+        output: 'Sets with validation',
+      },
+    ],
+    constraints: [
+      'Use @property decorator',
+      'Validate in setter',
+      'Provide computed properties',
+    ],
+    hints: [
+      '@property creates getter',
+      '@name.setter creates setter',
+      'Computed properties calculate on access',
+    ],
+    starterCode: `class Rectangle:
     """
     Rectangle with validated dimensions and computed properties.
     
@@ -2587,14 +2587,14 @@ def test_rectangle(width, height):
     except:
         return None  # Return None if methods not yet implemented
 `,
-        testCases: [
-            {
-                input: [5, 10],
-                expected: 50,
-                functionName: 'test_rectangle',
-            },
-        ],
-        solution: `import math
+    testCases: [
+      {
+        input: [5, 10],
+        expected: 50,
+        functionName: 'test_rectangle',
+      },
+    ],
+    solution: `import math
 
 class Rectangle:
     def __init__(self, width, height):
@@ -2676,16 +2676,16 @@ def test_rectangle(width, height):
     """Test function for the Rectangle class."""
     rect = Rectangle(width, height)
     return rect.area`,
-        timeComplexity: 'O(1) for all operations',
-        spaceComplexity: 'O(1)',
-        order: 15,
-        topic: 'Python Intermediate',
-    },
-    {
-        id: 'intermediate-sqlite-manager',
-        title: 'SQLite Database Manager',
-        difficulty: 'Hard',
-        description: `Create a simple database manager for SQLite operations.
+    timeComplexity: 'O(1) for all operations',
+    spaceComplexity: 'O(1)',
+    order: 15,
+    topic: 'Python Intermediate',
+  },
+  {
+    id: 'intermediate-sqlite-manager',
+    title: 'SQLite Database Manager',
+    difficulty: 'Hard',
+    description: `Create a simple database manager for SQLite operations.
 
 **Features:**
 - Create tables
@@ -2701,23 +2701,23 @@ with DatabaseManager('users.db') as db:
     db.insert('users', {'name': 'Alice', 'age': 30})
     users = db.query('users', where={'age': 30})
 \`\`\``,
-        examples: [
-            {
-                input: "db.insert('users', {'name': 'Bob', 'age': 25})",
-                output: 'Inserts record into database',
-            },
-        ],
-        constraints: [
-            'Use sqlite3 module',
-            'Implement context manager',
-            'Handle SQL injection safely',
-        ],
-        hints: [
-            'Use parameterized queries (? placeholders)',
-            'Implement __enter__ and __exit__',
-            'Commit transactions in __exit__',
-        ],
-        starterCode: `import sqlite3
+    examples: [
+      {
+        input: "db.insert('users', {'name': 'Bob', 'age': 25})",
+        output: 'Inserts record into database',
+      },
+    ],
+    constraints: [
+      'Use sqlite3 module',
+      'Implement context manager',
+      'Handle SQL injection safely',
+    ],
+    hints: [
+      'Use parameterized queries (? placeholders)',
+      'Implement __enter__ and __exit__',
+      'Commit transactions in __exit__',
+    ],
+    starterCode: `import sqlite3
 
 class DatabaseManager:
     """
@@ -2884,14 +2884,14 @@ def test_database_manager(table_name, data):
     except:
         return None  # Return None if methods not yet implemented
 `,
-        testCases: [
-            {
-                input: ['users', { name: 'Alice', age: 30 }],
-                expected: 1,
-                functionName: 'test_database_manager',
-            },
-        ],
-        solution: `import sqlite3
+    testCases: [
+      {
+        input: ['users', { name: 'Alice', age: 30 }],
+        expected: 1,
+        functionName: 'test_database_manager',
+      },
+    ],
+    solution: `import sqlite3
 
 class DatabaseManager:
     def __init__(self, db_name):
@@ -2965,16 +2965,16 @@ def test_database_manager(table_name, data):
             'age INTEGER'
         ])
         return db.insert(table_name, data)`,
-        timeComplexity: 'O(n) for queries, O(1) for indexed operations',
-        spaceComplexity: 'O(r) where r is number of results',
-        order: 16,
-        topic: 'Python Intermediate',
-    },
-    {
-        id: 'intermediate-retry-decorator',
-        title: 'Retry Decorator with Exponential Backoff',
-        difficulty: 'Medium',
-        description: `Create a decorator that retries failed function calls with exponential backoff.
+    timeComplexity: 'O(n) for queries, O(1) for indexed operations',
+    spaceComplexity: 'O(r) where r is number of results',
+    order: 16,
+    topic: 'Python Intermediate',
+  },
+  {
+    id: 'intermediate-retry-decorator',
+    title: 'Retry Decorator with Exponential Backoff',
+    difficulty: 'Medium',
+    description: `Create a decorator that retries failed function calls with exponential backoff.
 
 **Features:**
 - Retry on exception
@@ -2993,23 +2993,23 @@ def fetch_data():
     response = requests.get(url)
     return response.json()
 \`\`\``,
-        examples: [
-            {
-                input: '@retry(max_attempts=3)\\ndef flaky(): ...',
-                output: 'Retries up to 3 times',
-            },
-        ],
-        constraints: [
-            'Use exponential backoff',
-            'Log each retry',
-            'Re-raise if max attempts exceeded',
-        ],
-        hints: [
-            'time.sleep() for delays',
-            'Multiply delay by backoff factor',
-            'Use isinstance() to check exceptions',
-        ],
-        starterCode: `import time
+    examples: [
+      {
+        input: '@retry(max_attempts=3)\\ndef flaky(): ...',
+        output: 'Retries up to 3 times',
+      },
+    ],
+    constraints: [
+      'Use exponential backoff',
+      'Log each retry',
+      'Re-raise if max attempts exceeded',
+    ],
+    hints: [
+      'time.sleep() for delays',
+      'Multiply delay by backoff factor',
+      'Use isinstance() to check exceptions',
+    ],
+    starterCode: `import time
 import functools
 import random
 
@@ -3091,13 +3091,13 @@ try:
 except ZeroDivisionError as e:
     print(f"Failed: {e}")
 `,
-        testCases: [
-            {
-                input: [10, 5],
-                expected: 2,
-            },
-        ],
-        solution: `import time
+    testCases: [
+      {
+        input: [10, 5],
+        expected: 2,
+      },
+    ],
+    solution: `import time
 import functools
 import random
 
@@ -3153,16 +3153,16 @@ def retry_with_jitter(max_attempts=3, base_delay=1, max_delay=60, exceptions=(Ex
         
         return wrapper
     return decorator`,
-        timeComplexity: 'O(2^n) for backoff delays where n is attempts',
-        spaceComplexity: 'O(1)',
-        order: 17,
-        topic: 'Python Intermediate',
-    },
-    {
-        id: 'intermediate-command-line-parser',
-        title: 'Command Line Argument Parser',
-        difficulty: 'Medium',
-        description: `Create a command-line tool using argparse to process files.
+    timeComplexity: 'O(2^n) for backoff delays where n is attempts',
+    spaceComplexity: 'O(1)',
+    order: 17,
+    topic: 'Python Intermediate',
+  },
+  {
+    id: 'intermediate-command-line-parser',
+    title: 'Command Line Argument Parser',
+    difficulty: 'Medium',
+    description: `Create a command-line tool using argparse to process files.
 
 **Features:**
 - Parse command-line arguments
@@ -3176,23 +3176,23 @@ def retry_with_jitter(max_attempts=3, base_delay=1, max_delay=60, exceptions=(Ex
 python tool.py process --input data.txt --output result.txt --verbose
 python tool.py analyze --file data.csv --format json
 \`\`\``,
-        examples: [
-            {
-                input: 'python tool.py --input file.txt',
-                output: 'Processes file with arguments',
-            },
-        ],
-        constraints: [
-            'Use argparse module',
-            'Support multiple subcommands',
-            'Provide good help text',
-        ],
-        hints: [
-            'ArgumentParser for main parser',
-            'add_argument() for arguments',
-            'add_subparsers() for subcommands',
-        ],
-        starterCode: `import argparse
+    examples: [
+      {
+        input: 'python tool.py --input file.txt',
+        output: 'Processes file with arguments',
+      },
+    ],
+    constraints: [
+      'Use argparse module',
+      'Support multiple subcommands',
+      'Provide good help text',
+    ],
+    hints: [
+      'ArgumentParser for main parser',
+      'add_argument() for arguments',
+      'add_subparsers() for subcommands',
+    ],
+    starterCode: `import argparse
 import sys
 
 def create_parser():
@@ -3311,13 +3311,13 @@ if __name__ == '__main__':
     sys.argv = ['tool.py', 'analyze', '--file', 'test_input.txt', '--format', 'json']
     main()
 `,
-        testCases: [
-            {
-                input: ['test.txt'],
-                expected: true,
-            },
-        ],
-        solution: `import argparse
+    testCases: [
+      {
+        input: ['test.txt'],
+        expected: true,
+      },
+    ],
+    solution: `import argparse
 import sys
 
 def create_parser():
@@ -3378,16 +3378,16 @@ def main():
         args.func(args)
     else:
         parser.print_help()`,
-        timeComplexity: 'O(n) where n is file size',
-        spaceComplexity: 'O(n)',
-        order: 18,
-        topic: 'Python Intermediate',
-    },
-    {
-        id: 'intermediate-text-statistics',
-        title: 'Advanced Text Statistics',
-        difficulty: 'Medium',
-        description: `Calculate comprehensive statistics for text documents.
+    timeComplexity: 'O(n) where n is file size',
+    spaceComplexity: 'O(n)',
+    order: 18,
+    topic: 'Python Intermediate',
+  },
+  {
+    id: 'intermediate-text-statistics',
+    title: 'Advanced Text Statistics',
+    difficulty: 'Medium',
+    description: `Calculate comprehensive statistics for text documents.
 
 **Statistics to Calculate:**
 - Total words, characters, lines
@@ -3399,23 +3399,23 @@ def main():
 
 **Flesch-Kincaid Reading Ease:**
 \`206.835 - 1.015 * (words/sentences) - 84.6 * (syllables/words)\``,
-        examples: [
-            {
-                input: 'analyze_text("The quick brown fox...")',
-                output: 'Comprehensive text statistics',
-            },
-        ],
-        constraints: [
-            'Calculate all statistics',
-            'Handle edge cases',
-            'Estimate syllable count',
-        ],
-        hints: [
-            'Use collections.Counter for word frequency',
-            'Split on sentence punctuation',
-            'Estimate syllables by counting vowel groups',
-        ],
-        starterCode: `import re
+    examples: [
+      {
+        input: 'analyze_text("The quick brown fox...")',
+        output: 'Comprehensive text statistics',
+      },
+    ],
+    constraints: [
+      'Calculate all statistics',
+      'Handle edge cases',
+      'Estimate syllable count',
+    ],
+    hints: [
+      'Use collections.Counter for word frequency',
+      'Split on sentence punctuation',
+      'Estimate syllables by counting vowel groups',
+    ],
+    starterCode: `import re
 from collections import Counter
 import string
 
@@ -3543,13 +3543,13 @@ for key, value in stats.items():
     else:
         print(f"{key}: {value}")
 `,
-        testCases: [
-            {
-                input: ['The quick brown fox jumps over the lazy dog.'],
-                expected: 9,
-            },
-        ],
-        solution: `import re
+    testCases: [
+      {
+        input: ['The quick brown fox jumps over the lazy dog.'],
+        expected: 9,
+      },
+    ],
+    solution: `import re
 from collections import Counter
 import string
 
@@ -3643,16 +3643,16 @@ class TextAnalyzer:
             'reading_ease': self.get_reading_level(),
             'most_common_words': self.get_most_common_words(10)
         }`,
-        timeComplexity: 'O(n) where n is text length',
-        spaceComplexity: 'O(w) where w is number of words',
-        order: 19,
-        topic: 'Python Intermediate',
-    },
-    {
-        id: 'intermediate-markdown-parser',
-        title: 'Simple Markdown to HTML Converter',
-        difficulty: 'Hard',
-        description: `Convert Markdown text to HTML.
+    timeComplexity: 'O(n) where n is text length',
+    spaceComplexity: 'O(w) where w is number of words',
+    order: 19,
+    topic: 'Python Intermediate',
+  },
+  {
+    id: 'intermediate-markdown-parser',
+    title: 'Simple Markdown to HTML Converter',
+    difficulty: 'Hard',
+    description: `Convert Markdown text to HTML.
 
 **Supported Markdown:**
 - Headers: # H1, ## H2, ### H3
@@ -3672,23 +3672,23 @@ This is **bold** and this is *italic*.
 - Item 1
 - Item 2
 \`\`\``,
-        examples: [
-            {
-                input: '# Hello\\n\\nThis is **bold**',
-                output: '<h1>Hello</h1>\\n<p>This is <strong>bold</strong></p>',
-            },
-        ],
-        constraints: [
-            'Use regex for parsing',
-            'Handle nested formatting',
-            'Escape HTML entities',
-        ],
-        hints: [
-            'Process line by line',
-            'Replace patterns in order',
-            'Use html.escape() for safety',
-        ],
-        starterCode: `import re
+    examples: [
+      {
+        input: '# Hello\\n\\nThis is **bold**',
+        output: '<h1>Hello</h1>\\n<p>This is <strong>bold</strong></p>',
+      },
+    ],
+    constraints: [
+      'Use regex for parsing',
+      'Handle nested formatting',
+      'Escape HTML entities',
+    ],
+    hints: [
+      'Process line by line',
+      'Replace patterns in order',
+      'Use html.escape() for safety',
+    ],
+    starterCode: `import re
 import html
 
 class MarkdownConverter:
@@ -3806,14 +3806,14 @@ def test_markdown_converter(markdown_text):
     except:
         return None  # Return None if methods not yet implemented
 `,
-        testCases: [
-            {
-                input: ['# Hello'],
-                expected: '<h1>Hello</h1>',
-                functionName: 'test_markdown_converter',
-            },
-        ],
-        solution: `import re
+    testCases: [
+      {
+        input: ['# Hello'],
+        expected: '<h1>Hello</h1>',
+        functionName: 'test_markdown_converter',
+      },
+    ],
+    solution: `import re
 import html
 
 class MarkdownConverter:
@@ -3940,16 +3940,16 @@ def test_markdown_converter(markdown_text):
     """Test function for MarkdownConverter."""
     converter = MarkdownConverter()
     return converter.convert(markdown_text)`,
-        timeComplexity: 'O(n*m) where n is lines, m is pattern matches',
-        spaceComplexity: 'O(n)',
-        order: 20,
-        topic: 'Python Intermediate',
-    },
-    {
-        id: 'intermediate-password-manager',
-        title: 'Password Strength Validator',
-        difficulty: 'Medium',
-        description: `Create a comprehensive password strength validator and generator.
+    timeComplexity: 'O(n*m) where n is lines, m is pattern matches',
+    spaceComplexity: 'O(n)',
+    order: 20,
+    topic: 'Python Intermediate',
+  },
+  {
+    id: 'intermediate-password-manager',
+    title: 'Password Strength Validator',
+    difficulty: 'Medium',
+    description: `Create a comprehensive password strength validator and generator.
 
 **Validation Criteria:**
 - Minimum length (8+ characters)
@@ -3964,23 +3964,23 @@ def test_markdown_converter(markdown_text):
 - Generate strong passwords
 - Suggest improvements
 - Check against common passwords`,
-        examples: [
-            {
-                input: 'validate_password("P@ssw0rd123")',
-                output: 'Strong (score: 85)',
-            },
-        ],
-        constraints: [
-            'Check all criteria',
-            'Calculate numeric score',
-            'Provide specific feedback',
-        ],
-        hints: [
-            'Use regex for pattern matching',
-            'Award points for each criterion',
-            'Check against common password list',
-        ],
-        starterCode: `import re
+    examples: [
+      {
+        input: 'validate_password("P@ssw0rd123")',
+        output: 'Strong (score: 85)',
+      },
+    ],
+    constraints: [
+      'Check all criteria',
+      'Calculate numeric score',
+      'Provide specific feedback',
+    ],
+    hints: [
+      'Use regex for pattern matching',
+      'Award points for each criterion',
+      'Check against common password list',
+    ],
+    starterCode: `import re
 import random
 import string
 
@@ -4100,14 +4100,14 @@ def test_password_validator(password):
     except:
         return None  # Return None if methods not yet implemented
 `,
-        testCases: [
-            {
-                input: ['Str0ng!P@ss'],
-                expected: true,
-                functionName: 'test_password_validator',
-            },
-        ],
-        solution: `import re
+    testCases: [
+      {
+        input: ['Str0ng!P@ss'],
+        expected: true,
+        functionName: 'test_password_validator',
+      },
+    ],
+    solution: `import re
 import random
 import string
 
@@ -4246,9 +4246,9 @@ def test_password_validator(password):
     validator = PasswordValidator()
     result = validator.validate(password)
     return result['passed']`,
-        timeComplexity: 'O(n) where n is password length',
-        spaceComplexity: 'O(1)',
-        order: 21,
-        topic: 'Python Intermediate',
-    },
+    timeComplexity: 'O(n) where n is password length',
+    spaceComplexity: 'O(1)',
+    order: 21,
+    topic: 'Python Intermediate',
+  },
 ];

@@ -406,10 +406,11 @@ sys.stdout.getvalue() + sys.stderr.getvalue()
               {results.map((result, i) => (
                 <div
                   key={i}
-                  className={`rounded-lg border-2 p-4 ${result.passed
+                  className={`rounded-lg border-2 p-4 ${
+                    result.passed
                       ? 'border-[#50fa7b] bg-[#50fa7b]/10'
                       : 'border-[#ff5555] bg-[#ff5555]/10'
-                    }`}
+                  }`}
                 >
                   <div className="mb-3 flex items-center justify-between">
                     <div className="text-lg font-semibold text-[#f8f8f2]">
@@ -446,8 +447,9 @@ sys.stdout.getvalue() + sys.stderr.getvalue()
                         Got:
                       </span>
                       <span
-                        className={`font-semibold ${result.passed ? 'text-[#50fa7b]' : 'text-[#ff5555]'
-                          }`}
+                        className={`font-semibold ${
+                          result.passed ? 'text-[#50fa7b]' : 'text-[#ff5555]'
+                        }`}
                       >
                         {formatValue(result.actual)}
                       </span>
@@ -480,10 +482,11 @@ sys.stdout.getvalue() + sys.stderr.getvalue()
               <div className="font-semibold text-[#f8f8f2]">Console Output</div>
               {executionMode && (
                 <span
-                  className={`rounded px-2 py-0.5 text-xs font-semibold ${executionMode === 'run'
+                  className={`rounded px-2 py-0.5 text-xs font-semibold ${
+                    executionMode === 'run'
                       ? 'bg-[#bd93f9]/20 text-[#bd93f9]'
                       : 'bg-[#50fa7b]/20 text-[#50fa7b]'
-                    }`}
+                  }`}
                 >
                   {executionMode === 'run'
                     ? 'Code Execution'

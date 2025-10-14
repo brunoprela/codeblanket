@@ -342,10 +342,11 @@ json.dumps(result)
               {results.map((result, i) => (
                 <div
                   key={i}
-                  className={`rounded-lg border-2 p-4 ${result.passed
+                  className={`rounded-lg border-2 p-4 ${
+                    result.passed
                       ? 'border-[#50fa7b] bg-[#50fa7b]/10'
                       : 'border-[#ff5555] bg-[#ff5555]/10'
-                    }`}
+                  }`}
                 >
                   <div className="mb-3 flex items-center justify-between">
                     <div className="text-lg font-semibold text-[#f8f8f2]">

@@ -572,8 +572,74 @@ export default function ModulePage({
                     while (i < lines.length) {
                       const line = lines[i].trim();
 
+                      // Check for headers (# ## ### #### etc)
+                      if (/^#{1,6}\s/.test(line)) {
+                        const headerMatch = line.match(/^(#{1,6})\s+(.+)/);
+                        if (headerMatch) {
+                          const level = headerMatch[1].length;
+                          const text = headerMatch[2];
+
+                          // Render appropriate header based on level
+                          if (level === 1) {
+                            elements.push(
+                              <h1
+                                key={`header-${elementKey++}`}
+                                className="mt-8 mb-6 text-3xl font-bold text-[#ff79c6]"
+                              >
+                                {formatText(text)}
+                              </h1>,
+                            );
+                          } else if (level === 2) {
+                            elements.push(
+                              <h2
+                                key={`header-${elementKey++}`}
+                                className="mt-6 mb-4 text-2xl font-bold text-[#bd93f9]"
+                              >
+                                {formatText(text)}
+                              </h2>,
+                            );
+                          } else if (level === 3) {
+                            elements.push(
+                              <h3
+                                key={`header-${elementKey++}`}
+                                className="mt-4 mb-3 text-xl font-bold text-[#8be9fd]"
+                              >
+                                {formatText(text)}
+                              </h3>,
+                            );
+                          } else if (level === 4) {
+                            elements.push(
+                              <h4
+                                key={`header-${elementKey++}`}
+                                className="mt-3 mb-2 text-lg font-semibold text-[#50fa7b]"
+                              >
+                                {formatText(text)}
+                              </h4>,
+                            );
+                          } else if (level === 5) {
+                            elements.push(
+                              <h5
+                                key={`header-${elementKey++}`}
+                                className="mt-2 mb-2 text-base font-semibold text-[#f1fa8c]"
+                              >
+                                {formatText(text)}
+                              </h5>,
+                            );
+                          } else {
+                            elements.push(
+                              <h6
+                                key={`header-${elementKey++}`}
+                                className="mt-2 mb-2 text-sm font-semibold text-[#ffb86c]"
+                              >
+                                {formatText(text)}
+                              </h6>,
+                            );
+                          }
+                        }
+                        i++;
+                      }
                       // Check for numbered list (1. 2. 3. etc)
-                      if (/^\d+\.\s/.test(line)) {
+                      else if (/^\d+\.\s/.test(line)) {
                         const listItems: string[] = [];
                         while (
                           i < lines.length &&
@@ -620,13 +686,13 @@ export default function ModulePage({
                       }
                       // Regular paragraph
                       else if (line) {
-                        // Collect all lines until next list or empty line
+                        // Collect all lines until next list, header, or empty line
                         let para = line;
                         i++;
                         while (
                           i < lines.length &&
                           lines[i].trim() &&
-                          !/^(\d+\.|-|\*)\s/.test(lines[i].trim())
+                          !/^(\d+\.|-|\*|#{1,6})\s/.test(lines[i].trim())
                         ) {
                           para += ' ' + lines[i].trim();
                           i++;
@@ -908,28 +974,29 @@ export default function ModulePage({
                                 </div>
 
                                 {/* Key Points */}
-                                {question.keyPoints.length > 0 && (
-                                  <div className="rounded-lg border-2 border-[#8be9fd] bg-[#8be9fd]/10 p-4">
-                                    <div className="mb-2 font-semibold text-[#8be9fd]">
-                                      ✓ Key Points to Cover:
+                                {question.keyPoints &&
+                                  question.keyPoints.length > 0 && (
+                                    <div className="rounded-lg border-2 border-[#8be9fd] bg-[#8be9fd]/10 p-4">
+                                      <div className="mb-2 font-semibold text-[#8be9fd]">
+                                        ✓ Key Points to Cover:
+                                      </div>
+                                      <ul className="space-y-1.5 text-sm text-[#f8f8f2]">
+                                        {question.keyPoints.map(
+                                          (point, index) => (
+                                            <li
+                                              key={index}
+                                              className="flex items-start gap-2"
+                                            >
+                                              <span className="mt-1 text-[#8be9fd]">
+                                                •
+                                              </span>
+                                              <span>{point}</span>
+                                            </li>
+                                          ),
+                                        )}
+                                      </ul>
                                     </div>
-                                    <ul className="space-y-1.5 text-sm text-[#f8f8f2]">
-                                      {question.keyPoints.map(
-                                        (point, index) => (
-                                          <li
-                                            key={index}
-                                            className="flex items-start gap-2"
-                                          >
-                                            <span className="mt-1 text-[#8be9fd]">
-                                              •
-                                            </span>
-                                            <span>{point}</span>
-                                          </li>
-                                        ),
-                                      )}
-                                    </ul>
-                                  </div>
-                                )}
+                                  )}
                               </div>
                             )}
 

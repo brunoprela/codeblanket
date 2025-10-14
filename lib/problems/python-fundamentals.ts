@@ -2243,7 +2243,10 @@ This problem tests:
         output: '[0]',
       },
     ],
-    constraints: ['1 <= len(nums) <= 10^4', 'Must be in-place with O(1) extra space'],
+    constraints: [
+      '1 <= len(nums) <= 10^4',
+      'Must be in-place with O(1) extra space',
+    ],
     hints: [
       'Use two pointers',
       'One pointer for non-zero position',
@@ -2335,7 +2338,10 @@ This problem tests:
         output: '1',
       },
     ],
-    constraints: ['Each element appears twice except one', 'Must use O(1) space'],
+    constraints: [
+      'Each element appears twice except one',
+      'Must use O(1) space',
+    ],
     hints: [
       'XOR has special properties: a ^ a = 0, a ^ 0 = a',
       'XOR all numbers together',

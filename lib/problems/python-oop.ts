@@ -104,15 +104,27 @@ print(account.balance)  # 1500
 print(account.withdraw(200))  # True
 print(account.balance)  # 1300
 print(account.withdraw(2000))  # False
+
+
+def test_bank_account(name, initial_balance, deposit_amount, withdraw_amount):
+    """Test function for BankAccount class."""
+    account = BankAccount(name, initial_balance)
+    account.deposit(deposit_amount)
+    result = account.withdraw(withdraw_amount)
+    if not result:
+        return False
+    return account.balance
 `,
     testCases: [
       {
         input: ['Alice', 1000, 500, 200],
         expected: 1300,
+        functionName: 'test_bank_account',
       },
       {
         input: ['Bob', 100, 0, 200],
         expected: false, // withdraw fails
+        functionName: 'test_bank_account',
       },
     ],
     solution: `class BankAccount:
@@ -136,7 +148,17 @@ print(account.withdraw(2000))  # False
         return self._balance
     
     def __str__(self):
-        return f"BankAccount({self.name}, balance={self._balance})"`,
+        return f"BankAccount({self.name}, balance={self._balance})"
+
+
+def test_bank_account(name, initial_balance, deposit_amount, withdraw_amount):
+    """Test function for BankAccount class."""
+    account = BankAccount(name, initial_balance)
+    account.deposit(deposit_amount)
+    result = account.withdraw(withdraw_amount)
+    if not result:
+        return False
+    return account.balance`,
     timeComplexity: 'O(1) for all operations',
     spaceComplexity: 'O(1)',
     order: 1,
@@ -248,19 +270,36 @@ shapes = [
 
 for shape in shapes:
     print(f"{shape.__class__.__name__}: area={shape.area():.2f}, perimeter={shape.perimeter():.2f}")
+
+
+def test_shape(shape_type, *args):
+    """Test function for Shape classes."""
+    import math
+    if shape_type == 'Circle':
+        shape = Circle(args[0])
+    elif shape_type == 'Rectangle':
+        shape = Rectangle(args[0], args[1])
+    elif shape_type == 'Square':
+        shape = Square(args[0])
+    else:
+        raise ValueError(f"Unknown shape type: {shape_type}")
+    return round(shape.area(), 2)
 `,
     testCases: [
       {
         input: ['Circle', 5],
         expected: 78.54, // area
+        functionName: 'test_shape',
       },
       {
         input: ['Rectangle', 4, 6],
         expected: 24, // area
+        functionName: 'test_shape',
       },
       {
         input: ['Square', 4],
         expected: 16, // area
+        functionName: 'test_shape',
       },
     ],
     solution: `from abc import ABC, abstractmethod
@@ -301,7 +340,21 @@ class Rectangle(Shape):
 
 class Square(Rectangle):
     def __init__(self, side):
-        super().__init__(side, side)`,
+        super().__init__(side, side)
+
+
+def test_shape(shape_type, *args):
+    """Test function for Shape classes."""
+    import math
+    if shape_type == 'Circle':
+        shape = Circle(args[0])
+    elif shape_type == 'Rectangle':
+        shape = Rectangle(args[0], args[1])
+    elif shape_type == 'Square':
+        shape = Square(args[0])
+    else:
+        raise ValueError(f"Unknown shape type: {shape_type}")
+    return round(shape.area(), 2)`,
     timeComplexity: 'O(1) for all operations',
     spaceComplexity: 'O(1)',
     order: 2,
@@ -413,15 +466,28 @@ owner.add_animal(Dog("Max", 2))
 
 print(f"{owner.name} has {owner.animal_count} animals")
 owner.make_all_speak()
+
+
+def test_animal(animal_type, name):
+    """Test function for Animal classes."""
+    if animal_type == 'Dog':
+        animal = Dog(name, 5)
+    elif animal_type == 'Cat':
+        animal = Cat(name, 3)
+    else:
+        raise ValueError(f"Unknown animal type: {animal_type}")
+    return animal.speak()
 `,
     testCases: [
       {
         input: ['Dog', 'Buddy'],
         expected: 'Buddy says Woof!',
+        functionName: 'test_animal',
       },
       {
         input: ['Cat', 'Whiskers'],
         expected: 'Whiskers says Meow!',
+        functionName: 'test_animal',
       },
     ],
     solution: `class Animal:
@@ -470,7 +536,18 @@ class Owner:
     
     @property
     def animal_count(self):
-        return len(self._animals)`,
+        return len(self._animals)
+
+
+def test_animal(animal_type, name):
+    """Test function for Animal classes."""
+    if animal_type == 'Dog':
+        animal = Dog(name, 5)
+    elif animal_type == 'Cat':
+        animal = Cat(name, 3)
+    else:
+        raise ValueError(f"Unknown animal type: {animal_type}")
+    return animal.speak()`,
     timeComplexity: 'O(n) for make_all_speak where n is number of animals',
     spaceComplexity: 'O(n) to store n animals',
     order: 3,
@@ -557,15 +634,23 @@ class VehicleFactory:
 # Test
 car = VehicleFactory.create_vehicle('car')
 print(car.get_info())
+
+
+def test_vehicle_factory(vehicle_type):
+    """Test function for VehicleFactory."""
+    vehicle = VehicleFactory.create_vehicle(vehicle_type)
+    return vehicle.__class__.__name__
 `,
     testCases: [
       {
         input: ['car'],
         expected: 'Car',
+        functionName: 'test_vehicle_factory',
       },
       {
         input: ['motorcycle'],
         expected: 'Motorcycle',
+        functionName: 'test_vehicle_factory',
       },
     ],
     solution: `from abc import ABC, abstractmethod
@@ -629,7 +714,13 @@ class VehicleFactory:
         vehicle_class = VehicleFactory._vehicles.get(vehicle_type.lower())
         if vehicle_class is None:
             raise ValueError(f"Unknown vehicle type: {vehicle_type}")
-        return vehicle_class()`,
+        return vehicle_class()
+
+
+def test_vehicle_factory(vehicle_type):
+    """Test function for VehicleFactory."""
+    vehicle = VehicleFactory.create_vehicle(vehicle_type)
+    return vehicle.__class__.__name__`,
     timeComplexity: 'O(1)',
     spaceComplexity: 'O(1)',
     order: 4,
@@ -723,11 +814,22 @@ observer2 = ConcreteObserver("Observer2")
 subject.attach(observer1)
 subject.attach(observer2)
 subject.state = 10  # Should notify both observers
+
+
+def test_observer_pattern(state, num_observers):
+    """Test function for Observer pattern."""
+    subject = Subject()
+    for i in range(num_observers):
+        observer = ConcreteObserver(f"Observer{i+1}")
+        subject.attach(observer)
+    subject.state = state
+    return 'notified'
 `,
     testCases: [
       {
         input: [10, 2], // state, num observers
         expected: 'notified',
+        functionName: 'test_observer_pattern',
       },
     ],
     solution: `from abc import ABC, abstractmethod
@@ -770,7 +872,17 @@ class ConcreteObserver(Observer):
         self.name = name
     
     def update(self, subject):
-        print(f"{self.name} received update: state = {subject.state}")`,
+        print(f"{self.name} received update: state = {subject.state}")
+
+
+def test_observer_pattern(state, num_observers):
+    """Test function for Observer pattern."""
+    subject = Subject()
+    for i in range(num_observers):
+        observer = ConcreteObserver(f"Observer{i+1}")
+        subject.attach(observer)
+    subject.state = state
+    return 'notified'`,
     timeComplexity: 'O(n) for notify where n is number of observers',
     spaceComplexity: 'O(n) to store observers',
     order: 5,
@@ -872,11 +984,26 @@ house = (HouseBuilder()
          .add_garage()
          .build())
 print(house)
+
+
+def test_builder_pattern(*components):
+    """Test function for Builder pattern."""
+    builder = HouseBuilder()
+    for component in components:
+        if component == 'walls':
+            builder.add_walls()
+        elif component == 'roof':
+            builder.add_roof()
+        elif component == 'garage':
+            builder.add_garage()
+    house = builder.build()
+    return house.__class__.__name__
 `,
     testCases: [
       {
         input: ['walls', 'roof', 'garage'],
         expected: 'House',
+        functionName: 'test_builder_pattern',
       },
     ],
     solution: `class House:
@@ -937,7 +1064,21 @@ class HouseBuilder:
             windows=self._windows,
             doors=self._doors,
             garage=self._garage
-        )`,
+        )
+
+
+def test_builder_pattern(*components):
+    """Test function for Builder pattern."""
+    builder = HouseBuilder()
+    for component in components:
+        if component == 'walls':
+            builder.add_walls()
+        elif component == 'roof':
+            builder.add_roof()
+        elif component == 'garage':
+            builder.add_garage()
+    house = builder.build()
+    return house.__class__.__name__`,
     timeComplexity: 'O(1)',
     spaceComplexity: 'O(1)',
     order: 6,
@@ -1031,11 +1172,26 @@ print(result)
 processor.set_strategy(BubbleSort())
 result = processor.sort([3, 1, 4, 1, 5, 9, 2, 6])
 print(result)
+
+
+def test_strategy_pattern(data, strategy_name):
+    """Test function for Strategy pattern."""
+    processor = DataProcessor()
+    if strategy_name == 'QuickSort':
+        processor.set_strategy(QuickSort())
+    elif strategy_name == 'BubbleSort':
+        processor.set_strategy(BubbleSort())
+    elif strategy_name == 'MergeSort':
+        processor.set_strategy(MergeSort())
+    else:
+        raise ValueError(f"Unknown strategy: {strategy_name}")
+    return processor.sort(data)
 `,
     testCases: [
       {
         input: [[3, 1, 2], 'QuickSort'],
         expected: [1, 2, 3],
+        functionName: 'test_strategy_pattern',
       },
     ],
     solution: `from abc import ABC, abstractmethod
@@ -1100,7 +1256,21 @@ class DataProcessor:
     def sort(self, data):
         if self._strategy is None:
             raise ValueError("No strategy set")
-        return self._strategy.sort(data)`,
+        return self._strategy.sort(data)
+
+
+def test_strategy_pattern(data, strategy_name):
+    """Test function for Strategy pattern."""
+    processor = DataProcessor()
+    if strategy_name == 'QuickSort':
+        processor.set_strategy(QuickSort())
+    elif strategy_name == 'BubbleSort':
+        processor.set_strategy(BubbleSort())
+    elif strategy_name == 'MergeSort':
+        processor.set_strategy(MergeSort())
+    else:
+        raise ValueError(f"Unknown strategy: {strategy_name}")
+    return processor.sort(data)`,
     timeComplexity:
       'Depends on strategy (O(n²) for bubble, O(n log n) for others)',
     spaceComplexity: 'O(n)',
@@ -1197,11 +1367,20 @@ root.add(pics)
 root.add(File("readme.txt", 256))
 
 print(f"Total size: {root.get_size()} bytes")
+
+
+def test_composite_pattern(*file_sizes):
+    """Test function for Composite pattern."""
+    directory = Directory("test")
+    for i, size in enumerate(file_sizes):
+        directory.add(File(f"file{i}.txt", size))
+    return directory.get_size()
 `,
     testCases: [
       {
         input: [1024, 512, 256], // file sizes
         expected: 1792, // sum
+        functionName: 'test_composite_pattern',
       },
     ],
     solution: `from abc import ABC, abstractmethod
@@ -1239,7 +1418,15 @@ class Directory(FileSystemItem):
             self.children.remove(item)
     
     def get_size(self):
-        return sum(child.get_size() for child in self.children)`,
+        return sum(child.get_size() for child in self.children)
+
+
+def test_composite_pattern(*file_sizes):
+    """Test function for Composite pattern."""
+    directory = Directory("test")
+    for i, size in enumerate(file_sizes):
+        directory.add(File(f"file{i}.txt", size))
+    return directory.get_size()`,
     timeComplexity: 'O(n) where n is total number of items',
     spaceComplexity: 'O(d) where d is depth of directory tree',
     order: 8,
@@ -1344,11 +1531,24 @@ class JSONProcessor(DataProcessor):
 # Test
 csv_processor = CSVProcessor()
 csv_processor.process()
+
+
+def test_template_method(processor_type):
+    """Test function for Template Method pattern."""
+    if processor_type == 'CSV':
+        processor = CSVProcessor()
+    elif processor_type == 'JSON':
+        processor = JSONProcessor()
+    else:
+        raise ValueError(f"Unknown processor type: {processor_type}")
+    processor.process()
+    return 'processed'
 `,
     testCases: [
       {
         input: ['CSV'],
         expected: 'processed',
+        functionName: 'test_template_method',
       },
     ],
     solution: `from abc import ABC, abstractmethod
@@ -1418,7 +1618,19 @@ class JSONProcessor(DataProcessor):
         return {'user_count': len(users)}
     
     def save_results(self, results):
-        print(f"Saving results: {results}")`,
+        print(f"Saving results: {results}")
+
+
+def test_template_method(processor_type):
+    """Test function for Template Method pattern."""
+    if processor_type == 'CSV':
+        processor = CSVProcessor()
+    elif processor_type == 'JSON':
+        processor = JSONProcessor()
+    else:
+        raise ValueError(f"Unknown processor type: {processor_type}")
+    processor.process()
+    return 'processed'`,
     timeComplexity: 'O(n) where n is data size',
     spaceComplexity: 'O(n)',
     order: 9,
@@ -1500,11 +1712,19 @@ print(user.updated_at)
 
 # Test MRO
 print(User.mro())
+
+
+def test_mixin(username, email):
+    """Test function for Mixin pattern."""
+    user = User(username, email)
+    result = user.to_dict()
+    return type(result).__name__
 `,
     testCases: [
       {
         input: ['alice', 'alice@example.com'],
         expected: 'dict',
+        functionName: 'test_mixin',
       },
     ],
     solution: `from datetime import datetime
@@ -1552,7 +1772,14 @@ class User(SerializableMixin, TimestampMixin):
     def __init__(self, username, email=None):
         super().__init__()
         self.username = username
-        self.email = email`,
+        self.email = email
+
+
+def test_mixin(username, email):
+    """Test function for Mixin pattern."""
+    user = User(username, email)
+    result = user.to_dict()
+    return type(result).__name__`,
     timeComplexity: 'O(n) where n is number of attributes',
     spaceComplexity: 'O(n)',
     order: 10,
@@ -1636,11 +1863,18 @@ print(p1 < p2)  # Comparison works automatically
 
 rect = Rectangle(Point(0, 10), Point(10, 0))
 print(f"Area: {rect.area}")
+
+
+def test_dataclass(x, y):
+    """Test function for Dataclass."""
+    point = Point(x, y)
+    return point.distance_from_origin()
 `,
     testCases: [
       {
         input: [3, 4],
         expected: 5.0,
+        functionName: 'test_dataclass',
       },
     ],
     solution: `from dataclasses import dataclass
@@ -1677,7 +1911,13 @@ class Rectangle:
     
     def contains_point(self, point):
         return (self.top_left.x <= point.x <= self.bottom_right.x and
-                self.bottom_right.y <= point.y <= self.top_left.y)`,
+                self.bottom_right.y <= point.y <= self.top_left.y)
+
+
+def test_dataclass(x, y):
+    """Test function for Dataclass."""
+    point = Point(x, y)
+    return point.distance_from_origin()`,
     timeComplexity: 'O(1) for all operations',
     spaceComplexity: 'O(1)',
     order: 11,
@@ -1775,11 +2015,29 @@ canvas.add(Square(4))
 canvas.add(Triangle(3, 4))
 
 print(canvas.render())
+
+
+def test_protocol(shape_type, size):
+    """Test function for Protocol pattern."""
+    if shape_type == 'Circle':
+        shape = Circle(size)
+    elif shape_type == 'Square':
+        shape = Square(size)
+    elif shape_type == 'Triangle':
+        shape = Triangle(size, size)
+    else:
+        raise ValueError(f"Unknown shape type: {shape_type}")
+    result = shape.draw()
+    # Check if result contains the shape type
+    if shape_type in result:
+        return f"{shape_type} drawn"
+    return result
 `,
     testCases: [
       {
         input: ['Circle', 5],
         expected: 'Circle drawn',
+        functionName: 'test_protocol',
       },
     ],
     solution: `from typing import Protocol
@@ -1823,7 +2081,24 @@ class Canvas:
         self.objects.append(obj)
     
     def render(self) -> str:
-        return '\\n'.join(obj.draw() for obj in self.objects)`,
+        return '\\n'.join(obj.draw() for obj in self.objects)
+
+
+def test_protocol(shape_type, size):
+    """Test function for Protocol pattern."""
+    if shape_type == 'Circle':
+        shape = Circle(size)
+    elif shape_type == 'Square':
+        shape = Square(size)
+    elif shape_type == 'Triangle':
+        shape = Triangle(size, size)
+    else:
+        raise ValueError(f"Unknown shape type: {shape_type}")
+    result = shape.draw()
+    # Check if result contains the shape type
+    if shape_type in result:
+        return f"{shape_type} drawn"
+    return result`,
     timeComplexity: 'O(n) for rendering n objects',
     spaceComplexity: 'O(n)',
     order: 12,
@@ -1917,11 +2192,34 @@ print(light)  # YELLOW
 
 light.next_state()
 print(light)  # RED again
+
+
+def test_state_machine(initial_state):
+    """Test function for State Machine with Enum."""
+    from enum import Enum
+    
+    class TrafficLightState(Enum):
+        RED = 1
+        YELLOW = 2
+        GREEN = 3
+    
+    light = TrafficLight()
+    # Set initial state if specified
+    if initial_state == 'RED':
+        light.current_state = TrafficLightState.RED
+    elif initial_state == 'YELLOW':
+        light.current_state = TrafficLightState.YELLOW
+    elif initial_state == 'GREEN':
+        light.current_state = TrafficLightState.GREEN
+    
+    light.next_state()
+    return light.current_state.name
 `,
     testCases: [
       {
         input: ['RED'],
         expected: 'GREEN',
+        functionName: 'test_state_machine',
       },
     ],
     solution: `from enum import Enum
@@ -1965,7 +2263,29 @@ class TrafficLight:
         self.current_state = state
     
     def __str__(self):
-        return f"Traffic Light: {self.current_state.name}"`,
+        return f"Traffic Light: {self.current_state.name}"
+
+
+def test_state_machine(initial_state):
+    """Test function for State Machine with Enum."""
+    from enum import Enum
+    
+    class TrafficLightState(Enum):
+        RED = 1
+        YELLOW = 2
+        GREEN = 3
+    
+    light = TrafficLight()
+    # Set initial state if specified
+    if initial_state == 'RED':
+        light.current_state = TrafficLightState.RED
+    elif initial_state == 'YELLOW':
+        light.current_state = TrafficLightState.YELLOW
+    elif initial_state == 'GREEN':
+        light.current_state = TrafficLightState.GREEN
+    
+    light.next_state()
+    return light.current_state.name`,
     timeComplexity: 'O(1)',
     spaceComplexity: 'O(1)',
     order: 13,

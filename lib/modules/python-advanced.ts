@@ -129,6 +129,19 @@ These advanced features are not just syntactic sugar—they fundamentally change
           explanation:
             'Generators are ideal for large datasets because they produce values on-demand (lazy evaluation) rather than creating the entire list in memory at once. This makes them memory-efficient.',
         },
+        {
+          id: 'mc5',
+          question: 'What is a metaclass in Python?',
+          options: [
+            'A class that inherits from multiple parents',
+            'A class of classes that controls class creation',
+            'A class with only class methods',
+            'An abstract base class',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'A metaclass is a class of classes - it controls how classes are created and behave, similar to how classes control how instances are created.',
+        },
       ],
     },
     {
@@ -253,6 +266,20 @@ class Database:
             'Copies metadata from original to wrapper',
           ],
         },
+        {
+          id: 'q3',
+          question:
+            'Explain how decorator chaining works and why order matters. What happens when you stack multiple decorators?',
+          sampleAnswer:
+            'When you stack decorators like @decorator1 @decorator2 @decorator3 def func(), they execute from bottom to top during decoration, meaning func is first wrapped by decorator3, that result is wrapped by decorator2, and finally by decorator1. However, at runtime, they execute top to bottom - decorator1 runs first, then decorator2, then decorator3, and finally func. Order matters because each decorator modifies what the next one sees. For example, if you have @auth @cache, auth runs first (good - no caching unauthorized requests). But @cache @auth would cache before auth checking (bad - security risk). Always consider the logical flow.',
+          keyPoints: [
+            'Decoration: bottom to top (innermost first)',
+            'Execution: top to bottom (outermost first)',
+            'Each decorator wraps the previous result',
+            'Order affects behavior and can cause bugs',
+            'Example: @auth @cache vs @cache @auth',
+          ],
+        },
       ],
       multipleChoice: [
         {
@@ -281,6 +308,47 @@ class Database:
           correctAnswer: 1,
           explanation:
             'Without memoization, recursive fibonacci is O(2^n) due to redundant calculations. With @lru_cache, each fibonacci(n) is calculated only once, reducing time complexity to O(n).',
+        },
+        {
+          id: 'mc3',
+          question:
+            'When stacking decorators like @a @b @c def func(), what is the execution order at runtime?',
+          options: [
+            'a, b, c, func',
+            'c, b, a, func',
+            'func, a, b, c',
+            'func, c, b, a',
+          ],
+          correctAnswer: 0,
+          explanation:
+            'Decorators execute from top to bottom at runtime: a runs first, then b, then c, and finally the original function func.',
+        },
+        {
+          id: 'mc4',
+          question:
+            'What requirement must function arguments meet to use @lru_cache?',
+          options: [
+            'Must be strings',
+            'Must be hashable (immutable)',
+            'Must be integers',
+            'No requirements',
+          ],
+          correctAnswer: 1,
+          explanation:
+            '@lru_cache stores results in a dictionary keyed by arguments, so arguments must be hashable (immutable types like int, str, tuple).',
+        },
+        {
+          id: 'mc5',
+          question: 'What is a common use case for decorators?',
+          options: [
+            'Adding authentication checks to functions',
+            'Sorting lists',
+            'Creating loops',
+            'Defining variables',
+          ],
+          correctAnswer: 0,
+          explanation:
+            'Decorators are commonly used for cross-cutting concerns like authentication, logging, caching, and timing - functionality that applies to multiple functions.',
         },
       ],
     },
@@ -413,6 +481,20 @@ print(avg.send(30))  # 20.0
             'Enables stream processing',
           ],
         },
+        {
+          id: 'q3',
+          question:
+            'What is the advantage of chaining generators in a pipeline versus processing data in steps? How does it affect memory usage?',
+          sampleAnswer:
+            'Chaining generators creates a lazy pipeline where each stage processes one item at a time before passing it to the next stage. This keeps memory usage constant (O(1)) regardless of dataset size. In contrast, processing in steps requires storing intermediate results. For example: list → filter → map → list requires three full lists in memory. But generator → generator → generator processes one item through all stages before moving to the next, using minimal memory. This is how Unix pipes work (cat file | grep pattern | sort) - streaming data through transformations without materializing intermediate results.',
+          keyPoints: [
+            'Lazy pipeline: one item through all stages',
+            'Constant O(1) memory usage',
+            'No intermediate result storage',
+            'Similar to Unix pipes',
+            'Efficient for large datasets',
+          ],
+        },
       ],
       multipleChoice: [
         {
@@ -436,6 +518,45 @@ print(avg.send(30))  # 20.0
           correctAnswer: 2,
           explanation:
             'Generator expressions use parentheses (). Square brackets create lists, curly braces create sets, and the last option is invalid syntax.',
+        },
+        {
+          id: 'mc3',
+          question: 'What happens when a generator function is called?',
+          options: [
+            'The function executes immediately',
+            'It returns a generator object without executing the function body',
+            'It raises an error',
+            'It returns None',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Calling a generator function returns a generator object without executing the function body. The code runs only when you iterate over the generator or call next().',
+        },
+        {
+          id: 'mc4',
+          question: 'Can generators represent infinite sequences?',
+          options: [
+            'No, they must be finite',
+            'Yes, because they produce values lazily',
+            'Only with special syntax',
+            'Yes, but they crash after 1 million items',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Generators can represent infinite sequences because they produce values lazily on-demand, never storing the entire sequence. Example: while True: yield value',
+        },
+        {
+          id: 'mc5',
+          question: 'What is the main benefit of using generator pipelines?',
+          options: [
+            'Faster execution',
+            'Memory efficiency through lazy evaluation',
+            'Automatic parallelization',
+            'Better error handling',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Generator pipelines keep memory usage constant by processing one item through all stages before moving to the next, avoiding intermediate result storage.',
         },
       ],
     },
@@ -587,6 +708,20 @@ with (
             'Example: rollback on error, return False',
           ],
         },
+        {
+          id: 'q3',
+          question:
+            'Compare the @contextmanager decorator approach versus implementing __enter__/__exit__ directly. When would you use each?',
+          sampleAnswer:
+            "The @contextmanager decorator (from contextlib) lets you create context managers with a simple generator function: code before yield is __enter__, yield provides the value, code after yield is __exit__. This is much simpler for straightforward cases. Use it when: 1) cleanup logic is simple, 2) you don't need complex exception handling. Implement __enter__/__exit__ directly when: 1) you need fine-grained control over exception handling, 2) the context manager is a class with state and methods, 3) you want to reuse the same object multiple times. For example, a simple timer uses @contextmanager; a database connection pool with state uses __enter__/__exit__.",
+          keyPoints: [
+            '@contextmanager: simple, generator-based',
+            'Direct implementation: more control, stateful',
+            'Use decorator for simple cleanup',
+            'Use class for complex state/exception handling',
+            'Example: timer vs connection pool',
+          ],
+        },
       ],
       multipleChoice: [
         {
@@ -614,6 +749,42 @@ with (
           correctAnswer: 1,
           explanation:
             'Returning True from __exit__ suppresses any exception that occurred in the with block. Return False (default) to let exceptions propagate normally.',
+        },
+        {
+          id: 'mc3',
+          question: 'Which module provides the @contextmanager decorator?',
+          options: ['contextlib', 'functools', 'itertools', 'contextmanager'],
+          correctAnswer: 0,
+          explanation:
+            'The contextlib module provides the @contextmanager decorator for creating simple context managers using generator functions.',
+        },
+        {
+          id: 'mc4',
+          question:
+            'What is the main advantage of context managers over try/finally blocks?',
+          options: [
+            'Faster execution',
+            'Less verbose and impossible to forget cleanup',
+            'Automatic error recovery',
+            'Parallel execution',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Context managers make cleanup code less verbose and guarantee it runs, making it impossible to forget cleanup. try/finally works but is verbose and error-prone.',
+        },
+        {
+          id: 'mc5',
+          question:
+            'Can you use multiple context managers in a single with statement?',
+          options: [
+            'No, only one at a time',
+            'Yes, separated by commas',
+            'Only with special syntax',
+            'Yes, but deprecated',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'You can use multiple context managers in a single with statement, separated by commas: with open(f1) as a, open(f2) as b:',
         },
       ],
     },
@@ -770,6 +941,20 @@ class Meta(type):
             '__new__ for structure, __init__ for initialization',
           ],
         },
+        {
+          id: 'q3',
+          question:
+            'What are some alternatives to metaclasses that are simpler but solve similar problems? When would you use each?',
+          sampleAnswer:
+            'Modern Python offers simpler alternatives: 1) **Class decorators**: Apply @decorator to a class to modify it after creation. Use for adding methods, wrapping methods, or registering classes. Simpler than metaclasses. 2) **__init_subclass__** (Python 3.6+): A class method called when a class is subclassed. Use for validation, registration, or modifying subclasses. Cleaner than metaclasses for inheritance patterns. 3) **Descriptors**: Control attribute access at the instance level. Use for validation, computed properties. Only use metaclasses when you need to: control how ALL subclasses are created, modify class structure deeply, or implement frameworks like ORMs. Rule of thumb: try decorators first, then __init_subclass__, metaclasses last.',
+          keyPoints: [
+            'Class decorators: simpler, for post-creation modification',
+            '__init_subclass__: cleaner for inheritance patterns',
+            'Descriptors: for attribute-level control',
+            'Use metaclasses only when alternatives insufficient',
+            'Order: decorators → __init_subclass__ → metaclasses',
+          ],
+        },
       ],
       multipleChoice: [
         {
@@ -792,6 +977,41 @@ class Meta(type):
           correctAnswer: 1,
           explanation:
             'Class decorators are simpler and more readable than metaclasses for most use cases. Use metaclasses only when you need to control subclass creation or modify the class at a structural level.',
+        },
+        {
+          id: 'mc3',
+          question:
+            'Which method in a metaclass is called first during class creation?',
+          options: ['__init__', '__new__', '__call__', '__create__'],
+          correctAnswer: 1,
+          explanation:
+            '__new__ is called first in a metaclass to create the class object before __init__ initializes it.',
+        },
+        {
+          id: 'mc4',
+          question: 'What is a common use case for metaclasses?',
+          options: [
+            'Sorting lists',
+            'ORM implementations like Django models',
+            'File I/O',
+            'String manipulation',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'ORMs like Django use metaclasses to transform class definitions into database schemas, automatically creating fields and methods.',
+        },
+        {
+          id: 'mc5',
+          question: 'What is __init_subclass__ used for?',
+          options: [
+            'Initializing object instances',
+            'A simpler alternative to metaclasses for controlling subclass creation',
+            'Defining class variables',
+            'Creating abstract methods',
+          ],
+          correctAnswer: 1,
+          explanation:
+            '__init_subclass__ (Python 3.6+) is a simpler alternative to metaclasses for customizing subclass creation, without needing a metaclass.',
         },
       ],
     },
