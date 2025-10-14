@@ -3,6 +3,13 @@
  */
 
 import { Problem } from '../types';
+import { pythonFundamentalsBatch1 } from './python-fundamentals-batch1';
+import { pythonFundamentalsBatch2 } from './python-fundamentals-batch2';
+import { pythonFundamentalsBatch3 } from './python-fundamentals-batch3';
+import { pythonFundamentalsBatch4 } from './python-fundamentals-batch4';
+import { pythonFundamentalsBatch5 } from './python-fundamentals-batch5';
+import { pythonFundamentalsBatch6 } from './python-fundamentals-batch6';
+import { pythonFundamentalsBatch7 } from './python-fundamentals-batch7';
 
 export const pythonFundamentalsProblems: Problem[] = [
   {
@@ -2819,4 +2826,18 @@ def to_title_case_alt(s):
     order: 30,
     topic: 'Python Fundamentals',
   },
+  // Batch 1: Problems 31-40
+  ...pythonFundamentalsBatch1,
+  // Batch 2: Problems 41-50
+  ...pythonFundamentalsBatch2,
+  // Batch 3: Problems 51-60
+  ...pythonFundamentalsBatch3,
+  // Batch 4: Problems 61-70
+  ...pythonFundamentalsBatch4,
+  // Batch 5: Problems 71-80
+  ...pythonFundamentalsBatch5,
+  // Batch 6: Problems 81-90
+  ...pythonFundamentalsBatch6,
+  // Batch 7: Problems 91-100
+  ...pythonFundamentalsBatch7,
 ];

@@ -3,6 +3,9 @@
  */
 
 import { Problem } from '../types';
+import { pythonIntermediateBatch1 } from './python-intermediate-batch1';
+import { pythonIntermediateBatch2 } from './python-intermediate-batch2';
+import { pythonIntermediateBatch3 } from './python-intermediate-batch3';
 
 export const pythonIntermediateProblems: Problem[] = [
   {
@@ -5002,4 +5005,8 @@ def most_common_word_alt(paragraph, banned):
     order: 28,
     topic: 'Python Intermediate',
   },
+  // New problems (22-50)
+  ...pythonIntermediateBatch1,
+  ...pythonIntermediateBatch2,
+  ...pythonIntermediateBatch3,
 ];

@@ -3,6 +3,10 @@
  */
 
 import { Problem } from '../types';
+import { pythonOOPBatch1 } from './python-oop-batch1';
+import { pythonOOPBatch2 } from './python-oop-batch2';
+import { pythonOOPBatch3 } from './python-oop-batch3';
+import { pythonOOPBatch4 } from './python-oop-batch4';
 
 export const pythonOOPProblems: Problem[] = [
   {
@@ -2919,4 +2923,9 @@ print(lookup[p2])      # "Manager" (p2 same as p1)`,
     order: 18,
     topic: 'Python Object-Oriented Programming',
   },
+  // New problems (11-50)
+  ...pythonOOPBatch1,
+  ...pythonOOPBatch2,
+  ...pythonOOPBatch3,
+  ...pythonOOPBatch4,
 ];

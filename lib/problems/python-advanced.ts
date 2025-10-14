@@ -3,6 +3,7 @@
  */
 
 import { Problem } from '../types';
+import { pythonAdvancedNew } from './python-advanced-new';
 
 export const pythonAdvancedProblems: Problem[] = [
   {
@@ -4376,4 +4377,6 @@ def capture_print_output(func):
     order: 39,
     topic: 'Python Advanced',
   },
+  // New problems (40-50)
+  ...pythonAdvancedNew,
 ];

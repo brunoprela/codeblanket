@@ -29,7 +29,18 @@ export function MultipleChoiceQuiz({
     if (stored) {
       try {
         const completed = JSON.parse(stored);
-        setCompletedQuestions(new Set(completed));
+        // Deduplicate in case of corrupted data
+        const uniqueCompleted = [...new Set(completed)];
+
+        // Fix corrupted data if duplicates found
+        if (uniqueCompleted.length !== completed.length) {
+          localStorage.setItem(storageKey, JSON.stringify(uniqueCompleted));
+          console.warn(
+            `Fixed duplicates in ${storageKey}: ${completed.length} → ${uniqueCompleted.length}`,
+          );
+        }
+
+        setCompletedQuestions(new Set(uniqueCompleted as string[]));
       } catch (e) {
         console.error('Failed to load completed questions:', e);
       }

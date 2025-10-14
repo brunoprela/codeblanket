@@ -160,7 +160,21 @@ export default function ModulePage({
           if (stored) {
             try {
               const completedQuestions = JSON.parse(stored);
-              mcCompleted += completedQuestions.length;
+              // Deduplicate in case of corrupted data
+              const uniqueQuestions = [...new Set(completedQuestions)];
+
+              // Fix corrupted data if duplicates found
+              if (uniqueQuestions.length !== completedQuestions.length) {
+                localStorage.setItem(
+                  storageKey,
+                  JSON.stringify(uniqueQuestions),
+                );
+                console.warn(
+                  `Fixed duplicates in ${storageKey}: ${completedQuestions.length} → ${uniqueQuestions.length}`,
+                );
+              }
+
+              mcCompleted += uniqueQuestions.length;
             } catch (e) {
               console.error('Failed to parse MC quiz progress:', e);
             }
