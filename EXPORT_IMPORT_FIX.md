@@ -5,11 +5,13 @@
 ### Issue 1: Module & Multiple Choice Progress Not Exported ❌ → ✅
 
 **Problem:**
+
 - Export only used localStorage as fallback if IndexedDB had < 2 keys
 - If you had some data in IndexedDB but module completions or MC quiz progress hadn't synced yet, they wouldn't be exported
 - Result: Missing `module-*` and `mc-quiz-*` keys in export file
 
 **Solution:**
+
 ```typescript
 // OLD (line 144-154):
 let data = await getAllData(); // Only IndexedDB
@@ -28,6 +30,7 @@ const data = { ...localStorageData, ...indexedDBData };
 ```
 
 **Result:**
+
 - ✅ Module completion data (`module-{moduleId}-completed`) now always exported
 - ✅ Multiple choice progress (`mc-quiz-{moduleId}-{sectionId}`) now always exported
 - ✅ Custom test cases (`codeblanket_tests_*`) now always exported
@@ -38,6 +41,7 @@ const data = { ...localStorageData, ...indexedDBData };
 ### Issue 2: Videos Required Double Import ❌ → ✅
 
 **Problem:**
+
 - Import triggered immediate page refresh via `window.dispatchEvent(new Event('storage'))`
 - Videos were still being imported async when refresh happened
 - On refresh, videos weren't fully written to IndexedDB yet
@@ -46,6 +50,7 @@ const data = { ...localStorageData, ...indexedDBData };
 **Solution:**
 
 #### 1. Removed Auto-Refresh in Import Process
+
 ```typescript
 // OLD (line 253):
 window.dispatchEvent(new Event('storage')); // Triggers immediate refresh
@@ -61,6 +66,7 @@ resolve();
 ```
 
 #### 2. Updated Import UI Message
+
 ```typescript
 // OLD:
 setMessage({
@@ -81,6 +87,7 @@ setIsImporting(false);
 ```
 
 **Result:**
+
 - ✅ Videos fully import before page refreshes
 - ✅ User controls when to refresh (Cmd/Ctrl+R)
 - ✅ Videos show up immediately after manual refresh
@@ -105,6 +112,7 @@ setIsImporting(false);
 ## Testing
 
 ### To Test Module/MC Export:
+
 1. Complete some sections in a module (checkboxes)
 2. Complete some multiple choice questions
 3. Export progress
@@ -113,6 +121,7 @@ setIsImporting(false);
    - `"mc-quiz-python-fundamentals-loops": [1, 2, 3]`
 
 ### To Test Video Import:
+
 1. Export progress with videos
 2. Clear all data
 3. Import the file
@@ -125,11 +134,13 @@ setIsImporting(false);
 ## Benefits
 
 ### Export:
+
 - ✅ **More comprehensive** - Captures ALL data sources
 - ✅ **More reliable** - Doesn't depend on sync timing
 - ✅ **No data loss** - Module completions and MC progress always included
 
 ### Import:
+
 - ✅ **More reliable** - Videos fully import before refresh
 - ✅ **User control** - Refresh when ready
 - ✅ **Single import** - No need to import twice
@@ -151,17 +162,20 @@ setIsImporting(false);
 ## Console Messages
 
 ### During Export:
+
 ```
 Exported 45 data entries and 3 videos (2.34 MB)
 ```
 
 ### During Import:
+
 ```
 Importing 3 videos...
 Video import complete. Refresh the page to see them.
 ```
 
 ### User Sees:
+
 ```
 ✅ Import complete! Please refresh the page (Cmd/Ctrl+R) to see your data.
 ```
@@ -174,4 +188,3 @@ Video import complete. Refresh the page to see them.
 - New export files include everything
 - No database schema changes needed
 - Backwards compatible with existing exports
-
