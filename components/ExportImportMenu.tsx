@@ -45,11 +45,13 @@ export default function ExportImportMenu() {
       await importProgress(file);
       setMessage({
         type: 'success',
-        text: 'Progress imported successfully! Refreshing...',
+        text: 'Import complete! Please refresh the page (Cmd/Ctrl+R) to see your data.',
       });
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
+      setIsImporting(false);
+      // Don't auto-reload - let user manually refresh after videos finish importing
+      // setTimeout(() => {
+      //   window.location.reload();
+      // }, 1500);
     } catch (error) {
       console.error('Import failed:', error);
       setMessage({

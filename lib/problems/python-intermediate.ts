@@ -1768,16 +1768,40 @@ def quick_math(x, y):
     """Perform quick calculation."""
     return x ** 2 + y ** 2
 
-result1 = fibonacci(10)
-print(f"Result: {result1}")
 
-result2 = quick_math(3, 4)
-print(f"Result: {result2}")
+def test_timer():
+    """Test function that validates timer decorator"""
+    import sys
+    from io import StringIO
+    
+    # Capture printed output
+    old_stdout = sys.stdout
+    sys.stdout = StringIO()
+    
+    try:
+        # Call decorated function
+        result = fibonacci(10)
+        output = sys.stdout.getvalue()
+        sys.stdout = old_stdout
+        
+        # Verify function returned correct value
+        if result != 55:
+            return f"FAIL: Wrong result: {result}"
+        
+        # Verify decorator printed timing information
+        if not output or "took" not in output.lower() and "time" not in output.lower():
+            return "FAIL: Decorator should print timing info"
+        
+        return 55
+    except Exception as e:
+        sys.stdout = old_stdout
+        return f"FAIL: {str(e)}"
 `,
     testCases: [
       {
-        input: [10],
+        input: [],
         expected: 55,
+        functionName: 'test_timer',
       },
     ],
     solution: `import time
@@ -1818,16 +1842,47 @@ def timer(repeat=1):
     return decorator
 
 
-# Alternative: Simple decorator without arguments
-def simple_timer(func):
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        start = time.perf_counter()
-        result = func(*args, **kwargs)
-        end = time.perf_counter()
-        print(f"{func.__name__} took {(end-start)*1000:.4f}ms")
-        return result
-    return wrapper`,
+# Test
+@timer(repeat=1)
+def fibonacci(n):
+    """Calculate nth Fibonacci number."""
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+@timer(repeat=5)
+def quick_math(x, y):
+    """Perform quick calculation."""
+    return x ** 2 + y ** 2
+
+
+def test_timer():
+    """Test function that validates timer decorator"""
+    import sys
+    from io import StringIO
+    
+    # Capture printed output
+    old_stdout = sys.stdout
+    sys.stdout = StringIO()
+    
+    try:
+        # Call decorated function
+        result = fibonacci(10)
+        output = sys.stdout.getvalue()
+        sys.stdout = old_stdout
+        
+        # Verify function returned correct value
+        if result != 55:
+            return f"FAIL: Wrong result: {result}"
+        
+        # Verify decorator printed timing information
+        if not output or "took" not in output.lower() and "time" not in output.lower():
+            return "FAIL: Decorator should print timing info"
+        
+        return 55
+    except Exception as e:
+        sys.stdout = old_stdout
+        return f"FAIL: {str(e)}"`,
     timeComplexity: 'O(r*f) where r is repeats, f is function complexity',
     spaceComplexity: 'O(r) for storing times',
     order: 11,
@@ -2351,25 +2406,38 @@ def expensive_operation(x, y):
     time.sleep(0.1)  # Simulate slow operation
     return x ** y
 
-# Test Fibonacci
-print("\\nFibonacci sequence:")
-for i in range(8):
-    print(f"fib({i}) = {fibonacci(i)}")
-
-print(f"\\nCache stats: {fibonacci.cache_info()}")
-
-# Test LRU eviction
-print("\\n\\nTesting LRU eviction:")
-for i in range(6):
-    result = expensive_operation(2, i)
-    print(f"2^{i} = {result}")
-
-print(f"\\nCache stats: {expensive_operation.cache_info()}")
+def test_cache():
+    """Test function that validates LRU cache decorator"""
+    # First test: verify fibonacci works
+    result = fibonacci(10)
+    if result != 55:
+        return f"FAIL: Wrong fibonacci result: {result}"
+    
+    # Second test: verify caching works by checking cache hits
+    fibonacci.cache_clear()  # Clear any existing cache
+    
+    # Call fibonacci(5) multiple times
+    fibonacci(5)  # Miss
+    fibonacci(5)  # Should be a hit
+    fibonacci(5)  # Should be a hit
+    
+    info = fibonacci.cache_info()
+    
+    # Verify cache stats exist
+    if 'hits' not in info or 'misses' not in info:
+        return "FAIL: Cache stats not available"
+    
+    # Verify we have at least 1 cache hit (from repeated calls)
+    if info['hits'] < 1:
+        return f"FAIL: No cache hits detected. Got {info}"
+    
+    return 55
 `,
     testCases: [
       {
-        input: [10],
+        input: [],
         expected: 55,
+        functionName: 'test_cache',
       },
     ],
     solution: `from functools import wraps
@@ -2430,12 +2498,14 @@ def lru_cache(maxsize=128):
     return decorator
 
 
-# Alternative using Python's built-in
-from functools import lru_cache as builtin_lru_cache
+@lru_cache(maxsize=3)
+def fibonacci(n):
+    """Calculate Fibonacci number."""
+    if n < 2:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
 
-@builtin_lru_cache(maxsize=128)
-def cached_function(n):
-    return n * 2`,
+result = fibonacci(10)`,
     timeComplexity: 'O(1) for cache lookup, O(n) for function execution',
     spaceComplexity: 'O(maxsize)',
     order: 14,
@@ -3069,32 +3139,39 @@ def divide(a, b):
     return a / b
 
 
-# Test
-print("Test 1: Flaky network call (will retry)")
-try:
-    result = flaky_network_call(success_rate=0.4)
-    print(f"Success: {result}")
-except ConnectionError as e:
-    print(f"Failed after all retries: {e}")
-
-print("\\n" + "="*50 + "\\n")
-
-print("Test 2: Immediate success")
-result = flaky_network_call(success_rate=1.0)
-print(f"Success: {result}")
-
-print("\\n" + "="*50 + "\\n")
-
-print("Test 3: Permanent failure (won't help to retry)")
-try:
-    result = divide(10, 0)
-except ZeroDivisionError as e:
-    print(f"Failed: {e}")
+def test_retry():
+    """Test function that validates retry decorator"""
+    import sys
+    from io import StringIO
+    
+    # Capture printed output
+    old_stdout = sys.stdout
+    sys.stdout = StringIO()
+    
+    try:
+        # Test basic division (should work immediately)
+        result = divide(10, 5)
+        output = sys.stdout.getvalue()
+        sys.stdout = old_stdout
+        
+        # Verify function returned correct value
+        if result != 2:
+            return f"FAIL: Wrong result: {result}"
+        
+        # Verify retry prints attempt info
+        if "attempt" not in output.lower() and "retry" not in output.lower():
+            return "FAIL: Decorator should log retry attempts"
+        
+        return 2
+    except Exception as e:
+        sys.stdout = old_stdout
+        return f"FAIL: {str(e)}"
 `,
     testCases: [
       {
-        input: [10, 5],
+        input: [],
         expected: 2,
+        functionName: 'test_retry',
       },
     ],
     solution: `import time
@@ -3130,29 +3207,12 @@ def retry(max_attempts=3, delay=1, backoff=2, exceptions=(Exception,)):
     return decorator
 
 
-# Alternative: Retry with jitter (randomized delay)
-def retry_with_jitter(max_attempts=3, base_delay=1, max_delay=60, exceptions=(Exception,)):
-    """Retry with jittered exponential backoff."""
-    def decorator(func):
-        @functools.wraps(func)
-        def wrapper(*args, **kwargs):
-            for attempt in range(1, max_attempts + 1):
-                try:
-                    return func(*args, **kwargs)
-                except exceptions as e:
-                    if attempt == max_attempts:
-                        raise
-                    
-                    # Exponential backoff with jitter
-                    delay = min(base_delay * (2 ** (attempt - 1)), max_delay)
-                    jitter = random.uniform(0, delay * 0.1)  # Add up to 10% jitter
-                    total_delay = delay + jitter
-                    
-                    print(f"Attempt {attempt} failed. Retrying in {total_delay:.2f}s...")
-                    time.sleep(total_delay)
-        
-        return wrapper
-    return decorator`,
+@retry(max_attempts=3, delay=1)
+def divide(a, b):
+    """Division with retry."""
+    return a / b
+
+result = divide(10, 5)`,
     timeComplexity: 'O(2^n) for backoff delays where n is attempts',
     spaceComplexity: 'O(1)',
     order: 17,
