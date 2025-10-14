@@ -247,11 +247,10 @@ export default function ExportImportMenu() {
       {/* Success/Error Message */}
       {message && (
         <div
-          className={`fixed right-4 bottom-4 z-50 rounded-lg border-2 p-4 shadow-xl ${
-            message.type === 'success'
+          className={`fixed right-4 bottom-4 z-50 rounded-lg border-2 p-4 shadow-xl ${message.type === 'success'
               ? 'border-[#50fa7b] bg-[#50fa7b]/10 text-[#50fa7b]'
               : 'border-[#ff5555] bg-[#ff5555]/10 text-[#ff5555]'
-          }`}
+            }`}
         >
           <div className="flex items-center gap-2">
             {message.type === 'success' ? (
