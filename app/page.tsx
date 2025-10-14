@@ -324,7 +324,7 @@ export default function Home() {
         </div>
 
         {/* Render each topic section */}
-        {topicSections.map((topicSection, sectionIndex) => (
+        {topicSections.map((topicSection) => (
           <div key={topicSection.id} className="space-y-6">
             {/* Section Header */}
             <div>

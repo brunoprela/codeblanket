@@ -4,7 +4,7 @@
  * Provides type-safe access with error handling.
  */
 
-import { setItem, getItem } from './indexeddb';
+import { setItem } from './indexeddb';
 
 const COMPLETED_PROBLEMS_KEY = 'codeblanket_completed_problems';
 const USER_CODE_KEY_PREFIX = 'codeblanket_code_';

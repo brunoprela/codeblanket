@@ -84,6 +84,7 @@ stdout_value + stderr_value
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isInteractive, pyodideReady, isRunning, code]);
 
   if (!isInteractive) {

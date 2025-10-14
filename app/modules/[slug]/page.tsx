@@ -9,7 +9,6 @@ import { allProblems } from '@/lib/problems';
 import { getCompletedProblems } from '@/lib/helpers/storage';
 import { formatText } from '@/lib/utils/formatText';
 import { InteractiveCodeBlock } from '@/components/InteractiveCodeBlock';
-import { ClientOnlySyntaxHighlighter } from '@/components/ClientOnlySyntaxHighlighter';
 import { VideoRecorder } from '@/components/VideoRecorder';
 import { MultipleChoiceQuiz } from '@/components/MultipleChoiceQuiz';
 import {
@@ -83,6 +82,7 @@ export default function ModulePage({
         videos.forEach((video) => URL.revokeObjectURL(video.url));
       });
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
 
   // Handle video save

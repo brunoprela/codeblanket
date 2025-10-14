@@ -152,6 +152,7 @@ export function VideoRecorder({
         URL.revokeObjectURL(currentVideoUrl);
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

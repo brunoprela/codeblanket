@@ -1503,7 +1503,7 @@ START: What is your goal?
 | **Dijkstra** | Shortest path (weighted, non-negative) | Weighted | O((V+E) log V) | O(V) | Priority queue, greedy approach |
 | **Bellman-Ford** | Shortest path with negative weights | Weighted | O(V·E) | O(V) | Relax all edges V-1 times |
 | **Floyd-Warshall** | All pairs shortest paths | Weighted | O(V³) | O(V²) | DP, tries all intermediate nodes |
-| **A\*** | Shortest path with heuristic | Weighted | O(E) best case | O(V) | Like Dijkstra + heuristic function |
+| **A*** | Shortest path with heuristic | Weighted | O(E) best case | O(V) | Like Dijkstra + heuristic function |
 | **Prim's** | Minimum spanning tree | Weighted, undirected | O((V+E) log V) | O(V) | Greedy, grow tree from vertex |
 | **Kruskal's** | Minimum spanning tree | Weighted, undirected | O(E log E) | O(V) | Sort edges, use Union-Find |
 | **Union-Find** | Dynamic connectivity | Any | O(α(n)) per op | O(V) | Near-constant amortized time |
@@ -1691,7 +1691,7 @@ def floydWarshall(graph, V):
 
 ## 🧭 A* Search: When and How
 
-**A\* = Dijkstra + Heuristic**
+**A* = Dijkstra + Heuristic**
 
 **When to use:**
 ✅ You know the goal location (target)

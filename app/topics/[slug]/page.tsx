@@ -20,14 +20,11 @@ export default function TopicProblemsPage({
   );
   const [backUrl, setBackUrl] = useState('/');
   const [backText, setBackText] = useState('Back to Topics');
-  const [from, setFrom] = useState('');
 
   // Set back URL from search params after mount to avoid hydration mismatch
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     const fromParam = searchParams.get('from') || '';
-
-    setFrom(fromParam);
 
     if (fromParam.startsWith('modules/')) {
       setBackUrl(`/${fromParam}`);
@@ -127,7 +124,6 @@ export default function TopicProblemsPage({
                   difficultyColors={difficultyColors}
                   isCompleted={completedProblems.has(problem.id)}
                   topicSlug={slug}
-                  from={from}
                 />
               ))}
             </div>
@@ -150,7 +146,6 @@ export default function TopicProblemsPage({
                   difficultyColors={difficultyColors}
                   isCompleted={completedProblems.has(problem.id)}
                   topicSlug={slug}
-                  from={from}
                 />
               ))}
             </div>
@@ -171,7 +166,6 @@ export default function TopicProblemsPage({
                   difficultyColors={difficultyColors}
                   isCompleted={completedProblems.has(problem.id)}
                   topicSlug={slug}
-                  from={from}
                 />
               ))}
             </div>
@@ -193,14 +187,12 @@ function ProblemCard({
   difficultyColors,
   isCompleted,
   topicSlug,
-  from,
 }: {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   problem: any;
   difficultyColors: Record<Difficulty, string>;
   isCompleted: boolean;
   topicSlug: string;
-  from: string;
 }) {
   // Always use topics page as the back destination when viewing problems from topics page
   // This ensures users return to the topic problems list, not the module page

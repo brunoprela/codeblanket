@@ -794,7 +794,7 @@ print(new_text)
 - **\\S**: Non-whitespace
 
 ### Quantifiers
-- **\***: 0 or more
+- *****: 0 or more
 - **+**: 1 or more
 - **?**: 0 or 1 (optional)
 - **{n}**: Exactly n times

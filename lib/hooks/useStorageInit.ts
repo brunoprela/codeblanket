@@ -20,10 +20,10 @@ export function useStorageInit() {
         const migrationComplete = localStorage.getItem(migrationKey);
 
         if (!migrationComplete && mounted) {
-          console.log('Migrating data from localStorage to IndexedDB...');
+          console.debug('Migrating data from localStorage to IndexedDB...');
           await migrateFromLocalStorage();
           localStorage.setItem(migrationKey, 'true');
-          console.log('Migration complete!');
+          console.debug('Migration complete!');
         }
 
         // Create an auto-backup every time the app loads

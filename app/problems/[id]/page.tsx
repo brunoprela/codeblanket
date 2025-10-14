@@ -20,7 +20,7 @@ function formatApproach(text: string): ReactNode[] {
   // Handle both ```language\ncode``` and ```\ncode``` patterns
   const codeBlocks: string[] = [];
   const codeBlockRegex = /```(\w+)?[\n\r]?([\s\S]*?)```/g;
-  let processedText = text.replace(codeBlockRegex, (match, lang, code) => {
+  const processedText = text.replace(codeBlockRegex, (match, lang, code) => {
     // Reconstruct proper code block format for formatText
     const language = lang || 'python';
     const reconstructed = `\`\`\`${language}\n${code.trim()}\n\`\`\``;
