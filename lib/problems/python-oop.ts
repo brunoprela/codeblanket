@@ -2291,4 +2291,611 @@ def test_state_machine(initial_state):
     order: 13,
     topic: 'Python Object-Oriented Programming',
   },
+  {
+    id: 'complex-number-magic-methods',
+    title: 'Complex Number with Magic Methods',
+    difficulty: 'medium',
+    category: 'python-oop',
+    description: `Create a \`ComplexNumber\` class that implements magic methods for arithmetic operations, comparison, and string representation.
+
+Implement these magic methods:
+- \`__init__(real, imag)\`: Initialize with real and imaginary parts
+- \`__str__()\`: Return user-friendly string like "3 + 4i"
+- \`__repr__()\`: Return developer string like "ComplexNumber(3, 4)"
+- \`__add__(other)\`: Add two complex numbers
+- \`__sub__(other)\`: Subtract complex numbers
+- \`__mul__(other)\`: Multiply complex numbers
+- \`__eq__(other)\`: Check equality
+- \`__abs__()\`: Return magnitude (distance from origin)
+
+**Examples:**
+\`\`\`python
+c1 = ComplexNumber(3, 4)
+c2 = ComplexNumber(1, 2)
+
+print(c1)           # "3 + 4i"
+print(repr(c1))     # "ComplexNumber(3, 4)"
+print(c1 + c2)      # "4 + 6i"
+print(c1 * c2)      # "-5 + 10i"  (3+4i)*(1+2i) = 3 + 6i + 4i + 8i² = -5 + 10i
+print(abs(c1))      # 5.0  (sqrt(3² + 4²))
+print(c1 == ComplexNumber(3, 4))  # True
+\`\`\`
+
+**Constraints:**
+- Handle negative imaginary parts correctly in \`__str__\`
+- \`__abs__\` should return a float`,
+    starterCode: `class ComplexNumber:
+    def __init__(self, real, imag):
+        """Initialize complex number with real and imaginary parts."""
+        pass
+    
+    def __str__(self):
+        """Return user-friendly string representation."""
+        pass
+    
+    def __repr__(self):
+        """Return developer-friendly representation."""
+        pass
+    
+    def __add__(self, other):
+        """Add two complex numbers."""
+        pass
+    
+    def __sub__(self, other):
+        """Subtract complex numbers."""
+        pass
+    
+    def __mul__(self, other):
+        """Multiply complex numbers."""
+        pass
+    
+    def __eq__(self, other):
+        """Check equality."""
+        pass
+    
+    def __abs__(self):
+        """Return magnitude."""
+        pass`,
+    testCases: [
+      {
+        input:
+          'c1 = ComplexNumber(3, 4); c2 = ComplexNumber(1, 2); str(c1 + c2)',
+        expected: '"4 + 6i"',
+      },
+      {
+        input: 'c1 = ComplexNumber(3, 4); abs(c1)',
+        expected: '5.0',
+      },
+      {
+        input:
+          'c1 = ComplexNumber(3, 4); c2 = ComplexNumber(1, 2); str(c1 * c2)',
+        expected: '"-5 + 10i"',
+      },
+    ],
+    hints: [
+      'For __str__, handle negative imaginary with f"{real} - {abs(imag)}i"',
+      'For __mul__, use (a+bi)*(c+di) = (ac-bd) + (ad+bc)i',
+      'For __abs__, use sqrt(real² + imag²)',
+      'Always check isinstance(other, ComplexNumber) in operations',
+    ],
+    solution: `import math
+
+class ComplexNumber:
+    def __init__(self, real, imag):
+        """Initialize complex number with real and imaginary parts."""
+        self.real = real
+        self.imag = imag
+    
+    def __str__(self):
+        """Return user-friendly string representation."""
+        if self.imag >= 0:
+            return f"{self.real} + {self.imag}i"
+        else:
+            return f"{self.real} - {abs(self.imag)}i"
+    
+    def __repr__(self):
+        """Return developer-friendly representation."""
+        return f"ComplexNumber({self.real}, {self.imag})"
+    
+    def __add__(self, other):
+        """Add two complex numbers."""
+        if not isinstance(other, ComplexNumber):
+            return NotImplemented
+        return ComplexNumber(self.real + other.real, self.imag + other.imag)
+    
+    def __sub__(self, other):
+        """Subtract complex numbers."""
+        if not isinstance(other, ComplexNumber):
+            return NotImplemented
+        return ComplexNumber(self.real - other.real, self.imag - other.imag)
+    
+    def __mul__(self, other):
+        """Multiply complex numbers: (a+bi)*(c+di) = (ac-bd) + (ad+bc)i"""
+        if not isinstance(other, ComplexNumber):
+            return NotImplemented
+        real_part = self.real * other.real - self.imag * other.imag
+        imag_part = self.real * other.imag + self.imag * other.real
+        return ComplexNumber(real_part, imag_part)
+    
+    def __eq__(self, other):
+        """Check equality."""
+        if not isinstance(other, ComplexNumber):
+            return False
+        return self.real == other.real and self.imag == other.imag
+    
+    def __abs__(self):
+        """Return magnitude: sqrt(real² + imag²)"""
+        return math.sqrt(self.real ** 2 + self.imag ** 2)
+
+
+# Test
+c1 = ComplexNumber(3, 4)
+c2 = ComplexNumber(1, 2)
+print(c1 + c2)      # 4 + 6i
+print(c1 * c2)      # -5 + 10i
+print(abs(c1))      # 5.0`,
+    timeComplexity: 'O(1) for all operations',
+    spaceComplexity: 'O(1)',
+    order: 14,
+    topic: 'Python Object-Oriented Programming',
+  },
+  {
+    id: 'custom-list-magic-methods',
+    title: 'Custom List with Magic Methods',
+    difficulty: 'medium',
+    category: 'python-oop',
+    description: `Create a \`MyList\` class that behaves like Python's built-in list using magic methods.
+
+Implement:
+- \`__init__(items=[])\`: Initialize with items
+- \`__len__()\`: Support \`len()\`
+- \`__getitem__(index)\`: Support indexing \`mylist[i]\`
+- \`__setitem__(index, value)\`: Support assignment \`mylist[i] = val\`
+- \`__contains__(item)\`: Support \`in\` operator
+- \`__iter__()\`: Support iteration
+- \`__str__()\`: Return string like "[1, 2, 3]"
+- \`append(item)\`: Add item to end
+
+**Examples:**
+\`\`\`python
+mylist = MyList([1, 2, 3])
+print(len(mylist))      # 3
+print(mylist[0])        # 1
+print(2 in mylist)      # True
+mylist.append(4)
+print(str(mylist))      # "[1, 2, 3, 4]"
+
+for item in mylist:
+    print(item)         # 1, 2, 3, 4
+\`\`\``,
+    starterCode: `class MyList:
+    def __init__(self, items=None):
+        """Initialize with items."""
+        pass
+    
+    def __len__(self):
+        """Return length."""
+        pass
+    
+    def __getitem__(self, index):
+        """Get item by index."""
+        pass
+    
+    def __setitem__(self, index, value):
+        """Set item by index."""
+        pass
+    
+    def __contains__(self, item):
+        """Check if item exists."""
+        pass
+    
+    def __iter__(self):
+        """Make iterable."""
+        pass
+    
+    def __str__(self):
+        """String representation."""
+        pass
+    
+    def append(self, item):
+        """Add item to end."""
+        pass`,
+    testCases: [
+      {
+        input: 'mylist = MyList([1, 2, 3]); len(mylist)',
+        expected: '3',
+      },
+      {
+        input: 'mylist = MyList([1, 2, 3]); mylist[1]',
+        expected: '2',
+      },
+      {
+        input: 'mylist = MyList([1, 2, 3]); 2 in mylist',
+        expected: 'True',
+      },
+    ],
+    hints: [
+      'Store items in internal list: self._items = items or []',
+      'Delegate most operations to self._items',
+      '__iter__ should return iter(self._items)',
+      '__str__ can use str(self._items)',
+    ],
+    solution: `class MyList:
+    def __init__(self, items=None):
+        """Initialize with items."""
+        self._items = items if items is not None else []
+    
+    def __len__(self):
+        """Return length."""
+        return len(self._items)
+    
+    def __getitem__(self, index):
+        """Get item by index."""
+        return self._items[index]
+    
+    def __setitem__(self, index, value):
+        """Set item by index."""
+        self._items[index] = value
+    
+    def __contains__(self, item):
+        """Check if item exists."""
+        return item in self._items
+    
+    def __iter__(self):
+        """Make iterable."""
+        return iter(self._items)
+    
+    def __str__(self):
+        """String representation."""
+        return str(self._items)
+    
+    def append(self, item):
+        """Add item to end."""
+        self._items.append(item)
+
+
+# Test
+mylist = MyList([1, 2, 3])
+print(len(mylist))      # 3
+print(mylist[0])        # 1
+print(2 in mylist)      # True
+mylist.append(4)
+print(mylist)           # [1, 2, 3, 4]
+
+for item in mylist:
+    print(item)`,
+    timeComplexity: 'O(1) for most operations, O(n) for __contains__',
+    spaceComplexity: 'O(n)',
+    order: 15,
+    topic: 'Python Object-Oriented Programming',
+  },
+  {
+    id: 'vector-comparison-magic',
+    title: 'Vector with Comparison Magic Methods',
+    difficulty: 'medium',
+    category: 'python-oop',
+    description: `Create a \`Vector\` class that supports comparison operations based on magnitude (length).
+
+Implement:
+- \`__init__(x, y)\`: Initialize vector
+- \`__eq__(other)\`: Equal if same magnitude
+- \`__lt__(other)\`: Less than if smaller magnitude
+- \`__le__(other)\`: Less than or equal
+- \`__gt__(other)\`: Greater than
+- \`__ge__(other)\`: Greater than or equal
+- \`magnitude()\`: Return vector length
+- \`__repr__()\`: Return "Vector(x, y)"
+
+Use \`@functools.total_ordering\` to implement only \`__eq__\` and \`__lt__\`.
+
+**Examples:**
+\`\`\`python
+v1 = Vector(3, 4)      # magnitude = 5
+v2 = Vector(0, 5)      # magnitude = 5
+v3 = Vector(1, 1)      # magnitude ≈ 1.41
+
+print(v1 == v2)        # True (same magnitude)
+print(v1 > v3)         # True (5 > 1.41)
+print(sorted([v1, v3, v2]))  # [Vector(1, 1), Vector(3, 4), Vector(0, 5)]
+\`\`\``,
+    starterCode: `from functools import total_ordering
+import math
+
+@total_ordering
+class Vector:
+    def __init__(self, x, y):
+        """Initialize vector."""
+        pass
+    
+    def magnitude(self):
+        """Calculate vector magnitude."""
+        pass
+    
+    def __eq__(self, other):
+        """Check if magnitudes are equal."""
+        pass
+    
+    def __lt__(self, other):
+        """Check if magnitude is less than."""
+        pass
+    
+    def __repr__(self):
+        """Return string representation."""
+        pass`,
+    testCases: [
+      {
+        input: 'v1 = Vector(3, 4); v2 = Vector(0, 5); v1 == v2',
+        expected: 'True',
+      },
+      {
+        input: 'v1 = Vector(3, 4); v3 = Vector(1, 1); v1 > v3',
+        expected: 'True',
+      },
+      {
+        input: 'v1 = Vector(3, 4); v1.magnitude()',
+        expected: '5.0',
+      },
+    ],
+    hints: [
+      'magnitude = sqrt(x² + y²)',
+      '@total_ordering auto-generates <=, >, >= from __eq__ and __lt__',
+      'Compare using magnitude() in __eq__ and __lt__',
+      'Check isinstance(other, Vector) before comparing',
+    ],
+    solution: `from functools import total_ordering
+import math
+
+@total_ordering
+class Vector:
+    def __init__(self, x, y):
+        """Initialize vector."""
+        self.x = x
+        self.y = y
+    
+    def magnitude(self):
+        """Calculate vector magnitude."""
+        return math.sqrt(self.x ** 2 + self.y ** 2)
+    
+    def __eq__(self, other):
+        """Check if magnitudes are equal."""
+        if not isinstance(other, Vector):
+            return NotImplemented
+        return self.magnitude() == other.magnitude()
+    
+    def __lt__(self, other):
+        """Check if magnitude is less than."""
+        if not isinstance(other, Vector):
+            return NotImplemented
+        return self.magnitude() < other.magnitude()
+    
+    def __repr__(self):
+        """Return string representation."""
+        return f"Vector({self.x}, {self.y})"
+
+
+# Test
+v1 = Vector(3, 4)      # magnitude = 5
+v2 = Vector(0, 5)      # magnitude = 5
+v3 = Vector(1, 1)      # magnitude ≈ 1.41
+
+print(v1 == v2)        # True
+print(v1 > v3)         # True
+print(v1 <= v2)        # True (auto-generated!)
+print(sorted([v1, v3, v2]))  # Sorted by magnitude`,
+    timeComplexity: 'O(1) for all operations',
+    spaceComplexity: 'O(1)',
+    order: 16,
+    topic: 'Python Object-Oriented Programming',
+  },
+  {
+    id: 'counter-callable-magic',
+    title: 'Callable Counter',
+    difficulty: 'easy',
+    category: 'python-oop',
+    description: `Create a \`Counter\` class that tracks how many times it has been called.
+
+Make the instance callable using \`__call__\` magic method.
+
+Implement:
+- \`__init__()\`: Initialize count to 0
+- \`__call__()\`: Increment count and return current count
+- \`get_count()\`: Return current count
+- \`reset()\`: Reset count to 0
+
+**Examples:**
+\`\`\`python
+counter = Counter()
+print(counter())        # 1
+print(counter())        # 2
+print(counter())        # 3
+print(counter.get_count())  # 3
+counter.reset()
+print(counter())        # 1
+\`\`\``,
+    starterCode: `class Counter:
+    def __init__(self):
+        """Initialize counter."""
+        pass
+    
+    def __call__(self):
+        """Increment and return count."""
+        pass
+    
+    def get_count(self):
+        """Return current count."""
+        pass
+    
+    def reset(self):
+        """Reset count to 0."""
+        pass`,
+    testCases: [
+      {
+        input: 'counter = Counter(); counter(); counter(); counter()',
+        expected: '3',
+      },
+      {
+        input: 'counter = Counter(); counter(); counter.get_count()',
+        expected: '2',
+      },
+      {
+        input:
+          'counter = Counter(); counter(); counter(); counter.reset(); counter()',
+        expected: '1',
+      },
+    ],
+    hints: [
+      '__call__ makes instances callable like functions',
+      'Increment self.count in __call__',
+      'Return the new count after incrementing',
+    ],
+    solution: `class Counter:
+    def __init__(self):
+        """Initialize counter."""
+        self.count = 0
+    
+    def __call__(self):
+        """Increment and return count."""
+        self.count += 1
+        return self.count
+    
+    def get_count(self):
+        """Return current count."""
+        return self.count
+    
+    def reset(self):
+        """Reset count to 0."""
+        self.count = 0
+
+
+# Test
+counter = Counter()
+print(counter())        # 1
+print(counter())        # 2
+print(counter())        # 3
+print(counter.get_count())  # 3
+counter.reset()
+print(counter())        # 1
+
+# Can pass as function!
+def apply_twice(func):
+    func()
+    func()
+
+apply_twice(counter)  # counter is callable!`,
+    timeComplexity: 'O(1)',
+    spaceComplexity: 'O(1)',
+    order: 17,
+    topic: 'Python Object-Oriented Programming',
+  },
+  {
+    id: 'hashable-person',
+    title: 'Hashable Person Class',
+    difficulty: 'medium',
+    category: 'python-oop',
+    description: `Create a \`Person\` class that can be used in sets and as dictionary keys.
+
+Implement:
+- \`__init__(name, age, email)\`: Initialize person
+- \`__eq__(other)\`: Two people are equal if same email
+- \`__hash__()\`: Hash based on email (immutable identifier)
+- \`__repr__()\`: Return "Person(name, age, email)"
+
+**Why this matters:** For objects to work in sets/dicts, they must be hashable. If you implement \`__eq__\`, you must implement \`__hash__\` such that equal objects have equal hashes.
+
+**Examples:**
+\`\`\`python
+p1 = Person("Alice", 30, "alice@example.com")
+p2 = Person("Alice Smith", 30, "alice@example.com")  # Same email
+p3 = Person("Bob", 25, "bob@example.com")
+
+print(p1 == p2)        # True (same email)
+print(p1 is p2)        # False (different objects)
+
+people = {p1, p2, p3}  # Set treats p1 and p2 as same
+print(len(people))     # 2
+
+lookup = {p1: "Manager", p3: "Engineer"}
+print(lookup[p2])      # "Manager" (p2 treated same as p1)
+\`\`\``,
+    starterCode: `class Person:
+    def __init__(self, name, age, email):
+        """Initialize person."""
+        pass
+    
+    def __eq__(self, other):
+        """Check equality based on email."""
+        pass
+    
+    def __hash__(self):
+        """Return hash based on email."""
+        pass
+    
+    def __repr__(self):
+        """Return string representation."""
+        pass`,
+    testCases: [
+      {
+        input:
+          'p1 = Person("Alice", 30, "alice@example.com"); p2 = Person("Alice Smith", 30, "alice@example.com"); p1 == p2',
+        expected: 'True',
+      },
+      {
+        input:
+          'p1 = Person("Alice", 30, "alice@example.com"); p2 = Person("Alice", 30, "alice@example.com"); len({p1, p2})',
+        expected: '1',
+      },
+      {
+        input:
+          'p1 = Person("Alice", 30, "alice@example.com"); hash(p1) == hash(p1)',
+        expected: 'True',
+      },
+    ],
+    hints: [
+      'Email is the unique identifier (like SSN)',
+      '__hash__ should return hash(self.email)',
+      '__eq__ should check if emails are equal',
+      'Always check isinstance(other, Person) in __eq__',
+    ],
+    solution: `class Person:
+    def __init__(self, name, age, email):
+        """Initialize person."""
+        self.name = name
+        self.age = age
+        self.email = email
+    
+    def __eq__(self, other):
+        """Check equality based on email."""
+        if not isinstance(other, Person):
+            return False
+        return self.email == other.email
+    
+    def __hash__(self):
+        """Return hash based on email (immutable identifier)."""
+        return hash(self.email)
+    
+    def __repr__(self):
+        """Return string representation."""
+        return f"Person('{self.name}', {self.age}, '{self.email}')"
+
+
+# Test
+p1 = Person("Alice", 30, "alice@example.com")
+p2 = Person("Alice Smith", 30, "alice@example.com")  # Same email!
+p3 = Person("Bob", 25, "bob@example.com")
+
+print(p1 == p2)        # True
+print(hash(p1) == hash(p2))  # True
+
+# Use in set
+people = {p1, p2, p3}
+print(len(people))     # 2 (p1 and p2 treated as one)
+
+# Use as dict key
+lookup = {p1: "Manager", p3: "Engineer"}
+print(lookup[p2])      # "Manager" (p2 same as p1)`,
+    timeComplexity: 'O(1) for all operations',
+    spaceComplexity: 'O(1)',
+    order: 18,
+    topic: 'Python Object-Oriented Programming',
+  },
 ];

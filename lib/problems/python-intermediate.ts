@@ -4251,4 +4251,659 @@ def test_password_validator(password):
     order: 21,
     topic: 'Python Intermediate',
   },
+  {
+    id: 'group-anagrams-collections',
+    title: 'Group Anagrams',
+    difficulty: 'medium',
+    category: 'python-intermediate',
+    description: `Given an array of strings \`strs\`, group the anagrams together using \`defaultdict\`. You can return the answer in any order.
+
+An **anagram** is a word formed by rearranging the letters of another, using all original letters exactly once.
+
+**Example 1:**
+\`\`\`
+Input: strs = ["eat","tea","tan","ate","nat","bat"]
+Output: [["bat"],["nat","tan"],["ate","eat","tea"]]
+\`\`\`
+
+**Example 2:**
+\`\`\`
+Input: strs = [""]
+Output: [[""]]
+\`\`\`
+
+**Example 3:**
+\`\`\`
+Input: strs = ["a"]
+Output: [["a"]]
+\`\`\``,
+    starterCode: `from collections import defaultdict
+
+def group_anagrams(strs):
+    """
+    Group strings that are anagrams of each other.
+    
+    Args:
+        strs: List of strings
+    
+    Returns:
+        List of lists, each containing anagrams
+    """
+    pass`,
+    testCases: [
+      {
+        input: 'strs = ["eat","tea","tan","ate","nat","bat"]',
+        expected: '[["bat"],["nat","tan"],["ate","eat","tea"]]',
+      },
+      {
+        input: 'strs = [""]',
+        expected: '[[""]]',
+      },
+      {
+        input: 'strs = ["a"]',
+        expected: '[["a"]]',
+      },
+    ],
+    hints: [
+      'Use defaultdict(list) to automatically handle new keys',
+      'Sort characters in each word to create a signature',
+      'Group words by their sorted signature',
+    ],
+    solution: `from collections import defaultdict
+
+def group_anagrams(strs):
+    """
+    Group strings that are anagrams of each other.
+    
+    Args:
+        strs: List of strings
+    
+    Returns:
+        List of lists, each containing anagrams
+    """
+    # Use defaultdict to avoid KeyError
+    anagram_groups = defaultdict(list)
+    
+    for word in strs:
+        # Sort characters to create key
+        # Anagrams will have same sorted key
+        key = ''.join(sorted(word))
+        anagram_groups[key].append(word)
+    
+    return list(anagram_groups.values())
+
+
+# Alternative: Using tuple of character counts as key
+def group_anagrams_alt(strs):
+    from collections import Counter
+    anagram_groups = defaultdict(list)
+    
+    for word in strs:
+        # Use tuple of sorted counts as key
+        key = tuple(sorted(Counter(word).items()))
+        anagram_groups[key].append(word)
+    
+    return list(anagram_groups.values())`,
+    timeComplexity:
+      'O(n * k log k) where n is number of strings, k is max length',
+    spaceComplexity: 'O(n * k)',
+    order: 23,
+    topic: 'Python Intermediate',
+  },
+  {
+    id: 'sliding-window-maximum-deque',
+    title: 'Sliding Window Maximum',
+    difficulty: 'hard',
+    category: 'python-intermediate',
+    description: `Given an array \`nums\` and a sliding window of size \`k\`, find the maximum element in each window as it slides from left to right.
+
+Use \`deque\` to solve this efficiently in O(n) time.
+
+**Example 1:**
+\`\`\`
+Input: nums = [1,3,-1,-3,5,3,6,7], k = 3
+Output: [3,3,5,5,6,7]
+Explanation: 
+Window position                Max
+---------------               -----
+[1  3  -1] -3  5  3  6  7       3
+ 1 [3  -1  -3] 5  3  6  7       3
+ 1  3 [-1  -3  5] 3  6  7       5
+ 1  3  -1 [-3  5  3] 6  7       5
+ 1  3  -1  -3 [5  3  6] 7       6
+ 1  3  -1  -3  5 [3  6  7]      7
+\`\`\`
+
+**Example 2:**
+\`\`\`
+Input: nums = [1], k = 1
+Output: [1]
+\`\`\``,
+    starterCode: `from collections import deque
+
+def max_sliding_window(nums, k):
+    """
+    Find maximum in each sliding window of size k.
+    
+    Args:
+        nums: List of integers
+        k: Window size
+    
+    Returns:
+        List of maximums for each window
+    """
+    pass`,
+    testCases: [
+      {
+        input: 'nums = [1,3,-1,-3,5,3,6,7], k = 3',
+        expected: '[3, 3, 5, 5, 6, 7]',
+      },
+      {
+        input: 'nums = [1], k = 1',
+        expected: '[1]',
+      },
+      {
+        input: 'nums = [1,-1], k = 1',
+        expected: '[1, -1]',
+      },
+    ],
+    hints: [
+      'Use deque to store indices, not values',
+      'Keep deque in decreasing order of values',
+      'Remove indices that are out of window range',
+      'Front of deque always contains maximum',
+    ],
+    solution: `from collections import deque
+
+def max_sliding_window(nums, k):
+    """
+    Find maximum in each sliding window of size k.
+    
+    Args:
+        nums: List of integers
+        k: Window size
+    
+    Returns:
+        List of maximums for each window
+    """
+    if not nums or k == 0:
+        return []
+    
+    dq = deque()  # Store indices
+    result = []
+    
+    for i in range(len(nums)):
+        # Remove indices that are out of current window
+        while dq and dq[0] < i - k + 1:
+            dq.popleft()
+        
+        # Remove indices whose values are smaller than current
+        # (they can never be maximum)
+        while dq and nums[dq[-1]] < nums[i]:
+            dq.pop()
+        
+        # Add current index
+        dq.append(i)
+        
+        # Add maximum to result (once window is full)
+        if i >= k - 1:
+            result.append(nums[dq[0]])
+    
+    return result
+
+
+# Why this works:
+# 1. deque maintains indices in decreasing order of their values
+# 2. Front of deque is always the maximum in current window
+# 3. O(1) per element since each element enters and exits deque once
+# 4. Total: O(n) time, O(k) space`,
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(k)',
+    order: 24,
+    topic: 'Python Intermediate',
+  },
+  {
+    id: 'lru-cache-implementation',
+    title: 'LRU Cache Implementation',
+    difficulty: 'medium',
+    category: 'python-intermediate',
+    description: `Design a data structure that follows the constraints of a **Least Recently Used (LRU) cache**.
+
+Implement the \`LRUCache\` class using \`OrderedDict\`:
+- \`LRUCache(int capacity)\`: Initialize with positive capacity
+- \`int get(int key)\`: Return value of key if exists, otherwise -1
+- \`void put(int key, int value)\`: Update value or add new key-value pair. If cache exceeds capacity, evict the least recently used key.
+
+Both \`get\` and \`put\` must run in O(1) average time.
+
+**Example:**
+\`\`\`python
+cache = LRUCache(2)
+cache.put(1, 1)  # cache: {1=1}
+cache.put(2, 2)  # cache: {1=1, 2=2}
+cache.get(1)     # returns 1, cache: {2=2, 1=1}
+cache.put(3, 3)  # evicts key 2, cache: {1=1, 3=3}
+cache.get(2)     # returns -1 (not found)
+cache.put(4, 4)  # evicts key 1, cache: {3=3, 4=4}
+cache.get(1)     # returns -1 (not found)
+cache.get(3)     # returns 3
+cache.get(4)     # returns 4
+\`\`\``,
+    starterCode: `from collections import OrderedDict
+
+class LRUCache:
+    def __init__(self, capacity: int):
+        """Initialize LRU cache with given capacity."""
+        pass
+    
+    def get(self, key: int) -> int:
+        """Get value for key, return -1 if not found."""
+        pass
+    
+    def put(self, key: int, value: int) -> None:
+        """Add or update key-value pair."""
+        pass`,
+    testCases: [
+      {
+        input:
+          'cache = LRUCache(2); cache.put(1, 1); cache.put(2, 2); cache.get(1)',
+        expected: '1',
+      },
+      {
+        input:
+          'cache = LRUCache(2); cache.put(1, 1); cache.put(2, 2); cache.put(3, 3); cache.get(2)',
+        expected: '-1',
+      },
+      {
+        input:
+          'cache = LRUCache(2); cache.put(1, 1); cache.put(2, 2); cache.get(1); cache.put(3, 3); cache.get(2)',
+        expected: '-1',
+      },
+    ],
+    hints: [
+      'OrderedDict maintains insertion order',
+      'Use move_to_end() to mark items as recently used',
+      'Use popitem(last=False) to remove least recently used',
+    ],
+    solution: `from collections import OrderedDict
+
+class LRUCache:
+    def __init__(self, capacity: int):
+        """Initialize LRU cache with given capacity."""
+        self.cache = OrderedDict()
+        self.capacity = capacity
+    
+    def get(self, key: int) -> int:
+        """Get value for key, return -1 if not found."""
+        if key not in self.cache:
+            return -1
+        
+        # Move to end (mark as recently used)
+        self.cache.move_to_end(key)
+        return self.cache[key]
+    
+    def put(self, key: int, value: int) -> None:
+        """Add or update key-value pair."""
+        if key in self.cache:
+            # Update existing key and move to end
+            self.cache.move_to_end(key)
+        
+        self.cache[key] = value
+        
+        # If over capacity, remove least recently used (first item)
+        if len(self.cache) > self.capacity:
+            self.cache.popitem(last=False)
+
+
+# Test
+cache = LRUCache(2)
+cache.put(1, 1)
+cache.put(2, 2)
+print(cache.get(1))    # 1
+cache.put(3, 3)        # Evicts 2
+print(cache.get(2))    # -1
+cache.put(4, 4)        # Evicts 1
+print(cache.get(1))    # -1
+print(cache.get(3))    # 3
+print(cache.get(4))    # 4`,
+    timeComplexity: 'O(1) for both get and put',
+    spaceComplexity: 'O(capacity)',
+    order: 25,
+    topic: 'Python Intermediate',
+  },
+  {
+    id: 'task-scheduler-with-counter',
+    title: 'Task Scheduler',
+    difficulty: 'medium',
+    category: 'python-intermediate',
+    description: `Given a characters array \`tasks\`, where each character represents a unique task and an integer \`n\` representing the cooldown period, return the minimum number of time units needed to complete all tasks.
+
+The same task cannot be executed in two consecutive time units. During a cooldown period, you can either execute another task or stay idle.
+
+Use \`Counter\` and smart scheduling to solve this.
+
+**Example 1:**
+\`\`\`
+Input: tasks = ["A","A","A","B","B","B"], n = 2
+Output: 8
+Explanation: A -> B -> idle -> A -> B -> idle -> A -> B
+\`\`\`
+
+**Example 2:**
+\`\`\`
+Input: tasks = ["A","A","A","B","B","B"], n = 0
+Output: 6
+Explanation: No cooldown, so: A -> A -> A -> B -> B -> B
+\`\`\`
+
+**Example 3:**
+\`\`\`
+Input: tasks = ["A","A","A","A","A","A","B","C","D","E","F","G"], n = 2
+Output: 16
+Explanation: One optimal solution:
+A -> B -> C -> A -> D -> E -> A -> F -> G -> A -> idle -> idle -> A -> idle -> idle -> A
+\`\`\``,
+    starterCode: `from collections import Counter
+
+def least_interval(tasks, n):
+    """
+    Calculate minimum time units to complete all tasks with cooldown.
+    
+    Args:
+        tasks: List of task characters
+        n: Cooldown period
+    
+    Returns:
+        Minimum time units needed
+    """
+    pass`,
+    testCases: [
+      {
+        input: 'tasks = ["A","A","A","B","B","B"], n = 2',
+        expected: '8',
+      },
+      {
+        input: 'tasks = ["A","A","A","B","B","B"], n = 0',
+        expected: '6',
+      },
+      {
+        input:
+          'tasks = ["A","A","A","A","A","A","B","C","D","E","F","G"], n = 2',
+        expected: '16',
+      },
+    ],
+    hints: [
+      'Count task frequencies using Counter',
+      'Most frequent task determines minimum time',
+      'Calculate idle slots based on most frequent task',
+      'Fill idle slots with other tasks',
+    ],
+    solution: `from collections import Counter
+
+def least_interval(tasks, n):
+    """
+    Calculate minimum time units to complete all tasks with cooldown.
+    
+    Args:
+        tasks: List of task characters
+        n: Cooldown period
+    
+    Returns:
+        Minimum time units needed
+    """
+    # Count task frequencies
+    task_counts = Counter(tasks)
+    
+    # Find maximum frequency
+    max_freq = max(task_counts.values())
+    
+    # Count how many tasks have maximum frequency
+    max_freq_count = sum(1 for count in task_counts.values() if count == max_freq)
+    
+    # Calculate minimum intervals needed
+    # For most frequent task: (max_freq - 1) complete cycles + final tasks
+    # Each cycle has (n + 1) slots
+    intervals = (max_freq - 1) * (n + 1) + max_freq_count
+    
+    # Result is max of calculated intervals or total tasks
+    # (if n is small, no idle time needed)
+    return max(intervals, len(tasks))
+
+
+# Example walkthrough for ["A","A","A","B","B","B"], n=2:
+# max_freq = 3 (both A and B appear 3 times)
+# max_freq_count = 2
+# intervals = (3-1) * (2+1) + 2 = 2*3 + 2 = 8
+# Result: max(8, 6) = 8
+#
+# Schedule: A -> B -> idle -> A -> B -> idle -> A -> B`,
+    timeComplexity: 'O(n) where n is number of tasks',
+    spaceComplexity: 'O(1) - at most 26 unique tasks',
+    order: 26,
+    topic: 'Python Intermediate',
+  },
+  {
+    id: 'design-hit-counter',
+    title: 'Design Hit Counter',
+    difficulty: 'medium',
+    category: 'python-intermediate',
+    description: `Design a hit counter that counts the number of hits received in the past 5 minutes (300 seconds).
+
+Implement \`HitCounter\` class using \`deque\`:
+- \`HitCounter()\`: Initialize
+- \`void hit(int timestamp)\`: Record a hit at given timestamp
+- \`int getHits(int timestamp)\`: Return number of hits in past 5 minutes from timestamp
+
+**Example:**
+\`\`\`python
+counter = HitCounter()
+counter.hit(1)        # hit at timestamp 1
+counter.hit(2)        # hit at timestamp 2
+counter.hit(3)        # hit at timestamp 3
+counter.getHits(4)    # returns 3 (hits at 1,2,3 are within 5 mins)
+counter.hit(300)      # hit at timestamp 300
+counter.getHits(300)  # returns 4 (hits at 1,2,3,300)
+counter.getHits(301)  # returns 3 (hit at 1 is outside 5 min window)
+\`\`\`
+
+**Follow-up:** What if hit rate is very high? How would you optimize?`,
+    starterCode: `from collections import deque
+
+class HitCounter:
+    def __init__(self):
+        """Initialize hit counter."""
+        pass
+    
+    def hit(self, timestamp: int) -> None:
+        """Record a hit at timestamp."""
+        pass
+    
+    def getHits(self, timestamp: int) -> int:
+        """Get hits in past 300 seconds."""
+        pass`,
+    testCases: [
+      {
+        input:
+          'counter = HitCounter(); counter.hit(1); counter.hit(2); counter.hit(3); counter.getHits(4)',
+        expected: '3',
+      },
+      {
+        input:
+          'counter = HitCounter(); counter.hit(1); counter.hit(2); counter.hit(3); counter.hit(300); counter.getHits(300)',
+        expected: '4',
+      },
+      {
+        input:
+          'counter = HitCounter(); counter.hit(1); counter.hit(2); counter.hit(3); counter.hit(300); counter.getHits(301)',
+        expected: '3',
+      },
+    ],
+    hints: [
+      'Use deque to store timestamps',
+      'Remove old timestamps when checking hits',
+      'Timestamps older than 300 seconds are outside window',
+    ],
+    solution: `from collections import deque
+
+class HitCounter:
+    def __init__(self):
+        """Initialize hit counter."""
+        self.hits = deque()
+    
+    def hit(self, timestamp: int) -> None:
+        """Record a hit at timestamp."""
+        self.hits.append(timestamp)
+    
+    def getHits(self, timestamp: int) -> int:
+        """Get hits in past 300 seconds."""
+        # Remove hits outside 5-minute window
+        while self.hits and self.hits[0] <= timestamp - 300:
+            self.hits.popleft()
+        
+        return len(self.hits)
+
+
+# Optimized version for high hit rate (using buckets)
+class HitCounterOptimized:
+    """
+    For very high hit rates, store (timestamp, count) pairs
+    instead of individual timestamps.
+    """
+    def __init__(self):
+        self.hits = deque()  # Store (timestamp, count) tuples
+    
+    def hit(self, timestamp: int) -> None:
+        if self.hits and self.hits[-1][0] == timestamp:
+            # Increment count for current timestamp
+            self.hits[-1] = (timestamp, self.hits[-1][1] + 1)
+        else:
+            # New timestamp
+            self.hits.append((timestamp, 1))
+    
+    def getHits(self, timestamp: int) -> int:
+        # Remove old timestamps
+        while self.hits and self.hits[0][0] <= timestamp - 300:
+            self.hits.popleft()
+        
+        # Sum all counts
+        return sum(count for ts, count in self.hits)
+
+
+# Test
+counter = HitCounter()
+counter.hit(1)
+counter.hit(2)
+counter.hit(3)
+print(counter.getHits(4))    # 3
+counter.hit(300)
+print(counter.getHits(300))  # 4
+print(counter.getHits(301))  # 3`,
+    timeComplexity: 'O(1) for hit, O(n) for getHits where n is hits in window',
+    spaceComplexity: 'O(n) where n is hits in window',
+    order: 27,
+    topic: 'Python Intermediate',
+  },
+  {
+    id: 'most-common-word',
+    title: 'Most Common Word',
+    difficulty: 'easy',
+    category: 'python-intermediate',
+    description: `Given a string \`paragraph\` and an array of banned words, return the most frequent word that is not banned. Words are case-insensitive and punctuation should be ignored.
+
+Use \`Counter\` for efficient counting.
+
+**Example 1:**
+\`\`\`
+Input: paragraph = "Bob hit a ball, the hit BALL flew far after it was hit.", banned = ["hit"]
+Output: "ball"
+Explanation: 
+"hit" appears 3 times but is banned.
+"ball" appears 2 times and is not banned.
+\`\`\`
+
+**Example 2:**
+\`\`\`
+Input: paragraph = "a.", banned = []
+Output: "a"
+\`\`\``,
+    starterCode: `from collections import Counter
+import re
+
+def most_common_word(paragraph, banned):
+    """
+    Find most common non-banned word.
+    
+    Args:
+        paragraph: String containing words and punctuation
+        banned: List of banned words
+    
+    Returns:
+        Most common non-banned word (lowercase)
+    """
+    pass`,
+    testCases: [
+      {
+        input:
+          'paragraph = "Bob hit a ball, the hit BALL flew far after it was hit.", banned = ["hit"]',
+        expected: '"ball"',
+      },
+      {
+        input: 'paragraph = "a.", banned = []',
+        expected: '"a"',
+      },
+      {
+        input: 'paragraph = "a, a, a, a, b,b,b,c, c", banned = ["a"]',
+        expected: '"b"',
+      },
+    ],
+    hints: [
+      'Use regex to extract words: re.findall(r"\\w+", paragraph)',
+      'Convert to lowercase',
+      'Use Counter.most_common() after filtering banned words',
+    ],
+    solution: `from collections import Counter
+import re
+
+def most_common_word(paragraph, banned):
+    """
+    Find most common non-banned word.
+    
+    Args:
+        paragraph: String containing words and punctuation
+        banned: List of banned words
+    
+    Returns:
+        Most common non-banned word (lowercase)
+    """
+    # Extract words using regex, convert to lowercase
+    words = re.findall(r'\\w+', paragraph.lower())
+    
+    # Create set of banned words for O(1) lookup
+    banned_set = set(banned)
+    
+    # Count only non-banned words
+    word_counts = Counter(word for word in words if word not in banned_set)
+    
+    # Return most common
+    return word_counts.most_common(1)[0][0]
+
+
+# Alternative without list comprehension
+def most_common_word_alt(paragraph, banned):
+    words = re.findall(r'\\w+', paragraph.lower())
+    banned_set = set(banned)
+    
+    # Count all words first
+    word_counts = Counter(words)
+    
+    # Remove banned words
+    for word in banned_set:
+        word_counts.pop(word, None)
+    
+    return word_counts.most_common(1)[0][0]`,
+    timeComplexity: 'O(n + m) where n is paragraph length, m is banned words',
+    spaceComplexity: 'O(n)',
+    order: 28,
+    topic: 'Python Intermediate',
+  },
 ];

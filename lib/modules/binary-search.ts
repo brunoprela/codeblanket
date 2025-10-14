@@ -1156,6 +1156,629 @@ Binary search problems in interviews often hide the "sorted" aspect. Look for:
         },
       ],
     },
+    {
+      id: 'common-mistakes',
+      title: 'Common Binary Search Mistakes & How to Avoid Them',
+      content: `## 🚨 The 7 Most Common Binary Search Mistakes
+
+Binary search seems simple, but it's surprisingly easy to get wrong. Here are the mistakes that trip up even experienced developers:
+
+---
+
+### Mistake 1: Wrong Loop Condition (< vs <=)
+
+**Problem:** Using \`while left < right\` when you mean \`while left <= right\`, or vice versa.
+
+\`\`\`python
+# ❌ BAD: Using < when target is exact match
+def binarySearch(nums, target):
+    left, right = 0, len(nums) - 1
+    
+    while left < right:  # ❌ WRONG! Misses when left == right
+        mid = (left + right) // 2
+        if nums[mid] == target:
+            return mid
+        elif nums[mid] < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+    
+    return -1  # May miss the answer!
+
+# Example: nums = [5], target = 5
+# Initially: left=0, right=0
+# Loop doesn't run because left < right is False!
+# Returns -1 instead of 0
+
+# ✅ GOOD: Using <= for exact match
+def binarySearch(nums, target):
+    left, right = 0, len(nums) - 1
+    
+    while left <= right:  # ✅ CORRECT!
+        mid = (left + right) // 2
+        if nums[mid] == target:
+            return mid
+        elif nums[mid] < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+    
+    return -1
+\`\`\`
+
+**Rule of thumb:**
+- Use \`while left <= right\` when searching for **exact match**
+- Use \`while left < right\` when searching for **first/last position** and want to converge to one element
+
+---
+
+### Mistake 2: Off-by-One Errors (mid ± 1)
+
+**Problem:** Using \`left = mid\` or \`right = mid\` when you should use \`mid ± 1\`.
+
+\`\`\`python
+# ❌ BAD: Not adjusting mid, causes infinite loop
+def binarySearch(nums, target):
+    left, right = 0, len(nums) - 1
+    
+    while left < right:
+        mid = (left + right) // 2
+        if nums[mid] < target:
+            left = mid  # ❌ WRONG! Can cause infinite loop
+        else:
+            right = mid
+    
+    return left
+
+# Example: nums = [1, 3], target = 3
+# First iteration: left=0, right=1, mid=0
+# nums[0]=1 < 3, so left = mid = 0
+# Second iteration: left=0, right=1, mid=0
+# INFINITE LOOP! left never increases!
+
+# ✅ GOOD: Properly adjust boundaries
+def binarySearch(nums, target):
+    left, right = 0, len(nums) - 1
+    
+    while left < right:
+        mid = (left + right) // 2
+        if nums[mid] < target:
+            left = mid + 1  # ✅ CORRECT! Exclude mid
+        else:
+            right = mid
+    
+    return left
+\`\`\`
+
+**Rule of thumb:**
+- If you exclude \`mid\` from consideration: use \`mid + 1\` or \`mid - 1\`
+- If you include \`mid\` as possible answer: use \`mid\`
+- **Never** do both \`left = mid\` and \`right = mid\` with \`left < right\` loop
+
+---
+
+### Mistake 3: Integer Overflow in Mid Calculation
+
+**Problem:** Using \`mid = (left + right) / 2\` can overflow in languages with fixed integer sizes.
+
+\`\`\`python
+# ❌ BAD: Can overflow in C++, Java
+def binarySearch(nums, target):
+    left, right = 0, len(nums) - 1
+    
+    while left <= right:
+        mid = (left + right) // 2  # ❌ Can overflow if left + right > MAX_INT
+        if nums[mid] == target:
+            return mid
+        elif nums[mid] < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+    
+    return -1
+
+# Example in C++/Java:
+# left = 2,000,000,000, right = 2,000,000,000
+# left + right = 4,000,000,000 > INT_MAX (2,147,483,647)
+# Overflow! Negative number, wrong mid!
+
+# ✅ GOOD: Overflow-safe calculation
+def binarySearch(nums, target):
+    left, right = 0, len(nums) - 1
+    
+    while left <= right:
+        mid = left + (right - left) // 2  # ✅ CORRECT! No overflow
+        if nums[mid] == target:
+            return mid
+        elif nums[mid] < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+    
+    return -1
+
+# Alternative: Use bit shift (even faster)
+# mid = (left + right) >> 1  # In languages where this is safe
+\`\`\`
+
+**Note:** Python handles large integers automatically, but use safe formula for other languages.
+
+---
+
+### Mistake 4: Forgetting to Check if Array is Sorted
+
+**Problem:** Applying binary search to unsorted data.
+
+\`\`\`python
+# ❌ BAD: No check if sorted
+def search(nums, target):
+    # Binary search without checking if sorted
+    left, right = 0, len(nums) - 1
+    
+    while left <= right:
+        mid = left + (right - left) // 2
+        if nums[mid] == target:
+            return mid
+        elif nums[mid] < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+    
+    return -1
+
+# Example: nums = [5, 2, 8, 1, 9], target = 8
+# Binary search gives wrong answer! Array is not sorted.
+
+# ✅ GOOD: Verify or ensure sorted
+def search(nums, target):
+    # Option 1: Check if sorted (O(n))
+    if not all(nums[i] <= nums[i+1] for i in range(len(nums)-1)):
+        nums.sort()  # or raise error, or use linear search
+    
+    # Now apply binary search
+    left, right = 0, len(nums) - 1
+    
+    while left <= right:
+        mid = left + (right - left) // 2
+        if nums[mid] == target:
+            return mid
+        elif nums[mid] < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+    
+    return -1
+
+# Better: If problem guarantees sorted, trust it
+# But always test with sorted data
+\`\`\`
+
+**Key insight:** Binary search **requires** sorted (or monotonic) data. Always verify this precondition.
+
+---
+
+### Mistake 5: Wrong Return Value
+
+**Problem:** Returning \`left\` when you should return \`-1\`, or vice versa.
+
+\`\`\`python
+# ❌ BAD: Always returns an index, even if target not found
+def binarySearch(nums, target):
+    left, right = 0, len(nums) - 1
+    
+    while left < right:
+        mid = (left + right) // 2
+        if nums[mid] < target:
+            left = mid + 1
+        else:
+            right = mid
+    
+    return left  # ❌ WRONG! Returns index even if target doesn't exist
+
+# Example: nums = [1, 3, 5], target = 4
+# Returns 2 (index of 5), but 4 is not in the array!
+
+# ✅ GOOD: Verify before returning
+def binarySearch(nums, target):
+    left, right = 0, len(nums) - 1
+    
+    while left < right:
+        mid = (left + right) // 2
+        if nums[mid] < target:
+            left = mid + 1
+        else:
+            right = mid
+    
+    # Verify the result
+    if left < len(nums) and nums[left] == target:
+        return left
+    return -1  # ✅ CORRECT! Return -1 if not found
+\`\`\`
+
+**Different return value scenarios:**
+- **Exact match:** Return index if found, \`-1\` if not found
+- **Insert position:** Return \`left\` (where to insert to keep sorted)
+- **First occurrence:** Return \`left\` after verifying
+- **Last occurrence:** Return \`right\` after verifying
+
+---
+
+### Mistake 6: Incorrect Handling of Duplicates
+
+**Problem:** Not finding the FIRST or LAST occurrence when duplicates exist.
+
+\`\`\`python
+# ❌ BAD: Returns ANY occurrence, not first
+def findFirst(nums, target):
+    left, right = 0, len(nums) - 1
+    
+    while left <= right:
+        mid = left + (right - left) // 2
+        if nums[mid] == target:
+            return mid  # ❌ WRONG! May not be first occurrence
+        elif nums[mid] < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+    
+    return -1
+
+# Example: nums = [1, 2, 2, 2, 3], target = 2
+# Might return index 1, 2, or 3 (any occurrence)
+# But we want index 1 (first occurrence)
+
+# ✅ GOOD: Find FIRST occurrence
+def findFirst(nums, target):
+    left, right = 0, len(nums) - 1
+    result = -1
+    
+    while left <= right:
+        mid = left + (right - left) // 2
+        if nums[mid] == target:
+            result = mid  # ✅ Found one, but keep searching left
+            right = mid - 1  # ✅ Continue searching left side
+        elif nums[mid] < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+    
+    return result
+
+# ✅ ALTERNATIVE: Template with left < right
+def findFirst(nums, target):
+    left, right = 0, len(nums) - 1
+    
+    while left < right:
+        mid = left + (right - left) // 2
+        if nums[mid] < target:
+            left = mid + 1
+        else:
+            right = mid  # ✅ Keep mid as potential answer
+    
+    # Verify
+    return left if left < len(nums) and nums[left] == target else -1
+
+# ✅ GOOD: Find LAST occurrence
+def findLast(nums, target):
+    left, right = 0, len(nums) - 1
+    result = -1
+    
+    while left <= right:
+        mid = left + (right - left) // 2
+        if nums[mid] == target:
+            result = mid  # ✅ Found one, but keep searching right
+            left = mid + 1  # ✅ Continue searching right side
+        elif nums[mid] < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+    
+    return result
+\`\`\`
+
+**Pattern:**
+- **First occurrence:** When found, search left: \`right = mid - 1\`
+- **Last occurrence:** When found, search right: \`left = mid + 1\`
+
+---
+
+### Mistake 7: Applying Binary Search to Non-Monotonic Functions
+
+**Problem:** Trying to use binary search on a function without monotonic property.
+
+\`\`\`python
+# ❌ BAD: Function is not monotonic
+def findPeak(nums):
+    # Trying to find peak (local maximum) with standard binary search
+    left, right = 0, len(nums) - 1
+    target = max(nums)
+    
+    while left <= right:
+        mid = left + (right - left) // 2
+        if nums[mid] == target:
+            return mid  # ❌ WRONG! Binary search needs monotonic property
+        elif nums[mid] < target:
+            left = mid + 1  # ❌ Which direction? Can't tell!
+        else:
+            right = mid - 1
+    
+    return -1
+
+# Example: nums = [1, 3, 2, 4, 5]
+# Peak is at index 4 (value 5)
+# But nums[mid] < target doesn't tell us which side peak is on!
+
+# ✅ GOOD: Use appropriate algorithm for non-monotonic
+def findPeak(nums):
+    # For peak finding, compare with neighbors
+    left, right = 0, len(nums) - 1
+    
+    while left < right:
+        mid = left + (right - left) // 2
+        if nums[mid] < nums[mid + 1]:
+            left = mid + 1  # ✅ Peak is on the right
+        else:
+            right = mid  # ✅ Peak is on the left or at mid
+    
+    return left
+\`\`\`
+
+**Key insight:** Binary search requires a way to **eliminate half the search space** with confidence. Without monotonicity, you can't do this.
+
+**When CAN you use binary search:**
+- Array is sorted
+- Function is monotonic (strictly increasing or decreasing)
+- Function is unimodal (single peak/valley)
+- **Key test:** Can you determine which half contains the answer?
+
+---
+
+## 📝 Debugging Checklist
+
+When your binary search isn't working, check these:
+
+**✅ Loop condition:**
+- Exact match → use \`while left <= right\`
+- First/last position → use \`while left < right\`
+
+**✅ Mid calculation:**
+- Use \`left + (right - left) // 2\` (not \`(left + right) // 2\` in some languages)
+
+**✅ Boundary updates:**
+- Excluding mid → \`left = mid + 1\` or \`right = mid - 1\`
+- Including mid → \`right = mid\` or \`left = mid\` (but not both!)
+
+**✅ Return value:**
+- Exact match → return mid when found, -1 otherwise
+- Insert position → return left
+- First/last → verify nums[left] or nums[right] equals target
+
+**✅ Edge cases:**
+- Empty array: \`nums = []\`
+- Single element: \`nums = [5]\`
+- Two elements: \`nums = [1, 2]\`
+- Target before first: \`target < nums[0]\`
+- Target after last: \`target > nums[-1]\`
+- All duplicates: \`nums = [5, 5, 5, 5]\`
+
+---
+
+## 💡 Pro Tips to Avoid Mistakes
+
+### Tip 1: Master One Template First
+**Start with this standard template:**
+\`\`\`python
+def binarySearch(nums, target):
+    left, right = 0, len(nums) - 1
+    
+    while left <= right:
+        mid = left + (right - left) // 2
+        if nums[mid] == target:
+            return mid
+        elif nums[mid] < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+    
+    return -1  # or return left for insert position
+\`\`\`
+
+Once solid, adapt for specific cases (first/last, different conditions).
+
+### Tip 2: Draw the Array
+**Visualize your pointers:**
+\`\`\`
+nums = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        L        M           R
+
+After nums[mid] < target:
+nums = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+                    L     M     R
+\`\`\`
+
+This catches off-by-one errors immediately.
+
+### Tip 3: Add Debugging Prints
+**Temporarily print pointers:**
+\`\`\`python
+while left <= right:
+    mid = left + (right - left) // 2
+    print(f"left={left}, mid={mid}, right={right}, nums[mid]={nums[mid]}")
+    # ... rest of code
+\`\`\`
+
+Helps spot infinite loops or wrong boundary updates.
+
+### Tip 4: Test with Small Arrays
+**Always test with:**
+- \`nums = []\` (empty)
+- \`nums = [5]\` (single element)
+- \`nums = [1, 2]\` (two elements)
+- \`nums = [1, 2, 3]\` (three elements)
+- \`nums = [1, 1, 1]\` (all same)
+
+Small arrays expose boundary errors fast.
+
+### Tip 5: Use Assertions
+**Validate invariants:**
+\`\`\`python
+def binarySearch(nums, target):
+    assert all(nums[i] <= nums[i+1] for i in range(len(nums)-1)), "Array must be sorted"
+    
+    left, right = 0, len(nums) - 1
+    
+    while left <= right:
+        mid = left + (right - left) // 2
+        assert 0 <= mid < len(nums), f"mid {mid} out of bounds"
+        # ... rest of code
+\`\`\`
+
+Catches violations early.
+
+---
+
+## 🎯 Interview Strategy
+
+When implementing binary search in an interview:
+
+1. **Clarify:** "Is the array sorted?" (or "Is there a monotonic property?")
+2. **Choose template:** Exact match? First/last? Insert position?
+3. **Write skeleton:**
+   \`\`\`python
+   left, right = 0, len(nums) - 1
+   while left <= right:  # or left < right
+       mid = left + (right - left) // 2
+       # logic here
+   \`\`\`
+4. **Fill in logic:** What comparison? How to update left/right?
+5. **Handle return:** What to return when found? When not found?
+6. **Test edge cases:** Walk through empty array, single element, duplicates
+7. **Explain:** "I'm using mid+1 here to exclude mid because..."
+
+**If you make a mistake:**
+- "Let me trace through with a small example..."
+- Draw the array and pointers
+- "Ah, I see the issue - I need mid+1 here to avoid infinite loop"
+
+This systematic approach catches mistakes before you even run the code!`,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Explain why using "left = mid" with "while left < right" can cause an infinite loop. Give a concrete example.',
+          hint: 'Think about what happens when the search space narrows to two elements.',
+          sampleAnswer:
+            'When search space has two adjacent elements and mid rounds down, "left = mid" causes infinite loop. Example: nums = [1, 3], target = 3. Initially left=0, right=1. First iteration: mid = (0+1)//2 = 0. If we do "left = mid" when nums[mid] < target, left becomes 0 again. Next iteration: still left=0, right=1, mid=0. Infinite loop! The fix is "left = mid + 1" to exclude mid and move past it. Rule: with "while left < right", you cannot do "left = mid" when mid rounds down (or "right = mid + 1" when mid rounds up) because the search space won not shrink.',
+          keyPoints: [
+            'Problem: "left = mid" with mid rounding down',
+            'Two-element array causes mid to always point to left',
+            'left never increases, infinite loop',
+            'Fix: use "left = mid + 1" to exclude mid',
+            'General rule: search space must shrink each iteration',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'How do you find the FIRST occurrence of a target in an array with duplicates? Walk through the algorithm.',
+          hint: 'Think about what to do when you find a match - should you stop or keep searching?',
+          sampleAnswer:
+            'To find FIRST occurrence, when you find target, do not return immediately - keep searching LEFT. Algorithm: 1) Standard binary search, 2) When nums[mid] == target, save this index as potential result, 3) Continue searching left half by setting right = mid - 1, 4) Keep updating result if you find earlier occurrence, 5) Return result. Example: nums = [1,2,2,2,3], target=2. Find 2 at index 2, but continue searching left. Eventually converge to index 1. The key insight: finding a match does not mean it is the first - there might be earlier ones to the left. Same logic applies to finding LAST (search right instead).',
+          keyPoints: [
+            'Do not return immediately when found',
+            'Save current index, keep searching left',
+            'Update: right = mid - 1 to search left side',
+            'Keep updating result if earlier occurrence found',
+            'Template works for first; reverse for last',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'When should you NOT use binary search? Give examples where binary search fails.',
+          hint: 'Think about the requirements for binary search to work correctly.',
+          sampleAnswer:
+            'Do NOT use binary search when: 1) Data is not sorted or monotonic - Example: [5,2,8,1,9] searching for 8 will fail. 2) No way to eliminate half - Example: finding arbitrary substring in string without sorted order. 3) Need all occurrences, not just one - Linear scan might be better. 4) Small dataset (n < 50) - Linear search is simpler and nearly as fast. 5) Random access is expensive - Example: linked list where accessing middle is O(n). 6) Function has multiple peaks/valleys - Non-monotonic functions like [1,3,2,4,1] cannot reliably eliminate halves. The fundamental requirement is: you must be able to confidently eliminate half the search space at each step.',
+          keyPoints: [
+            'Requires sorted or monotonic data',
+            'Must be able to eliminate half reliably',
+            'Not for multiple occurrences (unless adapted)',
+            'Not for small datasets (overhead not worth it)',
+            'Not for expensive random access (linked lists)',
+          ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question:
+            'Which mid calculation is safest to avoid integer overflow?',
+          options: [
+            'mid = (left + right) / 2',
+            'mid = left + (right - left) / 2',
+            'mid = (left + right) >> 1',
+            'mid = (2 * left + right) / 3',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'left + (right - left) / 2 avoids overflow because it never adds two potentially large numbers. The subtraction keeps the result small.',
+        },
+        {
+          id: 'mc2',
+          question: 'What causes an infinite loop in binary search?',
+          options: [
+            'Using mid + 1 always',
+            'Using "while left <= right"',
+            'Using "left = mid" with "while left < right" when mid rounds down',
+            'Checking if nums[mid] equals target',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'Using "left = mid" when mid rounds down can cause infinite loop in a two-element array because left never increases past mid.',
+        },
+        {
+          id: 'mc3',
+          question:
+            'To find the FIRST occurrence of a duplicate, when you find nums[mid] == target, you should:',
+          options: [
+            'Return mid immediately',
+            'Set left = mid + 1',
+            'Set right = mid - 1 and continue searching',
+            'Do nothing and break',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'To find the FIRST occurrence, save the index but continue searching the left half by setting right = mid - 1. There might be earlier occurrences.',
+        },
+        {
+          id: 'mc4',
+          question: 'Binary search requires:',
+          options: [
+            'Array to be sorted or have monotonic property',
+            'Array to have unique elements',
+            'Array to have even length',
+            'Array to be stored in contiguous memory',
+          ],
+          correctAnswer: 0,
+          explanation:
+            'Binary search requires sorted or monotonic data so you can confidently eliminate half the search space. Duplicates, length, and memory layout do not matter.',
+        },
+        {
+          id: 'mc5',
+          question:
+            'When implementing binary search for insert position, what should you return?',
+          options: [
+            '-1 if target not found',
+            'mid when target found',
+            'left (the position to insert to maintain sorted order)',
+            'right',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'For insert position, return left after the loop ends. This is where the target should be inserted to keep the array sorted.',
+        },
+      ],
+    },
   ],
   keyTakeaways: [
     'Binary search reduces O(n) search to O(log n) by eliminating half the search space each iteration',

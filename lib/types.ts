@@ -30,10 +30,10 @@ export interface Problem {
   title: string;
   difficulty: Difficulty;
   description: string;
-  examples: Example[];
-  constraints: string[];
-  hints: string[];
-  starterCode: string;
+  examples?: Example[];
+  constraints?: string[];
+  hints?: string[];
+  starterCode?: string;
   testCases: TestCase[];
   solution?: string;
   timeComplexity?: string;
@@ -42,6 +42,7 @@ export interface Problem {
   topic: string; // e.g., "Binary Search", "Two Pointers"
   leetcodeUrl?: string; // Link to LeetCode problem
   youtubeUrl?: string; // Link to YouTube explanation
+  approach?: string; // For design problems - detailed approach explanation
 }
 
 export interface TestResult {

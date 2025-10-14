@@ -875,4 +875,560 @@ def build_tree(preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
       'https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/',
     youtubeUrl: 'https://www.youtube.com/watch?v=ihj4IQGZ2zc',
   },
+
+  // MEDIUM - Lowest Common Ancestor of Binary Tree
+  {
+    id: 'lowest-common-ancestor-binary-tree',
+    title: 'Lowest Common Ancestor of a Binary Tree',
+    difficulty: 'Medium',
+    topic: 'Trees',
+    description: `Given a binary tree, find the lowest common ancestor (LCA) of two given nodes in the tree.
+
+According to the definition of LCA: "The lowest common ancestor is defined between two nodes \`p\` and \`q\` as the lowest node in T that has both \`p\` and \`q\` as descendants (where we allow **a node to be a descendant of itself**)."
+
+**Note:** This is for a **general binary tree**, not a BST. You cannot use the ordering property.`,
+    examples: [
+      {
+        input: 'root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 1',
+        output: '3',
+        explanation: 'The LCA of nodes 5 and 1 is 3.',
+      },
+      {
+        input: 'root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 4',
+        output: '5',
+        explanation:
+          'The LCA of nodes 5 and 4 is 5, since a node can be a descendant of itself.',
+      },
+      {
+        input: 'root = [1,2], p = 1, q = 2',
+        output: '1',
+        explanation: 'The LCA of nodes 1 and 2 is 1.',
+      },
+    ],
+    constraints: [
+      'The number of nodes in the tree is in the range [2, 10^5]',
+      '-10^9 <= Node.val <= 10^9',
+      'All Node.val are unique',
+      'p != q',
+      'p and q will exist in the tree',
+    ],
+    hints: [
+      'Use recursion to search for both nodes',
+      'If current node is p or q, return it',
+      'If left and right subtrees both return non-null, current node is LCA',
+      'Otherwise, return whichever subtree found something',
+    ],
+    starterCode: `from typing import Optional
+
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def lowest_common_ancestor(root: TreeNode, p: TreeNode, q: TreeNode) -> TreeNode:
+    """
+    Find LCA of two nodes in a binary tree.
+    
+    Args:
+        root: Root of binary tree
+        p: First node
+        q: Second node
+        
+    Returns:
+        LCA node
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[3, 5, 1, 6, 2, 0, 8, null, null, 7, 4], 5, 1],
+        expected: 3,
+      },
+      {
+        input: [[3, 5, 1, 6, 2, 0, 8, null, null, 7, 4], 5, 4],
+        expected: 5,
+      },
+      {
+        input: [[1, 2], 1, 2],
+        expected: 1,
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(h)',
+    solution: `from typing import Optional
+
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def lowest_common_ancestor(root: TreeNode, p: TreeNode, q: TreeNode) -> TreeNode:
+    """
+    Find LCA of two nodes in a binary tree using recursive approach.
+    
+    Time: O(N) - might visit all nodes
+    Space: O(H) - recursion depth (height of tree)
+    
+    Key Insight:
+    - The LCA is the first node where p and q diverge into different subtrees
+    - Use post-order traversal (process children before parent)
+    - Return nodes upward and look for split point
+    
+    Algorithm:
+    1. Base case: if root is None or root is p or q, return root
+    2. Recursively search left and right subtrees
+    3. If both subtrees return non-null → root is LCA (split point)
+    4. If only one returns non-null → both nodes in that subtree
+    """
+    # Base case: empty tree or found one of the target nodes
+    if not root or root == p or root == q:
+        return root
+    
+    # Recursively search left and right subtrees
+    left = lowest_common_ancestor(root.left, p, q)
+    right = lowest_common_ancestor(root.right, p, q)
+    
+    # Case 1: Found nodes in different subtrees
+    # Current root is the split point (LCA)
+    if left and right:
+        return root
+    
+    # Case 2: Both nodes in one subtree
+    # Return whichever subtree found something
+    return left if left else right
+
+
+# Example usage and explanation
+def example():
+    """
+    Example tree:
+            3
+           / \\
+          5   1
+         / \\ / \\
+        6  2 0  8
+          / \\
+         7   4
+    
+    Example 1: LCA(5, 1)
+    - Searching from 3:
+      - Left subtree (5): returns 5
+      - Right subtree (1): returns 1
+      - Both non-null → 3 is LCA
+    
+    Example 2: LCA(5, 4)
+    - Searching from 3:
+      - Left subtree (5):
+        - Finds 5 immediately (base case)
+        - Returns 5
+      - Right subtree (1): returns None
+      - Only left non-null → return 5
+    - Result: 5 (node can be ancestor of itself)
+    
+    Example 3: LCA(7, 4)
+    - Searching from 3:
+      - Left subtree (5):
+        - Neither 5 is target, search children
+        - Left (6): returns None
+        - Right (2):
+          - Left (7): returns 7
+          - Right (4): returns 4
+          - Both non-null → 2 is LCA
+        - Right returned 2 → return 2
+      - Right subtree (1): returns None
+      - Only left non-null → return 2
+    - Result: 2
+    """
+    pass
+
+
+# Alternative: Iterative with Parent Pointers (if nodes have parent)
+def lca_with_parent(p: TreeNode, q: TreeNode) -> TreeNode:
+    """
+    Find LCA using parent pointers (if available).
+    
+    Time: O(H) - traverse up to root
+    Space: O(H) - store ancestors in set
+    
+    Approach: Similar to finding intersection of two linked lists
+    """
+    # Store all ancestors of p
+    ancestors = set()
+    while p:
+        ancestors.add(p)
+        p = p.parent
+    
+    # Find first ancestor of q that's also ancestor of p
+    while q:
+        if q in ancestors:
+            return q
+        q = q.parent
+    
+    return None
+
+
+# Comparison: BST vs Binary Tree LCA
+"""
+Binary Search Tree LCA:
+- Can use BST ordering property
+- If both nodes < root → go left
+- If both nodes > root → go right
+- Otherwise → root is LCA
+- Time: O(H), Space: O(1) with iteration
+
+Binary Tree LCA:
+- No ordering property
+- Must explore both subtrees
+- Use recursive post-order traversal
+- Time: O(N), Space: O(H) for recursion
+
+Key Difference:
+BST property allows us to determine direction without exploring
+both subtrees, enabling iterative O(1) space solution.
+"""`,
+    difficulty: 'Medium',
+    leetcodeUrl:
+      'https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=13m9ZCB8gjw',
+  },
+  {
+    id: 'serialize-deserialize-binary-tree',
+    title: 'Serialize and Deserialize Binary Tree',
+    difficulty: 'Hard',
+    description: `Serialization is the process of converting a data structure or object into a sequence of bits so that it can be stored in a file or memory buffer, or transmitted across a network connection link to be reconstructed later in the same or another computer environment.
+
+Design an algorithm to serialize and deserialize a binary tree. There is no restriction on how your serialization/deserialization algorithm should work. You just need to ensure that a binary tree can be serialized to a string and this string can be deserialized to the original tree structure.
+
+**Clarification:** The input/output format is the same as how LeetCode serializes a binary tree. You do not necessarily need to follow this format, so please be creative and come up with different approaches yourself.
+
+
+**Why This Problem Matters:**
+
+This is one of the most asked tree problems at FAANG companies because it tests:
+- Deep understanding of tree traversal
+- String manipulation skills
+- Edge case handling (null nodes, single nodes, etc.)
+- Design skills (choosing the right format)
+
+**Key Concepts:**
+
+1. **Serialization Strategy:** Convert tree to string representation
+   - Can use pre-order, level-order, or post-order traversal
+   - Must encode null nodes to preserve structure
+   
+2. **Deserialization Strategy:** Reconstruct tree from string
+   - Parse the string and rebuild nodes
+   - Must handle null markers correctly
+   
+3. **Format Choices:**
+   - Delimiter-based: "1,2,3,null,null,4,5"
+   - Bracket-based: "1(2)(3(4)(5))"
+   - Level-order vs Pre-order
+
+**Common Approaches:**
+
+**Approach 1: Pre-order Traversal (Recommended)**
+- Serialize: Root → Left → Right, mark nulls
+- Deserialize: Build root, recursively build left & right
+- Time: O(N), Space: O(N)
+- Pros: Simple, intuitive, recursive
+
+**Approach 2: Level-order Traversal (BFS)**
+- Serialize: Use queue, process level by level
+- Deserialize: Use queue, connect nodes level by level  
+- Time: O(N), Space: O(N)
+- Pros: Matches LeetCode format
+
+**Approach 3: Post-order Traversal**
+- Serialize: Left → Right → Root
+- Deserialize: Build from end of string
+- Time: O(N), Space: O(N)
+- Less common in interviews`,
+    examples: [
+      {
+        input: 'root = [1,2,3,null,null,4,5]',
+        output: '[1,2,3,null,null,4,5]',
+        explanation:
+          'Tree structure is preserved after serialization and deserialization.',
+      },
+      {
+        input: 'root = []',
+        output: '[]',
+        explanation: 'Empty tree case.',
+      },
+      {
+        input: 'root = [1]',
+        output: '[1]',
+        explanation: 'Single node tree.',
+      },
+      {
+        input: 'root = [1,2]',
+        output: '[1,2]',
+        explanation: 'Tree with only left child.',
+      },
+    ],
+    constraints: [
+      'The number of nodes in the tree is in the range [0, 10^4]',
+      '-1000 <= Node.val <= 1000',
+    ],
+    hints: [
+      'Use pre-order traversal for serialization (root, left, right)',
+      'Mark null nodes explicitly with a special marker like "null" or "N"',
+      'Use a delimiter like comma to separate values',
+      'For deserialization, use an iterator or index to track position',
+      'Build the tree recursively during deserialization',
+      'Handle edge cases: empty tree, single node, only left/right children',
+    ],
+    starterCode: `# Definition for a binary tree node.
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+class Codec:
+    def serialize(self, root: TreeNode) -> str:
+        """Encodes a tree to a single string.
+        
+        Args:
+            root: Root of binary tree
+            
+        Returns:
+            String representation of the tree
+        """
+        pass
+    
+    def deserialize(self, data: str) -> TreeNode:
+        """Decodes your encoded data to tree.
+        
+        Args:
+            data: String representation from serialize()
+            
+        Returns:
+            Root of reconstructed binary tree
+        """
+        pass
+
+# Your Codec object will be instantiated and called as such:
+# codec = Codec()
+# codec.deserialize(codec.serialize(root))`,
+    testCases: [
+      {
+        input: [1, 2, 3, null, null, 4, 5],
+        expected: [1, 2, 3, null, null, 4, 5],
+      },
+      {
+        input: [],
+        expected: [],
+      },
+      {
+        input: [1],
+        expected: [1],
+      },
+      {
+        input: [1, 2],
+        expected: [1, 2],
+      },
+    ],
+    solution: `# Definition for a binary tree node.
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+class Codec:
+    """
+    Serialize and Deserialize Binary Tree using Pre-order Traversal.
+    
+    Time Complexity: O(N) for both operations
+    Space Complexity: O(N) for storing the string and recursion stack
+    
+    Strategy:
+    - Serialize: Pre-order traversal (root, left, right) with null markers
+    - Deserialize: Build tree recursively using iterator
+    
+    Format: "1,2,N,N,3,4,N,N,5,N,N"
+    Where N represents null nodes and commas are delimiters
+    """
+    
+    def serialize(self, root: TreeNode) -> str:
+        """
+        Encodes a tree to a single string using pre-order traversal.
+        
+        Example: Tree [1,2,3,null,null,4,5]
+                 1
+                / \\
+               2   3
+                  / \\
+                 4   5
+        
+        Serialize as: "1,2,N,N,3,4,N,N,5,N,N"
+        Breakdown:
+        - Visit 1 → "1"
+        - Visit 2 → "1,2"
+        - 2.left is null → "1,2,N"
+        - 2.right is null → "1,2,N,N"
+        - Visit 3 → "1,2,N,N,3"
+        - Visit 4 → "1,2,N,N,3,4"
+        - 4.left is null → "1,2,N,N,3,4,N"
+        - 4.right is null → "1,2,N,N,3,4,N,N"
+        - Visit 5 → "1,2,N,N,3,4,N,N,5"
+        - 5.left is null → "1,2,N,N,3,4,N,N,5,N"
+        - 5.right is null → "1,2,N,N,3,4,N,N,5,N,N"
+        """
+        def dfs(node):
+            if not node:
+                return "N"
+            
+            # Pre-order: Root → Left → Right
+            return f"{node.val},{dfs(node.left)},{dfs(node.right)}"
+        
+        return dfs(root)
+    
+    def deserialize(self, data: str) -> TreeNode:
+        """
+        Decodes string to tree using recursive pre-order reconstruction.
+        
+        Example: data = "1,2,N,N,3,4,N,N,5,N,N"
+        
+        Parse as list: ["1", "2", "N", "N", "3", "4", "N", "N", "5", "N", "N"]
+        Use iterator to track current position:
+        
+        1. Read "1" → Create node(1)
+        2. Build left subtree:
+           - Read "2" → Create node(2)
+           - Build 2.left: Read "N" → None
+           - Build 2.right: Read "N" → None
+           - Return node(2)
+        3. Build right subtree:
+           - Read "3" → Create node(3)
+           - Build 3.left:
+             - Read "4" → Create node(4)
+             - Build 4.left: Read "N" → None
+             - Build 4.right: Read "N" → None
+             - Return node(4)
+           - Build 3.right:
+             - Read "5" → Create node(5)
+             - Build 5.left: Read "N" → None
+             - Build 5.right: Read "N" → None
+             - Return node(5)
+           - Return node(3)
+        4. Return node(1) as root
+        """
+        def dfs():
+            val = next(vals)
+            
+            # Base case: null marker
+            if val == "N":
+                return None
+            
+            # Create node and recursively build subtrees
+            node = TreeNode(int(val))
+            node.left = dfs()   # Build left subtree
+            node.right = dfs()  # Build right subtree
+            
+            return node
+        
+        # Convert string to iterator for sequential access
+        vals = iter(data.split(","))
+        return dfs()
+
+
+# Alternative Solution: Level-order (BFS) approach
+class CodecBFS:
+    """
+    Alternative using level-order traversal (matches LeetCode format).
+    
+    Time: O(N), Space: O(N)
+    
+    Pros: Matches standard tree representation
+    Cons: Slightly more complex with queue management
+    """
+    
+    def serialize(self, root: TreeNode) -> str:
+        if not root:
+            return ""
+        
+        result = []
+        queue = [root]
+        
+        while queue:
+            node = queue.pop(0)
+            
+            if node:
+                result.append(str(node.val))
+                queue.append(node.left)
+                queue.append(node.right)
+            else:
+                result.append("N")
+        
+        return ",".join(result)
+    
+    def deserialize(self, data: str) -> TreeNode:
+        if not data:
+            return None
+        
+        vals = data.split(",")
+        root = TreeNode(int(vals[0]))
+        queue = [root]
+        i = 1
+        
+        while queue and i < len(vals):
+            node = queue.pop(0)
+            
+            # Process left child
+            if vals[i] != "N":
+                node.left = TreeNode(int(vals[i]))
+                queue.append(node.left)
+            i += 1
+            
+            # Process right child
+            if i < len(vals) and vals[i] != "N":
+                node.right = TreeNode(int(vals[i]))
+                queue.append(node.right)
+            i += 1
+        
+        return root
+
+
+"""
+Comparison of Approaches:
+
+Pre-order (Recommended for interviews):
+✅ Simple, clean recursive solution
+✅ Easy to explain and code
+✅ Natural tree traversal
+✅ Minimal state tracking (just iterator)
+
+Level-order:
+✅ Matches LeetCode format
+✅ Intuitive (processes level by level)
+⚠️ More complex with queue management
+⚠️ More variables to track
+
+Interview Tips:
+1. Start with pre-order - cleaner and easier to code under pressure
+2. Explain your choice of delimiter and null marker
+3. Handle edge cases: empty tree, single node
+4. Test with asymmetric trees (only left or right children)
+5. Time/Space complexity: Both O(N)
+
+Common Mistakes:
+❌ Forgetting to mark null nodes → can't reconstruct structure
+❌ Not using delimiter → can't parse multi-digit numbers
+❌ Off-by-one errors in level-order deserialization
+❌ Not handling empty tree case
+"""`,
+    timeComplexity: 'O(N) for both serialize and deserialize',
+    spaceComplexity: 'O(N) for the string and recursion stack',
+    order: 10,
+    topic: 'Trees',
+    leetcodeUrl:
+      'https://leetcode.com/problems/serialize-and-deserialize-binary-tree/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=u4JAi2JJhI8',
+  },
 ];

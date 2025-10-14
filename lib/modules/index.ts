@@ -28,6 +28,10 @@ import { pythonFundamentalsModule } from './python-fundamentals';
 import { pythonIntermediateModule } from './python-intermediate';
 import { pythonAdvancedModule } from './python-advanced';
 import { pythonOOPModule } from './python-oop';
+import { recursionModule } from './recursion';
+import { queueModule } from './queue';
+import { stringAlgorithmsModule } from './string-algorithms';
+import { designProblemsModule } from './design-problems';
 
 /**
  * All available modules
@@ -48,10 +52,14 @@ export const allModules: Module[] = [
   intervalsModule,
   linkedListModule,
   mathGeometryModule,
+  queueModule,
+  recursionModule,
   segmentTreeModule,
   slidingWindowModule,
   sortingModule,
   stackModule,
+  designProblemsModule,
+  stringAlgorithmsModule,
   timeSpaceComplexityModule,
   treesModule,
   triesModule,
@@ -149,6 +157,17 @@ export const moduleCategories: ModuleCategory[] = [
       problemCategories.find((cat) => cat.id === 'sorting')?.problems.length ||
       0,
   },
+  // 3.5. Recursion - Foundation for DFS, trees, backtracking
+  {
+    id: recursionModule.id,
+    title: recursionModule.title,
+    description: recursionModule.description,
+    icon: recursionModule.icon,
+    module: recursionModule,
+    problemCount:
+      problemCategories.find((cat) => cat.id === 'recursion')?.problems
+        .length || 0,
+  },
   // 4. Basic data structures
   {
     id: stackModule.id,
@@ -160,6 +179,25 @@ export const moduleCategories: ModuleCategory[] = [
       problemCategories.find((cat) => cat.id === 'stack')?.problems.length || 0,
   },
   {
+    id: queueModule.id,
+    title: queueModule.title,
+    description: queueModule.description,
+    icon: queueModule.icon,
+    module: queueModule,
+    problemCount:
+      problemCategories.find((cat) => cat.id === 'queue')?.problems.length || 0,
+  },
+  {
+    id: designProblemsModule.id,
+    title: designProblemsModule.title,
+    description: designProblemsModule.description,
+    icon: designProblemsModule.icon,
+    module: designProblemsModule,
+    problemCount:
+      problemCategories.find((cat) => cat.id === 'design-problems')?.problems
+        .length || 0,
+  },
+  {
     id: linkedListModule.id,
     title: linkedListModule.title,
     description: linkedListModule.description,
@@ -167,6 +205,16 @@ export const moduleCategories: ModuleCategory[] = [
     module: linkedListModule,
     problemCount:
       problemCategories.find((cat) => cat.id === 'linked-list')?.problems
+        .length || 0,
+  },
+  {
+    id: stringAlgorithmsModule.id,
+    title: stringAlgorithmsModule.title,
+    description: stringAlgorithmsModule.description,
+    icon: stringAlgorithmsModule.icon,
+    module: stringAlgorithmsModule,
+    problemCount:
+      problemCategories.find((cat) => cat.id === 'string-algorithms')?.problems
         .length || 0,
   },
   // 5. Hierarchical structures

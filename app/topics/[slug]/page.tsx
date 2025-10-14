@@ -15,13 +15,25 @@ export default function TopicProblemsPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = use(params);
-  const searchParams = new URLSearchParams(
-    typeof window !== 'undefined' ? window.location.search : '',
-  );
-  const from = searchParams.get('from') || '';
   const [completedProblems, setCompletedProblems] = useState<Set<string>>(
     new Set(),
   );
+  const [backUrl, setBackUrl] = useState('/');
+  const [backText, setBackText] = useState('Back to Topics');
+  const [from, setFrom] = useState('');
+
+  // Set back URL from search params after mount to avoid hydration mismatch
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const fromParam = searchParams.get('from') || '';
+
+    setFrom(fromParam);
+
+    if (fromParam.startsWith('modules/')) {
+      setBackUrl(`/${fromParam}`);
+      setBackText('Back to Module');
+    }
+  }, []);
 
   // Load completed problems from localStorage
   useEffect(() => {
@@ -75,12 +87,6 @@ export default function TopicProblemsPage({
     Medium: 'bg-[#f1fa8c] text-[#282a36] border-[#f1fa8c]',
     Hard: 'bg-[#ff5555] text-[#282a36] border-[#ff5555]',
   };
-
-  // Determine back URL based on where we came from
-  const backUrl = from.startsWith('modules/') ? `/${from}` : '/';
-  const backText = from.startsWith('modules/')
-    ? 'Back to Module'
-    : 'Back to Topics';
 
   return (
     <div className="container mx-auto max-w-6xl px-4 py-12">

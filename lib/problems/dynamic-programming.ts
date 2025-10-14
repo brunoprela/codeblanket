@@ -5,6 +5,7 @@ export const dynamicProgrammingProblems: Problem[] = [
     id: 'climbing-stairs',
     title: 'Climbing Stairs',
     difficulty: 'Easy',
+    topic: 'Dynamic Programming',
     description: `You are climbing a staircase. It takes \`n\` steps to reach the top.
 
 Each time you can either climb \`1\` or \`2\` steps. In how many **distinct ways** can you climb to the top?
@@ -135,6 +136,7 @@ def climb_stairs_memo(n: int) -> int:
     id: 'house-robber',
     title: 'House Robber',
     difficulty: 'Medium',
+    topic: 'Dynamic Programming',
     description: `You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed. The constraint is that **adjacent houses have security systems connected** and **it will automatically contact the police if two adjacent houses are broken into on the same night**.
 
 Given an integer array \`nums\` representing the amount of money of each house, return **the maximum amount of money you can rob tonight without alerting the police**.
@@ -300,6 +302,7 @@ def rob_memo(nums: List[int]) -> int:
     id: 'coin-change',
     title: 'Coin Change',
     difficulty: 'Hard',
+    topic: 'Dynamic Programming',
     description: `You are given an integer array \`coins\` representing coins of different denominations and an integer \`amount\` representing a total amount of money.
 
 Return **the fewest number of coins** that you need to make up that amount. If that amount of money cannot be made up by any combination of the coins, return \`-1\`.
@@ -881,5 +884,440 @@ The test cases are generated so that the answer will be less than or equal to \`
     spaceComplexity: 'O(n) with space optimization',
     leetcodeUrl: 'https://leetcode.com/problems/unique-paths/',
     youtubeUrl: 'https://www.youtube.com/watch?v=IlEsdxuD4lY',
+  },
+  {
+    id: 'longest-common-subsequence',
+    title: 'Longest Common Subsequence',
+    difficulty: 'medium',
+    description: `Given two strings \`text1\` and \`text2\`, return the length of their longest common subsequence. If there is no common subsequence, return 0.
+
+A **subsequence** of a string is a new string generated from the original string with some characters (can be none) deleted without changing the relative order of the remaining characters.
+
+**Example 1:**
+\`\`\`
+Input: text1 = "abcde", text2 = "ace" 
+Output: 3  
+Explanation: The longest common subsequence is "ace" and its length is 3.
+\`\`\`
+
+**Example 2:**
+\`\`\`
+Input: text1 = "abc", text2 = "abc"
+Output: 3
+\`\`\`
+
+**Example 3:**
+\`\`\`
+Input: text1 = "abc", text2 = "def"
+Output: 0
+\`\`\``,
+    starterCode: `def longest_common_subsequence(text1, text2):
+    """
+    Find length of longest common subsequence.
+    
+    Args:
+        text1: First string
+        text2: Second string
+        
+    Returns:
+        Length of LCS
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: ['abcde', 'ace'],
+        expected: 3,
+      },
+      {
+        input: ['abc', 'abc'],
+        expected: 3,
+      },
+      {
+        input: ['abc', 'def'],
+        expected: 0,
+      },
+    ],
+    timeComplexity: 'O(m * n)',
+    spaceComplexity: 'O(m * n) or O(min(m,n)) with optimization',
+    leetcodeUrl: 'https://leetcode.com/problems/longest-common-subsequence/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=Ua0GhsJSlWM',
+  },
+  {
+    id: 'edit-distance',
+    title: 'Edit Distance',
+    difficulty: 'hard',
+    description: `Given two strings \`word1\` and \`word2\`, return the minimum number of operations required to convert \`word1\` to \`word2\`.
+
+You have the following three operations permitted on a word:
+- Insert a character
+- Delete a character
+- Replace a character
+
+**Example 1:**
+\`\`\`
+Input: word1 = "horse", word2 = "ros"
+Output: 3
+Explanation: 
+horse -> rorse (replace 'h' with 'r')
+rorse -> rose (remove 'r')
+rose -> ros (remove 'e')
+\`\`\`
+
+**Example 2:**
+\`\`\`
+Input: word1 = "intention", word2 = "execution"
+Output: 5
+\`\`\``,
+    starterCode: `def min_distance(word1, word2):
+    """
+    Calculate minimum edit distance (Levenshtein distance).
+    
+    Args:
+        word1: Source string
+        word2: Target string
+        
+    Returns:
+        Minimum number of operations
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: ['horse', 'ros'],
+        expected: 3,
+      },
+      {
+        input: ['intention', 'execution'],
+        expected: 5,
+      },
+      {
+        input: ['', 'abc'],
+        expected: 3,
+      },
+    ],
+    timeComplexity: 'O(m * n)',
+    spaceComplexity: 'O(m * n) or O(min(m,n)) with optimization',
+    leetcodeUrl: 'https://leetcode.com/problems/edit-distance/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=XYi2-LPrwm4',
+  },
+  {
+    id: 'partition-equal-subset-sum',
+    title: 'Partition Equal Subset Sum',
+    difficulty: 'medium',
+    description: `Given an integer array \`nums\`, return \`true\` if you can partition the array into two subsets such that the sum of the elements in both subsets is equal or \`false\` otherwise.
+
+**Example 1:**
+\`\`\`
+Input: nums = [1,5,11,5]
+Output: true
+Explanation: The array can be partitioned as [1, 5, 5] and [11].
+\`\`\`
+
+**Example 2:**
+\`\`\`
+Input: nums = [1,2,3,5]
+Output: false
+Explanation: The array cannot be partitioned into equal sum subsets.
+\`\`\`
+
+**Hint:** This is a 0/1 knapsack problem variant. If total sum is odd, return false. Otherwise, find if subset with sum = total/2 exists.`,
+    starterCode: `def can_partition(nums):
+    """
+    Check if array can be partitioned into two equal sum subsets.
+    
+    Args:
+        nums: Array of integers
+        
+    Returns:
+        True if partition possible, False otherwise
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [[1, 5, 11, 5]],
+        expected: true,
+      },
+      {
+        input: [[1, 2, 3, 5]],
+        expected: false,
+      },
+      {
+        input: [[1, 2, 5]],
+        expected: false,
+      },
+    ],
+    timeComplexity: 'O(n * sum) where sum is total/2',
+    spaceComplexity: 'O(sum) with 1D DP',
+    leetcodeUrl: 'https://leetcode.com/problems/partition-equal-subset-sum/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=IsvocB5BJhw',
+  },
+  {
+    id: 'word-break',
+    title: 'Word Break',
+    difficulty: 'medium',
+    description: `Given a string \`s\` and a dictionary of strings \`wordDict\`, return \`true\` if \`s\` can be segmented into a space-separated sequence of one or more dictionary words.
+
+**Note:** The same word in the dictionary may be reused multiple times in the segmentation.
+
+**Example 1:**
+\`\`\`
+Input: s = "leetcode", wordDict = ["leet","code"]
+Output: true
+Explanation: Return true because "leetcode" can be segmented as "leet code".
+\`\`\`
+
+**Example 2:**
+\`\`\`
+Input: s = "applepenapple", wordDict = ["apple","pen"]
+Output: true
+Explanation: Return true because "applepenapple" can be segmented as "apple pen apple".
+Note that you are allowed to reuse a dictionary word.
+\`\`\`
+
+**Example 3:**
+\`\`\`
+Input: s = "catsandog", wordDict = ["cats","dog","sand","and","cat"]
+Output: false
+\`\`\``,
+    starterCode: `def word_break(s, word_dict):
+    """
+    Check if string can be segmented using dictionary words.
+    
+    Args:
+        s: String to segment
+        word_dict: List of valid words
+        
+    Returns:
+        True if segmentation possible, False otherwise
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: ['leetcode', ['leet', 'code']],
+        expected: true,
+      },
+      {
+        input: ['applepenapple', ['apple', 'pen']],
+        expected: true,
+      },
+      {
+        input: ['catsandog', ['cats', 'dog', 'sand', 'and', 'cat']],
+        expected: false,
+      },
+    ],
+    timeComplexity: 'O(n² * m) where n is string length, m is avg word length',
+    spaceComplexity: 'O(n)',
+    leetcodeUrl: 'https://leetcode.com/problems/word-break/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=Sx9NNgInc3A',
+  },
+  {
+    id: 'decode-ways',
+    title: 'Decode Ways',
+    difficulty: 'medium',
+    description: `A message containing letters from A-Z can be encoded into numbers using the following mapping:
+
+'A' -> "1"
+'B' -> "2"
+...
+'Z' -> "26"
+
+To decode an encoded message, all the digits must be grouped then mapped back into letters using the reverse of the mapping above (there may be multiple ways). For example, "11106" can be mapped into:
+- "AAJF" with the grouping (1 1 10 6)
+- "KJF" with the grouping (11 10 6)
+
+Given a string \`s\` containing only digits, return the number of ways to decode it.
+
+**Example 1:**
+\`\`\`
+Input: s = "12"
+Output: 2
+Explanation: "12" could be decoded as "AB" (1 2) or "L" (12).
+\`\`\`
+
+**Example 2:**
+\`\`\`
+Input: s = "226"
+Output: 3
+Explanation: "226" could be decoded as "BZ" (2 26), "VF" (22 6), or "BBF" (2 2 6).
+\`\`\`
+
+**Example 3:**
+\`\`\`
+Input: s = "06"
+Output: 0
+Explanation: "06" cannot be mapped to "F" because "6" is different from "06".
+\`\`\``,
+    starterCode: `def num_decodings(s):
+    """
+    Count number of ways to decode the string.
+    
+    Args:
+        s: String of digits
+        
+    Returns:
+        Number of decoding ways
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: ['12'],
+        expected: 2,
+      },
+      {
+        input: ['226'],
+        expected: 3,
+      },
+      {
+        input: ['06'],
+        expected: 0,
+      },
+    ],
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1) with optimization',
+    leetcodeUrl: 'https://leetcode.com/problems/decode-ways/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=6aEyTjOwlJU',
+  },
+  {
+    id: 'coin-change-2',
+    title: 'Coin Change II',
+    difficulty: 'medium',
+    description: `You are given an integer array \`coins\` representing coins of different denominations and an integer \`amount\` representing a total amount of money.
+
+Return the number of combinations that make up that amount. If that amount of money cannot be made up by any combination of the coins, return 0.
+
+You may assume that you have an infinite number of each kind of coin.
+
+**Example 1:**
+\`\`\`
+Input: amount = 5, coins = [1,2,5]
+Output: 4
+Explanation: there are four ways to make up the amount:
+5=5
+5=2+2+1
+5=2+1+1+1
+5=1+1+1+1+1
+\`\`\`
+
+**Example 2:**
+\`\`\`
+Input: amount = 3, coins = [2]
+Output: 0
+Explanation: the amount of 3 cannot be made up just with coins of 2.
+\`\`\`
+
+**Example 3:**
+\`\`\`
+Input: amount = 10, coins = [10]
+Output: 1
+\`\`\`
+
+**This is the "number of combinations" variant (unbounded knapsack).**`,
+    starterCode: `def change(amount, coins):
+    """
+    Count number of combinations to make amount using coins.
+    
+    Args:
+        amount: Target amount
+        coins: List of coin denominations
+        
+    Returns:
+        Number of combinations
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: [5, [1, 2, 5]],
+        expected: 4,
+      },
+      {
+        input: [3, [2]],
+        expected: 0,
+      },
+      {
+        input: [10, [10]],
+        expected: 1,
+      },
+    ],
+    timeComplexity: 'O(amount * n) where n is number of coins',
+    spaceComplexity: 'O(amount)',
+    leetcodeUrl: 'https://leetcode.com/problems/coin-change-ii/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=DJ4a7cmjZY0',
+  },
+  {
+    id: 'interleaving-string',
+    title: 'Interleaving String',
+    difficulty: 'medium',
+    description: `Given strings \`s1\`, \`s2\`, and \`s3\`, find whether \`s3\` is formed by an interleaving of \`s1\` and \`s2\`.
+
+An interleaving of two strings \`s\` and \`t\` is a configuration where \`s\` and \`t\` are divided into \`n\` and \`m\` substrings respectively, such that:
+- s = s1 + s2 + ... + sn
+- t = t1 + t2 + ... + tm
+- |n - m| <= 1
+- The interleaving is s1 + t1 + s2 + t2 + ... or t1 + s1 + t2 + s2 + ...
+
+**Example 1:**
+\`\`\`
+Input: s1 = "aabcc", s2 = "dbbca", s3 = "aadbbcbcac"
+Output: true
+Explanation: One way to obtain s3 is:
+Split s1 into s1 = "aa" + "bc" + "c", and s2 into s2 = "dbbc" + "a".
+Interleaving the two splits, we get "aa" + "dbbc" + "bc" + "a" + "c" = "aadbbcbcac".
+\`\`\`
+
+**Example 2:**
+\`\`\`
+Input: s1 = "aabcc", s2 = "dbbca", s3 = "aadbbbaccc"
+Output: false
+\`\`\`
+
+**Example 3:**
+\`\`\`
+Input: s1 = "", s2 = "", s3 = ""
+Output: true
+\`\`\``,
+    starterCode: `def is_interleave(s1, s2, s3):
+    """
+    Check if s3 is an interleaving of s1 and s2.
+    
+    Args:
+        s1: First string
+        s2: Second string
+        s3: Target string
+        
+    Returns:
+        True if s3 is interleaving of s1 and s2
+    """
+    # Write your code here
+    pass
+`,
+    testCases: [
+      {
+        input: ['aabcc', 'dbbca', 'aadbbcbcac'],
+        expected: true,
+      },
+      {
+        input: ['aabcc', 'dbbca', 'aadbbbaccc'],
+        expected: false,
+      },
+      {
+        input: ['', '', ''],
+        expected: true,
+      },
+    ],
+    timeComplexity: 'O(m * n) where m, n are lengths of s1, s2',
+    spaceComplexity: 'O(m * n) or O(n) with optimization',
+    leetcodeUrl: 'https://leetcode.com/problems/interleaving-string/',
+    youtubeUrl: 'https://www.youtube.com/watch?v=3Rw3p9LrgvE',
   },
 ];

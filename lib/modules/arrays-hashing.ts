@@ -1053,6 +1053,456 @@ key = tuple(sorted(lst))
       ],
     },
     {
+      id: 'two-sum-patterns',
+      title: 'Two-Sum Patterns Family',
+      content: `**Two-Sum patterns** are the **#1 most asked** pattern family in technical interviews. Mastering these patterns is essential for interview success.
+
+---
+
+## Why Two-Sum Matters
+
+**Interview Frequency:**
+- Asked at: Amazon (very frequently), Facebook, Google, Microsoft, Apple
+- Appears in ~15-20% of all array/hash table interviews
+- Foundation for more complex problems (3Sum, 4Sum, subset sum)
+- Tests fundamental hash table optimization thinking
+
+**What Makes It Important:**
+- Teaches hash table vs. brute force trade-off
+- Demonstrates space-time complexity analysis
+- Shows pattern recognition across variations
+- Gateway to understanding pair/complement problems
+
+---
+
+## Pattern 1: Two Sum (Hash Table Approach)
+
+**Problem:** Find two numbers in an array that add up to a target.
+
+**Brute Force:** O(n²) - check all pairs  
+**Optimized:** O(n) - use hash table to store complements
+
+**Key Insight:** As you iterate, check if \`target - current\` was seen before.
+
+**Implementation:**
+\`\`\`python
+def two_sum(nums: List[int], target: int) -> List[int]:
+    """
+    Find indices of two numbers that add up to target.
+    
+    Time: O(n) - single pass
+    Space: O(n) - hash table
+    
+    Key: Store value → index mapping, look for complement
+    """
+    seen = {}  # value → index
+    
+    for i, num in enumerate(nums):
+        complement = target - num
+        
+        if complement in seen:
+            return [seen[complement], i]
+        
+        seen[num] = i
+    
+    return []  # No solution found
+\`\`\`
+
+**Why Hash Table:**
+- **Before:** Check if complement exists → O(n) linear search
+- **After:** Check if complement exists → O(1) hash lookup
+- Trade O(n) space for O(n) time (down from O(n²))
+
+**Example:**
+\`\`\`
+nums = [2, 7, 11, 15], target = 9
+
+Iteration 1: num=2, complement=7
+  - 7 not in seen
+  - Add 2 → index 0
+  - seen = {2: 0}
+
+Iteration 2: num=7, complement=2
+  - 2 IS in seen (index 0)
+  - Return [0, 1]
+\`\`\`
+
+---
+
+## Pattern 2: Two Sum II - Sorted Array
+
+**Problem:** Same as Two Sum, but array is **sorted**.
+
+**New Approach:** Two pointers (O(1) space!)
+
+**Key Insight:** Sorting enables two-pointer technique without extra space.
+
+**Implementation:**
+\`\`\`python
+def two_sum_sorted(nums: List[int], target: int) -> List[int]:
+    """
+    Find indices in sorted array that add up to target.
+    
+    Time: O(n) - two pointers converge
+    Space: O(1) - no extra space needed
+    
+    Key: Use sorted property to move pointers intelligently
+    """
+    left, right = 0, len(nums) - 1
+    
+    while left < right:
+        current_sum = nums[left] + nums[right]
+        
+        if current_sum == target:
+            return [left + 1, right + 1]  # 1-indexed
+        elif current_sum < target:
+            left += 1  # Need larger sum
+        else:
+            right -= 1  # Need smaller sum
+    
+    return []
+\`\`\`
+
+**Why Two Pointers:**
+- If sum too small → increase left (makes sum bigger)
+- If sum too large → decrease right (makes sum smaller)
+- Converge toward answer without checking all pairs
+
+**Comparison:**
+| Approach | Time | Space | When to Use |
+|----------|------|-------|-------------|
+| Hash Table | O(n) | O(n) | Unsorted array |
+| Two Pointers | O(n) | O(1) | Sorted array |
+| Sort + Two Pointers | O(n log n) | O(1) | Space constrained |
+
+---
+
+## Pattern 3: 3Sum (Extension to Three Numbers)
+
+**Problem:** Find all **unique triplets** that sum to zero.
+
+**Challenges:**
+1. **Three elements** instead of two
+2. Need **all unique triplets** (no duplicates)
+3. Time limit: must be better than O(n³)
+
+**Approach:** Sort + Two Pointers (O(n²))
+
+**Key Insight:** Fix one element, then do Two Sum II on the rest.
+
+**Implementation:**
+\`\`\`python
+def three_sum(nums: List[int]) -> List[List[int]]:
+    """
+    Find all unique triplets that sum to zero.
+    
+    Time: O(n²) - n iterations × n two-pointer search
+    Space: O(1) - excluding output
+    
+    Strategy:
+    1. Sort array: O(n log n)
+    2. Fix first element
+    3. Two-pointer search for remaining two
+    4. Skip duplicates to ensure uniqueness
+    """
+    nums.sort()
+    result = []
+    n = len(nums)
+    
+    for i in range(n - 2):
+        # Skip duplicate values for first element
+        if i > 0 and nums[i] == nums[i-1]:
+            continue
+        
+        # Two-pointer search for remaining two elements
+        left, right = i + 1, n - 1
+        target = -nums[i]
+        
+        while left < right:
+            current_sum = nums[left] + nums[right]
+            
+            if current_sum == target:
+                result.append([nums[i], nums[left], nums[right]])
+                
+                # Skip duplicates for left pointer
+                while left < right and nums[left] == nums[left + 1]:
+                    left += 1
+                # Skip duplicates for right pointer
+                while left < right and nums[right] == nums[right - 1]:
+                    right -= 1
+                
+                left += 1
+                right -= 1
+            elif current_sum < target:
+                left += 1
+            else:
+                right -= 1
+    
+    return result
+\`\`\`
+
+**Example:**
+\`\`\`
+nums = [-1, 0, 1, 2, -1, -4]
+After sort: [-4, -1, -1, 0, 1, 2]
+
+i=0: nums[0]=-4, target=4
+  Two-pointer search: no pairs sum to 4
+
+i=1: nums[1]=-1, target=1
+  left=2, right=5: nums[2]=-1, nums[5]=2, sum=1 ✓
+  Result: [[-1, -1, 2]]
+  left=3, right=4: nums[3]=0, nums[4]=1, sum=1 ✓
+  Result: [[-1, -1, 2], [-1, 0, 1]]
+
+i=2: Skip (nums[2] == nums[1])
+
+Final: [[-1, -1, 2], [-1, 0, 1]]
+\`\`\`
+
+**Duplicate Handling:**
+- Skip duplicate first elements: \`if i > 0 and nums[i] == nums[i - 1]: continue\`
+- Skip duplicate left/right pointers after finding a match
+- This ensures uniqueness without using a set
+
+---
+
+## Pattern 4: 4Sum (Further Extension)
+
+**Problem:** Find all unique quadruplets that sum to a target.
+
+**Approach:** Sort + Two nested loops + Two Pointers (O(n³))
+
+**Key Insight:** Fix two elements, then do Two Sum II on the rest.
+
+**Implementation Sketch:**
+\`\`\`python
+def four_sum(nums: List[int], target: int) -> List[List[int]]:
+    """
+    Find all unique quadruplets that sum to target.
+    
+    Time: O(n³) - n² pairs × n two-pointer search
+    Space: O(1) - excluding output
+    
+    Strategy:
+    1. Sort array
+    2. Fix first two elements (nested loops)
+    3. Two-pointer search for remaining two
+    4. Skip duplicates
+    """
+    nums.sort()
+    result = []
+    n = len(nums)
+    
+    for i in range(n - 3):
+        # Skip duplicates for first element
+        if i > 0 and nums[i] == nums[i-1]:
+            continue
+        
+        for j in range(i + 1, n - 2):
+            # Skip duplicates for second element
+            if j > i + 1 and nums[j] == nums[j-1]:
+                continue
+            
+            # Two-pointer for remaining elements
+            left, right = j + 1, n - 1
+            remaining = target - nums[i] - nums[j]
+            
+            while left < right:
+                current_sum = nums[left] + nums[right]
+                
+                if current_sum == remaining:
+                    result.append([nums[i], nums[j], nums[left], nums[right]])
+                    # Skip duplicates...
+                    while left < right and nums[left] == nums[left+1]:
+                        left += 1
+                    while left < right and nums[right] == nums[right-1]:
+                        right -= 1
+                    left += 1
+                    right -= 1
+                elif current_sum < remaining:
+                    left += 1
+                else:
+                    right -= 1
+    
+    return result
+\`\`\`
+
+---
+
+## Pattern Recognition Guide
+
+**When you see:**
+| Keyword | Pattern | Approach |
+|---------|---------|----------|
+| "Find two numbers that sum to..." | Two Sum | Hash table O(n) |
+| "Sorted array, two sum" | Two Sum II | Two pointers O(1) space |
+| "Three numbers sum to zero/target" | 3Sum | Sort + fix one + two pointers |
+| "Four numbers sum to target" | 4Sum | Sort + fix two + two pointers |
+| "K numbers sum to target" | K-Sum | Recursively reduce to 2Sum |
+| "Count pairs with sum" | Two Sum variant | Hash table counting |
+| "Find all pairs" | Two Sum all | Hash table with list |
+
+---
+
+## Complexity Analysis
+
+| Problem | Best Time | Space | Approach |
+|---------|-----------|-------|----------|
+| **Two Sum (unsorted)** | O(n) | O(n) | Hash table |
+| **Two Sum (sorted)** | O(n) | O(1) | Two pointers |
+| **3Sum** | O(n²) | O(1)* | Sort + fixed first + two pointers |
+| **4Sum** | O(n³) | O(1)* | Sort + fixed two + two pointers |
+| **K-Sum** | O(n^(k-1)) | O(1)* | Generalize to k elements |
+
+*excluding output space
+
+**Pattern Complexity Growth:**
+- 2Sum: O(n) with hash table
+- 3Sum: O(n²) with sort + two pointers
+- 4Sum: O(n³) with sort + two pointers
+- K-Sum: O(n^(k-1)) in general
+
+---
+
+## Interview Strategy
+
+**Recognition:**
+- "Sum to target" → Think Two-Sum family
+- "Pairs" → Two Sum
+- "Triplets" → 3Sum  
+- "Unique" → Need to skip duplicates
+
+**Approach Selection:**
+1. **Unsorted, two elements** → Hash table
+2. **Sorted, two elements** → Two pointers
+3. **Three+ elements** → Sort + fix first(s) + two pointers
+4. **Space constrained** → Sort first, use two pointers
+
+**Communication:**
+\`\`\`
+"I recognize this as a Two-Sum variant.
+
+For two elements in unsorted array:
+- Brute force: O(n²) checking all pairs
+- Optimized: O(n) with hash table for complements
+
+For three elements:
+- Sort first: O(n log n)
+- Fix first element, two-pointer for rest: O(n²)
+- Skip duplicates to ensure uniqueness
+
+Time: O(n²), Space: O(1) excluding output"
+\`\`\`
+
+**Common Mistakes:**
+- ❌ Forgetting to skip duplicates in 3Sum/4Sum
+- ❌ Using same element twice (check indices)
+- ❌ Not considering sorted vs unsorted
+- ❌ Using hash table when two pointers is more efficient
+
+**Practice Progression:**
+1. Master Two Sum (hash table)
+2. Practice Two Sum II (two pointers)
+3. Tackle 3Sum (combining techniques)
+4. Attempt 4Sum (harder but same pattern)
+5. Try variations (closest sum, count pairs, etc.)`,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Explain why we use a hash table for Two Sum instead of nested loops. Walk through the optimization and why it works.',
+          sampleAnswer:
+            'The brute force approach checks all pairs with nested loops: for each element, check every other element to see if they sum to target. This is O(n²) because we check n elements against n-1 others. The hash table optimization works by storing complements: as we iterate once through the array, we calculate complement = target - current, then check if that complement was already seen in O(1) time using a hash table. If yes, we found our pair. If no, we store current for future lookups. This reduces time from O(n²) to O(n) by trading O(n) space for O(1) lookups. The key insight: instead of searching for complement each time (O(n)), we remember all previous elements and look them up instantly (O(1)).',
+          keyPoints: [
+            'Brute force: nested loops check all pairs O(n²)',
+            'Hash table stores seen elements for O(1) lookup',
+            'Check if complement exists instead of searching',
+            'Single pass through array: O(n) time',
+            'Trade O(n) space for O(n²) → O(n) time improvement',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'For 3Sum, why do we sort first? Could we use a hash table like in Two Sum? Explain the trade-offs.',
+          sampleAnswer:
+            'We sort for 3Sum because it enables two key optimizations: 1) We can use two-pointer technique which gives O(n²) total time (n iterations × n two-pointer search), and 2) Sorting makes duplicate handling easy - we can skip consecutive duplicates to ensure unique triplets without needing a set. Could we use hash table? Yes, but it is harder: we would need nested loops to fix two elements, then hash lookup for the third - still O(n²) time but more complex duplicate handling, and O(n) extra space. The sorted approach is cleaner: O(n log n) sort + O(n²) search, versus O(n²) with hash table but messier code. The sort time does not dominate since O(n²) is larger. The two-pointer technique on sorted array is the standard approach because it is elegant, space-efficient, and handles duplicates naturally.',
+          keyPoints: [
+            'Sorting enables two-pointer technique: O(n²) total',
+            'Easy duplicate handling with sorted array',
+            'Hash table possible but more complex',
+            'Sort time O(n log n) does not dominate O(n²)',
+            'Two-pointer on sorted array is standard, cleanest approach',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'In Two Sum II (sorted array), how do you decide whether to move the left or right pointer? Why does this guarantee we find the answer?',
+          sampleAnswer:
+            'The decision rule is: if current_sum < target, move left pointer right (increase sum); if current_sum > target, move right pointer left (decrease sum). This works because the array is sorted. Moving left pointer right means we pick a larger number (since sorted), increasing the sum. Moving right pointer left means we pick a smaller number, decreasing the sum. This guarantees finding the answer because: 1) If the answer exists and current sum is too small, increasing left is the only way to potentially reach target (right cannot go further right without skipping). 2) If current sum is too large, decreasing right is needed. 3) The pointers converge, checking all viable pairs exactly once. We cannot miss the answer because for any pair (i, j), we either check it directly or eliminate one of its elements by proving it cannot be part of the solution.',
+          keyPoints: [
+            'Sorted property: left pointer = smaller values, right = larger',
+            'Sum too small → move left right (increase)',
+            'Sum too large → move right left (decrease)',
+            'Pointers converge, checking all viable pairs once',
+            'Cannot miss answer: every pair considered or eliminated',
+          ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question:
+            'What is the time complexity of Two Sum using a hash table?',
+          options: ['O(n²)', 'O(n log n)', 'O(n)', 'O(1)'],
+          correctAnswer: 2,
+          explanation:
+            'Two Sum with hash table is O(n) time - single pass through array with O(1) hash lookups for each element. We check and insert each element once.',
+        },
+        {
+          id: 'mc2',
+          question:
+            'For Two Sum II (sorted array), what is the space complexity using two pointers?',
+          options: ['O(n)', 'O(log n)', 'O(1)', 'O(n²)'],
+          correctAnswer: 2,
+          explanation:
+            'Two pointers approach uses O(1) space - only two pointer variables. We leverage the sorted property instead of extra data structures.',
+        },
+        {
+          id: 'mc3',
+          question:
+            'What is the time complexity of 3Sum using sort + two pointers?',
+          options: ['O(n)', 'O(n log n)', 'O(n²)', 'O(n³)'],
+          correctAnswer: 2,
+          explanation:
+            '3Sum is O(n²): O(n log n) for sorting + O(n²) for fix-one-element (n times) × two-pointer-search (n). The n² dominates, so overall O(n²).',
+        },
+        {
+          id: 'mc4',
+          question: 'Why must we skip duplicates in 3Sum?',
+          options: [
+            'To improve performance',
+            'To ensure unique triplets in the result',
+            'To reduce space usage',
+            'To handle negative numbers',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'We skip duplicates to ensure unique triplets. Without skipping, we would find the same triplet multiple times. For example, [-1,-1,2] might be found twice if we do not skip the second -1.',
+        },
+        {
+          id: 'mc5',
+          question: 'For 4Sum, what is the time complexity?',
+          options: ['O(n²)', 'O(n³)', 'O(n⁴)', 'O(n log n)'],
+          correctAnswer: 1,
+          explanation:
+            '4Sum using sort + nested loops + two pointers is O(n³): fix two elements (n²) × two-pointer search (n) = O(n³).',
+        },
+      ],
+    },
+    {
       id: 'interview',
       title: 'Interview Strategy & Tips',
       content: `**Recognition Signals:**

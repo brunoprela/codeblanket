@@ -1015,12 +1015,625 @@ class Meta(type):
         },
       ],
     },
+    {
+      id: 'async-await',
+      title: 'Async/Await & Asynchronous Programming',
+      content: `**What is Asynchronous Programming?**
+Async programming allows your code to handle multiple tasks concurrently without blocking, making it ideal for I/O-bound operations like network requests, file I/O, and database queries.
+
+**Key Concepts:**
+- **Coroutine:** An async function defined with \`async def\`
+- **Await:** Pauses execution until the awaited task completes
+- **Event Loop:** Manages and schedules async tasks
+- **Concurrency:** Multiple tasks make progress, but not necessarily in parallel
+
+**Basic Async Function:**
+\`\`\`python
+import asyncio
+
+async def fetch_data(url):
+    """Async function (coroutine)"""
+    print(f"Fetching {url}...")
+    await asyncio.sleep(1)  # Simulate I/O operation
+    return f"Data from {url}"
+
+# Run async function
+result = asyncio.run(fetch_data("https://api.example.com"))
+print(result)
+\`\`\`
+
+**Running Multiple Tasks Concurrently:**
+\`\`\`python
+async def fetch_all_data():
+    """Run multiple async tasks concurrently"""
+    # All three requests run concurrently (not sequentially!)
+    results = await asyncio.gather(
+        fetch_data("https://api1.example.com"),
+        fetch_data("https://api2.example.com"),
+        fetch_data("https://api3.example.com")
+    )
+    return results
+
+# Total time: ~1 second (not 3 seconds!)
+results = asyncio.run(fetch_all_data())
+\`\`\`
+
+**Why Async Matters:**
+\`\`\`python
+import time
+
+# Synchronous version (3 seconds total)
+def sync_fetch_all():
+    results = []
+    for url in ["url1", "url2", "url3"]:
+        time.sleep(1)  # Blocking operation
+        results.append(f"Data from {url}")
+    return results
+
+# Async version (1 second total - concurrent!)
+async def async_fetch_all():
+    tasks = [fetch_data(url) for url in ["url1", "url2", "url3"]]
+    return await asyncio.gather(*tasks)
+\`\`\`
+
+**Common Async Patterns:**
+
+**1. Creating Tasks:**
+\`\`\`python
+async def main():
+    # Create tasks (start them immediately)
+    task1 = asyncio.create_task(fetch_data("url1"))
+    task2 = asyncio.create_task(fetch_data("url2"))
+    
+    # Do other work while tasks run
+    print("Tasks are running in background...")
+    
+    # Wait for results
+    result1 = await task1
+    result2 = await task2
+\`\`\`
+
+**2. Timeout Handling:**
+\`\`\`python
+async def fetch_with_timeout(url, timeout=5):
+    try:
+        return await asyncio.wait_for(
+            fetch_data(url), 
+            timeout=timeout
+        )
+    except asyncio.TimeoutError:
+        return f"Request to {url} timed out"
+\`\`\`
+
+**3. Async Context Managers:**
+\`\`\`python
+class AsyncDatabaseConnection:
+    async def __aenter__(self):
+        print("Opening database connection...")
+        await asyncio.sleep(0.1)  # Simulate async setup
+        return self
+    
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        print("Closing database connection...")
+        await asyncio.sleep(0.1)  # Simulate async cleanup
+        return False
+
+async def use_database():
+    async with AsyncDatabaseConnection() as conn:
+        print("Using database...")
+\`\`\`
+
+**4. Async Generators:**
+\`\`\`python
+async def async_range(start, stop):
+    """Async generator example"""
+    for i in range(start, stop):
+        await asyncio.sleep(0.1)  # Simulate async work
+        yield i
+
+async def consume_async_generator():
+    async for value in async_range(0, 5):
+        print(value)
+\`\`\`
+
+**Real-World Example - Web Scraping:**
+\`\`\`python
+import aiohttp
+import asyncio
+
+async def fetch_url(session, url):
+    """Fetch single URL"""
+    async with session.get(url) as response:
+        return await response.text()
+
+async def scrape_websites(urls):
+    """Scrape multiple websites concurrently"""
+    async with aiohttp.ClientSession() as session:
+        tasks = [fetch_url(session, url) for url in urls]
+        return await asyncio.gather(*tasks)
+
+# Scrape 10 websites concurrently (much faster than sequential!)
+urls = [f"https://example.com/page{i}" for i in range(10)]
+results = asyncio.run(scrape_websites(urls))
+\`\`\`
+
+**Common Pitfalls:**
+
+**1. Forgetting await:**
+\`\`\`python
+# WRONG - returns coroutine object, doesn't execute
+result = fetch_data("url")  
+
+# CORRECT - awaits the coroutine
+result = await fetch_data("url")
+\`\`\`
+
+**2. Using blocking operations:**
+\`\`\`python
+# WRONG - blocks event loop
+time.sleep(1)
+
+# CORRECT - async version
+await asyncio.sleep(1)
+\`\`\`
+
+**3. Not using asyncio.run() properly:**
+\`\`\`python
+# WRONG - can't await outside async function
+result = await fetch_data("url")  
+
+# CORRECT - use asyncio.run()
+result = asyncio.run(fetch_data("url"))
+\`\`\`
+
+**When to Use Async:**
+- ✅ I/O-bound operations (network, file I/O, database)
+- ✅ Many concurrent connections (web servers, chat apps)
+- ✅ Real-time applications (websockets, streaming)
+- ❌ CPU-bound operations (use multiprocessing instead)
+- ❌ Simple scripts with few I/O operations
+
+**Best Practices:**
+- Use \`asyncio.gather()\` for concurrent tasks
+- Always await async functions
+- Use async libraries (aiohttp, asyncpg) not blocking ones
+- Handle exceptions in async code properly
+- Don't mix blocking and async code`,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Explain the difference between concurrency and parallelism. How does async/await enable concurrency in Python?',
+          hint: 'Think about single vs multiple CPU cores, and how async handles I/O wait time.',
+          sampleAnswer:
+            "Concurrency means multiple tasks make progress during overlapping time periods, but not necessarily simultaneously. Parallelism means tasks execute simultaneously on multiple CPU cores. Async/await enables concurrency through cooperative multitasking: when an async function awaits an I/O operation (like a network request), it yields control back to the event loop, which can then run other tasks. This is perfect for I/O-bound operations where tasks spend time waiting. However, it doesn't help with CPU-bound tasks because Python still runs on a single thread. For example, with async you can handle 1000 network requests concurrently on one CPU core because most time is spent waiting, not computing.",
+          keyPoints: [
+            'Concurrency: tasks make progress during overlapping periods',
+            'Parallelism: tasks execute simultaneously on multiple cores',
+            'Async enables concurrency via cooperative multitasking',
+            'Perfect for I/O-bound, not CPU-bound operations',
+            'Single-threaded but handles many tasks concurrently',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            "Why can't you use regular blocking functions like time.sleep() or requests.get() in async code? What happens if you do?",
+          hint: 'Consider what happens to other async tasks while one task is blocked.',
+          sampleAnswer:
+            'Blocking functions freeze the entire event loop, preventing all other async tasks from running. When you call time.sleep(1), the entire program pauses—no other async tasks can execute during that second. This defeats the purpose of async programming. You must use async versions: asyncio.sleep() for delays, aiohttp for HTTP requests, asyncpg for databases. These async functions yield control to the event loop during I/O, allowing other tasks to run. If you absolutely must use blocking code, use asyncio.to_thread() or loop.run_in_executor() to run it in a thread pool, preventing it from blocking the event loop.',
+          keyPoints: [
+            'Blocking functions freeze the entire event loop',
+            'Prevents all other async tasks from running',
+            'Must use async equivalents (asyncio.sleep, aiohttp)',
+            'Async functions yield control during I/O',
+            'Use loop.run_in_executor() for blocking code if needed',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'What is the event loop and how does it schedule async tasks? How does this differ from threads?',
+          hint: 'Think about context switching, memory overhead, and how control is yielded.',
+          sampleAnswer:
+            "The event loop is a single-threaded scheduler that manages async tasks. It maintains a queue of tasks and runs them cooperatively: each task explicitly yields control (at await points), allowing the loop to switch to other tasks. This is different from threads where the OS preemptively switches between threads at any time. Advantages: 1) No race conditions (tasks only switch at await), 2) Lower memory overhead (tasks are lightweight), 3) Predictable switching points. Disadvantages: 1) One blocking call ruins everything, 2) Doesn't utilize multiple CPU cores. The event loop makes async programming safer and more efficient than threads for I/O-bound workloads.",
+          keyPoints: [
+            'Event loop: single-threaded scheduler for async tasks',
+            'Cooperative multitasking: tasks yield control at await',
+            'Threads: preemptive multitasking by OS',
+            'Async: lighter weight, no race conditions',
+            "Trade-off: requires discipline, can't use blocking calls",
+          ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What does the await keyword do?',
+          options: [
+            'Starts a new thread',
+            'Pauses execution until the awaited coroutine completes',
+            'Makes code run in parallel',
+            'Blocks all other code',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'await pauses the current coroutine and yields control to the event loop, which can run other tasks. Execution resumes when the awaited coroutine completes.',
+        },
+        {
+          id: 'mc2',
+          question:
+            'What is the difference between asyncio.gather() and creating tasks with asyncio.create_task()?',
+          options: [
+            'No difference',
+            'gather() runs tasks sequentially, create_task() runs concurrently',
+            'gather() runs multiple tasks concurrently and waits for all, create_task() starts a task in background',
+            'create_task() is deprecated',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'asyncio.gather() runs multiple tasks concurrently and waits for all to complete. asyncio.create_task() schedules a single task to run in background and returns immediately, allowing you to do other work.',
+        },
+        {
+          id: 'mc3',
+          question: 'When should you use async/await?',
+          options: [
+            'For CPU-intensive calculations',
+            'For I/O-bound operations like network requests',
+            'For simple scripts with no I/O',
+            'Always, it makes code faster',
+          ],
+          correctAnswer: 1,
+          explanation:
+            "Async/await is ideal for I/O-bound operations where tasks spend time waiting (network, databases, files). It doesn't help with CPU-bound operations.",
+        },
+        {
+          id: 'mc4',
+          question: 'What happens if you forget to await an async function?',
+          options: [
+            'It runs synchronously',
+            'It returns a coroutine object without executing',
+            'It raises an error immediately',
+            'It runs in background automatically',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Forgetting await returns a coroutine object without executing the function. You\'ll see a warning: "coroutine was never awaited".',
+        },
+        {
+          id: 'mc5',
+          question: 'What is asyncio.run() used for?',
+          options: [
+            'To run multiple tasks concurrently',
+            'To run an async function from synchronous code',
+            'To create a new event loop',
+            'To convert sync functions to async',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'asyncio.run() is the main entry point that runs an async function from synchronous code, creating an event loop, running the coroutine, and cleaning up.',
+        },
+      ],
+    },
+    {
+      id: 'type-hints',
+      title: 'Type Hints & Static Type Checking',
+      content: `**What are Type Hints?**
+Type hints (PEP 484) let you annotate variables, function parameters, and return values with type information, enabling better IDE support, documentation, and static type checking with tools like mypy.
+
+**Basic Type Hints:**
+\`\`\`python
+def greet(name: str) -> str:
+    """Function with type hints"""
+    return f"Hello, {name}!"
+
+age: int = 30
+price: float = 19.99
+is_valid: bool = True
+names: list[str] = ["Alice", "Bob"]  # Python 3.9+
+\`\`\`
+
+**Generic Types:**
+\`\`\`python
+from typing import List, Dict, Set, Tuple, Optional, Union
+
+# Collections (pre-Python 3.9)
+numbers: List[int] = [1, 2, 3]
+user_data: Dict[str, int] = {"age": 30, "score": 95}
+unique_items: Set[str] = {"apple", "banana"}
+coordinates: Tuple[float, float] = (10.5, 20.3)
+
+# Python 3.9+ - use built-in types directly
+numbers: list[int] = [1, 2, 3]
+user_data: dict[str, int] = {"age": 30}
+\`\`\`
+
+**Optional and Union:**
+\`\`\`python
+from typing import Optional, Union
+
+# Optional[T] = Union[T, None]
+def find_user(user_id: int) -> Optional[str]:
+    """Returns username or None if not found"""
+    if user_id == 1:
+        return "Alice"
+    return None
+
+# Union for multiple possible types
+def process_id(id: Union[int, str]) -> str:
+    """Accepts int or str"""
+    return str(id)
+
+# Python 3.10+ - use | operator
+def process_id(id: int | str) -> str:
+    return str(id)
+\`\`\`
+
+**Generic Functions with TypeVar:**
+\`\`\`python
+from typing import TypeVar, List
+
+T = TypeVar('T')  # Generic type variable
+
+def first_element(items: List[T]) -> Optional[T]:
+    """Get first element, preserving type"""
+    return items[0] if items else None
+
+# Usage preserves types
+nums: List[int] = [1, 2, 3]
+first_num: Optional[int] = first_element(nums)  # Type: Optional[int]
+
+names: List[str] = ["Alice", "Bob"]
+first_name: Optional[str] = first_element(names)  # Type: Optional[str]
+\`\`\`
+
+**Constrained TypeVars:**
+\`\`\`python
+from typing import TypeVar
+
+# Constrain to specific types
+Number = TypeVar('Number', int, float)
+
+def add(a: Number, b: Number) -> Number:
+    """Works with int or float, but both must be same type"""
+    return a + b
+
+result1: int = add(1, 2)        # OK: both int
+result2: float = add(1.5, 2.5)  # OK: both float
+# result3 = add(1, 2.5)         # Error: mixing types
+\`\`\`
+
+**Callable Types:**
+\`\`\`python
+from typing import Callable
+
+def apply_twice(func: Callable[[int], int], value: int) -> int:
+    """Apply function twice to value"""
+    return func(func(value))
+
+def double(x: int) -> int:
+    return x * 2
+
+result: int = apply_twice(double, 5)  # 20
+\`\`\`
+
+**Literal Types:**
+\`\`\`python
+from typing import Literal
+
+def set_log_level(level: Literal["debug", "info", "warning", "error"]) -> None:
+    """Only accepts these exact string values"""
+    print(f"Log level set to {level}")
+
+set_log_level("debug")    # OK
+# set_log_level("trace")  # Error: not in Literal values
+\`\`\`
+
+**Type Aliases:**
+\`\`\`python
+from typing import List, Dict, Tuple
+
+# Create readable type aliases
+UserId = int
+Username = str
+UserData = Dict[UserId, Username]
+Coordinates = Tuple[float, float]
+Point = Tuple[float, float, float]
+
+users: UserData = {1: "Alice", 2: "Bob"}
+location: Coordinates = (10.5, 20.3)
+\`\`\`
+
+**Protocol (Structural Typing):**
+\`\`\`python
+from typing import Protocol
+
+class Drawable(Protocol):
+    """Anything with a draw() method"""
+    def draw(self) -> None: ...
+
+class Circle:
+    def draw(self) -> None:
+        print("Drawing circle")
+
+class Square:
+    def draw(self) -> None:
+        print("Drawing square")
+
+def render(shape: Drawable) -> None:
+    """Works with any object that has draw()"""
+    shape.draw()
+
+# Both work without explicit inheritance!
+render(Circle())
+render(Square())
+\`\`\`
+
+**TypedDict for Structured Dictionaries:**
+\`\`\`python
+from typing import TypedDict
+
+class User(TypedDict):
+    name: str
+    age: int
+    email: str
+
+def create_user(name: str, age: int, email: str) -> User:
+    return {"name": name, "age": age, "email": email}
+
+user: User = create_user("Alice", 30, "alice@example.com")
+print(user["name"])  # IDE knows this exists and is str
+\`\`\`
+
+**Static Type Checking with mypy:**
+\`\`\`python
+# Run: mypy script.py
+
+def add_numbers(a: int, b: int) -> int:
+    return a + b
+
+# mypy will catch this error:
+result: str = add_numbers(1, 2)  # Error: incompatible types
+\`\`\`
+
+**Best Practices:**
+- Start with function signatures (parameters and return types)
+- Use Optional for values that can be None
+- Prefer Protocol over ABC for flexibility
+- Use mypy in CI/CD pipeline
+- Type hints are optional—add where they help most
+- Use \`# type: ignore\` for exceptions
+
+**Benefits:**
+- Better IDE autocomplete and error detection
+- Self-documenting code
+- Catch bugs before runtime
+- Easier refactoring
+- No runtime overhead (hints are ignored at runtime)`,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'What is the difference between List[int] and list[int]? When should you use each?',
+          hint: 'Consider Python versions and the typing module.',
+          sampleAnswer:
+            "List[int] is from the typing module and works in Python 3.5+. list[int] uses the built-in list type directly and works only in Python 3.9+. They mean the same thing: a list of integers. Use list[int] (lowercase) if you're on Python 3.9+ as it's simpler and doesn't require imports. Use List[int] (uppercase) if you need to support older Python versions. Python 3.9+ made built-in collections generic, so you can write dict[str, int] instead of Dict[str, int], list[str] instead of List[str], etc.",
+          keyPoints: [
+            'List[int]: typing module, Python 3.5+',
+            'list[int]: built-in type, Python 3.9+',
+            'Same meaning, different syntax',
+            'Prefer lowercase (list[int]) in Python 3.9+',
+            'Python 3.9+ made built-ins generic',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            "Explain TypeVar and why it's useful for generic functions. How does it preserve type information?",
+          hint: 'Think about what happens when you pass different types to the same function.',
+          sampleAnswer:
+            'TypeVar creates a generic type placeholder that preserves the actual type used. Without TypeVar, a function returning "any type" would lose type information. For example, def first(items: List) -> object means "returns something", but def first(items: List[T]) -> T (with T = TypeVar("T")) means "returns same type as input". This lets the type checker know that first([1,2,3]) returns an int, not just "some object". This is crucial for maintaining type safety in generic functions—the type checker can verify you\'re using the result correctly.',
+          keyPoints: [
+            'Creates generic type placeholder',
+            'Preserves type information through function',
+            'Without it, type information is lost',
+            'Example: List[T] -> T preserves element type',
+            'Enables type-safe generic functions',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            "Why are type hints beneficial even though they don't affect runtime behavior? What problems do they solve?",
+          hint: 'Consider development tools, documentation, and catching bugs.',
+          sampleAnswer:
+            'Type hints are zero-cost at runtime but invaluable during development. Benefits: 1) IDE autocomplete and inline error detection catch typos and type mismatches immediately, 2) Self-documenting code—function signatures show expected types, 3) Refactoring is safer—type checker catches breaking changes, 4) mypy catches bugs in CI/CD before deployment, 5) New developers understand code faster. For example, def process(data: Dict[str, List[int]]) -> Optional[int] immediately tells you what the function expects and returns, without reading documentation or code. The investment in adding types pays off in reduced bugs and development time.',
+          keyPoints: [
+            'Zero runtime cost, huge development benefits',
+            'IDE catches errors as you type',
+            'Self-documenting code',
+            'Safer refactoring',
+            'Catches bugs before runtime with mypy',
+          ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question: 'What does Optional[str] mean?',
+          options: [
+            'A string that might be empty',
+            'Union[str, None] - str or None',
+            'A string with optional parameters',
+            'A string that may not be used',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Optional[str] is equivalent to Union[str, None], meaning the value can be a string or None.',
+        },
+        {
+          id: 'mc2',
+          question:
+            'What is the correct type hint for a function that takes any number of integers and returns their sum?',
+          options: [
+            'def sum(*args: int) -> int',
+            'def sum(*args: list[int]) -> int',
+            'def sum(*args: List[int]) -> int',
+            'def sum(args: int) -> int',
+          ],
+          correctAnswer: 0,
+          explanation:
+            'When using *args, type each individual arg: *args: int means args is a tuple of integers.',
+        },
+        {
+          id: 'mc3',
+          question: 'What does Callable[[int, str], bool] represent?',
+          options: [
+            'A function taking int and str, returning bool',
+            'A class with int, str, and bool attributes',
+            'A tuple of int, str, and bool',
+            'A function taking a list of int and str',
+          ],
+          correctAnswer: 0,
+          explanation:
+            'Callable[[int, str], bool] represents a function that takes an int and str as parameters and returns a bool.',
+        },
+        {
+          id: 'mc4',
+          question: 'What is the difference between Protocol and ABC?',
+          options: [
+            'No difference',
+            'Protocol uses structural typing (duck typing), ABC uses nominal typing (explicit inheritance)',
+            'Protocol is faster',
+            'ABC is deprecated',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Protocol enables structural typing—any class with matching methods satisfies the protocol. ABC requires explicit inheritance.',
+        },
+        {
+          id: 'mc5',
+          question: 'Do type hints affect runtime performance?',
+          options: [
+            'Yes, they slow down execution',
+            'Yes, they speed up execution',
+            'No, they are ignored at runtime',
+            'Only in production mode',
+          ],
+          correctAnswer: 2,
+          explanation:
+            'Type hints have zero runtime overhead—they are stored as annotations and ignored during execution. Tools like mypy check them statically.',
+        },
+      ],
+    },
   ],
   keyTakeaways: [
     'Decorators modify functions without changing their code—use @functools.wraps to preserve metadata',
     'Generators provide memory-efficient lazy evaluation using yield—ideal for large datasets',
     'Context managers guarantee cleanup with __enter__ and __exit__—always use for resources',
     'Metaclasses control class creation—powerful but rarely needed, consider simpler alternatives first',
+    'Async/await enables concurrent I/O operations—perfect for network requests and real-time apps',
+    'Type hints improve code quality with zero runtime cost—use mypy for static type checking',
     'Advanced features enable elegant solutions—master them for production Python development',
   ],
   relatedProblems: [

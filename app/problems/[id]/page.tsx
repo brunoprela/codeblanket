@@ -2,12 +2,137 @@
 
 import { notFound, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { useState, useEffect, use, Suspense } from 'react';
+import { useState, useEffect, use, Suspense, ReactNode } from 'react';
 
 import { getProblemById } from '@/lib/problems';
 import { SimpleCodeEditor } from '@/components/SimpleCodeEditor';
 import { isProblemCompleted } from '@/lib/helpers/storage';
 import { formatText } from '@/lib/utils/formatText';
+
+/**
+ * Formats markdown-style approach content into properly styled React elements
+ */
+function formatApproach(text: string): ReactNode[] {
+  const elements: ReactNode[] = [];
+  let elementKey = 0;
+
+  // First, extract code blocks and replace with placeholders
+  // Handle both ```language\ncode``` and ```\ncode``` patterns
+  const codeBlocks: string[] = [];
+  const codeBlockRegex = /```(\w+)?[\n\r]?([\s\S]*?)```/g;
+  let processedText = text.replace(codeBlockRegex, (match, lang, code) => {
+    // Reconstruct proper code block format for formatText
+    const language = lang || 'python';
+    const reconstructed = `\`\`\`${language}\n${code.trim()}\n\`\`\``;
+    codeBlocks.push(reconstructed);
+    return `__CODE_BLOCK_${codeBlocks.length - 1}__`;
+  });
+
+  // Split by double newlines to get paragraphs
+  const paragraphs = processedText.split('\n\n');
+
+  paragraphs.forEach((paragraph) => {
+    const trimmed = paragraph.trim();
+    if (!trimmed) return;
+
+    // Check if this is a code block placeholder
+    const codeBlockMatch = trimmed.match(/^__CODE_BLOCK_(\d+)__$/);
+    if (codeBlockMatch) {
+      const blockIndex = parseInt(codeBlockMatch[1]);
+      elements.push(
+        <div key={`code-${elementKey++}`} className="my-4">
+          {formatText(codeBlocks[blockIndex])}
+        </div>,
+      );
+      return;
+    }
+
+    // Process line by line for other markdown elements
+    const lines = paragraph.split('\n');
+    let listItems: string[] = [];
+
+    const flushList = () => {
+      if (listItems.length > 0) {
+        elements.push(
+          <ul
+            key={`list-${elementKey++}`}
+            className="mb-4 ml-6 list-disc space-y-2"
+          >
+            {listItems.map((item, idx) => (
+              <li key={idx} className="text-[#f8f8f2]">
+                {formatText(item)}
+              </li>
+            ))}
+          </ul>,
+        );
+        listItems = [];
+      }
+    };
+
+    lines.forEach((line) => {
+      // Handle headers
+      if (line.startsWith('### ')) {
+        flushList();
+        elements.push(
+          <h4
+            key={`h4-${elementKey++}`}
+            className="mt-3 mb-2 text-lg font-semibold text-[#bd93f9]"
+          >
+            {line.substring(4)}
+          </h4>,
+        );
+      } else if (line.startsWith('## ')) {
+        flushList();
+        elements.push(
+          <h3
+            key={`h3-${elementKey++}`}
+            className="mt-4 mb-3 text-xl font-semibold text-[#50fa7b] first:mt-0"
+          >
+            {line.substring(3)}
+          </h3>,
+        );
+      }
+      // Handle horizontal rules
+      else if (line.trim() === '---') {
+        flushList();
+        elements.push(
+          <hr key={`hr-${elementKey++}`} className="my-4 border-[#6272a4]" />,
+        );
+      }
+      // Handle list items (- or * at start)
+      else if (line.match(/^[-*]\s+/)) {
+        const content = line.replace(/^[-*]\s+/, '');
+        listItems.push(content);
+      }
+      // Handle numbered lists
+      else if (line.match(/^\d+\.\s+/)) {
+        flushList();
+        elements.push(
+          <div key={`num-${elementKey++}`} className="mb-2 text-[#f8f8f2]">
+            {formatText(line)}
+          </div>,
+        );
+      }
+      // Handle regular text
+      else if (line.trim() !== '') {
+        flushList();
+        elements.push(
+          <div
+            key={`line-${elementKey++}`}
+            className="mb-2 leading-relaxed text-[#f8f8f2]"
+          >
+            {formatText(line)}
+          </div>,
+        );
+      }
+    });
+
+    // Flush any remaining list items
+    flushList();
+  });
+
+  return elements;
+}
 
 function ProblemPageContent({ id }: { id: string }) {
   const searchParams = useSearchParams();
@@ -218,41 +343,55 @@ function ProblemPageContent({ id }: { id: string }) {
                 ))}
               </div>
 
-              {/* Examples */}
-              <div className="mb-6">
-                <h3 className="mb-4 text-base font-semibold text-[#f8f8f2]">
-                  Examples
-                </h3>
-                {problem.examples.map((example, index) => (
-                  <div
-                    key={index}
-                    className="mb-4 rounded-lg bg-[#44475a] p-4 font-mono text-sm"
-                  >
-                    <div className="mb-2">
-                      <span className="font-semibold text-[#bd93f9]">
-                        Input:
-                      </span>{' '}
-                      <span className="text-[#f8f8f2]">{example.input}</span>
-                    </div>
-                    <div className="mb-2">
-                      <span className="font-semibold text-[#bd93f9]">
-                        Output:
-                      </span>{' '}
-                      <span className="text-[#f8f8f2]">{example.output}</span>
-                    </div>
-                    {example.explanation && (
-                      <div>
-                        <span className="font-semibold text-[#bd93f9]">
-                          Explanation:
-                        </span>{' '}
-                        <span className="text-[#6272a4]">
-                          {example.explanation}
-                        </span>
-                      </div>
-                    )}
+              {/* Approach - for design problems */}
+              {problem.approach && (
+                <div className="mb-6">
+                  <h3 className="mb-4 text-base font-semibold text-[#f8f8f2]">
+                    Approach
+                  </h3>
+                  <div className="rounded-lg bg-[#44475a] p-6 text-[#f8f8f2]">
+                    {formatApproach(problem.approach)}
                   </div>
-                ))}
-              </div>
+                </div>
+              )}
+
+              {/* Examples */}
+              {problem.examples && problem.examples.length > 0 && (
+                <div className="mb-6">
+                  <h3 className="mb-4 text-base font-semibold text-[#f8f8f2]">
+                    Examples
+                  </h3>
+                  {problem.examples.map((example, index) => (
+                    <div
+                      key={index}
+                      className="mb-4 rounded-lg bg-[#44475a] p-4 font-mono text-sm"
+                    >
+                      <div className="mb-2">
+                        <span className="font-semibold text-[#bd93f9]">
+                          Input:
+                        </span>{' '}
+                        <span className="text-[#f8f8f2]">{example.input}</span>
+                      </div>
+                      <div className="mb-2">
+                        <span className="font-semibold text-[#bd93f9]">
+                          Output:
+                        </span>{' '}
+                        <span className="text-[#f8f8f2]">{example.output}</span>
+                      </div>
+                      {example.explanation && (
+                        <div>
+                          <span className="font-semibold text-[#bd93f9]">
+                            Explanation:
+                          </span>{' '}
+                          <span className="text-[#6272a4]">
+                            {example.explanation}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
 
               {/* Constraints */}
               {problem.constraints && problem.constraints.length > 0 && (
@@ -323,7 +462,7 @@ function ProblemPageContent({ id }: { id: string }) {
         {/* Right Panel - Code Editor */}
         <div className="flex w-1/2 flex-col overflow-hidden bg-[#282a36]">
           <SimpleCodeEditor
-            starterCode={problem.starterCode}
+            starterCode={problem.starterCode || '# Write your code here\n'}
             testCases={problem.testCases}
             problemId={problem.id}
             onSuccess={handleSuccess}

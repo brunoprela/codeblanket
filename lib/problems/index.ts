@@ -26,6 +26,10 @@ import { pythonFundamentalsProblems } from './python-fundamentals';
 import { pythonIntermediateProblems } from './python-intermediate';
 import { pythonAdvancedProblems } from './python-advanced';
 import { pythonOOPProblems } from './python-oop';
+import { recursionProblems } from './recursion';
+import { queueProblems } from './queue';
+import { stringAlgorithmsProblems } from './string-algorithms';
+import { designProblemsProblems } from './design-problems';
 
 export interface ProblemCategory {
   id: string;
@@ -207,6 +211,15 @@ export const problemCategories: ProblemCategory[] = [
     problems: sortingProblems,
   },
   {
+    id: 'recursion',
+    title: 'Recursion',
+    description:
+      'Master recursion from basics to advanced - the foundation for DFS, backtracking, and dynamic programming',
+    icon: '🔄',
+    problemCount: recursionProblems.length,
+    problems: recursionProblems,
+  },
+  {
     id: 'stack',
     title: 'Stack',
     description:
@@ -214,6 +227,33 @@ export const problemCategories: ProblemCategory[] = [
     icon: '📚',
     problemCount: stackProblems.length,
     problems: stackProblems,
+  },
+  {
+    id: 'string-algorithms',
+    title: 'String Algorithms',
+    description:
+      'Master string manipulation, pattern matching, palindromes, and anagrams',
+    icon: '📝',
+    problemCount: stringAlgorithmsProblems.length,
+    problems: stringAlgorithmsProblems,
+  },
+  {
+    id: 'queue',
+    title: 'Queue',
+    description:
+      'Master queue data structure and FIFO operations - essential for BFS, scheduling, and many algorithms',
+    icon: '📬',
+    problemCount: queueProblems.length,
+    problems: queueProblems,
+  },
+  {
+    id: 'design-problems',
+    title: 'Design Problems',
+    description:
+      'Master data structure and system design problems - LRU Cache, Min Stack, Rate Limiters, and more',
+    icon: '🏗️',
+    problemCount: designProblemsProblems.length,
+    problems: designProblemsProblems,
   },
   {
     id: 'trees',
@@ -295,11 +335,15 @@ export const allProblems: Problem[] = [
   ...heapProblems,
   ...intervalsProblems,
   ...linkedListProblems,
+  ...queueProblems,
+  ...designProblemsProblems,
+  ...recursionProblems,
   ...mathGeometryProblems,
   ...segmentTreeProblems,
   ...slidingWindowProblems,
   ...sortingProblems,
   ...stackProblems,
+  ...stringAlgorithmsProblems,
   ...timeSpaceComplexityProblems,
   ...treesProblems,
   ...triesProblems,

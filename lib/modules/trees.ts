@@ -1250,6 +1250,397 @@ def inorder_iterative(root):
       ],
     },
     {
+      id: 'lowest-common-ancestor',
+      title: 'Lowest Common Ancestor (LCA)',
+      content: `**Lowest Common Ancestor (LCA)** is the deepest node that is an ancestor of both given nodes in a tree.
+
+**Definition:**
+- The LCA of nodes **p** and **q** is the lowest (deepest) node in the tree that has both **p** and **q** as descendants
+- A node can be a descendant of itself
+
+**Example:**
+\`\`\`
+        3
+       / \\
+      5   1
+     / \\ / \\
+    6  2 0  8
+      / \\
+     7   4
+\`\`\`
+
+- LCA(5, 1) = 3 (root is only common ancestor)
+- LCA(5, 4) = 5 (node can be ancestor of itself)
+- LCA(6, 4) = 5 (5 is the lowest node containing both)
+- LCA(7, 4) = 2 (2 is parent of both)
+
+---
+
+## Why LCA Matters
+
+**Real-World Applications:**
+- **File systems:** Find common parent directory
+- **Version control:** Find common ancestor commit
+- **Network routing:** Find common network node
+- **Biology:** Find common evolutionary ancestor
+
+**Interview Importance:**
+- Top 10 most asked tree question at FAANG
+- Tests understanding of recursion and tree traversal
+- Multiple approaches with different trade-offs
+- Foundation for more complex tree problems
+
+---
+
+## Approach 1: Binary Search Tree (BST)
+
+**For BST only:** Use the ordering property.
+
+**Algorithm:**
+1. If both nodes are **less than** root → LCA is in **left subtree**
+2. If both nodes are **greater than** root → LCA is in **right subtree**  
+3. Otherwise → **root is the LCA** (split point)
+
+**Implementation:**
+\`\`\`python
+def lca_bst(root, p, q):
+    """LCA for Binary Search Tree - O(H) time, O(1) space."""
+    while root:
+        # Both in left subtree
+        if p.val < root.val and q.val < root.val:
+            root = root.left
+        # Both in right subtree
+        elif p.val > root.val and q.val > root.val:
+            root = root.right
+        else:
+            # Split point found
+            return root
+    return None
+\`\`\`
+
+**Time:** O(H) where H is height  
+**Space:** O(1) - iterative, no recursion
+
+**Key Insight:** BST property tells us which direction to go without exploring both subtrees.
+
+---
+
+## Approach 2: Binary Tree (General Case)
+
+**For any binary tree:** Cannot use ordering, must explore both subtrees.
+
+**Recursive Algorithm:**
+1. **Base case:** If root is None or equals p or q, return root
+2. **Recurse:** Search for p and q in left and right subtrees
+3. **Combine:**
+   - If **both** left and right return non-null → root is LCA (split point)
+   - If **only left** returns non-null → LCA is in left subtree
+   - If **only right** returns non-null → LCA is in right subtree
+
+**Implementation:**
+\`\`\`python
+def lca_binary_tree(root, p, q):
+    """
+    LCA for general Binary Tree - O(N) time, O(H) space.
+    
+    Key insight: The first node where p and q diverge is the LCA.
+    """
+    # Base case: empty tree or found one of the target nodes
+    if not root or root == p or root == q:
+        return root
+    
+    # Recursively search left and right subtrees
+    left = lca_binary_tree(root.left, p, q)
+    right = lca_binary_tree(root.right, p, q)
+    
+    # Case 1: Found both nodes in different subtrees
+    # → Current root is the split point (LCA)
+    if left and right:
+        return root
+    
+    # Case 2: Both nodes in one subtree
+    # → Return whichever subtree found something
+    return left if left else right
+\`\`\`
+
+**Time:** O(N) - might visit all nodes  
+**Space:** O(H) - recursion depth
+
+**Why This Works:**
+
+The algorithm works bottom-up:
+1. Each recursive call returns the LCA for its subtree
+2. When both subtrees return non-null, we found the split point
+3. When only one returns non-null, both nodes are in that subtree
+
+**Example Walkthrough:**
+
+For LCA(7, 4) in the tree above:
+\`\`\`
+lca(3, 7, 4)
+  lca(5, 7, 4)
+    lca(6, 7, 4) → null (neither found)
+    lca(2, 7, 4)
+      lca(7, 7, 4) → 7 (found!)
+      lca(4, 7, 4) → 4 (found!)
+      left=7, right=4 → return 2 (split point!)
+    left=null, right=2 → return 2
+  left=2, right=null → return 2
+left=2, right=null → return 2
+\`\`\`
+
+---
+
+## Approach 3: With Parent Pointers
+
+**If nodes have parent pointers:** Treat it like finding intersection of two linked lists.
+
+**Algorithm:**
+1. Get paths from both nodes to root
+2. Find first common node in paths
+
+**Implementation:**
+\`\`\`python
+def lca_with_parent(p, q):
+    """LCA when nodes have parent pointers - O(H) time, O(H) space."""
+    # Store all ancestors of p
+    ancestors = set()
+    while p:
+        ancestors.add(p)
+        p = p.parent
+    
+    # Find first ancestor of q that's also ancestor of p
+    while q:
+        if q in ancestors:
+            return q
+        q = q.parent
+    
+    return None
+\`\`\`
+
+**Optimized (Two Pointers):**
+\`\`\`python
+def lca_with_parent_optimized(p, q):
+    """Space-optimized version - O(H) time, O(1) space."""
+    # Get depths
+    def get_depth(node):
+        depth = 0
+        while node:
+            depth += 1
+            node = node.parent
+        return depth
+    
+    depth_p = get_depth(p)
+    depth_q = get_depth(q)
+    
+    # Move deeper node up to same level
+    while depth_p > depth_q:
+        p = p.parent
+        depth_p -= 1
+    
+    while depth_q > depth_p:
+        q = q.parent
+        depth_q -= 1
+    
+    # Move both up until they meet
+    while p != q:
+        p = p.parent
+        q = q.parent
+    
+    return p
+\`\`\`
+
+---
+
+## Complexity Comparison
+
+| Approach | Time | Space | When to Use |
+|----------|------|-------|-------------|
+| **BST** | O(H) | O(1) | Binary Search Tree only |
+| **Binary Tree** | O(N) | O(H) | Any binary tree (most common) |
+| **Parent Pointers** | O(H) | O(1) or O(H) | When parent pointers available |
+
+**Note:** H = log N for balanced trees, H = N for skewed trees
+
+---
+
+## Common Variations
+
+**1. LCA of Multiple Nodes**
+Find LCA of k nodes instead of just 2.
+
+**2. LCA with Distance**
+Return both LCA and distance to both nodes.
+
+**3. LCA in DAG (Directed Acyclic Graph)**
+More complex, may have multiple LCAs.
+
+**4. Range LCA Query**
+Preprocess tree for O(1) LCA queries (using binary lifting).
+
+---
+
+## Interview Tips
+
+**Problem Recognition:**
+- Keywords: "lowest common ancestor", "LCA", "common parent"
+- "Find node that is ancestor of both"
+- Sometimes disguised: "find merge point", "common node"
+
+**Clarifying Questions:**
+1. Is it a BST or general binary tree?
+2. Can nodes be null?
+3. Are both nodes guaranteed to exist in tree?
+4. Can a node be its own ancestor?
+
+**Common Mistakes:**
+- Confusing BST approach with general tree approach
+- Forgetting base case (node can be ancestor of itself)
+- Not handling case where one node is ancestor of other
+- Forgetting to check if nodes exist in tree
+
+**Code Structure:**
+\`\`\`python
+def lowest_common_ancestor(root, p, q):
+    # 1. Base case
+    if not root or root == p or root == q:
+        return root
+    
+    # 2. Recursive case
+    left = lowest_common_ancestor(root.left, p, q)
+    right = lowest_common_ancestor(root.right, p, q)
+    
+    # 3. Combine results
+    if left and right:
+        return root  # Split point
+    return left if left else right
+\`\`\`
+
+**Optimization:**
+- BST: Use iterative approach (O(1) space)
+- General tree: Recursive is cleanest
+- Parent pointers: Two-pointer technique
+
+---
+
+## Related Problems
+
+- **Distance Between Nodes:** Find LCA, then calculate distance
+- **Kth Ancestor:** Binary lifting technique
+- **LCA in N-ary Tree:** Similar logic, check all children
+- **Maximum Path Sum:** Uses LCA concept`,
+      quiz: [
+        {
+          id: 'q1',
+          question:
+            'Walk me through how the recursive LCA algorithm determines the lowest common ancestor. Why does returning root when both subtrees return non-null give us the LCA?',
+          sampleAnswer:
+            "The recursive LCA works bottom-up by returning found nodes upward. When we call lca(root, p, q), we recursively search left and right subtrees. If left subtree returns p and right subtree returns q (or vice versa), it means p and q are in different subtrees of root - so root must be their LCA (the split point). If both results come from one subtree, we pass that result up because both nodes are deeper. The base case 'if root == p or root == q: return root' ensures we return nodes when found. This works because the first ancestor where paths diverge is by definition the lowest common ancestor.",
+          keyPoints: [
+            'Works bottom-up, returning found nodes upward',
+            'left and right both non-null → split point found',
+            'Only one non-null → both nodes in that subtree',
+            'Base case returns node when found',
+            'First divergence point is LCA',
+          ],
+        },
+        {
+          id: 'q2',
+          question:
+            'Explain why LCA for BST can be solved in O(1) space but general binary tree requires O(H) space. What property enables the optimization?',
+          sampleAnswer:
+            'BST LCA can use O(1) space with an iterative approach because the BST property (left < root < right) tells us exactly which direction to go - we never need to explore both subtrees. If both nodes are less than root, go left; if both are greater, go right; otherwise root is the LCA. We can iterate down without recursion. For general binary trees, we lack ordering information, so we must explore both subtrees to find where p and q are located. This requires recursion (or explicit stack), using O(H) space to store the call stack. The BST ordering property eliminates the need to explore both branches.',
+          keyPoints: [
+            'BST: ordering determines direction, no recursion needed',
+            'Iterate down: O(1) space',
+            'Binary tree: must check both subtrees',
+            'Recursion needed: O(H) space',
+            'BST property enables optimization',
+          ],
+        },
+        {
+          id: 'q3',
+          question:
+            'In the recursive LCA algorithm, why is the base case "if root == p or root == q: return root" correct? What about the case where one node is an ancestor of the other?',
+          sampleAnswer:
+            'The base case "return root" when we encounter p or q is correct because: 1) If we find p or q, we return it upward. 2) If one node (say p) is an ancestor of the other (q), when we encounter p, we return it immediately. The recursive calls below p will search for q, find it, and return it. But since we already returned p, the upper recursive call receives p from one subtree and null from the other, correctly returning p as the LCA. This handles the ancestor case elegantly - the higher node gets returned first, and it is indeed the LCA. The problem statement allows a node to be its own ancestor, so this works perfectly.',
+          keyPoints: [
+            'Base case returns first match encountered',
+            'If one is ancestor: it gets returned first',
+            "Other node found below, but we've already returned",
+            'Upper call gets p from one side, null from other',
+            'Correctly returns p as LCA',
+          ],
+        },
+      ],
+      multipleChoice: [
+        {
+          id: 'mc1',
+          question:
+            'What is the time complexity of finding LCA in a Binary Search Tree using the iterative approach?',
+          options: [
+            'O(N)',
+            'O(H) where H is height',
+            'O(log N always)',
+            'O(1)',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'LCA in BST using the iterative approach takes O(H) time where H is the height of the tree. We traverse down from root to the split point. In balanced BST, H = log N; in skewed tree, H = N.',
+        },
+        {
+          id: 'mc2',
+          question:
+            'For general binary tree LCA, what does it mean when both left and right recursive calls return non-null?',
+          options: [
+            'There is an error',
+            'Current root is the LCA (split point)',
+            'Both nodes are in left subtree',
+            'Continue searching',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'When both left and right return non-null, it means one target node was found in the left subtree and the other in the right subtree. The current root is therefore the lowest common ancestor - the split point where paths to the two nodes diverge.',
+        },
+        {
+          id: 'mc3',
+          question:
+            'What is the space complexity of the recursive LCA algorithm for binary trees?',
+          options: ['O(1)', 'O(H) where H is height', 'O(N)', 'O(log N)'],
+          correctAnswer: 1,
+          explanation:
+            'The recursive LCA uses O(H) space for the call stack where H is the tree height. Each recursive call adds a frame to the stack, and the maximum depth is the height of the tree.',
+        },
+        {
+          id: 'mc4',
+          question:
+            'Why can BST LCA be solved more efficiently than general binary tree LCA?',
+          options: [
+            'BST is always balanced',
+            'BST ordering property tells us which subtree to search without exploring both',
+            'BST has fewer nodes',
+            'BST nodes have parent pointers',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'BST LCA is more efficient because the ordering property (left < root < right) tells us exactly which direction to search. If both nodes are less than root, go left; if both are greater, go right. We never need to explore both subtrees, enabling O(1) space iterative solution.',
+        },
+        {
+          id: 'mc5',
+          question: 'In LCA problems, what should you clarify about the input?',
+          options: [
+            'The programming language to use',
+            'Whether it is a BST or general binary tree, and if both nodes are guaranteed to exist',
+            'The number of nodes in the tree',
+            'Whether to use recursion',
+          ],
+          correctAnswer: 1,
+          explanation:
+            'Always clarify: 1) BST or general binary tree (different algorithms), 2) Are both nodes guaranteed to exist (affects validation), 3) Can node be its own ancestor (affects base case). These factors determine the approach and edge cases.',
+        },
+      ],
+    },
+    {
       id: 'interview',
       title: 'Interview Strategy',
       content: `**Recognition Signals:**
