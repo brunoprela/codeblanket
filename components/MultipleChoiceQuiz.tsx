@@ -60,7 +60,7 @@ export function MultipleChoiceQuiz({
     const storageKey = `mc-quiz-${moduleId}-${sectionId}`;
     const stored = localStorage.getItem(storageKey);
     const currentCompleted = stored
-      ? new Set(JSON.parse(stored))
+      ? new Set<string>(JSON.parse(stored) as string[])
       : new Set<string>();
 
     // Add the new question
