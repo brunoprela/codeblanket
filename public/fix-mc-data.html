@@ -156,27 +156,35 @@
                 alert('Please run "1. Analyze Data" first!');
                 return;
             }
-
+            
             if (!confirm(`This will fix ${window.pendingFixes.length} corrupted sections. Continue?`)) {
                 return;
             }
-
+            
             const output = document.getElementById('output');
             let result = '<span class="success">FIXING DATA...</span>\n\n';
-
+            
             window.pendingFixes.forEach(fix => {
                 const oldData = JSON.parse(localStorage.getItem(fix.key));
                 localStorage.setItem(fix.key, JSON.stringify(fix.validQuestions));
-
+                
                 result += `<span class="success">✓ Fixed ${fix.key}</span>\n`;
                 result += `  Before: ${oldData.length} questions\n`;
                 result += `  After: ${fix.validQuestions.length} questions\n`;
                 result += `  Removed: ${oldData.length - fix.validQuestions.length} invalid questions\n\n`;
             });
-
-            result += `\n<span class="success">✅ All done! Refresh your app to see corrected counts.</span>`;
+            
+            // Trigger app to reload the data by dispatching storage event
+            // Note: storage event doesn't fire in the same window, so we dispatch custom event
+            window.dispatchEvent(new Event('storage'));
+            window.dispatchEvent(new CustomEvent('mcQuizUpdated', { detail: { fixed: true } }));
+            
+            result += `\n<span class="success">✅ All done!</span>\n`;
+            result += `Changes saved to localStorage.\n\n`;
+            result += `If you have the app open, switch back to it - the counts should update automatically.\n`;
+            result += `If not, refresh your app to see the corrected counts.`;
             output.innerHTML = result;
-
+            
             window.pendingFixes = [];
         }
     </script>

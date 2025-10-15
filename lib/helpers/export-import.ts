@@ -52,7 +52,20 @@ function getLocalStorageData(): Record<string, unknown> {
       const value = localStorage.getItem(key);
       if (value) {
         try {
-          data[key] = JSON.parse(value);
+          const parsed = JSON.parse(value);
+
+          // Special handling for mc-quiz data: deduplicate arrays
+          if (key.startsWith('mc-quiz-') && Array.isArray(parsed)) {
+            const uniqueData = [...new Set(parsed)];
+            if (uniqueData.length !== parsed.length) {
+              console.warn(
+                `Export: Cleaned duplicates in ${key}: ${parsed.length} → ${uniqueData.length}`,
+              );
+            }
+            data[key] = uniqueData;
+          } else {
+            data[key] = parsed;
+          }
         } catch {
           data[key] = value;
         }
@@ -222,10 +235,25 @@ export async function importProgress(file: File): Promise<void> {
         // Also restore to localStorage for immediate access
         Object.entries(importedData.data).forEach(([key, value]) => {
           try {
+            let finalValue = value;
+
+            // Special handling for mc-quiz data: deduplicate arrays on import
+            if (key.startsWith('mc-quiz-') && Array.isArray(value)) {
+              const uniqueData = [...new Set(value)];
+              if (uniqueData.length !== value.length) {
+                console.warn(
+                  `Import: Cleaned duplicates in ${key}: ${value.length} → ${uniqueData.length}`,
+                );
+                finalValue = uniqueData;
+              }
+            }
+
             // If value is already a string (like code), store it directly
             // Otherwise, stringify it (like arrays, objects)
             const valueToStore =
-              typeof value === 'string' ? value : JSON.stringify(value);
+              typeof finalValue === 'string'
+                ? finalValue
+                : JSON.stringify(finalValue);
             localStorage.setItem(key, valueToStore);
           } catch (error) {
             console.error(`Failed to restore ${key} to localStorage:`, error);
