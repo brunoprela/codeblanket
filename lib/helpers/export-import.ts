@@ -21,6 +21,64 @@ export interface ExportData {
 }
 
 /**
+ * Validate and clean multiple choice quiz data
+ */
+function validateMCQuizData(key: string, data: string[]): string[] {
+  // Extract section ID from key (e.g., "mc-quiz-python-fundamentals-variables-types" -> "variables-types")
+  let sectionId = '';
+  if (key.startsWith('mc-quiz-python-fundamentals-')) {
+    sectionId = key.replace('mc-quiz-python-fundamentals-', '');
+  } else if (key.startsWith('mc-quiz-python-intermediate-')) {
+    sectionId = key.replace('mc-quiz-python-intermediate-', '');
+  } else if (key.startsWith('mc-quiz-python-advanced-')) {
+    sectionId = key.replace('mc-quiz-python-advanced-', '');
+  } else if (key.startsWith('mc-quiz-python-oop-')) {
+    sectionId = key.replace('mc-quiz-python-oop-', '');
+  } else {
+    // For other modules, can't validate, just deduplicate
+    return [...new Set(data)];
+  }
+
+  // Define valid prefixes for each section
+  const sectionPrefixes: Record<string, string[]> = {
+    'variables-types': ['pf-variables-mc-'],
+    'control-flow': ['pf-control-mc-'],
+    'data-structures': ['pf-datastructures-mc-'],
+    functions: ['pf-functions-mc-'],
+    strings: ['pf-strings-mc-'],
+    'none-handling': ['pf-none-mc-'],
+    'modules-imports': ['mc'], // Generic IDs
+    'list-comprehensions': ['mc'],
+    'lambda-functions': ['mc'],
+    'built-in-functions': ['mc'],
+  };
+
+  const validPrefixes = sectionPrefixes[sectionId];
+  if (!validPrefixes) {
+    // Unknown section, just deduplicate
+    return [...new Set(data)];
+  }
+
+  // Filter to only valid questions for this section
+  const validQuestions = data.filter((qId) =>
+    validPrefixes.some((prefix) => qId.startsWith(prefix)),
+  );
+
+  // Deduplicate
+  const uniqueQuestions = [...new Set(validQuestions)];
+
+  if (uniqueQuestions.length !== data.length) {
+    const removed = data.length - uniqueQuestions.length;
+    const invalid = data.filter((qId) => !validQuestions.includes(qId));
+    console.warn(
+      `Export: Cleaned ${key}: ${data.length} → ${uniqueQuestions.length} (removed ${removed} invalid: ${invalid.join(', ')})`,
+    );
+  }
+
+  return uniqueQuestions;
+}
+
+/**
  * Get all data from localStorage that should be backed up
  */
 function getLocalStorageData(): Record<string, unknown> {
@@ -54,15 +112,9 @@ function getLocalStorageData(): Record<string, unknown> {
         try {
           const parsed = JSON.parse(value);
 
-          // Special handling for mc-quiz data: deduplicate arrays
+          // Special handling for mc-quiz data: validate and deduplicate
           if (key.startsWith('mc-quiz-') && Array.isArray(parsed)) {
-            const uniqueData = [...new Set(parsed)];
-            if (uniqueData.length !== parsed.length) {
-              console.warn(
-                `Export: Cleaned duplicates in ${key}: ${parsed.length} → ${uniqueData.length}`,
-              );
-            }
-            data[key] = uniqueData;
+            data[key] = validateMCQuizData(key, parsed);
           } else {
             data[key] = parsed;
           }
@@ -237,15 +289,9 @@ export async function importProgress(file: File): Promise<void> {
           try {
             let finalValue = value;
 
-            // Special handling for mc-quiz data: deduplicate arrays on import
+            // Special handling for mc-quiz data: validate and deduplicate on import
             if (key.startsWith('mc-quiz-') && Array.isArray(value)) {
-              const uniqueData = [...new Set(value)];
-              if (uniqueData.length !== value.length) {
-                console.warn(
-                  `Import: Cleaned duplicates in ${key}: ${value.length} → ${uniqueData.length}`,
-                );
-                finalValue = uniqueData;
-              }
+              finalValue = validateMCQuizData(key, value);
             }
 
             // If value is already a string (like code), store it directly
