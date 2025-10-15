@@ -379,17 +379,22 @@ export default function ModulePage({
               {moduleData.description}
             </p>
           </div>
-          <Link
-            href={`/topics/${moduleData.id}?from=modules/${slug}`}
-            className="rounded-lg bg-[#bd93f9] px-6 py-2 font-semibold text-[#282a36] transition-colors hover:bg-[#ff79c6]"
-          >
-            📝 Practice Problems →
-          </Link>
+          {/* Hide Practice Problems button for system design modules */}
+          {!slug.startsWith('system-design') && (
+            <Link
+              href={`/topics/${moduleData.id}?from=modules/${slug}`}
+              className="rounded-lg bg-[#bd93f9] px-6 py-2 font-semibold text-[#282a36] transition-colors hover:bg-[#ff79c6]"
+            >
+              📝 Practice Problems →
+            </Link>
+          )}
         </div>
 
         {/* Progress Bars */}
         <div className="rounded-lg border-2 border-[#6272a4] bg-[#6272a4]/10 p-4">
-          <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
+          <div
+            className={`grid gap-3 ${slug.startsWith('system-design') ? 'md:grid-cols-3' : 'md:grid-cols-2 lg:grid-cols-4'}`}
+          >
             {/* Module Sections Progress */}
             <div>
               <div className="mb-1 flex items-center justify-between text-xs">
@@ -439,21 +444,23 @@ export default function ModulePage({
               </div>
             </div>
 
-            {/* Problems Progress */}
-            <div>
-              <div className="mb-1 flex items-center justify-between text-xs">
-                <span className="font-semibold text-[#50fa7b]">
-                  💻 Problems: {completedProblemsCount} / {totalProblems}
-                </span>
-                <span className="text-[#6272a4]">{problemsPercent}%</span>
+            {/* Problems Progress - Hide for system design modules */}
+            {!slug.startsWith('system-design') && (
+              <div>
+                <div className="mb-1 flex items-center justify-between text-xs">
+                  <span className="font-semibold text-[#50fa7b]">
+                    💻 Problems: {completedProblemsCount} / {totalProblems}
+                  </span>
+                  <span className="text-[#6272a4]">{problemsPercent}%</span>
+                </div>
+                <div className="h-1.5 overflow-hidden rounded-full bg-[#282a36]">
+                  <div
+                    className="h-full rounded-full bg-[#50fa7b] transition-all duration-300"
+                    style={{ width: `${problemsPercent}%` }}
+                  />
+                </div>
               </div>
-              <div className="h-1.5 overflow-hidden rounded-full bg-[#282a36]">
-                <div
-                  className="h-full rounded-full bg-[#50fa7b] transition-all duration-300"
-                  style={{ width: `${problemsPercent}%` }}
-                />
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
@@ -601,8 +608,18 @@ export default function ModulePage({
                     while (i < lines.length) {
                       const line = lines[i].trim();
 
+                      // Check for horizontal rule (---)
+                      if (/^---+$/.test(line)) {
+                        elements.push(
+                          <hr
+                            key={`hr-${elementKey++}`}
+                            className="my-8 border-t-2 border-[#44475a]"
+                          />,
+                        );
+                        i++;
+                      }
                       // Check for headers (# ## ### #### etc)
-                      if (/^#{1,6}\s/.test(line)) {
+                      else if (/^#{1,6}\s/.test(line)) {
                         const headerMatch = line.match(/^(#{1,6})\s+(.+)/);
                         if (headerMatch) {
                           const level = headerMatch[1].length;

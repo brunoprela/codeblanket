@@ -18,6 +18,11 @@ export default function Home() {
   const totalProblems = allProblems.length;
   const totalModules = moduleCategories.length;
 
+  // Track selected section
+  const [selectedSectionId, setSelectedSectionId] = useState<string>(
+    topicSections[0]?.id || '',
+  );
+
   // Track completed problems
   const [completedProblems, setCompletedProblems] = useState<Set<string>>(
     new Set(),
@@ -312,10 +317,15 @@ export default function Home() {
       progress.completed > 0 && progress.completed === progress.total,
   ).length;
 
+  // Get the selected topic section
+  const selectedSection = topicSections.find(
+    (section) => section.id === selectedSectionId,
+  );
+
   return (
-    <div className="container mx-auto max-w-6xl px-4 py-12">
+    <div className="container mx-auto max-w-7xl px-4 py-12">
       {/* Stats */}
-      <div className="mb-16 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <div className="mb-8 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {/* Modules Completed */}
         <div className="rounded-lg border-2 border-[#bd93f9] bg-[#bd93f9]/10 p-6 text-center">
           <div className="mb-2 text-4xl font-bold text-[#bd93f9]">
@@ -349,38 +359,67 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Learning Path */}
-      <div className="space-y-12">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-3xl font-bold text-[#f8f8f2]">
-              📚 Learning Path
-            </h2>
+      {/* Header */}
+      <div className="mb-6 flex items-center justify-between">
+        <h2 className="text-3xl font-bold text-[#f8f8f2]">📚 Learning Path</h2>
+        <Link
+          href="/problems"
+          className="rounded-lg bg-[#bd93f9] px-6 py-2.5 font-semibold text-[#282a36] transition-colors hover:bg-[#ff79c6]"
+        >
+          View All Problems →
+        </Link>
+      </div>
+
+      {/* Two-Pane Layout */}
+      <div className="flex flex-col gap-6 lg:flex-row">
+        {/* Left Sidebar - Section Navigation */}
+        <div className="lg:w-64 lg:flex-shrink-0">
+          <div className="flex gap-2 overflow-x-auto pb-2 lg:sticky lg:top-4 lg:flex-col lg:space-y-2 lg:overflow-visible lg:pb-0">
+            {topicSections.map((topicSection) => {
+              const isSelected = topicSection.id === selectedSectionId;
+              const sectionModuleCount = topicSection.modules.length;
+
+              return (
+                <button
+                  key={topicSection.id}
+                  onClick={() => setSelectedSectionId(topicSection.id)}
+                  className={`flex-shrink-0 rounded-lg border-2 p-4 text-left transition-all lg:w-full ${
+                    isSelected
+                      ? 'border-[#bd93f9] bg-[#bd93f9]/20 shadow-lg'
+                      : 'border-[#44475a] bg-[#44475a]/50 hover:border-[#bd93f9]/50 hover:bg-[#44475a]'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="text-2xl">{topicSection.icon}</div>
+                    <div className="flex-1">
+                      <div className="font-bold text-[#f8f8f2]">
+                        {topicSection.title}
+                      </div>
+                      <div className="text-xs text-[#f8f8f2]/60">
+                        {sectionModuleCount} module
+                        {sectionModuleCount !== 1 ? 's' : ''}
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
           </div>
-          <Link
-            href="/problems"
-            className="rounded-lg bg-[#bd93f9] px-6 py-2.5 font-semibold text-[#282a36] transition-colors hover:bg-[#ff79c6]"
-          >
-            View All Problems →
-          </Link>
         </div>
 
-        {/* Render each topic section */}
-        {topicSections.map((topicSection) => (
-          <div key={topicSection.id} className="space-y-6">
-            {/* Section Header */}
-            <div>
-              <h3 className="text-2xl font-bold text-[#f8f8f2]">
-                {topicSection.icon} {topicSection.title}
-              </h3>
-              <p className="mt-1 text-sm text-[#f8f8f2]/80">
-                {topicSection.description}
-              </p>
-            </div>
+        {/* Right Content - Modules in Selected Section */}
+        <div className="flex-1">
+          {selectedSection && (
+            <div className="space-y-6">
+              {/* Section Header */}
+              <div className="rounded-lg border-2 border-[#bd93f9] bg-[#bd93f9]/10 p-6">
+                <h3 className="text-2xl font-bold text-[#f8f8f2]">
+                  {selectedSection.icon} {selectedSection.title}
+                </h3>
+              </div>
 
-            {/* Modules in this section */}
-            <div className="space-y-5">
-              {topicSection.modules.map((moduleCategory, index) => {
+              {/* Modules in this section */}
+              {selectedSection.modules.map((moduleCategory, index) => {
                 const progress = moduleProgress[moduleCategory.id] || {
                   completed: 0,
                   total: moduleCategory.module.sections.length,
@@ -471,14 +510,14 @@ export default function Home() {
                     key={moduleCategory.id}
                     className="rounded-xl border-2 border-[#44475a] bg-[#44475a] p-6 shadow-lg"
                   >
-                    <div className="flex items-center gap-6">
-                      {/* Number */}
-                      <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-[#bd93f9] text-xl font-bold text-[#282a36]">
-                        {index + 1}
+                    <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-6">
+                      {/* Number and Icon */}
+                      <div className="flex items-center gap-4">
+                        <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-[#bd93f9] text-xl font-bold text-[#282a36]">
+                          {index + 1}
+                        </div>
+                        <div className="text-4xl">{moduleCategory.icon}</div>
                       </div>
-
-                      {/* Icon */}
-                      <div className="text-4xl">{moduleCategory.icon}</div>
 
                       {/* Content */}
                       <div className="flex-1">
@@ -505,8 +544,10 @@ export default function Home() {
                                 ✓ All Discussions Complete
                               </span>
                             )}
-                          {problemsProgress.completed ===
-                            problemsProgress.total &&
+                          {/* Hide "All Problems Solved" badge for system design modules */}
+                          {selectedSection.id !== 'system-design' &&
+                            problemsProgress.completed ===
+                              problemsProgress.total &&
                             problemsProgress.total > 0 && (
                               <span className="rounded-full border-2 border-[#50fa7b] bg-[#50fa7b]/20 px-2 py-0.5 text-xs font-semibold text-[#50fa7b]">
                                 ✓ All Problems Solved
@@ -519,30 +560,38 @@ export default function Home() {
                       </div>
 
                       {/* Metadata and Actions */}
-                      <div className="flex flex-shrink-0 items-center gap-3">
+                      <div className="flex flex-wrap items-center gap-3 lg:flex-shrink-0">
                         <div className="rounded-full border-2 border-[#f8f8f2] bg-[#f8f8f2]/10 px-3 py-1 text-xs font-semibold text-[#f8f8f2]">
                           {moduleCategory.module.sections.length} sections
                         </div>
-                        <div className="rounded-full border-2 border-[#f8f8f2] bg-[#f8f8f2]/10 px-3 py-1 text-xs font-semibold text-[#f8f8f2]">
-                          {moduleCategory.problemCount} problems
-                        </div>
+                        {/* Hide problems count for system design modules */}
+                        {selectedSection.id !== 'system-design' && (
+                          <div className="rounded-full border-2 border-[#f8f8f2] bg-[#f8f8f2]/10 px-3 py-1 text-xs font-semibold text-[#f8f8f2]">
+                            {moduleCategory.problemCount} problems
+                          </div>
+                        )}
                         <Link
                           href={`/modules/${moduleCategory.id}`}
                           className="rounded-lg bg-[#bd93f9] px-4 py-2 text-sm font-semibold text-[#282a36] transition-colors hover:bg-[#ff79c6]"
                         >
                           Learn
                         </Link>
-                        <Link
-                          href={`/topics/${moduleCategory.id}`}
-                          className="rounded-lg border-2 border-[#bd93f9] bg-transparent px-4 py-2 text-sm font-semibold text-[#bd93f9] transition-colors hover:bg-[#bd93f9] hover:text-[#282a36]"
-                        >
-                          Practice
-                        </Link>
+                        {/* Hide Practice button for system design modules */}
+                        {selectedSection.id !== 'system-design' && (
+                          <Link
+                            href={`/topics/${moduleCategory.id}`}
+                            className="rounded-lg border-2 border-[#bd93f9] bg-transparent px-4 py-2 text-sm font-semibold text-[#bd93f9] transition-colors hover:bg-[#bd93f9] hover:text-[#282a36]"
+                          >
+                            Practice
+                          </Link>
+                        )}
                       </div>
                     </div>
 
                     {/* Progress Bars - Always show */}
-                    <div className="mt-4 grid gap-3 md:grid-cols-2 lg:grid-cols-4">
+                    <div
+                      className={`mt-4 grid gap-3 ${selectedSection.id === 'system-design' ? 'md:grid-cols-3' : 'md:grid-cols-2 lg:grid-cols-4'}`}
+                    >
                       {/* Module Progress */}
                       <div>
                         <div className="mb-1 flex items-center justify-between text-xs">
@@ -597,31 +646,33 @@ export default function Home() {
                         </div>
                       </div>
 
-                      {/* Problems Progress */}
-                      <div>
-                        <div className="mb-1 flex items-center justify-between text-xs">
-                          <span className="font-semibold text-[#50fa7b]">
-                            💻 Problems: {problemsProgress.completed} /{' '}
-                            {problemsProgress.total}
-                          </span>
-                          <span className="text-[#6272a4]">
-                            {problemsPercent}%
-                          </span>
+                      {/* Problems Progress - Hide for system design modules */}
+                      {selectedSection.id !== 'system-design' && (
+                        <div>
+                          <div className="mb-1 flex items-center justify-between text-xs">
+                            <span className="font-semibold text-[#50fa7b]">
+                              💻 Problems: {problemsProgress.completed} /{' '}
+                              {problemsProgress.total}
+                            </span>
+                            <span className="text-[#6272a4]">
+                              {problemsPercent}%
+                            </span>
+                          </div>
+                          <div className="h-1.5 overflow-hidden rounded-full bg-[#282a36]">
+                            <div
+                              className="h-full rounded-full bg-[#50fa7b] transition-all duration-300"
+                              style={{ width: `${problemsPercent}%` }}
+                            />
+                          </div>
                         </div>
-                        <div className="h-1.5 overflow-hidden rounded-full bg-[#282a36]">
-                          <div
-                            className="h-full rounded-full bg-[#50fa7b] transition-all duration-300"
-                            style={{ width: `${problemsPercent}%` }}
-                          />
-                        </div>
-                      </div>
+                      )}
                     </div>
                   </div>
                 );
               })}
             </div>
-          </div>
-        ))}
+          )}
+        </div>
       </div>
     </div>
   );

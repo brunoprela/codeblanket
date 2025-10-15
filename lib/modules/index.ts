@@ -32,6 +32,8 @@ import { recursionModule } from './recursion';
 import { queueModule } from './queue';
 import { stringAlgorithmsModule } from './string-algorithms';
 import { designProblemsModule } from './design-problems';
+import { systemDesignAuthenticationModule } from './system-design-authentication';
+import { systemDesignFundamentalsModule } from './system-design-fundamentals';
 
 /**
  * All available modules
@@ -68,6 +70,8 @@ export const allModules: Module[] = [
   pythonIntermediateModule,
   pythonAdvancedModule,
   pythonOOPModule,
+  systemDesignFundamentalsModule,
+  systemDesignAuthenticationModule,
 ];
 
 /**
@@ -395,6 +399,24 @@ export const moduleCategories: ModuleCategory[] = [
       problemCategories.find((cat) => cat.id === 'python-oop')?.problems
         .length || 0,
   },
+  // 16. System Design - Fundamentals
+  {
+    id: systemDesignFundamentalsModule.id,
+    title: systemDesignFundamentalsModule.title,
+    description: systemDesignFundamentalsModule.description,
+    icon: systemDesignFundamentalsModule.icon,
+    module: systemDesignFundamentalsModule,
+    problemCount: 0, // No coding problems, just learning content
+  },
+  // 17. System Design - Authentication
+  {
+    id: systemDesignAuthenticationModule.id,
+    title: systemDesignAuthenticationModule.title,
+    description: systemDesignAuthenticationModule.description,
+    icon: systemDesignAuthenticationModule.icon,
+    module: systemDesignAuthenticationModule,
+    problemCount: 0, // No coding problems, just learning content
+  },
 ];
 
 /**
@@ -426,7 +448,21 @@ export const topicSections: TopicSection[] = [
         m.id !== 'python-fundamentals' &&
         m.id !== 'python-intermediate' &&
         m.id !== 'python-advanced' &&
-        m.id !== 'python-oop',
+        m.id !== 'python-oop' &&
+        m.id !== 'system-design-fundamentals' &&
+        m.id !== 'system-design-authentication',
+    ),
+  },
+  {
+    id: 'system-design',
+    title: 'System Design',
+    description:
+      'Learn system design concepts including authentication, authorization, and distributed systems',
+    icon: '🔐',
+    modules: moduleCategories.filter(
+      (m) =>
+        m.id === 'system-design-fundamentals' ||
+        m.id === 'system-design-authentication',
     ),
   },
 ];
