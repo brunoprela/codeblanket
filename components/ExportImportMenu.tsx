@@ -247,7 +247,7 @@ export default function ExportImportMenu() {
       {/* Success/Error Message */}
       {message && (
         <div
-          className={`fixed right-4 bottom-4 z-50 rounded-lg border-2 p-4 shadow-xl ${
+          className={`fixed right-4 bottom-4 left-4 z-50 max-w-md rounded-lg border-2 p-3 shadow-xl sm:right-4 sm:left-auto sm:p-4 ${
             message.type === 'success'
               ? 'border-[#50fa7b] bg-[#50fa7b]/10 text-[#50fa7b]'
               : 'border-[#ff5555] bg-[#ff5555]/10 text-[#ff5555]'
@@ -255,7 +255,11 @@ export default function ExportImportMenu() {
         >
           <div className="flex items-center gap-2">
             {message.type === 'success' ? (
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24">
+              <svg
+                className="h-4 w-4 flex-shrink-0 sm:h-5 sm:w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
                 <path
                   stroke="currentColor"
                   strokeLinecap="round"
@@ -265,7 +269,11 @@ export default function ExportImportMenu() {
                 />
               </svg>
             ) : (
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24">
+              <svg
+                className="h-4 w-4 flex-shrink-0 sm:h-5 sm:w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
                 <path
                   stroke="currentColor"
                   strokeLinecap="round"
@@ -275,7 +283,9 @@ export default function ExportImportMenu() {
                 />
               </svg>
             )}
-            <span className="font-semibold">{message.text}</span>
+            <span className="text-sm font-semibold sm:text-base">
+              {message.text}
+            </span>
           </div>
         </div>
       )}

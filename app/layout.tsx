@@ -9,9 +9,14 @@ import Script from 'next/script';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'CodeBlanket - Master Binary Search Algorithms',
+  title: 'CodeBlanket',
   description:
     'Learn and practice binary search algorithms with interactive Python coding challenges',
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 5,
+  },
 };
 
 export default function RootLayout({
@@ -29,31 +34,17 @@ export default function RootLayout({
 
         <StorageInitializer />
         <nav className="border-b border-gray-700 bg-[#282a36] text-white shadow-lg">
-          <div className="container mx-auto px-4 py-4">
+          <div className="container mx-auto px-4 py-3 sm:py-4">
             <div className="flex items-center justify-between">
               <Link
                 href="/"
                 className="flex items-center space-x-2 transition-opacity hover:opacity-90"
               >
-                <div className="text-2xl font-bold text-[#bd93f9]">
+                <div className="text-xl font-bold text-[#bd93f9] sm:text-2xl">
                   🛌 CodeBlanket
                 </div>
               </Link>
-              <div className="flex items-center space-x-6">
-                <Link
-                  href="/"
-                  className="font-medium text-[#f8f8f2] transition-colors hover:text-[#bd93f9]"
-                >
-                  Topics
-                </Link>
-                <Link
-                  href="/problems"
-                  className="font-medium text-[#f8f8f2] transition-colors hover:text-[#bd93f9]"
-                >
-                  Problems
-                </Link>
-                <ExportImportMenu />
-              </div>
+              <ExportImportMenu />
             </div>
           </div>
         </nav>

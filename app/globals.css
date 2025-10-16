@@ -35,10 +35,10 @@ html {
   padding: 0;
 }
 
-/* Prevent over-scrolling in all scroll containers */
+/* Enable smooth scrolling in scroll containers */
 .overflow-y-auto,
 .overflow-auto {
-  overscroll-behavior-y: contain;
+  overscroll-behavior-y: auto;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -65,6 +65,7 @@ html {
   cursor: ns-resize;
   pointer-events: none;
 }
+
 /* Prism.js Dracula Theme Override */
 .token.comment,
 .token.prolog,

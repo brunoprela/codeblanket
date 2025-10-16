@@ -2,7 +2,7 @@
 
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { use, ReactElement, useState, useEffect } from 'react';
+import { use, ReactElement, ReactNode, useState, useEffect } from 'react';
 
 import { getModuleById } from '@/lib/modules';
 import { allProblems } from '@/lib/problems';
@@ -16,6 +16,174 @@ import {
   getVideosForQuestion,
   deleteVideo,
 } from '@/lib/helpers/indexeddb';
+
+/**
+ * Formats sample answer text with markdown support (headers, lists, code blocks, bold, etc.)
+ */
+function formatSampleAnswer(text: string): ReactNode[] {
+  const elements: ReactNode[] = [];
+  let elementKey = 0;
+
+  // Extract code blocks first
+  const codeBlockRegex = /```(\w+)?\n([\s\S]*?)```/g;
+  const codeBlocks: Array<{ language: string; code: string }> = [];
+  let match;
+
+  while ((match = codeBlockRegex.exec(text)) !== null) {
+    codeBlocks.push({
+      language: match[1] || 'javascript',
+      code: match[2].trim(),
+    });
+  }
+
+  // Replace code blocks with placeholders
+  let processedText = text;
+  codeBlocks.forEach((_, index) => {
+    processedText = processedText.replace(
+      /```\w+?\n[\s\S]*?```/,
+      `__CODE_BLOCK_${index}__`,
+    );
+  });
+
+  // Split by double newlines to get paragraphs
+  const paragraphs = processedText.split('\n\n');
+
+  paragraphs.forEach((paragraph) => {
+    const trimmed = paragraph.trim();
+    if (!trimmed) return;
+
+    // Check if this is a code block placeholder
+    const codeBlockMatch = trimmed.match(/^__CODE_BLOCK_(\d+)__$/);
+    if (codeBlockMatch) {
+      const blockIndex = parseInt(codeBlockMatch[1]);
+      const block = codeBlocks[blockIndex];
+      elements.push(
+        <div key={`code-${elementKey++}`} className="my-4">
+          {formatText(`\`\`\`${block.language}\n${block.code}\`\`\``)}
+        </div>,
+      );
+      return;
+    }
+
+    // Process line by line for other markdown elements
+    const lines = paragraph.split('\n');
+    let listItems: string[] = [];
+    let numberedListItems: string[] = [];
+
+    const flushList = () => {
+      if (listItems.length > 0) {
+        elements.push(
+          <ul
+            key={`list-${elementKey++}`}
+            className="mb-4 ml-6 list-disc space-y-2"
+          >
+            {listItems.map((item, idx) => (
+              <li key={idx} className="text-[#f8f8f2]">
+                {formatText(item)}
+              </li>
+            ))}
+          </ul>,
+        );
+        listItems = [];
+      }
+      if (numberedListItems.length > 0) {
+        elements.push(
+          <ol
+            key={`numlist-${elementKey++}`}
+            className="mb-4 ml-6 list-decimal space-y-2"
+          >
+            {numberedListItems.map((item, idx) => (
+              <li key={idx} className="text-[#f8f8f2]">
+                {formatText(item)}
+              </li>
+            ))}
+          </ol>,
+        );
+        numberedListItems = [];
+      }
+    };
+
+    lines.forEach((line) => {
+      const trimmedLine = line.trim();
+
+      // Handle headers
+      if (trimmedLine.startsWith('### ')) {
+        flushList();
+        elements.push(
+          <h4
+            key={`h4-${elementKey++}`}
+            className="mt-3 mb-2 text-base font-semibold text-[#bd93f9]"
+          >
+            {trimmedLine.substring(4)}
+          </h4>,
+        );
+      } else if (trimmedLine.startsWith('## ')) {
+        flushList();
+        elements.push(
+          <h3
+            key={`h3-${elementKey++}`}
+            className="mt-4 mb-3 text-lg font-semibold text-[#50fa7b] first:mt-0"
+          >
+            {trimmedLine.substring(3)}
+          </h3>,
+        );
+      } else if (trimmedLine.startsWith('# ')) {
+        flushList();
+        elements.push(
+          <h2
+            key={`h2-${elementKey++}`}
+            className="mt-5 mb-3 text-xl font-bold text-[#8be9fd] first:mt-0"
+          >
+            {trimmedLine.substring(2)}
+          </h2>,
+        );
+      }
+      // Handle horizontal rules
+      else if (trimmedLine === '---' || trimmedLine === '***') {
+        flushList();
+        elements.push(
+          <hr key={`hr-${elementKey++}`} className="my-4 border-[#6272a4]" />,
+        );
+      }
+      // Handle unordered list items (-, *, or •)
+      else if (trimmedLine.match(/^[-*•]\s+/)) {
+        const content = trimmedLine.replace(/^[-*•]\s+/, '');
+        listItems.push(content);
+      }
+      // Handle numbered lists
+      else if (trimmedLine.match(/^\d+\.\s+/)) {
+        // If we have unordered items, flush them first
+        if (listItems.length > 0) {
+          flushList();
+        }
+        const content = trimmedLine.replace(/^\d+\.\s+/, '');
+        numberedListItems.push(content);
+      }
+      // Handle indented sub-items (for nested lists)
+      else if (trimmedLine.match(/^\s{2,}[-*•]\s+/) && listItems.length > 0) {
+        const content = trimmedLine.replace(/^\s+[-*•]\s+/, '  • ');
+        listItems.push(content);
+      }
+      // Handle regular text
+      else if (trimmedLine !== '') {
+        flushList();
+        elements.push(
+          <div
+            key={`line-${elementKey++}`}
+            className="mb-2 leading-relaxed text-[#f8f8f2]"
+          >
+            {formatText(trimmedLine)}
+          </div>,
+        );
+      }
+    });
+
+    // Flush any remaining list items
+    flushList();
+  });
+
+  return elements;
+}
 
 export default function ModulePage({
   params,
@@ -345,11 +513,11 @@ export default function ModulePage({
       : 0;
 
   return (
-    <div className="container mx-auto max-w-7xl px-4 py-8">
+    <div className="container mx-auto max-w-7xl px-4 py-4 sm:py-8">
       {/* Back Link */}
       <Link
         href="/"
-        className="mb-6 inline-flex items-center text-sm font-medium text-[#6272a4] transition-colors hover:text-[#bd93f9]"
+        className="mb-4 inline-flex items-center text-sm font-medium text-[#6272a4] transition-colors hover:text-[#bd93f9] sm:mb-6"
       >
         <svg
           className="mr-1.5 h-4 w-4"
@@ -368,14 +536,14 @@ export default function ModulePage({
       </Link>
 
       {/* Module Header */}
-      <div className="mb-8">
-        <div className="mb-4 flex items-center gap-4">
-          <span className="text-5xl">{moduleData.icon}</span>
+      <div className="mb-6 sm:mb-8">
+        <div className="mb-4 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-4">
+          <span className="text-4xl sm:text-5xl">{moduleData.icon}</span>
           <div className="flex-1">
-            <h1 className="text-3xl font-bold text-[#f8f8f2]">
+            <h1 className="text-2xl font-bold text-[#f8f8f2] sm:text-3xl">
               {moduleData.title}
             </h1>
-            <p className="mt-1 text-base text-[#6272a4]">
+            <p className="mt-1 text-sm text-[#6272a4] sm:text-base">
               {moduleData.description}
             </p>
           </div>
@@ -383,7 +551,7 @@ export default function ModulePage({
           {!slug.startsWith('system-design') && (
             <Link
               href={`/topics/${moduleData.id}?from=modules/${slug}`}
-              className="rounded-lg bg-[#bd93f9] px-6 py-2 font-semibold text-[#282a36] transition-colors hover:bg-[#ff79c6]"
+              className="w-full rounded-lg bg-[#bd93f9] px-4 py-2 text-center font-semibold text-[#282a36] transition-colors hover:bg-[#ff79c6] sm:w-auto sm:px-6"
             >
               📝 Practice Problems →
             </Link>
@@ -466,14 +634,16 @@ export default function ModulePage({
       </div>
 
       {/* Two-Pane Layout */}
-      <div className="flex gap-6">
+      <div className="flex flex-col gap-4 sm:gap-6 lg:flex-row">
         {/* Left Pane: Section Navigation */}
-        <div className="w-80 flex-shrink-0">
-          <div className="sticky top-4 rounded-lg border-2 border-[#44475a] bg-[#282a36]">
-            <div className="border-b-2 border-[#44475a] p-4">
-              <h2 className="text-lg font-bold text-[#f8f8f2]">📚 Sections</h2>
+        <div className="w-full flex-shrink-0 lg:w-80">
+          <div className="rounded-lg border-2 border-[#44475a] bg-[#282a36] lg:sticky lg:top-4">
+            <div className="border-b-2 border-[#44475a] p-3 sm:p-4">
+              <h2 className="text-base font-bold text-[#f8f8f2] sm:text-lg">
+                📚 Sections
+              </h2>
             </div>
-            <div className="max-h-[calc(100vh-200px)] overflow-y-auto p-2">
+            <div className="max-h-[300px] overflow-y-auto p-2 lg:max-h-[calc(100vh-200px)]">
               {moduleData.sections.map((section, index) => {
                 const isSelected = selectedSectionId === section.id;
                 const isCompleted = completedSections.has(section.id);
@@ -482,16 +652,16 @@ export default function ModulePage({
                   <button
                     key={section.id}
                     onClick={() => setSelectedSectionId(section.id)}
-                    className={`mb-2 w-full rounded-lg border-2 p-3 text-left transition-all ${
+                    className={`mb-2 w-full rounded-lg border-2 p-2 text-left transition-all sm:p-3 ${
                       isSelected
                         ? 'border-[#bd93f9] bg-[#bd93f9]/20'
                         : 'border-[#44475a] bg-[#44475a] hover:border-[#6272a4]'
                     }`}
                   >
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2 sm:gap-3">
                       {/* Section Number */}
                       <div
-                        className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full font-bold ${
+                        className={`flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full text-sm font-bold sm:h-8 sm:w-8 sm:text-base ${
                           isSelected
                             ? 'bg-[#bd93f9] text-[#282a36]'
                             : 'bg-[#6272a4] text-[#f8f8f2]'
@@ -501,8 +671,8 @@ export default function ModulePage({
                       </div>
 
                       {/* Section Title */}
-                      <div className="flex-1">
-                        <h3 className="text-sm font-semibold text-[#f8f8f2]">
+                      <div className="min-w-0 flex-1">
+                        <h3 className="truncate text-xs font-semibold text-[#f8f8f2] sm:text-sm">
                           {section.title}
                         </h3>
                       </div>
@@ -532,13 +702,13 @@ export default function ModulePage({
         </div>
 
         {/* Right Pane: Section Content */}
-        <div className="flex-1">
+        <div className="min-w-0 flex-1">
           {selectedSection && (
-            <div className="rounded-lg border-2 border-[#44475a] bg-[#282a36] p-8">
+            <div className="rounded-lg border-2 border-[#44475a] bg-[#282a36] p-4 sm:p-6 lg:p-8">
               {/* Section Header */}
-              <div className="mb-6 flex items-start justify-between">
-                <div className="flex-1">
-                  <h2 className="mb-2 text-2xl font-bold text-[#f8f8f2]">
+              <div className="mb-4 flex items-start justify-between gap-3 sm:mb-6">
+                <div className="min-w-0 flex-1">
+                  <h2 className="mb-2 text-xl font-bold text-[#f8f8f2] sm:text-2xl">
                     {selectedSection.title}
                   </h2>
                   {(moduleData.timeComplexity ||
@@ -561,7 +731,7 @@ export default function ModulePage({
                 {/* Completed Checkbox */}
                 <button
                   onClick={() => toggleSectionComplete(selectedSection.id)}
-                  className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg border-2 transition-colors ${
+                  className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg border-2 transition-colors sm:h-10 sm:w-10 ${
                     completedSections.has(selectedSection.id)
                       ? 'border-[#50fa7b] bg-[#50fa7b] text-[#282a36]'
                       : 'border-[#6272a4] bg-transparent text-transparent hover:border-[#50fa7b]'
@@ -574,7 +744,7 @@ export default function ModulePage({
                 >
                   {completedSections.has(selectedSection.id) && (
                     <svg
-                      className="h-6 w-6"
+                      className="h-5 w-5 sm:h-6 sm:w-6"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -896,8 +1066,8 @@ export default function ModulePage({
 
               {/* Code Example */}
               {selectedSection.codeExample && (
-                <div className="mt-6">
-                  <div className="mb-2 font-semibold text-[#bd93f9]">
+                <div className="mt-4 sm:mt-6">
+                  <div className="mb-2 text-sm font-semibold text-[#bd93f9] sm:text-base">
                     Code Example:
                   </div>
                   <InteractiveCodeBlock
@@ -911,16 +1081,16 @@ export default function ModulePage({
               {((selectedSection.multipleChoice &&
                 selectedSection.multipleChoice.length > 0) ||
                 (selectedSection.quiz && selectedSection.quiz.length > 0)) && (
-                <div className="my-8 border-t-2 border-[#44475a]" />
+                <div className="my-6 border-t-2 border-[#44475a] sm:my-8" />
               )}
 
               {/* Multiple Choice Quiz */}
               {selectedSection.multipleChoice &&
                 selectedSection.multipleChoice.length > 0 && (
-                  <div className="mb-8">
-                    <div className="mb-4 flex items-center gap-3">
+                  <div className="mb-6 sm:mb-8">
+                    <div className="mb-4 flex items-center gap-2 sm:gap-3">
                       <div className="h-1 w-1 rounded-full bg-[#8be9fd]" />
-                      <h3 className="text-xl font-bold text-[#8be9fd]">
+                      <h3 className="text-lg font-bold text-[#8be9fd] sm:text-xl">
                         📝 Test Your Knowledge
                       </h3>
                       <div className="h-1 flex-1 bg-gradient-to-r from-[#8be9fd] to-transparent" />
@@ -938,26 +1108,26 @@ export default function ModulePage({
                 selectedSection.multipleChoice.length > 0 &&
                 selectedSection.quiz &&
                 selectedSection.quiz.length > 0 && (
-                  <div className="my-8 border-t-2 border-[#44475a]" />
+                  <div className="my-6 border-t-2 border-[#44475a] sm:my-8" />
                 )}
 
               {/* Discussion Questions Section */}
               {selectedSection.quiz && selectedSection.quiz.length > 0 && (
                 <div>
-                  <div className="mb-4 flex items-center gap-3">
+                  <div className="mb-4 flex items-center gap-2 sm:gap-3">
                     <div className="h-1 w-1 rounded-full bg-[#f1fa8c]" />
-                    <h3 className="text-xl font-bold text-[#f1fa8c]">
+                    <h3 className="text-lg font-bold text-[#f1fa8c] sm:text-xl">
                       💬 Discussion & Practice
                     </h3>
                     <div className="h-1 flex-1 bg-gradient-to-r from-[#f1fa8c] to-transparent" />
                   </div>
-                  <div className="rounded-lg border-2 border-[#f1fa8c] bg-[#f1fa8c]/5 p-6">
-                    <p className="mb-6 text-sm text-[#6272a4]">
+                  <div className="rounded-lg border-2 border-[#f1fa8c] bg-[#f1fa8c]/5 p-4 sm:p-6">
+                    <p className="mb-4 text-xs text-[#6272a4] sm:mb-6 sm:text-sm">
                       Think through these questions or discuss them on camera.
                       Click to reveal sample answers.
                     </p>
 
-                    <div className="space-y-5">
+                    <div className="space-y-4 sm:space-y-5">
                       {selectedSection.quiz.map((question, qIndex) => {
                         const questionKey = `${selectedSection.id}-${question.id}`;
                         const questionId = `${slug}-${selectedSection.id}-${question.id}`;
@@ -966,9 +1136,9 @@ export default function ModulePage({
                         return (
                           <div
                             key={questionKey}
-                            className="rounded-lg border-2 border-[#44475a] bg-[#282a36] p-5"
+                            className="rounded-lg border-2 border-[#44475a] bg-[#282a36] p-3 sm:p-5"
                           >
-                            <div className="mb-4 text-lg leading-relaxed font-semibold text-[#f8f8f2]">
+                            <div className="mb-3 text-base leading-relaxed font-semibold text-[#f8f8f2] sm:mb-4 sm:text-lg">
                               <span className="mr-2 text-[#bd93f9]">
                                 {qIndex + 1}.
                               </span>
@@ -976,7 +1146,7 @@ export default function ModulePage({
                             </div>
 
                             {question.hint && !showSolution && (
-                              <div className="mb-4 rounded-lg border border-[#6272a4] bg-[#6272a4]/10 p-3 text-sm text-[#8be9fd]">
+                              <div className="mb-3 rounded-lg border border-[#6272a4] bg-[#6272a4]/10 p-2 text-xs text-[#8be9fd] sm:mb-4 sm:p-3 sm:text-sm">
                                 <span className="font-semibold">💡 Hint: </span>
                                 {question.hint}
                               </div>
@@ -986,7 +1156,7 @@ export default function ModulePage({
                               onClick={() =>
                                 toggleSolution(selectedSection.id, question.id)
                               }
-                              className="rounded-lg bg-[#bd93f9] px-4 py-2 text-sm font-semibold text-[#282a36] transition-colors hover:bg-[#ff79c6]"
+                              className="rounded-lg bg-[#bd93f9] px-3 py-2 text-xs font-semibold text-[#282a36] transition-colors hover:bg-[#ff79c6] sm:px-4 sm:text-sm"
                             >
                               {showSolution
                                 ? '🔒 Hide Sample Answer'
@@ -998,7 +1168,7 @@ export default function ModulePage({
                               <div className="mt-4 space-y-4">
                                 {/* Sample Answer */}
                                 <div className="rounded-lg border-2 border-[#50fa7b] bg-[#50fa7b]/10 p-4">
-                                  <div className="mb-2 flex items-center gap-2 font-semibold text-[#50fa7b]">
+                                  <div className="mb-3 flex items-center gap-2 font-semibold text-[#50fa7b]">
                                     <svg
                                       className="h-5 w-5"
                                       fill="none"
@@ -1014,9 +1184,9 @@ export default function ModulePage({
                                     </svg>
                                     Sample Answer
                                   </div>
-                                  <p className="text-sm leading-relaxed text-[#f8f8f2]">
-                                    {question.sampleAnswer}
-                                  </p>
+                                  <div className="space-y-2 text-sm">
+                                    {formatSampleAnswer(question.sampleAnswer)}
+                                  </div>
                                 </div>
 
                                 {/* Key Points */}
@@ -1070,34 +1240,38 @@ export default function ModulePage({
       </div>
 
       {/* Key Takeaways */}
-      <div className="mt-12 rounded-lg border-2 border-[#50fa7b] bg-[#50fa7b]/10 p-8">
-        <h2 className="mb-4 text-2xl font-bold text-[#50fa7b]">
+      <div className="mt-8 rounded-lg border-2 border-[#50fa7b] bg-[#50fa7b]/10 p-4 sm:mt-12 sm:p-6 lg:p-8">
+        <h2 className="mb-3 text-xl font-bold text-[#50fa7b] sm:mb-4 sm:text-2xl">
           🎯 Key Takeaways
         </h2>
-        <ul className="space-y-3">
+        <ul className="space-y-2 sm:space-y-3">
           {moduleData.keyTakeaways.map((takeaway, index) => (
-            <li key={index} className="flex items-start gap-3">
-              <span className="mt-1 text-[#50fa7b]">✓</span>
-              <span className="text-[#f8f8f2]">{takeaway}</span>
+            <li key={index} className="flex items-start gap-2 sm:gap-3">
+              <span className="mt-1 flex-shrink-0 text-[#50fa7b]">✓</span>
+              <span className="text-sm text-[#f8f8f2] sm:text-base">
+                {takeaway}
+              </span>
             </li>
           ))}
         </ul>
       </div>
 
       {/* Bottom Navigation */}
-      <div className="mt-12 flex justify-center gap-4 border-t-2 border-[#44475a] pt-8">
+      <div className="mt-8 flex flex-col justify-center gap-3 border-t-2 border-[#44475a] pt-6 sm:mt-12 sm:flex-row sm:gap-4 sm:pt-8">
         <Link
           href="/"
-          className="rounded-lg bg-[#6272a4] px-6 py-3 font-semibold text-[#f8f8f2] transition-colors hover:bg-[#6272a4]/80"
+          className="rounded-lg bg-[#6272a4] px-4 py-3 text-center font-semibold text-[#f8f8f2] transition-colors hover:bg-[#6272a4]/80 sm:px-6"
         >
           ← All Topics
         </Link>
-        <Link
-          href={`/topics/${moduleData.id}?from=modules/${slug}`}
-          className="rounded-lg bg-[#bd93f9] px-6 py-3 font-semibold text-[#282a36] transition-colors hover:bg-[#ff79c6]"
-        >
-          Practice {moduleData.title} Problems →
-        </Link>
+        {!slug.startsWith('system-design') && (
+          <Link
+            href={`/topics/${moduleData.id}?from=modules/${slug}`}
+            className="rounded-lg bg-[#bd93f9] px-4 py-3 text-center font-semibold text-[#282a36] transition-colors hover:bg-[#ff79c6] sm:px-6"
+          >
+            Practice {moduleData.title} Problems →
+          </Link>
+        )}
       </div>
     </div>
   );

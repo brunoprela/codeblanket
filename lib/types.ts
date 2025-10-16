@@ -80,6 +80,7 @@ export interface MultipleChoiceQuestion {
   options: string[];
   correctAnswer: number; // Index of correct option (0-based)
   explanation: string;
+  difficulty?: 'easy' | 'medium' | 'hard'; // Optional difficulty level
 }
 
 export interface DiscussionItem {
@@ -93,9 +94,11 @@ export interface ModuleSection {
   content: string;
   codeExample?: string;
   videoUrl?: string;
-  quiz: QuizQuestion[];
-  multipleChoice?: MultipleChoiceQuestion[];
-  discussion?: DiscussionItem[];
+  quiz?: QuizQuestion[]; // Made optional since most modules use multipleChoiceQuestions instead
+  multipleChoiceQuestions?: MultipleChoiceQuestion[]; // Actual property name used in modules
+  discussionQuestions?: QuizQuestion[]; // Actual property name used in modules
+  multipleChoice?: MultipleChoiceQuestion[]; // Legacy - keep for compatibility
+  discussion?: DiscussionItem[]; // Legacy - keep for compatibility
 }
 
 export interface Module {

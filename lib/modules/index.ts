@@ -32,8 +32,14 @@ import { recursionModule } from './recursion';
 import { queueModule } from './queue';
 import { stringAlgorithmsModule } from './string-algorithms';
 import { designProblemsModule } from './design-problems';
-import { systemDesignAuthenticationModule } from './system-design-authentication';
 import { systemDesignFundamentalsModule } from './system-design-fundamentals';
+import { systemDesignCoreBuildingBlocksModule } from './system-design-core-building-blocks';
+import { systemDesignDatabaseDesignModule } from './system-design-database-design';
+import { systemDesignNetworkingModule } from './system-design-networking';
+import { systemDesignApiDesignModule } from './system-design-api-design';
+import { systemDesignTradeoffsModule } from './system-design-tradeoffs';
+import { systemDesignAuthenticationModule } from './system-design-authentication';
+import { systemDesignMicroservicesModule } from './system-design-microservices';
 
 /**
  * All available modules
@@ -71,7 +77,13 @@ export const allModules: Module[] = [
   pythonAdvancedModule,
   pythonOOPModule,
   systemDesignFundamentalsModule,
+  systemDesignCoreBuildingBlocksModule,
+  systemDesignDatabaseDesignModule,
+  systemDesignNetworkingModule,
+  systemDesignApiDesignModule,
+  systemDesignTradeoffsModule,
   systemDesignAuthenticationModule,
+  systemDesignMicroservicesModule,
 ];
 
 /**
@@ -399,7 +411,7 @@ export const moduleCategories: ModuleCategory[] = [
       problemCategories.find((cat) => cat.id === 'python-oop')?.problems
         .length || 0,
   },
-  // 16. System Design - Fundamentals
+  // 16. System Design - Module 1: Fundamentals
   {
     id: systemDesignFundamentalsModule.id,
     title: systemDesignFundamentalsModule.title,
@@ -408,13 +420,67 @@ export const moduleCategories: ModuleCategory[] = [
     module: systemDesignFundamentalsModule,
     problemCount: 0, // No coding problems, just learning content
   },
-  // 17. System Design - Authentication
+  // 17. System Design - Module 2: Core Building Blocks
+  {
+    id: systemDesignCoreBuildingBlocksModule.id,
+    title: systemDesignCoreBuildingBlocksModule.title,
+    description: systemDesignCoreBuildingBlocksModule.description,
+    icon: systemDesignCoreBuildingBlocksModule.icon,
+    module: systemDesignCoreBuildingBlocksModule,
+    problemCount: 0, // No coding problems, just learning content
+  },
+  // 18. System Design - Module 3: Database Design & Theory
+  {
+    id: systemDesignDatabaseDesignModule.id,
+    title: systemDesignDatabaseDesignModule.title,
+    description: systemDesignDatabaseDesignModule.description,
+    icon: systemDesignDatabaseDesignModule.icon,
+    module: systemDesignDatabaseDesignModule,
+    problemCount: 0, // No coding problems, just learning content
+  },
+  // 19. System Design - Module 4: Networking & Communication
+  {
+    id: systemDesignNetworkingModule.id,
+    title: systemDesignNetworkingModule.title,
+    description: systemDesignNetworkingModule.description,
+    icon: systemDesignNetworkingModule.icon,
+    module: systemDesignNetworkingModule,
+    problemCount: 0, // No coding problems, just learning content
+  },
+  // 20. System Design - Module 5: API Design & Management
+  {
+    id: systemDesignApiDesignModule.id,
+    title: systemDesignApiDesignModule.title,
+    description: systemDesignApiDesignModule.description,
+    icon: systemDesignApiDesignModule.icon,
+    module: systemDesignApiDesignModule,
+    problemCount: 0, // No coding problems, just learning content
+  },
+  // 21. System Design - Module 6: Trade-offs & Best Practices
+  {
+    id: systemDesignTradeoffsModule.id,
+    title: systemDesignTradeoffsModule.title,
+    description: systemDesignTradeoffsModule.description,
+    icon: systemDesignTradeoffsModule.icon,
+    module: systemDesignTradeoffsModule,
+    problemCount: 0, // No coding problems, just learning content
+  },
+  // 22. System Design - Module 7: Authentication & Authorization
   {
     id: systemDesignAuthenticationModule.id,
     title: systemDesignAuthenticationModule.title,
     description: systemDesignAuthenticationModule.description,
     icon: systemDesignAuthenticationModule.icon,
     module: systemDesignAuthenticationModule,
+    problemCount: 0, // No coding problems, just learning content
+  },
+  // 23. System Design - Module 8: Microservices Architecture
+  {
+    id: systemDesignMicroservicesModule.id,
+    title: systemDesignMicroservicesModule.title,
+    description: systemDesignMicroservicesModule.description,
+    icon: systemDesignMicroservicesModule.icon,
+    module: systemDesignMicroservicesModule,
     problemCount: 0, // No coding problems, just learning content
   },
 ];
@@ -450,7 +516,13 @@ export const topicSections: TopicSection[] = [
         m.id !== 'python-advanced' &&
         m.id !== 'python-oop' &&
         m.id !== 'system-design-fundamentals' &&
-        m.id !== 'system-design-authentication',
+        m.id !== 'system-design-core-building-blocks' &&
+        m.id !== 'system-design-database-design' &&
+        m.id !== 'system-design-api-design' &&
+        m.id !== 'system-design-authentication' &&
+        m.id !== 'system-design-microservices' &&
+        m.id !== 'system-design-networking' &&
+        m.id !== 'system-design-tradeoffs',
     ),
   },
   {
@@ -462,7 +534,13 @@ export const topicSections: TopicSection[] = [
     modules: moduleCategories.filter(
       (m) =>
         m.id === 'system-design-fundamentals' ||
-        m.id === 'system-design-authentication',
+        m.id === 'system-design-core-building-blocks' ||
+        m.id === 'system-design-database-design' ||
+        m.id === 'system-design-api-design' ||
+        m.id === 'system-design-authentication' ||
+        m.id === 'system-design-microservices' ||
+        m.id === 'system-design-networking' ||
+        m.id === 'system-design-tradeoffs',
     ),
   },
 ];
