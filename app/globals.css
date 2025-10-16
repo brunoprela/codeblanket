@@ -28,18 +28,32 @@ body {
   font-conmily: Arial, Helvetica, sans-serif;
   margin: 0;
   padding: 0;
+  overscroll-behavior-x: auto;
+  /* Enable browser back/forward gestures on macOS */
 }
 
 html {
   margin: 0;
   padding: 0;
+  overscroll-behavior-x: auto;
+  /* Enable browser back/forward gestures on macOS */
 }
 
 /* Enable smooth scrolling in scroll containers */
 .overflow-y-auto,
 .overflow-auto {
-  overscroll-behavior-y: auto;
+  overscroll-behavior-x: auto;
+  /* Allow horizontal swipe gestures for browser navigation */
+  overscroll-behavior-y: contain;
+  /* Prevent vertical bounce but allow scroll chaining */
   -webkit-overflow-scrolling: touch;
+}
+
+/* Ensure main scrollable area allows browser back/forward gestures on macOS */
+main {
+  overscroll-behavior-x: auto !important;
+  touch-action: manipulation;
+  /* Enable all gestures including browser navigation */
 }
 
 /* Resizable editor styles */
@@ -55,13 +69,11 @@ html {
   right: 0;
   width: 20px;
   height: 20px;
-  background: linear-gradient(
-    135deg,
-    transparent 0%,
-    transparent 50%,
-    rgba(156, 163, 175, 0.4) 50%,
-    rgba(156, 163, 175, 0.4) 100%
-  );
+  background: linear-gradient(135deg,
+      transparent 0%,
+      transparent 50%,
+      rgba(156, 163, 175, 0.4) 50%,
+      rgba(156, 163, 175, 0.4) 100%);
   cursor: ns-resize;
   pointer-events: none;
 }
