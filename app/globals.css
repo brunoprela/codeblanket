@@ -69,11 +69,13 @@ main {
   right: 0;
   width: 20px;
   height: 20px;
-  background: linear-gradient(135deg,
-      transparent 0%,
-      transparent 50%,
-      rgba(156, 163, 175, 0.4) 50%,
-      rgba(156, 163, 175, 0.4) 100%);
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    transparent 50%,
+    rgba(156, 163, 175, 0.4) 50%,
+    rgba(156, 163, 175, 0.4) 100%
+  );
   cursor: ns-resize;
   pointer-events: none;
 }
