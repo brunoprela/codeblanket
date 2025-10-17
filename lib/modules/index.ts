@@ -43,7 +43,6 @@ import { systemDesignMicroservicesModule } from './system-design-microservices';
 import { mlMathematicalFoundationsModule } from './ml-mathematical-foundations';
 import mlCalculusFundamentals from './ml-calculus-fundamentals';
 import { mlLinearAlgebraFoundationsModule } from './ml-linear-algebra-foundations';
-import reactFundamentalsModule from './react-fundamentals';
 
 /**
  * All available modules
@@ -91,7 +90,6 @@ export const allModules: Module[] = [
   mlMathematicalFoundationsModule,
   mlCalculusFundamentals,
   mlLinearAlgebraFoundationsModule,
-  reactFundamentalsModule,
 ];
 
 /**
@@ -444,15 +442,6 @@ export const moduleCategories: ModuleCategory[] = [
     module: mlLinearAlgebraFoundationsModule,
     problemCount: 0, // No coding problems, just learning content
   },
-  // Frontend Development - Module 1: React Fundamentals
-  {
-    id: reactFundamentalsModule.id,
-    title: reactFundamentalsModule.title,
-    description: reactFundamentalsModule.description,
-    icon: reactFundamentalsModule.icon,
-    module: reactFundamentalsModule,
-    problemCount: 0, // No coding problems, just learning content
-  },
   // System Design - Module 1: Fundamentals
   {
     id: systemDesignFundamentalsModule.id,
@@ -567,8 +556,7 @@ export const topicSections: TopicSection[] = [
         m.id !== 'system-design-tradeoffs' &&
         m.id !== 'ml-mathematical-foundations' &&
         m.id !== 'ml-calculus-fundamentals' &&
-        m.id !== 'ml-linear-algebra-foundations' &&
-        m.id !== 'react-fundamentals',
+        m.id !== 'ml-linear-algebra-foundations',
     ),
   },
   {
@@ -583,14 +571,6 @@ export const topicSections: TopicSection[] = [
         m.id === 'ml-calculus-fundamentals' ||
         m.id === 'ml-linear-algebra-foundations',
     ),
-  },
-  {
-    id: 'frontend',
-    title: 'Frontend Development',
-    description:
-      'Master modern frontend development with React, Next.js, and TypeScript',
-    icon: '⚛️',
-    modules: moduleCategories.filter((m) => m.id === 'react-fundamentals'),
   },
   {
     id: 'system-design',
