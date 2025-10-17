@@ -521,6 +521,14 @@ export const moduleCategories: ModuleCategory[] = [
  */
 export const topicSections: TopicSection[] = [
   {
+    id: 'frontend',
+    title: 'Frontend Development',
+    description:
+      'Master modern frontend development with React, Next.js, and web technologies',
+    icon: '⚛️',
+    modules: [],
+  },
+  {
     id: 'python',
     title: 'Python',
     description:
@@ -573,6 +581,14 @@ export const topicSections: TopicSection[] = [
     ),
   },
   {
+    id: 'devops',
+    title: 'DevOps',
+    description:
+      'Learn DevOps practices, CI/CD, containerization, and cloud infrastructure',
+    icon: '🚀',
+    modules: [],
+  },
+  {
     id: 'system-design',
     title: 'System Design',
     description:
@@ -589,6 +605,14 @@ export const topicSections: TopicSection[] = [
         m.id === 'system-design-networking' ||
         m.id === 'system-design-tradeoffs',
     ),
+  },
+  {
+    id: 'behavioral',
+    title: 'Behavioral Interview',
+    description:
+      'Prepare for behavioral interviews with common questions and frameworks',
+    icon: '💬',
+    modules: [],
   },
 ];
 
