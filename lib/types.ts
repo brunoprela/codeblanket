@@ -80,6 +80,7 @@ export interface MultipleChoiceQuestion {
   options: string[];
   correctAnswer: number; // Index of correct option (0-based)
   explanation: string;
+  keyPoints?: string[]; // Optional key points for the answer
   difficulty?: 'easy' | 'medium' | 'hard'; // Optional difficulty level
 }
 

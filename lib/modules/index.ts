@@ -40,6 +40,10 @@ import { systemDesignApiDesignModule } from './system-design-api-design';
 import { systemDesignTradeoffsModule } from './system-design-tradeoffs';
 import { systemDesignAuthenticationModule } from './system-design-authentication';
 import { systemDesignMicroservicesModule } from './system-design-microservices';
+import { mlMathematicalFoundationsModule } from './ml-mathematical-foundations';
+import mlCalculusFundamentals from './ml-calculus-fundamentals';
+import { mlLinearAlgebraFoundationsModule } from './ml-linear-algebra-foundations';
+import reactFundamentalsModule from './react-fundamentals';
 
 /**
  * All available modules
@@ -84,6 +88,10 @@ export const allModules: Module[] = [
   systemDesignTradeoffsModule,
   systemDesignAuthenticationModule,
   systemDesignMicroservicesModule,
+  mlMathematicalFoundationsModule,
+  mlCalculusFundamentals,
+  mlLinearAlgebraFoundationsModule,
+  reactFundamentalsModule,
 ];
 
 /**
@@ -411,7 +419,41 @@ export const moduleCategories: ModuleCategory[] = [
       problemCategories.find((cat) => cat.id === 'python-oop')?.problems
         .length || 0,
   },
-  // 16. System Design - Module 1: Fundamentals
+  // Quantitative Programming
+  {
+    id: mlMathematicalFoundationsModule.id,
+    title: mlMathematicalFoundationsModule.title,
+    description: mlMathematicalFoundationsModule.description,
+    icon: mlMathematicalFoundationsModule.icon,
+    module: mlMathematicalFoundationsModule,
+    problemCount: 0, // No coding problems, just learning content
+  },
+  {
+    id: mlCalculusFundamentals.id,
+    title: mlCalculusFundamentals.title,
+    description: mlCalculusFundamentals.description,
+    icon: mlCalculusFundamentals.icon,
+    module: mlCalculusFundamentals,
+    problemCount: 0, // No coding problems, just learning content
+  },
+  {
+    id: mlLinearAlgebraFoundationsModule.id,
+    title: mlLinearAlgebraFoundationsModule.title,
+    description: mlLinearAlgebraFoundationsModule.description,
+    icon: mlLinearAlgebraFoundationsModule.icon,
+    module: mlLinearAlgebraFoundationsModule,
+    problemCount: 0, // No coding problems, just learning content
+  },
+  // Frontend Development - Module 1: React Fundamentals
+  {
+    id: reactFundamentalsModule.id,
+    title: reactFundamentalsModule.title,
+    description: reactFundamentalsModule.description,
+    icon: reactFundamentalsModule.icon,
+    module: reactFundamentalsModule,
+    problemCount: 0, // No coding problems, just learning content
+  },
+  // System Design - Module 1: Fundamentals
   {
     id: systemDesignFundamentalsModule.id,
     title: systemDesignFundamentalsModule.title,
@@ -420,7 +462,7 @@ export const moduleCategories: ModuleCategory[] = [
     module: systemDesignFundamentalsModule,
     problemCount: 0, // No coding problems, just learning content
   },
-  // 17. System Design - Module 2: Core Building Blocks
+  // System Design - Module 2: Core Building Blocks
   {
     id: systemDesignCoreBuildingBlocksModule.id,
     title: systemDesignCoreBuildingBlocksModule.title,
@@ -429,7 +471,7 @@ export const moduleCategories: ModuleCategory[] = [
     module: systemDesignCoreBuildingBlocksModule,
     problemCount: 0, // No coding problems, just learning content
   },
-  // 18. System Design - Module 3: Database Design & Theory
+  // System Design - Module 3: Database Design & Theory
   {
     id: systemDesignDatabaseDesignModule.id,
     title: systemDesignDatabaseDesignModule.title,
@@ -438,7 +480,7 @@ export const moduleCategories: ModuleCategory[] = [
     module: systemDesignDatabaseDesignModule,
     problemCount: 0, // No coding problems, just learning content
   },
-  // 19. System Design - Module 4: Networking & Communication
+  // System Design - Module 4: Networking & Communication
   {
     id: systemDesignNetworkingModule.id,
     title: systemDesignNetworkingModule.title,
@@ -447,7 +489,7 @@ export const moduleCategories: ModuleCategory[] = [
     module: systemDesignNetworkingModule,
     problemCount: 0, // No coding problems, just learning content
   },
-  // 20. System Design - Module 5: API Design & Management
+  // System Design - Module 5: API Design & Management
   {
     id: systemDesignApiDesignModule.id,
     title: systemDesignApiDesignModule.title,
@@ -456,7 +498,7 @@ export const moduleCategories: ModuleCategory[] = [
     module: systemDesignApiDesignModule,
     problemCount: 0, // No coding problems, just learning content
   },
-  // 21. System Design - Module 6: Trade-offs & Best Practices
+  // System Design - Module 6: Trade-offs & Best Practices
   {
     id: systemDesignTradeoffsModule.id,
     title: systemDesignTradeoffsModule.title,
@@ -465,7 +507,7 @@ export const moduleCategories: ModuleCategory[] = [
     module: systemDesignTradeoffsModule,
     problemCount: 0, // No coding problems, just learning content
   },
-  // 22. System Design - Module 7: Authentication & Authorization
+  // System Design - Module 7: Authentication & Authorization
   {
     id: systemDesignAuthenticationModule.id,
     title: systemDesignAuthenticationModule.title,
@@ -474,7 +516,7 @@ export const moduleCategories: ModuleCategory[] = [
     module: systemDesignAuthenticationModule,
     problemCount: 0, // No coding problems, just learning content
   },
-  // 23. System Design - Module 8: Microservices Architecture
+  // System Design - Module 8: Microservices Architecture
   {
     id: systemDesignMicroservicesModule.id,
     title: systemDesignMicroservicesModule.title,
@@ -522,8 +564,33 @@ export const topicSections: TopicSection[] = [
         m.id !== 'system-design-authentication' &&
         m.id !== 'system-design-microservices' &&
         m.id !== 'system-design-networking' &&
-        m.id !== 'system-design-tradeoffs',
+        m.id !== 'system-design-tradeoffs' &&
+        m.id !== 'ml-mathematical-foundations' &&
+        m.id !== 'ml-calculus-fundamentals' &&
+        m.id !== 'ml-linear-algebra-foundations' &&
+        m.id !== 'react-fundamentals',
     ),
+  },
+  {
+    id: 'quantitative-programming',
+    title: 'Quantitative Programming',
+    description:
+      'Master mathematics, statistics, machine learning, and AI for quantitative analysis and algorithmic trading',
+    icon: '📊',
+    modules: moduleCategories.filter(
+      (m) =>
+        m.id === 'ml-mathematical-foundations' ||
+        m.id === 'ml-calculus-fundamentals' ||
+        m.id === 'ml-linear-algebra-foundations',
+    ),
+  },
+  {
+    id: 'frontend',
+    title: 'Frontend Development',
+    description:
+      'Master modern frontend development with React, Next.js, and TypeScript',
+    icon: '⚛️',
+    modules: moduleCategories.filter((m) => m.id === 'react-fundamentals'),
   },
   {
     id: 'system-design',

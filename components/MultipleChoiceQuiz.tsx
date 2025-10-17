@@ -287,6 +287,23 @@ export function MultipleChoiceQuiz({
                     </p>
                   </div>
 
+                  {/* Key Points */}
+                  {question.keyPoints && question.keyPoints.length > 0 && (
+                    <div className="rounded-lg border-2 border-[#8be9fd] bg-[#8be9fd]/10 p-4">
+                      <div className="mb-2 font-semibold text-[#8be9fd]">
+                        ✓ Key Points:
+                      </div>
+                      <ul className="space-y-1.5 text-sm text-[#f8f8f2]">
+                        {question.keyPoints.map((point, index) => (
+                          <li key={index} className="flex items-start gap-2">
+                            <span className="mt-1 text-[#8be9fd]">•</span>
+                            <span>{point}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
                   {/* Try again button for incorrect answers (if not yet completed) */}
                   {!isCorrect && !isCompleted && (
                     <button

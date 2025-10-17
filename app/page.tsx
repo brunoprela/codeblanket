@@ -19,16 +19,10 @@ export default function Home() {
   const totalModules = moduleCategories.length;
 
   // Track selected section with localStorage persistence
-  const [selectedSectionId, setSelectedSectionId] = useState<string>(() => {
-    // Initialize from localStorage if available
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('selected-learning-path');
-      if (saved && topicSections.some((s) => s.id === saved)) {
-        return saved;
-      }
-    }
-    return topicSections[0]?.id || '';
-  });
+  // Initialize with default value to ensure consistent SSR/client rendering
+  const [selectedSectionId, setSelectedSectionId] = useState<string>(
+    topicSections[0]?.id || '',
+  );
 
   // Track completed problems
   const [completedProblems, setCompletedProblems] = useState<Set<string>>(
@@ -68,6 +62,14 @@ export default function Home() {
       total: topicProblems.length,
     };
   };
+
+  // Load selected section from localStorage on client mount
+  useEffect(() => {
+    const saved = localStorage.getItem('selected-learning-path');
+    if (saved && topicSections.some((s) => s.id === saved)) {
+      setSelectedSectionId(saved);
+    }
+  }, []);
 
   // Save selected learning path to localStorage
   useEffect(() => {

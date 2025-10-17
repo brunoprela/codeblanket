@@ -190,7 +190,11 @@ json.dumps(result)
                 Loading Python Environment...
               </div>
               <div className="text-sm text-[#f8f8f2]">
-                This may take a few seconds on first load (~10MB)
+                Loading Python runtime + NumPy, Pandas, Matplotlib, SciPy,
+                scikit-learn, and SymPy
+              </div>
+              <div className="mt-1 text-xs text-[#6272a4]">
+                This may take 10-20 seconds on first load (~40MB total)
               </div>
             </div>
           </div>

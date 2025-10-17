@@ -7,7 +7,7 @@ import { use, ReactElement, ReactNode, useState, useEffect } from 'react';
 import { getModuleById } from '@/lib/modules';
 import { allProblems } from '@/lib/problems';
 import { getCompletedProblems } from '@/lib/helpers/storage';
-import { formatText } from '@/lib/utils/formatText';
+import { formatTextWithMath } from '@/lib/utils/formatTextWithMath';
 import { InteractiveCodeBlock } from '@/components/InteractiveCodeBlock';
 import { VideoRecorder } from '@/components/VideoRecorder';
 import { MultipleChoiceQuiz } from '@/components/MultipleChoiceQuiz';
@@ -59,7 +59,7 @@ function formatSampleAnswer(text: string): ReactNode[] {
       const block = codeBlocks[blockIndex];
       elements.push(
         <div key={`code-${elementKey++}`} className="my-4">
-          {formatText(`\`\`\`${block.language}\n${block.code}\`\`\``)}
+          {formatTextWithMath(`\`\`\`${block.language}\n${block.code}\`\`\``)}
         </div>,
       );
       return;
@@ -79,7 +79,7 @@ function formatSampleAnswer(text: string): ReactNode[] {
           >
             {listItems.map((item, idx) => (
               <li key={idx} className="text-[#f8f8f2]">
-                {formatText(item)}
+                {formatTextWithMath(item)}
               </li>
             ))}
           </ul>,
@@ -94,7 +94,7 @@ function formatSampleAnswer(text: string): ReactNode[] {
           >
             {numberedListItems.map((item, idx) => (
               <li key={idx} className="text-[#f8f8f2]">
-                {formatText(item)}
+                {formatTextWithMath(item)}
               </li>
             ))}
           </ol>,
@@ -114,7 +114,7 @@ function formatSampleAnswer(text: string): ReactNode[] {
             key={`h4-${elementKey++}`}
             className="mt-3 mb-2 text-base font-semibold text-[#bd93f9]"
           >
-            {trimmedLine.substring(4)}
+            {formatTextWithMath(trimmedLine.substring(4))}
           </h4>,
         );
       } else if (trimmedLine.startsWith('## ')) {
@@ -124,7 +124,7 @@ function formatSampleAnswer(text: string): ReactNode[] {
             key={`h3-${elementKey++}`}
             className="mt-4 mb-3 text-lg font-semibold text-[#50fa7b] first:mt-0"
           >
-            {trimmedLine.substring(3)}
+            {formatTextWithMath(trimmedLine.substring(3))}
           </h3>,
         );
       } else if (trimmedLine.startsWith('# ')) {
@@ -134,7 +134,7 @@ function formatSampleAnswer(text: string): ReactNode[] {
             key={`h2-${elementKey++}`}
             className="mt-5 mb-3 text-xl font-bold text-[#8be9fd] first:mt-0"
           >
-            {trimmedLine.substring(2)}
+            {formatTextWithMath(trimmedLine.substring(2))}
           </h2>,
         );
       }
@@ -172,7 +172,7 @@ function formatSampleAnswer(text: string): ReactNode[] {
             key={`line-${elementKey++}`}
             className="mb-2 leading-relaxed text-[#f8f8f2]"
           >
-            {formatText(trimmedLine)}
+            {formatTextWithMath(trimmedLine)}
           </div>,
         );
       }
@@ -802,7 +802,7 @@ export default function ModulePage({
                                 key={`header-${elementKey++}`}
                                 className="mt-8 mb-6 text-3xl font-bold text-[#ff79c6]"
                               >
-                                {formatText(text)}
+                                {formatTextWithMath(text)}
                               </h1>,
                             );
                           } else if (level === 2) {
@@ -811,7 +811,7 @@ export default function ModulePage({
                                 key={`header-${elementKey++}`}
                                 className="mt-6 mb-4 text-2xl font-bold text-[#bd93f9]"
                               >
-                                {formatText(text)}
+                                {formatTextWithMath(text)}
                               </h2>,
                             );
                           } else if (level === 3) {
@@ -820,7 +820,7 @@ export default function ModulePage({
                                 key={`header-${elementKey++}`}
                                 className="mt-4 mb-3 text-xl font-bold text-[#8be9fd]"
                               >
-                                {formatText(text)}
+                                {formatTextWithMath(text)}
                               </h3>,
                             );
                           } else if (level === 4) {
@@ -829,7 +829,7 @@ export default function ModulePage({
                                 key={`header-${elementKey++}`}
                                 className="mt-3 mb-2 text-lg font-semibold text-[#50fa7b]"
                               >
-                                {formatText(text)}
+                                {formatTextWithMath(text)}
                               </h4>,
                             );
                           } else if (level === 5) {
@@ -838,7 +838,7 @@ export default function ModulePage({
                                 key={`header-${elementKey++}`}
                                 className="mt-2 mb-2 text-base font-semibold text-[#f1fa8c]"
                               >
-                                {formatText(text)}
+                                {formatTextWithMath(text)}
                               </h5>,
                             );
                           } else {
@@ -847,7 +847,7 @@ export default function ModulePage({
                                 key={`header-${elementKey++}`}
                                 className="mt-2 mb-2 text-sm font-semibold text-[#ffb86c]"
                               >
-                                {formatText(text)}
+                                {formatTextWithMath(text)}
                               </h6>,
                             );
                           }
@@ -872,7 +872,7 @@ export default function ModulePage({
                             className="mb-4 ml-6 list-decimal space-y-2 text-[#f8f8f2]"
                           >
                             {listItems.map((item, idx) => (
-                              <li key={idx}>{formatText(item)}</li>
+                              <li key={idx}>{formatTextWithMath(item)}</li>
                             ))}
                           </ol>,
                         );
@@ -895,7 +895,7 @@ export default function ModulePage({
                             className="mb-4 ml-6 list-disc space-y-2 text-[#f8f8f2]"
                           >
                             {listItems.map((item, idx) => (
-                              <li key={idx}>{formatText(item)}</li>
+                              <li key={idx}>{formatTextWithMath(item)}</li>
                             ))}
                           </ul>,
                         );
@@ -918,7 +918,7 @@ export default function ModulePage({
                             key={`text-${elementKey++}`}
                             className="mb-4 leading-relaxed text-[#f8f8f2]"
                           >
-                            {formatText(para)}
+                            {formatTextWithMath(para)}
                           </p>,
                         );
                       } else {
@@ -992,7 +992,7 @@ export default function ModulePage({
                                         key={cellIdx}
                                         className="border border-[#6272a4] px-4 py-2 text-[#f8f8f2]"
                                       >
-                                        {formatText(cell)}
+                                        {formatTextWithMath(cell)}
                                       </td>
                                     ))}
                                   </tr>

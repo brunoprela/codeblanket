@@ -21,6 +21,7 @@ export function InteractiveCodeBlock({
   const [isInteractive, setIsInteractive] = useState(false);
   const [code, setCode] = useState(initialCode);
   const [output, setOutput] = useState<string>('');
+  const [plotImages, setPlotImages] = useState<string[]>([]);
   const [isRunning, setIsRunning] = useState(false);
 
   const { isReady: pyodideReady, isLoading: pyodideLoading } = usePyodide();
@@ -28,32 +29,70 @@ export function InteractiveCodeBlock({
   const runCode = async () => {
     setIsRunning(true);
     setOutput('');
+    setPlotImages([]);
 
     try {
       const pyodide = await getPyodide();
 
-      // Setup console output capture
+      // Setup console output capture and matplotlib
       await pyodide.runPythonAsync(`
 import sys
-from io import StringIO
+from io import StringIO, BytesIO
+import base64
 sys.stdout = StringIO()
 sys.stderr = StringIO()
+
+# Setup matplotlib if imported
+_plot_images = []
+try:
+    import matplotlib
+    import matplotlib.pyplot as plt
+    matplotlib.use('Agg')  # Use non-interactive backend
+    
+    # Monkey-patch plt.show() to capture figures
+    _original_show = plt.show
+    def _custom_show(*args, **kwargs):
+        global _plot_images
+        for fig_num in plt.get_fignums():
+            fig = plt.figure(fig_num)
+            buf = BytesIO()
+            fig.savefig(buf, format='png', dpi=100, bbox_inches='tight')
+            buf.seek(0)
+            img_base64 = base64.b64encode(buf.read()).decode('utf-8')
+            _plot_images.append(img_base64)
+            buf.close()
+        plt.close('all')
+    plt.show = _custom_show
+except ImportError:
+    pass
 `);
 
       // Execute user's code
       await pyodide.runPythonAsync(code);
 
-      // Capture all output
-      const result = await pyodide.runPythonAsync(`
+      // Capture text output
+      const textOutput = await pyodide.runPythonAsync(`
 stdout_value = sys.stdout.getvalue()
 stderr_value = sys.stderr.getvalue()
 stdout_value + stderr_value
 `);
 
-      if (result) {
-        setOutput(result);
-      } else {
+      // Capture plot images
+      const plotsJson = await pyodide.runPythonAsync(`
+import json
+json.dumps(_plot_images)
+`);
+
+      const plots = JSON.parse(plotsJson);
+
+      if (textOutput) {
+        setOutput(textOutput);
+      } else if (plots.length === 0) {
         setOutput('✓ Code executed successfully (no output)');
+      }
+
+      if (plots.length > 0) {
+        setPlotImages(plots);
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -66,6 +105,7 @@ stdout_value + stderr_value
   const resetCode = () => {
     setCode(initialCode);
     setOutput('');
+    setPlotImages([]);
   };
 
   // Keyboard shortcut support (only when interactive)
@@ -236,14 +276,40 @@ stdout_value + stderr_value
       </div>
 
       {/* Output */}
-      {output && (
+      {(output || plotImages.length > 0) && (
         <div className="border-t border-[#44475a] bg-[#1e1f29] p-4">
-          <div className="mb-2 text-sm font-semibold text-[#bd93f9]">
-            Output:
-          </div>
-          <pre className="font-mono text-sm whitespace-pre-wrap text-[#f8f8f2]">
-            {output}
-          </pre>
+          {output && (
+            <>
+              <div className="mb-2 text-sm font-semibold text-[#bd93f9]">
+                Output:
+              </div>
+              <pre className="mb-4 font-mono text-sm whitespace-pre-wrap text-[#f8f8f2]">
+                {output}
+              </pre>
+            </>
+          )}
+
+          {/* Display matplotlib plots */}
+          {plotImages.length > 0 && (
+            <div className="space-y-4">
+              {plotImages.map((imgData, idx) => (
+                <div
+                  key={idx}
+                  className="rounded-lg border border-[#44475a] bg-[#282a36] p-4"
+                >
+                  <div className="mb-2 text-sm font-semibold text-[#bd93f9]">
+                    Plot {plotImages.length > 1 ? `${idx + 1}` : ''}:
+                  </div>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={`data:image/png;base64,${imgData}`}
+                    alt={`Plot ${idx + 1}`}
+                    className="w-full rounded"
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>

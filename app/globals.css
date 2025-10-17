@@ -1,5 +1,8 @@
 @import 'tailwindcss';
 
+/* KaTeX Math Rendering */
+@import 'katex/dist/katex.min.css';
+
 /* Dracula Color Scheme */
 :root {
   --background: #282a36;

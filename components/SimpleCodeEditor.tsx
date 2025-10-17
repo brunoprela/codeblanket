@@ -44,6 +44,7 @@ export function SimpleCodeEditor({
   const [isRunning, setIsRunning] = useState(false);
   const [isResultsCollapsed, setIsResultsCollapsed] = useState(false);
   const [consoleOutput, setConsoleOutput] = useState<string[]>([]);
+  const [plotImages, setPlotImages] = useState<string[]>([]);
   const [executionMode, setExecutionMode] = useState<'run' | 'test' | null>(
     null,
   );
@@ -53,37 +54,72 @@ export function SimpleCodeEditor({
     setIsRunning(true);
     setResults([]);
     setConsoleOutput([]);
+    setPlotImages([]);
     setExecutionMode('run');
 
     try {
       const pyodide = await getPyodide();
       const capturedOutput: string[] = [];
 
-      // Setup console output capture
+      // Setup console output capture and matplotlib
       await pyodide.runPythonAsync(`
 import sys
-from io import StringIO
+from io import StringIO, BytesIO
+import base64
 sys.stdout = StringIO()
 sys.stderr = StringIO()
+
+# Setup matplotlib if imported
+_plot_images = []
+try:
+    import matplotlib
+    import matplotlib.pyplot as plt
+    matplotlib.use('Agg')  # Use non-interactive backend
+    
+    # Monkey-patch plt.show() to capture figures
+    _original_show = plt.show
+    def _custom_show(*args, **kwargs):
+        global _plot_images
+        for fig_num in plt.get_fignums():
+            fig = plt.figure(fig_num)
+            buf = BytesIO()
+            fig.savefig(buf, format='png', dpi=100, bbox_inches='tight')
+            buf.seek(0)
+            img_base64 = base64.b64encode(buf.read()).decode('utf-8')
+            _plot_images.append(img_base64)
+            buf.close()
+        plt.close('all')
+    plt.show = _custom_show
+except ImportError:
+    pass
 `);
 
       // Execute user's code
       await pyodide.runPythonAsync(code);
 
-      // Capture all output
+      // Capture text output
       const output = await pyodide.runPythonAsync(`
 stdout_value = sys.stdout.getvalue()
 stderr_value = sys.stderr.getvalue()
 stdout_value + stderr_value
 `);
 
+      // Capture plot images
+      const plotsJson = await pyodide.runPythonAsync(`
+import json
+json.dumps(_plot_images)
+`);
+
+      const plots = JSON.parse(plotsJson);
+
       if (output) {
         capturedOutput.push(output);
-      } else {
+      } else if (plots.length === 0) {
         capturedOutput.push('Code executed successfully (no output)');
       }
 
       setConsoleOutput(capturedOutput);
+      setPlotImages(plots);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       setConsoleOutput([`Error: ${error.message}`]);
@@ -230,6 +266,7 @@ sys.stdout.getvalue() + sys.stderr.getvalue()
     resetCodeStorage();
     setResults([]);
     setConsoleOutput([]);
+    setPlotImages([]);
     setExecutionMode(null);
 
     if (problemId) {
@@ -291,7 +328,11 @@ sys.stdout.getvalue() + sys.stderr.getvalue()
                 Loading Python Environment...
               </div>
               <div className="text-sm text-[#f8f8f2]">
-                This may take a few seconds on first load (~10MB)
+                Loading Python runtime + NumPy, Pandas, Matplotlib, SciPy,
+                scikit-learn, and SymPy
+              </div>
+              <div className="mt-1 text-xs text-[#6272a4]">
+                This may take 10-20 seconds on first load (~40MB total)
               </div>
             </div>
           </div>
@@ -475,8 +516,8 @@ sys.stdout.getvalue() + sys.stderr.getvalue()
       )}
 
       {/* Console Output */}
-      {consoleOutput.length > 0 && (
-        <div className="max-h-[30vh] min-h-0 flex-shrink-0 overflow-y-auto border-t border-[#44475a] bg-[#282a36] p-4">
+      {(consoleOutput.length > 0 || plotImages.length > 0) && (
+        <div className="max-h-[40vh] min-h-0 flex-shrink-0 overflow-y-auto border-t border-[#44475a] bg-[#282a36] p-4">
           <div className="mb-3 flex items-center justify-between rounded-lg bg-[#44475a] px-4 py-2">
             <div className="flex items-center gap-2">
               <span className="text-lg">📟</span>
@@ -496,13 +537,38 @@ sys.stdout.getvalue() + sys.stderr.getvalue()
               )}
             </div>
           </div>
-          <div className="rounded-lg border border-[#44475a] bg-[#1e1f29] p-4 font-mono text-sm">
-            {consoleOutput.map((output, i) => (
-              <pre key={i} className="whitespace-pre-wrap text-[#f8f8f2]">
-                {output}
-              </pre>
-            ))}
-          </div>
+
+          {consoleOutput.length > 0 && (
+            <div className="mb-4 rounded-lg border border-[#44475a] bg-[#1e1f29] p-4 font-mono text-sm">
+              {consoleOutput.map((output, i) => (
+                <pre key={i} className="whitespace-pre-wrap text-[#f8f8f2]">
+                  {output}
+                </pre>
+              ))}
+            </div>
+          )}
+
+          {/* Display matplotlib plots */}
+          {plotImages.length > 0 && (
+            <div className="space-y-4">
+              {plotImages.map((imgData, idx) => (
+                <div
+                  key={idx}
+                  className="rounded-lg border border-[#44475a] bg-[#1e1f29] p-4"
+                >
+                  <div className="mb-2 text-sm font-semibold text-[#bd93f9]">
+                    📊 Plot {plotImages.length > 1 ? `${idx + 1}` : ''}:
+                  </div>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={`data:image/png;base64,${imgData}`}
+                    alt={`Plot ${idx + 1}`}
+                    className="w-full rounded"
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>

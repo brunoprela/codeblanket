@@ -55,6 +55,19 @@ export async function getPyodide() {
         indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.24.1/full/',
       });
 
+      // Load commonly used scientific Python packages
+      // These are available in the Pyodide repository
+      console.debug('Loading Python packages...');
+      await pyodideInstance.loadPackage([
+        'numpy',
+        'pandas',
+        'matplotlib',
+        'scipy',
+        'scikit-learn',
+        'sympy',
+      ]);
+      console.debug('Python packages loaded successfully');
+
       return pyodideInstance;
     } catch (error) {
       loadingPromise = null;
