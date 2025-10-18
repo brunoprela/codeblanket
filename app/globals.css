@@ -40,6 +40,7 @@ html {
   padding: 0;
   overscroll-behavior-x: auto;
   /* Enable browser back/forward gestures on macOS */
+  scroll-behavior: smooth;
 }
 
 /* Enable smooth scrolling in scroll containers */

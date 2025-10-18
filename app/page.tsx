@@ -3,8 +3,8 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 
-import { allProblems } from '@/lib/problems';
-import { moduleCategories, topicSections } from '@/lib/modules';
+import { allProblems } from '@/lib/content/problems';
+import { moduleCategories, topicSections } from '@/lib/content/topics';
 import { getCompletedProblems } from '@/lib/helpers/storage';
 import {
   getCompletedDiscussionQuestionsCount,
@@ -16,13 +16,18 @@ import {
 
 export default function Home() {
   const totalProblems = allProblems.length;
-  const totalModules = moduleCategories.length;
 
   // Track selected section with localStorage persistence
-  // Initialize with default value to ensure consistent SSR/client rendering
-  const [selectedSectionId, setSelectedSectionId] = useState<string>(
-    topicSections[0]?.id || '',
+  // Initialize with null to prevent flash of wrong content
+  const [selectedSectionId, setSelectedSectionId] = useState<string | null>(
+    null,
   );
+
+  // Track if we're transitioning between sections
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  // Track if we've loaded the initial state
+  const [isInitialized, setIsInitialized] = useState(false);
 
   // Track completed problems
   const [completedProblems, setCompletedProblems] = useState<Set<string>>(
@@ -68,7 +73,11 @@ export default function Home() {
     const saved = localStorage.getItem('selected-learning-path');
     if (saved && topicSections.some((s) => s.id === saved)) {
       setSelectedSectionId(saved);
+    } else {
+      // If no saved selection, use the first section
+      setSelectedSectionId(topicSections[0]?.id || '');
     }
+    setIsInitialized(true);
   }, []);
 
   // Save selected learning path to localStorage
@@ -327,28 +336,57 @@ export default function Home() {
     };
   }, []);
 
-  // Calculate completed modules (all sections completed)
-  const completedModulesCount = Object.values(moduleProgress).filter(
-    (progress) =>
-      progress.completed > 0 && progress.completed === progress.total,
-  ).length;
+  // Calculate completed sub-modules (sections) across all modules
+  const completedSectionsCount = Object.values(moduleProgress).reduce(
+    (sum, progress) => sum + progress.completed,
+    0,
+  );
+  const totalSectionsCount = Object.values(moduleProgress).reduce(
+    (sum, progress) => sum + progress.total,
+    0,
+  );
 
   // Get the selected topic section
   const selectedSection = topicSections.find(
     (section) => section.id === selectedSectionId,
   );
 
+  // Handler for section change with smooth scroll
+  const handleSectionChange = (sectionId: string) => {
+    if (sectionId === selectedSectionId) return;
+
+    setIsTransitioning(true);
+    setSelectedSectionId(sectionId);
+
+    // Smooth scroll to top of content
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Reset transition state after animation
+    setTimeout(() => setIsTransitioning(false), 300);
+  };
+
+  // Don't render content until we've loaded the saved selection
+  if (!isInitialized || !selectedSectionId) {
+    return (
+      <div className="container mx-auto max-w-7xl px-4 py-6 sm:py-8 lg:py-12">
+        <div className="flex items-center justify-center py-12">
+          <div className="text-[#6272a4]">Loading...</div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto max-w-7xl px-4 py-6 sm:py-8 lg:py-12">
       {/* Stats */}
       <div className="mb-6 grid grid-cols-2 gap-3 sm:mb-8 sm:gap-4 md:grid-cols-4 md:gap-6">
-        {/* Modules Completed */}
+        {/* Sub-Modules (Sections) Completed */}
         <div className="rounded-lg border-2 border-[#bd93f9] bg-[#bd93f9]/10 p-3 text-center sm:p-4 lg:p-6">
           <div className="mb-1 text-2xl font-bold text-[#bd93f9] sm:mb-2 sm:text-3xl lg:text-4xl">
-            {completedModulesCount} / {totalModules}
+            {completedSectionsCount} / {totalSectionsCount}
           </div>
           <div className="text-xs font-medium text-[#f8f8f2] sm:text-sm lg:text-base">
-            Modules
+            Sections
           </div>
         </div>
 
@@ -408,7 +446,7 @@ export default function Home() {
               return (
                 <button
                   key={topicSection.id}
-                  onClick={() => setSelectedSectionId(topicSection.id)}
+                  onClick={() => handleSectionChange(topicSection.id)}
                   className={`min-w-[160px] flex-shrink-0 rounded-lg border-2 p-3 text-left transition-all sm:min-w-0 sm:p-4 lg:w-full ${
                     isSelected
                       ? 'border-[#bd93f9] bg-[#bd93f9]/20 shadow-lg'
@@ -438,7 +476,9 @@ export default function Home() {
         {/* Right Content - Modules in Selected Section */}
         <div className="min-w-0 flex-1">
           {selectedSection && (
-            <div className="space-y-4 sm:space-y-6">
+            <div
+              className={`space-y-4 transition-opacity duration-300 sm:space-y-6 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
+            >
               {/* Section Header */}
               <div className="rounded-lg border-2 border-[#bd93f9] bg-[#bd93f9]/10 p-4 sm:p-6">
                 <h3 className="text-xl font-bold text-[#f8f8f2] sm:text-2xl">
@@ -597,7 +637,7 @@ export default function Home() {
                         {/* Hide problems count for system design modules */}
                         {selectedSection.id !== 'system-design' && (
                           <div className="rounded-full border-2 border-[#f8f8f2] bg-[#f8f8f2]/10 px-2 py-1 text-xs font-semibold text-[#f8f8f2] sm:px-3">
-                            {moduleCategory.problemCount} problems
+                            {problemsProgress.total} problems
                           </div>
                         )}
                         <Link

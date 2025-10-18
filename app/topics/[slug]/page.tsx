@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { useEffect, useState, use } from 'react';
 
-import { problemCategories } from '@/lib/problems';
+import { problemCategories } from '@/lib/content/problems';
 import { Difficulty } from '@/lib/types';
 import { getCompletedProblems } from '@/lib/helpers/storage';
 import { formatDescription } from '@/lib/utils/formatText';

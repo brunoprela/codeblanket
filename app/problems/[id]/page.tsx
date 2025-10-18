@@ -4,7 +4,7 @@ import { notFound, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useState, useEffect, use, Suspense, ReactNode } from 'react';
 
-import { getProblemById } from '@/lib/problems';
+import { getProblemById } from '@/lib/content/problems';
 import { SimpleCodeEditor } from '@/components/SimpleCodeEditor';
 import { isProblemCompleted } from '@/lib/helpers/storage';
 import { formatText } from '@/lib/utils/formatText';

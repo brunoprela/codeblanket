@@ -4,8 +4,8 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { use, ReactElement, ReactNode, useState, useEffect } from 'react';
 
-import { getModuleById } from '@/lib/modules';
-import { allProblems } from '@/lib/problems';
+import { getModuleById } from '@/lib/content/topics';
+import { allProblems } from '@/lib/content/problems';
 import { getCompletedProblems } from '@/lib/helpers/storage';
 import { formatTextWithMath } from '@/lib/utils/formatTextWithMath';
 import { InteractiveCodeBlock } from '@/components/InteractiveCodeBlock';

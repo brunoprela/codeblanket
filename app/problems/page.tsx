@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 
-import { allProblems } from '@/lib/problems';
+import { allProblems } from '@/lib/content/problems';
 import { Difficulty } from '@/lib/types';
 import { getCompletedProblems } from '@/lib/helpers/storage';
 import { formatDescription } from '@/lib/utils/formatText';
