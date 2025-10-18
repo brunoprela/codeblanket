@@ -4,6 +4,7 @@
 
 export const servicediscoveryQuiz = [
   {
+    id: 'service-discovery-migration',
     question:
       "Your company is migrating from a monolithic application to microservices. You have 20 services that need to communicate with each other, and you're deploying on AWS ECS. Design a service discovery strategy using either Consul or AWS Cloud Map. Explain how services register, how clients discover services, how health checks work, and how you'd handle graceful shutdowns. Include specific implementation details and monitoring strategies.",
     sampleAnswer: `**Service Discovery Strategy for AWS ECS Migration**
@@ -744,11 +745,11 @@ export const servicediscoveryQuiz = [
     # Take snapshot
     consul snapshot save \\
       -token=\${CONSUL_TOKEN} \\
-      /backups/consul-snapshot-\$(date +%Y%m%d-%H%M%S).snap
+      /backups/consul-snapshot-$(date +%Y%m%d-%H%M%S).snap
     
     # Upload to S3
     aws s3 cp /backups/consul-snapshot-*.snap \\
-      s3://my-consul-backups/\$(date +%Y/%m/%d)/
+      s3://my-consul-backups/$(date +%Y/%m/%d)/
     
     # Retention: Keep last 30 days
     find /backups -name "consul-snapshot-*.snap" -mtime +30 -delete
@@ -833,7 +834,7 @@ export const servicediscoveryQuiz = [
             expr: consul_raft_peers != 3
             for: 5m
             annotations:
-              summary: "Expected 3 Raft peers, found {{ \$value }}"
+              summary: "Expected 3 Raft peers, found {{ $value }}"
           
           # High RPC latency
           - alert: ConsulHighRPCLatency
@@ -847,7 +848,7 @@ export const servicediscoveryQuiz = [
             expr: consul_health_service_status{status="critical"} > 0
             for: 2m
             annotations:
-              summary: "Service {{ \$labels.service }} is unhealthy"
+              summary: "Service {{ $labels.service }} is unhealthy"
     \`\`\`
     
     **9. Operational Procedures**
@@ -875,7 +876,7 @@ export const servicediscoveryQuiz = [
     \`\`\`bash
     # 1. Restart non-leader servers first
     for server in consul-server-2 consul-server-3; do
-      ssh \$server "systemctl restart consul"
+      ssh $server "systemctl restart consul"
       sleep 60  # Wait for it to rejoin
     done
     
