@@ -23,9 +23,6 @@ export default function Home() {
     null,
   );
 
-  // Track if we're transitioning between sections
-  const [isTransitioning, setIsTransitioning] = useState(false);
-
   // Track if we've loaded the initial state
   const [isInitialized, setIsInitialized] = useState(false);
 
@@ -355,14 +352,10 @@ export default function Home() {
   const handleSectionChange = (sectionId: string) => {
     if (sectionId === selectedSectionId) return;
 
-    setIsTransitioning(true);
     setSelectedSectionId(sectionId);
 
     // Smooth scroll to top of content
     window.scrollTo({ top: 0, behavior: 'smooth' });
-
-    // Reset transition state after animation
-    setTimeout(() => setIsTransitioning(false), 300);
   };
 
   // Don't render content until we've loaded the saved selection
@@ -435,10 +428,10 @@ export default function Home() {
       </div>
 
       {/* Two-Pane Layout */}
-      <div className="flex flex-col gap-4 sm:gap-6 lg:flex-row">
+      <div className="flex flex-col gap-4 sm:gap-6 lg:flex-row lg:items-start">
         {/* Left Sidebar - Section Navigation */}
-        <div className="lg:w-64 lg:flex-shrink-0">
-          <div className="flex gap-2 overflow-x-auto pb-2 lg:sticky lg:top-4 lg:flex-col lg:space-y-2 lg:overflow-visible lg:pb-0">
+        <div className="scrollbar-hide lg:sticky lg:top-4 lg:h-[calc(100vh-8rem)] lg:w-64 lg:flex-shrink-0 lg:overflow-y-auto">
+          <div className="flex gap-2 overflow-x-auto pb-2 lg:flex-col lg:space-y-2 lg:overflow-visible lg:pb-0">
             {topicSections.map((topicSection) => {
               const isSelected = topicSection.id === selectedSectionId;
               const sectionModuleCount = topicSection.modules.length;
@@ -474,11 +467,9 @@ export default function Home() {
         </div>
 
         {/* Right Content - Modules in Selected Section */}
-        <div className="min-w-0 flex-1">
+        <div className="min-w-0 flex-1 lg:overflow-y-auto">
           {selectedSection && (
-            <div
-              className={`space-y-4 transition-opacity duration-300 sm:space-y-6 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
-            >
+            <div className="space-y-4 sm:space-y-6">
               {/* Section Header */}
               <div className="rounded-lg border-2 border-[#bd93f9] bg-[#bd93f9]/10 p-4 sm:p-6">
                 <h3 className="text-xl font-bold text-[#f8f8f2] sm:text-2xl">

@@ -13,6 +13,10 @@ export * from './quantitative-programming';
 export * from './devops';
 export * from './frontend-development';
 export * from './behavioral';
+export * from './applied-ai';
+export * from './product-management';
+export * from './engineering-management';
+export * from './finance';
 
 // Import topics for aggregation
 import {
@@ -23,6 +27,10 @@ import {
   devopsTopic,
   frontendDevelopmentTopic,
   behavioralTopic,
+  appliedAiTopic,
+  productManagementTopic,
+  engineeringManagementTopic,
+  financeTopic,
 } from '.';
 
 // Import all modules
@@ -145,9 +153,13 @@ const allTopics = [
   pythonTopic,
   algorithmsDataStructuresTopic,
   quantitativeProgrammingTopic,
+  appliedAiTopic,
   devopsTopic,
   systemDesignTopic,
+  productManagementTopic,
+  engineeringManagementTopic,
   behavioralTopic,
+  financeTopic,
 ];
 
 // Build moduleCategories for backward compatibility
