@@ -12,5 +12,10 @@ export const quantitativeProgrammingTopic = {
     'ml-mathematical-foundations',
     'ml-calculus-fundamentals',
     'ml-linear-algebra-foundations',
+    'ml-probability-theory',
+    'ml-statistics-fundamentals',
+    'ml-python-for-data-science',
+    'ml-eda-feature-engineering',
+    'ml-supervised-learning',
   ],
 };

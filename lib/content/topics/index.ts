@@ -71,6 +71,11 @@ import { systemDesignMicroservicesModule } from '../modules/system-design-micros
 import { mlMathematicalFoundationsModule } from '../modules/ml-mathematical-foundations';
 import { mlCalculusFundamentalsModule } from '../modules/ml-calculus-fundamentals';
 import { mlLinearAlgebraFoundationsModule } from '../modules/ml-linear-algebra-foundations';
+import { mlProbabilityTheoryModule } from '../modules/ml-probability-theory';
+import { mlStatisticsFundamentalsModule } from '../modules/ml-statistics-fundamentals';
+import { mlPythonForDataScience } from '../modules/ml-python-for-data-science';
+import { mlEdaFeatureEngineeringModule } from '../modules/ml-eda-feature-engineering';
+import { mlSupervisedLearningModule } from '../modules/ml-supervised-learning';
 
 // Create a map of all modules by ID
 const allModulesMap: Record<string, Module> = {
@@ -119,6 +124,11 @@ const allModulesMap: Record<string, Module> = {
   'ml-mathematical-foundations': mlMathematicalFoundationsModule,
   'ml-calculus-fundamentals': mlCalculusFundamentalsModule,
   'ml-linear-algebra-foundations': mlLinearAlgebraFoundationsModule,
+  'ml-probability-theory': mlProbabilityTheoryModule,
+  'ml-statistics-fundamentals': mlStatisticsFundamentalsModule,
+  'ml-python-for-data-science': mlPythonForDataScience,
+  'ml-eda-feature-engineering': mlEdaFeatureEngineeringModule,
+  'ml-supervised-learning': mlSupervisedLearningModule,
 };
 
 // Define all topics in order
