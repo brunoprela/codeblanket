@@ -20,6 +20,7 @@ export const association_rule_learningMultipleChoice: MultipleChoiceQuestion[] =
       correctAnswer: 1,
       explanation:
         'Support measures how frequently an itemset appears in the dataset. For example, support({milk, bread}) = 0.3 means 30% of all transactions contain both milk and bread.',
+      difficulty: 'easy',
     },
     {
       id: 'association-rule-learning-mc2',
@@ -33,6 +34,7 @@ export const association_rule_learningMultipleChoice: MultipleChoiceQuestion[] =
       correctAnswer: 1,
       explanation:
         'Lift = confidence / P(Y) adjusts for how common Y is. A rule might have high confidence simply because Y is popular. Lift > 1 indicates X truly increases the likelihood of Y beyond its base rate.',
+      difficulty: 'medium',
     },
     {
       id: 'association-rule-learning-mc3',
@@ -46,6 +48,7 @@ export const association_rule_learningMultipleChoice: MultipleChoiceQuestion[] =
       correctAnswer: 0,
       explanation:
         'The Apriori property (monotonicity) states that if an itemset is frequent, all its subsets must also be frequent. This allows pruning of candidates: if {A,B} is infrequent, no need to check {A,B,C}.',
+      difficulty: 'medium',
     },
     {
       id: 'association-rule-learning-mc4',
@@ -59,5 +62,21 @@ export const association_rule_learningMultipleChoice: MultipleChoiceQuestion[] =
       correctAnswer: 2,
       explanation:
         'Lift < 1 indicates negative correlation: purchasing A actually makes B less likely than its base rate. Lift = 1 is independence, lift > 1 is positive correlation.',
+      difficulty: 'medium',
+    },
+    {
+      id: 'association-rule-learning-mc5',
+      question:
+        'You find a rule {diapers} → {beer} with support=0.05, confidence=0.6, lift=1.8. What should you conclude?',
+      options: [
+        'The rule is useless because support is too low',
+        'The rule suggests a real association: 60% of diaper buyers also buy beer, which is 1.8× the baseline',
+        'The rule indicates diapers and beer are independent',
+        'You should reject this rule because lift should be > 2',
+      ],
+      correctAnswer: 1,
+      explanation:
+        'Support=0.05 means 5% of transactions have both (low but might still be valuable for targeted marketing). Confidence=0.6 means 60% of diaper buyers buy beer. Lift=1.8 means buying diapers makes beer 1.8× more likely than baseline, indicating a real association. Low support is not necessarily bad - it depends on business context (rare but valuable patterns). There is no universal threshold for lift.',
+      difficulty: 'hard',
     },
   ];

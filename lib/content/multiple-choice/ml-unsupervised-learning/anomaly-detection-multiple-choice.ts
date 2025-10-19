@@ -18,6 +18,7 @@ export const anomaly_detectionMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       "Isolation Forest is based on the principle that anomalies are 'few and different', making them easier to isolate with fewer random splits in a tree. Normal points in dense regions require more splits to isolate.",
+    difficulty: 'easy',
   },
   {
     id: 'anomaly-detection-mc2',
@@ -31,6 +32,7 @@ export const anomaly_detectionMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'LOF identifies anomalies based on local density. A point is an outlier if its density is significantly lower than the density of its neighbors, making it effective for detecting local anomalies in varying density data.',
+    difficulty: 'medium',
   },
   {
     id: 'anomaly-detection-mc3',
@@ -45,6 +47,7 @@ export const anomaly_detectionMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'The contamination parameter specifies the expected proportion (percentage) of anomalies in the dataset. It sets the threshold for classifying points as anomalies, typically ranging from 0.01 to 0.1 (1% to 10%).',
+    difficulty: 'easy',
   },
   {
     id: 'anomaly-detection-mc4',
@@ -59,5 +62,21 @@ export const anomaly_detectionMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       "Due to class imbalance (anomalies are rare, often <1%), a naive classifier predicting 'normal' for everything achieves >99% accuracy but misses all anomalies. Use precision, recall, F1, or PR-AUC instead.",
+    difficulty: 'medium',
+  },
+  {
+    id: 'anomaly-detection-mc5',
+    question:
+      'You are monitoring network traffic for intrusions (anomalies). Your system has high recall (95%) but low precision (30%). What does this mean?',
+    options: [
+      'The system catches most attacks but generates many false alarms',
+      'The system misses most attacks but rarely gives false alarms',
+      'The system performs well on both detecting and avoiding false alarms',
+      'The system is completely ineffective',
+    ],
+    correctAnswer: 0,
+    explanation:
+      'High recall (95%) means the system catches 95% of actual attacks (good at not missing anomalies). Low precision (30%) means only 30% of flagged items are actual attacks - 70% are false positives. This trade-off is common in anomaly detection: sensitive systems catch more anomalies but generate more false alarms. The choice depends on the cost of false positives vs false negatives.',
+    difficulty: 'hard',
   },
 ];
