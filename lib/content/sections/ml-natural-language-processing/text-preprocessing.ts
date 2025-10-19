@@ -6,9 +6,9 @@
  */
 
 export const textPreprocessingSection = {
-    id: 'text-preprocessing',
-    title: 'Text Preprocessing',
-    content: `
+  id: 'text-preprocessing',
+  title: 'Text Preprocessing',
+  content: `
 # Text Preprocessing
 
 ## Introduction

@@ -1,11 +1,11 @@
 import { QuizQuestion } from '../../../types';
 
 export const advancedNlpTasksQuiz: QuizQuestion[] = [
-    {
-        id: 'advanced-nlp-dq-1',
-        question:
-            'Compare extractive and abstractive summarization. Which approach would you use for summarizing financial earnings reports, and why?',
-        sampleAnswer: `**Extractive Summarization:**
+  {
+    id: 'advanced-nlp-dq-1',
+    question:
+      'Compare extractive and abstractive summarization. Which approach would you use for summarizing financial earnings reports, and why?',
+    sampleAnswer: `**Extractive Summarization:**
 
 Selects and combines existing sentences:
 - Pulls important sentences directly from source
@@ -138,20 +138,20 @@ def financial_summary_hybrid(earnings_report):
 - Monitor for hallucinations
 
 The trend in financial NLP is toward abstractive summaries with strong verification guardrails.`,
-        keyPoints: [
-            'Extractive: selects existing sentences, accurate but choppy',
-            'Abstractive: generates new text, fluent but risks hallucination',
-            'Financial reports need synthesis (abstractive) but accuracy (extractive)',
-            'Hybrid approach: abstractive summary + extractive verification',
-            'Always verify financial figures, include sources, human review',
-            'Modern solution: fine-tuned abstractive with fact verification',
-        ],
-    },
-    {
-        id: 'advanced-nlp-dq-2',
-        question:
-            'Explain how few-shot learning works with large language models. How would you use it for financial sentiment analysis without labeled data?',
-        sampleAnswer: `**Few-Shot Learning with LLMs:**
+    keyPoints: [
+      'Extractive: selects existing sentences, accurate but choppy',
+      'Abstractive: generates new text, fluent but risks hallucination',
+      'Financial reports need synthesis (abstractive) but accuracy (extractive)',
+      'Hybrid approach: abstractive summary + extractive verification',
+      'Always verify financial figures, include sources, human review',
+      'Modern solution: fine-tuned abstractive with fact verification',
+    ],
+  },
+  {
+    id: 'advanced-nlp-dq-2',
+    question:
+      'Explain how few-shot learning works with large language models. How would you use it for financial sentiment analysis without labeled data?',
+    sampleAnswer: `**Few-Shot Learning with LLMs:**
 
 Few-shot learning enables models to perform tasks with only a few examples provided in the prompt, without fine-tuning.
 
@@ -380,21 +380,21 @@ finbert = fine_tune_finbert(verified_labels)
 - **Context critical**: "rate hike" negative for stocks, positive for banks
 
 Few-shot learning democratizes NLP by enabling deployment without large labeled datasets, ideal for specialized financial applications.`,
-        keyPoints: [
-            'Few-shot: provide examples in prompt, no training needed',
-            'Works via in-context learning in large language models (GPT-3+)',
-            'Financial sentiment: curate 5-10 diverse, high-quality examples',
-            'Dynamic example selection improves accuracy',
-            'Advantages: no labeled data, fast deployment, flexible',
-            'Limitations: API costs, latency, less accurate than fine-tuning',
-            'Use few-shot for prototyping, fine-tuning for production',
-        ],
-    },
-    {
-        id: 'advanced-nlp-dq-3',
-        question:
-            'Design an NLP system to generate trading signals from real-time financial news. Discuss the pipeline, challenges, and risk management.',
-        sampleAnswer: `**System Architecture:**
+    keyPoints: [
+      'Few-shot: provide examples in prompt, no training needed',
+      'Works via in-context learning in large language models (GPT-3+)',
+      'Financial sentiment: curate 5-10 diverse, high-quality examples',
+      'Dynamic example selection improves accuracy',
+      'Advantages: no labeled data, fast deployment, flexible',
+      'Limitations: API costs, latency, less accurate than fine-tuning',
+      'Use few-shot for prototyping, fine-tuning for production',
+    ],
+  },
+  {
+    id: 'advanced-nlp-dq-3',
+    question:
+      'Design an NLP system to generate trading signals from real-time financial news. Discuss the pipeline, challenges, and risk management.',
+    sampleAnswer: `**System Architecture:**
 
 \`\`\`
 News Sources → Preprocessing → Entity Extraction → Sentiment Analysis → 
@@ -738,13 +738,13 @@ metrics = {
 - Strict risk management (position sizing, stop losses)
 - Monitor and adapt based on performance
 - Never risk more than you can afford to lose`,
-        keyPoints: [
-            'Pipeline: news ingestion → entity extraction → sentiment → signal generation',
-            'Entity linking critical: map company names to tickers',
-            'Ensemble sentiment models for robustness',
-            'Risk management: position sizing, confidence thresholds, volatility checks',
-            'Challenges: latency, noise, false positives, adversarial news',
-            'Monitor: Sharpe ratio, win rate, sentiment accuracy, signal latency',
-        ],
-    },
+    keyPoints: [
+      'Pipeline: news ingestion → entity extraction → sentiment → signal generation',
+      'Entity linking critical: map company names to tickers',
+      'Ensemble sentiment models for robustness',
+      'Risk management: position sizing, confidence thresholds, volatility checks',
+      'Challenges: latency, noise, false positives, adversarial news',
+      'Monitor: Sharpe ratio, win rate, sentiment accuracy, signal latency',
+    ],
+  },
 ];
