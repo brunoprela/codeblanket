@@ -17,5 +17,9 @@ export const quantitativeProgrammingTopic = {
     'ml-python-for-data-science',
     'ml-eda-feature-engineering',
     'ml-supervised-learning',
+    'ml-unsupervised-learning',
+    'ml-deep-learning-fundamentals',
+    'ml-advanced-deep-learning',
+    'ml-natural-language-processing',
   ],
 };

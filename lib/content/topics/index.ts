@@ -76,6 +76,10 @@ import { mlStatisticsFundamentalsModule } from '../modules/ml-statistics-fundame
 import { mlPythonForDataScience } from '../modules/ml-python-for-data-science';
 import { mlEdaFeatureEngineeringModule } from '../modules/ml-eda-feature-engineering';
 import { mlSupervisedLearningModule } from '../modules/ml-supervised-learning';
+import { mlUnsupervisedLearning } from '../modules/ml-unsupervised-learning';
+import { mlDeepLearningFundamentals } from '../modules/ml-deep-learning-fundamentals';
+import { mlAdvancedDeepLearningModule } from '../modules/ml-advanced-deep-learning';
+import { naturalLanguageProcessingModule } from '../modules/ml-natural-language-processing';
 
 // Create a map of all modules by ID
 const allModulesMap: Record<string, Module> = {
@@ -129,6 +133,10 @@ const allModulesMap: Record<string, Module> = {
   'ml-python-for-data-science': mlPythonForDataScience,
   'ml-eda-feature-engineering': mlEdaFeatureEngineeringModule,
   'ml-supervised-learning': mlSupervisedLearningModule,
+  'ml-unsupervised-learning': mlUnsupervisedLearning,
+  'ml-deep-learning-fundamentals': mlDeepLearningFundamentals,
+  'ml-advanced-deep-learning': mlAdvancedDeepLearningModule,
+  'ml-natural-language-processing': naturalLanguageProcessingModule,
 };
 
 // Define all topics in order
