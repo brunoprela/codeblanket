@@ -89,6 +89,12 @@ import { mlDeepLearningFundamentals } from '../modules/ml-deep-learning-fundamen
 import { mlAdvancedDeepLearningModule } from '../modules/ml-advanced-deep-learning';
 import { naturalLanguageProcessingModule } from '../modules/ml-natural-language-processing';
 
+import { promptEngineeringOptimizationModule } from '../modules/prompt-engineering-optimization';
+import { llmEngineeringFundamentalsModule } from '../modules/llm-engineering-fundamentals';
+import { fileProcessingDocumentUnderstandingModule } from '../modules/file-processing-document-understanding';
+import { codeUnderstandingAstManipulationModule } from '../modules/code-understanding-ast-manipulation';
+import { buildingCodeGenerationSystemsModule } from '../modules/building-code-generation-systems';
+
 // Create a map of all modules by ID
 const allModulesMap: Record<string, Module> = {
   'python-fundamentals': pythonFundamentalsModule,
@@ -145,6 +151,12 @@ const allModulesMap: Record<string, Module> = {
   'ml-deep-learning-fundamentals': mlDeepLearningFundamentals,
   'ml-advanced-deep-learning': mlAdvancedDeepLearningModule,
   'ml-natural-language-processing': naturalLanguageProcessingModule,
+
+  'applied-ai-llm-fundamentals': llmEngineeringFundamentalsModule,
+  'applied-ai-prompt-engineering': promptEngineeringOptimizationModule,
+  'applied-ai-file-processing': fileProcessingDocumentUnderstandingModule,
+  'applied-ai-code-understanding': codeUnderstandingAstManipulationModule,
+  'applied-ai-code-generation': buildingCodeGenerationSystemsModule,
 };
 
 // Define all topics in order
