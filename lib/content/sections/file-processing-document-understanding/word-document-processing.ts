@@ -4,9 +4,9 @@
  */
 
 export const worddocumentprocessingSection = {
-    id: 'word-document-processing',
-    title: 'Word Document Processing',
-    content: `# Word Document Processing
+  id: 'word-document-processing',
+  title: 'Word Document Processing',
+  content: `# Word Document Processing
 
 Master Word document manipulation for building AI applications that can read, modify, and generate professional Word documents.
 
@@ -621,6 +621,5 @@ processor.generate_document("report.docx", "Q4 2024 Sales Report", sections)
 10. **Validate output** before delivering to users
 
 These patterns enable building sophisticated document processing systems for LLM applications, from automated report generation to contract filling.`,
-    videoUrl: null,
+  videoUrl: undefined,
 };
-

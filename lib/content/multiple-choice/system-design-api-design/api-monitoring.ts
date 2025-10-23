@@ -18,7 +18,6 @@ export const apimonitoringMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Google SRE defines Golden Signals as: Latency (request duration), Traffic (requests/sec), Errors (error rate), and Saturation (resource usage). These four metrics provide comprehensive view of system health. Other metrics are useful but these four are foundational.',
-    difficulty: 'easy',
   },
   {
     id: 'monitoring-q2',
@@ -32,7 +31,6 @@ export const apimonitoringMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Percentiles (p95, p99) reveal tail latency: the slowest requests that affect real users. Average can be misleading (e.g., average 100ms but p99 is 5s means 1% of users have terrible experience). Always track percentiles, not just averages.',
-    difficulty: 'medium',
   },
   {
     id: 'monitoring-q3',
@@ -47,7 +45,6 @@ export const apimonitoringMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Request IDs (X-Request-ID header) allow tracing a single user request as it flows through multiple services. Essential for debugging: you can find all logs related to one request across API gateway, service A, service B, database, etc.',
-    difficulty: 'easy',
   },
   {
     id: 'monitoring-q4',
@@ -62,7 +59,6 @@ export const apimonitoringMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Distributed tracing (e.g., Jaeger, Zipkin) tracks requests across services, showing: API Gateway (10ms) → Service A (50ms) → Service B (200ms) ← bottleneck! Crucial for debugging microservices where a single request touches many services.',
-    difficulty: 'medium',
   },
   {
     id: 'monitoring-q5',
@@ -77,6 +73,5 @@ export const apimonitoringMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       "Synthetic monitoring: automated tests from specific locations (e.g., AWS health checks every 1 min). RUM: tracks real users' actual API calls with timing data. Both are valuable: synthetic catches outages, RUM shows real user experience.",
-    difficulty: 'easy',
   },
 ];

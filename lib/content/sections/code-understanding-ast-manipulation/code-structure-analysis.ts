@@ -1,7 +1,7 @@
 export default {
-    id: 'code-structure-analysis',
-    title: 'Code Structure Analysis',
-    content: `
+  id: 'code-structure-analysis',
+  title: 'Code Structure Analysis',
+  content: `
 # Code Structure Analysis
 
 ## Introduction
@@ -1291,5 +1291,5 @@ Code structure analysis provides deep understanding of code organization:
 These techniques enable AI coding tools like Cursor to provide intelligent, context-aware suggestions that understand not just individual functions, but the entire structure and flow of your codebase.
 
 In the next section, we'll explore symbol resolution and references—understanding what names mean and where they're used throughout your code.
-`
+`,
 };

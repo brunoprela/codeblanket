@@ -17,7 +17,6 @@ export const webhookdesignMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Webhooks push data immediately when events occur, avoiding inefficient polling (repeated "are there updates?" requests). This reduces server load, latency, and client complexity. Real-time updates without constant checking.',
-    difficulty: 'easy',
   },
   {
     id: 'webhook-q2',
@@ -31,7 +30,6 @@ export const webhookdesignMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       "HMAC signature verifies: (1) webhook came from your API (authentication), (2) payload wasn't modified (integrity). Client recomputes signature with shared secret and compares. Signing doesn't encrypt data, just proves authenticity.",
-    difficulty: 'medium',
   },
   {
     id: 'webhook-q3',
@@ -46,7 +44,6 @@ export const webhookdesignMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Returning 200 quickly (< 1s) acknowledges receipt, preventing sender timeout and retry. Then process async. If processing takes 30s and times out, sender retries, causing duplicates. Always acknowledge fast, process later.',
-    difficulty: 'medium',
   },
   {
     id: 'webhook-q4',
@@ -60,7 +57,6 @@ export const webhookdesignMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Dead Letter Queue stores webhooks that failed after all retries (e.g., 3 attempts). Allows manual investigation and retry. Prevents losing events when client endpoint is down. Critical for reliability.',
-    difficulty: 'medium',
   },
   {
     id: 'webhook-q5',
@@ -74,6 +70,5 @@ export const webhookdesignMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Webhooks may be delivered multiple times (network issues, retries). Idempotency means processing same webhook twice has same effect as once. Track webhook IDs to avoid duplicate orders, charges, etc. Essential for reliability.',
-    difficulty: 'easy',
   },
 ];

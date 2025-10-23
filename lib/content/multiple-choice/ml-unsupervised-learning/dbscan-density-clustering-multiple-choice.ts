@@ -19,7 +19,6 @@ export const dbscan_density_clusteringMultipleChoice: MultipleChoiceQuestion[] =
       correctAnswer: 1,
       explanation:
         'A core point in DBSCAN has at least MinPts neighbors (including itself) within epsilon (ε) distance. Core points form the backbone of clusters and can extend the cluster to other density-connected points.',
-      difficulty: 'easy',
     },
     {
       id: 'dbscan-density-clustering-mc2',
@@ -33,7 +32,6 @@ export const dbscan_density_clusteringMultipleChoice: MultipleChoiceQuestion[] =
       correctAnswer: 1,
       explanation:
         'DBSCAN can discover clusters of arbitrary shapes (not just spherical) and explicitly identifies outliers as noise points, unlike K-Means which forces every point into a cluster and assumes spherical shapes.',
-      difficulty: 'easy',
     },
     {
       id: 'dbscan-density-clustering-mc3',
@@ -48,7 +46,6 @@ export const dbscan_density_clusteringMultipleChoice: MultipleChoiceQuestion[] =
       correctAnswer: 1,
       explanation:
         "The k-distance graph method plots sorted distances to the k-th nearest neighbor (k = MinPts). The 'elbow' point in this curve suggests a good epsilon value, separating dense regions from sparse regions.",
-      difficulty: 'medium',
     },
     {
       id: 'dbscan-density-clustering-mc4',
@@ -62,7 +59,6 @@ export const dbscan_density_clusteringMultipleChoice: MultipleChoiceQuestion[] =
       correctAnswer: 2,
       explanation:
         'DBSCAN uses a single epsilon value, which makes it difficult to handle clusters with significantly different densities. HDBSCAN (Hierarchical DBSCAN) addresses this limitation by using varying epsilon values.',
-      difficulty: 'medium',
     },
     {
       id: 'dbscan-density-clustering-mc5',
@@ -77,6 +73,5 @@ export const dbscan_density_clusteringMultipleChoice: MultipleChoiceQuestion[] =
       correctAnswer: 2,
       explanation:
         'HDBSCAN (Hierarchical DBSCAN) or OPTICS are designed to handle clusters of varying densities by using hierarchical approaches or ordered reachability plots. Standard DBSCAN with a single epsilon will either merge sparse clusters or fragment dense ones. K-Means also struggles with varying densities as it assumes spherical, equally-sized clusters.',
-      difficulty: 'hard',
     },
   ];

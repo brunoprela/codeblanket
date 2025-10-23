@@ -17,7 +17,6 @@ export const svmMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Support vectors are the training points that lie closest to the decision boundary - specifically, they are on the margin boundaries. These points "support" the hyperplane and are the only points that determine its position. Removing other points doesn\'t change the decision boundary.',
-    difficulty: 'easy',
   },
   {
     id: 'svm-mc-2',
@@ -32,7 +31,6 @@ export const svmMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       "For linearly separable data, use the linear kernel. It's faster, has fewer hyperparameters to tune, and avoids overfitting. More complex kernels (RBF, polynomial) are unnecessary and can actually hurt performance by creating overly complex boundaries.",
-    difficulty: 'easy',
   },
   {
     id: 'svm-mc-3',
@@ -46,7 +44,6 @@ export const svmMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Increasing C makes the penalty for misclassification stronger, causing the model to fit training data more closely (smaller margin, more complex boundary). This can lead to overfitting. Small C allows larger margin with more training errors (simpler model).',
-    difficulty: 'medium',
   },
   {
     id: 'svm-mc-4',
@@ -60,7 +57,6 @@ export const svmMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'SVM uses distance calculations in kernels (especially RBF). Features with larger numeric ranges dominate these distances, effectively making smaller-scale features irrelevant. StandardScaler should always be applied before training SVM to ensure all features contribute fairly.',
-    difficulty: 'medium',
   },
   {
     id: 'svm-mc-5',
@@ -75,6 +71,5 @@ export const svmMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'SVM training has quadratic to cubic time complexity in the number of samples, making it impractical for datasets with millions of examples. While prediction is relatively fast (depends only on support vectors), training large models is prohibitively expensive. For large datasets, consider linear SVM variants or other algorithms.',
-    difficulty: 'hard',
   },
 ];

@@ -18,7 +18,6 @@ export const sqlvsnosqldecisionMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       'PostgreSQL (SQL) is the correct choice because banking systems require ACID transactions to ensure atomicity. When transferring money, you must guarantee that if $100 is deducted from Account A, it is definitely added to Account B - either both operations succeed or both fail. This atomicity is critical for financial accuracy and is a core strength of SQL databases. While MongoDB and Cassandra scale well, they sacrifice strong consistency. Redis is for caching, not primary transactional data.',
-    difficulty: 'medium',
   },
   {
     id: 'sql-vs-nosql-q2',
@@ -33,7 +32,6 @@ export const sqlvsnosqldecisionMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       'MongoDB (NoSQL document database) is ideal for this use case because each product can have a completely different schema stored in its document. Books can have {isbn, pageCount}, electronics can have {brand, specifications}, and clothing can have {size, material} without forcing all products into the same rigid table structure. Option A creates maintenance overhead with multiple tables, Option B results in sparse tables with many null values wasting space, and Option D (Redis) is for caching not primary storage.',
-    difficulty: 'medium',
   },
   {
     id: 'sql-vs-nosql-q3',
@@ -48,7 +46,6 @@ export const sqlvsnosqldecisionMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       "PostgreSQL (SQL) is the best choice for this complex analytical query. SQL databases excel at JOINs across multiple tables (customers, orders, products, regions), aggregations (SUM, AVG, GROUP BY), and filtering (last 6 months, top 5). The query likely requires joining 3-4 tables and SQL's declarative language makes this straightforward. While MongoDB has aggregation pipelines, they're more complex for multi-collection operations. Cassandra and DynamoDB are optimized for simple, predefined access patterns, not ad-hoc complex analytics.",
-    difficulty: 'hard',
   },
   {
     id: 'sql-vs-nosql-q4',
@@ -63,7 +60,6 @@ export const sqlvsnosqldecisionMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       'Cassandra is the best choice for Instagram-scale photo metadata storage. With partition key on user_id, all photos for a user are stored together enabling fast "get all photos for user X" queries. Clustering by timestamp provides time-ordered results. Cassandra excels at write-heavy workloads (millions of photo uploads), scales horizontally to billions of records, and supports multi-datacenter replication for global distribution. MySQL master-slave struggles at this scale, PostgreSQL partitioning is complex to manage at billions of records, and while MongoDB could work, Cassandra is proven at Instagram scale and designed specifically for this access pattern.',
-    difficulty: 'hard',
   },
   {
     id: 'sql-vs-nosql-q5',
@@ -78,6 +74,5 @@ export const sqlvsnosqldecisionMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 3,
     explanation:
       'Inventory management is the best SQL use case because it requires ACID transactions to prevent overselling. When a customer buys an item, you need to atomically: (1) check stock level, (2) decrement inventory, (3) create order record. This must be strongly consistent - you cannot oversell items due to eventual consistency. SQL ensures immediate consistency across these operations. Option A (IoT writes) is perfect for Cassandra/InfluxDB, Option B (session caching) is ideal for Redis, Option C (flexible profiles) fits MongoDB well.',
-    difficulty: 'medium',
   },
 ];

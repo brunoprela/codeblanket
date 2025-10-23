@@ -4,9 +4,9 @@
  */
 
 export const filesystemoperationspathhandlingSection = {
-    id: 'file-system-operations-path-handling',
-    title: 'File System Operations & Path Handling',
-    content: `# File System Operations & Path Handling
+  id: 'file-system-operations-path-handling',
+  title: 'File System Operations & Path Handling',
+  content: `# File System Operations & Path Handling
 
 Master safe, reliable, and cross-platform file system operations for production LLM applications.
 
@@ -914,6 +914,5 @@ tree = manager.get_file_tree()
 10. **Test cross-platform** if deploying on multiple OS
 
 These patterns form the foundation for building robust file processing in LLM applications like Cursor, where reliability and data safety are paramount.`,
-    videoUrl: null,
+  videoUrl: undefined,
 };
-

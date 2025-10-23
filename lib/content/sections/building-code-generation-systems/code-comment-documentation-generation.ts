@@ -4,9 +4,9 @@
  */
 
 export const codecommentdocumentationgenerationSection = {
-    id: 'code-comment-documentation-generation',
-    title: 'Code Comment & Documentation Generation',
-    content: `# Code Comment & Documentation Generation
+  id: 'code-comment-documentation-generation',
+  title: 'Code Comment & Documentation Generation',
+  content: `# Code Comment & Documentation Generation
 
 Master generating comprehensive documentation, docstrings, and inline comments automatically.
 
@@ -760,4 +760,3 @@ You've mastered documentation generation! Next:
 Remember: **Good Documentation = Maintainable Code**
 `,
 };
-

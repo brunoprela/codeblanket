@@ -4,9 +4,9 @@
  */
 
 export const textfileprocessingSection = {
-    id: 'text-file-processing',
-    title: 'Text File Processing',
-    content: `# Text File Processing
+  id: 'text-file-processing',
+  title: 'Text File Processing',
+  content: `# Text File Processing
 
 Master efficient text file processing for building production LLM applications that handle code, documents, and data files.
 
@@ -894,6 +894,5 @@ processor.apply_changes("src/main.py", new_code, create_backup=True)
 10. **Create backups** before modifying files
 
 These patterns are essential for building production-grade text processing in LLM applications, especially code editors like Cursor where data integrity and performance are critical.`,
-    videoUrl: null,
+  videoUrl: undefined,
 };
-

@@ -17,7 +17,6 @@ export const multivariablecalculusMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'The Hessian matrix H = [∂²f/∂xᵢ∂xⱼ] contains all second-order partial derivatives.',
-    difficulty: 'easy',
   },
   {
     id: 'multivar-2',
@@ -32,7 +31,6 @@ export const multivariablecalculusMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       'Mixed eigenvalue signs indicate a saddle point: decreasing in some directions, increasing in others.',
-    difficulty: 'medium',
   },
   {
     id: 'multivar-3',
@@ -46,7 +44,6 @@ export const multivariablecalculusMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       "In n dimensions, the probability of a random critical point being a saddle point approaches 100% as n increases, because it's unlikely all n eigenvalues have the same sign.",
-    difficulty: 'hard',
   },
   {
     id: 'multivar-4',
@@ -55,7 +52,6 @@ export const multivariablecalculusMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       'The Jacobian has m rows (one per output) and n columns (one per input), resulting in m × n.',
-    difficulty: 'medium',
   },
   {
     id: 'multivar-5',
@@ -70,6 +66,5 @@ export const multivariablecalculusMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       'Second-order Taylor expansion includes constant, linear (gradient), and quadratic (Hessian) terms.',
-    difficulty: 'medium',
   },
 ];

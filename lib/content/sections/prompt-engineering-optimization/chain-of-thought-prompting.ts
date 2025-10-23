@@ -4,9 +4,9 @@
  */
 
 export const chainofthoughtpromptingSection = {
-    id: 'chain-of-thought-prompting',
-    title: 'Chain-of-Thought Prompting',
-    content: `# Chain-of-Thought Prompting
+  id: 'chain-of-thought-prompting',
+  title: 'Chain-of-Thought Prompting',
+  content: `# Chain-of-Thought Prompting
 
 Master Chain-of-Thought (CoT) prompting to enable LLMs to solve complex problems through step-by-step reasoning.
 
@@ -900,4 +900,3 @@ if 'verification_reasoning' in result:
 
 Now that you understand Chain-of-Thought prompting, you're ready to explore **Prompt Optimization Techniques** - learning systematic approaches to improve prompt performance through testing and iteration.`,
 };
-

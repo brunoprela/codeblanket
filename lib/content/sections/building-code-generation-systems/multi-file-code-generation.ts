@@ -4,9 +4,9 @@
  */
 
 export const multifilecodegenerationSection = {
-    id: 'multi-file-code-generation',
-    title: 'Multi-File Code Generation',
-    content: `# Multi-File Code Generation
+  id: 'multi-file-code-generation',
+  title: 'Multi-File Code Generation',
+  content: `# Multi-File Code Generation
 
 Master generating and coordinating changes across multiple files - essential for real-world code generation systems.
 
@@ -788,4 +788,3 @@ You've mastered multi-file generation! Next:
 Remember: **Plan → Generate → Validate → Apply Transactionally**
 `,
 };
-

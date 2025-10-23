@@ -4,9 +4,9 @@
  */
 
 export const outputformatcontrolSection = {
-    id: 'output-format-control',
-    title: 'Output Format Control',
-    content: `# Output Format Control
+  id: 'output-format-control',
+  title: 'Output Format Control',
+  content: `# Output Format Control
 
 Master techniques to enforce specific output formats, making LLM outputs reliable and parseable in production systems.
 
@@ -837,4 +837,3 @@ print(csv_output)
 
 Now that you understand output format control, you're ready to explore **Context Management & Truncation** - learning how to handle long documents and manage context windows effectively.`,
 };
-

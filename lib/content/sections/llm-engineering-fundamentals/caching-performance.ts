@@ -4,9 +4,9 @@
  */
 
 export const cachingperformanceSection = {
-    id: 'caching-performance',
-    title: 'Caching & Performance',
-    content: `# Caching & Performance
+  id: 'caching-performance',
+  title: 'Caching & Performance',
+  content: `# Caching & Performance
 
 Master caching strategies to dramatically reduce costs and improve performance in production LLM applications.
 
@@ -794,4 +794,3 @@ print(f"  Spent: \${metrics['total_api_cost']:.4f}")
 
 Now you can optimize performance and costs. Next: **Local LLM Deployment** - learning to run models locally for privacy and cost control.`,
 };
-

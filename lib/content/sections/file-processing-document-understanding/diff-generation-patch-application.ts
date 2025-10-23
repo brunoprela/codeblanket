@@ -4,9 +4,9 @@
  */
 
 export const diffgenerationpatchapplicationSection = {
-    id: 'diff-generation-patch-application',
-    title: 'Diff Generation & Patch Application',
-    content: `# Diff Generation & Patch Application
+  id: 'diff-generation-patch-application',
+  title: 'Diff Generation & Patch Application',
+  content: `# Diff Generation & Patch Application
 
 Master diff generation and patch application for building code editors and version control tools like Cursor.
 
@@ -111,6 +111,5 @@ def apply_patch(original_text: str, patch_text: str):
 8. **Test patches** before applying
 9. **Preserve line endings** in diffs
 10. **Handle edge cases** (empty files, etc.)`,
-    videoUrl: null,
+  videoUrl: undefined,
 };
-

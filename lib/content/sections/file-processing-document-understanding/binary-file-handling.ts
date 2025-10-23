@@ -4,9 +4,9 @@
  */
 
 export const binaryfilehandlingSection = {
-    id: 'binary-file-handling',
-    title: 'Binary File Handling',
-    content: `# Binary File Handling
+  id: 'binary-file-handling',
+  title: 'Binary File Handling',
+  content: `# Binary File Handling
 
 Master binary file processing for comprehensive file manipulation in LLM applications.
 
@@ -111,6 +111,5 @@ def extract_tar(tar_path: str, extract_to: str):
 8. **Never assume** text encoding for binary
 9. **Check file signatures** before processing
 10. **Use appropriate libraries** for each format`,
-    videoUrl: null,
+  videoUrl: undefined,
 };
-

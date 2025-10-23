@@ -4,9 +4,9 @@
  */
 
 export const outputparsingSection = {
-    id: 'output-parsing',
-    title: 'Output Parsing & Structured Data',
-    content: `# Output Parsing & Structured Data
+  id: 'output-parsing',
+  title: 'Output Parsing & Structured Data',
+  content: `# Output Parsing & Structured Data
 
 Master extracting structured data from LLM outputs for reliable production applications.
 
@@ -776,4 +776,3 @@ else:
 
 Now you can extract structured data reliably. Next: **LLM Observability & Logging** - learning to monitor and debug LLM applications in production.`,
 };
-

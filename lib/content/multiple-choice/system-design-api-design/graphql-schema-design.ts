@@ -17,7 +17,6 @@ export const graphqlschemadesignMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       "GraphQL's main advantage is that clients specify exactly what data they need in their query, eliminating over-fetching (getting unnecessary data) and under-fetching (needing multiple requests). GraphQL uses HTTP (not binary), doesn't auto-generate database queries, and still requires authentication.",
-    difficulty: 'easy',
   },
   {
     id: 'graphql-q2',
@@ -31,7 +30,6 @@ export const graphqlschemadesignMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       'The "!" symbol indicates a field is non-nullable, meaning it must always have a value. "String!" means a required string, "String" is optional. "[Post!]!" means a non-null array containing non-null Posts.',
-    difficulty: 'easy',
   },
   {
     id: 'graphql-q3',
@@ -45,7 +43,6 @@ export const graphqlschemadesignMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 0,
     explanation:
       'N+1 problem: Fetching a list of N items, then making 1 query per item for related data (N+1 total queries). Example: fetching 10 posts, then 10 separate queries for each author. DataLoader batches and caches these queries, turning N+1 into 2 queries.',
-    difficulty: 'hard',
   },
   {
     id: 'graphql-q4',
@@ -60,7 +57,6 @@ export const graphqlschemadesignMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Relay specification uses cursor-based pagination with specific structure: edges (array of {cursor, node}), nodes (actual data), and pageInfo (hasNextPage, hasPreviousPage, startCursor, endCursor). This provides consistent, efficient pagination.',
-    difficulty: 'medium',
   },
   {
     id: 'graphql-q5',
@@ -74,6 +70,5 @@ export const graphqlschemadesignMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Nullable fields allow schema evolution - you can add new fields without breaking existing clients. If you add a required field later, old data might not have it. Core fields (id, createdAt) can be non-nullable, but most fields should be nullable for flexibility. Only inputs should match business requirements strictly.',
-    difficulty: 'medium',
   },
 ];

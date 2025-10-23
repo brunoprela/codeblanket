@@ -4,9 +4,9 @@
  */
 
 export const testgenerationSection = {
-    id: 'test-generation',
-    title: 'Test Generation',
-    content: `# Test Generation
+  id: 'test-generation',
+  title: 'Test Generation',
+  content: `# Test Generation
 
 Master generating comprehensive unit tests, test cases, and test data automatically with LLMs.
 
@@ -770,4 +770,3 @@ You've mastered test generation! Next:
 Remember: **Comprehensive Tests = Confident Code**
 `,
 };
-

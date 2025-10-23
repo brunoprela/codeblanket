@@ -4,9 +4,9 @@
  */
 
 export const costtrackingoptimizationSection = {
-    id: 'cost-tracking-optimization',
-    title: 'Cost Tracking & Optimization',
-    content: `# Cost Tracking & Optimization
+  id: 'cost-tracking-optimization',
+  title: 'Cost Tracking & Optimization',
+  content: `# Cost Tracking & Optimization
 
 Master cost management to build profitable LLM applications that scale economically.
 
@@ -880,4 +880,3 @@ print(f"Monthly: \${status['monthly']['spent']:.2f} / \${status['monthly']['budg
 
 Now you can track and optimize costs. Next: **Prompt Templates & Variables** - learning to build reusable, maintainable prompt systems.`,
 };
-

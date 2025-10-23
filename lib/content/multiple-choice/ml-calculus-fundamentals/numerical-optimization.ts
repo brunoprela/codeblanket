@@ -17,7 +17,6 @@ export const numericaloptimizationMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Momentum accumulates a velocity term that smooths updates and accelerates movement in directions of consistent gradient, helping escape ravines and oscillations.',
-    difficulty: 'medium',
   },
   {
     id: 'numopt-2',
@@ -32,7 +31,6 @@ export const numericaloptimizationMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       "Newton's method requires computing, storing, and inverting an n×n Hessian matrix, which is computationally intractable for networks with millions of parameters.",
-    difficulty: 'easy',
   },
   {
     id: 'numopt-3',
@@ -46,7 +44,6 @@ export const numericaloptimizationMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 0,
     explanation:
       'Adam (Adaptive Moment Estimation) combines momentum (first moment) with adaptive learning rates based on second moment estimates, providing both acceleration and per-parameter adaptation.',
-    difficulty: 'medium',
   },
   {
     id: 'numopt-4',
@@ -60,7 +57,6 @@ export const numericaloptimizationMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'SGD uses gradients computed on small mini-batches as noisy estimates of the full gradient, trading some accuracy for computational efficiency on large datasets.',
-    difficulty: 'easy',
   },
   {
     id: 'numopt-5',
@@ -74,6 +70,5 @@ export const numericaloptimizationMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Line search methods (like backtracking) adaptively find step sizes that guarantee sufficient decrease, typically using conditions like the Armijo rule.',
-    difficulty: 'medium',
   },
 ];

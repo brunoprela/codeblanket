@@ -17,7 +17,6 @@ export const timeseriesforecastingMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'In ARIMA(p,d,q), d represents the order of differencing. d=1 means first-order differencing (Y_t - Y_{t-1}), d=2 means second-order differencing. Differencing is used to make a non-stationary series stationary by removing trend. p is autoregressive order, q is moving average order.',
-    difficulty: 'easy',
   },
   {
     id: 'timeseries-forecasting-mc-2',
@@ -32,7 +31,6 @@ export const timeseriesforecastingMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Random splitting violates temporal causality in time series. Training data could contain future values relative to test data, causing data leakage. The model unrealistically learns from the future. Always use time-based splits: train on earlier data, test on later data.',
-    difficulty: 'medium',
   },
   {
     id: 'timeseries-forecasting-mc-3',
@@ -47,7 +45,6 @@ export const timeseriesforecastingMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       'Holt-Winters (Triple Exponential Smoothing) handles both trend and seasonality. Simple ES handles neither, Holt handles only trend, and Simple MA is just an average. Holt-Winters has three smoothing parameters: level (alpha), trend (beta), and seasonal (gamma).',
-    difficulty: 'easy',
   },
   {
     id: 'timeseries-forecasting-mc-4',
@@ -62,7 +59,6 @@ export const timeseriesforecastingMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'A significant spike at lag 1 in the Partial Autocorrelation Function (PACF) suggests that Y_t is directly correlated with Y_{t-1} after controlling for intermediate lags. This indicates an AR(1) model (autoregressive order p=1) might be appropriate. PACF helps determine the AR order (p) in ARIMA.',
-    difficulty: 'hard',
   },
   {
     id: 'timeseries-forecasting-mc-5',
@@ -77,6 +73,5 @@ export const timeseriesforecastingMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'ADF test p-value of 0.03 < 0.05 means we reject the null hypothesis of non-stationarity. The series is stationary after first-order differencing (d=1). You can now proceed with fitting ARIMA, using d=1 in the model. No need for additional differencing.',
-    difficulty: 'medium',
   },
 ];

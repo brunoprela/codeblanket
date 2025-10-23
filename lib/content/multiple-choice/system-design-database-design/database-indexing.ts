@@ -45,7 +45,6 @@ export const databaseindexingMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       'Option C is correct. When a query matches a large percentage of rows (e.g., 20-30%+), the cost of random I/O from index lookups exceeds the cost of a sequential table scan. The optimizer chooses the more efficient full scan. Example: "WHERE country = \'USA\'" in a US-based company might match 90% of rows. Option A would cause errors, not fall back to table scan. Option B is not a reason to avoid indexes. Option D is incorrect; indexes are immediately available after creation.',
-    difficulty: 'hard' as const,
   },
   {
     id: 'indexing-4',
@@ -59,7 +58,6 @@ export const databaseindexingMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Option B is correct. A covering index (or index with INCLUDE columns) contains all data needed to satisfy a query, allowing an "index-only scan" without accessing table rows. This eliminates random I/O to fetch table data. Example: CREATE INDEX idx ON orders(user_id) INCLUDE (status, total) can satisfy "SELECT status, total FROM orders WHERE user_id = 123" entirely from the index. Option A is impractical (huge index). Option C misunderstands covering. Option D describes a different concept.',
-    difficulty: 'medium' as const,
   },
   {
     id: 'indexing-5',
@@ -74,6 +72,5 @@ export const databaseindexingMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       'Option C is correct. A partial (filtered) index on WHERE status = "premium" creates a tiny index covering only 1M rows (0.1%) instead of 1B rows. This makes the index 1000x smaller, faster to search, and much cheaper to maintain on writes. The composite (status, user_id) supports various queries. Option A creates a huge index for low-selectivity column. Option B doesn\'t leverage the small subset. Option D is incorrect because user_id should already be unique across all users, not just premium users.',
-    difficulty: 'hard' as const,
   },
 ];

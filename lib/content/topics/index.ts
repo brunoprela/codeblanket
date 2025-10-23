@@ -94,6 +94,11 @@ import { llmEngineeringFundamentalsModule } from '../modules/llm-engineering-fun
 import { fileProcessingDocumentUnderstandingModule } from '../modules/file-processing-document-understanding';
 import { codeUnderstandingAstManipulationModule } from '../modules/code-understanding-ast-manipulation';
 import { buildingCodeGenerationSystemsModule } from '../modules/building-code-generation-systems';
+import { llmToolUseFunctionCallingModule } from '../modules/llm-tool-use-function-calling';
+import { multiAgentSystemsOrchestrationModule } from '../modules/multi-agent-systems-orchestration';
+import { imageGenerationComputerVisionModule } from '../modules/image-generation-computer-vision';
+import { videoAudioGenerationModule } from '../modules/video-audio-generation';
+import { multiModalAiSystemsModule } from '../modules/multi-modal-ai-systems';
 
 // Create a map of all modules by ID
 const allModulesMap: Record<string, Module> = {
@@ -157,6 +162,11 @@ const allModulesMap: Record<string, Module> = {
   'applied-ai-file-processing': fileProcessingDocumentUnderstandingModule,
   'applied-ai-code-understanding': codeUnderstandingAstManipulationModule,
   'applied-ai-code-generation': buildingCodeGenerationSystemsModule,
+  'applied-ai-tool-use': llmToolUseFunctionCallingModule,
+  'applied-ai-multi-agent': multiAgentSystemsOrchestrationModule,
+  'applied-ai-image-generation': imageGenerationComputerVisionModule,
+  'applied-ai-video-audio': videoAudioGenerationModule,
+  'applied-ai-multi-modal': multiModalAiSystemsModule,
 };
 
 // Define all topics in order

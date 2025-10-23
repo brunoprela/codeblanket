@@ -17,7 +17,6 @@ export const apitestingMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Contract testing ensures API responses match the documented OpenAPI spec (correct status codes, schema, required fields). Catches when implementation drift from spec. Tools like Pact or jest-openapi automate this.',
-    difficulty: 'medium',
   },
   {
     id: 'testing-q2',
@@ -32,7 +31,6 @@ export const apitestingMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 0,
     explanation:
       'Mocking external dependencies makes tests: (1) Fast (no network calls), (2) Reliable (no external failures), (3) Repeatable (no side effects like charging cards). Test YOUR code, not third-party services. Use real services in E2E tests only.',
-    difficulty: 'easy',
   },
   {
     id: 'testing-q3',
@@ -46,7 +44,6 @@ export const apitestingMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Test pyramid: Many unit tests (fast, cheap, pinpoint failures) → Some integration tests (medium) → Few E2E tests (slow, expensive, brittle). Unit tests run in ms, E2E tests in minutes. Balance speed and confidence.',
-    difficulty: 'medium',
   },
   {
     id: 'testing-q4',
@@ -60,7 +57,6 @@ export const apitestingMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       "Load test thresholds: p95 latency < target (e.g., 500ms) AND error rate < 1-5%. Some errors acceptable under load. Don't just track averages (misleading). p95/p99 show real user experience.",
-    difficulty: 'medium',
   },
   {
     id: 'testing-q5',
@@ -75,6 +71,5 @@ export const apitestingMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       "Testing error cases ensures: (1) Proper status codes (400 vs 500), (2) Clear error messages, (3) No crashes, (4) Security (don't leak sensitive info). Happy path tests are insufficient. Error handling is critical for UX.",
-    difficulty: 'easy',
   },
 ];

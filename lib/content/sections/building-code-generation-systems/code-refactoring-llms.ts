@@ -4,9 +4,9 @@
  */
 
 export const coderefactoringllmsSection = {
-    id: 'code-refactoring-llms',
-    title: 'Code Refactoring with LLMs',
-    content: `# Code Refactoring with LLMs
+  id: 'code-refactoring-llms',
+  title: 'Code Refactoring with LLMs',
+  content: `# Code Refactoring with LLMs
 
 Master automated code refactoring using LLMs - rename variables, extract functions, and restructure code safely.
 
@@ -869,4 +869,3 @@ You've mastered refactoring! Next:
 Remember: **Structure Changes + Behavior Preservation = Safe Refactoring**
 `,
 };
-

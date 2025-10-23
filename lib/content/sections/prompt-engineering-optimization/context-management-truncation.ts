@@ -4,9 +4,9 @@
  */
 
 export const contextmanagementtruncationSection = {
-    id: 'context-management-truncation',
-    title: 'Context Management & Truncation',
-    content: `# Context Management & Truncation
+  id: 'context-management-truncation',
+  title: 'Context Management & Truncation',
+  content: `# Context Management & Truncation
 
 Master managing context windows and handling long documents when building production AI applications.
 
@@ -620,4 +620,3 @@ print(context)
 
 Now that you understand context management, you're ready to explore **Negative Prompting & Constraints** - learning how to tell LLMs what NOT to do and set boundaries for safe, reliable outputs.`,
 };
-

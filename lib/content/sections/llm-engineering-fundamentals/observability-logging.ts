@@ -4,9 +4,9 @@
  */
 
 export const observabilityloggingSection = {
-    id: 'observability-logging',
-    title: 'LLM Observability & Logging',
-    content: `# LLM Observability & Logging
+  id: 'observability-logging',
+  title: 'LLM Observability & Logging',
+  content: `# LLM Observability & Logging
 
 Master monitoring, logging, and debugging LLM applications for reliable production systems.
 
@@ -814,4 +814,3 @@ print(json.dumps(metrics, indent=2))
 
 Now you can monitor LLM apps. Next: **Caching & Performance** - learning to optimize performance and reduce costs through intelligent caching.`,
 };
-

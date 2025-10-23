@@ -18,7 +18,6 @@ export const graphqlperformanceMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'N+1 problem: Fetching N items then making 1 query per item for related data (N+1 total queries). Example: 100 posts → 1 query for posts + 100 queries for authors. DataLoader batches these into 2 queries total: one for posts, one batched query for all authors.',
-    difficulty: 'medium',
   },
   {
     id: 'graphql-perf-q2',
@@ -32,7 +31,6 @@ export const graphqlperformanceMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       "GraphQL typically uses POST requests (to send query in body), and POST requests aren't cached by browsers/CDNs by default. REST GET requests have built-in HTTP caching. GraphQL requires custom caching solutions like APQ (Automatic Persisted Queries) or Redis.",
-    difficulty: 'medium',
   },
   {
     id: 'graphql-perf-q3',
@@ -46,7 +44,6 @@ export const graphqlperformanceMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Query complexity analysis assigns "cost" to each field and rejects queries exceeding a threshold. This prevents malicious or accidentally expensive queries (e.g., fetching 1000 posts × 1000 comments = 1M records). Each field gets a complexity score.',
-    difficulty: 'easy',
   },
   {
     id: 'graphql-perf-q4',
@@ -61,7 +58,6 @@ export const graphqlperformanceMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Fetching limit + 1 items lets you check hasNextPage: if you get more than requested, there are more pages. Return only "limit" items to client, but the extra item tells you hasNextPage = true. Avoids expensive COUNT queries.',
-    difficulty: 'hard',
   },
   {
     id: 'graphql-perf-q5',
@@ -75,6 +71,5 @@ export const graphqlperformanceMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'APQ sends query hash instead of full query text after first request. Server caches query by hash. Subsequent requests send only hash (small), saving bandwidth especially for mobile. First request: full query + hash. Subsequent: just hash.',
-    difficulty: 'medium',
   },
 ];

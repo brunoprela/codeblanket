@@ -4,9 +4,9 @@
  */
 
 export const systempromptsroleassignmentSection = {
-    id: 'system-prompts-role-assignment',
-    title: 'System Prompts & Role Assignment',
-    content: `# System Prompts & Role Assignment
+  id: 'system-prompts-role-assignment',
+  title: 'System Prompts & Role Assignment',
+  content: `# System Prompts & Role Assignment
 
 Master the art of defining AI personality, behavior, and capabilities through system prompts.
 
@@ -987,4 +987,3 @@ experiment.print_results(results)
 
 Now that you understand system prompts and role assignment, you're ready to explore **Few-Shot Learning & Examples** - learning how to teach AI through demonstrations for more reliable outputs.`,
 };
-

@@ -1,7 +1,7 @@
 export default {
-    id: 'static-analysis',
-    title: 'Static Analysis & Code Quality',
-    content: `
+  id: 'static-analysis',
+  title: 'Static Analysis & Code Quality',
+  content: `
 # Static Analysis & Code Quality
 
 ## Introduction
@@ -1227,5 +1227,5 @@ Static analysis enables comprehensive code quality checking:
 These capabilities are essential for AI coding tools like Cursor to provide real-time feedback, suggest improvements, and help developers write better code. Combined with AST understanding, static analysis enables intelligent, context-aware assistance that goes far beyond simple syntax checking.
 
 In the next section, we'll explore type system understanding—how to work with Python's type hints for even more intelligent analysis.
-`
+`,
 };

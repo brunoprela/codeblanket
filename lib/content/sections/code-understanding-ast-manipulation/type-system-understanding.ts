@@ -1,7 +1,7 @@
 export default {
-    id: 'type-system-understanding',
-    title: 'Type System Understanding',
-    content: `
+  id: 'type-system-understanding',
+  title: 'Type System Understanding',
+  content: `
 # Type System Understanding
 
 ## Introduction
@@ -860,5 +860,5 @@ Type system understanding enables intelligent code assistance:
 These capabilities allow AI coding tools like Cursor to provide context-aware suggestions, catch errors before runtime, and generate type-correct code that integrates seamlessly with your existing codebase.
 
 In the next section, we'll explore documentation and comment extraction—understanding the human-written context around code.
-`
+`,
 };

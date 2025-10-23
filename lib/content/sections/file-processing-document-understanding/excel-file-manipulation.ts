@@ -4,9 +4,9 @@
  */
 
 export const excelfilemanipulationSection = {
-    id: 'excel-file-manipulation',
-    title: 'Excel File Manipulation',
-    content: `# Excel File Manipulation
+  id: 'excel-file-manipulation',
+  title: 'Excel File Manipulation',
+  content: `# Excel File Manipulation
 
 Master Excel file processing for building AI applications that can read, understand, and modify spreadsheets through natural language.
 
@@ -850,6 +850,5 @@ wb.save("file.xlsx")  # Formatting is preserved
 10. **Build modular functions** for reuse in LLM pipelines
 
 These patterns form the foundation for building AI applications that can intelligently manipulate Excel files, enabling natural language interfaces to spreadsheet operations.`,
-    videoUrl: null,
+  videoUrl: undefined,
 };
-

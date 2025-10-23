@@ -1,7 +1,7 @@
 export default {
-    id: 'code-similarity-detection',
-    title: 'Code Similarity & Clone Detection',
-    content: `
+  id: 'code-similarity-detection',
+  title: 'Code Similarity & Clone Detection',
+  content: `
 # Code Similarity & Clone Detection
 
 ## Introduction
@@ -884,5 +884,5 @@ Code similarity and clone detection enable intelligent code maintenance:
 These capabilities allow AI coding tools like Cursor to help maintain code quality by identifying duplication, suggesting refactorings, and finding relevant examples throughout your codebase—essential for building maintainable software at scale.
 
 In the next section, we'll explore the Language Server Protocol (LSP)—the standard for IDE features like go-to-definition and auto-complete.
-`
+`,
 };

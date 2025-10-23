@@ -4,9 +4,9 @@
  */
 
 export const streamingresponsesSection = {
-    id: 'streaming-responses',
-    title: 'Streaming Responses',
-    content: `# Streaming Responses
+  id: 'streaming-responses',
+  title: 'Streaming Responses',
+  content: `# Streaming Responses
 
 Master streaming to build responsive, real-time LLM applications like ChatGPT's interface.
 
@@ -869,4 +869,3 @@ STREAMING BEST PRACTICES:
 
 Now you can stream responses for better UX. Next: **Error Handling & Retry Logic** - learning to build robust LLM applications that gracefully handle failures.`,
 };
-

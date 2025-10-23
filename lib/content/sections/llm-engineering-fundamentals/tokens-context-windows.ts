@@ -4,9 +4,9 @@
  */
 
 export const tokenscontextwindowsSection = {
-    id: 'tokens-context-windows',
-    title: 'Tokens, Context Windows & Limitations',
-    content: `# Tokens, Context Windows & Limitations
+  id: 'tokens-context-windows',
+  title: 'Tokens, Context Windows & Limitations',
+  content: `# Tokens, Context Windows & Limitations
 
 Master token management and context windows to build efficient, cost-effective LLM applications.
 
@@ -869,4 +869,3 @@ print(f"Remaining for response: {budget.remaining:,}")
 
 Now you understand tokens and context limits. Next: **Temperature, Top-P & Sampling Parameters** - learning to control the randomness and creativity of model outputs.`,
 };
-

@@ -23,25 +23,25 @@ Each project builds incrementally, allowing you to apply concepts immediately.
 
 ## 📚 Module Overview
 
-| Module | Title | Sections | Difficulty | Est. Time |
-|--------|-------|----------|------------|-----------|
-| 1 | React Fundamentals | 9 | Beginner | 2-3 weeks |
-| 2 | Modern React Patterns & Hooks | 11 ⭐ | Beginner | 3 weeks |
-| 3 | State Management | 9 | Intermediate | 2-3 weeks |
-| 4 | Next.js Pages Router (Legacy) | 12 | Intermediate | 2 weeks |
-| 5 | Next.js App Router Fundamentals | 8 | Intermediate | 2-3 weeks |
-| 6 | Next.js App Router Advanced | 8 | Advanced | 2-3 weeks |
-| 7 | Styling & UI Development | 12 ⭐ | Intermediate | 2-3 weeks |
-| 8 | Forms & Data Validation | 10 | Intermediate | 2 weeks |
-| 9 | API Integration & Data Fetching | 15 ⚠️ | Advanced | 3-4 weeks |
-| 10 | Performance Optimization | 13 ⭐ | Advanced | 3 weeks |
-| 11 | Testing | 12 | Advanced | 2-3 weeks |
-| 12 | Authentication & Authorization | 10 | Advanced | 2 weeks |
-| 13 | SEO & Metadata | 10 | Intermediate | 1-2 weeks |
-| 14 | Deployment & DevOps | 12 | Advanced | 2-3 weeks |
-| 15 | Real-Time Features | 8 | Advanced | 2 weeks |
-| 16 | Advanced Patterns & Architecture | 14 ⭐ | Expert | 3 weeks |
-| 17 | Production Best Practices | 11 | Expert | 2-3 weeks |
+| Module | Title                            | Sections | Difficulty   | Est. Time |
+| ------ | -------------------------------- | -------- | ------------ | --------- |
+| 1      | React Fundamentals               | 9        | Beginner     | 2-3 weeks |
+| 2      | Modern React Patterns & Hooks    | 11 ⭐    | Beginner     | 3 weeks   |
+| 3      | State Management                 | 9        | Intermediate | 2-3 weeks |
+| 4      | Next.js Pages Router (Legacy)    | 12       | Intermediate | 2 weeks   |
+| 5      | Next.js App Router Fundamentals  | 8        | Intermediate | 2-3 weeks |
+| 6      | Next.js App Router Advanced      | 8        | Advanced     | 2-3 weeks |
+| 7      | Styling & UI Development         | 12 ⭐    | Intermediate | 2-3 weeks |
+| 8      | Forms & Data Validation          | 10       | Intermediate | 2 weeks   |
+| 9      | API Integration & Data Fetching  | 15 ⚠️    | Advanced     | 3-4 weeks |
+| 10     | Performance Optimization         | 13 ⭐    | Advanced     | 3 weeks   |
+| 11     | Testing                          | 12       | Advanced     | 2-3 weeks |
+| 12     | Authentication & Authorization   | 10       | Advanced     | 2 weeks   |
+| 13     | SEO & Metadata                   | 10       | Intermediate | 1-2 weeks |
+| 14     | Deployment & DevOps              | 12       | Advanced     | 2-3 weeks |
+| 15     | Real-Time Features               | 8        | Advanced     | 2 weeks   |
+| 16     | Advanced Patterns & Architecture | 14 ⭐    | Expert       | 3 weeks   |
+| 17     | Production Best Practices        | 11       | Expert       | 2-3 weeks |
 
 **Total**: 185 sections, 41-51 weeks (full-time equivalent)
 
@@ -269,6 +269,7 @@ Each project builds incrementally, allowing you to apply concepts immediately.
 **Description**: Master state management patterns from Context API to external libraries
 
 **Important Note**: This module covers multiple state management solutions. You don't need to master all of them! Most applications use only 2-3 approaches:
+
 - **Common combination**: Local state + TanStack Query + Zustand/Context
 - **Focus areas**: Sections 1-4 and 6 cover 90% of real-world needs
 - **Advanced options**: Sections 5, 7 (Redux, Jotai) are for specific use cases
@@ -378,6 +379,7 @@ Each project builds incrementally, allowing you to apply concepts immediately.
 **Description**: Learn the Pages Router for maintaining existing projects (Optional - skip to Module 5 for modern App Router)
 
 **Note**: The Pages Router is still widely used in production applications, but new projects should use the App Router (Module 5). This module is recommended for:
+
 - Developers maintaining existing Next.js applications
 - Teams working with legacy codebases
 - Understanding migration paths to App Router
@@ -401,7 +403,7 @@ Each project builds incrementally, allowing you to apply concepts immediately.
    - Catch-all routes ([...slug])
    - Optional catch-all ([[...slug]])
    - 404 pages
-   - Custom App (_app.js)
+   - Custom App (\_app.js)
 
 3. **Link Component & Navigation**
    - next/link component
@@ -473,8 +475,8 @@ Each project builds incrementally, allowing you to apply concepts immediately.
    - CSS optimization
 
 10. **Custom Document & App**
-    - _app.js customization
-    - _document.js customization
+    - \_app.js customization
+    - \_document.js customization
     - Global layouts
     - Per-page layouts
     - Persistent state
@@ -484,7 +486,7 @@ Each project builds incrementally, allowing you to apply concepts immediately.
 
 11. **Environment Variables**
     - .env files (.env.local, .env.production)
-    - NEXT_PUBLIC_ prefix
+    - NEXT*PUBLIC* prefix
     - Exposing variables to browser
     - Build-time vs runtime variables
     - Environment-specific configs
@@ -939,6 +941,7 @@ Each project builds incrementally, allowing you to apply concepts immediately.
 **Description**: Master API integration, data fetching strategies, database connections, and real-time updates
 
 **Note**: This is the largest module (15 sections) covering critical production topics. Plan for 3-4 weeks. If pacing feels overwhelming, consider splitting your study into two phases:
+
 - **Phase A**: Database & APIs (Sections 1-8)
 - **Phase B**: Production Features (Sections 9-15)
 
@@ -2094,6 +2097,7 @@ Each project builds incrementally, allowing you to apply concepts immediately.
 ## Implementation Guidelines
 
 ### Content Structure per Section:
+
 1. **Introduction** (what and why)
 2. **Concepts** (detailed explanation with code examples)
 3. **Practical implementation**
@@ -2103,6 +2107,7 @@ Each project builds incrementally, allowing you to apply concepts immediately.
 7. **Interview preparation tips**
 
 ### Quiz Structure per Section:
+
 1. **5 Multiple Choice Questions**
    - Test understanding of concepts
    - Realistic scenarios
@@ -2116,6 +2121,7 @@ Each project builds incrementally, allowing you to apply concepts immediately.
    - Best practices analysis
 
 ### Module Structure:
+
 - `id`: kebab-case identifier
 - `title`: Display title
 - `description`: 1-2 sentence summary
@@ -2137,6 +2143,7 @@ Each project builds incrementally, allowing you to apply concepts immediately.
 - **Estimated Total Lines**: ~61,000-71,000
 
 **Recent Improvements**:
+
 - ✅ Added Testing Introduction to Module 2 (early testing mindset)
 - ✅ Added Chrome DevTools to Module 10 (practical profiling)
 - ✅ Refocused Module 7 on Tailwind CSS (industry standard)
@@ -2148,32 +2155,39 @@ Each project builds incrementally, allowing you to apply concepts immediately.
 ## Priority Order for Implementation
 
 ### Phase 1: React Foundations (Modules 1-3)
+
 - Module 1: React Fundamentals
 - Module 2: Modern React Patterns & Hooks
 - Module 3: State Management
 
 ### Phase 2: Next.js Core (Modules 4-6)
+
 - Module 4: Next.js Fundamentals (Pages Router) - **Optional/Legacy**
 - Module 5: Next.js App Router Fundamentals
 - Module 6: Next.js App Router Advanced
 
 ### Phase 3: UI & Forms (Modules 7-8)
+
 - Module 7: Styling & UI Development
 - Module 8: Forms & Data Validation
 
 ### Phase 4: Data & Performance (Modules 9-10)
+
 - Module 9: API Integration & Data Fetching (includes Database, tRPC, Email)
 - Module 10: Performance Optimization
 
 ### Phase 5: Quality & Security (Modules 11-12)
+
 - Module 11: Testing React & Next.js Applications
 - Module 12: Authentication & Authorization
 
 ### Phase 6: Production Readiness (Modules 13-14)
+
 - Module 13: SEO & Metadata Management
 - Module 14: Deployment & DevOps
 
 ### Phase 7: Advanced Topics (Modules 15-17)
+
 - Module 15: Real-Time Features & Collaboration
 - Module 16: Advanced Patterns & Architecture (includes CMS)
 - Module 17: Production Best Practices & Case Studies (includes Payments)
@@ -2195,6 +2209,7 @@ Each project builds incrementally, allowing you to apply concepts immediately.
 ## Learning Path Recommendations
 
 ### **Beginner Path** (4-5 months) - Start Here
+
 **Goal**: Build your first React and Next.js applications
 
 1. Module 1: React Fundamentals
@@ -2209,19 +2224,13 @@ Each project builds incrementally, allowing you to apply concepts immediately.
 ---
 
 ### **Job-Ready Path** (6-8 months) - Get Hired
+
 **Goal**: Production-ready full-stack developer
 
-**All beginner modules, plus:**
-7. Module 3: State Management (complete all sections)
-8. Module 6: Next.js App Router Advanced
-9. Module 9: API Integration & Data Fetching
-10. Module 10: Performance Optimization
-11. Module 11: Testing (sections 1-5)
-12. Module 12: Authentication & Authorization
-13. Module 13: SEO & Metadata
-14. Module 14: Deployment & DevOps
+**All beginner modules, plus:** 7. Module 3: State Management (complete all sections) 8. Module 6: Next.js App Router Advanced 9. Module 9: API Integration & Data Fetching 10. Module 10: Performance Optimization 11. Module 11: Testing (sections 1-5) 12. Module 12: Authentication & Authorization 13. Module 13: SEO & Metadata 14. Module 14: Deployment & DevOps
 
-**Projects**: 
+**Projects**:
+
 - E-commerce store with payments
 - SaaS dashboard with auth
 - Production deployment
@@ -2229,6 +2238,7 @@ Each project builds incrementally, allowing you to apply concepts immediately.
 ---
 
 ### **Intermediate Path** (3-4 months) - Level Up
+
 **Prerequisites**: Complete Beginner Path
 
 1. Module 6: Next.js App Router Advanced
@@ -2243,6 +2253,7 @@ Each project builds incrementally, allowing you to apply concepts immediately.
 ---
 
 ### **Advanced Path** (2-3 months) - Master Level
+
 **Prerequisites**: Complete Job-Ready Path
 
 1. Module 15: Real-Time Features & Collaboration
@@ -2254,6 +2265,7 @@ Each project builds incrementally, allowing you to apply concepts immediately.
 ---
 
 ### **Legacy Maintenance Path** (Optional)
+
 **For maintaining existing Next.js applications**
 
 - Module 4: Next.js Fundamentals (Pages Router)
@@ -2294,6 +2306,7 @@ Each project builds incrementally, allowing you to apply concepts immediately.
 ## Revision Summary
 
 ### **v2.1 - Performance & Quality Improvements** (Latest)
+
 - ✅ Added **Testing Introduction** to Module 2 (start testing habits early)
 - ✅ Added **Chrome DevTools Profiling** to Module 10 (practical debugging)
 - ✅ Refocused Module 7 on **Tailwind CSS as primary** (industry standard 2024+)
@@ -2302,6 +2315,7 @@ Each project builds incrementally, allowing you to apply concepts immediately.
 - 📊 **New total**: 185 sections (up from 182)
 
 ### **v2.0 - Major Restructuring** (Previous)
+
 - ✅ Condensed legacy patterns (Class components, HOCs, Render Props) into single section
 - ✅ Split Module 5 (15 sections) into Module 5 & 6 for better pacing
 - ✅ Added Database Integration (Prisma) to Module 9
@@ -2316,9 +2330,8 @@ Each project builds incrementally, allowing you to apply concepts immediately.
 - ✅ Added "Job-Ready Path" learning track
 - ✅ Increased from 16 to 17 modules with better organization
 
-**Total Curriculum Evolution**: 
+**Total Curriculum Evolution**:
+
 - v1: 169 sections → v2: 182 sections → v2.1: 185 sections
 - Focus shifted from "everything" to "production-ready + modern best practices"
 - Career-oriented with Job-Ready learning path
-
-

@@ -4,9 +4,9 @@
  */
 
 export const interactivecodeeditingSection = {
-    id: 'interactive-code-editing',
-    title: 'Interactive Code Editing',
-    content: `# Interactive Code Editing
+  id: 'interactive-code-editing',
+  title: 'Interactive Code Editing',
+  content: `# Interactive Code Editing
 
 Master building interactive code editing experiences with conversational AI, like Cursor's chat interface.
 
@@ -769,4 +769,3 @@ You've mastered interactive editing! Next:
 Remember: **User Control + Transparency = Trust**
 `,
 };
-

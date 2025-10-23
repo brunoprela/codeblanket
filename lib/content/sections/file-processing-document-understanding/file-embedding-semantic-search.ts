@@ -4,9 +4,9 @@
  */
 
 export const fileembeddingsemanticsearchSection = {
-    id: 'file-embedding-semantic-search',
-    title: 'File Embedding & Semantic Search',
-    content: `# File Embedding & Semantic Search
+  id: 'file-embedding-semantic-search',
+  title: 'File Embedding & Semantic Search',
+  content: `# File Embedding & Semantic Search
 
 Master semantic search across files for building intelligent code search and document retrieval systems like Cursor.
 
@@ -170,6 +170,5 @@ results = store.search("database connection logic")
 8. **Update incrementally** when files change
 9. **Combine semantic + keyword** search
 10. **Use for code search** like Cursor does`,
-    videoUrl: null,
+  videoUrl: undefined,
 };
-

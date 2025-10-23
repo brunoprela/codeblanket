@@ -1,7 +1,7 @@
 export default {
-    id: 'python-code-analysis',
-    title: 'Python Code Analysis with AST',
-    content: `
+  id: 'python-code-analysis',
+  title: 'Python Code Analysis with AST',
+  content: `
 # Python Code Analysis with AST
 
 ## Introduction
@@ -1231,5 +1231,5 @@ Python AST analysis provides powerful code understanding capabilities:
 These techniques form the foundation for building intelligent Python tools like Cursor, enabling context-aware suggestions, accurate refactoring, and smart code generation.
 
 In the next section, we'll explore tree-sitter for multi-language parsing, allowing us to analyze code in any programming language with the same systematic approach.
-`
+`,
 };

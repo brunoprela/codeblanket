@@ -17,7 +17,6 @@ export const chainrulemultivariableMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Multivariable chain rule sums contributions from all paths: dz/dt = (∂f/∂x)(dx/dt) + (∂f/∂y)(dy/dt).',
-    difficulty: 'medium',
   },
   {
     id: 'chain-multi-2',
@@ -31,7 +30,6 @@ export const chainrulemultivariableMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Backpropagation is the systematic application of the chain rule to compute gradients through composed functions (layers).',
-    difficulty: 'easy',
   },
   {
     id: 'chain-multi-3',
@@ -45,7 +43,6 @@ export const chainrulemultivariableMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Gradients flow backward through the computational graph, with each node applying the chain rule to propagate gradients to its inputs.',
-    difficulty: 'easy',
   },
   {
     id: 'chain-multi-4',
@@ -55,7 +52,6 @@ export const chainrulemultivariableMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       'Computing ∂L/∂W1 requires chain rule through all layers: Layer3→Layer2→Layer1, three applications total.',
-    difficulty: 'medium',
   },
   {
     id: 'chain-multi-5',
@@ -69,6 +65,5 @@ export const chainrulemultivariableMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 0,
     explanation:
       'The Jacobian matrix contains all first-order partial derivatives, capturing how each output component depends on each input component.',
-    difficulty: 'medium',
   },
 ];

@@ -18,7 +18,6 @@ export const limitscontinuityMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       "A limit describes the value a function approaches as x gets close to a. The function doesn't need to be defined at a, and f(a) doesn't need to equal the limit. This is a key distinction between limits and function values.",
-    difficulty: 'easy',
   },
   {
     id: 'limits-2',
@@ -32,7 +31,6 @@ export const limitscontinuityMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 3,
     explanation:
       'The step function (Heaviside) has a jump discontinuity at x = 0, jumping from 0 to 1. ReLU is continuous everywhere but not differentiable at 0. Sigmoid and tanh are both continuous and differentiable everywhere.',
-    difficulty: 'medium',
   },
   {
     id: 'limits-3',
@@ -47,7 +45,6 @@ export const limitscontinuityMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       'Continuity requires three conditions: (1) f(a) is defined, (2) the limit as x approaches a exists, and (3) the limit equals f(a). Differentiability is not required for continuity.',
-    difficulty: 'medium',
   },
   {
     id: 'limits-4',
@@ -56,7 +53,6 @@ export const limitscontinuityMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'For rational functions at infinity, divide by the highest power of x. The terms 2x², 1, and 3 become negligible, leaving (5x³)/(x³) = 5. The limit is the ratio of leading coefficients when degrees are equal.',
-    difficulty: 'medium',
   },
   {
     id: 'limits-5',
@@ -71,6 +67,5 @@ export const limitscontinuityMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       "The IVT states that a continuous function on a closed interval will take on every value between f(a) and f(b). It doesn't guarantee differentiability, extrema, or monotonicity.",
-    difficulty: 'hard',
   },
 ];

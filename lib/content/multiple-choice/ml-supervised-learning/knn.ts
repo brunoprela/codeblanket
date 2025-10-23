@@ -18,7 +18,6 @@ export const knnMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'A very small k (especially k=1) makes the model highly sensitive to noise and outliers in the training data, leading to overfitting. The decision boundary becomes very jagged, fitting to individual noisy points rather than the underlying pattern. A larger k smooths the decision boundary and reduces sensitivity to individual points, though too large k can lead to underfitting.',
-    difficulty: 'medium',
   },
   {
     id: 'knn-mc-2',
@@ -33,7 +32,6 @@ export const knnMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Income has a much larger numeric range (180k spread) compared to age (62 year spread), so income differences will dominate Euclidean distance calculations by roughly 3x in magnitude. This means kNN will base decisions primarily on income similarity regardless of whether age is actually more predictive. Feature scaling (e.g., StandardScaler) is critical to give both features equal opportunity to influence predictions.',
-    difficulty: 'easy',
   },
   {
     id: 'knn-mc-3',
@@ -48,7 +46,6 @@ export const knnMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       'For each prediction, kNN must compute the distance (O(d) operations) to every training point (n points), resulting in O(n·d) complexity. This makes prediction slow for large datasets. KD-trees or ball trees can improve this to O(d log n) in low dimensions, but degrade to O(n·d) in high dimensions. This is why kNN is called "lazy learning" - all computation happens at prediction time.',
-    difficulty: 'medium',
   },
   {
     id: 'knn-mc-4',
@@ -63,7 +60,6 @@ export const knnMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'The curse of dimensionality causes all points to become roughly equidistant in high dimensions, making it impossible to identify truly "similar" neighbors. The ratio of nearest to farthest distance approaches 1. This fundamentally breaks kNN\'s assumption that similar inputs (by distance) should have similar outputs. Solutions include dimensionality reduction (PCA) or using algorithms that don\'t rely on distances.',
-    difficulty: 'hard',
   },
   {
     id: 'knn-mc-5',
@@ -78,6 +74,5 @@ export const knnMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Distance-weighted kNN assigns higher weight to closer neighbors (typically weight = 1/distance), making them more influential in the prediction. This is beneficial when you have a larger k but want nearby neighbors to dominate the decision. It allows using larger k values (for stability) while still being sensitive to local patterns. Uniform weights treat all k neighbors equally regardless of distance.',
-    difficulty: 'medium',
   },
 ];

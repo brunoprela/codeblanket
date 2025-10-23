@@ -18,7 +18,6 @@ export const featureselectionMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       "Filter methods are much faster than wrapper methods because they use simple statistical tests (correlation, ANOVA, mutual information) rather than training models repeatedly. This makes them scalable to high-dimensional data (thousands of features). However, they don't capture feature interactions like wrappers do.",
-    difficulty: 'easy',
   },
   {
     id: 'feature-selection-mc-2',
@@ -33,7 +32,6 @@ export const featureselectionMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Feature selection must be done only on training data to prevent data leakage. If you select features on the full dataset before splitting, the selection process has "seen" the test data, leading to overly optimistic performance estimates. Always use Pipeline or re-select features in each CV fold.',
-    difficulty: 'medium',
   },
   {
     id: 'feature-selection-mc-3',
@@ -47,7 +45,6 @@ export const featureselectionMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'L1 regularization adds a penalty proportional to the absolute value of coefficients. This drives some coefficients to exactly zero, effectively removing those features. This is automatic feature selection - features with zero coefficients can be dropped. L2 (Ridge) only shrinks coefficients but never zeros them out.',
-    difficulty: 'medium',
   },
   {
     id: 'feature-selection-mc-4',
@@ -62,7 +59,6 @@ export const featureselectionMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'With 50,000 features, wrapper methods like RFE or forward selection would be prohibitively slow. Filter methods (correlation, variance threshold, univariate tests) are fast and scalable, making them ideal for initial screening. After reducing to hundreds of features, you can use more sophisticated methods.',
-    difficulty: 'easy',
   },
   {
     id: 'feature-selection-mc-5',
@@ -77,6 +73,5 @@ export const featureselectionMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       "When features are highly correlated, they provide redundant information. Feature importance algorithms (especially tree-based) split the importance between correlated features. Individually each appears unimportant, but together they're valuable. Solution: drop one feature from each correlated pair, or use permutation importance which handles correlations better.",
-    difficulty: 'hard',
   },
 ];

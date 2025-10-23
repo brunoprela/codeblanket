@@ -17,6 +17,7 @@ This document outlines the complete 18-module curriculum designed to take studen
 ## 🎯 What Makes This Curriculum Unique
 
 ### Comprehensive Path from Math to Production Trading Bots
+
 This curriculum is specifically designed to take you from elementary mathematics to building **production-ready, LLM-powered trading systems**. Unlike typical ML courses, it integrates:
 
 - **Deep Mathematical Foundation**: Stochastic calculus, convex optimization, and quantitative finance
@@ -27,6 +28,7 @@ This curriculum is specifically designed to take you from elementary mathematics
 ### Critical Additions in Enhanced Version
 
 #### 📐 **Enhanced Mathematics (Modules 1-5)**
+
 - **Stochastic Calculus**: Brownian motion, Itô's lemma, SDEs (Module 2)
 - **Convex Optimization**: KKT conditions, duality theory (Module 2)
 - **Numerical Optimization**: BFGS, L-BFGS, trust region methods (Module 2)
@@ -37,6 +39,7 @@ This curriculum is specifically designed to take you from elementary mathematics
 - **Robust Statistics**: Handling noisy financial data (Module 5)
 
 #### 🤖 **Expanded LLM Coverage (Module 14: 12→16 sections)**
+
 - **LLM Agents & Tool Use**: ReAct, function calling, LangChain (NEW Section 11)
 - **Context Window Management**: Handling long documents (NEW Section 12)
 - **Advanced Architectures**: MoE, multimodal models (NEW Section 13)
@@ -46,6 +49,7 @@ This curriculum is specifically designed to take you from elementary mathematics
 - **Vector Databases Deep Dive**: FAISS, Pinecone, embeddings (Enhanced Section 9)
 
 #### 📈 **Comprehensive Trading (Module 15: 15→20 sections)**
+
 - **Market Regimes**: HMM, adaptive strategies (NEW Section 15)
 - **Advanced Risk Management**: VaR, CVaR, stress testing (NEW Section 16)
 - **Strategy Performance**: Risk-adjusted returns, statistical significance (NEW Section 17)
@@ -54,7 +58,9 @@ This curriculum is specifically designed to take you from elementary mathematics
 - **Enhanced RL**: Multi-asset portfolio RL, risk-aware objectives (Enhanced Section 14)
 
 #### 💰 **New Module 17: Quantitative Finance** (12 sections)
+
 Complete professional-grade quantitative finance:
+
 - Options pricing and Greeks
 - Black-Scholes model
 - Portfolio theory and CAPM
@@ -66,7 +72,9 @@ Complete professional-grade quantitative finance:
 - Alternative investments
 
 #### 💼 **New Module 18: LLM Applications in Finance** (10 sections)
+
 Practical LLM applications for trading:
+
 - Financial document analysis (10-K, 10-Q)
 - Earnings call analysis
 - News analysis at scale
@@ -79,6 +87,7 @@ Practical LLM applications for trading:
 - Regulatory compliance
 
 #### 🚀 **Enhanced Production (Module 16: 12→14 sections)**
+
 - **Real-Time ML Systems**: Online learning, streaming pipelines, <10ms latency (NEW Section 13)
 - **LLM Production**: Token streaming, cost monitoring, fallback strategies (NEW Section 14)
 
@@ -93,20 +102,20 @@ After completing this curriculum, you will be able to:
 ✅ **Integrate LLMs in Trading**: Use LLMs for research, analysis, and signal generation  
 ✅ **Deploy to Production**: Build scalable, monitored, production-ready systems  
 ✅ **Manage Risk**: Implement professional risk management (VaR, Greeks, drawdown control)  
-✅ **Price Derivatives**: Understand and implement options pricing models  
+✅ **Price Derivatives**: Understand and implement options pricing models
 
 ### Comparison: Before vs After Enhancement
 
-| Aspect | Original | Enhanced |
-|--------|----------|----------|
-| **Modules** | 16 | 18 (+2 major modules) |
-| **Sections** | ~170 | ~205 (+35 sections) |
-| **Math Depth** | Basic calculus | Stochastic calculus, convex opt |
-| **LLM Coverage** | Good | Comprehensive (agents, prod) |
-| **Finance** | Trading basics | Full quantitative finance |
-| **Trading Infrastructure** | Backtesting | Live trading, execution, risk |
-| **Duration** | 30 weeks | 45 weeks (comprehensive) |
-| **Lines of Content** | 60-80K | 85-100K |
+| Aspect                     | Original       | Enhanced                        |
+| -------------------------- | -------------- | ------------------------------- |
+| **Modules**                | 16             | 18 (+2 major modules)           |
+| **Sections**               | ~170           | ~205 (+35 sections)             |
+| **Math Depth**             | Basic calculus | Stochastic calculus, convex opt |
+| **LLM Coverage**           | Good           | Comprehensive (agents, prod)    |
+| **Finance**                | Trading basics | Full quantitative finance       |
+| **Trading Infrastructure** | Backtesting    | Live trading, execution, risk   |
+| **Duration**               | 30 weeks       | 45 weeks (comprehensive)        |
+| **Lines of Content**       | 60-80K         | 85-100K                         |
 
 ---
 
@@ -2367,6 +2376,7 @@ After completing this curriculum, you will be able to:
 ## Implementation Guidelines
 
 ### Content Structure per Section:
+
 1. **Conceptual Introduction** (theory and intuition)
 2. **Mathematical Foundations** (equations and derivations when necessary)
 3. **Python Implementation** (from scratch when educational, with libraries for practice)
@@ -2376,6 +2386,7 @@ After completing this curriculum, you will be able to:
 7. **Connection to Trading** (where relevant)
 
 ### Code Requirements:
+
 - **NumPy/Pandas** for data manipulation
 - **Matplotlib/Seaborn** for visualization
 - **Scikit-learn** for classical ML
@@ -2386,6 +2397,7 @@ After completing this curriculum, you will be able to:
 - Reproducible examples with random seeds
 
 ### Quiz Structure per Section:
+
 1. **5 Multiple Choice Questions**
    - Conceptual understanding
    - Practical scenarios
@@ -2401,6 +2413,7 @@ After completing this curriculum, you will be able to:
    - Connection to practical problems
 
 ### Module Structure:
+
 - `id`: kebab-case identifier
 - `title`: Display title
 - `description`: 2-3 sentence summary
@@ -2416,18 +2429,22 @@ After completing this curriculum, you will be able to:
 ## Learning Path & Prerequisites
 
 ### Beginner Path (Modules 1-6):
+
 - Module 1: Mathematical Foundations → Module 2: Calculus → Module 3: Linear Algebra
 - Module 4: Probability → Module 5: Statistics → Module 6: Python for Data Science
 
 ### Intermediate Path (Modules 7-10):
+
 - Module 7: EDA & Feature Engineering → Module 8: Supervised Learning
 - Module 9: Unsupervised Learning → Module 10: Model Evaluation
 
 ### Advanced Path (Modules 11-14):
+
 - Module 11: Deep Learning Fundamentals → Module 12: Advanced Deep Learning
 - Module 13: Natural Language Processing → Module 14: Large Language Models
 
 ### Specialization Paths:
+
 - **Quantitative Trading Track**: Modules 1-10 → Module 15 → Module 17 → Module 16
 - **LLM Mastery Track**: Modules 1-7 → Modules 11-14 → Module 18
 - **LLM + Trading Track** (Full Quant/AI): All 18 modules
@@ -2438,6 +2455,7 @@ After completing this curriculum, you will be able to:
 ## Practical Projects
 
 ### Beginner Projects:
+
 1. **Linear Regression from Scratch** (Module 8)
    - Implement OLS, gradient descent
    - Visualize convergence
@@ -2449,6 +2467,7 @@ After completing this curriculum, you will be able to:
    - Visualization best practices
 
 ### Intermediate Projects:
+
 3. **Customer Segmentation** (Module 9)
    - Clustering analysis
    - Dimensionality reduction
@@ -2465,6 +2484,7 @@ After completing this curriculum, you will be able to:
    - Fine-tuned transformer
 
 ### Advanced Projects:
+
 6. **Stock Price Predictor** (Module 15)
    - Feature engineering with technical indicators
    - Multiple model comparison
@@ -2525,6 +2545,7 @@ After completing this curriculum, you will be able to:
 ## Resources & References
 
 ### Essential Libraries:
+
 - **Core**: NumPy, Pandas, Matplotlib, Seaborn
 - **Classical ML**: Scikit-learn, XGBoost, LightGBM
 - **Deep Learning**: PyTorch, TensorFlow/Keras
@@ -2534,6 +2555,7 @@ After completing this curriculum, you will be able to:
 - **MLOps**: MLflow, DVC, FastAPI, Docker
 
 ### Recommended Books:
+
 - "The Elements of Statistical Learning" - Hastie, Tibshirani, Friedman
 - "Deep Learning" - Goodfellow, Bengio, Courville
 - "Hands-On Machine Learning" - Aurélien Géron
@@ -2541,6 +2563,7 @@ After completing this curriculum, you will be able to:
 - "Advances in Financial Machine Learning" - Marcos López de Prado
 
 ### Online Resources:
+
 - Kaggle (datasets and competitions)
 - Papers with Code (latest research)
 - ArXiv (research papers)
@@ -2552,36 +2575,44 @@ After completing this curriculum, you will be able to:
 ## Priority Order for Implementation
 
 ### Phase 1: Mathematical Foundations (Modules 1-3) - Weeks 1-5
+
 - Module 1: Mathematical Foundations (2 weeks)
 - Module 2: Calculus Fundamentals (1.5 weeks)
 - Module 3: Linear Algebra Foundations (1.5 weeks)
 
 ### Phase 2: Probability & Statistics (Modules 4-5) - Weeks 6-9
+
 - Module 4: Probability Theory (2 weeks)
 - Module 5: Statistics Fundamentals (2 weeks)
 
 ### Phase 3: Python & Data Analysis (Modules 6-7) - Weeks 10-12
+
 - Module 6: Python for Data Science (1.5 weeks)
 - Module 7: EDA & Feature Engineering (1.5 weeks)
 
 ### Phase 4: Classical ML (Modules 8-10) - Weeks 13-18
+
 - Module 8: Supervised Learning (2.5 weeks)
 - Module 9: Unsupervised Learning (1.5 weeks)
 - Module 10: Model Evaluation (1.5 weeks)
 
 ### Phase 5: Deep Learning (Modules 11-12) - Weeks 19-24
+
 - Module 11: Deep Learning Fundamentals (3 weeks)
 - Module 12: Advanced Deep Learning (3 weeks)
 
 ### Phase 6: NLP & LLMs (Modules 13-14) - Weeks 25-31
+
 - Module 13: Natural Language Processing (3 weeks)
 - Module 14: Large Language Models (4 weeks) ⭐ Expanded
 
 ### Phase 7: Trading & Finance (Modules 15, 17) - Weeks 32-39
+
 - Module 15: Time Series & Financial ML (4 weeks) ⭐ Expanded
 - Module 17: Quantitative Finance (3 weeks) ⭐ NEW
 
 ### Phase 8: Production & Applications (Modules 16, 18) - Weeks 40-45
+
 - Module 16: ML System Design & Production (3 weeks)
 - Module 18: LLM Applications in Finance (2.5 weeks) ⭐ NEW
 
@@ -2596,6 +2627,7 @@ After completing this curriculum, you will be able to:
 This curriculum supports building a sophisticated, production-ready trading bot through progressive projects:
 
 ### Stage 1: Foundation (After Module 8)
+
 - **Goal**: Basic statistical trading system
 - Simple moving average strategy
 - Linear regression price prediction
@@ -2603,6 +2635,7 @@ This curriculum supports building a sophisticated, production-ready trading bot 
 - Performance metrics
 
 ### Stage 2: Feature Engineering & Model Selection (After Module 10)
+
 - **Goal**: Enhanced prediction with ML
 - Technical indicators (50+ features)
 - Feature selection and importance
@@ -2611,6 +2644,7 @@ This curriculum supports building a sophisticated, production-ready trading bot 
 - Cross-validation for trading
 
 ### Stage 3: Advanced ML & Deep Learning (After Module 12)
+
 - **Goal**: State-of-the-art prediction models
 - LSTM for time series forecasting
 - 1D CNN for pattern recognition
@@ -2619,6 +2653,7 @@ This curriculum supports building a sophisticated, production-ready trading bot 
 - Multi-asset strategies
 
 ### Stage 4: NLP & Alternative Data (After Module 14)
+
 - **Goal**: Incorporate textual data
 - News sentiment analysis with LLMs
 - Social media sentiment (Reddit, Twitter)
@@ -2627,6 +2662,7 @@ This curriculum supports building a sophisticated, production-ready trading bot 
 - Multi-modal signal fusion
 
 ### Stage 5: Complete Trading System (After Module 15)
+
 - **Goal**: Full-featured trading bot
 - Real-time data ingestion (WebSocket)
 - Multiple strategy orchestration
@@ -2638,6 +2674,7 @@ This curriculum supports building a sophisticated, production-ready trading bot 
 - Performance monitoring dashboard
 
 ### Stage 6: Quantitative Finance Integration (After Module 17)
+
 - **Goal**: Professional-grade quant strategies
 - Options strategies and Greeks
 - Factor-based portfolio construction
@@ -2647,6 +2684,7 @@ This curriculum supports building a sophisticated, production-ready trading bot 
 - Advanced risk models
 
 ### Stage 7: LLM-Powered Intelligence (After Module 18)
+
 - **Goal**: AI-enhanced trading system
 - Automated fundamental analysis
 - Research automation
@@ -2656,6 +2694,7 @@ This curriculum supports building a sophisticated, production-ready trading bot 
 - Compliance monitoring
 
 ### Stage 8: Production Deployment (After Module 16)
+
 - **Goal**: Robust production system
 - Containerized deployment (Docker/Kubernetes)
 - CI/CD for trading strategies
@@ -2666,6 +2705,7 @@ This curriculum supports building a sophisticated, production-ready trading bot 
 - Live trading with capital controls
 
 ### Final System Capabilities:
+
 ✅ Multi-strategy orchestration  
 ✅ Real-time ML predictions  
 ✅ LLM-powered fundamental analysis  
@@ -2673,7 +2713,7 @@ This curriculum supports building a sophisticated, production-ready trading bot 
 ✅ Automated execution  
 ✅ Production monitoring  
 ✅ Regulatory compliance  
-✅ Scalable infrastructure  
+✅ Scalable infrastructure
 
 **Recommended Path**: Complete stages sequentially, thoroughly testing each before moving to the next.
 
@@ -2699,6 +2739,7 @@ This curriculum supports building a sophisticated, production-ready trading bot 
 **Goal**: Comprehensive ML/AI curriculum from mathematics through LLMs and quantitative trading
 
 **Key Enhancements**:
+
 - ✅ Advanced mathematical finance (stochastic calculus, convex optimization)
 - ✅ Expanded LLM coverage (agents, tools, context management, production)
 - ✅ Complete trading infrastructure (execution, risk, live trading)
@@ -2708,5 +2749,3 @@ This curriculum supports building a sophisticated, production-ready trading bot 
 - ✅ Professional-grade trading bot development roadmap
 
 **Target Outcome**: Students will be able to build sophisticated, production-ready trading systems powered by machine learning and LLMs, with deep understanding of the underlying mathematics and finance.
-
-

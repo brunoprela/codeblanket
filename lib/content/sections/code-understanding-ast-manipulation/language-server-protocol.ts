@@ -1,7 +1,7 @@
 export default {
-    id: 'language-server-protocol',
-    title: 'Language Server Protocol (LSP)',
-    content: `
+  id: 'language-server-protocol',
+  title: 'Language Server Protocol (LSP)',
+  content: `
 # Language Server Protocol (LSP)
 
 ## Introduction
@@ -616,5 +616,5 @@ Language Server Protocol enables universal IDE features:
 Understanding LSP is essential for building AI coding tools that integrate seamlessly with editors. It provides the infrastructure for real-time code intelligence that makes tools like Cursor possible—enabling features like auto-complete, go-to-definition, and refactoring across any programming language.
 
 In the final section, we'll bring everything together to build a complete code understanding engine that combines all the techniques we've learned.
-`
+`,
 };

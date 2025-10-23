@@ -18,7 +18,6 @@ export const grpcservicedesignMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       "gRPC uses Protocol Buffers (binary, compact) over HTTP/2 (multiplexing, compression), making it significantly faster than JSON/REST. However, it's harder to debug (not human-readable), requires proxies for browsers, and both support many languages.",
-    difficulty: 'easy',
   },
   {
     id: 'grpc-q2',
@@ -33,7 +32,6 @@ export const grpcservicedesignMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 3,
     explanation:
       'Real-time chat requires bidirectional streaming where both client and server continuously send and receive messages. Server streaming is one-way (server→client), client streaming is opposite (client→server), unary is single request-response.',
-    difficulty: 'easy',
   },
   {
     id: 'grpc-q3',
@@ -48,7 +46,6 @@ export const grpcservicedesignMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       "Field numbers (1, 2, 3...) are permanent identifiers used in binary encoding. Changing them breaks compatibility. They're not related to JSON order, optionality (proto3 all fields optional), or defaults. Never reuse or change field numbers.",
-    difficulty: 'medium',
   },
   {
     id: 'grpc-q4',
@@ -62,7 +59,6 @@ export const grpcservicedesignMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'gRPC uses deadlines: client specifies timeout when making call, gRPC propagates it as deadline in metadata, server can check if deadline exceeded and abort. No default timeout (can hang forever), not automatic, not in HTTP/2 or protobuf.',
-    difficulty: 'medium',
   },
   {
     id: 'grpc-q5',
@@ -76,6 +72,5 @@ export const grpcservicedesignMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       'REST works in browsers without proxies, JSON is human-readable for debugging, and HTTP caching is straightforward. gRPC is actually faster, has better streaming, and both support various auth methods. gRPC requires gRPC-Web proxy for browsers.',
-    difficulty: 'easy',
   },
 ];

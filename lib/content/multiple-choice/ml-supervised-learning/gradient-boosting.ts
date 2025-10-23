@@ -17,7 +17,6 @@ export const gradientboostingMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Each new tree fits the residuals (errors) of the current ensemble. This is the key difference from Random Forests - boosting trees explicitly target mistakes. Tree m predicts: residual = y - F_{m-1}(x), then updates: F_m = F_{m-1} + learning_rate × tree_m.',
-    difficulty: 'easy',
   },
   {
     id: 'gradient-boosting-mc-2',
@@ -32,7 +31,6 @@ export const gradientboostingMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 0,
     explanation:
       'Lower learning rate with more trees generalizes better. learning_rate=1.0 is aggressive and can overfit. Using learning_rate=0.1 with proportionally more trees (200) makes smaller, more careful updates. This explores the solution space better and prevents overfitting.',
-    difficulty: 'medium',
   },
   {
     id: 'gradient-boosting-mc-3',
@@ -46,7 +44,6 @@ export const gradientboostingMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       'LightGBM is significantly faster than XGBoost, especially on large datasets (>1M rows). It uses leaf-wise tree growth, gradient-based one-side sampling (GOSS), and exclusive feature bundling (EFB) for speed. Accuracy is typically similar once both are tuned.',
-    difficulty: 'medium',
   },
   {
     id: 'gradient-boosting-mc-4',
@@ -60,7 +57,6 @@ export const gradientboostingMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'colsample_bytree controls what fraction of features (columns) to randomly sample when building each tree. For example, colsample_bytree=0.8 means each tree uses 80% of features. This adds randomness, decorrelates trees, and helps prevent overfitting - similar to max_features in Random Forests.',
-    difficulty: 'medium',
   },
   {
     id: 'gradient-boosting-mc-5',
@@ -75,6 +71,5 @@ export const gradientboostingMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       'Boosting works best with weak learners (high bias, low variance). Shallow trees (max_depth=3-5) are weak learners that capture simple patterns. Boosting sequentially adds many such weak learners, each correcting residuals. This gradually reduces bias while maintaining low variance. Deep trees would overfit and defeat the purpose of sequential learning.',
-    difficulty: 'hard',
   },
 ];

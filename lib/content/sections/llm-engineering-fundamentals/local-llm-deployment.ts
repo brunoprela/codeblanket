@@ -4,9 +4,9 @@
  */
 
 export const localllmdeploymentSection = {
-    id: 'local-llm-deployment',
-    title: 'Local LLM Deployment',
-    content: `# Local LLM Deployment
+  id: 'local-llm-deployment',
+  title: 'Local LLM Deployment',
+  content: `# Local LLM Deployment
 
 Master running LLMs locally for privacy, cost control, and offline access.
 
@@ -750,4 +750,3 @@ You now understand:
 
 **Next Module**: Prompt Engineering & Optimization - Master the art of crafting effective prompts for production applications.`,
 };
-

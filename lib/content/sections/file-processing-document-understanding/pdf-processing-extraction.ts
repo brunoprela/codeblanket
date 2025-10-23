@@ -1,12 +1,12 @@
 /**
- * PDF Processing & Extraction Section  
+ * PDF Processing & Extraction Section
  * Module 3: File Processing & Document Understanding
  */
 
 export const pdfprocessingextractionSection = {
-    id: 'pdf-processing-extraction',
-    title: 'PDF Processing & Extraction',
-    content: `# PDF Processing & Extraction
+  id: 'pdf-processing-extraction',
+  title: 'PDF Processing & Extraction',
+  content: `# PDF Processing & Extraction
 
 Master PDF file processing for building AI applications that extract and understand document content from PDFs.
 
@@ -615,6 +615,5 @@ full_text = pdf_data['full_text']
 10. **Validate extracted data** before using in production
 
 These patterns enable building robust PDF processing pipelines for LLM applications, from document Q&A to automated data extraction.`,
-    videoUrl: null,
+  videoUrl: undefined,
 };
-

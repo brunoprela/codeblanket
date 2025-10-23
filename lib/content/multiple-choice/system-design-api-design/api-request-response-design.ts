@@ -19,7 +19,6 @@ export const apirequestresponsedesignMultipleChoice: MultipleChoiceQuestion[] =
       correctAnswer: 1,
       explanation:
         'Cursor-based pagination uses stable references (like ID + timestamp), preventing duplicates or missing items when data changes. Offset-based can show duplicates if items are inserted between requests.',
-      difficulty: 'medium',
     },
     {
       id: 'req-res-q2',
@@ -34,7 +33,6 @@ export const apirequestresponsedesignMultipleChoice: MultipleChoiceQuestion[] =
       correctAnswer: 1,
       explanation:
         '400 Bad Request is appropriate for client input errors. While 422 is also valid for validation errors, 400 is more commonly used and understood.',
-      difficulty: 'easy',
     },
     {
       id: 'req-res-q3',
@@ -49,7 +47,6 @@ export const apirequestresponsedesignMultipleChoice: MultipleChoiceQuestion[] =
       correctAnswer: 2,
       explanation:
         'Operator-based filtering (age[gte]=18) is extensible, consistent, and widely used (MongoDB-style). It scales to other operators (gt, lt, ne, in) without parameter explosion.',
-      difficulty: 'medium',
     },
     {
       id: 'req-res-q4',
@@ -64,7 +61,6 @@ export const apirequestresponsedesignMultipleChoice: MultipleChoiceQuestion[] =
       correctAnswer: 1,
       explanation:
         'Field selection (sparse fieldsets) is the REST way to optimize bandwidth without creating multiple endpoints or paradigm shifts.',
-      difficulty: 'easy',
     },
     {
       id: 'req-res-q5',
@@ -78,6 +74,5 @@ export const apirequestresponsedesignMultipleChoice: MultipleChoiceQuestion[] =
       correctAnswer: 1,
       explanation:
         'OFFSET requires scanning and discarding rows. Cursor-based pagination uses WHERE id > X which uses indexes efficiently regardless of position.',
-      difficulty: 'hard',
     },
   ];

@@ -4,9 +4,9 @@
  */
 
 export const csvstructureddataSection = {
-    id: 'csv-structured-data',
-    title: 'CSV & Structured Data',
-    content: `# CSV & Structured Data
+  id: 'csv-structured-data',
+  title: 'CSV & Structured Data',
+  content: `# CSV & Structured Data
 
 Master processing CSV files and structured data formats for building robust data pipelines in LLM applications.
 
@@ -137,6 +137,5 @@ df = pd.DataFrame(data)
 8. **Type conversion** for correct data types
 9. **Chunk processing** for large files
 10. **Error handling** for production systems`,
-    videoUrl: null,
+  videoUrl: undefined,
 };
-

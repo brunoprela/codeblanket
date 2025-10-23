@@ -18,7 +18,6 @@ export const mlfundamentalsMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'This is supervised learning (we have labeled data: features and prices) and specifically regression (predicting a continuous numerical value: price). Classification would involve predicting discrete categories (e.g., expensive/affordable), while unsupervised learning would find patterns without labeled data, and reinforcement learning involves learning through trial and error with rewards.',
-    difficulty: 'easy',
   },
   {
     id: 'ml-fundamentals-mc-2',
@@ -33,7 +32,6 @@ export const mlfundamentalsMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'The large gap between training (99%) and test (65%) accuracy is a classic sign of overfitting. The model has learned to memorize the training data rather than generalizing. Solutions include collecting more training data, adding regularization (L1/L2, dropout), reducing model complexity, or using data augmentation. Underfitting would show poor performance on both sets, and data leakage would typically show unrealistically high performance on both sets.',
-    difficulty: 'medium',
   },
   {
     id: 'ml-fundamentals-mc-3',
@@ -48,7 +46,6 @@ export const mlfundamentalsMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       'The validation set is used to tune hyperparameters (like learning rate, regularization strength, or number of trees) and to select between different model architectures without touching the test set. The training set is used to learn patterns, and the test set provides the final unbiased performance estimate. Using the test set for hyperparameter tuning would bias its performance estimate.',
-    difficulty: 'medium',
   },
   {
     id: 'ml-fundamentals-mc-4',
@@ -63,7 +60,6 @@ export const mlfundamentalsMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Option 2 is correct: split first, then fit the scaler ONLY on training data, and apply the learned transformation to both training and test sets. Option 1 causes leakage by using test set statistics. Option 3 causes leakage by using test data for feature selection. Option 4 turns the test set into a validation set by using it for model selection, losing the unbiased performance estimate.',
-    difficulty: 'hard',
   },
   {
     id: 'ml-fundamentals-mc-5',
@@ -78,6 +74,5 @@ export const mlfundamentalsMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       "Both training and test accuracies are low and similar, indicating underfitting (high bias). The model is too simple to capture the underlying patterns. Solutions include using a more complex model architecture, adding relevant features, using polynomial features, or reducing regularization. If the model were overfitting, we'd see high training accuracy with low test accuracy.",
-    difficulty: 'medium',
   },
 ];

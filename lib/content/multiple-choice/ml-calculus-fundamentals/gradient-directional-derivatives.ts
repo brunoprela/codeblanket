@@ -18,7 +18,6 @@ export const gradientdirectionalderivativesMultipleChoice: MultipleChoiceQuestio
       correctAnswer: 1,
       explanation:
         'The directional derivative equals the dot product of the gradient with the unit direction vector: D_v f = ∇f · v̂.',
-      difficulty: 'medium',
     },
     {
       id: 'grad-dir-2',
@@ -32,7 +31,6 @@ export const gradientdirectionalderivativesMultipleChoice: MultipleChoiceQuestio
       correctAnswer: 1,
       explanation:
         'The gradient points in the direction of maximum rate of increase (steepest ascent). We use -∇f for steepest descent.',
-      difficulty: 'easy',
     },
     {
       id: 'grad-dir-3',
@@ -46,7 +44,6 @@ export const gradientdirectionalderivativesMultipleChoice: MultipleChoiceQuestio
       correctAnswer: 1,
       explanation:
         'The maximum directional derivative equals the gradient magnitude. This maximum is achieved when moving in the gradient direction.',
-      difficulty: 'medium',
     },
     {
       id: 'grad-dir-4',
@@ -60,7 +57,6 @@ export const gradientdirectionalderivativesMultipleChoice: MultipleChoiceQuestio
       correctAnswer: 1,
       explanation:
         'Momentum maintains an exponential moving average of past gradients: v = βv + (1-β)∇L, which helps accelerate convergence.',
-      difficulty: 'medium',
     },
     {
       id: 'grad-dir-5',
@@ -75,6 +71,5 @@ export const gradientdirectionalderivativesMultipleChoice: MultipleChoiceQuestio
       correctAnswer: 1,
       explanation:
         'Projected GD alternates between: (1) taking a gradient step, (2) projecting back onto the constraint set. This ensures constraints are satisfied.',
-      difficulty: 'hard',
     },
   ];

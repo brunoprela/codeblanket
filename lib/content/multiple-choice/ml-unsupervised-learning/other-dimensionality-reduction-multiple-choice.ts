@@ -19,7 +19,6 @@ export const other_dimensionality_reductionMultipleChoice: MultipleChoiceQuestio
       correctAnswer: 1,
       explanation:
         'PCA is a linear dimensionality reduction technique that finds linear combinations of features, while t-SNE is non-linear and can capture complex manifold structures, making it better for visualization of complex data.',
-      difficulty: 'easy',
     },
     {
       id: 'other-dimensionality-reduction-mc2',
@@ -33,7 +32,6 @@ export const other_dimensionality_reductionMultipleChoice: MultipleChoiceQuestio
       correctAnswer: 2,
       explanation:
         'In t-SNE, points close together ARE similar in high-D space (local structure preserved). However, cluster sizes, inter-cluster distances, and axes are NOT meaningful or interpretable.',
-      difficulty: 'medium',
     },
     {
       id: 'other-dimensionality-reduction-mc3',
@@ -47,7 +45,6 @@ export const other_dimensionality_reductionMultipleChoice: MultipleChoiceQuestio
       correctAnswer: 1,
       explanation:
         'UMAP preserves both local and global structure (unlike t-SNE which focuses on local), is faster, more scalable, and crucially has a .transform() method to project new data points without retraining.',
-      difficulty: 'medium',
     },
     {
       id: 'other-dimensionality-reduction-mc4',
@@ -61,7 +58,6 @@ export const other_dimensionality_reductionMultipleChoice: MultipleChoiceQuestio
       correctAnswer: 1,
       explanation:
         'The manifold hypothesis suggests that real-world high-dimensional data often lies on or near a much lower-dimensional manifold (smooth surface) embedded in the high-dimensional space, which justifies dimensionality reduction.',
-      difficulty: 'medium',
     },
     {
       id: 'other-dimensionality-reduction-mc5',
@@ -76,6 +72,5 @@ export const other_dimensionality_reductionMultipleChoice: MultipleChoiceQuestio
       correctAnswer: 2,
       explanation:
         "UMAP is ideal here because it produces high-quality visualizations (comparable to t-SNE) AND has a .transform() method to project new data onto the same embedding. t-SNE lacks this capability - you'd need to retrain on all data including new points. PCA is less suitable for visualization of complex patterns. Clustering is not a dimensionality reduction technique.",
-      difficulty: 'hard',
     },
   ];

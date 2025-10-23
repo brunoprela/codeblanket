@@ -4,9 +4,9 @@
  */
 
 export const codegenerationfundamentalsSection = {
-    id: 'code-generation-fundamentals',
-    title: 'Code Generation Fundamentals',
-    content: `# Code Generation Fundamentals
+  id: 'code-generation-fundamentals',
+  title: 'Code Generation Fundamentals',
+  content: `# Code Generation Fundamentals
 
 Master the foundational concepts of generating code with LLMs and understand why it's uniquely challenging.
 
@@ -819,4 +819,3 @@ Now that you understand the fundamentals, you'll learn:
 The key insight: **Code generation requires validation at every step**. Unlike prose, there's no "close enough" - code either works or it doesn't.
 `,
 };
-

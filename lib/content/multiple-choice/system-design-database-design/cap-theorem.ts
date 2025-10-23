@@ -18,7 +18,6 @@ export const captheoremMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       'The system is AP (Availability + Partition Tolerance). During the partition, the system remains available in both datacenters, accepting reads and writes, which means it prioritizes Availability. The fact that users see stale data means it sacrificed strong Consistency. Partition Tolerance is demonstrated because the system continues operating despite the network partition. The eventual consistency doesn\'t mean the system is "CAP" - CAP theorem states you can only have 2 of 3 during a partition, and this system chose AP. Option D is incorrect because "eventually consistent" is not the same as "consistent" in CAP terms (which means strongly consistent).',
-    difficulty: 'medium',
   },
   {
     id: 'cap-theorem-q2',
@@ -33,7 +32,6 @@ export const captheoremMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'The system should reject the transfer (CP approach) because banking requires strong consistency - account balances must always be accurate. Accepting the transfer without confirmed replication (Option A) risks data loss if the primary fails. Option C could result in inconsistent balances or double-transfers. Option D makes no sense for financial transactions. In banking, correctness (consistency) is more important than availability. Better to show "service temporarily unavailable" than to risk incorrect account balances. This is why banks typically use CP systems (PostgreSQL with synchronous replication) rather than AP systems.',
-    difficulty: 'hard',
   },
   {
     id: 'cap-theorem-q3',
@@ -47,7 +45,6 @@ export const captheoremMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 3,
     explanation:
       'Option D is correct: Modern databases like Cassandra and DynamoDB support tunable consistency, allowing you to choose CP or AP behavior per query. For example, Cassandra with consistency level QUORUM behaves like CP (requires majority, unavailable without quorum), while consistency level ONE behaves like AP (high availability, eventual consistency). Option A is wrong because MySQL async replication is AP, while MongoDB with majority writes is CP. Option B is wrong because consistency can be tuned per operation. Option C is wrong because network partitions always happen in distributed systems - partition tolerance is mandatory, not optional.',
-    difficulty: 'hard',
   },
   {
     id: 'cap-theorem-q4',
@@ -62,7 +59,6 @@ export const captheoremMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'ZooKeeper is CP (Consistency + Partition Tolerance). It requires a majority quorum for writes, meaning if a network partition splits nodes into majority and minority groups, the minority partition becomes unavailable (stops accepting writes) to maintain consistency. This prevents split-brain scenarios where two leaders could be elected simultaneously. Coordination services must prioritize consistency over availability because having two conflicting leaders would break the system. While the majority partition remains available (Option D mentions this), the system as a whole is classified as CP because it sacrifices availability in the minority partition to maintain consistency.',
-    difficulty: 'medium',
   },
   {
     id: 'cap-theorem-q5',
@@ -77,6 +73,5 @@ export const captheoremMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Option B is correct: For social media feeds, availability is more important than immediate consistency. Users expect the app to always work (availability) and won\'t notice or care if a feed is 2-3 seconds stale. Showing a slightly outdated feed is far better UX than showing "service unavailable" error. Option A is wrong because strong consistency is not critical for social feeds - the business impact of seeing a post 3 seconds late is negligible. Option C is wrong because scale doesn\'t force AP choice (you can shard CP systems too). Option D is wrong because AP is a conscious design choice for user experience, not cost savings. This demonstrates understanding of matching CAP choices to business requirements.',
-    difficulty: 'medium',
   },
 ];

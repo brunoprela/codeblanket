@@ -4,9 +4,9 @@
  */
 
 export const imageprocessingllmsSection = {
-    id: 'image-processing-llms',
-    title: 'Image Processing for LLMs',
-    content: `# Image Processing for LLMs
+  id: 'image-processing-llms',
+  title: 'Image Processing for LLMs',
+  content: `# Image Processing for LLMs
 
 Master image processing for building AI applications that can understand and extract information from images using vision-enabled LLMs.
 
@@ -574,6 +574,5 @@ print(f"Extracted Invoice Data: {invoice_data}")
 10. **Screenshot analysis** enables UI automation
 
 These patterns enable building sophisticated image processing pipelines for LLM applications, from document scanning to visual search.`,
-    videoUrl: null,
+  videoUrl: undefined,
 };
-

@@ -18,7 +18,6 @@ export const imbalanceddataMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'This is the accuracy paradox. While 99% accuracy sounds good, the model is useless for fraud detection - it catches 0% of fraud (0% recall). For imbalanced data, accuracy is misleading. Use metrics like recall, precision, and F1-score that focus on the minority class performance.',
-    difficulty: 'easy',
   },
   {
     id: 'imbalanced-data-mc-2',
@@ -32,7 +31,6 @@ export const imbalanceddataMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       'SMOTE (Synthetic Minority Over-sampling Technique) creates synthetic minority class samples by interpolating between existing minority samples and their k-nearest neighbors. This is more effective than simple duplication because it generates diverse samples rather than exact copies.',
-    difficulty: 'easy',
   },
   {
     id: 'imbalanced-data-mc-3',
@@ -42,7 +40,6 @@ export const imbalanceddataMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       'Recall (sensitivity) measures the proportion of actual positives that are correctly identified. When false negatives are costly (missing a disease), you want to maximize recall - catch as many true cases as possible, even if it means more false positives. This typically requires lowering the classification threshold.',
-    difficulty: 'medium',
   },
   {
     id: 'imbalanced-data-mc-4',
@@ -57,7 +54,6 @@ export const imbalanceddataMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Setting class_weight="balanced" adjusts the loss function to weight classes inversely proportional to their frequencies. This makes the model penalize errors on the minority class more heavily during training, without actually resampling the data. It\'s computationally efficient and often effective for imbalanced data.',
-    difficulty: 'medium',
   },
   {
     id: 'imbalanced-data-mc-5',
@@ -72,6 +68,5 @@ export const imbalanceddataMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       "For severely imbalanced data (>1:100), SMOTE can struggle. Creating so many synthetic samples may generate unrealistic examples that confuse the model, especially if minority class samples are sparse or noisy. For severe imbalance, consider: (1) Less aggressive oversampling (don't fully balance); (2) Ensemble methods like Balanced Random Forest; (3) Anomaly detection approaches; (4) Focus on threshold tuning rather than resampling.",
-    difficulty: 'hard',
   },
 ];

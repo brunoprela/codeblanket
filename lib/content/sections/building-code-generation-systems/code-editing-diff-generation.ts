@@ -4,9 +4,9 @@
  */
 
 export const codeeditingdiffgenerationSection = {
-    id: 'code-editing-diff-generation',
-    title: 'Code Editing & Diff Generation',
-    content: `# Code Editing & Diff Generation
+  id: 'code-editing-diff-generation',
+  title: 'Code Editing & Diff Generation',
+  content: `# Code Editing & Diff Generation
 
 Master generating precise code edits and diffs like Cursor does - the most important skill for production code generation.
 
@@ -803,4 +803,3 @@ You've mastered diff generation! Next:
 Remember: **Minimal, Surgical Edits > Complete File Regeneration**
 `,
 };
-

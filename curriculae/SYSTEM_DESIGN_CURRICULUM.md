@@ -14,6 +14,7 @@ This document outlines the complete 16-module system design curriculum, designed
 **Description**: Master the foundations of system design interviews including requirements gathering, estimation techniques, and systematic problem-solving approaches
 
 ### Sections (8 total):
+
 1. **Introduction to System Design Interviews**
    - Purpose and format of interviews
    - What interviewers evaluate
@@ -572,6 +573,7 @@ This document outlines the complete 16-module system design curriculum, designed
 **Description**: Comprehensive coverage of modern authentication and authorization patterns
 
 ### Sections (5 total):
+
 1. Authentication Fundamentals
 2. SAML (Security Assertion Markup Language)
 3. OAuth 2.0 - Authorization Framework
@@ -1556,6 +1558,7 @@ Each section walks through a complete design:
 ## Implementation Guidelines
 
 ### Content Structure per Section:
+
 1. **Introduction** (what and why)
 2. **Concepts** (detailed explanation)
 3. **Real-world examples**
@@ -1565,6 +1568,7 @@ Each section walks through a complete design:
 7. **Interview tips**
 
 ### Quiz Structure per Section:
+
 1. **5 Multiple Choice Questions**
    - Test understanding of concepts
    - Realistic scenarios
@@ -1577,6 +1581,7 @@ Each section walks through a complete design:
    - Encourage trade-off analysis
 
 ### Module Structure:
+
 - `id`: kebab-case identifier
 - `title`: Display title
 - `description`: 1-2 sentence summary
@@ -1600,23 +1605,28 @@ Each section walks through a complete design:
 ## Priority Order for Implementation
 
 ### Phase 1: Core Foundations (Modules 1-3)
+
 - ✅ Module 1: System Design Fundamentals
 - Module 2: Core Building Blocks
 - Module 3: Database Design & Theory
 
 ### Phase 2: Communication & APIs (Modules 4-5)
+
 - Module 4: Networking & Communication
 - Module 5: API Design & Management
 
 ### Phase 3: Advanced Patterns (Modules 6-7)
+
 - Module 6: System Design Trade-offs
 - ✅ Module 7: Authentication & Authorization
 
 ### Phase 4: Microservices & Observability (Modules 8-9)
+
 - Module 8: Microservices Architecture
 - Module 9: Observability & Resilience
 
 ### Phase 5: Advanced Topics (Modules 10-14)
+
 - Module 10: Advanced Algorithms
 - Module 11: Distributed System Patterns
 - Module 12: Message Queues & Event Streaming
@@ -1624,6 +1634,7 @@ Each section walks through a complete design:
 - Module 14: Distributed File Systems & Databases
 
 ### Phase 6: Case Studies & Real-World (Modules 15-16)
+
 - Module 15: System Design Case Studies
 - Module 16: Real-World System Architectures
 
@@ -1643,4 +1654,3 @@ Each section walks through a complete design:
 
 **Last Updated**: Current session
 **Status**: 2/16 modules complete, 14 pending
-

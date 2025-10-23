@@ -4,9 +4,9 @@
  */
 
 export const codeexecutionvalidationSection = {
-    id: 'code-execution-validation',
-    title: 'Code Execution & Validation',
-    content: `# Code Execution & Validation
+  id: 'code-execution-validation',
+  title: 'Code Execution & Validation',
+  content: `# Code Execution & Validation
 
 Master safely executing and validating generated code - essential for ensuring quality and correctness.
 
@@ -771,4 +771,3 @@ You've mastered code execution and validation! Next:
 Remember: **Sandbox Everything + Validate Always = Safe Code Generation**
 `,
 };
-

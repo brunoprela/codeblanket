@@ -4,9 +4,9 @@
  */
 
 export const negativepromptingconstraintsSection = {
-    id: 'negative-prompting-constraints',
-    title: 'Negative Prompting & Constraints',
-    content: `# Negative Prompting & Constraints
+  id: 'negative-prompting-constraints',
+  title: 'Negative Prompting & Constraints',
+  content: `# Negative Prompting & Constraints
 
 Master techniques to guide LLMs by defining what NOT to do, setting boundaries, and enforcing constraints for reliable production outputs.
 
@@ -600,4 +600,3 @@ print(final_prompt)
 
 Now that you understand negative prompting and constraints, you're ready to explore **Prompt Injection & Security** - learning how to protect your prompts from malicious manipulation and ensure secure AI applications.`,
 };
-

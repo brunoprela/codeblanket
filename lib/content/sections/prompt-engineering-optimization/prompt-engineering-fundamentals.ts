@@ -4,9 +4,9 @@
  */
 
 export const promptengineeringfundamentalsSection = {
-    id: 'prompt-engineering-fundamentals',
-    title: 'Prompt Engineering Fundamentals',
-    content: `# Prompt Engineering Fundamentals
+  id: 'prompt-engineering-fundamentals',
+  title: 'Prompt Engineering Fundamentals',
+  content: `# Prompt Engineering Fundamentals
 
 Master the foundations of prompt engineering to build reliable, production-ready AI applications.
 
@@ -975,4 +975,3 @@ Generate the next 5 numbers following this pattern."""
 
 Now that you understand prompt engineering fundamentals, you're ready to dive into **System Prompts & Role Assignment** - learning how to define AI behavior and personality for your applications.`,
 };
-

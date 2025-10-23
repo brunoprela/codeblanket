@@ -4,9 +4,9 @@
  */
 
 export const buildingcompletecodeeditorSection = {
-    id: 'building-complete-code-editor',
-    title: 'Building a Complete Code Editor',
-    content: `# Building a Complete Code Editor
+  id: 'building-complete-code-editor',
+  title: 'Building a Complete Code Editor',
+  content: `# Building a Complete Code Editor
 
 Bring it all together - build a production-ready code editor like Cursor that users will love.
 
@@ -671,4 +671,3 @@ Next steps:
 Remember: **Great Tools Are Built Iteratively**
 `,
 };
-

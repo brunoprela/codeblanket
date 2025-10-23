@@ -8,7 +8,8 @@ This document outlines a comprehensive **Applied AI Engineering** curriculum des
 
 **Target Audience**: Developers who want to build AI applications, not just understand theory
 
-**Prerequisites**: 
+**Prerequisites**:
+
 - Basic Python programming
 - Understanding of APIs and web development
 - Familiarity with command line tools
@@ -21,6 +22,7 @@ This document outlines a comprehensive **Applied AI Engineering** curriculum des
 ## 🎯 What Makes This Curriculum Unique
 
 ### Building Production AI Applications
+
 This curriculum is specifically designed to teach you how to **reverse-engineer and build** production AI systems:
 
 - **Code Generation Tools**: Build a Cursor-like IDE that edits code from natural language
@@ -31,7 +33,8 @@ This curriculum is specifically designed to teach you how to **reverse-engineer 
 
 ### Real-World Engineering Focus
 
-#### 🛠️ **System Architecture** 
+#### 🛠️ **System Architecture**
+
 - How Cursor processes files and generates code edits
 - How Claude/GPT decides when to use tools
 - How Sora generates videos from text
@@ -39,6 +42,7 @@ This curriculum is specifically designed to teach you how to **reverse-engineer 
 - Production-grade error handling and retry logic
 
 #### 🎨 **Media Generation Deep Dive**
+
 - Diffusion models for images (Stable Diffusion, DALL-E)
 - Video generation (Sora, Runway, Pika)
 - Audio generation (ElevenLabs, Whisper)
@@ -46,6 +50,7 @@ This curriculum is specifically designed to teach you how to **reverse-engineer 
 - Multi-modal systems
 
 #### 💻 **Code Generation Mastery**
+
 - Code understanding and AST parsing
 - Diff generation and file editing
 - Multi-file code changes
@@ -53,6 +58,7 @@ This curriculum is specifically designed to teach you how to **reverse-engineer 
 - IDE integration patterns
 
 #### 🔧 **Document Processing**
+
 - Excel manipulation with LLMs
 - PDF extraction and analysis
 - Word document generation
@@ -70,7 +76,7 @@ After completing this curriculum, you will be able to:
 ✅ **Deploy to Production**: Handle scale, costs, errors, and monitoring  
 ✅ **Optimize for Performance**: Caching, streaming, parallel processing  
 ✅ **Build RAG Systems**: Document search, semantic understanding, retrieval  
-✅ **Create Multi-Modal Apps**: Text + images + audio + video together  
+✅ **Create Multi-Modal Apps**: Text + images + audio + video together
 
 ### Capstone Projects
 
@@ -91,28 +97,29 @@ Throughout the curriculum, you'll build increasingly complex projects:
 
 ## 📚 Module Overview
 
-| Module | Title | Sections | Difficulty | Est. Time |
-|--------|-------|----------|------------|-----------|
-| 1 | LLM Engineering Fundamentals | 12 | Beginner | 2-3 weeks |
-| 2 | Prompt Engineering & Optimization | 10 | Beginner | 2 weeks |
-| 3 | File Processing & Document Understanding | 14 | Intermediate | 3 weeks |
-| 4 | Code Understanding & AST Manipulation | 12 | Intermediate | 2-3 weeks |
-| 5 | Building Code Generation Systems | 13 | Advanced | 3 weeks |
-| 6 | LLM Tool Use & Function Calling | 11 | Intermediate | 2-3 weeks |
-| 7 | Multi-Agent Systems & Orchestration | 12 | Advanced | 3 weeks |
-| 8 | Image Generation & Computer Vision | 13 | Intermediate | 3 weeks |
-| 9 | Video & Audio Generation | 10 | Advanced | 2-3 weeks |
-| 10 | Multi-Modal AI Systems | 11 | Advanced | 3 weeks |
-| 11 | RAG & Semantic Search | 13 | Intermediate | 3 weeks |
-| 12 | Production LLM Applications | 14 | Advanced | 3 weeks |
-| 13 | Scaling & Cost Optimization | 12 | Advanced | 2-3 weeks |
-| 14 | AI Safety & Guardrails | 10 | Intermediate | 2 weeks |
-| 15 | Building Complete AI Products | 17 | Expert | 4-5 weeks |
-| 16 | Evaluation, Data Ops & Fine-Tuning | 14 | Advanced | 3 weeks |
+| Module | Title                                    | Sections | Difficulty   | Est. Time |
+| ------ | ---------------------------------------- | -------- | ------------ | --------- |
+| 1      | LLM Engineering Fundamentals             | 12       | Beginner     | 2-3 weeks |
+| 2      | Prompt Engineering & Optimization        | 10       | Beginner     | 2 weeks   |
+| 3      | File Processing & Document Understanding | 14       | Intermediate | 3 weeks   |
+| 4      | Code Understanding & AST Manipulation    | 12       | Intermediate | 2-3 weeks |
+| 5      | Building Code Generation Systems         | 13       | Advanced     | 3 weeks   |
+| 6      | LLM Tool Use & Function Calling          | 11       | Intermediate | 2-3 weeks |
+| 7      | Multi-Agent Systems & Orchestration      | 12       | Advanced     | 3 weeks   |
+| 8      | Image Generation & Computer Vision       | 13       | Intermediate | 3 weeks   |
+| 9      | Video & Audio Generation                 | 10       | Advanced     | 2-3 weeks |
+| 10     | Multi-Modal AI Systems                   | 11       | Advanced     | 3 weeks   |
+| 11     | RAG & Semantic Search                    | 13       | Intermediate | 3 weeks   |
+| 12     | Production LLM Applications              | 14       | Advanced     | 3 weeks   |
+| 13     | Scaling & Cost Optimization              | 12       | Advanced     | 2-3 weeks |
+| 14     | AI Safety & Guardrails                   | 10       | Intermediate | 2 weeks   |
+| 15     | Building Complete AI Products            | 17       | Expert       | 4-5 weeks |
+| 16     | Evaluation, Data Ops & Fine-Tuning       | 14       | Advanced     | 3 weeks   |
 
 **Total**: 198 sections, 43-51 weeks (comprehensive mastery)
 
 **Key Features**:
+
 - 🎯 **Reverse-Engineering Focus**: Learn by understanding how Cursor, Sora, and ChatGPT work
 - 💻 **Production-Ready Code**: 2,000+ Python examples you can run immediately
 - 🏗️ **10 Major Projects**: From file editors to complete AI platforms with IDE plugins
@@ -2527,6 +2534,7 @@ Throughout the curriculum, you'll build increasingly complex projects:
 ## Implementation Guidelines
 
 ### Content Structure per Section:
+
 1. **Conceptual Introduction** (why this matters in production)
 2. **Deep Technical Explanation** (how it actually works)
 3. **Code Implementation** (production-ready examples)
@@ -2536,6 +2544,7 @@ Throughout the curriculum, you'll build increasingly complex projects:
 7. **Production Checklist** (deployment considerations)
 
 ### Code Requirements:
+
 - **Python 3.10+** as primary language
 - **OpenAI SDK** for LLM interactions
 - **Anthropic SDK** for Claude
@@ -2548,6 +2557,7 @@ Throughout the curriculum, you'll build increasingly complex projects:
 - Cost estimates for each operation
 
 ### Quiz Structure per Section:
+
 1. **5 Multiple Choice Questions**
    - Conceptual understanding
    - Practical implementation scenarios
@@ -2563,6 +2573,7 @@ Throughout the curriculum, you'll build increasingly complex projects:
    - Connection to building production tools
 
 ### Module Structure:
+
 - `id`: kebab-case identifier
 - `title`: Display title
 - `description`: 2-3 sentence summary
@@ -2579,7 +2590,9 @@ Throughout the curriculum, you'll build increasingly complex projects:
 ## Learning Paths
 
 ### **Quick Start Path** (2-3 months)
+
 Build basic AI applications quickly
+
 - Module 1: LLM Engineering Fundamentals
 - Module 2: Prompt Engineering
 - Module 3: File Processing (sections 1-8)
@@ -2589,7 +2602,9 @@ Build basic AI applications quickly
 **Project**: AI document processor with basic tool use
 
 ### **Code Generation Path** (4-5 months)
+
 Build Cursor-like tools
+
 - Module 1: LLM Engineering Fundamentals
 - Module 2: Prompt Engineering
 - Module 3: File Processing
@@ -2601,7 +2616,9 @@ Build Cursor-like tools
 **Project**: AI-powered code editing tool
 
 ### **Media Generation Path** (4-5 months)
+
 Build Sora-like applications
+
 - Module 1: LLM Engineering Fundamentals
 - Module 2: Prompt Engineering
 - Module 8: Image Generation
@@ -2612,7 +2629,9 @@ Build Sora-like applications
 **Project**: Media generation platform
 
 ### **Full Stack AI Engineer Path** (8-10 months)
+
 Complete mastery - build any AI product
+
 - All 15 modules in sequence
 - All capstone projects
 - Production deployment
@@ -2637,6 +2656,7 @@ Complete mastery - build any AI product
 ## Key Technologies Covered
 
 ### LLM & AI:
+
 - OpenAI (GPT-4, GPT-3.5)
 - Anthropic Claude
 - Google Gemini
@@ -2645,6 +2665,7 @@ Complete mastery - build any AI product
 - Instructor (structured outputs)
 
 ### Media Generation:
+
 - Stable Diffusion
 - DALL-E 3
 - Midjourney API
@@ -2654,6 +2675,7 @@ Complete mastery - build any AI product
 - ElevenLabs (voice)
 
 ### Code Tools:
+
 - AST parsing (ast, tree-sitter)
 - Tree-sitter for multi-language
 - rope for refactoring
@@ -2661,6 +2683,7 @@ Complete mastery - build any AI product
 - Language Server Protocol (LSP)
 
 ### Document Processing:
+
 - openpyxl (Excel)
 - python-docx (Word)
 - PyPDF2, pdfplumber (PDF)
@@ -2668,6 +2691,7 @@ Complete mastery - build any AI product
 - Tesseract OCR
 
 ### Infrastructure:
+
 - FastAPI for APIs
 - Redis for caching
 - PostgreSQL + pgvector
@@ -2682,6 +2706,7 @@ Complete mastery - build any AI product
 **Status**: 16/16 modules outlined (All module structures complete!)
 
 **Completion**:
+
 - ✅ Module 1: LLM Engineering Fundamentals (12 sections)
 - ✅ Module 2: Prompt Engineering & Optimization (10 sections)
 - ✅ Module 3: File Processing & Document Understanding (14 sections)
@@ -2702,6 +2727,7 @@ Complete mastery - build any AI product
 - ✅ Module 16: Evaluation, Data Ops & Fine-Tuning (14 sections)
 
 **Next Steps**:
+
 1. Detailed content creation for each section (400-600 lines per section)
 2. Production-ready Python code examples
 3. Real-world tool breakdowns (Cursor, Sora, etc.)
@@ -2715,6 +2741,7 @@ Complete mastery - build any AI product
 ### ✅ Modern AI Product Workflow - COMPLETE COVERAGE
 
 #### **1. Research & Development Phase**
+
 - ✅ **Problem Definition**: Module 15, Section 1 (Product Architecture Design)
 - ✅ **Data Collection**: Module 16, Sections 6-7 (Labeling, Synthetic Data)
 - ✅ **Prompt Engineering**: Module 2 (Complete 10-section module)
@@ -2723,6 +2750,7 @@ Complete mastery - build any AI product
 - ✅ **RAG Development**: Module 11 (Complete 13-section module)
 
 #### **2. Evaluation Phase**
+
 - ✅ **Offline Evaluation**: Module 16, Sections 1-2 (AI & LLM Evaluation)
 - ✅ **Human Evaluation**: Module 16, Section 5 (Human Feedback)
 - ✅ **A/B Testing**: Module 16, Section 3 (Prompt A/B Testing)
@@ -2731,6 +2759,7 @@ Complete mastery - build any AI product
 - ✅ **Multi-Modal Evaluation**: Module 16, Section 12
 
 #### **3. Development Phase**
+
 - ✅ **API Integration**: Module 1 (LLM Engineering Fundamentals)
 - ✅ **Tool Development**: Module 6 (Tool Use & Function Calling)
 - ✅ **Agent Systems**: Module 7 (Multi-Agent Orchestration)
@@ -2741,6 +2770,7 @@ Complete mastery - build any AI product
 - ✅ **Frontend Development**: Module 15, Section 10
 
 #### **4. Testing Phase**
+
 - ✅ **Unit Testing**: Module 12, Section 11 (Testing LLM Applications)
 - ✅ **Integration Testing**: Module 12, Section 11
 - ✅ **Load Testing**: Module 13, Section 10 (Load Testing & Capacity)
@@ -2748,6 +2778,7 @@ Complete mastery - build any AI product
 - ✅ **Continuous Testing**: Module 16, Section 13 (Continuous Evaluation)
 
 #### **5. Safety & Compliance Phase**
+
 - ✅ **Content Moderation**: Module 14, Section 2
 - ✅ **PII Detection**: Module 14, Section 4
 - ✅ **Bias Detection**: Module 14, Section 8
@@ -2756,6 +2787,7 @@ Complete mastery - build any AI product
 - ✅ **Audit Logging**: Module 14, Section 9
 
 #### **6. Deployment Phase**
+
 - ✅ **Infrastructure Setup**: Module 12, Section 12 (Deployment Strategies)
 - ✅ **CI/CD Pipelines**: Module 15, Section 12 (DevOps)
 - ✅ **Monitoring Setup**: Module 12, Section 8 (Monitoring & Observability)
@@ -2763,6 +2795,7 @@ Complete mastery - build any AI product
 - ✅ **Docker/Kubernetes**: Module 15, Section 12
 
 #### **7. Production Phase**
+
 - ✅ **Scaling**: Module 13 (Complete 12-section module)
 - ✅ **Caching**: Module 12, Section 5; Module 13, Section 4
 - ✅ **Rate Limiting**: Module 12, Section 6
@@ -2771,6 +2804,7 @@ Complete mastery - build any AI product
 - ✅ **Multi-Region**: Module 13, Section 9
 
 #### **8. Monitoring & Improvement Phase**
+
 - ✅ **Performance Monitoring**: Module 12, Section 8
 - ✅ **Cost Monitoring**: Module 13, Section 11
 - ✅ **User Analytics**: Module 15, Section 13 (Product Analytics & Metrics)
@@ -2783,6 +2817,7 @@ Complete mastery - build any AI product
 ## How This Curriculum Answers Your Requirements
 
 ### ✅ Comprehensive AI Application Coverage
+
 - **LLMs**: Modules 1-2, 6-7, 11-14 cover everything from basics to production
 - **Media Generation**: Modules 8-10 cover images, video, audio, and multi-modal
 - **Code Generation**: Modules 4-5 specifically on building Cursor-like tools
@@ -2791,6 +2826,7 @@ Complete mastery - build any AI product
 - **Evaluation**: Module 16 (Complete evaluation workflow) ⭐ NEW
 
 ### ✅ Deep Technical Understanding
+
 - **How Cursor Works**: Modules 4-5 reverse-engineer code generation systems
 - **How Cursor for Excel Works**: Module 15, Section 8 ⭐ NEW
 - **How Sora Works**: Module 9 explains video generation architectures
@@ -2800,13 +2836,15 @@ Complete mastery - build any AI product
 - **Evaluation Systems**: Module 16 on comprehensive evaluation ⭐ NEW
 
 ### ✅ Production-Ready Skills
+
 - Module 12: Production LLM Applications
-- Module 13: Scaling & Cost Optimization  
+- Module 13: Scaling & Cost Optimization
 - Module 14: AI Safety & Guardrails
 - Module 15: Complete product development
 - Module 16: Evaluation & Fine-Tuning ⭐ NEW
 
 ### ✅ Complete Modern AI Workflow Coverage
+
 - ✅ **Data Operations**: Labeling, annotation, synthetic data (Module 16)
 - ✅ **Evaluation**: Comprehensive evaluation framework (Module 16)
 - ✅ **Fine-Tuning**: OpenAI and open-source models (Module 16)
@@ -2849,6 +2887,7 @@ Complete mastery - build any AI product
 ### ⭐ Module 15 Enhancements (17 sections, +2 sections)
 
 **NEW Section 3: IDE Plugin Development & Extensions**
+
 - VSCode extension architecture and API
 - Language Server Protocol (LSP) server implementation
 - Commands, keybindings, TreeView, WebView panels
@@ -2858,6 +2897,7 @@ Complete mastery - build any AI product
 - Complete Cursor-like VSCode extension project
 
 **NEW Section 4: Real-Time Collaboration & Multiplayer**
+
 - WebSocket architecture for real-time updates
 - Operational Transformation (OT) algorithms
 - Conflict-Free Replicated Data Types (CRDTs)
@@ -2868,6 +2908,7 @@ Complete mastery - build any AI product
 - Google Docs-like AI collaboration project
 
 **Previous Sections (Sections 8-9):**
+
 - Section 10 (prev 8): Building Cursor for Excel & Finance
   - Excel IDE architecture
   - Formula understanding and generation
@@ -2875,7 +2916,6 @@ Complete mastery - build any AI product
   - Integration with financial APIs
   - Real-time data updates
   - Version control for spreadsheets
-  
 - Section 11 (prev 9): Building Financial AI Applications
   - 10-K, 10-Q analysis
   - Market sentiment analysis
@@ -2883,13 +2923,16 @@ Complete mastery - build any AI product
   - Portfolio analysis
 
 **Section 15 (prev 13): Product Analytics & Metrics**
+
 - A/B testing framework
 - User behavior tracking
 - LLM-specific metrics
 - Cost per user/request
 
 ### ⭐ Module 16: Evaluation, Data Operations & Fine-Tuning (14 sections)
+
 Complete coverage of the evaluation and data workflow:
+
 - Comprehensive evaluation frameworks
 - Data labeling and annotation
 - Synthetic data generation
@@ -2906,6 +2949,7 @@ Complete coverage of the evaluation and data workflow:
 **Goal**: Enable students to build production AI tools like Cursor by reverse-engineering and implementing real systems
 
 **Curriculum Highlights**:
+
 - 🎓 **198 comprehensive sections** covering every aspect of applied AI
 - 💻 **2,000+ code examples** in Python with production patterns
 - 🏗️ **10 major capstone projects** including Cursor clone, Excel Cursor, IDE plugins, and evaluation platform
@@ -2919,5 +2963,3 @@ Complete coverage of the evaluation and data workflow:
 - 👥 **Real-Time Collaboration**: Multiplayer AI editing with CRDTs ⭐ NEW
 
 **Target Outcome**: Students will be able to build **any AI application** they can imagine, from code editors to media generation platforms, with production-quality engineering, comprehensive evaluation, and cost-effective scaling. They will understand the COMPLETE modern AI product workflow from data collection through deployment and continuous improvement, including how to build IDE plugins and real-time collaborative AI tools.
-
-

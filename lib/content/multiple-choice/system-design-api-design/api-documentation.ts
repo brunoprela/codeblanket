@@ -17,7 +17,6 @@ export const apidocumentationMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       "OpenAPI (formerly Swagger) is a standard specification format for describing REST APIs. It's language-agnostic, machine-readable, and enables auto-generation of documentation, client libraries, and test cases. Industry standard for API documentation.",
-    difficulty: 'easy',
   },
   {
     id: 'docs-q2',
@@ -32,7 +31,6 @@ export const apidocumentationMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Code examples in multiple languages (JavaScript, Python, cURL, etc.) reduce integration time significantly. Developers can copy-paste working examples instead of translating from documentation. Not required by spec, but greatly improves developer experience.',
-    difficulty: 'easy',
   },
   {
     id: 'docs-q3',
@@ -47,7 +45,6 @@ export const apidocumentationMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Interactive documentation allows developers to make API calls directly from the docs without writing code first. They can test authentication, see live responses, and understand the API faster. Swagger UI and Redoc provide this interactivity.',
-    difficulty: 'easy',
   },
   {
     id: 'docs-q4',
@@ -62,7 +59,6 @@ export const apidocumentationMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Auto-generating documentation from code (e.g., using annotations/decorators) ensures docs stay up-to-date when API changes. Manual docs often become outdated, causing developer frustration. Tools like Swagger, FastAPI, and NestJS provide auto-generation.',
-    difficulty: 'medium',
   },
   {
     id: 'docs-q5',
@@ -77,6 +73,5 @@ export const apidocumentationMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Complete API docs need: authentication methods, rate limits, all error codes, pagination patterns, code examples in multiple languages, and edge cases. Just schemas are insufficient. Document the full developer experience.',
-    difficulty: 'easy',
   },
 ];

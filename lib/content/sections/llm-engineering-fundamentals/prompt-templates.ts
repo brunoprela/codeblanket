@@ -4,9 +4,9 @@
  */
 
 export const prompttemplatesSection = {
-    id: 'prompt-templates',
-    title: 'Prompt Templates & Variables',
-    content: `# Prompt Templates & Variables
+  id: 'prompt-templates',
+  title: 'Prompt Templates & Variables',
+  content: `# Prompt Templates & Variables
 
 Master template systems to build maintainable, reusable prompts for production LLM applications.
 
@@ -816,4 +816,3 @@ print(prompt)
 
 Now you have reusable templates. Next: **Output Parsing & Structured Data** - learning to reliably extract structured data from LLM outputs.`,
 };
-

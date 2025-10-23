@@ -4,9 +4,9 @@
  */
 
 export const unstructuredlibrarydeepdiveSection = {
-    id: 'unstructured-library-deep-dive',
-    title: 'Unstructured Library Deep Dive',
-    content: `# Unstructured Library Deep Dive
+  id: 'unstructured-library-deep-dive',
+  title: 'Unstructured Library Deep Dive',
+  content: `# Unstructured Library Deep Dive
 
 Master the Unstructured library for universal document processing across all file types.
 
@@ -123,6 +123,5 @@ result = processor.process_document("any_file.pdf")
 8. **Production-ready** error handling
 9. **Chunking strategies** for LLMs
 10. **Combine with other tools** as needed`,
-    videoUrl: null,
+  videoUrl: undefined,
 };
-

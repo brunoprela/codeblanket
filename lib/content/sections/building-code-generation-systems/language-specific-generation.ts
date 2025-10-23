@@ -1,12 +1,12 @@
 /**
- * Language-Specific Generation Section  
+ * Language-Specific Generation Section
  * Module 5: Building Code Generation Systems
  */
 
 export const languagespecificgenerationSection = {
-    id: 'language-specific-generation',
-    title: 'Language-Specific Generation',
-    content: `# Language-Specific Generation
+  id: 'language-specific-generation',
+  title: 'Language-Specific Generation',
+  content: `# Language-Specific Generation
 
 Master generating code for different programming languages with language-specific patterns, conventions, and best practices.
 
@@ -604,4 +604,3 @@ You've mastered language-specific generation! Next:
 Remember: **Idiomatic Code = Quality Code**
 `,
 };
-

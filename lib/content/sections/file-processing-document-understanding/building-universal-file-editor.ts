@@ -4,9 +4,9 @@
  */
 
 export const buildinguniversalfileeditorSection = {
-    id: 'building-universal-file-editor',
-    title: 'Building a Universal File Editor',
-    content: `# Building a Universal File Editor
+  id: 'building-universal-file-editor',
+  title: 'Building a Universal File Editor',
+  content: `# Building a Universal File Editor
 
 Build a comprehensive file editing system that can process and modify any file type - the foundation for tools like Cursor.
 
@@ -275,6 +275,5 @@ print(summary)
 10. **Modular architecture** for extensibility
 
 This completes Module 3! You now have the foundation for building production file processing systems like Cursor.`,
-    videoUrl: null,
+  videoUrl: undefined,
 };
-

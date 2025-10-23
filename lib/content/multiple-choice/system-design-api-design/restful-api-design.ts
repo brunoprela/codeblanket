@@ -18,7 +18,6 @@ export const restfulapidesignMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       'PATCH is designed for partial updates, modifying only the specified fields. PUT would replace the entire resource, potentially clearing other fields. POST is for creating resources, and GET should never modify data.',
-    difficulty: 'medium',
   },
   {
     id: 'rest-q2',
@@ -33,7 +32,6 @@ export const restfulapidesignMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'DELETE is idempotent by design. Whether you delete a resource once or multiple times, the end state is the same - the resource is gone. This makes retries safe. The second attempt typically returns 404 (not found) or 204 (no content), but the key is that the operation is idempotent.',
-    difficulty: 'medium',
   },
   {
     id: 'rest-q3',
@@ -48,7 +46,6 @@ export const restfulapidesignMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       'Option 3 follows REST conventions: uses plural nouns (customers, orders), hierarchical structure showing relationship, GET method for retrieval, and query parameters for filtering/sorting. Option 1 uses verbs in URL, option 2 uses singular and vague naming, option 4 incorrectly uses POST for reading data.',
-    difficulty: 'medium',
   },
   {
     id: 'rest-q4',
@@ -63,7 +60,6 @@ export const restfulapidesignMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Stateless means each request contains all information needed (auth tokens, parameters, etc.) - the server does not store session state between requests. The server can still have databases (option 1 wrong), maintain application state like data (option 3 wrong), and clients can hold tokens (option 4 wrong). The key is no server-side session state.',
-    difficulty: 'medium',
   },
   {
     id: 'rest-q5',
@@ -78,6 +74,5 @@ export const restfulapidesignMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'The Richardson Maturity Model levels are: Level 0 (single endpoint), Level 1 (multiple resources), Level 2 (HTTP verbs and status codes correctly), Level 3 (adds HATEOAS - responses include links to related resources). Most production APIs are Level 2. The other options are unrelated to the maturity model.',
-    difficulty: 'hard',
   },
 ];

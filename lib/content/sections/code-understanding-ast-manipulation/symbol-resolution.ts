@@ -1,7 +1,7 @@
 export default {
-    id: 'symbol-resolution',
-    title: 'Symbol Resolution & References',
-    content: `
+  id: 'symbol-resolution',
+  title: 'Symbol Resolution & References',
+  content: `
 # Symbol Resolution & References
 
 ## Introduction
@@ -1220,5 +1220,5 @@ Symbol resolution and references are core to code understanding:
 These capabilities enable Cursor to provide intelligent features like auto-completion, go-to-definition, find references, and rename symbol—all essential for productive coding with AI assistance.
 
 In the next section, we'll explore code modification with AST—actually changing code programmatically while maintaining correctness.
-`
+`,
 };

@@ -18,7 +18,6 @@ export const timeseriesspecializedMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       'Option C is correct. Traditional RDBMS struggle with time-series data because: (1) B-tree index updates become very expensive at billions of rows, (2) They achieve only 1-2x compression vs 10-20x in TSDBs, (3) No built-in downsampling or retention policies, (4) Scanning billions of rows for time-range queries is slow. Option A is false (they support timestamps). Option B is false (they can handle many rows, just not efficiently for this use case). Option D is false (they support these queries, just not efficiently).',
-    difficulty: 'medium' as const,
   },
   {
     id: 'ts-2',
@@ -32,7 +31,6 @@ export const timeseriesspecializedMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       'Option C is correct. Downsampling is the process of aggregating high-resolution data (e.g., 1-second intervals) into lower-resolution summaries (e.g., 1-minute or 1-hour averages) as data ages. For example: keep raw data for 7 days, then downsample to 1-minute aggregates for 90 days, then 1-hour aggregates long-term. This saves storage while retaining important patterns. Option A describes changing collection rate (different concept). Option B is deletion, not downsampling. Option D describes compression (related but different).',
-    difficulty: 'medium' as const,
   },
   {
     id: 'ts-3',
@@ -46,7 +44,6 @@ export const timeseriesspecializedMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Option B is correct. Prometheus uses a pull model (scrapes metrics from targets), is specifically designed for monitoring with built-in alerting, and has local-only storage by default. InfluxDB uses a push model (applications send data), is a general-purpose time-series database for various use cases (IoT, analytics, monitoring), and has more flexible data models. Option A is false (both are for metrics). Option C is false (neither uses SQL as storage). Option D is false (both have open-source versions).',
-    difficulty: 'easy' as const,
   },
   {
     id: 'ts-4',
@@ -61,7 +58,6 @@ export const timeseriesspecializedMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       'Option C is correct. Time-series databases use specialized compression algorithms: (1) Delta encoding - store differences between consecutive values (1000, 1001, 1002 → 1000, +1, +1), (2) Delta-of-delta encoding - detect patterns in deltas, (3) Run-length encoding - compress repeated values (5, 5, 5, 5 → 5 count=4), (4) Specialized timestamp compression. These exploit the predictable nature of time-series data. Option A is too generic. Option B is deletion, not compression. Option D would lose data precision.',
-    difficulty: 'hard' as const,
   },
   {
     id: 'ts-5',
@@ -75,6 +71,5 @@ export const timeseriesspecializedMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Option B is correct. Time-series databases are NOT suitable when you need: (1) Complex relationships with many JOINs, (2) Strong ACID transaction guarantees across multiple entities, (3) Frequent updates to existing data, (4) Low write volume (<1000/sec), (5) Unpredictable ad-hoc queries. Use a traditional RDBMS (PostgreSQL, MySQL) for these scenarios. Options A, C, and D are all ideal use cases FOR time-series databases, not reasons to avoid them.',
-    difficulty: 'medium' as const,
   },
 ];

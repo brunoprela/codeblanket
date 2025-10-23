@@ -12,7 +12,6 @@ export const applicationsderivativesMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       "At critical points (local min/max), f'(x) = 0. Use second derivative to determine if it's a min or max.",
-    difficulty: 'easy',
   },
   {
     id: 'app-deriv-2',
@@ -26,7 +25,6 @@ export const applicationsderivativesMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       "Newton's method has quadratic convergence near the root, doubling correct digits each iteration.",
-    difficulty: 'medium',
   },
   {
     id: 'app-deriv-3',
@@ -41,7 +39,6 @@ export const applicationsderivativesMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       "First-order (linear) Taylor approximation: f(x) ≈ f(a) + f'(a)(x-a). This is the tangent line.",
-    difficulty: 'medium',
   },
   {
     id: 'app-deriv-4',
@@ -55,7 +52,6 @@ export const applicationsderivativesMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'θ_new = θ_old - α·∇L. We move opposite to gradient (downhill).',
-    difficulty: 'easy',
   },
   {
     id: 'app-deriv-5',
@@ -69,6 +65,5 @@ export const applicationsderivativesMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Taylor series approximate complex functions with polynomials, used in optimization (second-order methods) and analysis.',
-    difficulty: 'medium',
   },
 ];

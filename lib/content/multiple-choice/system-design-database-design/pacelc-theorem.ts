@@ -18,7 +18,6 @@ export const pacelctheoremMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'PACELC\'s "E" stands for "Else" (when there is NO partition) and "L" stands for Latency. This is important because CAP theorem only addresses behavior during partitions (which are rare), but PACELC recognizes that systems must make trade-offs even during normal operation (99.9% of the time). The ELC part states: during normal operation, you must choose between Low Latency (reading from any replica, potential staleness) and Consistency (reading from authoritative source, higher latency). This explains why Cassandra is faster than HBase even when both are healthy - Cassandra chooses Latency (EL) while HBase chooses Consistency (EC).',
-    difficulty: 'medium',
   },
   {
     id: 'pacelc-q2',
@@ -33,7 +32,6 @@ export const pacelctheoremMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       "PA/EL means during normal operation (EL), Cassandra chooses Latency over Consistency. It reads from the nearest/fastest replica (often just ONE replica) to minimize latency, which means it might return slightly stale data if that replica hasn't received the latest write yet. This is eventual consistency - the system will become consistent over time, but reads prioritize speed over guaranteed freshness. Option A describes PC/EC behavior (HBase). Option C describes unavailability. Option D describes QUORUM reads (which would be PA/EC configuration).",
-    difficulty: 'medium',
   },
   {
     id: 'pacelc-q3',
@@ -48,7 +46,6 @@ export const pacelctheoremMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       'The latency difference comes from the PACELC trade-off during normal operation. HBase (PC/EC) chooses Consistency over Latency even without partitions - reads must go to the authoritative RegionServer which might not be the closest one, adding network latency. Writes wait for WAL sync and replication acknowledgment. Cassandra (PA/EL) chooses Latency over Consistency - reads can go to any replica (usually the nearest), providing sub-millisecond response but potentially stale data. This architectural difference (EC vs EL) is why HBase has higher latency even when healthy. Options A, B, D are not the fundamental reasons.',
-    difficulty: 'hard',
   },
   {
     id: 'pacelc-q4',
@@ -63,7 +60,6 @@ export const pacelctheoremMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'PA/EL (like Cassandra or DynamoDB) best fits these requirements. The "<5ms latency" requirement strongly suggests needing to read from local replicas without waiting for quorum or authoritative sources, which is the EL (Latency over Consistency) choice. The ability to "tolerate slightly stale data" means eventual consistency is acceptable, which aligns with both PA (availability during partitions) and EL (low latency normally). PC/EC systems like HBase typically have 10-50ms latency because they prioritize consistency. PA/EC might work but still has higher latency than PA/EL during normal operation.',
-    difficulty: 'hard',
   },
   {
     id: 'pacelc-q5',
@@ -78,6 +74,5 @@ export const pacelctheoremMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       "PACELC is more practical because it addresses the trade-offs that affect your system during normal operation (ELC), which is 99.9% of the time. CAP only describes behavior during network partitions, which are rare events (minutes per year). The daily performance of your system is determined by the ELC trade-off: do you want low latency (read from any replica, eventual consistency) or strong consistency (read from authoritative source, higher latency)? This explains real-world performance differences between Cassandra and HBase even when both are healthy. PACELC extends CAP, it doesn't replace it (Option A wrong). It's not simpler (Option C wrong). It still has the same fundamental trade-offs (Option D wrong).",
-    difficulty: 'medium',
   },
 ];

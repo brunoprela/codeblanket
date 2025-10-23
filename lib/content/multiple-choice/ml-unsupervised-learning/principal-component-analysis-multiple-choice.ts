@@ -19,7 +19,6 @@ export const principal_component_analysisMultipleChoice: MultipleChoiceQuestion[
       correctAnswer: 1,
       explanation:
         'Principal components are new orthogonal (perpendicular) axes that are linear combinations of original features. They are ordered by the amount of variance they explain, with PC1 explaining the most variance.',
-      difficulty: 'easy',
     },
     {
       id: 'principal-component-analysis-mc2',
@@ -34,7 +33,6 @@ export const principal_component_analysisMultipleChoice: MultipleChoiceQuestion[
       correctAnswer: 2,
       explanation:
         'PCA is sensitive to feature scales because it uses distances/variance. Features with larger scales (e.g., salary in dollars vs age in years) will dominate the principal components if not scaled, leading to biased results.',
-      difficulty: 'medium',
     },
     {
       id: 'principal-component-analysis-mc3',
@@ -48,7 +46,6 @@ export const principal_component_analysisMultipleChoice: MultipleChoiceQuestion[
       correctAnswer: 1,
       explanation:
         'Explained variance ratio shows what percentage of the total variance in the data is captured by each principal component. This helps determine how many components to retain for dimensionality reduction.',
-      difficulty: 'easy',
     },
     {
       id: 'principal-component-analysis-mc4',
@@ -62,7 +59,6 @@ export const principal_component_analysisMultipleChoice: MultipleChoiceQuestion[
       correctAnswer: 1,
       explanation:
         'Avoid PCA when interpretability is crucial, as principal components are linear combinations of original features and lose direct interpretability. Also avoid it when relationships are non-linear (use Kernel PCA or t-SNE instead).',
-      difficulty: 'medium',
     },
     {
       id: 'principal-component-analysis-mc5',
@@ -77,6 +73,5 @@ export const principal_component_analysisMultipleChoice: MultipleChoiceQuestion[
       correctAnswer: 1,
       explanation:
         'When the first few principal components capture most of the variance (e.g., 95%), it indicates that the original features are highly correlated/redundant. You can safely reduce dimensionality from 100 to 3 while retaining 95% of the information. This is one of the main benefits of PCA - discovering that high-dimensional data often lies on a lower-dimensional manifold.',
-      difficulty: 'medium',
     },
   ];

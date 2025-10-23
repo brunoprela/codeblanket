@@ -4,9 +4,9 @@
  */
 
 export const temperaturesamplingSection = {
-    id: 'temperature-sampling',
-    title: 'Temperature, Top-P & Sampling Parameters',
-    content: `# Temperature, Top-P & Sampling Parameters
+  id: 'temperature-sampling',
+  title: 'Temperature, Top-P & Sampling Parameters',
+  content: `# Temperature, Top-P & Sampling Parameters
 
 Master sampling parameters to control LLM creativity, consistency, and output quality in production applications.
 
@@ -918,4 +918,3 @@ for i, result in enumerate(test_results):
 
 Now you control how models generate text. Next: **Streaming Responses** - learning to stream outputs token-by-token for better user experience.`,
 };
-

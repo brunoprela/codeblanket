@@ -4,9 +4,9 @@
  */
 
 export const chatcompletionsmessagesSection = {
-    id: 'chat-completions-messages',
-    title: 'Chat Completions & Message Formats',
-    content: `# Chat Completions & Message Formats
+  id: 'chat-completions-messages',
+  title: 'Chat Completions & Message Formats',
+  content: `# Chat Completions & Message Formats
 
 Master the art of structuring conversations with LLMs for optimal results in production applications.
 
@@ -803,4 +803,3 @@ manager.save_conversation("conversation.json")
 
 Now you understand chat structure. Next up: **Tokens, Context Windows & Limitations** - learning to work within the constraints of context windows and optimize token usage.`,
 };
-

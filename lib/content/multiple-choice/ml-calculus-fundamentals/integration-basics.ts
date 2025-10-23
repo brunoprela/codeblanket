@@ -17,7 +17,6 @@ export const integrationbasicsMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'The Fundamental Theorem connects differentiation and integration: the definite integral of f from a to b equals the antiderivative evaluated at the endpoints.',
-    difficulty: 'easy',
   },
   {
     id: 'integration-2',
@@ -26,7 +25,6 @@ export const integrationbasicsMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Power rule for integration: ∫ xⁿ dx = xⁿ⁺¹/(n+1) + C. For n=3: x⁴/4 + C.',
-    difficulty: 'easy',
   },
   {
     id: 'integration-3',
@@ -41,7 +39,6 @@ export const integrationbasicsMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       "Simpson's rule uses quadratic (parabolic) interpolation between points, providing better approximation than linear (trapezoidal) interpolation.",
-    difficulty: 'medium',
   },
   {
     id: 'integration-4',
@@ -51,7 +48,6 @@ export const integrationbasicsMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Expectation is the weighted average: E[X] = ∫ x·f(x) dx, where f(x) is the probability density function.',
-    difficulty: 'medium',
   },
   {
     id: 'integration-5',
@@ -65,6 +61,5 @@ export const integrationbasicsMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Many ML problems involve complex integrals (KL divergence, marginal likelihoods, expectations) that lack closed-form solutions, requiring numerical methods.',
-    difficulty: 'medium',
   },
 ];

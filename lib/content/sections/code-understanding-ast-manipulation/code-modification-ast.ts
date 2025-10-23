@@ -1,7 +1,7 @@
 export default {
-    id: 'code-modification-ast',
-    title: 'Code Modification with AST',
-    content: `
+  id: 'code-modification-ast',
+  title: 'Code Modification with AST',
+  content: `
 # Code Modification with AST
 
 ## Introduction
@@ -984,5 +984,5 @@ AST modification enables powerful code transformations:
 These capabilities are essential for AI coding tools like Cursor to provide intelligent refactoring, code generation, and automated fixes while maintaining code correctness and style.
 
 In the next section, we'll explore static analysis and code quality—detecting issues and patterns in code systematically.
-`
+`,
 };

@@ -12,7 +12,6 @@ export const differentiationrulesMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       "Product rule: (uv)' = u'v + uv'. Here u=x², v=e^x, so: 2x·e^x + x²·e^x.",
-    difficulty: 'easy',
   },
   {
     id: 'diff-rules-2',
@@ -20,7 +19,6 @@ export const differentiationrulesMultipleChoice: MultipleChoiceQuestion[] = [
     options: ['cos(3x²)', '6x·cos(3x²)', '3x·cos(3x²)', 'cos(6x)'],
     correctAnswer: 1,
     explanation: 'Chain rule: cos(3x²)·6x = 6x·cos(3x²).',
-    difficulty: 'medium',
   },
   {
     id: 'diff-rules-3',
@@ -34,7 +32,6 @@ export const differentiationrulesMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Backpropagation applies the chain rule to compute gradients through layer compositions.',
-    difficulty: 'medium',
   },
   {
     id: 'diff-rules-4',
@@ -42,7 +39,6 @@ export const differentiationrulesMultipleChoice: MultipleChoiceQuestion[] = [
     options: ['1/x²', '2/x', '2x', '1/(2x)'],
     correctAnswer: 1,
     explanation: 'Chain rule: (1/x²)·2x = 2/x, or use ln(x²) = 2ln(x) → 2/x.',
-    difficulty: 'easy',
   },
   {
     id: 'diff-rules-5',
@@ -56,6 +52,5 @@ export const differentiationrulesMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Logarithmic differentiation simplifies products, quotients, and functions like x^x.',
-    difficulty: 'medium',
   },
 ];

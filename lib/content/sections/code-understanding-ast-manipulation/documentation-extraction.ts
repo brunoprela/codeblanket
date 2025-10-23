@@ -1,7 +1,7 @@
 export default {
-    id: 'documentation-extraction',
-    title: 'Documentation & Comment Extraction',
-    content: `
+  id: 'documentation-extraction',
+  title: 'Documentation & Comment Extraction',
+  content: `
 # Documentation & Comment Extraction
 
 ## Introduction
@@ -974,5 +974,5 @@ Documentation extraction provides essential context:
 These capabilities enable AI coding tools like Cursor to understand not just what code does syntactically, but why it exists and how it should be used—critical for providing truly intelligent assistance that respects the developer's intent and project conventions.
 
 In the next section, we'll explore code similarity and clone detection—finding duplicate and similar code patterns.
-`
+`,
 };

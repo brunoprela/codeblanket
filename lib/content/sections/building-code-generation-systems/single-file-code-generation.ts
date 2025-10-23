@@ -4,9 +4,9 @@
  */
 
 export const singlefilecodegenerationSection = {
-    id: 'single-file-code-generation',
-    title: 'Single File Code Generation',
-    content: `# Single File Code Generation
+  id: 'single-file-code-generation',
+  title: 'Single File Code Generation',
+  content: `# Single File Code Generation
 
 Master generating complete files, functions, and classes from natural language descriptions.
 
@@ -834,4 +834,3 @@ You've mastered single file generation. Next:
 Remember: **Specification → Generation → Validation → Iteration**
 `,
 };
-

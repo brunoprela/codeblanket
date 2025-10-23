@@ -18,7 +18,6 @@ export const restapierrorhandlingMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       "403 Forbidden is for authenticated users who lack permission for a specific resource. 401 is for authentication issues, 404 would leak information (post exists but you can't access it), 400 is for malformed requests.",
-    difficulty: 'medium',
   },
   {
     id: 'error-q2',
@@ -33,7 +32,6 @@ export const restapierrorhandlingMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       '500 with generic message protects internal details. Include request ID for support to investigate. Never expose database details (security risk). 503 is for planned maintenance/temporary unavailability. 400 is for client errors.',
-    difficulty: 'easy',
   },
   {
     id: 'error-q3',
@@ -48,7 +46,6 @@ export const restapierrorhandlingMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Provide complete rate limit information: total limit, remaining requests (0), when limit resets (timestamp), and retry-after (seconds). This helps clients implement proper backoff strategies.',
-    difficulty: 'medium',
   },
   {
     id: 'error-q4',
@@ -63,7 +60,6 @@ export const restapierrorhandlingMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       "Return field-level details in single response so client can show all errors at once. Users shouldn't fix one field, resubmit, then discover another error. Good UX requires comprehensive validation feedback.",
-    difficulty: 'easy',
   },
   {
     id: 'error-q5',
@@ -77,6 +73,5 @@ export const restapierrorhandlingMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Idempotency keys let clients safely retry operations like payments without duplicates. Server caches result by key and returns cached response for retries. This solves network timeout uncertainty ("did my payment go through?").',
-    difficulty: 'hard',
   },
 ];

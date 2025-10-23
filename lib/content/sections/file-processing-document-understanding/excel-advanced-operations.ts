@@ -4,9 +4,9 @@
  */
 
 export const exceladvancedoperationsSection = {
-    id: 'excel-advanced-operations',
-    title: 'Excel Advanced Operations',
-    content: `# Excel Advanced Operations
+  id: 'excel-advanced-operations',
+  title: 'Excel Advanced Operations',
+  content: `# Excel Advanced Operations
 
 Master advanced Excel manipulation for building sophisticated AI applications that handle formulas, charts, pivot tables, and complex formatting.
 
@@ -757,6 +757,5 @@ automation.create_dashboard(data, 'dashboard.xlsx', 'Sales Dashboard')
 10. **Document formula logic** for maintenance
 
 These advanced Excel operations enable building sophisticated AI tools that can manipulate spreadsheets at an expert level, essential for a Cursor-like Excel application.`,
-    videoUrl: null,
+  videoUrl: undefined,
 };
-

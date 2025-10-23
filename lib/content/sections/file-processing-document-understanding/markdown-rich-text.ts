@@ -4,9 +4,9 @@
  */
 
 export const markdownrichtextSection = {
-    id: 'markdown-rich-text',
-    title: 'Markdown & Rich Text',
-    content: `# Markdown & Rich Text
+  id: 'markdown-rich-text',
+  title: 'Markdown & Rich Text',
+  content: `# Markdown & Rich Text
 
 Master markdown and rich text processing for documentation and content management in LLM applications.
 
@@ -114,6 +114,5 @@ def read_rtf(filepath: str) -> str:
 8. **Use standard markdown** for compatibility
 9. **Support code blocks** with language tags
 10. **Create structured documents** for clarity`,
-    videoUrl: null,
+  videoUrl: undefined,
 };
-

@@ -17,7 +17,6 @@ export const derivativesfundamentalsMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'The derivative represents the slope of the tangent line at a point, which is the instantaneous rate of change. This is found by taking the limit of secant line slopes as the interval shrinks to zero.',
-    difficulty: 'easy',
   },
   {
     id: 'deriv-2',
@@ -26,7 +25,6 @@ export const derivativesfundamentalsMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 0,
     explanation:
       "Using the power rule for each term: d/dx[3x⁴] = 12x³, d/dx[-2x²] = -4x, d/dx[5] = 0. So f'(x) = 12x³ - 4x.",
-    difficulty: 'easy',
   },
   {
     id: 'deriv-3',
@@ -41,7 +39,6 @@ export const derivativesfundamentalsMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       "The sigmoid derivative σ'(x) = σ(x)(1-σ(x)) is largest at x=0 (0.25) and approaches 0 as x → ±∞. This causes gradients to vanish in deep networks when neurons are saturated.",
-    difficulty: 'medium',
   },
   {
     id: 'deriv-4',
@@ -56,7 +53,6 @@ export const derivativesfundamentalsMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       'The gradient points in the direction of steepest increase. To minimize the loss, we move in the opposite direction (negative gradient), which is the direction of steepest decrease.',
-    difficulty: 'medium',
   },
   {
     id: 'deriv-5',
@@ -71,6 +67,5 @@ export const derivativesfundamentalsMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'While smaller h reduces truncation error, it amplifies floating-point round-off errors. The optimal h balances these two error sources, typically around √ε where ε is machine epsilon.',
-    difficulty: 'hard',
   },
 ];

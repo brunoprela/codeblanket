@@ -4,9 +4,9 @@
  */
 
 export const promptengineeringforcodeSection = {
-    id: 'prompt-engineering-for-code',
-    title: 'Prompt Engineering for Code',
-    content: `# Prompt Engineering for Code
+  id: 'prompt-engineering-for-code',
+  title: 'Prompt Engineering for Code',
+  content: `# Prompt Engineering for Code
 
 Master the art of crafting prompts that generate high-quality, contextual code like Cursor does.
 
@@ -919,4 +919,3 @@ With solid prompt engineering, you'll learn:
 Remember: **Context + Specificity + Format = Quality Code Generation**
 `,
 };
-

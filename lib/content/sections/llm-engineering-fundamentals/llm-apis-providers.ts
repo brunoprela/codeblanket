@@ -4,9 +4,9 @@
  */
 
 export const llmapisprovidersSection = {
-    id: 'llm-apis-providers',
-    title: 'LLM APIs & Providers',
-    content: `# LLM APIs & Providers
+  id: 'llm-apis-providers',
+  title: 'LLM APIs & Providers',
+  content: `# LLM APIs & Providers
 
 Master the landscape of Large Language Model APIs and choose the right provider for your production applications.
 
@@ -827,4 +827,3 @@ print(f"Reason: {rec['reason']}")
 
 Now that you understand LLM APIs and providers, you're ready to dive into **chat completions and message formats** - learning how to structure conversations for optimal results.`,
 };
-

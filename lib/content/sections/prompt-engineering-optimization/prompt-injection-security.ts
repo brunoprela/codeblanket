@@ -4,9 +4,9 @@
  */
 
 export const promptinjectionsecuritySection = {
-    id: 'prompt-injection-security',
-    title: 'Prompt Injection & Security',
-    content: `# Prompt Injection & Security
+  id: 'prompt-injection-security',
+  title: 'Prompt Injection & Security',
+  content: `# Prompt Injection & Security
 
 Master protecting your AI applications from prompt injection attacks and other security vulnerabilities.
 
@@ -171,13 +171,13 @@ class InputSanitizer:
         """Remove common injection patterns."""
         
         dangerous_patterns = [
-            r'ignore\s+(all\s+)?previous\s+instructions?',
-            r'forget\s+everything',
-            r'you\s+are\s+now',
-            r'new\s+instructions?',
+            r'ignore +(all +)?previous +instructions?',
+            r'forget +everything',
+            r'you +are +now',
+            r'new +instructions?',
             r'system:',
-            r'---\s*end',
-            r'<\s*/?\s*system\s*>',
+            r'--- *end',
+            r'< */? *system *>',
         ]
         
         cleaned = text
@@ -318,14 +318,14 @@ class InjectionDetector:
         
         # Patterns that indicate injection attempts
         injection_indicators = [
-            (r'ignore\s+(all\s+)?previous', 'instruction_override', 0.9),
-            (r'forget\s+everything', 'instruction_override', 0.9),
-            (r'you\s+are\s+now', 'role_manipulation', 0.8),
-            (r'system\s*:', 'role_confusion', 0.7),
-            (r'new\s+instructions?', 'instruction_injection', 0.8),
-            (r'reveal\s+(your\s+)?(prompt|instructions)', 'prompt_leak', 1.0),
-            (r'admin\s+mode', 'privilege_escalation', 0.9),
-            (r'---\s*end', 'delimiter_injection', 0.6),
+            (r'ignore +(all +)?previous', 'instruction_override', 0.9),
+            (r'forget +everything', 'instruction_override', 0.9),
+            (r'you +are +now', 'role_manipulation', 0.8),
+            (r'system *:', 'role_confusion', 0.7),
+            (r'new +instructions?', 'instruction_injection', 0.8),
+            (r'reveal +(your +)?(prompt|instructions)', 'prompt_leak', 1.0),
+            (r'admin +mode', 'privilege_escalation', 0.9),
+            (r'--- *end', 'delimiter_injection', 0.6),
         ]
         
         for pattern, attack_type, weight in injection_indicators:
@@ -408,7 +408,7 @@ class OutputValidator:
             (r'\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}\\b', '[EMAIL_REDACTED]'),
             (r'\\b\\d{3}-\\d{2}-\\d{4}\\b', '[SSN_REDACTED]'),
             (r'\\b\\d{16}\\b', '[CREDIT_CARD_REDACTED]'),
-            (r'api[_-]?key\\s*[:\\=]\\s*[\\w-]+', 'api_key=[KEY_REDACTED]'),
+            (r'api[_-]?key\ *[:\\=]\ *[\\w-]+', 'api_key=[KEY_REDACTED]'),
         ]
         
         redacted = output
@@ -673,4 +673,3 @@ else:
 
 Now that you understand prompt injection security, you're ready to explore **Meta-Prompting & Self-Improvement** - learning how to use LLMs to improve their own prompts and create self-optimizing systems.`,
 };
-

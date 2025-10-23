@@ -4,9 +4,9 @@
  */
 
 export const fewshotlearningexamplesSection = {
-    id: 'few-shot-learning-examples',
-    title: 'Few-Shot Learning & Examples',
-    content: `# Few-Shot Learning & Examples
+  id: 'few-shot-learning-examples',
+  title: 'Few-Shot Learning & Examples',
+  content: `# Few-Shot Learning & Examples
 
 Master the art of teaching LLMs through examples to achieve reliable, consistent outputs in production.
 
@@ -967,4 +967,3 @@ db.save()
 
 Now that you understand few-shot learning, you're ready to explore **Chain-of-Thought Prompting** - teaching LLMs to show their reasoning for complex problem-solving.`,
 };
-

@@ -18,7 +18,6 @@ export const apigatewaypatternsMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       "BFF pattern creates separate gateway per client type, allowing customization: mobile gets minimal data (bandwidth), web gets full HTML, IoT gets compact binary. This optimizes each client without compromising others. It doesn't share infrastructure (opposite), doesn't translate protocols, or handle auth automatically.",
-    difficulty: 'medium',
   },
   {
     id: 'gateway-q2',
@@ -32,7 +31,6 @@ export const apigatewaypatternsMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       "API gateways should handle cross-cutting concerns (auth, routing, rate limiting), not business logic. Business logic belongs in backend services for maintainability, testability, and separation of concerns. Gateways aren't inherently slow, can access DBs (but shouldn't), and can be tested.",
-    difficulty: 'easy',
   },
   {
     id: 'gateway-q3',
@@ -46,7 +44,6 @@ export const apigatewaypatternsMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Aggregator Gateway makes parallel calls to multiple services and combines responses into one. This reduces client requests from N to 1, critical for mobile apps with limited bandwidth and battery. Example: dashboard fetching user + orders + recommendations in one request instead of three.',
-    difficulty: 'easy',
   },
   {
     id: 'gateway-q4',
@@ -61,7 +58,6 @@ export const apigatewaypatternsMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Circuit breaker monitors failures and "opens" (stops sending requests) when threshold exceeded, preventing cascading failures and giving backend time to recover. After timeout, it tries again (half-open). This is different from load balancing, caching, or encryption.',
-    difficulty: 'medium',
   },
   {
     id: 'gateway-q5',
@@ -75,6 +71,5 @@ export const apigatewaypatternsMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       "API gateway is a single entry point, making it a potential single point of failure (mitigate with HA/redundancy) and bottleneck (all traffic goes through it). It actually reduces coupling (not increases), doesn't affect backend languages, and doesn't require rewriting services.",
-    difficulty: 'easy',
   },
 ];

@@ -4,9 +4,9 @@
  */
 
 export const errorhandlingretrySection = {
-    id: 'error-handling-retry',
-    title: 'Error Handling & Retry Logic',
-    content: `# Error Handling & Retry Logic
+  id: 'error-handling-retry',
+  title: 'Error Handling & Retry Logic',
+  content: `# Error Handling & Retry Logic
 
 Master production-grade error handling to build reliable LLM applications that gracefully handle failures.
 
@@ -839,4 +839,3 @@ ERROR HANDLING BEST PRACTICES:
 
 Now you have robust error handling. Next: **Cost Tracking & Optimization** - learning to monitor and optimize LLM costs in production.`,
 };
-

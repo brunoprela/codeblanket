@@ -19,7 +19,6 @@ export const normalizationdenormalizationMultipleChoice: MultipleChoiceQuestion[
       correctAnswer: 2,
       explanation:
         "Option C is correct. This table violates 3NF due to transitive dependency: department_name and department_location depend on department_id, not directly on the primary key (employee_id). The dependency chain is: employee_id → department_id → department_name/location. To fix, create a separate departments table. It's not 1NF violation (all values are atomic). Not 2NF violation (there's no composite primary key). Not BCNF issue (no overlapping candidate keys).",
-      difficulty: 'medium' as const,
     },
     {
       id: 'norm-2',
@@ -33,7 +32,6 @@ export const normalizationdenormalizationMultipleChoice: MultipleChoiceQuestion[
       correctAnswer: 2,
       explanation:
         'Option C is correct. Denormalization is most appropriate for read-heavy workloads (e.g., 10:1 or 100:1 read:write ratio) where you know the query patterns and can optimize for them. It reduces JOINs and improves read performance at the cost of data redundancy and write complexity. Option A favors normalization. Option B also favors normalization (frequent updates are easier with normalized data). Option D suggests complex relationships, which are typically better handled with normalization.',
-      difficulty: 'medium' as const,
     },
     {
       id: 'norm-3',
@@ -48,7 +46,6 @@ export const normalizationdenormalizationMultipleChoice: MultipleChoiceQuestion[
       correctAnswer: 1,
       explanation:
         "Option B is correct. Materialized views physically store the computed query results on disk, allowing fast access without re-running the query. Regular views are virtual - they're just stored query definitions that are executed when accessed. This makes materialized views faster to query but requires periodic refreshing to stay current, and they consume storage. Option A is incorrect (both support similar complexity). Option C is backwards (materialized views may be stale). Option D is incorrect (materialized views require MORE storage).",
-      difficulty: 'easy' as const,
     },
     {
       id: 'norm-4',
@@ -63,7 +60,6 @@ export const normalizationdenormalizationMultipleChoice: MultipleChoiceQuestion[
       correctAnswer: 2,
       explanation:
         'Option C is correct. The biggest risk of denormalization is data inconsistency. If a like is inserted but the like_count update fails (e.g., transaction rollback, application error), or if concurrent updates cause race conditions, the denormalized count may diverge from the true count in the likes table. Option A is incorrect (one integer column is negligible). Option B is incorrect (denormalized count is faster to query). Option D is incorrect (you can index denormalized columns).',
-      difficulty: 'hard' as const,
     },
     {
       id: 'norm-5',
@@ -78,6 +74,5 @@ export const normalizationdenormalizationMultipleChoice: MultipleChoiceQuestion[
       correctAnswer: 2,
       explanation:
         "Option C is correct. CQRS separates write and read models: the write model (command side) is typically normalized to maintain data integrity as the source of truth, while the read model (query side) is denormalized and optimized for specific query patterns. Events from the write model sync to the read model, which may be materialized views, caching layers, or search indexes. This allows ACID writes and fast reads. Options A, B, and D don't capture this separation of concerns.",
-      difficulty: 'hard' as const,
     },
   ];

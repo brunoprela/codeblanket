@@ -17,7 +17,6 @@ export const apigovernanceMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'API catalog is a central registry listing all APIs with: owner team, status (active/deprecated), documentation links, OpenAPI specs, and contact info. Essential for discovery and governance in organizations with many APIs.',
-    difficulty: 'easy',
   },
   {
     id: 'governance-q2',
@@ -31,7 +30,6 @@ export const apigovernanceMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Automated linting (e.g., Spectral) enforces design standards: naming conventions, required fields, error formats. Catches violations before merge, ensuring consistency across all APIs. Human reviews miss details; automation is consistent.',
-    difficulty: 'medium',
   },
   {
     id: 'governance-q3',
@@ -45,7 +43,6 @@ export const apigovernanceMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Design-first: Write OpenAPI spec before code. Benefits: (1) Review API design early, (2) Generate mocks for frontend, (3) Ensure docs match implementation, (4) Catch design issues before coding. Alternative: code-first (generate spec from code).',
-    difficulty: 'easy',
   },
   {
     id: 'governance-q4',
@@ -59,7 +56,6 @@ export const apigovernanceMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'API deprecation policy: (1) Announce 6-12 months early, (2) Set sunset date, (3) Provide migration guide, (4) Email affected clients, (5) Support N-1 versions. Never remove immediately; causes integration breakage.',
-    difficulty: 'easy',
   },
   {
     id: 'governance-q5',
@@ -73,6 +69,5 @@ export const apigovernanceMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'API review board ensures: (1) Design consistency, (2) Security standards met, (3) No duplicate APIs, (4) Follow best practices. Reviews major changes before GA. Not to slow down, but ensure quality and consistency across organization.',
-    difficulty: 'medium',
   },
 ];

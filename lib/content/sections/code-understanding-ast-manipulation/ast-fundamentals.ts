@@ -1,7 +1,7 @@
 export default {
-    id: 'ast-fundamentals',
-    title: 'Abstract Syntax Trees (AST) Fundamentals',
-    content: `
+  id: 'ast-fundamentals',
+  title: 'Abstract Syntax Trees (AST) Fundamentals',
+  content: `
 # Abstract Syntax Trees (AST) Fundamentals
 
 ## Introduction
@@ -896,5 +896,5 @@ Abstract Syntax Trees are the foundation of modern code analysis tools:
 Understanding ASTs is crucial for building AI coding assistants like Cursor, as they provide the structural understanding needed for intelligent code suggestions, refactoring, and generation.
 
 In the next sections, we'll dive deeper into Python-specific AST analysis, multi-language parsing with tree-sitter, and building complete code understanding engines.
-`
+`,
 };

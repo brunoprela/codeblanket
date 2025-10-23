@@ -4,9 +4,9 @@
  */
 
 export const codereviewbugdetectionSection = {
-    id: 'code-review-bug-detection',
-    title: 'Code Review & Bug Detection',
-    content: `# Code Review & Bug Detection
+  id: 'code-review-bug-detection',
+  title: 'Code Review & Bug Detection',
+  content: `# Code Review & Bug Detection
 
 Master using LLMs to automatically review code, detect bugs, find security issues, and suggest improvements.
 
@@ -804,4 +804,3 @@ You've mastered code review! Next:
 Remember: **Thorough Review = Quality Code**
 `,
 };
-

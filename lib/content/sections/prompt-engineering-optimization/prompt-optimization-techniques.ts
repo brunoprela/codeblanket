@@ -1,12 +1,12 @@
 /**
- * Prompt Optimization Techniques Section  
+ * Prompt Optimization Techniques Section
  * Module 2: Prompt Engineering & Optimization
  */
 
 export const promptoptimizationtechniquesSection = {
-    id: 'prompt-optimization-techniques',
-    title: 'Prompt Optimization Techniques',
-    content: `# Prompt Optimization Techniques
+  id: 'prompt-optimization-techniques',
+  title: 'Prompt Optimization Techniques',
+  content: `# Prompt Optimization Techniques
 
 Master systematic approaches to optimize prompts for better performance, lower costs, and higher reliability at scale.
 
@@ -945,4 +945,3 @@ print(f"\\n{result['recommendation']}")
 
 Now that you understand prompt optimization techniques, you're ready to explore **Output Format Control** - learning how to enforce specific output structures and formats for reliable parsing and processing.`,
 };
-

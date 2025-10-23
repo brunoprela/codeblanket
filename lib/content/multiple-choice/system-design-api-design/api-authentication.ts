@@ -18,7 +18,6 @@ export const apiauthenticationMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       "JWT with OAuth 2.0 PKCE flow is designed for mobile apps: provides per-user auth, secure without client secret, supports token refresh. API keys don't differentiate users, Basic Auth sends credentials repeatedly, mTLS is complex for mobile.",
-    difficulty: 'medium',
   },
   {
     id: 'auth-q2',
@@ -33,7 +32,6 @@ export const apiauthenticationMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       "Short-lived access tokens limit the time window an attacker can use a stolen token. Use refresh tokens for long-term access. JWTs are stateless (not stored on server), and short lifetimes don't require frequent user logins (refresh tokens handle renewal).",
-    difficulty: 'medium',
   },
   {
     id: 'auth-q3',
@@ -48,7 +46,6 @@ export const apiauthenticationMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       'OAuth 2.0 is specifically designed for delegation - allowing third parties to access resources on behalf of users without sharing credentials. Users grant permission, and third party receives scoped access tokens.',
-    difficulty: 'easy',
   },
   {
     id: 'auth-q4',
@@ -62,7 +59,6 @@ export const apiauthenticationMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'mTLS (Mutual TLS) requires both client and server to present valid certificates, providing cryptographic proof of identity. Bearer tokens can be stolen and replayed. mTLS still requires TLS, and certificates do expire.',
-    difficulty: 'hard',
   },
   {
     id: 'auth-q5',
@@ -77,6 +73,5 @@ export const apiauthenticationMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       "Once exposed publicly, assume the key is compromised forever (GitHub history, scrapers, caches). Must revoke immediately, issue new key, and audit logs for unauthorized usage. Deleting commits doesn't remove from history.",
-    difficulty: 'easy',
   },
 ];

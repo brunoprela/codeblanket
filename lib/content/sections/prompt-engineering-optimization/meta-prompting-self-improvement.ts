@@ -4,9 +4,9 @@
  */
 
 export const metapromptingselfimprovementSection = {
-    id: 'meta-prompting-self-improvement',
-    title: 'Meta-Prompting & Self-Improvement',
-    content: `# Meta-Prompting & Self-Improvement
+  id: 'meta-prompting-self-improvement',
+  title: 'Meta-Prompting & Self-Improvement',
+  content: `# Meta-Prompting & Self-Improvement
 
 Master using LLMs to write, improve, and optimize their own prompts for continuous performance improvement.
 
@@ -741,4 +741,3 @@ Congratulations! You've completed the Prompt Engineering & Optimization module. 
 
 Next module: **File Processing & Document Understanding** - Learn to parse, manipulate, and understand Excel, PDF, Word, and code files with LLMs.`,
 };
-

@@ -17,7 +17,6 @@ export const ensemblemethodsMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       "Diversity is crucial for ensembles. If all models make the same errors, combining them doesn't help. Diverse models (different algorithms, hyperparameters, or data subsets) make uncorrelated errors that cancel out when averaged. Even if individual models are mediocre, diversity enables the ensemble to perform better.",
-    difficulty: 'easy',
   },
   {
     id: 'ensemble-methods-mc-2',
@@ -32,7 +31,6 @@ export const ensemblemethodsMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 0,
     explanation:
       'Hard voting uses majority vote (most common class prediction wins). Soft voting averages the predicted probabilities from each model and picks the class with highest average probability. Soft voting is usually more accurate because it considers confidence levels, not just final predictions.',
-    difficulty: 'easy',
   },
   {
     id: 'ensemble-methods-mc-3',
@@ -46,7 +44,6 @@ export const ensemblemethodsMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Stacking trains a meta-model that learns how to optimally combine base model predictions. This meta-model can learn complex, non-linear combination rules, potentially achieving better performance than simple averaging. However, it requires more training time and proper cross-validation to avoid overfitting.',
-    difficulty: 'medium',
   },
   {
     id: 'ensemble-methods-mc-4',
@@ -60,7 +57,6 @@ export const ensemblemethodsMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Out-of-fold (OOF) predictions prevent data leakage. If we used training predictions directly, base models would have seen that data during training, leading to overly optimistic predictions and meta-model overfitting. OOF predictions are generated on data each base model never saw during training, providing unbiased inputs for the meta-model.',
-    difficulty: 'hard',
   },
   {
     id: 'ensemble-methods-mc-5',
@@ -75,6 +71,5 @@ export const ensemblemethodsMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       "When an ensemble performs worse than its best components, the models are likely highly correlated - they make the same errors. Without diversity, averaging doesn't help and can actually hurt. Solution: use more diverse model types (e.g., mix tree-based, linear, and kernel methods) or different hyperparameters to decorrelate predictions.",
-    difficulty: 'hard',
   },
 ];

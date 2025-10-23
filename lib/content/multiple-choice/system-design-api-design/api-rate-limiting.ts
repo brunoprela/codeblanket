@@ -17,7 +17,6 @@ export const apiratelimitingMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Fixed Window allows bursts at boundaries: user sends 100 requests at t=59s (end of window 1) and 100 at t=60s (start of window 2) = 200 requests in 1 second, bypassing the limit. Sliding Window Counter solves this by weighting counts across windows.',
-    difficulty: 'medium',
   },
   {
     id: 'ratelimit-q2',
@@ -32,7 +31,6 @@ export const apiratelimitingMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       'Sliding Window Counter is most efficient: stores only 2 counters (current + previous window) and uses weighted calculation. Sliding Window Log stores ALL timestamps (memory intensive). Token Bucket is efficient but allows bursts. Fixed Window has burst issues.',
-    difficulty: 'hard',
   },
   {
     id: 'ratelimit-q3',
@@ -47,7 +45,6 @@ export const apiratelimitingMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       '429 Too Many Requests is the standard HTTP status code for rate limiting. 403 is for authorization failures, 503 is for server unavailability, 400 is for invalid requests. Always return 429 with Retry-After header.',
-    difficulty: 'easy',
   },
   {
     id: 'ratelimit-q4',
@@ -62,7 +59,6 @@ export const apiratelimitingMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Cost-based rate limiting assigns different costs to operations based on resource usage. Expensive operations (analytics, search) cost more points than simple reads. User has point budget (e.g., 10,000/hour). This prevents abuse of expensive endpoints without overly restricting cheap operations.',
-    difficulty: 'medium',
   },
   {
     id: 'ratelimit-q5',
@@ -77,6 +73,5 @@ export const apiratelimitingMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Retry-After header tells client how many seconds to wait before retrying. This prevents clients from spam-retrying immediately, which would worsen the situation. Standard practice: return Retry-After with 429 status code.',
-    difficulty: 'easy',
   },
 ];

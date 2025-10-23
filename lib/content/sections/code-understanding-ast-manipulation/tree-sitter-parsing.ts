@@ -1,7 +1,7 @@
 export default {
-    id: 'tree-sitter-parsing',
-    title: 'Tree-sitter for Multi-Language Parsing',
-    content: `
+  id: 'tree-sitter-parsing',
+  title: 'Tree-sitter for Multi-Language Parsing',
+  content: `
 # Tree-sitter for Multi-Language Parsing
 
 ## Introduction
@@ -1161,5 +1161,5 @@ Tree-sitter enables universal code understanding:
 Understanding tree-sitter is essential for building multi-language AI coding tools. It provides the foundation for Cursor's ability to understand any codebase, regardless of programming language, and offer intelligent suggestions across your entire project.
 
 In the next section, we'll explore how to analyze code structure systematically to extract architectural patterns and relationships.
-`
+`,
 };

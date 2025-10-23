@@ -1,7 +1,7 @@
 export default {
-    id: 'building-code-understanding-engine',
-    title: 'Building a Code Understanding Engine',
-    content: `
+  id: 'building-code-understanding-engine',
+  title: 'Building a Code Understanding Engine',
+  content: `
 # Building a Code Understanding Engine
 
 ## Introduction
@@ -741,5 +741,5 @@ With this code understanding engine, you can:
 - Create documentation generators
 
 The code understanding engine you've built is the foundation for the next modules where we'll explore code generation, tool use, and building complete AI coding products like Cursor.
-`
+`,
 };
