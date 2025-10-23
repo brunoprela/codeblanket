@@ -1,4 +1,4 @@
-export default {
+const codeStructureAnalysis = {
   id: 'code-structure-analysis',
   title: 'Code Structure Analysis',
   content: `
@@ -1293,3 +1293,5 @@ These techniques enable AI coding tools like Cursor to provide intelligent, cont
 In the next section, we'll explore symbol resolution and references—understanding what names mean and where they're used throughout your code.
 `,
 };
+
+export default codeStructureAnalysis;

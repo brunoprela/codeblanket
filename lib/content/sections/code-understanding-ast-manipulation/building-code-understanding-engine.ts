@@ -1,4 +1,4 @@
-export default {
+const buildingCodeUnderstandingEngine = {
   id: 'building-code-understanding-engine',
   title: 'Building a Code Understanding Engine',
   content: `
@@ -743,3 +743,5 @@ With this code understanding engine, you can:
 The code understanding engine you've built is the foundation for the next modules where we'll explore code generation, tool use, and building complete AI coding products like Cursor.
 `,
 };
+
+export default buildingCodeUnderstandingEngine;

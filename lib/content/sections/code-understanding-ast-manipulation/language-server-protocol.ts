@@ -1,4 +1,4 @@
-export default {
+const languageServerProtocol = {
   id: 'language-server-protocol',
   title: 'Language Server Protocol (LSP)',
   content: `
@@ -618,3 +618,5 @@ Understanding LSP is essential for building AI coding tools that integrate seaml
 In the final section, we'll bring everything together to build a complete code understanding engine that combines all the techniques we've learned.
 `,
 };
+
+export default languageServerProtocol;

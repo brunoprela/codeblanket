@@ -1,4 +1,4 @@
-export default {
+const documentationExtraction = {
   id: 'documentation-extraction',
   title: 'Documentation & Comment Extraction',
   content: `
@@ -355,10 +355,10 @@ class DocstringExtractor(ast.NodeVisitor):
 
 # Example usage
 code = """
-\"\"\"Module for data processing utilities.\"\"\"
+"""Module for data processing utilities."""
 
 def calculate_sum(numbers: list, initial: int = 0) -> int:
-    \"\"\"Calculate sum of numbers with initial value.
+    """Calculate sum of numbers with initial value.
     
     This function adds all numbers in the list to an initial value.
     
@@ -375,28 +375,28 @@ def calculate_sum(numbers: list, initial: int = 0) -> int:
     Examples:
         >>> calculate_sum([1, 2, 3], 10)
         16
-    \"\"\"
+    """
     if not isinstance(numbers, list):
         raise TypeError("numbers must be a list")
     return sum(numbers) + initial
 
 class DataProcessor:
-    \"\"\"Process and transform data.
+    """Process and transform data.
     
     This class provides methods for data processing operations.
     
     Attributes:
         config (dict): Configuration settings
-    \"\"\"
+    """
     
     def transform(self, data: str) -> str:
-        \"\"\"Transform input data.
+        """Transform input data.
         
         :param data: Input data to transform
         :type data: str
         :return: Transformed data
         :rtype: str
-        \"\"\"
+        """
         return data.upper()
 """
 
@@ -804,10 +804,10 @@ class ComprehensiveDocumentationSystem:
 
 # Test the comprehensive system
 code = """
-\"\"\"User authentication module.\"\"\"
+"""User authentication module."""
 
 def authenticate(username: str, password: str) -> bool:
-    \"\"\"Authenticate user credentials.
+    """Authenticate user credentials.
     
     Args:
         username (str): User's username
@@ -815,7 +815,7 @@ def authenticate(username: str, password: str) -> bool:
         
     Returns:
         bool: True if authenticated, False otherwise
-    \"\"\"
+    """
     # TODO: Add rate limiting
     # FIXME: Password should be hashed
     return validate_credentials(username, password)
@@ -976,3 +976,5 @@ These capabilities enable AI coding tools like Cursor to understand not just wha
 In the next section, we'll explore code similarity and clone detection—finding duplicate and similar code patterns.
 `,
 };
+
+export default documentationExtraction;

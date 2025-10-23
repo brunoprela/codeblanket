@@ -150,7 +150,7 @@ class DocstringGenerator:
 Function does: [Analyze the function body to understand what it does]
 
 Format:
-\"\"\"
+"""
 Brief description (one line).
 
 Detailed description (multiple lines if needed).
@@ -166,7 +166,7 @@ Raises:
 
 {"Examples:" if include_examples else ""}
 {"    >>> example usage" if include_examples else ""}
-\"\"\"
+"""
 
 Generate the complete docstring.
 """

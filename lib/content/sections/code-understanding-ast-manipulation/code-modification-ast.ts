@@ -1,4 +1,4 @@
-export default {
+const codeModificationAst = {
   id: 'code-modification-ast',
   title: 'Code Modification with AST',
   content: `
@@ -986,3 +986,5 @@ These capabilities are essential for AI coding tools like Cursor to provide inte
 In the next section, we'll explore static analysis and code quality—detecting issues and patterns in code systematically.
 `,
 };
+
+export default codeModificationAst;

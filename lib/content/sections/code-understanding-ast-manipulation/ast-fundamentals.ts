@@ -1,4 +1,4 @@
-export default {
+const astFundamentals = {
   id: 'ast-fundamentals',
   title: 'Abstract Syntax Trees (AST) Fundamentals',
   content: `
@@ -172,7 +172,7 @@ def parse_code(source_code: str) -> ast.AST:
 # Example: Parse a simple function
 code = """
 def calculate_total(items, tax_rate=0.1):
-    \"\"\"Calculate total with tax.\"\"\"
+    """Calculate total with tax."""
     subtotal = sum(item['price'] for item in items)
     tax = subtotal * tax_rate
     return subtotal + tax
@@ -898,3 +898,5 @@ Understanding ASTs is crucial for building AI coding assistants like Cursor, as 
 In the next sections, we'll dive deeper into Python-specific AST analysis, multi-language parsing with tree-sitter, and building complete code understanding engines.
 `,
 };
+
+export default astFundamentals;

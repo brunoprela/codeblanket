@@ -1,4 +1,4 @@
-export default {
+const typeSystemUnderstanding = {
   id: 'type-system-understanding',
   title: 'Type System Understanding',
   content: `
@@ -862,3 +862,5 @@ These capabilities allow AI coding tools like Cursor to provide context-aware su
 In the next section, we'll explore documentation and comment extraction—understanding the human-written context around code.
 `,
 };
+
+export default typeSystemUnderstanding;

@@ -1,4 +1,4 @@
-export default {
+const staticAnalysis = {
   id: 'static-analysis',
   title: 'Static Analysis & Code Quality',
   content: `
@@ -1229,3 +1229,5 @@ These capabilities are essential for AI coding tools like Cursor to provide real
 In the next section, we'll explore type system understanding—how to work with Python's type hints for even more intelligent analysis.
 `,
 };
+
+export default staticAnalysis;

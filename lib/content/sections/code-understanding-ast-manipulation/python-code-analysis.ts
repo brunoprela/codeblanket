@@ -1,4 +1,4 @@
-export default {
+const pythonCodeAnalysis = {
   id: 'python-code-analysis',
   title: 'Python Code Analysis with AST',
   content: `
@@ -1233,3 +1233,5 @@ These techniques form the foundation for building intelligent Python tools like 
 In the next section, we'll explore tree-sitter for multi-language parsing, allowing us to analyze code in any programming language with the same systematic approach.
 `,
 };
+
+export default pythonCodeAnalysis;

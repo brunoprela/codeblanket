@@ -1,4 +1,4 @@
-export default {
+const treeSitterParsing = {
   id: 'tree-sitter-parsing',
   title: 'Tree-sitter for Multi-Language Parsing',
   content: `
@@ -1163,3 +1163,5 @@ Understanding tree-sitter is essential for building multi-language AI coding too
 In the next section, we'll explore how to analyze code structure systematically to extract architectural patterns and relationships.
 `,
 };
+
+export default treeSitterParsing;

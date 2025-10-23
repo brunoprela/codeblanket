@@ -258,7 +258,7 @@ examples_pool = [
     },
     {
         'input': 'How are you?',
-        'output': 'I\'m doing well, thanks for asking!',
+        'output': 'I'm doing well, thanks for asking!',
         'metadata': {'difficulty': 'easy', 'type': 'greeting'}
     }
 ]

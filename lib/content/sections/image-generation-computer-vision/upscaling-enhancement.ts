@@ -628,7 +628,7 @@ class ProductionUpscalePipeline:
         target_w = int(print_size_inches[0] * target_dpi)
         target_h = int(print_size_inches[1] * target_dpi)
         
-        print(f"Target size for {print_size_inches}\" at {target_dpi} DPI:")
+        print(f"Target size for {print_size_inches}" at {target_dpi} DPI:")
         print(f"{target_w}x{target_h} pixels")
         
         # Calculate scale factor

@@ -370,7 +370,7 @@ class WordTemplateProcessor:
                 text = run.text
                 
                 # Find all {{variable}} patterns
-                matches = re.findall(r'{{(\w+)}}', text)
+                matches = re.findall(r'{{([a-zA-Z0-9_]+)}}', text)
                 
                 for var_name in matches:
                     if var_name in data:

@@ -1,4 +1,4 @@
-export default {
+const symbolResolution = {
   id: 'symbol-resolution',
   title: 'Symbol Resolution & References',
   content: `
@@ -1222,3 +1222,5 @@ These capabilities enable Cursor to provide intelligent features like auto-compl
 In the next section, we'll explore code modification with AST—actually changing code programmatically while maintaining correctness.
 `,
 };
+
+export default symbolResolution;

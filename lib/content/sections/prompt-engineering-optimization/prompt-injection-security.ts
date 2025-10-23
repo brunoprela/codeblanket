@@ -408,7 +408,7 @@ class OutputValidator:
             (r'\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}\\b', '[EMAIL_REDACTED]'),
             (r'\\b\\d{3}-\\d{2}-\\d{4}\\b', '[SSN_REDACTED]'),
             (r'\\b\\d{16}\\b', '[CREDIT_CARD_REDACTED]'),
-            (r'api[_-]?key\ *[:\\=]\ *[\\w-]+', 'api_key=[KEY_REDACTED]'),
+            (r'api[_-]?key *[:\\=] *[\\w-]+', 'api_key=[KEY_REDACTED]'),
         ]
         
         redacted = output

@@ -1,4 +1,4 @@
-export default {
+const codeSimilarityDetection = {
   id: 'code-similarity-detection',
   title: 'Code Similarity & Clone Detection',
   content: `
@@ -886,3 +886,5 @@ These capabilities allow AI coding tools like Cursor to help maintain code quali
 In the next section, we'll explore the Language Server Protocol (LSP)—the standard for IDE features like go-to-definition and auto-complete.
 `,
 };
+
+export default codeSimilarityDetection;
