@@ -1,4 +1,4 @@
-import type { ContentSection } from '@/lib/content/types';
+import type { ContentSection } from '@/lib/types';
 
 export const factorModels: ContentSection = {
   id: 'factor-models',

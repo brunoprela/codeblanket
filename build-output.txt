@@ -1,0 +1,136 @@
+
+> codeblanket@0.1.0 build /Users/bruno/Developer/codeblanket/frontend
+> next build
+
+   ▲ Next.js 15.5.4
+
+   Creating an optimized production build ...
+ ⚠ Compiled with warnings in 3.8s
+
+./lib/content/modules/ml-system-design-production.ts
+Attempted import error: 'mlSystemDesignPrinciplesQuestions' is not exported from '../multiple-choice/ml-system-design-production/ml-system-design-principles' (imported as 'mlSystemDesignPrinciplesQuestions').
+
+Import trace for requested module:
+./lib/content/modules/ml-system-design-production.ts
+./lib/content/topics/index.ts
+./app/page.tsx
+
+./lib/content/modules/ml-system-design-production.ts
+Attempted import error: 'dataEngineeringForMl' is not exported from '../sections/ml-system-design-production/data-engineering-for-ml' (imported as 'dataEngineeringForMl').
+
+Import trace for requested module:
+./lib/content/modules/ml-system-design-production.ts
+./lib/content/topics/index.ts
+./app/page.tsx
+
+./lib/content/modules/ml-system-design-production.ts
+Attempted import error: 'dataEngineeringForMlQuestions' is not exported from '../multiple-choice/ml-system-design-production/data-engineering-for-ml' (imported as 'dataEngineeringForMlQuestions').
+
+Import trace for requested module:
+./lib/content/modules/ml-system-design-production.ts
+./lib/content/topics/index.ts
+./app/page.tsx
+
+./lib/content/modules/ml-system-design-production.ts
+Attempted import error: 'experimentTrackingManagementQuestions' is not exported from '../multiple-choice/ml-system-design-production/experiment-tracking-management' (imported as 'experimentTrackingManagementQuestions').
+
+Import trace for requested module:
+./lib/content/modules/ml-system-design-production.ts
+./lib/content/topics/index.ts
+./app/page.tsx
+
+./lib/content/modules/ml-system-design-production.ts
+Attempted import error: 'abTestingForMl' is not exported from '../sections/ml-system-design-production/ab-testing-for-ml' (imported as 'abTestingForMl').
+
+Import trace for requested module:
+./lib/content/modules/ml-system-design-production.ts
+./lib/content/topics/index.ts
+./app/page.tsx
+
+./lib/content/modules/ml-system-design-production.ts
+Attempted import error: 'mlOpsBestPractices' is not exported from '../sections/ml-system-design-production/mlops-best-practices' (imported as 'mlOpsBestPractices').
+
+Import trace for requested module:
+./lib/content/modules/ml-system-design-production.ts
+./lib/content/topics/index.ts
+./app/page.tsx
+
+./lib/content/modules/ml-system-design-production.ts
+Attempted import error: 'mlOpsBestPracticesQuiz' is not exported from '../quizzes/ml-system-design-production/mlops-best-practices' (imported as 'mlOpsBestPracticesQuiz').
+
+Import trace for requested module:
+./lib/content/modules/ml-system-design-production.ts
+./lib/content/topics/index.ts
+./app/page.tsx
+
+./lib/content/modules/ml-system-design-production.ts
+Attempted import error: 'mlSystemDesignPrinciplesQuestions' is not exported from '../multiple-choice/ml-system-design-production/ml-system-design-principles' (imported as 'mlSystemDesignPrinciplesQuestions').
+
+Import trace for requested module:
+./lib/content/modules/ml-system-design-production.ts
+./lib/content/topics/index.ts
+./app/page.tsx
+
+./lib/content/modules/ml-system-design-production.ts
+Attempted import error: 'dataEngineeringForMl' is not exported from '../sections/ml-system-design-production/data-engineering-for-ml' (imported as 'dataEngineeringForMl').
+
+Import trace for requested module:
+./lib/content/modules/ml-system-design-production.ts
+./lib/content/topics/index.ts
+./app/page.tsx
+
+./lib/content/modules/ml-system-design-production.ts
+Attempted import error: 'dataEngineeringForMlQuestions' is not exported from '../multiple-choice/ml-system-design-production/data-engineering-for-ml' (imported as 'dataEngineeringForMlQuestions').
+
+Import trace for requested module:
+./lib/content/modules/ml-system-design-production.ts
+./lib/content/topics/index.ts
+./app/page.tsx
+
+./lib/content/modules/ml-system-design-production.ts
+Attempted import error: 'experimentTrackingManagementQuestions' is not exported from '../multiple-choice/ml-system-design-production/experiment-tracking-management' (imported as 'experimentTrackingManagementQuestions').
+
+Import trace for requested module:
+./lib/content/modules/ml-system-design-production.ts
+./lib/content/topics/index.ts
+./app/page.tsx
+
+./lib/content/modules/ml-system-design-production.ts
+Attempted import error: 'abTestingForMl' is not exported from '../sections/ml-system-design-production/ab-testing-for-ml' (imported as 'abTestingForMl').
+
+Import trace for requested module:
+./lib/content/modules/ml-system-design-production.ts
+./lib/content/topics/index.ts
+./app/page.tsx
+
+./lib/content/modules/ml-system-design-production.ts
+Attempted import error: 'mlOpsBestPractices' is not exported from '../sections/ml-system-design-production/mlops-best-practices' (imported as 'mlOpsBestPractices').
+
+Import trace for requested module:
+./lib/content/modules/ml-system-design-production.ts
+./lib/content/topics/index.ts
+./app/page.tsx
+
+./lib/content/modules/ml-system-design-production.ts
+Attempted import error: 'mlOpsBestPracticesQuiz' is not exported from '../quizzes/ml-system-design-production/mlops-best-practices' (imported as 'mlOpsBestPracticesQuiz').
+
+Import trace for requested module:
+./lib/content/modules/ml-system-design-production.ts
+./lib/content/topics/index.ts
+./app/page.tsx
+
+   Linting and checking validity of types ...
+Failed to compile.
+
+./lib/content/modules/ai-safety-guardrails.ts:15:7
+Type error: Object literal may only specify known properties, and 'description' does not exist in type 'ModuleSection'.
+
+[0m [90m 13 |[39m       id[33m:[39m [32m'ai-safety-fundamentals'[39m[33m,[39m
+ [90m 14 |[39m       title[33m:[39m [32m'AI Safety Fundamentals'[39m[33m,[39m
+[31m[1m>[22m[39m[90m 15 |[39m       description[33m:[39m
+ [90m    |[39m       [31m[1m^[22m[39m
+ [90m 16 |[39m         [32m'Understanding the critical foundations of AI safety, responsible AI principles, and why safety matters in production systems'[39m[33m,[39m
+ [90m 17 |[39m     }[33m,[39m
+ [90m 18 |[39m     {[0m
+Next.js build worker exited with code: 1 and signal: null
+ ELIFECYCLE  Command failed with exit code 1.

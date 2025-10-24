@@ -7,17 +7,17 @@ import { Module } from '../../types';
 
 // Section imports
 import { mlSystemDesignPrinciples } from '../sections/ml-system-design-production/ml-system-design-principles';
-import { dataEngineeringForMl } from '../sections/ml-system-design-production/data-engineering-for-ml';
+import { dataEngineeringForML } from '../sections/ml-system-design-production/data-engineering-for-ml';
 import { experimentTrackingManagement } from '../sections/ml-system-design-production/experiment-tracking-management';
 import { modelTrainingPipeline } from '../sections/ml-system-design-production/model-training-pipeline';
 import { modelServingDeployment } from '../sections/ml-system-design-production/model-serving-deployment';
 import { modelMonitoring } from '../sections/ml-system-design-production/model-monitoring';
-import { abTestingForMl } from '../sections/ml-system-design-production/ab-testing-for-ml';
+import { abTestingForML } from '../sections/ml-system-design-production/ab-testing-for-ml';
 import { scalabilityPerformance } from '../sections/ml-system-design-production/scalability-performance';
 import { automlNeuralArchitectureSearch } from '../sections/ml-system-design-production/automl-neural-architecture-search';
 import { mlSecurityPrivacy } from '../sections/ml-system-design-production/ml-security-privacy';
 import { mlSystemCaseStudies } from '../sections/ml-system-design-production/ml-system-case-studies';
-import { mlOpsBestPractices } from '../sections/ml-system-design-production/mlops-best-practices';
+import { mlopsBestPractices } from '../sections/ml-system-design-production/mlops-best-practices';
 import { realTimeMlSystems } from '../sections/ml-system-design-production/real-time-ml-systems';
 import { llmProductionSystems } from '../sections/ml-system-design-production/llm-production-systems';
 
@@ -33,14 +33,14 @@ import { scalabilityPerformanceQuiz } from '../quizzes/ml-system-design-producti
 import { automlNeuralArchitectureSearchQuiz } from '../quizzes/ml-system-design-production/automl-neural-architecture-search';
 import { mlSecurityPrivacyQuiz } from '../quizzes/ml-system-design-production/ml-security-privacy';
 import { mlSystemCaseStudiesQuiz } from '../quizzes/ml-system-design-production/ml-system-case-studies';
-import { mlOpsBestPracticesQuiz } from '../quizzes/ml-system-design-production/mlops-best-practices';
+import { mlopsBestPracticesQuiz } from '../quizzes/ml-system-design-production/mlops-best-practices';
 import { realTimeMlSystemsQuiz } from '../quizzes/ml-system-design-production/real-time-ml-systems';
 import { llmProductionSystemsQuiz } from '../quizzes/ml-system-design-production/llm-production-systems';
 
 // Multiple choice imports
-import { mlSystemDesignPrinciplesQuestions } from '../multiple-choice/ml-system-design-production/ml-system-design-principles';
-import { dataEngineeringForMlQuestions } from '../multiple-choice/ml-system-design-production/data-engineering-for-ml';
-import { experimentTrackingManagementQuestions } from '../multiple-choice/ml-system-design-production/experiment-tracking-management';
+import { mlSystemDesignPrinciplesMultipleChoice } from '../multiple-choice/ml-system-design-production/ml-system-design-principles';
+import { dataEngineeringForMlMultipleChoice } from '../multiple-choice/ml-system-design-production/data-engineering-for-ml';
+import { experimentTrackingManagementMultipleChoice } from '../multiple-choice/ml-system-design-production/experiment-tracking-management';
 import { modelTrainingPipelineQuestions } from '../multiple-choice/ml-system-design-production/model-training-pipeline';
 import { modelServingDeploymentQuestions } from '../multiple-choice/ml-system-design-production/model-serving-deployment';
 import { modelMonitoringQuestions } from '../multiple-choice/ml-system-design-production/model-monitoring';
@@ -79,17 +79,17 @@ export const mlSystemDesignProductionModule: Module = {
     {
       ...mlSystemDesignPrinciples,
       quiz: mlSystemDesignPrinciplesQuiz,
-      multipleChoice: mlSystemDesignPrinciplesQuestions,
+      multipleChoice: mlSystemDesignPrinciplesMultipleChoice,
     },
     {
-      ...dataEngineeringForMl,
+      ...dataEngineeringForML,
       quiz: dataEngineeringForMlQuiz,
-      multipleChoice: dataEngineeringForMlQuestions,
+      multipleChoice: dataEngineeringForMlMultipleChoice,
     },
     {
       ...experimentTrackingManagement,
       quiz: experimentTrackingManagementQuiz,
-      multipleChoice: experimentTrackingManagementQuestions,
+      multipleChoice: experimentTrackingManagementMultipleChoice,
     },
     {
       ...modelTrainingPipeline,
@@ -107,7 +107,7 @@ export const mlSystemDesignProductionModule: Module = {
       multipleChoice: modelMonitoringQuestions,
     },
     {
-      ...abTestingForMl,
+      ...abTestingForML,
       quiz: abTestingForMlQuiz,
       multipleChoice: abTestingForMlQuestions,
     },
@@ -132,8 +132,8 @@ export const mlSystemDesignProductionModule: Module = {
       multipleChoice: mlSystemCaseStudiesQuestions,
     },
     {
-      ...mlOpsBestPractices,
-      quiz: mlOpsBestPracticesQuiz,
+      ...mlopsBestPractices,
+      quiz: mlopsBestPracticesQuiz,
       multipleChoice: mlOpsBestPracticesQuestions,
     },
     {

@@ -1,4 +1,4 @@
-import { MultipleChoiceQuestion } from '@/types/curriculum';
+import { MultipleChoiceQuestion } from '@/lib/types';
 
 export const modelTrainingPipelineQuestions: MultipleChoiceQuestion[] = [
   {

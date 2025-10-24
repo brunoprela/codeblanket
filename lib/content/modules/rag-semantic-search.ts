@@ -50,6 +50,37 @@ import { multiIndexRoutingMC } from '../multiple-choice/rag-semantic-search/mult
 import { productionRagSystemsMC } from '../multiple-choice/rag-semantic-search/production-rag-systems';
 import { buildingKnowledgeBaseMC } from '../multiple-choice/rag-semantic-search/building-knowledge-base';
 
+// Helper to transform quiz format
+const transformQuiz = (quiz: {
+  questions: { id: number; question: string; expectedAnswer: string }[];
+}) => {
+  return quiz.questions.map((q) => ({
+    id: q.id.toString(),
+    question: q.question,
+    sampleAnswer: q.expectedAnswer,
+    keyPoints: [],
+  }));
+};
+
+// Helper to transform multiple choice format
+const transformMC = (mc: {
+  questions: {
+    id: number;
+    question: string;
+    options: string[];
+    correctAnswer: number;
+    explanation: string;
+  }[];
+}) => {
+  return mc.questions.map((q) => ({
+    id: q.id.toString(),
+    question: q.question,
+    options: q.options,
+    correctAnswer: q.correctAnswer,
+    explanation: q.explanation,
+  }));
+};
+
 export const ragSemanticSearchModule: Module = {
   id: 'rag-semantic-search',
   title: 'RAG & Semantic Search',
@@ -73,69 +104,82 @@ export const ragSemanticSearchModule: Module = {
   ],
   sections: [
     {
+      id: 'rag-fundamentals',
       ...ragFundamentals,
-      quiz: ragFundamentalsQuiz,
-      multipleChoice: ragFundamentalsMultipleChoice,
+      quiz: transformQuiz(ragFundamentalsQuiz),
+      multipleChoice: transformMC(ragFundamentalsMultipleChoice),
     },
     {
+      id: 'text-embeddings-deep-dive',
       ...textEmbeddingsDeepDive,
-      quiz: textEmbeddingsDeepDiveQuiz,
-      multipleChoice: textEmbeddingsDeepDiveMC,
+      quiz: transformQuiz(textEmbeddingsDeepDiveQuiz),
+      multipleChoice: transformMC(textEmbeddingsDeepDiveMC),
     },
     {
+      id: 'chunking-strategies',
       ...chunkingStrategies,
-      quiz: chunkingStrategiesQuiz,
-      multipleChoice: chunkingStrategiesMC,
+      quiz: transformQuiz(chunkingStrategiesQuiz),
+      multipleChoice: transformMC(chunkingStrategiesMC),
     },
     {
+      id: 'vector-databases',
       ...vectorDatabases,
-      quiz: vectorDatabasesQuiz,
-      multipleChoice: vectorDatabasesMC,
+      quiz: transformQuiz(vectorDatabasesQuiz),
+      multipleChoice: transformMC(vectorDatabasesMC),
     },
     {
+      id: 'semantic-search-implementation',
       ...semanticSearchImplementation,
-      quiz: semanticSearchImplementationQuiz,
-      multipleChoice: semanticSearchImplementationMC,
+      quiz: transformQuiz(semanticSearchImplementationQuiz),
+      multipleChoice: transformMC(semanticSearchImplementationMC),
     },
     {
+      id: 'advanced-retrieval-strategies',
       ...advancedRetrievalStrategies,
-      quiz: advancedRetrievalStrategiesQuiz,
-      multipleChoice: advancedRetrievalStrategiesMC,
+      quiz: transformQuiz(advancedRetrievalStrategiesQuiz),
+      multipleChoice: transformMC(advancedRetrievalStrategiesMC),
     },
     {
+      id: 're-ranking-relevance',
       ...reRankingRelevance,
-      quiz: reRankingRelevanceQuiz,
-      multipleChoice: reRankingRelevanceMC,
+      quiz: transformQuiz(reRankingRelevanceQuiz),
+      multipleChoice: transformMC(reRankingRelevanceMC),
     },
     {
+      id: 'query-understanding-expansion',
       ...queryUnderstandingExpansion,
-      quiz: queryUnderstandingExpansionQuiz,
-      multipleChoice: queryUnderstandingExpansionMC,
+      quiz: transformQuiz(queryUnderstandingExpansionQuiz),
+      multipleChoice: transformMC(queryUnderstandingExpansionMC),
     },
     {
+      id: 'rag-evaluation',
       ...ragEvaluation,
-      quiz: ragEvaluationQuiz,
-      multipleChoice: ragEvaluationMC,
+      quiz: transformQuiz(ragEvaluationQuiz),
+      multipleChoice: transformMC(ragEvaluationMC),
     },
     {
+      id: 'conversational-rag',
       ...conversationalRag,
-      quiz: conversationalRagQuiz,
-      multipleChoice: conversationalRagMC,
+      quiz: transformQuiz(conversationalRagQuiz),
+      multipleChoice: transformMC(conversationalRagMC),
     },
     {
+      id: 'multi-index-routing',
       ...multiIndexRouting,
-      quiz: multiIndexRoutingQuiz,
-      multipleChoice: multiIndexRoutingMC,
+      quiz: transformQuiz(multiIndexRoutingQuiz),
+      multipleChoice: transformMC(multiIndexRoutingMC),
     },
     {
+      id: 'production-rag-systems',
       ...productionRagSystems,
-      quiz: productionRagSystemsQuiz,
-      multipleChoice: productionRagSystemsMC,
+      quiz: transformQuiz(productionRagSystemsQuiz),
+      multipleChoice: transformMC(productionRagSystemsMC),
     },
     {
+      id: 'building-knowledge-base',
       ...buildingKnowledgeBase,
-      quiz: buildingKnowledgeBaseQuiz,
-      multipleChoice: buildingKnowledgeBaseMC,
+      quiz: transformQuiz(buildingKnowledgeBaseQuiz),
+      multipleChoice: transformMC(buildingKnowledgeBaseMC),
     },
   ],
 };

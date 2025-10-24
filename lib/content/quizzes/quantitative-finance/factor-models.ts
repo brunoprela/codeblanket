@@ -1,6 +1,4 @@
-import type { Quiz } from '@/lib/content/types';
-
-export const factorModelsQuiz: Quiz = {
+export const factorModelsQuiz = {
   id: 'factor-models-quiz',
   title: 'Factor Models & Attribution - Discussion Questions',
   questions: [

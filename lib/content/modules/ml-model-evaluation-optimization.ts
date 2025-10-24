@@ -41,6 +41,37 @@ import { modelSelectionMultipleChoice } from '../multiple-choice/ml-model-evalua
 import { featureImportanceInterpretationMultipleChoice } from '../multiple-choice/ml-model-evaluation-optimization/feature-importance-interpretation';
 import { modelDebuggingMultipleChoice } from '../multiple-choice/ml-model-evaluation-optimization/model-debugging';
 
+// Helper to transform quiz format
+const transformQuiz = (quiz: {
+  questions: { id: number; question: string; expectedAnswer: string }[];
+}) => {
+  return quiz.questions.map((q) => ({
+    id: q.id.toString(),
+    question: q.question,
+    sampleAnswer: q.expectedAnswer,
+    keyPoints: [],
+  }));
+};
+
+// Helper to transform multiple choice format
+const transformMC = (mc: {
+  questions: {
+    id: number;
+    question: string;
+    options: string[];
+    correctAnswer: number;
+    explanation: string;
+  }[];
+}) => {
+  return mc.questions.map((q) => ({
+    id: q.id.toString(),
+    question: q.question,
+    options: q.options,
+    correctAnswer: q.correctAnswer,
+    explanation: q.explanation,
+  }));
+};
+
 export const mlModelEvaluationOptimizationModule: Module = {
   id: 'ml-model-evaluation-optimization',
   title: 'Model Evaluation & Optimization',
@@ -83,53 +114,55 @@ export const mlModelEvaluationOptimizationModule: Module = {
   sections: [
     {
       ...trainTestSplitValidation,
-      quiz: trainTestSplitValidationQuiz,
-      multipleChoice: trainTestSplitValidationMultipleChoice,
+      quiz: transformQuiz(trainTestSplitValidationQuiz),
+      multipleChoice: transformMC(trainTestSplitValidationMultipleChoice),
     },
     {
       ...crossValidationTechniques,
-      quiz: crossValidationTechniquesQuiz,
-      multipleChoice: crossValidationTechniquesMultipleChoice,
+      quiz: transformQuiz(crossValidationTechniquesQuiz),
+      multipleChoice: transformMC(crossValidationTechniquesMultipleChoice),
     },
     {
       ...regressionMetrics,
-      quiz: regressionMetricsQuiz,
-      multipleChoice: regressionMetricsMultipleChoice,
+      quiz: transformQuiz(regressionMetricsQuiz),
+      multipleChoice: transformMC(regressionMetricsMultipleChoice),
     },
     {
       ...classificationMetrics,
-      quiz: classificationMetricsQuiz,
-      multipleChoice: classificationMetricsMultipleChoice,
+      quiz: transformQuiz(classificationMetricsQuiz),
+      multipleChoice: transformMC(classificationMetricsMultipleChoice),
     },
     {
       ...multiClassMultiLabelMetrics,
-      quiz: multiClassMultiLabelMetricsQuiz,
-      multipleChoice: multiClassMultiLabelMetricsMultipleChoice,
+      quiz: transformQuiz(multiClassMultiLabelMetricsQuiz),
+      multipleChoice: transformMC(multiClassMultiLabelMetricsMultipleChoice),
     },
     {
       ...biasVarianceTradeoff,
-      quiz: biasVarianceTradeoffQuiz,
-      multipleChoice: biasVarianceTradeoffMultipleChoice,
+      quiz: transformQuiz(biasVarianceTradeoffQuiz),
+      multipleChoice: transformMC(biasVarianceTradeoffMultipleChoice),
     },
     {
       ...hyperparameterTuning,
-      quiz: hyperparameterTuningQuiz,
-      multipleChoice: hyperparameterTuningMultipleChoice,
+      quiz: transformQuiz(hyperparameterTuningQuiz),
+      multipleChoice: transformMC(hyperparameterTuningMultipleChoice),
     },
     {
       ...modelSelection,
-      quiz: modelSelectionQuiz,
-      multipleChoice: modelSelectionMultipleChoice,
+      quiz: transformQuiz(modelSelectionQuiz),
+      multipleChoice: transformMC(modelSelectionMultipleChoice),
     },
     {
       ...featureImportanceInterpretation,
-      quiz: featureImportanceInterpretationQuiz,
-      multipleChoice: featureImportanceInterpretationMultipleChoice,
+      quiz: transformQuiz(featureImportanceInterpretationQuiz),
+      multipleChoice: transformMC(
+        featureImportanceInterpretationMultipleChoice,
+      ),
     },
     {
       ...modelDebugging,
-      quiz: modelDebuggingQuiz,
-      multipleChoice: modelDebuggingMultipleChoice,
+      quiz: transformQuiz(modelDebuggingQuiz),
+      multipleChoice: transformMC(modelDebuggingMultipleChoice),
     },
   ],
 };

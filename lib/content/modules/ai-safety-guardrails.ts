@@ -1,4 +1,45 @@
+/**
+ * AI Safety & Guardrails Module
+ * Master building safe and responsible AI applications
+ */
+
 import { Module } from '@/lib/types';
+
+// Import section content strings
+import { aiSafetyFundamentalsSection } from '../sections/ai-safety-guardrails/ai-safety-fundamentals';
+import { contentModerationSection } from '../sections/ai-safety-guardrails/content-moderation';
+import { promptInjectionDefenseSection } from '../sections/ai-safety-guardrails/prompt-injection-defense';
+import { piiDetectionRemovalSection } from '../sections/ai-safety-guardrails/pii-detection-removal';
+import { hallucinationDetectionSection } from '../sections/ai-safety-guardrails/hallucination-detection';
+import { outputValidationGuardrailsSection } from '../sections/ai-safety-guardrails/output-validation-guardrails';
+import { rateLimitingSafetySection } from '../sections/ai-safety-guardrails/rate-limiting-safety';
+import { biasDetectionMitigationSection } from '../sections/ai-safety-guardrails/bias-detection-mitigation';
+import { auditLoggingComplianceSection } from '../sections/ai-safety-guardrails/audit-logging-compliance';
+import { buildingSafetyLayerSection } from '../sections/ai-safety-guardrails/building-safety-layer';
+
+// Import quizzes
+import { aisafetyfundamentalsQuiz } from '../quizzes/ai-safety-guardrails/ai-safety-fundamentals';
+import { contentmoderationQuiz } from '../quizzes/ai-safety-guardrails/content-moderation';
+import { promptinjectiondefenseQuiz } from '../quizzes/ai-safety-guardrails/prompt-injection-defense';
+import { piidetectionremovalQuiz } from '../quizzes/ai-safety-guardrails/pii-detection-removal';
+import { hallucinationdetectionQuiz } from '../quizzes/ai-safety-guardrails/hallucination-detection';
+import { outputvalidationguardrailsQuiz } from '../quizzes/ai-safety-guardrails/output-validation-guardrails';
+import { ratelimitingsafetyQuiz } from '../quizzes/ai-safety-guardrails/rate-limiting-safety';
+import { biasdetectionmitigationQuiz } from '../quizzes/ai-safety-guardrails/bias-detection-mitigation';
+import { auditloggingcomplianceQuiz } from '../quizzes/ai-safety-guardrails/audit-logging-compliance';
+import { buildingsafetylayerQuiz } from '../quizzes/ai-safety-guardrails/building-safety-layer';
+
+// Import multiple choice
+import { aisafetyfundamentalsMultipleChoice } from '../multiple-choice/ai-safety-guardrails/ai-safety-fundamentals';
+import { contentmoderationMultipleChoice } from '../multiple-choice/ai-safety-guardrails/content-moderation';
+import { promptinjectiondefenseMultipleChoice } from '../multiple-choice/ai-safety-guardrails/prompt-injection-defense';
+import { piidetectionremovalMultipleChoice } from '../multiple-choice/ai-safety-guardrails/pii-detection-removal';
+import { hallucinationdetectionMultipleChoice } from '../multiple-choice/ai-safety-guardrails/hallucination-detection';
+import { outputvalidationguardrailsMultipleChoice } from '../multiple-choice/ai-safety-guardrails/output-validation-guardrails';
+import { ratelimitingsafetyMultipleChoice } from '../multiple-choice/ai-safety-guardrails/rate-limiting-safety';
+import { biasdetectionmitigationMultipleChoice } from '../multiple-choice/ai-safety-guardrails/bias-detection-mitigation';
+import { auditloggingcomplianceMultipleChoice } from '../multiple-choice/ai-safety-guardrails/audit-logging-compliance';
+import { buildingsafetylayerMultipleChoice } from '../multiple-choice/ai-safety-guardrails/building-safety-layer';
 
 const aiSafetyGuardrailsModule: Module = {
   id: 'applied-ai-safety',
@@ -6,68 +47,76 @@ const aiSafetyGuardrailsModule: Module = {
   description:
     'Master building safe and responsible AI applications with comprehensive guardrails, content moderation, and compliance measures',
   icon: '🛡️',
-  difficulty: 'intermediate',
-  duration: '2 weeks',
   sections: [
     {
       id: 'ai-safety-fundamentals',
       title: 'AI Safety Fundamentals',
-      description:
-        'Understanding the critical foundations of AI safety, responsible AI principles, and why safety matters in production systems',
+      content: aiSafetyFundamentalsSection,
+      quiz: aisafetyfundamentalsQuiz,
+      multipleChoice: aisafetyfundamentalsMultipleChoice,
     },
     {
       id: 'content-moderation',
       title: 'Content Moderation',
-      description:
-        "Implementing robust content moderation systems using OpenAI's moderation API, custom filters, and toxicity detection",
+      content: contentModerationSection,
+      quiz: contentmoderationQuiz,
+      multipleChoice: contentmoderationMultipleChoice,
     },
     {
       id: 'prompt-injection-defense',
       title: 'Prompt Injection Defense',
-      description:
-        'Defending against prompt injection attacks with validation strategies, instruction hierarchies, and anomaly detection',
+      content: promptInjectionDefenseSection,
+      quiz: promptinjectiondefenseQuiz,
+      multipleChoice: promptinjectiondefenseMultipleChoice,
     },
     {
       id: 'pii-detection-removal',
       title: 'PII Detection & Removal',
-      description:
-        'Detecting and removing personally identifiable information with pattern-based detection, NER, and GDPR compliance',
+      content: piiDetectionRemovalSection,
+      quiz: piidetectionremovalQuiz,
+      multipleChoice: piidetectionremovalMultipleChoice,
     },
     {
       id: 'hallucination-detection',
       title: 'Hallucination Detection',
-      description:
-        'Identifying and mitigating LLM hallucinations through confidence scoring, fact-checking, and validation techniques',
+      content: hallucinationDetectionSection,
+      quiz: hallucinationdetectionQuiz,
+      multipleChoice: hallucinationdetectionMultipleChoice,
     },
     {
       id: 'output-validation-guardrails',
       title: 'Output Validation & Guardrails',
-      description:
-        'Implementing comprehensive output validation with schema checking, quality thresholds, and the Guardrails library',
+      content: outputValidationGuardrailsSection,
+      quiz: outputvalidationguardrailsQuiz,
+      multipleChoice: outputvalidationguardrailsMultipleChoice,
     },
     {
       id: 'rate-limiting-safety',
       title: 'Rate Limiting for Safety',
-      description:
-        'Preventing abuse through intelligent rate limiting, suspicious pattern detection, and account management',
+      content: rateLimitingSafetySection,
+      quiz: ratelimitingsafetyQuiz,
+      multipleChoice: ratelimitingsafetyMultipleChoice,
     },
     {
       id: 'bias-detection-mitigation',
       title: 'Bias Detection & Mitigation',
-      description:
-        'Measuring and mitigating bias in AI systems with fairness metrics, diverse testing, and continuous monitoring',
+      content: biasDetectionMitigationSection,
+      quiz: biasdetectionmitigationQuiz,
+      multipleChoice: biasdetectionmitigationMultipleChoice,
     },
     {
       id: 'audit-logging-compliance',
       title: 'Audit Logging & Compliance',
-      description:
-        'Building comprehensive audit systems for GDPR, CCPA, and SOC 2 compliance with proper data retention and reporting',
+      content: auditLoggingComplianceSection,
+      quiz: auditloggingcomplianceQuiz,
+      multipleChoice: auditloggingcomplianceMultipleChoice,
     },
     {
       id: 'building-safety-layer',
       title: 'Building a Safety Layer',
-      description:
-        'Architecting a complete safety layer with pre-processing, post-processing, human review, and incident response',
+      content: buildingSafetyLayerSection,
+      quiz: buildingsafetylayerQuiz,
+      multipleChoice: buildingsafetylayerMultipleChoice,
     },
   ],
   keyTakeaways: [
@@ -78,60 +127,9 @@ const aiSafetyGuardrailsModule: Module = {
     'Hallucination detection combines confidence scoring, fact-checking, and consistency validation',
     'Output validation should use schema enforcement and quality thresholds',
     'Rate limiting prevents abuse and suspicious pattern detection identifies bad actors',
-    'Bias detection and mitigation must be continuous, not one-time activities',
-    'Audit logging is critical for compliance and incident investigation',
-    'A comprehensive safety layer requires pre-processing, post-processing, and human oversight',
-  ],
-  learningObjectives: [
-    'Understand the fundamental principles of AI safety and responsible AI',
-    'Implement multi-level content moderation systems',
-    'Defend against prompt injection and adversarial attacks',
-    'Detect and remove PII for GDPR/CCPA compliance',
-    'Build hallucination detection and mitigation systems',
-    'Create comprehensive output validation with guardrails',
-    'Implement intelligent rate limiting for abuse prevention',
-    'Measure and mitigate bias in AI outputs',
-    'Build audit logging systems for compliance',
-    'Architect a complete, production-ready safety layer',
-  ],
-  prerequisites: [
-    'llm-engineering-fundamentals',
-    'prompt-engineering-optimization',
-    'production-llm-applications',
-  ],
-  practicalProjects: [
-    {
-      title: 'Content Moderation System',
-      description:
-        'Build a multi-level content moderation system with toxicity detection, NSFW filtering, and custom rules',
-    },
-    {
-      title: 'PII Detection & Redaction Tool',
-      description:
-        'Create a comprehensive PII detection system that identifies and redacts sensitive information',
-    },
-    {
-      title: 'Prompt Injection Defense Layer',
-      description:
-        'Implement a defense system that detects and blocks prompt injection attempts',
-    },
-    {
-      title: 'Hallucination Detector',
-      description:
-        'Build a system that identifies likely hallucinations through confidence scoring and fact-checking',
-    },
-    {
-      title: 'Complete Safety Layer',
-      description:
-        'Design and implement a production-ready safety layer with pre/post-processing and human review workflows',
-    },
-  ],
-  productionExamples: [
-    'How OpenAI implements content moderation in ChatGPT',
-    "Anthropic's Constitutional AI approach to safety",
-    "Google's responsible AI guardrails in Gemini",
-    'Enterprise AI safety layers for regulated industries',
-    'Financial services compliance in AI systems',
+    'Bias detection and mitigation are ethical and legal requirements',
+    'Comprehensive audit logging enables compliance and incident response',
+    'A safety layer should integrate all guardrails with monitoring and alerting',
   ],
 };
 

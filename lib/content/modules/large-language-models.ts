@@ -59,6 +59,37 @@ import { llmEvaluationSafetyMC } from '../multiple-choice/large-language-models/
 import { llmCostOptimizationMC } from '../multiple-choice/large-language-models/llm-cost-optimization';
 import { llmDeploymentProductionMC } from '../multiple-choice/large-language-models/llm-deployment-production';
 
+// Helper to transform quiz format from large-language-models format to standard format
+const transformQuiz = (
+  quiz: { id: number; question: string; expectedAnswer: string }[],
+) => {
+  return quiz.map((q) => ({
+    id: q.id.toString(),
+    question: q.question,
+    sampleAnswer: q.expectedAnswer,
+    keyPoints: [], // LLM quizzes don't have keyPoints, so we'll use empty array
+  }));
+};
+
+// Helper to transform multiple choice format
+const transformMC = (
+  mc: {
+    id: number;
+    question: string;
+    options: string[];
+    correctAnswer: number;
+    explanation: string;
+  }[],
+) => {
+  return mc.map((q) => ({
+    id: q.id.toString(),
+    question: q.question,
+    options: q.options,
+    correctAnswer: q.correctAnswer,
+    explanation: q.explanation,
+  }));
+};
+
 export const largeLanguageModelsModule: Module = {
   id: 'ml-ai-large-language-models',
   title: 'Large Language Models (LLMs)',
@@ -86,83 +117,83 @@ export const largeLanguageModelsModule: Module = {
   sections: [
     {
       ...llmFundamentals,
-      quiz: llmFundamentalsQuiz,
-      multipleChoice: llmFundamentalsMC,
+      quiz: transformQuiz(llmFundamentalsQuiz.questions),
+      multipleChoice: transformMC(llmFundamentalsMC.questions),
     },
     {
       ...transformerArchitectureDeepDive,
-      quiz: transformerArchitectureQuiz,
-      multipleChoice: transformerArchitectureMC,
+      quiz: transformQuiz(transformerArchitectureQuiz.questions),
+      multipleChoice: transformMC(transformerArchitectureMC.questions),
     },
     {
       ...gptFamily,
-      quiz: gptFamilyQuiz,
-      multipleChoice: gptFamilyMC,
+      quiz: transformQuiz(gptFamilyQuiz.questions),
+      multipleChoice: transformMC(gptFamilyMC.questions),
     },
     {
       ...bertEncoderModels,
-      quiz: bertEncoderModelsQuiz,
-      multipleChoice: bertEncoderModelsMC,
+      quiz: transformQuiz(bertEncoderModelsQuiz.questions),
+      multipleChoice: transformMC(bertEncoderModelsMC.questions),
     },
     {
       ...llmTrainingProcess,
-      quiz: llmTrainingProcessQuiz,
-      multipleChoice: llmTrainingProcessMC,
+      quiz: transformQuiz(llmTrainingProcessQuiz.questions),
+      multipleChoice: transformMC(llmTrainingProcessMC.questions),
     },
     {
       ...finetuningStrategies,
-      quiz: finetuningStrategiesQuiz,
-      multipleChoice: finetuningStrategiesMC,
+      quiz: transformQuiz(finetuningStrategiesQuiz.questions),
+      multipleChoice: transformMC(finetuningStrategiesMC.questions),
     },
     {
       ...promptEngineering,
-      quiz: promptEngineeringQuiz,
-      multipleChoice: promptEngineeringMC,
+      quiz: transformQuiz(promptEngineeringQuiz.questions),
+      multipleChoice: transformMC(promptEngineeringMC.questions),
     },
     {
       ...llmAlignmentRLHF,
-      quiz: llmAlignmentRLHFQuiz,
-      multipleChoice: llmAlignmentRLHFMC,
+      quiz: transformQuiz(llmAlignmentRLHFQuiz.questions),
+      multipleChoice: transformMC(llmAlignmentRLHFMC.questions),
     },
     {
       ...vectorDatabasesEmbeddings,
-      quiz: vectorDatabasesEmbeddingsQuiz,
-      multipleChoice: vectorDatabasesEmbeddingsMC,
+      quiz: transformQuiz(vectorDatabasesEmbeddingsQuiz.questions),
+      multipleChoice: transformMC(vectorDatabasesEmbeddingsMC.questions),
     },
     {
       ...retrievalAugmentedGeneration,
-      quiz: retrievalAugmentedGenerationQuiz,
-      multipleChoice: retrievalAugmentedGenerationMC,
+      quiz: transformQuiz(retrievalAugmentedGenerationQuiz.questions),
+      multipleChoice: transformMC(retrievalAugmentedGenerationMC.questions),
     },
     {
       ...llmAgentsToolUse,
-      quiz: llmAgentsToolUseQuiz,
-      multipleChoice: llmAgentsToolUseMC,
+      quiz: transformQuiz(llmAgentsToolUseQuiz.questions),
+      multipleChoice: transformMC(llmAgentsToolUseMC.questions),
     },
     {
       ...contextWindowManagement,
-      quiz: contextWindowManagementQuiz,
-      multipleChoice: contextWindowManagementMC,
+      quiz: transformQuiz(contextWindowManagementQuiz.questions),
+      multipleChoice: transformMC(contextWindowManagementMC.questions),
     },
     {
       ...advancedLLMArchitectures,
-      quiz: advancedLLMArchitecturesQuiz,
-      multipleChoice: advancedLLMArchitecturesMC,
+      quiz: transformQuiz(advancedLLMArchitecturesQuiz.questions),
+      multipleChoice: transformMC(advancedLLMArchitecturesMC.questions),
     },
     {
       ...llmEvaluationSafety,
-      quiz: llmEvaluationSafetyQuiz,
-      multipleChoice: llmEvaluationSafetyMC,
+      quiz: transformQuiz(llmEvaluationSafetyQuiz.questions),
+      multipleChoice: transformMC(llmEvaluationSafetyMC.questions),
     },
     {
       ...llmCostOptimization,
-      quiz: llmCostOptimizationQuiz,
-      multipleChoice: llmCostOptimizationMC,
+      quiz: transformQuiz(llmCostOptimizationQuiz.questions),
+      multipleChoice: transformMC(llmCostOptimizationMC.questions),
     },
     {
       ...llmDeploymentProduction,
-      quiz: llmDeploymentProductionQuiz,
-      multipleChoice: llmDeploymentProductionMC,
+      quiz: transformQuiz(llmDeploymentProductionQuiz.questions),
+      multipleChoice: transformMC(llmDeploymentProductionMC.questions),
     },
   ],
 };

@@ -47,6 +47,36 @@ import { load_testing_capacity_planningMC } from '../multiple-choice/scaling-cos
 import { cost_monitoring_analysisMC } from '../multiple-choice/scaling-cost-optimization/cost-monitoring-analysis';
 import { building_scaling_strategyMC } from '../multiple-choice/scaling-cost-optimization/building-scaling-strategy';
 
+// Helper to transform discussion quiz format (questions without ids)
+const transformDiscussionQuiz = (quiz: {
+  questions: { question: string; answer: string }[];
+}) => {
+  return quiz.questions.map((q, index) => ({
+    id: `q-${index + 1}`,
+    question: q.question,
+    sampleAnswer: q.answer,
+    keyPoints: [],
+  }));
+};
+
+// Helper to transform multiple choice format (questions without ids)
+const transformMC = (mc: {
+  questions: {
+    question: string;
+    options: string[];
+    correctAnswer: number;
+    explanation: string;
+  }[];
+}) => {
+  return mc.questions.map((q, index) => ({
+    id: `mc-${index + 1}`,
+    question: q.question,
+    options: q.options,
+    correctAnswer: q.correctAnswer,
+    explanation: q.explanation,
+  }));
+};
+
 export const scalingCostOptimizationModule: Module = {
   id: 'scaling-cost-optimization',
   title: 'Scaling & Cost Optimization',
@@ -92,85 +122,85 @@ export const scalingCostOptimizationModule: Module = {
       id: 'horizontal-scaling',
       title: 'Horizontal Scaling',
       content: horizontalScaling.content,
-      multipleChoiceQuestions: horizontal_scalingMC.questions,
-      discussionQuestions: horizontal_scalingQuiz.questions,
+      multipleChoiceQuestions: transformMC(horizontal_scalingMC),
+      discussionQuestions: transformDiscussionQuiz(horizontal_scalingQuiz),
     },
     {
       id: 'model-selection-routing',
       title: 'Model Selection & Routing',
       content: modelSelectionRouting.content,
-      multipleChoiceQuestions: model_selection_routingMC.questions,
-      discussionQuestions: model_selection_routingQuiz.questions,
+      multipleChoiceQuestions: transformMC(model_selection_routingMC),
+      discussionQuestions: transformDiscussionQuiz(model_selection_routingQuiz),
     },
     {
       id: 'prompt-optimization-for-cost',
       title: 'Prompt Optimization for Cost',
       content: promptOptimizationForCost.content,
-      multipleChoiceQuestions: prompt_optimization_for_costMC.questions,
-      discussionQuestions: prompt_optimization_for_costQuiz.questions,
+      multipleChoiceQuestions: transformMC(prompt_optimization_for_costMC),
+      discussionQuestions: transformDiscussionQuiz(prompt_optimization_for_costQuiz),
     },
     {
       id: 'caching-at-scale',
       title: 'Caching at Scale',
       content: cachingAtScale.content,
-      multipleChoiceQuestions: caching_at_scaleMC.questions,
-      discussionQuestions: caching_at_scaleQuiz.questions,
+      multipleChoiceQuestions: transformMC(caching_at_scaleMC),
+      discussionQuestions: transformDiscussionQuiz(caching_at_scaleQuiz),
     },
     {
       id: 'batch-processing',
       title: 'Batch Processing',
       content: batchProcessing.content,
-      multipleChoiceQuestions: batch_processingMC.questions,
-      discussionQuestions: batch_processingQuiz.questions,
+      multipleChoiceQuestions: transformMC(batch_processingMC),
+      discussionQuestions: transformDiscussionQuiz(batch_processingQuiz),
     },
     {
       id: 'edge-computing-for-llms',
       title: 'Edge Computing for LLMs',
       content: edgeComputingForLlms.content,
-      multipleChoiceQuestions: edge_computing_for_llmsMC.questions,
-      discussionQuestions: edge_computing_for_llmsQuiz.questions,
+      multipleChoiceQuestions: transformMC(edge_computing_for_llmsMC),
+      discussionQuestions: transformDiscussionQuiz(edge_computing_for_llmsQuiz),
     },
     {
       id: 'database-scaling',
       title: 'Database Scaling',
       content: databaseScaling.content,
-      multipleChoiceQuestions: database_scalingMC.questions,
-      discussionQuestions: database_scalingQuiz.questions,
+      multipleChoiceQuestions: transformMC(database_scalingMC),
+      discussionQuestions: transformDiscussionQuiz(database_scalingQuiz),
     },
     {
       id: 'quantization-model-optimization',
       title: 'Quantization & Model Optimization',
       content: quantizationModelOptimization.content,
-      multipleChoiceQuestions: quantization_model_optimizationMC.questions,
-      discussionQuestions: quantization_model_optimizationQuiz.questions,
+      multipleChoiceQuestions: transformMC(quantization_model_optimizationMC),
+      discussionQuestions: transformDiscussionQuiz(quantization_model_optimizationQuiz),
     },
     {
       id: 'multi-region-deployment',
       title: 'Multi-Region Deployment',
       content: multiRegionDeployment.content,
-      multipleChoiceQuestions: multi_region_deploymentMC.questions,
-      discussionQuestions: multi_region_deploymentQuiz.questions,
+      multipleChoiceQuestions: transformMC(multi_region_deploymentMC),
+      discussionQuestions: transformDiscussionQuiz(multi_region_deploymentQuiz),
     },
     {
       id: 'load-testing-capacity-planning',
       title: 'Load Testing & Capacity Planning',
       content: loadTestingCapacityPlanning.content,
-      multipleChoiceQuestions: load_testing_capacity_planningMC.questions,
-      discussionQuestions: load_testing_capacity_planningQuiz.questions,
+      multipleChoiceQuestions: transformMC(load_testing_capacity_planningMC),
+      discussionQuestions: transformDiscussionQuiz(load_testing_capacity_planningQuiz),
     },
     {
       id: 'cost-monitoring-analysis',
       title: 'Cost Monitoring & Analysis',
       content: costMonitoringAnalysis.content,
-      multipleChoiceQuestions: cost_monitoring_analysisMC.questions,
-      discussionQuestions: cost_monitoring_analysisQuiz.questions,
+      multipleChoiceQuestions: transformMC(cost_monitoring_analysisMC),
+      discussionQuestions: transformDiscussionQuiz(cost_monitoring_analysisQuiz),
     },
     {
       id: 'building-scaling-strategy',
       title: 'Building a Scaling Strategy',
       content: buildingScalingStrategy.content,
-      multipleChoiceQuestions: building_scaling_strategyMC.questions,
-      discussionQuestions: building_scaling_strategyQuiz.questions,
+      multipleChoiceQuestions: transformMC(building_scaling_strategyMC),
+      discussionQuestions: transformDiscussionQuiz(building_scaling_strategyQuiz),
     },
   ],
   practicalProjects: [

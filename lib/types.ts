@@ -81,7 +81,8 @@ export interface MultipleChoiceQuestion {
   correctAnswer: number; // Index of correct option (0-based)
   explanation: string;
   keyPoints?: string[]; // Optional key points for the answer
-  difficulty?: 'easy' | 'medium' | 'hard'; // Optional difficulty level
+  difficulty?: 'easy' | 'medium' | 'hard' | 'advanced' | 'intermediate'; // Optional difficulty level
+  topic?: string; // Optional topic for categorization
 }
 
 export interface DiscussionItem {
@@ -102,6 +103,15 @@ export interface ModuleSection {
   discussion?: DiscussionItem[]; // Legacy - keep for compatibility
 }
 
+export interface PracticalProject {
+  title: string;
+  description: string;
+  difficulty?: string;
+  estimatedTime?: string;
+  skills?: string[];
+  technologies?: string[];
+}
+
 export interface Module {
   id: string;
   title: string;
@@ -109,6 +119,7 @@ export interface Module {
   category?: string;
   difficulty?: string;
   estimatedTime?: string;
+  duration?: string;
   prerequisites?: string[];
   icon: string;
   sections: ModuleSection[];
@@ -117,6 +128,7 @@ export interface Module {
   timeComplexity?: string;
   spaceComplexity?: string;
   relatedProblems?: string[]; // Array of problem IDs
+  practicalProjects?: PracticalProject[];
 }
 
 export interface ModuleCategory {

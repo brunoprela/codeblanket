@@ -22,6 +22,9 @@ export const quantitativeProgrammingTopic = {
     'ml-deep-learning-fundamentals',
     'ml-advanced-deep-learning',
     'ml-natural-language-processing',
-    'ml-ai-large-language-models',
+    'ml-system-design-production',
+    'large-language-models',
+    'quantitative-finance',
+    'time-series-financial-ml',
   ],
 };

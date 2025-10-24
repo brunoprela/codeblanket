@@ -89,7 +89,10 @@ import { mlDeepLearningFundamentals } from '../modules/ml-deep-learning-fundamen
 import { mlAdvancedDeepLearningModule } from '../modules/ml-advanced-deep-learning';
 import { naturalLanguageProcessingModule } from '../modules/ml-natural-language-processing';
 import { mlModelEvaluationOptimizationModule } from '../modules/ml-model-evaluation-optimization';
+import { mlSystemDesignProductionModule } from '../modules/ml-system-design-production';
 import { largeLanguageModelsModule } from '../modules/large-language-models';
+import { quantitativeFinanceModule } from '../modules/quantitative-finance';
+import { timeSeriesFinancialMlModule } from '../modules/time-series-financial-ml';
 
 import { promptEngineeringOptimizationModule } from '../modules/prompt-engineering-optimization';
 import { llmEngineeringFundamentalsModule } from '../modules/llm-engineering-fundamentals';
@@ -165,6 +168,10 @@ const allModulesMap: Record<string, Module> = {
   'ml-advanced-deep-learning': mlAdvancedDeepLearningModule,
   'ml-natural-language-processing': naturalLanguageProcessingModule,
   'ml-model-evaluation-optimization': mlModelEvaluationOptimizationModule,
+  'ml-system-design-production': mlSystemDesignProductionModule,
+  'large-language-models': largeLanguageModelsModule,
+  'quantitative-finance': quantitativeFinanceModule,
+  'time-series-financial-ml': timeSeriesFinancialMlModule,
 
   'applied-ai-llm-fundamentals': llmEngineeringFundamentalsModule,
   'applied-ai-prompt-engineering': promptEngineeringOptimizationModule,

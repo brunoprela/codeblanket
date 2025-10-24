@@ -1,4 +1,4 @@
-import type { MultipleChoiceQuestion } from '@/lib/content/types';
+import type { MultipleChoiceQuestion } from '@/lib/types';
 
 export const factorModelsMultipleChoice: MultipleChoiceQuestion[] = [
   {

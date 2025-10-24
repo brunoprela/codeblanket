@@ -10,9 +10,9 @@ import { timeSeriesFundamentals } from '../sections/time-series-financial-ml/tim
 import { classicalTimeSeriesModels } from '../sections/time-series-financial-ml/classical-time-series-models';
 import { advancedTimeSeriesModels } from '../sections/time-series-financial-ml/advanced-time-series-models';
 import { deepLearningForTimeSeries } from '../sections/time-series-financial-ml/deep-learning-for-time-series';
-import { financialDataSourcesApis } from '../sections/time-series-financial-ml/financial-data-sources-apis';
+import { financialDataSourcesAPIs } from '../sections/time-series-financial-ml/financial-data-sources-apis';
 import { technicalIndicators } from '../sections/time-series-financial-ml/technical-indicators';
-import { fundamentalAnalysisMl } from '../sections/time-series-financial-ml/fundamental-analysis-ml';
+import { fundamentalAnalysisML } from '../sections/time-series-financial-ml/fundamental-analysis-ml';
 import { predictiveModelingTrading } from '../sections/time-series-financial-ml/predictive-modeling-trading';
 import { portfolioOptimization } from '../sections/time-series-financial-ml/portfolio-optimization';
 import { tradingStrategyDevelopment } from '../sections/time-series-financial-ml/trading-strategy-development';
@@ -32,9 +32,9 @@ import { timeSeriesFundamentalsQuiz } from '../quizzes/time-series-financial-ml/
 import { classicalTimeSeriesModelsQuiz } from '../quizzes/time-series-financial-ml/classical-time-series-models';
 import { advancedTimeSeriesModelsQuiz } from '../quizzes/time-series-financial-ml/advanced-time-series-models';
 import { deepLearningForTimeSeriesQuiz } from '../quizzes/time-series-financial-ml/deep-learning-for-time-series';
-import { financialDataSourcesApisQuiz } from '../quizzes/time-series-financial-ml/financial-data-sources-apis';
+import { financialDataSourcesAPIsQuiz } from '../quizzes/time-series-financial-ml/financial-data-sources-apis';
 import { technicalIndicatorsQuiz } from '../quizzes/time-series-financial-ml/technical-indicators';
-import { fundamentalAnalysisMlQuiz } from '../quizzes/time-series-financial-ml/fundamental-analysis-ml';
+import { fundamentalAnalysisMLQuiz } from '../quizzes/time-series-financial-ml/fundamental-analysis-ml';
 import { predictiveModelingTradingQuiz } from '../quizzes/time-series-financial-ml/predictive-modeling-trading';
 import { portfolioOptimizationQuiz } from '../quizzes/time-series-financial-ml/portfolio-optimization';
 import { tradingStrategyDevelopmentQuiz } from '../quizzes/time-series-financial-ml/trading-strategy-development';
@@ -54,9 +54,9 @@ import { timeSeriesFundamentalsMultipleChoice } from '../multiple-choice/time-se
 import { classicalTimeSeriesModelsMultipleChoice } from '../multiple-choice/time-series-financial-ml/classical-time-series-models';
 import { advancedTimeSeriesModelsMultipleChoice } from '../multiple-choice/time-series-financial-ml/advanced-time-series-models';
 import { deepLearningForTimeSeriesMultipleChoice } from '../multiple-choice/time-series-financial-ml/deep-learning-for-time-series';
-import { financialDataSourcesApisMultipleChoice } from '../multiple-choice/time-series-financial-ml/financial-data-sources-apis';
+import { financialDataSourcesAPIsMultipleChoice } from '../multiple-choice/time-series-financial-ml/financial-data-sources-apis';
 import { technicalIndicatorsMultipleChoice } from '../multiple-choice/time-series-financial-ml/technical-indicators';
-import { fundamentalAnalysisMlMultipleChoice } from '../multiple-choice/time-series-financial-ml/fundamental-analysis-ml';
+import { fundamentalAnalysisMLMultipleChoice } from '../multiple-choice/time-series-financial-ml/fundamental-analysis-ml';
 import { predictiveModelingTradingMultipleChoice } from '../multiple-choice/time-series-financial-ml/predictive-modeling-trading';
 import { portfolioOptimizationMultipleChoice } from '../multiple-choice/time-series-financial-ml/portfolio-optimization';
 import { tradingStrategyDevelopmentMultipleChoice } from '../multiple-choice/time-series-financial-ml/trading-strategy-development';
@@ -119,9 +119,9 @@ export const timeSeriesFinancialMlModule: Module = {
       multipleChoice: deepLearningForTimeSeriesMultipleChoice,
     },
     {
-      ...financialDataSourcesApis,
-      quiz: financialDataSourcesApisQuiz,
-      multipleChoice: financialDataSourcesApisMultipleChoice,
+      ...financialDataSourcesAPIs,
+      quiz: financialDataSourcesAPIsQuiz,
+      multipleChoice: financialDataSourcesAPIsMultipleChoice,
     },
     {
       ...technicalIndicators,
@@ -129,9 +129,9 @@ export const timeSeriesFinancialMlModule: Module = {
       multipleChoice: technicalIndicatorsMultipleChoice,
     },
     {
-      ...fundamentalAnalysisMl,
-      quiz: fundamentalAnalysisMlQuiz,
-      multipleChoice: fundamentalAnalysisMlMultipleChoice,
+      ...fundamentalAnalysisML,
+      quiz: fundamentalAnalysisMLQuiz,
+      multipleChoice: fundamentalAnalysisMLMultipleChoice,
     },
     {
       ...predictiveModelingTrading,
