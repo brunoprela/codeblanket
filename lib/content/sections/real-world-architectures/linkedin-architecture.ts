@@ -3,9 +3,9 @@
  */
 
 export const linkedinarchitectureSection = {
-    id: 'linkedin-architecture',
-    title: 'LinkedIn Architecture',
-    content: `LinkedIn is the world's largest professional networking platform with over 900 million members across 200+ countries. LinkedIn's architecture powers complex social graph operations, feed generation, job matching, and one of the largest data infrastructures in the world. This section explores the technical systems behind LinkedIn, including many innovations that have become industry standards.
+  id: 'linkedin-architecture',
+  title: 'LinkedIn Architecture',
+  content: `LinkedIn is the world's largest professional networking platform with over 900 million members across 200+ countries. LinkedIn's architecture powers complex social graph operations, feed generation, job matching, and one of the largest data infrastructures in the world. This section explores the technical systems behind LinkedIn, including many innovations that have become industry standards.
 
 ## Overview
 

@@ -81,6 +81,8 @@ import { distributedSystemPatternsModule } from '../modules/distributed-system-p
 import searchAnalyticsSpecializedSystemsModule from '../modules/search-analytics-specialized-systems';
 import { distributedFileSystemsDatabasesModule } from '../modules/distributed-file-systems-databases';
 import { systemDesignMessageQueuesModule } from '../modules/system-design-message-queues';
+import { realWorldArchitecturesModule } from '../modules/real-world-architectures';
+import { systemDesignCaseStudiesModule } from '../modules/system-design-case-studies';
 
 import { mlMathematicalFoundationsModule } from '../modules/ml-mathematical-foundations';
 import { mlCalculusFundamentalsModule } from '../modules/ml-calculus-fundamentals';
@@ -168,6 +170,8 @@ const allModulesMap: Record<string, Module> = {
     searchAnalyticsSpecializedSystemsModule,
   'distributed-file-systems-databases': distributedFileSystemsDatabasesModule,
   'system-design-message-queues': systemDesignMessageQueuesModule,
+  'real-world-architectures': realWorldArchitecturesModule,
+  'system-design-case-studies': systemDesignCaseStudiesModule,
 
   'ml-mathematical-foundations': mlMathematicalFoundationsModule,
   'ml-calculus-fundamentals': mlCalculusFundamentalsModule,

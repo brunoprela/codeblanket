@@ -3,9 +3,9 @@
  */
 
 export const redisSection = {
-    id: 'redis-deep-dive',
-    title: 'Redis Deep Dive',
-    content: `Redis (REmote DIctionary Server) is an in-memory data structure store used as a database, cache, message broker, and streaming engine, known for its blazing fast performance and versatile data structures.
+  id: 'redis-deep-dive',
+  title: 'Redis Deep Dive',
+  content: `Redis (REmote DIctionary Server) is an in-memory data structure store used as a database, cache, message broker, and streaming engine, known for its blazing fast performance and versatile data structures.
 
 ## Overview
 

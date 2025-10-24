@@ -1,289 +1,627 @@
 /**
- * Zoom Architecture Section
+ * Zoom Architecture Section  
  */
 
 export const zoomarchitectureSection = {
     id: 'zoom-architecture',
     title: 'Zoom Architecture',
-    content: `Zoom is a video conferencing platform that exploded in popularity, especially during the COVID-19 pandemic. With 300+ million daily meeting participants at peak, Zoom's architecture must handle massive scale video/audio streaming with minimal latency while ensuring quality and reliability.
+    content: `Zoom is a video conferencing platform that became essential during the COVID-19 pandemic. With 300+ million daily meeting participants at peak, Zoom's architecture must handle massive-scale video/audio streaming with minimal latency while ensuring quality and reliability even under poor network conditions. This section explores the technical systems behind Zoom.
 
 ## Overview
 
-**Scale**: 300M+ daily meeting participants (peak), 3.3 trillion meeting minutes annually, 99.9%+ uptime
+Zoom's scale and challenges:
+- **300+ million daily meeting participants** (peak during pandemic)
+- **3.3 trillion annual meeting minutes**
+- **2.6 trillion connections** annually  
+- **99.9%+ uptime**
+- **Average latency**: <150ms globally
+- **17 co-located datacenters** worldwide + cloud infrastructure
 
-**Key Challenges**: Low-latency video/audio, bandwidth optimization, scalability, global distribution, quality under poor networks
+### Key Architectural Challenges
 
-## Core Components
+1. **Low-latency video/audio**: Real-time streaming with <150ms end-to-end latency
+2. **Quality under poor networks**: Maintain experience with packet loss, jitter, bandwidth constraints
+3. **Scalability**: Handle 100-1000+ participants per meeting
+4. **Global distribution**: Low latency worldwide (17 datacenters)
+5. **Device heterogeneity**: Support web, mobile, desktop, room systems on varied networks
+6. **Security**: End-to-end encryption while maintaining quality
 
-### 1. Video Architecture
+---
 
-**Multimedia Router (MMR)**:
-- Core of Zoom's architecture
-- Routes video/audio between participants
-- Performs: Transcoding, mixing, layout composition
+## Core Architecture: Multimedia Router (MMR)
 
-**How it works**:
+Zoom's architecture centers on the **Multimedia Router (MMR)** - custom-built servers that route and process video/audio streams.
+
+**Why Not Peer-to-Peer?**
+
 \`\`\`
-Meeting with 10 participants:
+Mesh (P2P) architecture:
+- Each participant sends video to all others
+- 10-participant meeting: Each uploads 9 streams, downloads 9 streams
+- Doesn't scale beyond 4-5 participants
+- High bandwidth consumption (9x upload = infeasible)
 
-Option 1: Mesh (P2P) - Each participant sends to all others
-- Requires 9 uploads per participant
-- Doesn't scale beyond ~4 participants
-- High bandwidth consumption
+MCU (Multipoint Control Unit):
+- Server mixes all videos into one composite stream
+- Each participant uploads 1 stream, downloads 1 stream
+- Low bandwidth for participants
+- High CPU for server (encoding/decoding)
+- Latency introduced by mixing
 
-Option 2: SFU (Selective Forwarding Unit) - Used by Zoom
-- Each participant sends once to MMR
-- MMR forwards to all other participants
-- Participants download 9 streams (manageable)
-- Scales to 100s of participants
-
-Option 3: MCU (Multipoint Control Unit) - Zoom also uses
-- MMR mixes all videos into composite
-- Each participant downloads 1 stream
-- Lower bandwidth for participants
-- Higher CPU for MMR
+SFU (Selective Forwarding Unit) - Zoom's approach:
+- Server forwards video streams without transcoding
+- Each participant uploads 1 stream, downloads N streams
+- Low CPU for server (no encoding/decoding)
+- Scalable to 100+ participants
+- Used by Zoom for most scenarios
 \`\`\`
 
 **Zoom's Hybrid Approach**:
-- Small meetings (<10): SFU (forward individual streams)
-- Large meetings (>10): MCU (composite video for some, individual for host)
-- Gallery view: Composite of 25-49 participants (MCU)
-- Speaker view: Individual streams (SFU)
+
+Zoom uses SFU + MCU based on meeting size and view:
+
+\`\`\`
+Small meeting (<10 participants):
+- SFU mode: Forward individual streams
+- Each participant receives all other streams
+- Gallery view: Client displays all videos locally
+
+Large meeting (>10 participants):
+- Gallery view: MCU mode
+  * MMR mixes 25-49 participants into composite
+  * Reduces bandwidth for participants
+  * Each participant downloads 1 composite stream
+- Speaker view: SFU mode
+  * Active speaker's stream forwarded individually
+  * High quality for speaker, low for others
+
+Webinar (100-10,000 participants):
+- Hosts/panelists: SFU (interactive)
+- Attendees: View-only stream (like broadcast)
+\`\`\`
 
 ---
 
-### 2. Audio Processing
+## MMR (Multimedia Router) Deep Dive
 
-**Audio Codecs**:
-- **Opus**: Primary codec (excellent quality, low latency)
-- Adaptive bitrate: 8-64 kbps based on network
-- Packet loss concealment (PLC)
-- Echo cancellation, noise suppression
+**MMR Responsibilities**:
 
-**Audio Mixing**:
-- MMR mixes multiple audio streams
-- Active speaker detection (VAD - Voice Activity Detection)
-- Prioritize active speakers in mix
+1. **Routing**: Forward video/audio between participants
+2. **Transcoding**: Convert between codecs/resolutions (when necessary)
+3. **Mixing**: Combine multiple streams (gallery view)
+4. **Recording**: Capture meeting video/audio
+5. **Layout**: Arrange participants in grid/speaker view
+6. **Encryption**: Handle end-to-end encryption
+
+**MMR Architecture**:
+
+\`\`\`
+Client A ─────┐
+              │
+Client B ─────┼────→ MMR Server ────┬───→ Client C
+              │                     │
+Client D ─────┘                     └───→ Client E
+
+Each MMR handles:
+- 100-500 concurrent meetings
+- 10,000-50,000 concurrent participants
+- Written in C++ (high performance)
+- Runs on custom hardware + cloud (AWS, Oracle Cloud, Azure)
+\`\`\`
+
+**MMR Capacity Planning**:
+
+\`\`\`
+Single MMR capacity:
+- Small meetings (3-5 people): 300-500 meetings
+- Medium meetings (10-20 people): 100-200 meetings  
+- Large meetings (100+ people): 5-10 meetings
+
+Auto-scaling:
+- Monitor CPU usage (<80% target)
+- Spin up new MMRs when needed
+- Migrate meetings to less-loaded MMRs
+\`\`\`
 
 ---
 
-### 3. Video Encoding and Adaptive Bitrate
+## Video Encoding and Adaptive Bitrate
 
 **Video Codecs**:
-- **H.264**: Primary codec (widely supported)
+
+\`\`\`
+Primary: H.264/AVC
+- Widely supported (all devices)
 - Hardware acceleration (GPU encoding/decoding)
-- Multiple quality layers (simulcast):
-  - 1080p @ 2.5 Mbps
-  - 720p @ 1.5 Mbps
-  - 360p @ 600 kbps
-  - 180p @ 150 kbps
+- Profiles: Baseline (web), Main (desktop), High (recording)
 
-**Adaptive Bitrate**:
-\`\`\`
-Client measures:
-- Available bandwidth
-- Packet loss
-- Latency
-- CPU usage
+Fallback: VP8
+- For browsers without H.264
+- Slightly less efficient
 
-Adjusts:
-- Video resolution (1080p → 720p → 360p)
-- Frame rate (30fps → 15fps → 5fps)
-- Bitrate per layer
+Future: H.265/HEVC, AV1
+- Better compression (50% less bandwidth)
+- Limited device support currently
 \`\`\`
 
-**Simulcast**:
-- Sender uploads multiple quality layers simultaneously
-- MMR selects appropriate layer per recipient
-- Smooth quality transitions
+**Simulcast** (Multiple Quality Layers):
 
----
+Zoom uses simulcast: sender uploads multiple resolutions simultaneously.
 
-### 4. Network Optimization
-
-**Protocol**: UDP (not TCP)
-- Lower latency (no retransmissions)
-- Custom protocol for reliability (ARQ - Automatic Repeat Request)
-- Forward error correction (FEC)
-
-**NAT Traversal**:
-- STUN servers (discover public IP)
-- TURN servers (relay when P2P fails)
-- ICE (Interactive Connectivity Establishment)
-
-**Packet Loss Handling**:
-- FEC: Send redundant packets
-- Packet loss concealment
-- Jitter buffer (smooth playback)
-- Graceful degradation (reduce quality vs freeze)
-
----
-
-### 5. Global Infrastructure
-
-**MMR Deployment**:
-- 17 co-located datacenters worldwide
-- Route participants to nearest MMR (lowest latency)
-- Failover: If datacenter unavailable, route to next nearest
-
-**Latency Optimization**:
-- P50 latency: <50ms (video start time)
-- P99 latency: <200ms
-- Latency budget: Network (30ms) + Processing (20ms)
-
-**Load Balancing**:
-- Participants routed based on: Geography, CPU load, network conditions
-- Dynamic rebalancing during meeting (if MMR overloaded)
-
----
-
-### 6. Zoom Meeting Lifecycle
-
-**1. Scheduling**:
 \`\`\`
-- User schedules meeting via web/app
-- Generate meeting ID (11 digits)
-- Store in database (MySQL)
-- Send calendar invite with meeting URL
+Participant sends:
+- Layer 1: 720p @ 1.5 Mbps (high quality)
+- Layer 2: 360p @ 600 Kbps (medium quality)
+- Layer 3: 180p @ 150 Kbps (low quality)
+
+MMR selects appropriate layer per recipient:
+- Strong network recipient → Gets 720p layer
+- Weak network recipient → Gets 360p or 180p layer
+- No re-encoding needed (just forwarding)
 \`\`\`
 
-**2. Joining**:
-\`\`\`
-- User clicks link → Zoom client/web
-- Authenticate (if required)
-- Query backend: Which MMR to use?
-- Backend assigns MMR (nearest, least loaded)
-- Establish WebRTC connection to MMR
-- Start sending/receiving video/audio
+**Adaptive Bitrate Algorithm**:
+
+\`\`\`python
+class AdaptiveBitrateController:
+    def __init__(self):
+        self.target_bitrate = 1500  # Start at 1.5 Mbps
+        self.packet_loss = 0
+        self.available_bandwidth = 0
+        
+    def update(self, network_stats):
+        self.packet_loss = network_stats.packet_loss_rate
+        self.available_bandwidth = network_stats.bandwidth
+        
+        # Adjust bitrate based on packet loss
+        if self.packet_loss > 5%:
+            self.target_bitrate *= 0.8  # Reduce 20%
+        elif self.packet_loss < 1% and self.available_bandwidth > self.target_bitrate * 1.5:
+            self.target_bitrate *= 1.1  # Increase 10%
+        
+        # Clamp bitrate
+        self.target_bitrate = clamp(self.target_bitrate, 150, 3000)  # 150 Kbps to 3 Mbps
+        
+        # Select resolution based on bitrate
+        if self.target_bitrate >= 1200:
+            return Resolution.HD_720p, 30  # fps
+        elif self.target_bitrate >= 600:
+            return Resolution.SD_360p, 30
+        else:
+            return Resolution.LOW_180p, 15  # Lower fps too
 \`\`\`
 
-**3. In-Meeting**:
-\`\`\`
-- Participants send media to MMR
-- MMR forwards/mixes media
-- Real-time adjustments (bitrate, quality)
-- Recording (if enabled) → Store to S3
-- Transcription (if enabled) → ASR (Automatic Speech Recognition)
-\`\`\`
+**Frame Rate Adaptation**:
 
-**4. Ending**:
 \`\`\`
-- Host ends meeting
-- Disconnect all participants
-- Process recording (convert to MP4)
-- Upload to cloud storage
-- Generate meeting analytics
+Good network: 30 fps (smooth)
+Moderate packet loss: 15 fps (acceptable)
+High packet loss: 5-10 fps (choppy but functional)
+Very poor network: Freeze video, keep audio only
 \`\`\`
 
 ---
 
-### 7. Zoom Features Implementation
+## Audio Processing
 
-**Screen Sharing**:
-- Capture screen at 30fps
-- H.264 encode (optimized for screen content)
-- Higher resolution than camera (text readability)
-- Prioritize screen share over participant videos
+Audio is more critical than video (users tolerate video degradation but not audio).
 
-**Virtual Backgrounds**:
-- AI segmentation (remove background)
-- Replace with image/video
-- GPU-accelerated (TensorFlow Lite)
-- Runs on client (reduces CPU load)
+**Audio Codecs**:
 
-**Chat**:
-- WebSocket for real-time messages
-- Messages stored in database
-- History available post-meeting
+\`\`\`
+Primary: Opus
+- Excellent quality at low bitrates
+- Bitrate: 8-64 Kbps (adaptive)
+- Latency: <20ms
+- Handles packet loss gracefully (PLC - Packet Loss Concealment)
 
-**Reactions**:
-- Unicode emojis sent as metadata
-- Displayed overlay on participant video
-- Cleared after 5 seconds
+Audio prioritization:
+- Audio packets marked higher priority than video
+- Router QoS (Quality of Service) tags
+- Zoom sends audio even if video paused
+\`\`\`
 
-**Breakout Rooms**:
-- Split meeting into sub-meetings
-- Separate MMR instance per room
-- Host can move participants between rooms
-- Rejoin main room when closed
+**Audio Enhancements**:
+
+**1. Echo Cancellation (AEC)**:
+- Remove echo from microphone picking up speaker output
+- Essential for laptop meetings (speaker and mic close together)
+- Algorithm: Adaptive filter, learns speaker-to-mic delay
+
+**2. Noise Suppression**:
+- Remove background noise (typing, dog barking, traffic)
+- AI-based (trained on millions of noise samples)
+- Real-time processing (low latency)
+
+**3. Auto Gain Control (AGC)**:
+- Normalize volume levels (loud and quiet speakers)
+- Prevents sudden volume spikes
+
+**4. Active Speaker Detection**:
+- Identify who is speaking (for speaker view, gallery highlighting)
+- Based on voice activity detection (VAD) + volume level
+
+**Audio Mixing**:
+
+For large meetings, MMR mixes audio:
+
+\`\`\`
+10 participants speaking simultaneously:
+- MMR receives 10 audio streams
+- Mix streams (sum waveforms, normalize to prevent clipping)
+- Send mixed audio to all participants
+- Result: Participants hear all speakers blended
+
+Active speaker enhancement:
+- Boost active speaker volume by 3-6 dB
+- Reduce background speakers
+- Improves intelligibility
+\`\`\`
 
 ---
 
-### 8. Security
+## Network Optimization
+
+Zoom is famous for working well on poor networks. How?
+
+**Protocol: UDP (not TCP)**:
+
+\`\`\`
+Why UDP?
+- Lower latency (no retransmissions, no head-of-line blocking)
+- Real-time traffic prefers dropping old packets over delayed delivery
+- TCP retransmissions increase latency (unacceptable for video)
+
+Reliability mechanisms:
+- Forward Error Correction (FEC): Send redundant data
+- Negative Acknowledgment (NACK): Request missing packets (selective)
+- Jitter buffer: Smooth out network jitter
+\`\`\`
+
+**Forward Error Correction (FEC)**:
+
+\`\`\`
+Zoom sends redundant packets:
+- For every 10 data packets, send 2-3 FEC packets
+- FEC packets allow reconstructing lost data packets
+- Trade-off: 20-30% extra bandwidth for resilience
+
+Example:
+- Packets 1-10 sent + FEC_A, FEC_B
+- If packet 3 lost, reconstruct from packets 1,2,4-10 + FEC
+- Avoid retransmission (no latency increase)
+\`\`\`
+
+**Jitter Buffer**:
+
+\`\`\`
+Problem: Network jitter causes packets to arrive at variable times
+Solution: Jitter buffer (30-100ms)
+
+Algorithm:
+- Buffer incoming packets for 50ms (configurable)
+- Play packets in order (smooth playback)
+- If packet doesn't arrive in time, use FEC or PLC
+- Adaptive: Increase buffer if high jitter, decrease if low
+
+Trade-off: Increased latency vs smooth playback
+\`\`\`
+
+**Packet Loss Concealment (PLC)**:
+
+\`\`\`
+Video PLC:
+- Repeat last frame (freeze video momentarily)
+- Interpolate between frames (if brief loss)
+
+Audio PLC (Opus codec built-in):
+- Predict missing samples based on previous audio
+- Fade out if extended loss
+- Users barely notice <5% packet loss
+\`\`\`
+
+**Bandwidth Adaptation**:
+
+\`\`\`
+Zoom continuously measures available bandwidth:
+- Send RTCP reports (statistics about connection quality)
+- Estimate bandwidth using packet arrival patterns
+- Adjust bitrate within 1-2 seconds of network change
+
+Graceful degradation:
+1. High bandwidth: 720p 30fps + screen share 1080p 30fps
+2. Medium bandwidth: 360p 30fps + screen share 720p 15fps
+3. Low bandwidth: 180p 15fps + screen share 480p 5fps
+4. Very low bandwidth: Audio only, no video
+\`\`\`
+
+---
+
+## NAT Traversal and Firewall Penetration
+
+Participants are behind corporate firewalls, NATs, restrictive networks. Zoom must establish connections.
+
+**ICE (Interactive Connectivity Establishment)**:
+
+\`\`\`
+1. STUN (Session Traversal Utilities for NAT):
+   - Client contacts STUN server
+   - Discovers public IP address
+   - Maps internal IP:port to external IP:port
+
+2. Direct connection attempt (if possible):
+   - Client A → STUN → public IP A
+   - Client B → STUN → public IP B
+   - Try direct UDP hole punching
+   - If successful: Peer-to-peer path (lower latency)
+
+3. TURN (Traversal Using Relays around NAT):
+   - If direct connection fails (symmetric NAT, firewall)
+   - Route traffic through TURN relay server
+   - Higher latency but works reliably
+   - Zoom's MMR acts as TURN server
+
+Connection preference:
+1. Direct (P2P) - lowest latency
+2. Via MMR (relay) - higher latency but works everywhere
+\`\`\`
+
+**Firewall Traversal**:
+
+\`\`\`
+Zoom tries multiple ports:
+- UDP: 3478, 8801, 8802, 8803
+- TCP: 8801, 8802 (fallback)
+- HTTPS: 443 (last resort, tunnels over HTTP)
+
+Most restrictive: HTTPS tunnel over port 443
+- Works in almost all corporate networks
+- Higher latency (HTTP overhead)
+- Used by <5% of connections
+\`\`\`
+
+---
+
+## Global Infrastructure
+
+Zoom operates 17 co-located datacenters worldwide + cloud resources.
+
+**Datacenter Locations**:
+- North America: US East, US West, US Central, Canada
+- Europe: UK, Germany, Netherlands
+- Asia: Japan, Hong Kong, Singapore, India, Australia
+- South America: Brazil
+- Middle East/Africa: UAE
+
+**MMR Routing**:
+
+\`\`\`
+Participant joins meeting:
+1. Client queries Zoom API: Which MMR should I use?
+2. Zoom backend considers:
+   - Geographic location (closest datacenter)
+   - MMR load (CPU usage)
+   - Network path quality (latency, packet loss)
+3. Returns MMR IP address and port
+4. Client establishes connection to MMR
+\`\`\`
+
+**Multi-Region Meetings**:
+
+\`\`\`
+Participants from different regions:
+- US participant → US MMR
+- Europe participant → Europe MMR
+- Asia participant → Asia MMR
+
+Zoom uses "cascading MMRs":
+- MMRs communicate with each other
+- Video streams forwarded between MMRs
+- Optimized paths (not all-to-all)
+
+Example:
+10 US participants + 5 Europe participants + 3 Asia participants
+
+Architecture:
+US MMR ←→ Europe MMR ←→ Asia MMR
+  (10)       (5)          (3)
+
+US MMR sends 1 composite stream to Europe MMR
+Europe MMR sends 1 composite stream to US MMR and Asia MMR
+Result: Reduced inter-region bandwidth
+\`\`\`
+
+---
+
+## Features Implementation
+
+### Screen Sharing
+
+\`\`\`
+Screen capture:
+- OS-level screen capture API (Windows, macOS, Linux)
+- Capture frequency: 10-30 fps (adaptive)
+- Encoding: H.264 (optimized for screen content)
+  * Screen content: Text, graphics, slides
+  * Higher resolution than camera (1080p-4K)
+  * Lower frame rate than camera (10-15 fps often sufficient)
+
+Bandwidth optimization:
+- Only send changed regions (dirty rectangles)
+- High compression for static content
+- Prioritize over participant videos (screen more important)
+
+Advanced: Multiple screen sharing
+- Educators: Share multiple screens
+- Each screen is separate stream
+- Participants can choose which to view
+\`\`\`
+
+### Virtual Backgrounds
+
+\`\`\`
+AI-based background removal:
+- Deep learning model (TensorFlow Lite)
+- Segment person from background (semantic segmentation)
+- Replace background with image/video/blur
+- Real-time processing (30 fps)
+
+Model:
+- Input: Video frame (640x360)
+- Output: Binary mask (person vs background)
+- Inference time: <10ms (GPU accelerated)
+- Model size: ~2MB (runs on mobile)
+
+GPU acceleration:
+- Desktop: NVIDIA CUDA, AMD ROCm
+- Mobile: Metal (iOS), OpenGL ES (Android)
+- Fallback: CPU (slower, ~20 fps)
+\`\`\`
+
+### Breakout Rooms
+
+\`\`\`
+Architecture:
+- Host creates breakout rooms (Room A, Room B, Room C)
+- Assign participants to rooms
+- Technically: Create sub-MMR sessions
+  * Each room is separate meeting
+  * Separate video/audio streams
+  * Host can broadcast to all rooms
+  * Host can join any room
+
+Data Model:
+Main meeting ID: 123456
+Breakout Room A ID: 123456-A
+Breakout Room B ID: 123456-B
+
+When host closes rooms:
+- Migrate participants back to main meeting
+- Merge MMR sessions
+- Participants see main meeting again
+\`\`\`
+
+### Recording
+
+\`\`\`
+Local recording:
+- Client captures audio/video locally
+- Encodes to MP4 (H.264 + AAC)
+- Stores on local disk
+- No server involvement (free feature)
+
+Cloud recording:
+- MMR captures meeting audio/video
+- Encodes to MP4 (multiple quality levels)
+- Uploads to AWS S3 (or Zoom's storage)
+- Generates shareable link
+- Post-processing: Speaker view, gallery view, transcription
+
+Transcription (AI):
+- Automatic Speech Recognition (ASR)
+- Model: Whisper (OpenAI) or custom
+- Generate subtitles/closed captions
+- Searchable transcript (find keyword in recording)
+\`\`\`
+
+---
+
+## Security
 
 **End-to-End Encryption (E2EE)**:
-- AES-256-GCM encryption
-- Key generated per meeting
-- Keys never sent to Zoom servers (true E2EE)
-- Trade-off: No cloud recording, transcription with E2EE
 
-**Meeting Security**:
-- Password protection
-- Waiting room (host admits participants)
-- Lock meeting (no new participants)
-- Mute/remove participants (host controls)
+\`\`\`
+How it works:
+1. Meeting host enables E2EE (opt-in)
+2. Participants generate public/private key pairs
+3. Exchange public keys via Zoom server
+4. Encrypt media with shared secret key (AES-256-GCM)
+5. Keys never leave client devices
+6. MMR cannot decrypt (truly end-to-end)
 
-**Zoom Bombing Prevention**:
-- Screen sharing: Host only (default)
-- Remove participant feature
-- Report to Trust & Safety team
+Trade-offs:
+- Pro: Maximum security (Zoom can't access content)
+- Con: No cloud recording, no transcription, no phone dial-in
+- Con: Slightly higher CPU usage (encryption overhead)
 
----
+Zoom's default (not E2EE):
+- TLS encrypted in transit (client ↔ MMR)
+- Encrypted at rest (stored recordings)
+- MMR can decrypt (needed for recording, transcription)
+- Still secure, but not "zero-trust"
+\`\`\`
 
-### 9. Scalability
+**Waiting Room**:
+- Host manually admits participants (prevent Zoom bombing)
 
-**Horizontal Scaling**:
-- Add more MMR servers (datacenters or cloud)
-- Each MMR handles 100-500 concurrent meetings
-- Stateless (meetings can migrate between MMRs)
+**Passcode**:
+- Require passcode to join (prevent unauthorized access)
 
-**Cloud Scaling**:
-- AWS, Oracle Cloud for overflow capacity
-- Auto-scaling during peak hours
-- Cost optimization (spot instances for non-critical)
-
-**Meeting Capacity**:
-- Free: 40 minutes, 100 participants
-- Paid: Unlimited time, up to 1000 participants
-- Webinar: Up to 50K attendees (view-only for most)
-
----
-
-### 10. Zoom Phone and Zoom Rooms
-
-**Zoom Phone** (VoIP service):
-- SIP protocol (Session Initiation Protocol)
-- PSTN gateway (call regular phones)
-- Call routing, IVR (Interactive Voice Response)
-
-**Zoom Rooms** (Hardware for conference rooms):
-- Dedicated Zoom client on hardware
-- Calendar integration (book rooms)
-- Touch screen controls
-- Multiple cameras/mics (large rooms)
+**Screen Sharing Lock**:
+- Only host can share screen (prevent disruptions)
 
 ---
 
 ## Technology Stack
 
-**Video/Audio**: Custom C++ MMR (high performance), WebRTC
-**Codecs**: H.264, Opus, VP8 (fallback)
-**Backend**: Java, Node.js
-**Data**: MySQL, MongoDB, Redis
-**Infrastructure**: Own datacenters + AWS, Oracle Cloud
-**AI**: TensorFlow Lite (virtual backgrounds, noise suppression)
-**Monitoring**: Custom tools, Datadog
+### Core
+
+- **C++**: MMR (multimedia router), video/audio processing
+- **WebRTC**: Browser-based clients (modified)
+- **Custom protocols**: Proprietary RTP/RTCP extensions
+
+### Backend
+
+- **Go**: Backend services (API, meeting management)
+- **Java**: Some services
+- **Python**: Data processing, ML models
+
+### Data Storage
+
+- **MySQL**: Meeting metadata, user accounts
+- **Redis**: Session storage, rate limiting
+- **S3**: Cloud recordings, file storage
+
+### AI/ML
+
+- **TensorFlow Lite**: Virtual backgrounds, noise suppression
+- **Whisper**: Transcription (ASR)
+
+### Infrastructure
+
+- **Own datacenters**: 17 co-located facilities
+- **AWS, Oracle Cloud, Azure**: Additional capacity (auto-scaling)
+- **Custom hardware**: Optimized servers for MMR
+
+### Monitoring
+
+- **Custom tools**: Internal monitoring
+- **Datadog**: Metrics, logs
+- **PagerDuty**: Alerting, on-call
 
 ---
 
 ## Key Lessons
 
-1. **UDP over TCP** for real-time media (lower latency, custom reliability)
-2. **MMR** (router) architecture scales better than mesh P2P
-3. **Simulcast** enables adaptive quality per recipient
-4. **Global infrastructure** (17 datacenters) reduces latency
-5. **Graceful degradation**: Quality reduces under poor network vs freezing
-6. **Hardware acceleration**: GPU for encoding/decoding, AI features
+### 1. UDP Essential for Real-Time
+
+TCP retransmissions unacceptable for video. UDP with FEC, NACK, PLC provides reliability without latency penalty.
+
+### 2. Adaptive Bitrate Critical
+
+Networks vary wildly (broadband to 3G). Continuous bandwidth adaptation ensures quality for all users.
+
+### 3. Audio > Video
+
+Users tolerate video degradation but not audio issues. Prioritize audio packets, use Opus codec, apply noise suppression.
+
+### 4. Hybrid SFU+MCU
+
+Small meetings: SFU (low latency). Large meetings: MCU for gallery view (low bandwidth). Best of both worlds.
+
+### 5. Global Infrastructure Reduces Latency
+
+17 datacenters worldwide ensure <150ms latency globally. Proximity matters for real-time.
 
 ---
 
@@ -291,17 +629,33 @@ Adjusts:
 
 **Q: How does Zoom handle video conferencing at scale?**
 
-A: Use Multimedia Router (MMR) architecture. Participants send video/audio to MMR (SFU - Selective Forwarding Unit), MMR forwards to other participants. For large meetings, MMR mixes videos into composite (MCU - Multipoint Control Unit). Adaptive bitrate: Sender uploads multiple quality layers (simulcast: 1080p, 720p, 360p). MMR selects appropriate layer per recipient based on bandwidth. Codecs: H.264 (video), Opus (audio) with hardware acceleration. Protocol: UDP (low latency) with custom reliability (FEC, ARQ). Global deployment: 17 datacenters, route to nearest MMR. Handle 100-500 meetings per MMR server. Scale horizontally: Add MMR servers, auto-scale cloud resources during peak.
+A: Use Multimedia Router (MMR) architecture. Participants send video/audio to MMR (centralized server), MMR forwards to other participants (SFU - Selective Forwarding Unit). For large meetings, MMR mixes videos into composite (MCU - Multipoint Control Unit) to reduce bandwidth. Simulcast: Sender uploads multiple quality layers (720p, 360p, 180p), MMR selects appropriate layer per recipient based on bandwidth. Adaptive bitrate: Continuously measure network quality (packet loss, bandwidth), adjust resolution/frame rate within 1-2 seconds. Protocol: UDP for low latency, Forward Error Correction (FEC) for reliability, jitter buffer (30-100ms) for smooth playback. Global deployment: 17 datacenters, route participants to nearest MMR (<150ms latency). Scale: Each MMR handles 100-500 concurrent meetings, auto-scale by adding MMRs.
 
 **Q: How does Zoom optimize for poor network conditions?**
 
-A: Adaptive bitrate: Client measures bandwidth, packet loss, latency. Dynamically adjusts: (1) Resolution (1080p → 720p → 360p → 180p). (2) Frame rate (30fps → 15fps → 5fps). (3) Bitrate per layer. Simulcast: Sender uploads multiple layers, MMR selects best for each recipient. Protocol: UDP for low latency, FEC (forward error correction) for packet loss. Packet loss concealment: Audio (interpolate), video (repeat frames). Jitter buffer: Smooth playback despite variable latency. Graceful degradation: Reduce quality vs freeze. Prioritization: Audio > screen share > active speaker video > participant videos.
+A: Multiple techniques: (1) Adaptive bitrate: Measure bandwidth and packet loss every second, adjust video resolution (720p→360p→180p) and frame rate (30fps→15fps→5fps) dynamically. (2) Forward Error Correction (FEC): Send redundant packets (20-30% overhead), reconstruct lost packets without retransmission. (3) Jitter buffer: Buffer packets for 30-100ms (adaptive based on jitter), smooth out variable network delays. (4) Packet Loss Concealment: Video - repeat last frame, Audio - predict missing samples (Opus codec). (5) Audio prioritization: Mark audio packets higher priority (QoS), maintain audio even if video paused. (6) Graceful degradation: Very poor network → audio-only mode. Result: Zoom usable even at 5-10% packet loss where competitors fail.
+
+**Q: Why does Zoom use UDP instead of TCP for video?**
+
+A: Real-time video requires low latency; TCP retransmissions increase latency unacceptably. UDP characteristics: (1) No retransmissions: Drop old packets instead of delaying delivery. (2) No head-of-line blocking: Single lost packet doesn't block subsequent packets. (3) Lower latency: ~50ms faster than TCP for video. Reliability via UDP: (1) Forward Error Correction (FEC): Redundant packets allow reconstructing losses. (2) Selective NACK: Request specific lost packets if critical. (3) Packet Loss Concealment: Predict/interpolate missing data. (4) Jitter buffer: Smooth out timing variations. Trade-off: UDP requires custom reliability mechanisms (FEC, NACK) but enables real-time performance impossible with TCP.
 
 ---
 
 ## Summary
 
-Zoom's architecture handles massive-scale video conferencing: MMR (Multimedia Router) for routing/mixing, simulcast for adaptive quality, UDP with custom reliability, global datacenter deployment (17 locations), H.264/Opus codecs with hardware acceleration. Success from low latency, graceful degradation under poor networks, horizontal scalability, and simple user experience.
+Zoom's architecture handles massive-scale video conferencing with quality and reliability:
+
+**Key Takeaways**:
+
+1. **MMR architecture**: SFU for small meetings (low latency), MCU for large meetings (low bandwidth)
+2. **Simulcast**: Multiple quality layers (720p, 360p, 180p), MMR selects per recipient's bandwidth
+3. **UDP with FEC**: Low latency protocol, Forward Error Correction for reliability without retransmissions
+4. **Adaptive bitrate**: Continuous bandwidth measurement, adjust resolution/frame rate dynamically
+5. **Audio prioritization**: Opus codec, echo cancellation, noise suppression, maintain audio over video
+6. **Global infrastructure**: 17 datacenters worldwide, route to nearest MMR (<150ms latency)
+7. **Network resilience**: Jitter buffer, packet loss concealment, graceful degradation
+8. **E2EE option**: End-to-end encryption available (trade-off: no cloud recording/transcription)
+
+Zoom's success from focus on reliability under poor network conditions, global low-latency infrastructure, and optimized video/audio processing.
 `,
 };
-

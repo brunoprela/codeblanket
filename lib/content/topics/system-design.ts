@@ -23,5 +23,7 @@ export const systemDesignTopic = {
     'system-design-message-queues',
     'search-analytics-specialized-systems',
     'distributed-file-systems-databases',
+    'system-design-case-studies',
+    'real-world-architectures',
   ],
 };

@@ -10,7 +10,7 @@ import { tinyurlSection } from '../sections/system-design-case-studies/tinyurl';
 import { pastebinSection } from '../sections/system-design-case-studies/pastebin';
 import { twitterSection } from '../sections/system-design-case-studies/twitter';
 import { instagramSection } from '../sections/system-design-case-studies/instagram';
-import { facebookmessengerSection } from '../sections/system-design-case-studies/facebook-messenger';
+import { facebookMessengerSection } from '../sections/system-design-case-studies/facebook-messenger';
 import { netflixSection } from '../sections/system-design-case-studies/netflix';
 import { youtubeSection } from '../sections/system-design-case-studies/youtube';
 import { uberSection } from '../sections/system-design-case-studies/uber';
@@ -18,17 +18,17 @@ import { whatsappSection } from '../sections/system-design-case-studies/whatsapp
 import { dropboxSection } from '../sections/system-design-case-studies/dropbox';
 import { yelpSection } from '../sections/system-design-case-studies/yelp';
 import { ticketmasterSection } from '../sections/system-design-case-studies/ticketmaster';
-import { webcrawlerSection } from '../sections/system-design-case-studies/web-crawler';
-import { apiratelimiterSection } from '../sections/system-design-case-studies/api-rate-limiter';
-import { typeaheadSection } from '../sections/system-design-case-studies/typeahead';
-import { newsfeedSection } from '../sections/system-design-case-studies/news-feed';
+import { webCrawlerSection } from '../sections/system-design-case-studies/web-crawler';
+import { rateLimiterSection } from '../sections/system-design-case-studies/api-rate-limiter';
+import { typeaheadSection } from '../sections/system-design-case-studies/typeahead-suggestion';
+import { newsFeedSection } from '../sections/system-design-case-studies/news-feed';
 
 // Import quizzes
 import { tinyurlQuiz } from '../quizzes/system-design-case-studies/tinyurl';
 import { pastebinQuiz } from '../quizzes/system-design-case-studies/pastebin';
 import { twitterQuiz } from '../quizzes/system-design-case-studies/twitter';
 import { instagramQuiz } from '../quizzes/system-design-case-studies/instagram';
-import { facebookmessengerQuiz } from '../quizzes/system-design-case-studies/facebook-messenger';
+import { facebookMessengerQuiz } from '../quizzes/system-design-case-studies/facebook-messenger';
 import { netflixQuiz } from '../quizzes/system-design-case-studies/netflix';
 import { youtubeQuiz } from '../quizzes/system-design-case-studies/youtube';
 import { uberQuiz } from '../quizzes/system-design-case-studies/uber';
@@ -36,17 +36,17 @@ import { whatsappQuiz } from '../quizzes/system-design-case-studies/whatsapp';
 import { dropboxQuiz } from '../quizzes/system-design-case-studies/dropbox';
 import { yelpQuiz } from '../quizzes/system-design-case-studies/yelp';
 import { ticketmasterQuiz } from '../quizzes/system-design-case-studies/ticketmaster';
-import { webcrawlerQuiz } from '../quizzes/system-design-case-studies/web-crawler';
-import { apiratelimiterQuiz } from '../quizzes/system-design-case-studies/api-rate-limiter';
-import { typeaheadQuiz } from '../quizzes/system-design-case-studies/typeahead';
-import { newsfeedQuiz } from '../quizzes/system-design-case-studies/news-feed';
+import { webCrawlerQuiz } from '../quizzes/system-design-case-studies/web-crawler';
+import { rateLimiterQuiz } from '../quizzes/system-design-case-studies/api-rate-limiter';
+import { typeaheadQuiz } from '../quizzes/system-design-case-studies/typeahead-suggestion';
+import { newsFeedQuiz } from '../quizzes/system-design-case-studies/news-feed';
 
 // Import multiple choice
 import { tinyurlMultipleChoice } from '../multiple-choice/system-design-case-studies/tinyurl';
 import { pastebinMultipleChoice } from '../multiple-choice/system-design-case-studies/pastebin';
 import { twitterMultipleChoice } from '../multiple-choice/system-design-case-studies/twitter';
 import { instagramMultipleChoice } from '../multiple-choice/system-design-case-studies/instagram';
-import { facebookmessengerMultipleChoice } from '../multiple-choice/system-design-case-studies/facebook-messenger';
+import { facebookMessengerMultipleChoice } from '../multiple-choice/system-design-case-studies/facebook-messenger';
 import { netflixMultipleChoice } from '../multiple-choice/system-design-case-studies/netflix';
 import { youtubeMultipleChoice } from '../multiple-choice/system-design-case-studies/youtube';
 import { uberMultipleChoice } from '../multiple-choice/system-design-case-studies/uber';
@@ -54,10 +54,10 @@ import { whatsappMultipleChoice } from '../multiple-choice/system-design-case-st
 import { dropboxMultipleChoice } from '../multiple-choice/system-design-case-studies/dropbox';
 import { yelpMultipleChoice } from '../multiple-choice/system-design-case-studies/yelp';
 import { ticketmasterMultipleChoice } from '../multiple-choice/system-design-case-studies/ticketmaster';
-import { webcrawlerMultipleChoice } from '../multiple-choice/system-design-case-studies/web-crawler';
-import { apiratelimiterMultipleChoice } from '../multiple-choice/system-design-case-studies/api-rate-limiter';
-import { typeaheadMultipleChoice } from '../multiple-choice/system-design-case-studies/typeahead';
-import { newsfeedMultipleChoice } from '../multiple-choice/system-design-case-studies/news-feed';
+import { webCrawlerMultipleChoice } from '../multiple-choice/system-design-case-studies/web-crawler';
+import { rateLimiterMultipleChoice } from '../multiple-choice/system-design-case-studies/api-rate-limiter';
+import { typeaheadMultipleChoice } from '../multiple-choice/system-design-case-studies/typeahead-suggestion';
+import { newsFeedMultipleChoice } from '../multiple-choice/system-design-case-studies/news-feed';
 
 export const systemDesignCaseStudiesModule: Module = {
   id: 'system-design-case-studies',
@@ -127,9 +127,9 @@ export const systemDesignCaseStudiesModule: Module = {
       multipleChoice: instagramMultipleChoice,
     },
     {
-      ...facebookmessengerSection,
-      quiz: facebookmessengerQuiz,
-      multipleChoice: facebookmessengerMultipleChoice,
+      ...facebookMessengerSection,
+      quiz: facebookMessengerQuiz,
+      multipleChoice: facebookMessengerMultipleChoice,
     },
     {
       ...netflixSection,
@@ -167,14 +167,14 @@ export const systemDesignCaseStudiesModule: Module = {
       multipleChoice: ticketmasterMultipleChoice,
     },
     {
-      ...webcrawlerSection,
-      quiz: webcrawlerQuiz,
-      multipleChoice: webcrawlerMultipleChoice,
+      ...webCrawlerSection,
+      quiz: webCrawlerQuiz,
+      multipleChoice: webCrawlerMultipleChoice,
     },
     {
-      ...apiratelimiterSection,
-      quiz: apiratelimiterQuiz,
-      multipleChoice: apiratelimiterMultipleChoice,
+      ...rateLimiterSection,
+      quiz: rateLimiterQuiz,
+      multipleChoice: rateLimiterMultipleChoice,
     },
     {
       ...typeaheadSection,
@@ -182,9 +182,9 @@ export const systemDesignCaseStudiesModule: Module = {
       multipleChoice: typeaheadMultipleChoice,
     },
     {
-      ...newsfeedSection,
-      quiz: newsfeedQuiz,
-      multipleChoice: newsfeedMultipleChoice,
+      ...newsFeedSection,
+      quiz: newsFeedQuiz,
+      multipleChoice: newsFeedMultipleChoice,
     },
   ],
 };

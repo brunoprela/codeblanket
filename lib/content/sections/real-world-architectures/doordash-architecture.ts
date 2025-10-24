@@ -3,9 +3,9 @@
  */
 
 export const doordasharchitectureSection = {
-    id: 'doordash-architecture',
-    title: 'DoorDash Architecture',
-    content: `DoorDash is the largest food delivery platform in the United States with 30+ million customers and 500,000+ merchants. DoorDash's architecture must handle real-time logistics, dynamic dispatch, location tracking, and marketplace optimization at massive scale. This section explores the technical systems powering DoorDash's three-sided marketplace.
+  id: 'doordash-architecture',
+  title: 'DoorDash Architecture',
+  content: `DoorDash is the largest food delivery platform in the United States with 30+ million customers and 500,000+ merchants. DoorDash's architecture must handle real-time logistics, dynamic dispatch, location tracking, and marketplace optimization at massive scale. This section explores the technical systems powering DoorDash's three-sided marketplace.
 
 ## Overview
 
@@ -776,4 +776,3 @@ DoorDash's architecture handles real-time logistics for three-sided marketplace 
 DoorDash's success comes from sophisticated dispatch optimization, real-time location tracking, accurate ETA prediction, and dynamic marketplace balancing.
 `,
 };
-

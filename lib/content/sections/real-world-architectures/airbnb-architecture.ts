@@ -3,9 +3,9 @@
  */
 
 export const airbnbarchitectureSection = {
-    id: 'airbnb-architecture',
-    title: 'Airbnb Architecture',
-    content: `Airbnb is a global online marketplace connecting travelers with hosts offering accommodations and experiences. With 7+ million listings in 100,000+ cities and 150+ million users, Airbnb's architecture must handle complex challenges including geospatial search, dynamic pricing, payments, trust & safety, and global scale. This section explores the technical systems powering Airbnb.
+  id: 'airbnb-architecture',
+  title: 'Airbnb Architecture',
+  content: `Airbnb is a global online marketplace connecting travelers with hosts offering accommodations and experiences. With 7+ million listings in 100,000+ cities and 150+ million users, Airbnb's architecture must handle complex challenges including geospatial search, dynamic pricing, payments, trust & safety, and global scale. This section explores the technical systems powering Airbnb.
 
 ## Overview
 

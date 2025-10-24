@@ -2,9 +2,9 @@
 
 ## Overview
 
-This document outlines the complete 18-module curriculum designed to take students from elementary mathematics through advanced machine learning, large language models, and quantitative finance. Each module contains multiple sections with comprehensive content, practical Python implementations, 5 multiple-choice questions, and 3 discussion questions per section. Special emphasis on building production-ready trading systems with LLM integration.
+This document outlines the complete 20-module curriculum designed to take students from elementary mathematics through advanced machine learning, large language models, quantitative finance, and interview preparation. Each module contains multiple sections with comprehensive content, practical Python implementations, 5 multiple-choice questions, and 3 discussion questions per section. Special emphasis on building production-ready trading systems with LLM integration and interview preparation for top quant firms.
 
-**Status**: 2/18 modules complete (Module 3: ✅ COMPLETE - 14/14 sections, Module 10: ✅ COMPLETE - 10/10 sections) ⭐ ENHANCED VERSION
+**Status**: 2/20 modules complete (Module 3: ✅ COMPLETE - 14/14 sections, Module 10: ✅ COMPLETE - 10/10 sections) ⭐ ENHANCED VERSION WITH INTERVIEW PREP
 
 **Target Audience**: Beginners to advanced practitioners seeking comprehensive ML/AI expertise with specialization in LLMs and quantitative trading
 
@@ -86,6 +86,36 @@ Practical LLM applications for trading:
 - LLM-powered backtesting
 - Regulatory compliance
 
+#### 🎯 **New Module 19: Quantitative Interview Preparation** (12 sections)
+
+Master interview problems for top quant firms:
+
+- Probability puzzles and brain teasers (100+ problems)
+- Options pricing mental math
+- Combinatorics and counting
+- Calculus and integration puzzles
+- Linear algebra problems
+- Statistics and inference
+- Financial math puzzles
+- Market microstructure problems
+- Coding challenges (quant-focused)
+- Fermi estimation and market sense
+- Mock interviews (Jane Street, Citadel, Two Sigma, etc.)
+- Trading games and simulations
+
+#### 🏗️ **New Module 20: System Design for Trading Systems** (8 sections)
+
+Architecture and system design for production trading:
+
+- Order Management Systems (OMS)
+- Market data systems (1M+ msgs/sec)
+- Backtesting engines
+- Risk systems (real-time P&L, VaR, Greeks)
+- High-frequency trading architecture (FPGA, kernel bypass)
+- Distributed trading systems
+- Regulatory and compliance systems
+- ML model serving for trading (< 1ms inference)
+
 #### 🚀 **Enhanced Production (Module 16: 12→14 sections)**
 
 - **Real-Time ML Systems**: Online learning, streaming pipelines, <10ms latency (NEW Section 13)
@@ -102,20 +132,24 @@ After completing this curriculum, you will be able to:
 ✅ **Integrate LLMs in Trading**: Use LLMs for research, analysis, and signal generation  
 ✅ **Deploy to Production**: Build scalable, monitored, production-ready systems  
 ✅ **Manage Risk**: Implement professional risk management (VaR, Greeks, drawdown control)  
-✅ **Price Derivatives**: Understand and implement options pricing models
+✅ **Price Derivatives**: Understand and implement options pricing models  
+✅ **Ace Interviews**: Solve quantitative puzzles for Jane Street, Citadel, Two Sigma  
+✅ **Design Systems**: Architect production trading systems and HFT infrastructure
 
 ### Comparison: Before vs After Enhancement
 
 | Aspect                     | Original       | Enhanced                        |
 | -------------------------- | -------------- | ------------------------------- |
-| **Modules**                | 16             | 18 (+2 major modules)           |
-| **Sections**               | ~170           | ~205 (+35 sections)             |
+| **Modules**                | 16             | 20 (+4 major modules)           |
+| **Sections**               | ~170           | ~225 (+55 sections)             |
 | **Math Depth**             | Basic calculus | Stochastic calculus, convex opt |
 | **LLM Coverage**           | Good           | Comprehensive (agents, prod)    |
 | **Finance**                | Trading basics | Full quantitative finance       |
 | **Trading Infrastructure** | Backtesting    | Live trading, execution, risk   |
-| **Duration**               | 30 weeks       | 45 weeks (comprehensive)        |
-| **Lines of Content**       | 60-80K         | 85-100K                         |
+| **Interview Prep**         | None           | Complete (Green Book style)     |
+| **System Design**          | Limited        | Production trading systems      |
+| **Duration**               | 30 weeks       | 50 weeks (comprehensive)        |
+| **Lines of Content**       | 60-80K         | 95-110K                         |
 
 ---
 
@@ -2375,6 +2409,229 @@ After completing this curriculum, you will be able to:
 
 ---
 
+## Module 19: Quantitative Interview Preparation
+
+**Icon**: 🎯  
+**Description**: Master quantitative interview problems, mental math, and rapid problem-solving techniques for top quant firms
+
+### Sections (12 total):
+
+1. **Probability Puzzles & Brain Teasers**
+   - Classic probability problems (Monty Hall, dice games)
+   - Card problems and conditional probability
+   - Expected value puzzles and casino games
+   - Geometric probability (broken stick, Buffon's needle)
+   - Birthday paradox and collision problems
+   - Conditional probability (medical testing, Bayes)
+   - 100+ problems with progressive hints
+   - Python: Simulation validation
+   - Interview tips and mental shortcuts
+
+2. **Options Pricing Mental Math**
+   - Black-Scholes approximations and shortcuts
+   - Put-call parity quick checks
+   - Greeks mental calculations (Delta, Gamma, Theta)
+   - Implied volatility back-of-envelope
+   - Time value decay estimates
+   - Arbitrage detection without calculator
+   - Python: Verification of mental math
+   - Speed vs accuracy tradeoffs
+
+3. **Combinatorics & Counting**
+   - Complex permutation and combination problems
+   - Inclusion-exclusion principle
+   - Generating functions
+   - Catalan numbers and applications
+   - Fibonacci in finance
+   - Recursive counting problems
+   - Python: Computational verification
+   - Interview-style rapid fire
+
+4. **Calculus & Integration Puzzles**
+   - Integration tricks and mental shortcuts
+   - Taylor series approximations
+   - Optimization with Lagrange multipliers
+   - Differential equations closed-form solutions
+   - Numerical methods when exact fails
+   - Financial applications (yield curves, forwards)
+   - Python: Symbolic math with SymPy
+   - Speed calculation techniques
+
+5. **Linear Algebra Problems**
+   - Matrix multiplication shortcuts
+   - Eigenvalue/eigenvector intuition
+   - PCA application problems
+   - Least squares mental calculations
+   - Determinant shortcuts
+   - Orthogonalization problems
+   - Python: Verification
+   - Interview-style questions
+
+6. **Statistics & Inference**
+   - Hypothesis testing rapid calculations
+   - Confidence intervals mental construction
+   - Regression interpretation puzzles
+   - Correlation vs causation traps
+   - Sampling distribution problems
+   - Maximum likelihood quick estimates
+   - Python: Statistical verification
+   - Interview probability and stats
+
+7. **Financial Math Puzzles**
+   - Present value mental calculations
+   - Bond pricing shortcuts
+   - Duration and convexity estimates
+   - Yield curve arbitrage
+   - Forward rate agreements
+   - Currency triangular arbitrage
+   - Python: Financial calculators
+   - Trading floor mental math
+
+8. **Market Microstructure Puzzles**
+   - Order book dynamics problems
+   - Bid-ask spread calculations
+   - Market making P&L scenarios
+   - Adverse selection problems
+   - Optimal execution (VWAP/TWAP)
+   - Transaction cost analysis
+   - Python: Order book simulation
+   - Real trading scenarios
+
+9. **Coding Challenges (Quant-Focused)**
+   - Option pricer (30 minutes)
+   - Order book (efficient data structures)
+   - Backtester core (1 hour challenge)
+   - Time series rolling statistics
+   - Portfolio optimizer implementation
+   - Monte Carlo simulation engine
+   - Python: Clean, efficient code
+   - Interview coding patterns
+
+10. **Fermi Estimation & Market Sense**
+    - Market size estimates ("Trades per day on NYSE?")
+    - Revenue estimates ("Goldman trading revenue?")
+    - Risk estimates ("VaR for $100M portfolio?")
+    - Scaling problems ("HFT system 1M msgs/sec?")
+    - Resource estimation (costs, latency budgets)
+    - Python: Sanity checking estimates
+    - Developing quantitative intuition
+
+11. **Mock Interview Problems**
+    - 60+ full interview scenarios
+    - Company-specific problem sets:
+      - Jane Street: Logic and probability
+      - Citadel: Options and market making
+      - Two Sigma: ML and statistics
+      - DE Shaw: Programming and algorithms
+      - Optiver: Mental math and speed
+      - IMC: Probability and trading games
+    - Python: Complete solutions
+    - Interview strategy and tips
+
+12. **Trading Games & Simulations**
+    - Market making game (two-sided quotes)
+    - Arbitrage hunting (time pressure)
+    - Portfolio optimization (real-time)
+    - Options trading (Greeks-based hedging)
+    - Statistical arbitrage (pair finding)
+    - Python: Interactive games
+    - Competitive practice environment
+
+**Status**: 🔲 Pending
+
+---
+
+## Module 20: System Design for Trading Systems
+
+**Icon**: 🏗️  
+**Description**: Master architecture and system design for production trading systems and high-frequency trading infrastructure
+
+### Sections (8 total):
+
+1. **Designing Order Management Systems (OMS)**
+   - Architecture patterns for OMS
+   - Latency requirements (< 100μs)
+   - Pre-trade and real-time risk checks
+   - Order routing and smart order routing
+   - State management and recovery
+   - FIX protocol integration
+   - Python: OMS design patterns
+   - Production considerations
+
+2. **Designing Market Data Systems**
+   - Tick data ingestion (1M+ msgs/sec)
+   - Data normalization across exchanges
+   - Storage strategies (hot/warm/cold)
+   - Query optimization for historical data
+   - Real-time aggregation (OHLCV bars)
+   - Historical replay for backtesting
+   - Python: Market data architecture
+   - Scaling considerations
+
+3. **Designing Backtesting Engines**
+   - Event-driven architecture
+   - Historical data replay mechanisms
+   - Slippage and transaction cost modeling
+   - Performance attribution
+   - Parallelization strategies
+   - Walk-forward optimization
+   - Python: Backtesting system design
+   - Production-grade features
+
+4. **Designing Risk Systems**
+   - Real-time P&L calculation
+   - VaR computation (EOD vs intraday)
+   - Greeks aggregation across portfolio
+   - Stress testing infrastructure
+   - Margin and collateral calculations
+   - Alerting and limit enforcement
+   - Python: Risk system architecture
+   - Regulatory compliance
+
+5. **High-Frequency Trading Architecture**
+   - FPGA vs CPU tradeoffs
+   - Network topology (colocation)
+   - Microwave vs fiber connectivity
+   - Kernel bypass (DPDK, Solarflare)
+   - Lock-free data structures
+   - Latency measurement and optimization
+   - Python/C++: HFT components
+   - Sub-microsecond requirements
+
+6. **Distributed Trading Systems**
+   - Multi-region deployment strategies
+   - Clock synchronization (PTP, NTP)
+   - CAP theorem and consistency
+   - Failover and disaster recovery
+   - Database replication patterns
+   - Message queue architectures
+   - Python: Distributed system design
+   - Global trading infrastructure
+
+7. **Regulatory & Compliance Systems**
+   - Trade surveillance architecture
+   - Audit trail requirements
+   - Best execution monitoring
+   - RegNMS and MiFID II compliance
+   - Reporting infrastructure (CAT, FINRA)
+   - Reconciliation systems
+   - Python: Compliance architecture
+   - Production deployment
+
+8. **ML Model Serving for Trading**
+   - Real-time inference (< 1ms)
+   - Model versioning and deployment
+   - Feature computation pipelines
+   - Online learning infrastructure
+   - A/B testing in production
+   - Monitoring and drift detection
+   - Python: ML serving architecture
+   - Production ML systems
+
+**Status**: 🔲 Pending
+
+---
+
 ## Implementation Guidelines
 
 ### Content Structure per Section:
@@ -2447,10 +2704,11 @@ After completing this curriculum, you will be able to:
 
 ### Specialization Paths:
 
-- **Quantitative Trading Track**: Modules 1-10 → Module 15 → Module 17 → Module 16
+- **Quantitative Trading Track**: Modules 1-10 → Module 15 → Module 17 → Module 19 → Module 20 → Module 16
 - **LLM Mastery Track**: Modules 1-7 → Modules 11-14 → Module 18
-- **LLM + Trading Track** (Full Quant/AI): All 18 modules
+- **LLM + Trading Track** (Full Quant/AI): All 20 modules
 - **Production ML Track**: Modules 1-10 → Module 16
+- **Interview Prep Fast Track**: Modules 1-5, 8, 17 → Module 19 (focus on problem-solving)
 
 ---
 
@@ -2530,17 +2788,31 @@ After completing this curriculum, you will be able to:
     - Automated research reports
     - Trading signal generation from news
 
+13. **Interview Prep Challenge** (Module 19)
+    - 100+ probability puzzles
+    - Options pricing mental math drills
+    - Coding challenges under time pressure
+    - Mock interviews for top firms
+
+14. **Trading System Architecture** (Module 20)
+    - Complete OMS design document
+    - Market data system architecture
+    - HFT infrastructure design
+    - Production deployment plan
+
 ---
 
 ## Estimated Scope
 
-- **Total Modules**: 18 (expanded from 16) ⭐
-- **Total Sections**: ~205 (significantly increased)
-- **Total Multiple Choice Questions**: ~1,025 (5 per section)
-- **Total Discussion Questions**: ~615 (3 per section)
-- **Python Code Examples**: ~1,500+ practical examples
-- **Hands-on Projects**: 12 major projects
-- **Estimated Total Lines**: ~85,000-100,000 (comprehensive coverage)
+- **Total Modules**: 20 (expanded from 16) ⭐
+- **Total Sections**: ~225 (significantly increased)
+- **Total Multiple Choice Questions**: ~1,125 (5 per section)
+- **Total Discussion Questions**: ~675 (3 per section)
+- **Python Code Examples**: ~2,000+ practical examples
+- **Interview Problems**: 100+ Green Book style puzzles
+- **Hands-on Projects**: 14 major projects
+- **Company-Specific Mock Interviews**: 60+ scenarios
+- **Estimated Total Lines**: ~95,000-110,000 (comprehensive coverage)
 
 ---
 
@@ -2563,6 +2835,9 @@ After completing this curriculum, you will be able to:
 - "Hands-On Machine Learning" - Aurélien Géron
 - "Pattern Recognition and Machine Learning" - Christopher Bishop
 - "Advances in Financial Machine Learning" - Marcos López de Prado
+- "A Practical Guide To Quantitative Finance Interviews" - Xinfeng Zhou (Green Book)
+- "Heard on the Street" - Timothy Falcon Crack
+- "Quant Job Interview Questions and Answers" - Mark Joshi, Nick Denson, Andrew Downes
 
 ### Online Resources:
 
@@ -2618,9 +2893,14 @@ After completing this curriculum, you will be able to:
 - Module 16: ML System Design & Production (3 weeks)
 - Module 18: LLM Applications in Finance (2.5 weeks) ⭐ NEW
 
-**Total Duration**: ~45 weeks (10-11 months) of comprehensive study
+### Phase 9: Interview Prep & System Design (Modules 19-20) - Weeks 46-50
 
-**Note**: This is an intensive curriculum. Part-time learners should expect 18-24 months.
+- Module 19: Quantitative Interview Preparation (3 weeks) ⭐ NEW
+- Module 20: System Design for Trading Systems (2 weeks) ⭐ NEW
+
+**Total Duration**: ~50 weeks (11-12 months) of comprehensive study
+
+**Note**: This is an intensive curriculum. Part-time learners should expect 20-24 months.
 
 ---
 
@@ -2736,9 +3016,9 @@ This curriculum supports building a sophisticated, production-ready trading bot 
 
 ---
 
-**Last Updated**: Current session - ENHANCED VERSION ⭐  
-**Status**: 0/18 modules complete, 18 pending  
-**Goal**: Comprehensive ML/AI curriculum from mathematics through LLMs and quantitative trading
+**Last Updated**: Current session - ENHANCED VERSION WITH INTERVIEW PREP ⭐  
+**Status**: 0/20 modules complete, 20 pending  
+**Goal**: Comprehensive ML/AI curriculum from mathematics through LLMs, quantitative trading, and interview preparation
 
 **Key Enhancements**:
 
@@ -2747,7 +3027,10 @@ This curriculum supports building a sophisticated, production-ready trading bot 
 - ✅ Complete trading infrastructure (execution, risk, live trading)
 - ✅ New Module 17: Quantitative Finance Fundamentals
 - ✅ New Module 18: LLM Applications in Finance
-- ✅ 205 total sections (up from 170)
+- ✅ New Module 19: Quantitative Interview Preparation (Green Book style)
+- ✅ New Module 20: System Design for Trading Systems
+- ✅ 225 total sections (up from 170)
+- ✅ 100+ interview problems and 60+ mock interviews
 - ✅ Professional-grade trading bot development roadmap
 
-**Target Outcome**: Students will be able to build sophisticated, production-ready trading systems powered by machine learning and LLMs, with deep understanding of the underlying mathematics and finance.
+**Target Outcome**: Students will be able to build sophisticated, production-ready trading systems powered by machine learning and LLMs, ace interviews at top quant firms (Jane Street, Citadel, Two Sigma), design HFT infrastructure, and have deep understanding of the underlying mathematics and finance.

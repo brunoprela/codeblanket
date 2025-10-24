@@ -4,7 +4,7 @@
 
 This document outlines the complete 16-module system design curriculum, designed to take students from beginner to expert level. Each module contains multiple sections with comprehensive content, 5 multiple-choice questions, and 3 discussion questions per section.
 
-**Status**: 3/16 modules complete (Module 1, Module 7, Module 10)
+**Status**: 4/16 modules complete (Module 1, Module 7, Module 10, Module 16)
 
 ---
 
@@ -1551,7 +1551,7 @@ Each section walks through a complete design:
     - Ruby to multi-language
     - Operating at 99.99%+ availability
 
-**Status**: 🔲 Pending
+**Status**: ✅ COMPLETE (15 sections, 45 discussion questions, 75 multiple-choice questions, ~10,000+ lines of comprehensive content)
 
 ---
 

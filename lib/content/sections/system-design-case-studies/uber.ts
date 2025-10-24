@@ -665,7 +665,7 @@ def update_user_rating(user_id, new_rating):
 
 ### Sharding Users/Drivers by Geographic Region
 
-**Strategy**: Shard by `region_id` (city/metro area)
+**Strategy**: Shard by \`region_id\` (city/metro area)
 
 \`\`\`
 Shard 1: San Francisco, Oakland (Region 1)

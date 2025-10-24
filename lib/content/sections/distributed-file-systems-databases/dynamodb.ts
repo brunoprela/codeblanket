@@ -3,9 +3,9 @@
  */
 
 export const dynamodbSection = {
-    id: 'dynamodb',
-    title: 'Amazon DynamoDB',
-    content: `Amazon DynamoDB is a fully managed, serverless NoSQL database providing single-digit millisecond performance at any scale with built-in security, backup, and multi-region replication.
+  id: 'dynamodb',
+  title: 'Amazon DynamoDB',
+  content: `Amazon DynamoDB is a fully managed, serverless NoSQL database providing single-digit millisecond performance at any scale with built-in security, backup, and multi-region replication.
 
 ## Overview
 

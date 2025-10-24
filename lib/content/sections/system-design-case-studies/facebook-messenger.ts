@@ -2,7 +2,7 @@
  * Design Facebook Messenger Section
  */
 
-export const facebookmessengerSection = {
+export const facebookMessengerSection = {
   id: 'facebook-messenger',
   title: 'Design Facebook Messenger',
   content: `Facebook Messenger is a real-time messaging platform supporting 1-on-1 chats, group messaging, read receipts, typing indicators, and media sharing. The core challenge is delivering messages instantly with high availability and strong consistency guarantees.

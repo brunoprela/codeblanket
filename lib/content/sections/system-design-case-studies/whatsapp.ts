@@ -3,9 +3,9 @@
  */
 
 export const whatsappSection = {
-    id: 'whatsapp',
-    title: 'Design WhatsApp',
-    content: `WhatsApp is a global messaging platform with 2 billion users, handling 100 billion messages per day. The key challenges are: real-time message delivery, end-to-end encryption, supporting text/media/voice messages, group chat, and maintaining extreme reliability with minimal infrastructure (famous for running with 50 engineers for 900M users).
+  id: 'whatsapp',
+  title: 'Design WhatsApp',
+  content: `WhatsApp is a global messaging platform with 2 billion users, handling 100 billion messages per day. The key challenges are: real-time message delivery, end-to-end encryption, supporting text/media/voice messages, group chat, and maintaining extreme reliability with minimal infrastructure (famous for running with 50 engineers for 900M users).
 
 ## Problem Statement
 
@@ -418,4 +418,3 @@ CREATE TABLE messages (
 
 WhatsApp's design prioritizes **reliability, privacy, and efficiency** over feature richness, enabling incredible scale with minimal infrastructure.`,
 };
-

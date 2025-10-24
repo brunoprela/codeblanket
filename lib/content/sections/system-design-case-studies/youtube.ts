@@ -3,9 +3,9 @@
  */
 
 export const youtubeSection = {
-    id: 'youtube',
-    title: 'Design YouTube',
-    content: `YouTube is the world's largest video sharing platform with 2+ billion users, 500 hours of video uploaded every minute, and billions of views per day. Unlike Netflix (curated content), YouTube handles user-generated content with massive upload volume, real-time processing, and complex recommendation algorithms.
+  id: 'youtube',
+  title: 'Design YouTube',
+  content: `YouTube is the world's largest video sharing platform with 2+ billion users, 500 hours of video uploaded every minute, and billions of views per day. Unlike Netflix (curated content), YouTube handles user-generated content with massive upload volume, real-time processing, and complex recommendation algorithms.
 
 ## Problem Statement
 
