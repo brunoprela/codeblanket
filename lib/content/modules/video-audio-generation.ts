@@ -42,7 +42,7 @@ import { lipsyncavatargenerationMultipleChoice } from '../multiple-choice/video-
 import { buildingmediagenerationstudioMultipleChoice } from '../multiple-choice/video-audio-generation/building-media-generation-studio';
 
 export const videoAudioGenerationModule: Module = {
-  id: 'video-audio-generation',
+  id: 'applied-ai-video-audio',
   title: 'Video & Audio Generation',
   description:
     'Master the cutting-edge field of generative media AI. Learn to generate and manipulate videos, create realistic speech, produce music, and build production-ready media generation platforms with comprehensive hands-on implementations.',

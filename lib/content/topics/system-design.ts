@@ -17,5 +17,11 @@ export const systemDesignTopic = {
     'system-design-tradeoffs',
     'system-design-authentication',
     'system-design-microservices',
+    'observability-resilience',
+    'system-design-advanced-algorithms',
+    'distributed-system-patterns',
+    'system-design-message-queues',
+    'search-analytics-specialized-systems',
+    'distributed-file-systems-databases',
   ],
 };

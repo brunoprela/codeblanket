@@ -45,7 +45,7 @@ import { accessibilityapplicationsMultipleChoice } from '../multiple-choice/mult
 import { buildingmultimodalproductsMultipleChoice } from '../multiple-choice/multi-modal-ai-systems/building-multi-modal-products';
 
 export const multiModalAiSystemsModule: Module = {
-  id: 'multi-modal-ai-systems',
+  id: 'applied-ai-multi-modal',
   title: 'Multi-Modal AI Systems',
   description:
     'Master building sophisticated multi-modal AI systems that combine text, images, audio, and video. From understanding individual modalities to building complete products.',

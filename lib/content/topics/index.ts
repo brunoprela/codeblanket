@@ -75,6 +75,12 @@ import { systemDesignApiDesignModule } from '../modules/system-design-api-design
 import { systemDesignTradeoffsModule } from '../modules/system-design-tradeoffs';
 import { systemDesignAuthenticationModule } from '../modules/system-design-authentication';
 import { systemDesignMicroservicesModule } from '../modules/system-design-microservices';
+import { observabilityResilienceModule } from '../modules/observability-resilience';
+import { systemDesignAdvancedAlgorithmsModule } from '../modules/system-design-advanced-algorithms';
+import { distributedSystemPatternsModule } from '../modules/distributed-system-patterns';
+import searchAnalyticsSpecializedSystemsModule from '../modules/search-analytics-specialized-systems';
+import { distributedFileSystemsDatabasesModule } from '../modules/distributed-file-systems-databases';
+import { systemDesignMessageQueuesModule } from '../modules/system-design-message-queues';
 
 import { mlMathematicalFoundationsModule } from '../modules/ml-mathematical-foundations';
 import { mlCalculusFundamentalsModule } from '../modules/ml-calculus-fundamentals';
@@ -155,6 +161,13 @@ const allModulesMap: Record<string, Module> = {
   'system-design-tradeoffs': systemDesignTradeoffsModule,
   'system-design-authentication': systemDesignAuthenticationModule,
   'system-design-microservices': systemDesignMicroservicesModule,
+  'observability-resilience': observabilityResilienceModule,
+  'system-design-advanced-algorithms': systemDesignAdvancedAlgorithmsModule,
+  'distributed-system-patterns': distributedSystemPatternsModule,
+  'search-analytics-specialized-systems':
+    searchAnalyticsSpecializedSystemsModule,
+  'distributed-file-systems-databases': distributedFileSystemsDatabasesModule,
+  'system-design-message-queues': systemDesignMessageQueuesModule,
 
   'ml-mathematical-foundations': mlMathematicalFoundationsModule,
   'ml-calculus-fundamentals': mlCalculusFundamentalsModule,
