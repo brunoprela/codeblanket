@@ -24,7 +24,7 @@ By the end of this section, you'll understand:
 
 ### Why Options Matter for Quants
 
-Options provide asymmetric payoffs—limited downside with unlimited (or large) upside. This non-linearity creates opportunities:
+Options provide asymmetric payoffs-limited downside with unlimited (or large) upside. This non-linearity creates opportunities:
 
 1. **Hedging**: A portfolio manager holding stocks can buy put options as insurance
 2. **Income**: Writing covered calls generates premium income

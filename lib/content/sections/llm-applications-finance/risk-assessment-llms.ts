@@ -1,12 +1,12 @@
 export const riskAssessmentLLMs = {
-  title: 'Risk Assessment with LLMs',
-  id: 'risk-assessment-llms',
-  content: `
+    title: 'Risk Assessment with LLMs',
+    id: 'risk-assessment-llms',
+    content: `
 # Risk Assessment with LLMs
 
 ## Introduction
 
-Risk management is critical in finance—poor risk assessment can lead to catastrophic losses. Traditional risk models rely on quantitative metrics (VaR, Beta, volatility), but miss qualitative risks from documents, news, and complex scenarios. LLMs can analyze unstructured risk information, assess counterparty risk, monitor geopolitical threats, evaluate supply chain risks, and build comprehensive early warning systems.
+Risk management is critical in finance-poor risk assessment can lead to catastrophic losses. Traditional risk models rely on quantitative metrics (VaR, Beta, volatility), but miss qualitative risks from documents, news, and complex scenarios. LLMs can analyze unstructured risk information, assess counterparty risk, monitor geopolitical threats, evaluate supply chain risks, and build comprehensive early warning systems.
 
 This section covers using LLMs for multi-dimensional risk assessment: credit risk from documents, counterparty analysis, geopolitical risk monitoring, supply chain risk evaluation, and building integrated risk management systems.
 
@@ -59,12 +59,12 @@ Company: {company_data.get('name')}
 Industry: {company_data.get('industry')}
 
 Financial Metrics:
-- Revenue: ${company_data['financials']['revenue']}M
+- Revenue: \${company_data['financials']['revenue']}M
 - Revenue Trend: {company_data['financials']['revenue_trend']}
-- EBITDA: ${company_data['financials']['ebitda']}M
+- EBITDA: \${company_data['financials']['ebitda']}M
 - EBITDA Margin: {company_data['financials']['ebitda_margin']}%
-- Total Debt: ${company_data['financials']['total_debt']}M
-- Cash & Equivalents: ${company_data['financials']['cash']}M
+- Total Debt: \${company_data['financials']['total_debt']}M
+- Cash & Equivalents: \${company_data['financials']['cash']}M
 - Debt/EBITDA: {company_data['financials']['debt_ebitda']}x
 - Interest Coverage: {company_data['financials']['interest_coverage']}x
 - Current Ratio: {company_data['financials']['current_ratio']}
@@ -253,40 +253,40 @@ Assess going concern risk as JSON:
             if "```json" in response_text:
                 json_str = response_text.split("```json")[1].split("```")[0].strip()
             elif "```" in response_text:
-                json_str = response_text.split("```")[1].split("```")[0].strip()
+    json_str = response_text.split("```")[1].split("```")[0].strip()
             else:
-                json_str = response_text
+        json_str = response_text
             return json.loads(json_str)
         except:
             return {}
 
 # Example usage
-credit_analyzer = CreditRiskAnalyzer(api_key="your-key")
+credit_analyzer = CreditRiskAnalyzer(api_key = "your-key")
 
 company_data = {
-    'name': 'Example Corp',
-    'industry': 'Retail',
-    'financials': {
-        'revenue': 1200,
-        'revenue_trend': 'Declining 5% YoY',
-        'ebitda': 150,
-        'ebitda_margin': 12.5,
-        'total_debt': 800,
-        'cash': 100,
-        'debt_ebitda': 5.3,
-        'interest_coverage': 2.1,
-        'current_ratio': 1.2,
-        'quick_ratio': 0.8
-    },
-    'recent_developments': 'Store closures announced, CEO departure',
-    'mda_excerpts': 'Management discussing challenging retail environment...',
-    'industry_context': 'Retail sector under pressure from e-commerce'
-}
+        'name': 'Example Corp',
+        'industry': 'Retail',
+        'financials': {
+            'revenue': 1200,
+            'revenue_trend': 'Declining 5% YoY',
+            'ebitda': 150,
+            'ebitda_margin': 12.5,
+            'total_debt': 800,
+            'cash': 100,
+            'debt_ebitda': 5.3,
+            'interest_coverage': 2.1,
+            'current_ratio': 1.2,
+            'quick_ratio': 0.8
+        },
+        'recent_developments': 'Store closures announced, CEO departure',
+        'mda_excerpts': 'Management discussing challenging retail environment...',
+        'industry_context': 'Retail sector under pressure from e-commerce'
+    }
 
 # Analyze credit risk
 credit_assessment = credit_analyzer.analyze_credit_risk(company_data)
 print("Credit Risk Assessment:")
-print(json.dumps(credit_assessment, indent=2))
+print(json.dumps(credit_assessment, indent = 2))
 \`\`\`
 
 ---
@@ -326,7 +326,7 @@ class CounterpartyRiskAssessor:
 Counterparty: {counterparty_data.get('name')}
 Type: {relationship_type}
 Relationship Duration: {counterparty_data.get('relationship_years', 0)} years
-Annual Business Volume: ${counterparty_data.get('annual_volume', 0)}M
+Annual Business Volume: \${counterparty_data.get('annual_volume', 0)}M
 
 Financial Health:
 - Credit Rating: {counterparty_data.get('credit_rating', 'Unknown')}
@@ -449,17 +449,17 @@ Return comprehensive supply chain risk assessment as JSON."""
         import json
         try:
             if "```json" in response_text:
-                json_str = response_text.split("```json")[1].split("```")[0].strip()
+json_str = response_text.split("```json")[1].split("```")[0].strip()
             elif "```" in response_text:
-                json_str = response_text.split("```")[1].split("```")[0].strip()
+json_str = response_text.split("```")[1].split("```")[0].strip()
             else:
-                json_str = response_text
-            return json.loads(json_str)
-        except:
-            return {}
+json_str = response_text
+return json.loads(json_str)
+except:
+return {}
 
 # Example usage
-counterparty_assessor = CounterpartyRiskAssessor(api_key="your-key")
+counterparty_assessor = CounterpartyRiskAssessor(api_key = "your-key")
 
 counterparty_data = {
     'name': 'Key Supplier Inc',
@@ -478,12 +478,12 @@ counterparty_data = {
 }
 
 assessment = counterparty_assessor.assess_counterparty(
-    counterparty_data, 
-    relationship_type='critical supplier'
+    counterparty_data,
+    relationship_type = 'critical supplier'
 )
 
 print("Counterparty Risk Assessment:")
-print(json.dumps(assessment, indent=2))
+print(json.dumps(assessment, indent = 2))
 \`\`\`
 
 ---
@@ -675,17 +675,17 @@ Return JSON:
         import json
         try:
             if "```json" in response_text:
-                json_str = response_text.split("```json")[1].split("```")[0].strip()
+json_str = response_text.split("```json")[1].split("```")[0].strip()
             elif "```" in response_text:
-                json_str = response_text.split("```")[1].split("```")[0].strip()
+json_str = response_text.split("```")[1].split("```")[0].strip()
             else:
-                json_str = response_text
-            return json.loads(json_str)
-        except:
-            return {}
+json_str = response_text
+return json.loads(json_str)
+except:
+return {}
 
 # Example usage
-geo_monitor = GeopoliticalRiskMonitor(api_key="your-key")
+geo_monitor = GeopoliticalRiskMonitor(api_key = "your-key")
 
 event_data = {
     'event_type': 'Trade Dispute',
@@ -710,8 +710,8 @@ portfolio_exposure = {
         'Other': 5
     },
     'top_holdings': [
-        {'ticker': 'AAPL', 'weight': 8.5, 'china_exposure': 'High'},
-        {'ticker': 'NVDA', 'weight': 6.2, 'china_exposure': 'Medium'}
+        { 'ticker': 'AAPL', 'weight': 8.5, 'china_exposure': 'High' },
+        { 'ticker': 'NVDA', 'weight': 6.2, 'china_exposure': 'Medium' }
     ],
     'currencies': {
         'USD': 75,
@@ -722,7 +722,7 @@ portfolio_exposure = {
 
 impact = geo_monitor.assess_geopolitical_event(event_data, portfolio_exposure)
 print("Geopolitical Impact Assessment:")
-print(json.dumps(impact, indent=2))
+print(json.dumps(impact, indent = 2))
 \`\`\`
 
 ---

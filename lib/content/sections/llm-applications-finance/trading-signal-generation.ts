@@ -6,7 +6,7 @@ export const tradingSignalGeneration = {
 
 ## Introduction
 
-The ultimate goal of financial analysis is actionable trading signals—specific buy, sell, or hold recommendations with confidence levels and reasoning. LLMs can synthesize multiple data sources (fundamental analysis, technical indicators, news sentiment, market context) to generate sophisticated trading signals that combine quantitative and qualitative analysis.
+The ultimate goal of financial analysis is actionable trading signals-specific buy, sell, or hold recommendations with confidence levels and reasoning. LLMs can synthesize multiple data sources (fundamental analysis, technical indicators, news sentiment, market context) to generate sophisticated trading signals that combine quantitative and qualitative analysis.
 
 This section covers building LLM-powered trading signal generation systems that combine multiple analysis streams, provide explainable recommendations, assess confidence levels, and integrate with automated trading systems.
 
@@ -57,7 +57,7 @@ class TradingSignalGenerator:
         prompt = f"""Generate a trading signal for {ticker} based on comprehensive analysis.
 
 Technical Analysis:
-- Current Price: ${analysis_data['technical']['price']}
+- Current Price: \${analysis_data['technical']['price']}
 - RSI: {analysis_data['technical']['rsi']}
 - MACD: {analysis_data['technical']['macd']}
 - Moving Averages: {analysis_data['technical']['ma_analysis']}
@@ -173,7 +173,7 @@ Portfolio Constraints:
 {constraints_summary}
 
 Analysis:
-- Total portfolio value: ${sum(h['value'] for h in current_holdings):,.2f}
+- Total portfolio value: \${sum(h['value'] for h in current_holdings):,.2f}
 - Number of holdings: {len(current_holdings)}
 - Largest position: {max(current_holdings, key=lambda x: x['weight'])['ticker']} ({max(h['weight'] for h in current_holdings):.1f}%)
 

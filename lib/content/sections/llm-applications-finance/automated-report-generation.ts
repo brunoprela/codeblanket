@@ -116,7 +116,7 @@ Format as a polished Markdown document suitable for client presentation."""
         df = pd.DataFrame(holdings)
         
         summary = f"""
-Total Portfolio Value: ${df['market_value'].sum():,.2f}
+Total Portfolio Value: \\\${df['market_value'].sum():,.2f}
 Number of Holdings: {len(holdings)}
 
 Top 10 Holdings:
@@ -141,7 +141,7 @@ Risk Metrics:
 - Beta: {metrics.get('beta', 1.0):.2f}
 
 Income Generated:
-- Dividend Income: ${metrics.get('dividend_income', 0):,.2f}
+- Dividend Income: \\\${metrics.get('dividend_income', 0):,.2f}
 - Dividend Yield: {metrics.get('dividend_yield', 0):.2f}%
 """
     
@@ -284,7 +284,7 @@ class RiskReportGenerator:
         prompt = f"""Generate a comprehensive risk analysis report for this portfolio.
 
 Portfolio Composition:
-- Total Value: ${portfolio_data.get('total_value'):,.2f}
+- Total Value: \\${portfolio_data.get('total_value'):,.2f}
 - Number of Positions: {portfolio_data.get('num_positions')}
 - Largest Position: {portfolio_data.get('largest_position')} ({portfolio_data.get('largest_weight')}%)
 
@@ -295,8 +295,8 @@ Geographic Exposures:
 {self._format_dict(portfolio_data.get('geo_exposure', {}))}
 
 Risk Metrics:
-- Value at Risk (95% confidence, 1-day): ${risk_metrics.get('var_95'):,.2f}
-- Conditional VaR (Expected Shortfall): ${risk_metrics.get('cvar_95'):,.2f}
+- Value at Risk (95% confidence, 1-day): \\${risk_metrics.get('var_95'):,.2f}
+- Conditional VaR (Expected Shortfall): \\${risk_metrics.get('cvar_95'):,.2f}
 - Portfolio Beta: {risk_metrics.get('beta', 1.0):.2f}
 - Portfolio Volatility: {risk_metrics.get('volatility', 0):.1f}%
 - Maximum Drawdown (1Y): {risk_metrics.get('max_drawdown', 0):.1f}%
@@ -367,10 +367,10 @@ Format as Markdown suitable for risk committee presentation."""
         prompt = f"""Explain Value at Risk (VaR) to a {client_level} investor.
 
 VaR Metrics:
-- 1-Day VaR (95%): ${var_metrics.get('var_1d_95'):,.2f}
-- 1-Day VaR (99%): ${var_metrics.get('var_1d_99'):,.2f}
-- 10-Day VaR (95%): ${var_metrics.get('var_10d_95'):,.2f}
-- Portfolio Value: ${var_metrics.get('portfolio_value'):,.2f}
+- 1-Day VaR (95%): \\${var_metrics.get('var_1d_95'):,.2f}
+- 1-Day VaR (99%): \\${var_metrics.get('var_1d_99'):,.2f}
+- 10-Day VaR (95%): \\${var_metrics.get('var_10d_95'):,.2f}
+- Portfolio Value: \\${var_metrics.get('portfolio_value'):,.2f}
 
 Instructions: {technical_detail[client_level]}
 

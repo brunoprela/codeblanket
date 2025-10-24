@@ -1,6 +1,4 @@
-import type { ContentSection } from '@/lib/types';
-
-export const fixedIncomeAndBonds: ContentSection = {
+export const fixedIncomeAndBonds = {
   id: 'fixed-income-and-bonds',
   title: 'Fixed Income & Bonds',
   content: `
@@ -8,7 +6,7 @@ export const fixedIncomeAndBonds: ContentSection = {
 
 ## Introduction
 
-Fixed income securities—primarily bonds—represent a massive \$130+ trillion global market, dwarfing global equities in size. Bonds are debt instruments where issuers (governments, corporations) borrow capital and promise to pay periodic interest (coupons) and return principal at maturity. For quantitative finance professionals, understanding bond pricing, yield curve dynamics, duration, and convexity is essential for:
+Fixed income securities-primarily bonds-represent a massive \$130+ trillion global market, dwarfing global equities in size. Bonds are debt instruments where issuers (governments, corporations) borrow capital and promise to pay periodic interest (coupons) and return principal at maturity. For quantitative finance professionals, understanding bond pricing, yield curve dynamics, duration, and convexity is essential for:
 
 - **Portfolio management**: Bonds provide diversification, income, and capital preservation
 - **Risk management**: Interest rate risk hedging for liabilities (pensions, insurance)
@@ -16,7 +14,7 @@ Fixed income securities—primarily bonds—represent a massive \$130+ trillion 
 - **Derivatives pricing**: Interest rate swaps, swaptions, bond options build on bond fundamentals
 - **Macro investing**: Bonds reflect monetary policy, inflation expectations, credit risk
 
-Unlike stocks (which have theoretically infinite upside), bonds have **asymmetric payoffs**—fixed upside (coupon + principal) but significant downside (default risk). This makes credit analysis, duration management, and convexity hedging critical disciplines.
+Unlike stocks (which have theoretically infinite upside), bonds have **asymmetric payoffs**-fixed upside (coupon + principal) but significant downside (default risk). This makes credit analysis, duration management, and convexity hedging critical disciplines.
 
 This section covers bond pricing fundamentals, yield mathematics, duration and convexity for interest rate risk management, yield curve construction, and credit risk modeling with Python implementations for practical quantitative bond analysis.
 
@@ -76,11 +74,11 @@ P = \\$30 \\times 8.7521 + \\$1,000 \\times 0.7812 = \\$262.56 + \\$781.20 = \\$
 - YTM = 6% → Price = \$1,000.00 (par)
 - YTM = 7% → Price = \$958.42 (discount)
 
-**Key insight:** Bond prices are **NOT linear** in yield (convexity effect—discussed later).
+**Key insight:** Bond prices are **NOT linear** in yield (convexity effect-discussed later).
 
 ### Zero-Coupon Bonds
 
-No periodic coupons—only principal at maturity:
+No periodic coupons-only principal at maturity:
 
 \[
 P = \\frac{F}{(1 + y)^n}
@@ -100,17 +98,17 @@ P = \\frac{\\$1,000}{(1.04)^{10}} = \\$1,000 \\times 0.6756 = \\$675.60
 
 ### Yield to Maturity (YTM)
 
-**Definition:** Internal rate of return (IRR) of bond cash flows—the discount rate that equates present value to price.
+**Definition:** Internal rate of return (IRR) of bond cash flows-the discount rate that equates present value to price.
 
 \[
 P = \\sum_{t=1}^{n} \\frac{C}{(1 + YTM)^t} + \\frac{F}{(1 + YTM)^n}
 \]
 
-Solve for YTM (requires numerical methods—Newton-Raphson, bisection).
+Solve for YTM (requires numerical methods-Newton-Raphson, bisection).
 
 **Assumptions (limitations):**
 1. Hold bond to maturity (no early sale)
-2. Reinvest all coupons at YTM (unrealistic—reinvestment risk)
+2. Reinvest all coupons at YTM (unrealistic-reinvestment risk)
 3. No default (issuer pays all cash flows)
 
 ### Current Yield
@@ -223,7 +221,7 @@ DV01 \\approx D_{Mod} \\times P \\times 0.0001
 
 **Interpretation:** Bond loses \$0.75 for every 1 bps yield increase.
 
-**Portfolio DV01:** Sum of individual bond DV01s—key metric for interest rate risk hedging.
+**Portfolio DV01:** Sum of individual bond DV01s-key metric for interest rate risk hedging.
 
 ### Duration Matching (Immunization)
 
@@ -285,7 +283,7 @@ C = \\frac{1}{P} \\sum_{t=1}^{n} \\frac{t \\cdot (t+1) \\cdot C_t}{(1+y)^{t+2}}
 - Convexity effect: \(+\\frac{1}{2} \\times 80 \\times (0.01)^2 = +0.4\\%\)
 - Total: \(+8.0\\% + 0.4\\% = +8.4\\%\) (convexity increases gain)
 
-**Key insight:** **Positive convexity is always beneficial**—gains are larger than losses for equal-sized yield moves.
+**Key insight:** **Positive convexity is always beneficial**-gains are larger than losses for equal-sized yield moves.
 
 ### Convexity and Bond Characteristics
 
@@ -297,7 +295,7 @@ C = \\frac{1}{P} \\sum_{t=1}^{n} \\frac{t \\cdot (t+1) \\cdot C_t}{(1+y)^{t+2}}
 **Lower convexity:**
 - Short maturity
 - High coupon
-- Callable bonds (negative convexity when rates fall—issuer calls bond)
+- Callable bonds (negative convexity when rates fall-issuer calls bond)
 
 ### Negative Convexity (Callable Bonds, MBS)
 
@@ -904,7 +902,7 @@ credit_spread_analysis(spreads)
 
 ### 3. **Fallen Angel Strategy**
 
-**Concept:** Buy bonds downgraded from BBB (investment grade) to BB (high yield)—\"fallen angels.\"
+**Concept:** Buy bonds downgraded from BBB (investment grade) to BB (high yield)-\"fallen angels.\"
 
 **Rationale:**
 - **Forced selling**: Many institutional investors (pensions, insurance) restricted to investment grade → must sell on downgrade
@@ -930,15 +928,15 @@ credit_spread_analysis(spreads)
 
 ## Key Takeaways
 
-1. **Bond pricing** follows present value of cash flows—coupon stream plus principal discounted at YTM; price and yield have inverse relationship
-2. **Duration** measures interest rate sensitivity—modified duration approximates % price change for 1% yield move; critical for risk management and liability matching
-3. **Convexity** captures non-linearity—positive convexity always beneficial (larger gains than losses for equal yield changes); callable bonds/MBS have negative convexity
-4. **Yield curve shape** reflects market expectations, liquidity premia, and segmentation—inversion (short > long) is historically reliable recession predictor
-5. **Credit spread** compensates for default and liquidity risk—widens during crises, compresses in bull markets; rating transitions cause large price moves
-6. **Bootstrapping** constructs zero-coupon curve from coupon bonds—foundation for derivative pricing and relative value analysis
-7. **Duration matching (immunization)** hedges interest rate risk for liability-driven investors—requires rebalancing and convexity management
+1. **Bond pricing** follows present value of cash flows-coupon stream plus principal discounted at YTM; price and yield have inverse relationship
+2. **Duration** measures interest rate sensitivity-modified duration approximates % price change for 1% yield move; critical for risk management and liability matching
+3. **Convexity** captures non-linearity-positive convexity always beneficial (larger gains than losses for equal yield changes); callable bonds/MBS have negative convexity
+4. **Yield curve shape** reflects market expectations, liquidity premia, and segmentation-inversion (short > long) is historically reliable recession predictor
+5. **Credit spread** compensates for default and liquidity risk-widens during crises, compresses in bull markets; rating transitions cause large price moves
+6. **Bootstrapping** constructs zero-coupon curve from coupon bonds-foundation for derivative pricing and relative value analysis
+7. **Duration matching (immunization)** hedges interest rate risk for liability-driven investors-requires rebalancing and convexity management
 8. **Fixed income strategies** (carry trade, curve steepeners, fallen angels) exploit yield curve dynamics, rating changes, and structural inefficiencies
 
-Understanding bonds is fundamental for portfolio construction, risk hedging, and macro investing—mastering duration, convexity, and credit analysis enables sophisticated quantitative fixed income strategies.
+Understanding bonds is fundamental for portfolio construction, risk hedging, and macro investing-mastering duration, convexity, and credit analysis enables sophisticated quantitative fixed income strategies.
 `,
 };

@@ -137,7 +137,9 @@ export const scalingCostOptimizationModule: Module = {
       title: 'Prompt Optimization for Cost',
       content: promptOptimizationForCost.content,
       multipleChoiceQuestions: transformMC(prompt_optimization_for_costMC),
-      discussionQuestions: transformDiscussionQuiz(prompt_optimization_for_costQuiz),
+      discussionQuestions: transformDiscussionQuiz(
+        prompt_optimization_for_costQuiz,
+      ),
     },
     {
       id: 'caching-at-scale',
@@ -172,7 +174,9 @@ export const scalingCostOptimizationModule: Module = {
       title: 'Quantization & Model Optimization',
       content: quantizationModelOptimization.content,
       multipleChoiceQuestions: transformMC(quantization_model_optimizationMC),
-      discussionQuestions: transformDiscussionQuiz(quantization_model_optimizationQuiz),
+      discussionQuestions: transformDiscussionQuiz(
+        quantization_model_optimizationQuiz,
+      ),
     },
     {
       id: 'multi-region-deployment',
@@ -186,21 +190,27 @@ export const scalingCostOptimizationModule: Module = {
       title: 'Load Testing & Capacity Planning',
       content: loadTestingCapacityPlanning.content,
       multipleChoiceQuestions: transformMC(load_testing_capacity_planningMC),
-      discussionQuestions: transformDiscussionQuiz(load_testing_capacity_planningQuiz),
+      discussionQuestions: transformDiscussionQuiz(
+        load_testing_capacity_planningQuiz,
+      ),
     },
     {
       id: 'cost-monitoring-analysis',
       title: 'Cost Monitoring & Analysis',
       content: costMonitoringAnalysis.content,
       multipleChoiceQuestions: transformMC(cost_monitoring_analysisMC),
-      discussionQuestions: transformDiscussionQuiz(cost_monitoring_analysisQuiz),
+      discussionQuestions: transformDiscussionQuiz(
+        cost_monitoring_analysisQuiz,
+      ),
     },
     {
       id: 'building-scaling-strategy',
       title: 'Building a Scaling Strategy',
       content: buildingScalingStrategy.content,
       multipleChoiceQuestions: transformMC(building_scaling_strategyMC),
-      discussionQuestions: transformDiscussionQuiz(building_scaling_strategyQuiz),
+      discussionQuestions: transformDiscussionQuiz(
+        building_scaling_strategyQuiz,
+      ),
     },
   ],
   practicalProjects: [

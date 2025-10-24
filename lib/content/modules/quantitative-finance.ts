@@ -11,25 +11,59 @@ import { theGreeks } from '@/lib/content/sections/quantitative-finance/the-greek
 import { portfolioTheory } from '@/lib/content/sections/quantitative-finance/portfolio-theory';
 import { factorModels } from '@/lib/content/sections/quantitative-finance/factor-models';
 import { fixedIncomeAndBonds } from '@/lib/content/sections/quantitative-finance/fixed-income-and-bonds';
+import { derivativesPricing } from '@/lib/content/sections/quantitative-finance/derivatives-pricing';
+import { riskMeasures } from '@/lib/content/sections/quantitative-finance/risk-measures';
+import { marketMicrostructure } from '@/lib/content/sections/quantitative-finance/market-microstructure';
+import { statisticalArbitrage } from '@/lib/content/sections/quantitative-finance/statistical-arbitrage';
+import { quantTradingStrategies } from '@/lib/content/sections/quantitative-finance/quant-trading-strategies';
+import { alternativeInvestments } from '@/lib/content/sections/quantitative-finance/alternative-investments';
 
 // Quiz imports
-import { optionsFundamentalsQuiz } from '../quizzes/quantitative-finance/options-fundamentals';
-import { blackScholesModelQuiz } from '../quizzes/quantitative-finance/black-scholes-model';
-import { theGreeksQuiz } from '../quizzes/quantitative-finance/the-greeks';
-import { portfolioTheoryQuiz } from '../quizzes/quantitative-finance/portfolio-theory';
-import { factorModelsQuiz } from '../quizzes/quantitative-finance/factor-models';
-import { fixedIncomeAndBondsQuiz } from '../quizzes/quantitative-finance/fixed-income-and-bonds';
+import { optionsFundamentalsQuiz } from '@/lib/content/quizzes/quantitative-finance/options-fundamentals';
+import { blackScholesModelQuiz } from '@/lib/content/quizzes/quantitative-finance/black-scholes-model';
+import { theGreeksQuiz } from '@/lib/content/quizzes/quantitative-finance/the-greeks';
+import { portfolioTheoryQuiz } from '@/lib/content/quizzes/quantitative-finance/portfolio-theory';
+import { factorModelsQuiz } from '@/lib/content/quizzes/quantitative-finance/factor-models';
+import { fixedIncomeAndBondsQuiz } from '@/lib/content/quizzes/quantitative-finance/fixed-income-and-bonds';
+import { derivativesPricingQuiz } from '@/lib/content/quizzes/quantitative-finance/derivatives-pricing';
+import { riskMeasuresQuiz } from '@/lib/content/quizzes/quantitative-finance/risk-measures';
+import { marketMicrostructureQuiz } from '@/lib/content/quizzes/quantitative-finance/market-microstructure';
+import { statisticalArbitrageQuiz } from '@/lib/content/quizzes/quantitative-finance/statistical-arbitrage';
+import { quantTradingStrategiesQuiz } from '@/lib/content/quizzes/quantitative-finance/quant-trading-strategies';
+import { alternativeInvestmentsQuiz } from '@/lib/content/quizzes/quantitative-finance/alternative-investments';
 
 // Multiple choice imports
-import { optionsFundamentalsMultipleChoice } from '../multiple-choice/quantitative-finance/options-fundamentals';
-import { blackScholesModelMultipleChoice } from '../multiple-choice/quantitative-finance/black-scholes-model';
-import { theGreeksMultipleChoice } from '../multiple-choice/quantitative-finance/the-greeks';
-import { portfolioTheoryMultipleChoice } from '../multiple-choice/quantitative-finance/portfolio-theory';
-import { factorModelsMultipleChoice } from '../multiple-choice/quantitative-finance/factor-models';
-import { fixedIncomeAndBondsMultipleChoice } from '../multiple-choice/quantitative-finance/fixed-income-and-bonds';
+import { optionsFundamentalsMultipleChoice } from '@/lib/content/multiple-choice/quantitative-finance/options-fundamentals';
+import { blackScholesModelMultipleChoice } from '@/lib/content/multiple-choice/quantitative-finance/black-scholes-model';
+import { theGreeksMultipleChoice } from '@/lib/content/multiple-choice/quantitative-finance/the-greeks';
+import { portfolioTheoryMultipleChoice } from '@/lib/content/multiple-choice/quantitative-finance/portfolio-theory';
+import { factorModelsMultipleChoice } from '@/lib/content/multiple-choice/quantitative-finance/factor-models';
+import { fixedIncomeAndBondsMultipleChoice } from '@/lib/content/multiple-choice/quantitative-finance/fixed-income-and-bonds';
+import { derivativesPricingMultipleChoice } from '@/lib/content/multiple-choice/quantitative-finance/derivatives-pricing';
+import { riskMeasuresMultipleChoice } from '@/lib/content/multiple-choice/quantitative-finance/risk-measures';
+import { marketMicrostructureMultipleChoice } from '@/lib/content/multiple-choice/quantitative-finance/market-microstructure';
+import { statisticalArbitrageMultipleChoice } from '@/lib/content/multiple-choice/quantitative-finance/statistical-arbitrage';
+import { quantTradingStrategiesMultipleChoice } from '@/lib/content/multiple-choice/quantitative-finance/quant-trading-strategies';
+import { alternativeInvestmentsMultipleChoice } from '@/lib/content/multiple-choice/quantitative-finance/alternative-investments';
 
 // Helper to transform quiz format (quizzes with wrapped questions)
-const transformQuiz = (quiz: { questions: Array<{ id: string; question: string; sampleAnswer: string; keyPoints: string[] }> } | Array<{ id: string; question: string; sampleAnswer: string; keyPoints: string[] }>) => {
+const transformQuiz = (
+  quiz:
+    | {
+        questions: Array<{
+          id: string;
+          question: string;
+          sampleAnswer: string;
+          keyPoints: string[];
+        }>;
+      }
+    | Array<{
+        id: string;
+        question: string;
+        sampleAnswer: string;
+        keyPoints: string[];
+      }>,
+) => {
   if (Array.isArray(quiz)) {
     return quiz;
   }
@@ -37,7 +71,25 @@ const transformQuiz = (quiz: { questions: Array<{ id: string; question: string; 
 };
 
 // Helper to transform multiple choice format (mc with wrapped questions)
-const transformMC = (mc: { questions: Array<{ id: string; question: string; options: string[]; correctAnswer: number; explanation: string }> } | Array<{ id: string; question: string; options: string[]; correctAnswer: number; explanation: string }>) => {
+const transformMC = (
+  mc:
+    | {
+        questions: Array<{
+          id: string;
+          question: string;
+          options: string[];
+          correctAnswer: number;
+          explanation: string;
+        }>;
+      }
+    | Array<{
+        id: string;
+        question: string;
+        options: string[];
+        correctAnswer: number;
+        explanation: string;
+      }>,
+) => {
   if (Array.isArray(mc)) {
     return mc;
   }
@@ -80,6 +132,36 @@ export const quantitativeFinanceModule: Module = {
       ...fixedIncomeAndBonds,
       quiz: transformQuiz(fixedIncomeAndBondsQuiz),
       multipleChoice: transformMC(fixedIncomeAndBondsMultipleChoice),
+    },
+    {
+      ...derivativesPricing,
+      quiz: transformQuiz(derivativesPricingQuiz),
+      multipleChoice: transformMC(derivativesPricingMultipleChoice),
+    },
+    {
+      ...riskMeasures,
+      quiz: transformQuiz(riskMeasuresQuiz),
+      multipleChoice: transformMC(riskMeasuresMultipleChoice),
+    },
+    {
+      ...marketMicrostructure,
+      quiz: transformQuiz(marketMicrostructureQuiz),
+      multipleChoice: transformMC(marketMicrostructureMultipleChoice),
+    },
+    {
+      ...statisticalArbitrage,
+      quiz: transformQuiz(statisticalArbitrageQuiz),
+      multipleChoice: transformMC(statisticalArbitrageMultipleChoice),
+    },
+    {
+      ...quantTradingStrategies,
+      quiz: transformQuiz(quantTradingStrategiesQuiz),
+      multipleChoice: transformMC(quantTradingStrategiesMultipleChoice),
+    },
+    {
+      ...alternativeInvestments,
+      quiz: transformQuiz(alternativeInvestmentsQuiz),
+      multipleChoice: transformMC(alternativeInvestmentsMultipleChoice),
     },
   ],
   keyTakeaways: [

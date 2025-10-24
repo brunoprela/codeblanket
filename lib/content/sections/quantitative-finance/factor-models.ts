@@ -1,6 +1,4 @@
-import type { ContentSection } from '@/lib/types';
-
-export const factorModels: ContentSection = {
+export const factorModels = {
   id: 'factor-models',
   title: 'Factor Models & Attribution',
   content: `
@@ -791,15 +789,15 @@ risk_decomp = factor_risk_decomposition(portfolio_betas, factor_cov_matrix, idio
 
 ## Key Takeaways
 
-1. **Multi-factor models** (FF3, FF5, FF6) explain 70-95% of cross-sectional return variation—far better than CAPM alone
+1. **Multi-factor models** (FF3, FF5, FF6) explain 70-95% of cross-sectional return variation-far better than CAPM alone
 2. **Fama-French factors** (size, value, profitability, investment) capture systematic risk premia with economic and behavioral rationales
 3. **Momentum** is the strongest factor premium (~6-8% annually) but has severe crash risk during market reversals
-4. **Factor attribution** decomposes returns into systematic (factor) and idiosyncratic (alpha) components—essential for performance evaluation
+4. **Factor attribution** decomposes returns into systematic (factor) and idiosyncratic (alpha) components-essential for performance evaluation
 5. **Smart beta strategies** provide systematic factor exposure at low cost, but suffer from crowding and time-varying premia
-6. **Factor timing** is possible but difficult—valuation spreads and macro regimes provide some predictive power
+6. **Factor timing** is possible but difficult-valuation spreads and macro regimes provide some predictive power
 7. **Risk decomposition** reveals that most portfolio risk comes from factor exposures, not stock selection (typically 80%+ factor, 20% idiosyncratic)
 8. **Practical implementation** requires careful attention to transaction costs, rebalancing frequency, and capacity constraints
 
-Understanding factor models is foundational for modern quantitative investing—enabling systematic risk harvesting, intelligent portfolio construction, and rigorous performance attribution.
+Understanding factor models is foundational for modern quantitative investing-enabling systematic risk harvesting, intelligent portfolio construction, and rigorous performance attribution.
 `,
 };

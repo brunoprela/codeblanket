@@ -27,7 +27,7 @@ export const theGreeksMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 3,
     explanation:
-      'Long straddle Greeks: Delta ≈ 0 (call +0.50 and put -0.50 cancel), Gamma > 0 (both options positive gamma, profits from large moves either direction), Theta < 0 (both options lose time value), Vega > 0 (both options benefit from volatility increase). Long options always have positive vega – benefit from IV increases.',
+      'Long straddle Greeks: Delta ≈ 0 (call +0.50 and put -0.50 cancel), Gamma > 0 (both options positive gamma, profits from large moves either direction), Theta < 0 (both options lose time value), Vega > 0 (both options benefit from volatility increase). Long options always have positive vega - benefit from IV increases.',
   },
   {
     id: 'tg-mc-3',
@@ -41,7 +41,7 @@ export const theGreeksMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 2,
     explanation:
-      'Theta (time decay) accelerates dramatically as expiration approaches. The curve is non-linear – most time value decays in the final 30 days, especially the last 7 days. An option losing $0.10/day at 30 days might lose $0.30-$0.50/day at 5 days to expiration. This is why holding long options through final week is dangerous unless expecting a major move.',
+      'Theta (time decay) accelerates dramatically as expiration approaches. The curve is non-linear - most time value decays in the final 30 days, especially the last 7 days. An option losing $0.10/day at 30 days might lose $0.30-$0.50/day at 5 days to expiration. This is why holding long options through final week is dangerous unless expecting a major move.',
   },
   {
     id: 'tg-mc-4',
@@ -68,6 +68,6 @@ export const theGreeksMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 2,
     explanation:
-      'Gamma P&L = 0.5 × Gamma × (Stock move)² = 0.5 × (-50) × 10² = -$2,500. Negative gamma means losses from large moves in EITHER direction. Even though starting delta-neutral, the position becomes directional as stock moves (delta changes). Short gamma positions (like short straddles, iron condors) lose when stock moves significantly. The loss is quadratic – $20 move causes 4× the loss of $10 move.',
+      'Gamma P&L = 0.5 × Gamma × (Stock move)² = 0.5 × (-50) × 10² = -$2,500. Negative gamma means losses from large moves in EITHER direction. Even though starting delta-neutral, the position becomes directional as stock moves (delta changes). Short gamma positions (like short straddles, iron condors) lose when stock moves significantly. The loss is quadratic - $20 move causes 4× the loss of $10 move.',
   },
 ];

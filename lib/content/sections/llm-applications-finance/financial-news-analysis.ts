@@ -6,7 +6,7 @@ export const financialNewsAnalysis = {
 
 ## Introduction
 
-Financial news drives markets. A single breaking news story can move a stock 10%+ in minutes. However, thousands of news articles, tweets, blog posts, and press releases are published every hour across global markets. Manual monitoring is impossible—sophisticated, automated news analysis systems are essential for modern trading.
+Financial news drives markets. A single breaking news story can move a stock 10%+ in minutes. However, thousands of news articles, tweets, blog posts, and press releases are published every hour across global markets. Manual monitoring is impossible-sophisticated, automated news analysis systems are essential for modern trading.
 
 This section covers building production-scale news analysis systems using LLMs: real-time processing, event extraction, entity recognition, sentiment aggregation, news impact assessment, and generating actionable trading signals from news flow.
 

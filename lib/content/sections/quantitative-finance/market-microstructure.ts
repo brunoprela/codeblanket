@@ -1,9 +1,7 @@
-import type { ContentSection } from '@/lib/types';
-
-export const marketMicrostructure: ContentSection = {
-    id: 'market-microstructure',
-    title: 'Market Microstructure Theory',
-    content: `
+export const marketMicrostructure = {
+  id: 'market-microstructure',
+  title: 'Market Microstructure Theory',
+  content: `
 # Market Microstructure Theory
 
 ## Introduction
@@ -16,7 +14,7 @@ Market microstructure examines how trading mechanisms, information flows, and ma
 - **High-frequency trading**: Microsecond advantages worth billions in profits
 - **Market design**: Exchange competition, dark pools, payment for order flow
 
-This section covers order types, bid-ask spread components, order book dynamics, market impact models, and optimal execution algorithms—essential knowledge for quantitative traders, execution desk professionals, and market makers.
+This section covers order types, bid-ask spread components, order book dynamics, market impact models, and optimal execution algorithms-essential knowledge for quantitative traders, execution desk professionals, and market makers.
 
 ---
 
@@ -315,13 +313,13 @@ Trade evenly over time window.
 Minimize expected cost + risk penalty.
 
 **Objective:**
-\[
+[
 \\min \\mathbb{E}[\\text{Cost}] + \\lambda \\times \\text{Var}[\\text{Cost}]
-\]
+]
 
 Where:
 - Cost = Execution price - decision price
-- \(\\lambda\): Risk aversion (higher → trade slower to reduce variance)
+- (\\lambda): Risk aversion (higher → trade slower to reduce variance)
 
 **Solution**: Trade faster when risk aversion low, slower when high.
 
@@ -503,16 +501,16 @@ class OrderBook:
         print("\\n" + "="*50)
         print("ORDER BOOK")
         print("="*50)
-        print(f"Spread: ${self.get_spread(): .2f
+        print(f"Spread: \${self.get_spread(): .2f
 }")
-print(f"Mid Price: ${self.get_mid_price():.2f}")
+print(f"Mid Price: \${self.get_mid_price():.2f}")
 print("\\nAsks (Sell Orders):")
 for price, qty in reversed(depth['asks']):
-    print(f"  ${price:.2f}  |  {qty} shares")
+    print(f"  \${price:.2f}  |  {qty} shares")
 print("-" * 50)
 print("Bids (Buy Orders):")
 for price, qty in depth['bids']:
-    print(f"  ${price:.2f}  |  {qty} shares")
+    print(f"  \${price:.2f}  |  {qty} shares")
 
 # Example: Build order book
 book = OrderBook()
@@ -537,8 +535,8 @@ print("=" * 50)
 fills, avg_price, slippage = book.market_order('buy', 1000)
 print(f"\\nFills:")
 for price, qty in fills:
-    print(f"  {qty} shares @ ${price:.2f}")
-print(f"\\nAverage Price: ${avg_price:.4f}")
+    print(f"  {qty} shares @ \${price:.2f}")
+print(f"\\nAverage Price: \${avg_price:.4f}")
 print(f"Slippage: {slippage} shares (unfilled)")
 
 book.display()
@@ -591,8 +589,8 @@ for order_size in order_sizes:
         'Order Size': f'{order_size:,}',
         '% of ADV': f'{order_size/daily_volume*100:.2f}%',
         'Impact (bps)': f'{impact_bps:.1f}',
-        'Impact ($)': f'${impact_dollars: .4f}',
-'Total Cost': f'${total_cost:,.0f}'
+        'Impact ($)': f'\${impact_dollars: .4f}',
+'Total Cost': f'\${total_cost:,.0f}'
     })
 
 df = pd.DataFrame(results)
@@ -654,12 +652,12 @@ print("Doubling order size increases impact by √2 = 1.41× (not 2×)")
 ## Key Takeaways
 
 1. **Bid-ask spread** has three components: processing costs (20%), inventory risk (30%), adverse selection (50%)
-2. **Market impact** scales as √(order size)—large orders need careful execution to minimize cost
-3. **Order book imbalance** predicts short-term price moves (60-70% accuracy)—HFT traders exploit this
-4. **Microstructure noise** accounts for 50-70% of observed high-frequency volatility—use mid-quotes to filter
+2. **Market impact** scales as √(order size)-large orders need careful execution to minimize cost
+3. **Order book imbalance** predicts short-term price moves (60-70% accuracy)-HFT traders exploit this
+4. **Microstructure noise** accounts for 50-70% of observed high-frequency volatility-use mid-quotes to filter
 5. **HFT provides liquidity** (tighter spreads, deeper books) but can withdraw during stress (flash crashes)
 6. **Optimal execution** algorithms (Almgren-Chriss, VWAP, TWAP) save 5-15 bps on institutional trades
-7. **Transaction cost analysis (TCA)** is essential—measure shortfall, compare to benchmarks, improve execution
+7. **Transaction cost analysis (TCA)** is essential-measure shortfall, compare to benchmarks, improve execution
 8. **Dark pools** and payment for order flow raise conflict-of-interest concerns but dominate retail order flow
 
 Understanding microstructure enables quantitative traders to minimize execution costs, market makers to optimize quote placement, and regulators to design fair market structures.

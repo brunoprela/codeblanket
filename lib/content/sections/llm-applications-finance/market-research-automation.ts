@@ -1,7 +1,7 @@
 export const marketResearchAutomation = {
-  title: 'Market Research Automation',
-  id: 'market-research-automation',
-  content: `
+    title: 'Market Research Automation',
+    id: 'market-research-automation',
+    content: `
 # Market Research Automation
 
 ## Introduction
@@ -71,7 +71,7 @@ class CompetitorAnalyzer:
         prompt = f"""Conduct comprehensive competitive analysis for {company}.
 
 Industry Context:
-- Market Size: ${industry_data.get('market_size')}B
+- Market Size: \${industry_data.get('market_size')}B
 - Growth Rate: {industry_data.get('growth_rate')}%
 - Key Trends: {', '.join(industry_data.get('trends', []))}
 - Barriers to Entry: {industry_data.get('barriers', 'Unknown')}
@@ -250,54 +250,54 @@ Return opportunity analysis as JSON with:
             if "```json" in response_text:
                 json_str = response_text.split("```json")[1].split("```")[0].strip()
             elif "```" in response_text:
-                json_str = response_text.split("```")[1].split("```")[0].strip()
+    json_str = response_text.split("```")[1].split("```")[0].strip()
             else:
-                json_str = response_text
+        json_str = response_text
             return json.loads(json_str)
         except:
             return {}
 
 # Example usage
-competitor_analyzer = CompetitorAnalyzer(api_key="your-key")
+competitor_analyzer = CompetitorAnalyzer(api_key = "your-key")
 
 company = "Tesla"
-competitors = [
-    {
-        'name': 'Ford',
-        'market_share': 12.5,
-        'revenue': 158000,
-        'growth_rate': 8.2,
-        'strengths': ['Established brand', 'Dealership network', 'Manufacturing scale']
-    },
-    {
-        'name': 'GM',
-        'market_share': 14.2,
-        'revenue': 157000,
-        'growth_rate': 6.5,
-        'strengths': ['Product diversity', 'Financial strength', 'Technology investment']
-    },
-    {
-        'name': 'BYD',
-        'market_share': 8.3,
-        'revenue': 63000,
-        'growth_rate': 92.8,
-        'strengths': ['Battery technology', 'China market', 'Vertical integration']
-    }
-]
+competitors =[
+        {
+            'name': 'Ford',
+            'market_share': 12.5,
+            'revenue': 158000,
+            'growth_rate': 8.2,
+            'strengths': ['Established brand', 'Dealership network', 'Manufacturing scale']
+        },
+        {
+            'name': 'GM',
+            'market_share': 14.2,
+            'revenue': 157000,
+            'growth_rate': 6.5,
+            'strengths': ['Product diversity', 'Financial strength', 'Technology investment']
+        },
+        {
+            'name': 'BYD',
+            'market_share': 8.3,
+            'revenue': 63000,
+            'growth_rate': 92.8,
+            'strengths': ['Battery technology', 'China market', 'Vertical integration']
+        }
+    ]
 
 industry_data = {
-    'market_size': 2800,
-    'growth_rate': 12.5,
-    'trends': ['EV adoption accelerating', 'Autonomous driving', 'Software-defined vehicles'],
-    'barriers': 'High capital requirements, regulatory complexity'
-}
+        'market_size': 2800,
+        'growth_rate': 12.5,
+        'trends': ['EV adoption accelerating', 'Autonomous driving', 'Software-defined vehicles'],
+        'barriers': 'High capital requirements, regulatory complexity'
+    }
 
 analysis = competitor_analyzer.analyze_competitive_landscape(
-    company, competitors, industry_data
-)
+        company, competitors, industry_data
+    )
 
 print("Competitive Analysis:")
-print(json.dumps(analysis, indent=2))
+print(json.dumps(analysis, indent = 2))
 \`\`\`
 
 ---
@@ -335,7 +335,7 @@ class IndustryTrendAnalyzer:
         prompt = f"""Analyze key trends affecting the {industry} industry.
 
 Industry Data:
-- Market Size: ${data_sources.get('market_size')}B
+- Market Size: \${data_sources.get('market_size')}B
 - Historical Growth: {data_sources.get('historical_growth')}%
 - Major Players: {', '.join(data_sources.get('major_players', []))}
 
@@ -480,17 +480,17 @@ Return evolution analysis highlighting changes and lessons learned."""
         import json
         try:
             if "```json" in response_text:
-                json_str = response_text.split("```json")[1].split("```")[0].strip()
+json_str = response_text.split("```json")[1].split("```")[0].strip()
             elif "```" in response_text:
-                json_str = response_text.split("```")[1].split("```")[0].strip()
+json_str = response_text.split("```")[1].split("```")[0].strip()
             else:
-                json_str = response_text
-            return json.loads(json_str)
-        except:
-            return {}
+json_str = response_text
+return json.loads(json_str)
+except:
+return {}
 
 # Example usage
-trend_analyzer = IndustryTrendAnalyzer(api_key="your-key")
+trend_analyzer = IndustryTrendAnalyzer(api_key = "your-key")
 
 data_sources = {
     'market_size': 5600,
@@ -511,7 +511,7 @@ data_sources = {
 
 trends = trend_analyzer.analyze_industry_trends('Cloud Computing', data_sources)
 print("Industry Trend Analysis:")
-print(json.dumps(trends, indent=2))
+print(json.dumps(trends, indent = 2))
 \`\`\`
 
 ---
@@ -549,7 +549,7 @@ class CompanyResearcher:
 Company Overview:
 - Ticker: {company_data.get('ticker')}
 - Industry: {company_data.get('industry')}
-- Market Cap: ${company_data.get('market_cap')}B
+- Market Cap: \${company_data.get('market_cap')}B
 - Description: {company_data.get('description')}
 
 Financial Performance:
@@ -695,17 +695,17 @@ Create structured investment thesis as JSON:
         import json
         try:
             if "```json" in response_text:
-                json_str = response_text.split("```json")[1].split("```")[0].strip()
+json_str = response_text.split("```json")[1].split("```")[0].strip()
             elif "```" in response_text:
-                json_str = response_text.split("```")[1].split("```")[0].strip()
+json_str = response_text.split("```")[1].split("```")[0].strip()
             else:
-                json_str = response_text
-            return json.loads(json_str)
-        except:
-            return {}
+json_str = response_text
+return json.loads(json_str)
+except:
+return {}
 
 # Example usage
-researcher = CompanyResearcher(api_key="your-key")
+researcher = CompanyResearcher(api_key = "your-key")
 
 company_data = {
     'name': 'NVIDIA Corporation',
@@ -722,9 +722,9 @@ company_data = {
         'roce': 85
     },
     'segments': [
-        {'name': 'Data Center', 'revenue_pct': 78, 'growth': 171},
-        {'name': 'Gaming', 'revenue_pct': 16, 'growth': 15},
-        {'name': 'Professional Visualization', 'revenue_pct': 4, 'growth': 105}
+        { 'name': 'Data Center', 'revenue_pct': 78, 'growth': 171 },
+        { 'name': 'Gaming', 'revenue_pct': 16, 'growth': 15 },
+        { 'name': 'Professional Visualization', 'revenue_pct': 4, 'growth': 105 }
     ],
     'competitive_position': 'Dominant market leader in AI chips with 90%+ market share',
     'management': {
@@ -900,17 +900,17 @@ Return gap analysis with action plan."""
         import json
         try:
             if "```json" in response_text:
-                json_str = response_text.split("```json")[1].split("```")[0].strip()
+json_str = response_text.split("```json")[1].split("```")[0].strip()
             elif "```" in response_text:
-                json_str = response_text.split("```")[1].split("```")[0].strip()
+json_str = response_text.split("```")[1].split("```")[0].strip()
             else:
-                json_str = response_text
-            return json.loads(json_str)
-        except:
-            return {}
+json_str = response_text
+return json.loads(json_str)
+except:
+return {}
 
 # Example usage
-dd_automator = DueDiligenceAutomator(api_key="your-key")
+dd_automator = DueDiligenceAutomator(api_key = "your-key")
 
 documents = {
     'financials_summary': 'Strong revenue growth, improving margins',
@@ -926,7 +926,7 @@ interviews = [
 
 dd_report = dd_automator.conduct_due_diligence('Target Company', documents, interviews)
 print("Due Diligence Report:")
-print(json.dumps(dd_report, indent=2))
+print(json.dumps(dd_report, indent = 2))
 \`\`\`
 
 ---

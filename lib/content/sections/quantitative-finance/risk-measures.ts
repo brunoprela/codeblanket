@@ -1,9 +1,7 @@
-import type { ContentSection } from '@/lib/types';
-
-export const riskMeasures: ContentSection = {
-    id: 'risk-measures',
-    title: 'Risk Measures (VaR, CVaR)',
-    content: `
+export const riskMeasures = {
+  id: 'risk-measures',
+  title: 'Risk Measures (VaR, CVaR)',
+  content: `
 # Risk Measures: VaR, CVaR, and Expected Shortfall
 
 ## Introduction
@@ -36,9 +34,9 @@ Where:
 - \(\\alpha\): Confidence level (e.g., 95%, 99%)
 - \(\\text{VaR}_{\\alpha}\): Value at Risk at confidence \(\\alpha\)
 
-**Example:** 1-day 95% VaR = \$1M means:
-- 95% of days, losses ≤ \$1M
-- 5% of days, losses > \$1M
+**Example:** 1-day 95% VaR = $1M means:
+- 95% of days, losses ≤ $1M
+- 5% of days, losses > $1M
 
 ### VaR Calculation Methods
 
@@ -54,7 +52,7 @@ Where:
 - \(z_{\\alpha}\): Z-score for confidence level (1.65 for 95%, 2.33 for 99%)
 - \(\\sigma\): Portfolio volatility
 
-**Example:** Portfolio: \$10M, daily return 0.05%, daily volatility 1.5%
+**Example:** Portfolio: $10M, daily return 0.05%, daily volatility 1.5%
 \[
 \\text{VaR}_{95\\%} = -0.05\\% + (-1.65) \\times 1.5\\% = -0.05\\% - 2.475\\% = -2.525\\%
 \]
@@ -92,8 +90,8 @@ Simulate thousands of return scenarios:
 ### VaR Limitations
 
 **1. Ignores tail risk beyond VaR:**
-- VaR says "95% of time, loss ≤ \$1M"
-- But doesn't say anything about the 5% worst cases (could be \$2M or \$100M!)
+- VaR says "95% of time, loss ≤ $1M"
+- But doesn't say anything about the 5% worst cases (could be $2M or $100M!)
 
 **2. Non-subadditive:**
 - \(\\text{VaR}(A + B)\) can exceed \(\\text{VaR}(A) + \\text{VaR}(B)\)
@@ -115,8 +113,8 @@ Simulate thousands of return scenarios:
 \\text{CVaR}_{\\alpha} = E[L \\mid L > \\text{VaR}_{\\alpha}]
 \]
 
-**Example:** 95% VaR = \$1M, 95% CVaR = \$1.5M means:
-- In the worst 5% of cases (beyond VaR), average loss is \$1.5M
+**Example:** 95% VaR = $1M, 95% CVaR = $1.5M means:
+- In the worst 5% of cases (beyond VaR), average loss is $1.5M
 - CVaR captures **tail risk** (not just threshold)
 
 ### CVaR Advantages Over VaR
@@ -158,7 +156,7 @@ Simulate thousands of return scenarios:
 
 **2. Hypothetical Scenarios:**
 - Fed hikes 5% overnight
-- Oil jumps to \$150/barrel
+- Oil jumps to $150/barrel
 - Tech bubble bursts (-50% NASDAQ)
 
 **3. Reverse Stress Testing:**
@@ -183,7 +181,7 @@ For each scenario:
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from scipy.stats import norm
+from scipy.stats import norm, t
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -218,7 +216,7 @@ class RiskMetrics:
         """Calculate CVaR (Expected Shortfall) using historical simulation."""
         sorted_returns = np.sort(self.returns)
         index = int((1 - confidence) * len(sorted_returns))
-        tail_returns = sorted_returns[:index]
+        tail_returns = sorted_returns[:index] if index > 0 else sorted_returns[:1]
         cvar_pct = np.mean(tail_returns)
         cvar_dollar = -cvar_pct * self.portfolio_value
         return cvar_pct, cvar_dollar
@@ -248,34 +246,34 @@ class RiskMetrics:
         print("="*60)
         print(f"RISK METRICS SUMMARY ({confidence*100:.0f}% Confidence)")
         print("="*60)
-        print(f"Portfolio Value: ${self.portfolio_value:, .0f
+        print(f"Portfolio Value: \${self.portfolio_value:, .0f
 }")
 print(f"Returns: {len(self.returns)} observations")
 print(f"Mean Return: {np.mean(self.returns)*100:.4f}%")
 print(f"Volatility: {np.std(self.returns)*100:.4f}%")
 print()
 print("PARAMETRIC VAR (Normal Distribution):")
-print(f"  VaR: ${var_param_dollar:,.0f} ({var_param_pct*100:.2f}%)")
+print(f"  VaR: \${var_param_dollar:,.0f} ({var_param_pct*100:.2f}%)")
 print()
 print("HISTORICAL SIMULATION:")
-print(f"  VaR: ${var_hist_dollar:,.0f} ({var_hist_pct*100:.2f}%)")
-print(f"  CVaR: ${cvar_hist_dollar:,.0f} ({cvar_hist_pct*100:.2f}%)")
+print(f"  VaR: \${var_hist_dollar:,.0f} ({var_hist_pct*100:.2f}%)")
+print(f"  CVaR: \${cvar_hist_dollar:,.0f} ({cvar_hist_pct*100:.2f}%)")
 print()
 print(f"INTERPRETATION:")
-print(f"  VaR: {confidence*100:.0f}% of days, losses ≤ ${var_hist_dollar:,.0f}")
-print(f"  CVaR: Average loss in worst {(1-confidence)*100:.0f}% of days = ${cvar_hist_dollar:,.0f}")
+print(f"  VaR: {confidence*100:.0f}% of days, losses ≤ \${var_hist_dollar:,.0f}")
+print(f"  CVaR: Average loss in worst {(1-confidence)*100:.0f}% of days = \${cvar_hist_dollar:,.0f}")
 print(f"  Tail risk: CVaR / VaR = {cvar_hist_dollar / var_hist_dollar:.2f}x")
 
 # Example: Calculate VaR for portfolio
 np.random.seed(42)
 dates = pd.date_range('2020-01-01', '2023-12-31', freq = 'D')
 # Simulate returns with fat tails(student - t distribution)
-from scipy.stats import t
 returns = t.rvs(df = 5, loc = 0.0005, scale = 0.015, size = len(dates))  # Fat tails
 portfolio_value = 10_000_000
 
 risk = RiskMetrics(returns, portfolio_value)
 risk.summary(confidence = 0.95)
+print()
 risk.summary(confidence = 0.99)
 \`\`\`
 
@@ -287,7 +285,7 @@ def plot_var_distribution(returns, portfolio_value, confidence=0.95):
     sorted_returns = np.sort(returns)
     var_index = int((1 - confidence) * len(sorted_returns))
     var_threshold = sorted_returns[var_index]
-    cvar = np.mean(sorted_returns[:var_index])
+    cvar = np.mean(sorted_returns[:var_index]) if var_index > 0 else sorted_returns[0]
     
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 5))
     
@@ -395,7 +393,7 @@ print("="*60)
 stress_results = stress_test(portfolio_value, positions, scenarios)
 print(stress_results.to_string(index=False))
 print(f"\\nWorst scenario: {stress_results.loc[stress_results['Loss ($)'].idxmax(), 'Scenario']}")
-print(f"Maximum loss: ${stress_results['Loss ($)'].max():, .0f} ({ stress_results['Loss (%)'].max(): .2f } %)")
+print(f"Maximum loss: \${stress_results['Loss ($)'].max():, .0f} ({ stress_results['Loss (%)'].max(): .2f } %)")
 \`\`\`
 
 ---
@@ -406,14 +404,14 @@ print(f"Maximum loss: ${stress_results['Loss ($)'].max():, .0f} ({ stress_result
 
 Banks must hold capital against VaR:
 - **Market Risk Capital** = max(VaR_prev, k × VaR_avg) where k = 3-4 (multiplier)
-- Example: 99% 10-day VaR = \$50M → Capital requirement ≈ \$150-200M
+- Example: 99% 10-day VaR = $50M → Capital requirement ≈ $150-200M
 
 ### 2. **Position Limits**
 
 Set trading limits based on VaR:
-- Trader limit: 1-day 95% VaR ≤ \$1M
-- Desk limit: 1-day 99% VaR ≤ \$10M
-- Firm-wide: 10-day 99% VaR ≤ \$100M
+- Trader limit: 1-day 95% VaR ≤ $1M
+- Desk limit: 1-day 99% VaR ≤ $10M
+- Firm-wide: 10-day 99% VaR ≤ $100M
 
 ### 3. **Risk-Adjusted Performance**
 
@@ -449,4 +447,3 @@ Produces portfolios with better tail risk management than mean-variance optimiza
 Risk measurement is imperfect (models are approximations) but essential—proper VaR/CVaR analysis prevents catastrophic losses and ensures regulatory compliance.
 `,
 };
-
