@@ -270,10 +270,10 @@ Return JSON:
     def _parse_json(self, response_text: str) -> Dict:
         """Parse JSON from LLM response"""
         try:
-            if "```json" in response_text:
-                json_str = response_text.split("```json")[1].split("```")[0].strip()
-            elif "```" in response_text:
-                json_str = response_text.split("```")[1].split("```")[0].strip()
+            if "\`\`\`json" in response_text:
+                json_str = response_text.split("\`\`\`json")[1].split("\`\`\`")[0].strip()
+            elif "\`\`\`" in response_text:
+                json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
             else:
                 json_str = response_text
             return json.loads(json_str)
@@ -457,10 +457,10 @@ Return JSON analysis with recommended resolution."""
         """Parse JSON from response"""
         import json
         try:
-            if "```json" in response_text:
-                json_str = response_text.split("```json")[1].split("```")[0].strip()
-            elif "```" in response_text:
-                json_str = response_text.split("```")[1].split("```")[0].strip()
+            if "\`\`\`json" in response_text:
+                json_str = response_text.split("\`\`\`json")[1].split("\`\`\`")[0].strip()
+            elif "\`\`\`" in response_text:
+                json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
             else:
                 json_str = response_text
             return json.loads(json_str)
@@ -645,10 +645,10 @@ Should the signal change? Return JSON:
         """Parse JSON from response"""
         import json
         try:
-            if "```json" in response_text:
-                json_str = response_text.split("```json")[1].split("```")[0].strip()
-            elif "```" in response_text:
-                json_str = response_text.split("```")[1].split("```")[0].strip()
+            if "\`\`\`json" in response_text:
+                json_str = response_text.split("\`\`\`json")[1].split("\`\`\`")[0].strip()
+            elif "\`\`\`" in response_text:
+                json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
             else:
                 json_str = response_text
             return json.loads(json_str)
@@ -711,4 +711,3 @@ We covered:
 Next: Risk assessment with LLMs for portfolio management.
 `,
 };
-

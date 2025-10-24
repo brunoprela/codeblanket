@@ -1,7 +1,7 @@
 export const conversationalTradingAssistants = {
-    title: 'Conversational Trading Assistants',
-    id: 'conversational-trading-assistants',
-    content: `
+  title: 'Conversational Trading Assistants',
+  id: 'conversational-trading-assistants',
+  content: `
 # Conversational Trading Assistants
 
 ## Introduction
@@ -59,16 +59,15 @@ class PortfolioQueryAssistant:
 User Question: "{user_question}"
 
 Portfolio Data:
-- Total Value: \\${portfolio_data['total_value']:, .2f
-}
-    - Total Return: {portfolio_data['total_return']: .2f}%
-        - Cash: \\${ portfolio_data['cash']:, .2f }
+- Total Value: \\$\${portfolio_data['total_value']:,.2f}
+- Total Return: \${portfolio_data['total_return']:.2f}%
+- Cash: \\$\${portfolio_data['cash']:,.2f}
 
 Holdings:
-{ self._format_holdings(portfolio_data['holdings']) }
+\${self._format_holdings(portfolio_data['holdings'])}
 
 Performance:
-{ self._format_performance(portfolio_data['performance']) }
+\${self._format_performance(portfolio_data['performance'])}
 
 Provide a clear, conversational answer.If suggesting actions, explain reasoning.
 If the question requires analysis not directly in the data, make reasonable inferences but note assumptions."""
@@ -96,10 +95,10 @@ Returns:
         # Format portfolio data
 portfolio_context = f"""
 Portfolio Summary:
-- Total Value: \\${ portfolio_data['total_value']:, .2f }
-- Holdings: { len(portfolio_data['holdings']) } positions
-    - Top Positions: { ', '.join([h['ticker'] for h in portfolio_data['holdings'][: 5]]) }
-- Performance: { portfolio_data['total_return']: .2f }% total return
+- Total Value: \\$\${portfolio_data['total_value']:,.2f}
+- Holdings: \${len(portfolio_data['holdings'])} positions
+    - Top Positions: \${', '.join([h['ticker'] for h in portfolio_data['holdings'][:5]])}
+- Performance: \${portfolio_data['total_return']:.2f}% total return
 """
 
         # Build conversation with portfolio context
@@ -140,20 +139,20 @@ Explanation
 """
 prompt = f"""Explain this portfolio holding to the user in simple, conversational language.
 
-Holding: { ticker }
-Company: { holding_data.get('name') }
-Shares: { holding_data.get('shares') }
-Cost Basis: \\${ holding_data.get('cost_basis') }
-Current Price: \\${ holding_data.get('current_price') }
-Market Value: \\${ holding_data.get('market_value'):, .2f }
-Return: { holding_data.get('return'): .2f }%
-    Weight in Portfolio: { holding_data.get('weight'): .1f }%
+Holding: \${ticker}
+Company: \${holding_data.get('name')}
+Shares: \${holding_data.get('shares')}
+Cost Basis: \\$\${holding_data.get('cost_basis')}
+Current Price: \\$\${holding_data.get('current_price')}
+Market Value: \\$\${holding_data.get('market_value'):,.2f}
+Return: \${holding_data.get('return'):.2f}%
+    Weight in Portfolio: \${holding_data.get('weight'):.1f}%
 
         Recent Performance:
-{ holding_data.get('recent_performance', 'Not available') }
+\${holding_data.get('recent_performance', 'Not available')}
 
 Market Context:
-{ market_context.get('summary', 'Market conditions normal') }
+\${market_context.get('summary', 'Market conditions normal')}
 
 Explain:
 1. What the company does(if known)
@@ -189,15 +188,15 @@ Returns:
 prompt = f"""Provide portfolio suggestions for this investor.
 
 Portfolio:
-{ self._format_holdings(portfolio_data['holdings']) }
+\${self._format_holdings(portfolio_data['holdings'])}
 
 Investor Profile:
-- Goals: { user_goals.get('primary_goal') }
-- Time Horizon: { user_goals.get('time_horizon') }
-- Risk Tolerance: { risk_tolerance }
+- Goals: \${user_goals.get('primary_goal')}
+- Time Horizon: \${user_goals.get('time_horizon')}
+- Risk Tolerance: \${risk_tolerance}
 
 Current Allocation:
-{ self._format_allocation(portfolio_data.get('allocation', {})) }
+\${self._format_allocation(portfolio_data.get('allocation', {}))}
 
 Provide 3 - 5 specific, actionable suggestions in conversational language:
 1. Rebalancing if needed
@@ -224,7 +223,7 @@ return response.content[0].text
     def _format_holdings(self, holdings: List[Dict]) -> str:
 """Format holdings for display"""
 return "\\n".join([
-    f"- {h['ticker']} ({h['name']}): \\${h['market_value']:,.2f} ({h['return']:+.1f}%)"
+    f"- \${h['ticker']} (\${h['name']}): \\$\${h['market_value']:,.2f} (\${h['return']:+.1f}%)"
             for h in holdings
         ])
     
@@ -336,9 +335,9 @@ class VoiceTradingAssistant:
 Voice Input: "{voice_input}"
 
 Portfolio Context:
-- Cash Available: \\${portfolio_context.get('cash', 0):, .2f}
-- Buying Power: \\${ portfolio_context.get('buying_power', 0):, .2f }
-- Current Holdings: { ', '.join(portfolio_context.get('tickers', [])) }
+- Cash Available: \\$\${portfolio_context.get('cash', 0):,.2f}
+- Buying Power: \\$\${portfolio_context.get('buying_power', 0):,.2f}
+- Current Holdings: \${', '.join(portfolio_context.get('tickers', []))}
 
 Parse the command and return JSON:
 {
@@ -395,8 +394,8 @@ order_type = parsed_command.get('order_type', 'MARKET')
 if intent == 'BUY':
     message = f"""I understand you want to buy {quantity} shares of {ticker} at {order_type.lower()} price.
 
-Current market price: \\${ current_price: .2f }
-Estimated cost: ~\\${ quantity * current_price:, .2f }
+Current market price: \\$\${current_price:.2f}
+Estimated cost: ~\\$\${quantity * current_price:,.2f}
 
 Would you like me to proceed with this order ?
     Say "Yes, execute" to confirm or "Cancel" to abort."""
@@ -404,8 +403,8 @@ Would you like me to proceed with this order ?
         elif intent == 'SELL':
 message = f"""I understand you want to sell {quantity} shares of {ticker} at {order_type.lower()} price.
 
-Current market price: \\${ current_price: .2f }
-Estimated proceeds: ~\\${ quantity * current_price:, .2f }
+Current market price: \\$\${current_price:.2f}
+Estimated proceeds: ~\\$\${quantity * current_price:,.2f}
 
 Would you like me to proceed with this order ?
     Say "Yes, execute" to confirm or "Cancel" to abort."""
@@ -501,10 +500,10 @@ return {
 """Parse JSON from response"""
 import json
         try:
-if "```json" in response_text:
-    json_str = response_text.split("```json")[1].split("```")[0].strip()
-            elif "```" in response_text:
-json_str = response_text.split("```")[1].split("```")[0].strip()
+if "\`\`\`json" in response_text:
+    json_str = response_text.split("\`\`\`json")[1].split("\`\`\`")[0].strip()
+            elif "\`\`\`" in response_text:
+json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
             else:
 json_str = response_text
 return json.loads(json_str)
@@ -813,10 +812,10 @@ Format as a short message (2-4 sentences) that could be sent as notification."""
         prompt = f"""Explain to the user why their stop loss was triggered.
 
 Position: {ticker}
-Stop Loss Price: \\${stop_loss_price: .2f}
-Current Price: \\${ current_price: .2f }
-Original Cost: \\${ position_data['cost_basis']: .2f }
-Loss: { loss_pct: .1f }%
+Stop Loss Price: \\$\${stop_loss_price:.2f}
+Current Price: \\$\${current_price:.2f}
+Original Cost: \\$\${position_data['cost_basis']:.2f}
+Loss: \${loss_pct:.1f}%
 
     Explain in a supportive, educational tone:
 1. What happened
@@ -1029,4 +1028,3 @@ We covered:
 Next: LLM-powered backtesting and strategy development.
 `,
 };
-

@@ -1,7 +1,7 @@
 export const regulatoryComplianceMonitoring = {
-    title: 'Regulatory Compliance & Monitoring',
-    id: 'regulatory-compliance-monitoring',
-    content: `
+  title: 'Regulatory Compliance & Monitoring',
+  id: 'regulatory-compliance-monitoring',
+  content: `
 # Regulatory Compliance & Monitoring
 
 ## Introduction
@@ -72,11 +72,10 @@ Trades:
 {trades_summary}
 
 Context:
-- Account Type: {context.get('account_type')}
-- Account Size: ${context.get('account_size'):, .2f
-}
-    - Typical Trade Size: ${ context.get('typical_size'):, .2f}
-- Trading History: { context.get('history', 'Normal') }
+- Account Type: \${context.get('account_type')}
+- Account Size: \\$\${context.get('account_size'):,.2f}
+- Typical Trade Size: \\$\${context.get('typical_size'):,.2f}
+- Trading History: \${context.get('history', 'Normal')}
 
 Check for:
     1. ** Wash Sales **: Selling and repurchasing same security within 30 days
@@ -226,10 +225,10 @@ return self._parse_json(response.content[0].text)
     def _parse_json(self, response_text: str) -> Dict:
 """Parse JSON from response"""
 try:
-if "```json" in response_text:
-    json_str = response_text.split("```json")[1].split("```")[0].strip()
-            elif "```" in response_text:
-json_str = response_text.split("```")[1].split("```")[0].strip()
+if "\`\`\`json" in response_text:
+    json_str = response_text.split("\`\`\`json")[1].split("\`\`\`")[0].strip()
+            elif "\`\`\`" in response_text:
+json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
             else:
 json_str = response_text
 return json.loads(json_str)
@@ -391,10 +390,10 @@ Return JSON assessment of collusion risk."""
         """Parse JSON from response"""
         import json
         try:
-            if "```json" in response_text:
-json_str = response_text.split("```json")[1].split("```")[0].strip()
-            elif "```" in response_text:
-json_str = response_text.split("```")[1].split("```")[0].strip()
+            if "\`\`\`json" in response_text:
+json_str = response_text.split("\`\`\`json")[1].split("\`\`\`")[0].strip()
+            elif "\`\`\`" in response_text:
+json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
             else:
 json_str = response_text
 return json.loads(json_str)
@@ -535,10 +534,10 @@ Return as structured JSON list."""
         """Parse JSON from response"""
         import json
         try:
-            if "```json" in response_text:
-json_str = response_text.split("```json")[1].split("```")[0].strip()
-            elif "```" in response_text:
-json_str = response_text.split("```")[1].split("```")[0].strip()
+            if "\`\`\`json" in response_text:
+json_str = response_text.split("\`\`\`json")[1].split("\`\`\`")[0].strip()
+            elif "\`\`\`" in response_text:
+json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
             else:
 json_str = response_text
 return json.loads(json_str)
@@ -877,4 +876,3 @@ We covered:
 This completes Module 18: LLM Applications in Finance. We've covered the complete spectrum of applying LLMs to financial analysis, trading, risk management, research, and compliance.
 `,
 };
-

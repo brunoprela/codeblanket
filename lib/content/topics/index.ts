@@ -93,6 +93,7 @@ import { mlSystemDesignProductionModule } from '../modules/ml-system-design-prod
 import { largeLanguageModelsModule } from '../modules/large-language-models';
 import { quantitativeFinanceModule } from '../modules/quantitative-finance';
 import { timeSeriesFinancialMlModule } from '../modules/time-series-financial-ml';
+import { llmApplicationsFinanceModule } from '../modules/llm-applications-finance';
 
 import { promptEngineeringOptimizationModule } from '../modules/prompt-engineering-optimization';
 import { llmEngineeringFundamentalsModule } from '../modules/llm-engineering-fundamentals';
@@ -172,6 +173,7 @@ const allModulesMap: Record<string, Module> = {
   'large-language-models': largeLanguageModelsModule,
   'quantitative-finance': quantitativeFinanceModule,
   'time-series-financial-ml': timeSeriesFinancialMlModule,
+  'ml-ai-llm-applications-finance': llmApplicationsFinanceModule,
 
   'applied-ai-llm-fundamentals': llmEngineeringFundamentalsModule,
   'applied-ai-prompt-engineering': promptEngineeringOptimizationModule,

@@ -297,16 +297,16 @@ Return only the JSON."""
         
         # Parse JSON from response
         try:
-            if "```json" in response_text:
-                json_str = response_text.split("```json")[1].split("```")[0].strip()
-            elif "```" in response_text:
-                json_str = response_text.split("```")[1].split("```")[0].strip()
+            if "\`\`\`json" in response_text:
+                json_str = response_text.split("\`\`\`json")[1].split("\`\`\`")[0].strip()
+            elif "\`\`\`" in response_text:
+                json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
             else:
                 json_str = response_text
             
             return json.loads(json_str)
         except Exception as e:
-            print(f"Error parsing JSON: {e}")
+            print(f"Error parsing JSON: {{e}}")
             return {}
     
     def classify_event_type(self, article_text: str) -> Dict:
@@ -388,10 +388,10 @@ Return as JSON list of facts:
     def _parse_json_response(self, response_text: str) -> Dict:
         """Helper to parse JSON from LLM response"""
         try:
-            if "```json" in response_text:
-                json_str = response_text.split("```json")[1].split("```")[0].strip()
-            elif "```" in response_text:
-                json_str = response_text.split("```")[1].split("```")[0].strip()
+            if "\`\`\`json" in response_text:
+                json_str = response_text.split("\`\`\`json")[1].split("\`\`\`")[0].strip()
+            elif "\`\`\`" in response_text:
+                json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
             else:
                 json_str = response_text
             
@@ -630,10 +630,10 @@ Provide JSON response:
         """Parse JSON from LLM response"""
         import json
         try:
-            if "```json" in response_text:
-                json_str = response_text.split("```json")[1].split("```")[0].strip()
-            elif "```" in response_text:
-                json_str = response_text.split("```")[1].split("```")[0].strip()
+            if "\`\`\`json" in response_text:
+                json_str = response_text.split("\`\`\`json")[1].split("\`\`\`")[0].strip()
+            elif "\`\`\`" in response_text:
+                json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
             else:
                 json_str = response_text
             return json.loads(json_str)
@@ -1041,10 +1041,10 @@ Provide analysis with expected outcome."""
         """Parse JSON from response"""
         import json
         try:
-            if "```json" in response_text:
-                json_str = response_text.split("```json")[1].split("```")[0].strip()
-            elif "```" in response_text:
-                json_str = response_text.split("```")[1].split("```")[0].strip()
+            if "\`\`\`json" in response_text:
+                json_str = response_text.split("\`\`\`json")[1].split("\`\`\`")[0].strip()
+            elif "\`\`\`" in response_text:
+                json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
             else:
                 json_str = response_text
             return json.loads(json_str)
@@ -1275,4 +1275,3 @@ We covered:
 Next: Automated report generation for portfolio and market analysis.
 `,
 };
-

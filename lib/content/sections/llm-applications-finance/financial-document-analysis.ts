@@ -794,10 +794,10 @@ Return your analysis as a JSON object matching this structure:
         response_text = response.content[0].text
         
         # Extract JSON from response (handling markdown code blocks)
-        if "```json" in response_text:
-            json_str = response_text.split("```json")[1].split("```")[0].strip()
-        elif "```" in response_text:
-            json_str = response_text.split("```")[1].split("```")[0].strip()
+        if "\`\`\`json" in response_text:
+            json_str = response_text.split("\`\`\`json")[1].split("\`\`\`")[0].strip()
+        elif "\`\`\`" in response_text:
+            json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
         else:
             json_str = response_text
         
@@ -1140,4 +1140,3 @@ We've covered:
 In the next section, we'll apply similar techniques to earnings call transcripts and real-time earnings analysis.
 `,
 };
-

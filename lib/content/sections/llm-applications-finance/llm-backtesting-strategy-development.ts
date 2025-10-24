@@ -1,7 +1,7 @@
 export const llmBacktestingStrategyDevelopment = {
-    title: 'LLM-Powered Backtesting & Strategy Development',
-    id: 'llm-backtesting-strategy-development',
-    content: `
+  title: 'LLM-Powered Backtesting & Strategy Development',
+  id: 'llm-backtesting-strategy-development',
+  content: `
 # LLM-Powered Backtesting & Strategy Development
 
 ## Introduction
@@ -90,10 +90,10 @@ Return complete, executable Python code with detailed comments."""
         code = response.content[0].text
         
         # Extract from code block if present
-        if "```python" in code:
-            code = code.split("```python")[1].split("```")[0].strip()
-        elif "```" in code:
-    code = code.split("```")[1].split("```")[0].strip()
+        if "\`\`\`python" in code:
+            code = code.split("\`\`\`python")[1].split("\`\`\`")[0].strip()
+        elif "\`\`\`" in code:
+            code = code.split("\`\`\`")[1].split("\`\`\`")[0].strip()
         
         return code
     
@@ -139,8 +139,8 @@ response = self.client.messages.create(
 )
 
 code = response.content[0].text
-if "```python" in code:
-    code = code.split("```python")[1].split("```")[0].strip()
+if "\`\`\`python" in code:
+    code = code.split("\`\`\`python")[1].split("\`\`\`")[0].strip()
 
 return code
     
@@ -204,10 +204,10 @@ return self._parse_json(response.content[0].text)
     def _parse_json(self, response_text: str) -> Dict:
 """Parse JSON from response"""
 try:
-if "```json" in response_text:
-    json_str = response_text.split("```json")[1].split("```")[0].strip()
-            elif "```" in response_text:
-json_str = response_text.split("```")[1].split("```")[0].strip()
+if "\`\`\`json" in response_text:
+    json_str = response_text.split("\`\`\`json")[1].split("\`\`\`")[0].strip()
+            elif "\`\`\`" in response_text:
+json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
             else:
 json_str = response_text
 return json.loads(json_str)
@@ -349,8 +349,8 @@ Return complete, executable code with all imports."""
         )
         
         code = response.content[0].text
-        if "```python" in code:
-code = code.split("```python")[1].split("```")[0].strip()
+        if "\`\`\`python" in code:
+code = code.split("\`\`\`python")[1].split("\`\`\`")[0].strip()
 
 return code
     
@@ -395,8 +395,8 @@ response = self.client.messages.create(
 )
 
 code = response.content[0].text
-if "```python" in code:
-    code = code.split("```python")[1].split("```")[0].strip()
+if "\`\`\`python" in code:
+    code = code.split("\`\`\`python")[1].split("\`\`\`")[0].strip()
 
 return code
     
@@ -437,8 +437,8 @@ response = self.client.messages.create(
 )
 
 code = response.content[0].text
-if "```python" in code:
-    code = code.split("```python")[1].split("```")[0].strip()
+if "\`\`\`python" in code:
+    code = code.split("\`\`\`python")[1].split("\`\`\`")[0].strip()
 
 return code
 
@@ -653,10 +653,10 @@ Return detailed comparison with rankings."""
         """Parse JSON from response"""
         import json
         try:
-            if "```json" in response_text:
-json_str = response_text.split("```json")[1].split("```")[0].strip()
-            elif "```" in response_text:
-json_str = response_text.split("```")[1].split("```")[0].strip()
+            if "\`\`\`json" in response_text:
+json_str = response_text.split("\`\`\`json")[1].split("\`\`\`")[0].strip()
+            elif "\`\`\`" in response_text:
+json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
             else:
 json_str = response_text
 return json.loads(json_str)
@@ -845,10 +845,10 @@ Return as JSON list of variations."""
         """Parse JSON from response"""
         import json
         try:
-            if "```json" in response_text:
-json_str = response_text.split("```json")[1].split("```")[0].strip()
-            elif "```" in response_text:
-json_str = response_text.split("```")[1].split("```")[0].strip()
+            if "\`\`\`json" in response_text:
+json_str = response_text.split("\`\`\`json")[1].split("\`\`\`")[0].strip()
+            elif "\`\`\`" in response_text:
+json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
             else:
 json_str = response_text
 return json.loads(json_str)
@@ -1031,4 +1031,3 @@ We covered:
 Final section: Regulatory compliance and monitoring with LLMs.
 `,
 };
-

@@ -26,5 +26,6 @@ export const quantitativeProgrammingTopic = {
     'large-language-models',
     'quantitative-finance',
     'time-series-financial-ml',
+    'ml-ai-llm-applications-finance',
   ],
 };

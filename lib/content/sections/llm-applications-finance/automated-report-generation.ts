@@ -284,28 +284,28 @@ class RiskReportGenerator:
         prompt = f"""Generate a comprehensive risk analysis report for this portfolio.
 
 Portfolio Composition:
-- Total Value: \\${portfolio_data.get('total_value'):,.2f}
-- Number of Positions: {portfolio_data.get('num_positions')}
-- Largest Position: {portfolio_data.get('largest_position')} ({portfolio_data.get('largest_weight')}%)
+- Total Value: \\$\${portfolio_data.get('total_value'):,.2f}
+- Number of Positions: \${portfolio_data.get('num_positions')}
+- Largest Position: \${portfolio_data.get('largest_position')} (\${portfolio_data.get('largest_weight')}%)
 
 Sector Exposures:
-{self._format_dict(portfolio_data.get('sector_exposure', {}))}
+\${self._format_dict(portfolio_data.get('sector_exposure', {}))}
 
 Geographic Exposures:
-{self._format_dict(portfolio_data.get('geo_exposure', {}))}
+\${self._format_dict(portfolio_data.get('geo_exposure', {}))}
 
 Risk Metrics:
-- Value at Risk (95% confidence, 1-day): \\${risk_metrics.get('var_95'):,.2f}
-- Conditional VaR (Expected Shortfall): \\${risk_metrics.get('cvar_95'):,.2f}
-- Portfolio Beta: {risk_metrics.get('beta', 1.0):.2f}
-- Portfolio Volatility: {risk_metrics.get('volatility', 0):.1f}%
-- Maximum Drawdown (1Y): {risk_metrics.get('max_drawdown', 0):.1f}%
-- Correlation with Market: {risk_metrics.get('market_correlation', 0):.2f}
+- Value at Risk (95% confidence, 1-day): \\$\${risk_metrics.get('var_95'):,.2f}
+- Conditional VaR (Expected Shortfall): \\$\${risk_metrics.get('cvar_95'):,.2f}
+- Portfolio Beta: \${risk_metrics.get('beta', 1.0):.2f}
+- Portfolio Volatility: \${risk_metrics.get('volatility', 0):.1f}%
+- Maximum Drawdown (1Y): \${risk_metrics.get('max_drawdown', 0):.1f}%
+- Correlation with Market: \${risk_metrics.get('market_correlation', 0):.2f}
 
 Current Market Environment:
-- VIX Level: {market_data.get('vix', 0):.1f}
-- Market Trend: {market_data.get('trend', 'Unknown')}
-- Recent Volatility: {market_data.get('recent_volatility', 'Normal')}
+- VIX Level: \${market_data.get('vix', 0):.1f}
+- Market Trend: \${market_data.get('trend', 'Unknown')}
+- Recent Volatility: \${market_data.get('recent_volatility', 'Normal')}
 
 Generate a risk report including:
 
@@ -367,12 +367,12 @@ Format as Markdown suitable for risk committee presentation."""
         prompt = f"""Explain Value at Risk (VaR) to a {client_level} investor.
 
 VaR Metrics:
-- 1-Day VaR (95%): \\${var_metrics.get('var_1d_95'):,.2f}
-- 1-Day VaR (99%): \\${var_metrics.get('var_1d_99'):,.2f}
-- 10-Day VaR (95%): \\${var_metrics.get('var_10d_95'):,.2f}
-- Portfolio Value: \\${var_metrics.get('portfolio_value'):,.2f}
+- 1-Day VaR (95%): \\$\${var_metrics.get('var_1d_95'):,.2f}
+- 1-Day VaR (99%): \\$\${var_metrics.get('var_1d_99'):,.2f}
+- 10-Day VaR (95%): \\$\${var_metrics.get('var_10d_95'):,.2f}
+- Portfolio Value: \\$\${var_metrics.get('portfolio_value'):,.2f}
 
-Instructions: {technical_detail[client_level]}
+Instructions: \${technical_detail[client_level]}
 
 Explain:
 1. What VaR means in simple terms
@@ -723,28 +723,28 @@ class AttributionReportGenerator:
         """
         prompt = f"""Generate a performance attribution report explaining sources of portfolio returns.
 
-Portfolio Return: {attribution_data.get('total_return', 0):.2f}%
-Benchmark Return: {attribution_data.get('benchmark_return', 0):.2f}%
-Active Return (Alpha): {attribution_data.get('active_return', 0):.2f}%
+Portfolio Return: \${attribution_data.get('total_return', 0):.2f}%
+Benchmark Return: \${attribution_data.get('benchmark_return', 0):.2f}%
+Active Return (Alpha): \${attribution_data.get('active_return', 0):.2f}%
 
 Attribution Breakdown:
 
-Asset Allocation Effect: {attribution_data.get('allocation_effect', 0):.2f}%
+Asset Allocation Effect: \${attribution_data.get('allocation_effect', 0):.2f}%
 (Difference from being overweight/underweight sectors vs benchmark)
 
-Security Selection Effect: {attribution_data.get('selection_effect', 0):.2f}%
+Security Selection Effect: \${attribution_data.get('selection_effect', 0):.2f}%
 (Difference from picking outperforming/underperforming stocks)
 
-Interaction Effect: {attribution_data.get('interaction_effect', 0):.2f}%
+Interaction Effect: \${attribution_data.get('interaction_effect', 0):.2f}%
 
 Sector Attribution:
-{self._format_sector_attribution(attribution_data.get('sector_attribution', {}))}
+\${self._format_sector_attribution(attribution_data.get('sector_attribution', {}))}
 
 Top Contributors to Performance:
-{self._format_contributors(attribution_data.get('top_contributors', []))}
+\${self._format_contributors(attribution_data.get('top_contributors', []))}
 
 Top Detractors from Performance:
-{self._format_contributors(attribution_data.get('top_detractors', []))}
+\${self._format_contributors(attribution_data.get('top_detractors', []))}
 
 Generate a report (800-1000 words) explaining:
 
@@ -1076,4 +1076,3 @@ We covered:
 Next: Trading signal generation using LLMs.
 `,
 };
-

@@ -1,7 +1,7 @@
 export const marketResearchAutomation = {
-    title: 'Market Research Automation',
-    id: 'market-research-automation',
-    content: `
+  title: 'Market Research Automation',
+  id: 'market-research-automation',
+  content: `
 # Market Research Automation
 
 ## Introduction
@@ -247,12 +247,12 @@ Return opportunity analysis as JSON with:
     def _parse_json(self, response_text: str) -> Dict:
         """Parse JSON from LLM response"""
         try:
-            if "```json" in response_text:
-                json_str = response_text.split("```json")[1].split("```")[0].strip()
-            elif "```" in response_text:
-    json_str = response_text.split("```")[1].split("```")[0].strip()
+            if "\`\`\`json" in response_text:
+                json_str = response_text.split("\`\`\`json")[1].split("\`\`\`")[0].strip()
+            elif "\`\`\`" in response_text:
+                json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
             else:
-        json_str = response_text
+                json_str = response_text
             return json.loads(json_str)
         except:
             return {}
@@ -479,10 +479,10 @@ Return evolution analysis highlighting changes and lessons learned."""
         """Parse JSON from response"""
         import json
         try:
-            if "```json" in response_text:
-json_str = response_text.split("```json")[1].split("```")[0].strip()
-            elif "```" in response_text:
-json_str = response_text.split("```")[1].split("```")[0].strip()
+            if "\`\`\`json" in response_text:
+json_str = response_text.split("\`\`\`json")[1].split("\`\`\`")[0].strip()
+            elif "\`\`\`" in response_text:
+json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
             else:
 json_str = response_text
 return json.loads(json_str)
@@ -694,10 +694,10 @@ Create structured investment thesis as JSON:
         """Parse JSON from response"""
         import json
         try:
-            if "```json" in response_text:
-json_str = response_text.split("```json")[1].split("```")[0].strip()
-            elif "```" in response_text:
-json_str = response_text.split("```")[1].split("```")[0].strip()
+            if "\`\`\`json" in response_text:
+json_str = response_text.split("\`\`\`json")[1].split("\`\`\`")[0].strip()
+            elif "\`\`\`" in response_text:
+json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
             else:
 json_str = response_text
 return json.loads(json_str)
@@ -899,10 +899,10 @@ Return gap analysis with action plan."""
         """Parse JSON from response"""
         import json
         try:
-            if "```json" in response_text:
-json_str = response_text.split("```json")[1].split("```")[0].strip()
-            elif "```" in response_text:
-json_str = response_text.split("```")[1].split("```")[0].strip()
+            if "\`\`\`json" in response_text:
+json_str = response_text.split("\`\`\`json")[1].split("\`\`\`")[0].strip()
+            elif "\`\`\`" in response_text:
+json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
             else:
 json_str = response_text
 return json.loads(json_str)
@@ -1159,4 +1159,3 @@ We covered:
 Next: Conversational trading assistants and interfaces.
 `,
 };
-
