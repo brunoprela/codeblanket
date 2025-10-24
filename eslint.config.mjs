@@ -77,5 +77,13 @@ export default [
             '@typescript-eslint/explicit-module-boundary-types': 'off',
         },
     },
+
+    // Content files with LaTeX notation and code examples
+    {
+        files: ['lib/content/**/*.ts'],
+        rules: {
+            'no-useless-escape': 'off',
+        },
+    },
 ];
 
