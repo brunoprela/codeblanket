@@ -34,10 +34,10 @@ export const textRepresentationMultipleChoice: MultipleChoiceQuestion[] = [
     question:
       'For the text "not good", which representation would best capture the negative sentiment?',
     options: [
-      'Unigrams only: ["not", "good"]',
-      'Bigrams only: ["not good"]',
-      'Unigrams + Bigrams: ["not", "good", "not good"]',
-      'Character n-grams: ["not", " go", "ood"]',
+      'Unigrams only: ["not", "good",]',
+      'Bigrams only: ["not good",]',
+      'Unigrams + Bigrams: ["not", "good", "not good",]',
+      'Character n-grams: ["not", " go", "ood",]',
     ],
     correctAnswer: 2,
     explanation:

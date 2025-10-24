@@ -437,11 +437,11 @@ df['email'] = df['email'].str.lower()
 df['name_clean'] = df['name'].str.replace('_', ' ').str.replace('-', ' ')
 
 # Remove special characters
-df['name_alpha'] = df['name'].str.replace(r'[^a-zA-Z\\s]', '', regex=True)
+df['name_alpha'] = df['name'].str.replace(r'[^a-zA-Z\\s]', ', regex=True)
 
 # Standardize phone numbers
 df['phone_clean'] = (df['phone']
-    .str.replace(r'[^0-9]', '', regex=True)  # Keep only digits
+    .str.replace(r'[^0-9]', ', regex=True)  # Keep only digits
     .str[-10:]  # Last 10 digits (remove country code)
 )
 
@@ -466,7 +466,7 @@ df['text'] = df['text'].str.strip('.,!?;:')
 df['text'] = df['text'].str.replace(r'[\\-_/]', ' ', regex=True)
 
 # Remove digits
-df['text'] = df['text'].str.replace(r'\\d+', '', regex=True)
+df['text'] = df['text'].str.replace(r'\\d+', ', regex=True)
 
 # Expand contractions
 contractions = {

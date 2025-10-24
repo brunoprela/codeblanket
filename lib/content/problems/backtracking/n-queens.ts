@@ -107,7 +107,7 @@ def solve_n_queens(n: int) -> List[List[str]]:
     def backtrack(row):
         # Base case: placed all queens
         if row == n:
-            result.append([''.join(r) for r in board])
+            result.append(['.join(r) for r in board])
             return
         
         # Try each column in current row
@@ -172,7 +172,7 @@ def solve_n_queens_check(n: int) -> List[List[str]]:
     
     def backtrack(row):
         if row == n:
-            result.append([''.join(r) for r in board])
+            result.append(['.join(r) for r in board])
             return
         
         for col in range(n):

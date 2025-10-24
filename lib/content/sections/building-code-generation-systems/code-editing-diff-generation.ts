@@ -74,7 +74,7 @@ def calculate(x, y):
 
 modified = """
 def calculate(x: int, y: int) -> int:
-    '''Add two numbers.'''
+    ''Add two numbers.''
     if not isinstance(x, int) or not isinstance(y, int):
         raise TypeError("Arguments must be integers")
     return x + y
@@ -89,7 +89,7 @@ print(diff)
 # @@ -1,2 +1,5 @@
 # -def calculate(x, y):
 # +def calculate(x: int, y: int) -> int:
-# +    '''Add two numbers.'''
+# +    ''Add two numbers.''
 # +    if not isinstance(x, int) or not isinstance(y, int):
 # +        raise TypeError("Arguments must be integers")
 #      return x + y
@@ -147,7 +147,7 @@ def calculate(x, y):
     return x + y
 =======
 def calculate(x: int, y: int) -> int:
-    '''Add two numbers.'''
+    ''Add two numbers.''
     return x + y
 >>>>>>> REPLACE
 
@@ -479,7 +479,7 @@ original = """def process(data):
 """
 
 modified = """def process(data: dict) -> dict:
-    '''Process input data.'''
+    ''Process input data.''
     if not data:
         raise ValueError("Data cannot be empty")
     result = transform(data)
@@ -756,7 +756,7 @@ ours = """def calculate(x: int, y: int):
 """
 
 theirs = """def calculate(x, y):
-    '''Add two numbers.'''
+    ''Add two numbers.''
     return x + y
 """
 

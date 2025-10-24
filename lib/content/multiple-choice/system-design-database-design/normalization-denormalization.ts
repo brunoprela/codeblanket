@@ -9,7 +9,7 @@ export const normalizationdenormalizationMultipleChoice: MultipleChoiceQuestion[
     {
       id: 'norm-1',
       question:
-        'Which normal form violation is present in this table?\n\nCREATE TABLE employees (\n  employee_id INT PRIMARY KEY,\n  employee_name VARCHAR(255),\n  department_id INT,\n  department_name VARCHAR(255),\n  department_location VARCHAR(255)\n);',
+        'Which normal form violation is present in this table?\\n\\nCREATE TABLE employees (\\n  employee_id INT PRIMARY KEY,\\n  employee_name VARCHAR(255),\\n  department_id INT,\\n  department_name VARCHAR(255),\\n  department_location VARCHAR(255)\\n);',
       options: [
         'First Normal Form (1NF) - contains non-atomic values',
         'Second Normal Form (2NF) - partial dependency on composite key',

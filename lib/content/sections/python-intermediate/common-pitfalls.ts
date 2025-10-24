@@ -189,10 +189,10 @@ for i in range(10000):
 parts = []
 for i in range(10000):
     parts.append(str(i))
-result = ''.join(parts)
+result = '.join(parts)
 
 # ✅ BEST - List comprehension
-result = ''.join([str(i) for i in range(10000)])
+result = '.join([str(i) for i in range(10000)])
 \`\`\`
 
 ---

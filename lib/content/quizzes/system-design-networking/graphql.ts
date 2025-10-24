@@ -68,7 +68,7 @@ export const graphqlQuiz = [
     const server = new ApolloServer({
       context: ({ req }) => {
         // Extract JWT from header
-        const token = req.headers.authorization?.replace('Bearer ', '');
+        const token = req.headers.authorization?.replace('Bearer ', ');
         
         if (!token) {
           throw new AuthenticationError('Missing auth token');
@@ -463,19 +463,19 @@ export const graphqlQuiz = [
     // Define costs in schema
     const typeDefs = gql\`
       type Query {
-        users(first: Int = 20): [User!]! @cost(complexity: 10, multipliers: ["first"])
+        users(first: Int = 20): [User!]! @cost(complexity: 10, multipliers: ["first",])
         user(id: ID!): User @cost(complexity: 1)
       }
       
       type User {
         id: ID!
         name: String!
-        posts(first: Int = 20): [Post!]! @cost(complexity: 5, multipliers: ["first"])
+        posts(first: Int = 20): [Post!]! @cost(complexity: 5, multipliers: ["first",])
       }
       
       type Post {
         id: ID!
-        comments(first: Int = 20): [Comment!]! @cost(complexity: 3, multipliers: ["first"])
+        comments(first: Int = 20): [Comment!]! @cost(complexity: 3, multipliers: ["first",])
       }
     \`;
     
@@ -805,8 +805,8 @@ export const graphqlQuiz = [
     \`\`\`javascript
     // Only allow pre-approved queries in production
     const approvedQueries = new Map([
-      ['abc123...', 'query GetUser($id: ID!) { user(id: $id) { id name } }'],
-      ['def456...', 'query GetFeed { feed { id title } }']
+      ['abc123...', 'query GetUser($id: ID!) { user(id: $id) { id name } }',],
+      ['def456...', 'query GetFeed { feed { id title } }',]
     ]);
     
     const server = new ApolloServer({

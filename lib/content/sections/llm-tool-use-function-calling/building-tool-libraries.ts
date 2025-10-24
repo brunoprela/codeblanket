@@ -521,7 +521,7 @@ def generate_tool_documentation(registry: ToolRegistry, output_file: str):
             docs.append("**Parameters:**\\n\\n")
             for param_name, param_info in tool.schema["properties"].items():
                 required = " (required)" if param_name in tool.schema.get("required", []) else ""
-                docs.append(f"- \`{param_name}\` ({param_info['type']}){required}: {param_info.get('description', '')}\\n")
+                docs.append(f"- \`{param_name}\` ({param_info['type']}){required}: {param_info.get('description', ')}\\n")
             
             docs.append("\\n")
             
@@ -537,7 +537,7 @@ docs.append("---\\n\\n")
     
     # Write to file
 with open(output_file, 'w') as f:
-f.write(''.join(docs))
+f.write('.join(docs))
 
 # Generate documentation
 generate_tool_documentation(registry, "docs/tools.md")

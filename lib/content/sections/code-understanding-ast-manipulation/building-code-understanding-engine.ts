@@ -569,20 +569,20 @@ engine.add_file('user_service.py', """
 from typing import Optional
 
 class UserService:
-    '''Manage user operations.'''
+    ''Manage user operations.''
     
     def __init__(self, db):
         self.db = db
     
     def get_user(self, user_id: int) -> Optional[dict]:
-        '''Get user by ID.
+        ''Get user by ID.
         
         Args:
             user_id: User ID to fetch
             
         Returns:
             User data or None if not found
-        '''
+        ''
         return self.db.query(user_id)
     
     def create_user(self, name: str, email: str):

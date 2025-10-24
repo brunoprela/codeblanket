@@ -57,7 +57,7 @@ export const microservicessecuritySection = {
 \`\`\`javascript
 // API Gateway
 async function authenticate(req, res, next) {
-    const token = req.headers['authorization']?.replace('Bearer ', '');
+    const token = req.headers['authorization']?.replace('Bearer ', ');
     
     if (!token) {
         return res.status(401).json({ error: 'No token provided' });
@@ -478,7 +478,7 @@ const stripeApiKey = secret.data.data['stripe-api-key'];
 \`\`\`javascript
 const query = \`SELECT * FROM users WHERE email = '\${req.body.email}'\`;
 // Attacker sends: email = "' OR '1'='1"
-// Query becomes: SELECT * FROM users WHERE email = '' OR '1'='1'
+// Query becomes: SELECT * FROM users WHERE email = ' OR '1'='1'
 // Returns all users!
 \`\`\`
 

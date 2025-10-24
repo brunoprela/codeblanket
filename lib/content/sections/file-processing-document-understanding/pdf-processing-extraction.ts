@@ -284,7 +284,7 @@ class PDFTableExtractor:
         for col in df.columns:
             try:
                 # Remove currency symbols and commas
-                cleaned = df[col].str.replace('[$,]', '', regex=True)
+                cleaned = df[col].str.replace('[$,]', ', regex=True)
                 df[col] = pd.to_numeric(cleaned, errors='ignore')
             except:
                 pass
@@ -430,13 +430,13 @@ def extract_pdf_metadata(filepath: str) -> Dict:
     info = {
         "filename": Path(filepath).name,
         "num_pages": len(reader.pages),
-        "author": metadata.get('/Author', ''),
-        "creator": metadata.get('/Creator', ''),
-        "producer": metadata.get('/Producer', ''),
-        "subject": metadata.get('/Subject', ''),
-        "title": metadata.get('/Title', ''),
-        "creation_date": metadata.get('/CreationDate', ''),
-        "modification_date": metadata.get('/ModDate', ''),
+        "author": metadata.get('/Author', '),
+        "creator": metadata.get('/Creator', '),
+        "producer": metadata.get('/Producer', '),
+        "subject": metadata.get('/Subject', '),
+        "title": metadata.get('/Title', '),
+        "creation_date": metadata.get('/CreationDate', '),
+        "modification_date": metadata.get('/ModDate', '),
     }
     
     # Additional info with pdfplumber

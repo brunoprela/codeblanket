@@ -689,7 +689,7 @@ async def judge_code_solution(code: str) -> float:
         score += 0.3
     
     # Check for documentation
-    if '"""' in code or "'''" in code:
+    if '"""' in code or "''" in code:
         score += 0.2
     
     # Check for type hints

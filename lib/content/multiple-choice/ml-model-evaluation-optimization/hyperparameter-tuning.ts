@@ -1,69 +1,79 @@
-import { MultipleChoiceQuestion } from '../../../types';
-
-export const hyperparameterTuningMultipleChoice: MultipleChoiceQuestion[] = [
-  {
-    id: 'hyperparameter-tuning-mc-1',
-    question:
-      'You have 5 hyperparameters, each with 5 possible values. How many configurations would grid search evaluate?',
-    options: ['25', '125', '625', '3,125'],
-    correctAnswer: 3,
-    explanation:
-      'Grid search tries all combinations: 5 × 5 × 5 × 5 × 5 = 5^5 = 3,125 configurations. This exponential growth is why grid search becomes impractical for high-dimensional hyperparameter spaces.',
-  },
-  {
-    id: 'hyperparameter-tuning-mc-2',
-    question:
-      'Why does random search often perform as well as grid search with fewer iterations?',
-    options: [
-      'Random search uses a better optimization algorithm',
-      'Not all hyperparameters are equally important, so random search explores important ones more thoroughly',
-      'Random search automatically identifies the best hyperparameters',
-      'Grid search wastes time on duplicate configurations',
-    ],
-    correctAnswer: 1,
-    explanation:
-      'Random search works well because typically only a few hyperparameters significantly impact performance. With the same budget, random search tries more unique values for each parameter than grid search, giving better coverage of the important dimensions.',
-  },
-  {
-    id: 'hyperparameter-tuning-mc-3',
-    question:
-      'When tuning a learning rate hyperparameter, which search space is most appropriate?',
-    options: [
-      'Linear: [0.001, 0.002, 0.003, ..., 0.999]',
-      'Logarithmic: [0.0001, 0.001, 0.01, 0.1, 1.0]',
-      'Random uniform: uniform(0, 1)',
-      'Categorical: [small, medium, large]',
-    ],
-    correctAnswer: 1,
-    explanation:
-      'Learning rates should be searched on a logarithmic scale because the effect of changing from 0.001 to 0.01 is similar to changing from 0.01 to 0.1 (10x multiplier). Linear spacing would waste evaluations in regions that behave similarly. Use loguniform or powers of 10.',
-  },
-  {
-    id: 'hyperparameter-tuning-mc-4',
-    question:
-      'What is the purpose of nested cross-validation in hyperparameter tuning?',
-    options: [
-      'To make hyperparameter tuning faster',
-      'To get an unbiased estimate of model performance with tuning',
-      'To tune more hyperparameters simultaneously',
-      'To avoid overfitting on the training set',
-    ],
-    correctAnswer: 1,
-    explanation:
-      'Nested CV provides an unbiased performance estimate by using an outer CV loop for evaluation and an inner CV loop for hyperparameter selection. This prevents overfitting to the validation set that occurs when you optimize hyperparameters using the same CV folds you report.',
-  },
-  {
-    id: 'hyperparameter-tuning-mc-5',
-    question:
-      'You performed hyperparameter tuning and your best model has CV score of 0.85 but test score of 0.75. What likely happened?',
-    options: [
-      'The model is working perfectly',
-      'You overfitted to the validation set during hyperparameter tuning',
-      'You need more training data',
-      'The hyperparameters are optimal',
-    ],
-    correctAnswer: 1,
-    explanation:
-      'The 0.10 gap between CV (0.85) and test (0.75) scores suggests you overfitted to the validation set during hyperparameter tuning. You optimized hyperparameters to maximize CV score, which makes it an optimistically biased estimate. This is why nested CV or a separate validation set is important.',
-  },
-];
+export const hyperparameterTuningMultipleChoice = {
+  title: 'Hyperparameter Tuning - Multiple Choice Questions',
+  questions: [
+    {
+      id: 1,
+      question:
+        'What is the main advantage of Random Search over Grid Search for hyperparameter tuning?',
+      options: [
+        'Random Search always finds better parameters',
+        'Random Search explores more values of important parameters with same budget',
+        'Random Search is more systematic',
+        "Random Search doesn't need cross-validation",
+      ],
+      correctAnswer: 1,
+      explanation:
+        "Random Search samples random combinations, so it tries more distinct values of each parameter compared to Grid Search which discretizes the space. If one parameter is unimportant, Random Search doesn't waste iterations on it while exploring more values of important parameters.",
+      difficulty: 'intermediate' as const,
+      category: 'Search Methods',
+    },
+    {
+      id: 2,
+      question: 'Why should you never tune hyperparameters using the test set?',
+      options: [
+        'It takes too long to compute',
+        "It creates optimistic bias - you're selecting parameters that work well on that specific test set",
+        'Test sets are too small',
+        'It violates mathematical laws',
+      ],
+      correctAnswer: 1,
+      explanation:
+        "Tuning on test set means selecting hyperparameters that happen to work well on that specific test set, possibly by chance. This 'leaks' information about the test set into your model selection, giving optimistically biased performance estimates. Always tune on validation set, test once at the end.",
+      difficulty: 'beginner' as const,
+      category: 'Methodology',
+    },
+    {
+      id: 3,
+      question:
+        'For a Random Forest with 10 hyperparameters and limited compute budget, which approach would be most efficient?',
+      options: [
+        'Grid Search with 5 values per parameter (9.7M combinations)',
+        'Bayesian Optimization with 50-100 trials',
+        'Try each parameter individually',
+        'Use default parameters without tuning',
+      ],
+      correctAnswer: 1,
+      explanation:
+        "Bayesian Optimization builds a probabilistic model of the objective function and intelligently samples promising regions. It's highly sample-efficient, often finding good solutions in 50-100 trials vs thousands for Grid/Random Search. Perfect for limited budgets and many hyperparameters.",
+      difficulty: 'advanced' as const,
+      category: 'Strategy',
+    },
+    {
+      id: 4,
+      question:
+        'What is the purpose of Successive Halving in hyperparameter search?',
+      options: [
+        'To try only half of the possible combinations',
+        'To quickly eliminate poor configurations by training on small data first',
+        'To use half the training data',
+        'To reduce the number of hyperparameters',
+      ],
+      correctAnswer: 1,
+      explanation:
+        'Successive Halving starts with many candidates on small data samples, eliminates worst performers, gives remaining candidates more data, and repeats. This quickly discards bad configs without wasting compute, focusing resources on promising candidates.',
+      difficulty: 'advanced' as const,
+      category: 'Optimization',
+    },
+    {
+      id: 5,
+      question:
+        'Which hyperparameter typically has the most significant impact on neural network training?',
+      options: ['Random seed', 'Batch size', 'Learning rate', 'Number of GPUs'],
+      correctAnswer: 2,
+      explanation:
+        'Learning rate is typically the most critical hyperparameter for neural networks. Too high causes divergence, too low results in slow convergence or getting stuck. It affects training dynamics more than most other hyperparameters and often requires careful tuning.',
+      difficulty: 'beginner' as const,
+      category: 'Neural Networks',
+    },
+  ],
+};

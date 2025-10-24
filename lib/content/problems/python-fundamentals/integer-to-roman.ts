@@ -93,7 +93,7 @@ print(int_to_roman(1994))
             result.append(symbol * count)
             num -= value * count
     
-    return ''.join(result)`,
+    return '.join(result)`,
   timeComplexity: 'O(1) - fixed number of iterations',
   spaceComplexity: 'O(1)',
   order: 42,

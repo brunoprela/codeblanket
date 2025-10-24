@@ -353,7 +353,7 @@ response = openai.chat.completions.create(
     model="gpt-4",
     messages=[{
         "role": "user",
-        "content": "Extract the city from: 'What's the weather in San Francisco?'"
+        "content": "Extract the city from: "What's the weather in San Francisco?""
     }]
 )
 

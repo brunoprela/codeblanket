@@ -371,15 +371,15 @@ class DocumentStore:
     def index_documents(self, documents):
         """Index with both text and embeddings"""
         for doc in documents:
-            embedding = self.encoder.encode(doc['content'])
+            embedding = self.encoder.encode(doc['content',])
             
             self.es.index(
                 index='support_docs',
                 body={
-                    'content': doc['content'],
+                    'content': doc['content',],
                     'content_embedding': embedding.tolist(),
-                    'category': doc['category'],
-                    'last_updated': doc['date']
+                    'category': doc['category',],
+                    'last_updated': doc['date',]
                 }
             )
 \`\`\`
@@ -393,7 +393,7 @@ class HybridRetriever:
         self.encoder = SentenceTransformer('all-MiniLM-L6-v2')
         
     def retrieve(self, query, intent=None, top_k=20):
-        '''Retrieve using hybrid search'''
+        ''Retrieve using hybrid search''
         # Encode query
         query_embedding = self.encoder.encode(query)
         
@@ -406,7 +406,7 @@ class HybridRetriever:
                         {
                             "multi_match": {
                                 "query": query,
-                                "fields": ["content"],
+                                "fields": ["content",],
                                 "type": "best_fields",
                                 "boost": 0.5
                             }
@@ -433,7 +433,7 @@ class HybridRetriever:
         }
         
         results = self.doc_store.es.search(index='support_docs', body=es_query)
-        return [hit['_source'] for hit in results['hits']['hits']]
+        return [hit['_source',] for hit in results['hits',]['hits',]]
 \`\`\`
 
 **Component 4: Re-ranking**
@@ -448,13 +448,13 @@ class Reranker:
         self.tokenizer = AutoTokenizer.from_pretrained('cross-encoder/ms-marco-MiniLM-L-6-v2')
         
     def rerank(self, query, documents, top_k=5):
-        '''Re-rank with cross-encoder'''
+        ''Re-rank with cross-encoder''
         scores = []
         
         for doc in documents:
             inputs = self.tokenizer(
                 query, 
-                doc['content'],
+                doc['content',],
                 padding=True,
                 truncation=True,
                 return_tensors='pt'
@@ -478,19 +478,19 @@ class AnswerExtractor:
         self.qa_model = pipeline('question-answering', model='distilbert-base-cased-distilled-squad')
         
     def extract_answer(self, question, documents):
-        '''Try to extract answer from each document'''
+        ''Try to extract answer from each document''
         candidates = []
         
         for doc in documents:
             try:
-                result = self.qa_model(question=question, context=doc['content'])
+                result = self.qa_model(question=question, context=doc['content',])
                 
                 # Only include if confidence is high
-                if result['score'] > 0.3:
+                if result['score',] > 0.3:
                     candidates.append({
-                        'answer': result['answer'],
-                        'score': result['score'],
-                        'context': doc['content'],
+                        'answer': result['answer',],
+                        'score': result['score',],
+                        'context': doc['content',],
                         'source': doc.get('title', 'Support Document')
                     })
             except:
@@ -498,7 +498,7 @@ class AnswerExtractor:
         
         # Return best answer
         if candidates:
-            return max(candidates, key=lambda x: x['score'])
+            return max(candidates, key=lambda x: x['score',])
         return None
 \`\`\`
 
@@ -510,19 +510,19 @@ class GenerativeAnswerer:
         self.generator = pipeline('text-generation', model='gpt2')
         
     def generate_answer(self, question, context_docs):
-        '''Generate answer when extraction fails'''
+        ''Generate answer when extraction fails''
         # Concatenate top documents as context
-        context = "\\n".join([doc['content'][:200] for doc in context_docs[:3]])
+        context = "\\n".join([doc['content',][:200] for doc in context_docs[:3]])
         
-        prompt = f'''Based on the following information, answer the question.
+        prompt = f''Based on the following information, answer the question.
         
 Context: {context}
 
 Question: {question}
 
-Answer:'''
+Answer:''
         
-        answer = self.generator(prompt, max_length=150)[0]['generated_text']
+        answer = self.generator(prompt, max_length=150)[0]['generated_text',]
         return answer.split("Answer:")[-1].strip()
 \`\`\`
 
@@ -543,44 +543,44 @@ class CustomerSupportQA:
         
         # 2. Retrieve candidates (broad recall)
         candidates = self.retriever.retrieve(
-            processed['expanded'],
-            intent=processed['intent'],
+            processed['expanded',],
+            intent=processed['intent',],
             top_k=20
         )
         
         # 3. Re-rank (precision)
-        reranked, scores = self.reranker.rerank(processed['corrected'], candidates, top_k=5)
+        reranked, scores = self.reranker.rerank(processed['corrected',], candidates, top_k=5)
         
         # 4. Extract answer
-        answer = self.extractor.extract_answer(processed['corrected'], reranked)
+        answer = self.extractor.extract_answer(processed['corrected',], reranked)
         
         # 5. Fallback to generation if extraction fails
-        if not answer or answer['score'] < 0.5:
+        if not answer or answer['score',] < 0.5:
             answer = {
-                'answer': self.generator.generate_answer(processed['corrected'], reranked),
+                'answer': self.generator.generate_answer(processed['corrected',], reranked),
                 'score': 0.7,
-                'context': reranked[0]['content'],
+                'context': reranked[0]['content',],
                 'source': 'Generated from context'
             }
         
         # 6. Format response
         return {
-            'answer': answer['answer'],
-            'confidence': answer['score'],
+            'answer': answer['answer',],
+            'confidence': answer['score',],
             'sources': [
-                {'title': doc.get('title', ''), 'snippet': doc['content'][:200]}
+                {'title': doc.get('title', '), 'snippet': doc['content',][:200]}
                 for doc in reranked[:3]
             ],
-            'intent': processed['intent']
+            'intent': processed['intent',]
         }
 
 # Usage
 qa_system = CustomerSupportQA()
 result = qa_system.answer_question("How do I return a product?")
 
-print(f"Answer: {result['answer']}")
-print(f"Confidence: {result['confidence']}")
-print("Sources:", result['sources'])
+print(f"Answer: {result['answer',]}")
+print(f"Confidence: {result['confidence',]}")
+print("Sources:", result['sources',])
 \`\`\`
 
 **Production Considerations:**

@@ -136,7 +136,7 @@ stream = ollama.chat(
 )
 
 for chunk in stream:
-    print(chunk['message']['content'], end='', flush=True)
+    print(chunk['message']['content'], end=', flush=True)
 \`\`\`
 
 ### Ollama HTTP API
@@ -181,7 +181,7 @@ def call_ollama_stream(prompt: str, model: str = 'llama3'):
         if line:
             data = json.loads(line)
             if 'response' in data:
-                print(data['response'], end='', flush=True)
+                print(data['response'], end=', flush=True)
             
             if data.get('done'):
                 print()  # Newline at end

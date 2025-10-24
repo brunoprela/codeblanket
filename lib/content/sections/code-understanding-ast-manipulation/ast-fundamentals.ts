@@ -705,21 +705,21 @@ class DataProcessor:
         self.cache = {}
     
     def process(self, data: list) -> dict:
-        '''Process input data and return results.'''
+        ''Process input data and return results.''
         cleaned = self.clean_data(data)
         result = self.transform(cleaned)
         return result
     
     def clean_data(self, data: list) -> list:
-        '''Remove invalid entries.'''
+        ''Remove invalid entries.''
         return [x for x in data if self.validate(x)]
     
     def transform(self, data: list) -> dict:
-        '''Transform data to output format.'''
+        ''Transform data to output format.''
         return {'processed': data, 'count': len(data)}
     
     def validate(self, item) -> bool:
-        '''Check if item is valid.'''
+        ''Check if item is valid.''
         return item is not None
 
 def main():

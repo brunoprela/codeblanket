@@ -146,9 +146,9 @@ reduce_lr = keras.callbacks.ReduceLROnPlateau(
 \`\`\`python
 class CustomCallback(keras.callbacks.Callback):
     def on_epoch_end(self, epoch, logs=None):
-        print(f"Epoch {epoch}: loss={logs['loss']:.4f}")
+        print(f"Epoch {epoch}: loss={logs['loss',]:.4f}")
         
-        if logs['val_accuracy'] > 0.95:
+        if logs['val_accuracy',] > 0.95:
             print("Reached target accuracy!")
             self.model.stop_training = True
 \`\`\`

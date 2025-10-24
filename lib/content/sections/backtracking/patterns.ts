@@ -141,7 +141,7 @@ def solve_n_queens(n):
     
     def backtrack(row):
         if row == n:
-            result.append([''.join(r) for r in board])
+            result.append(['.join(r) for r in board])
             return
         
         for col in range(n):

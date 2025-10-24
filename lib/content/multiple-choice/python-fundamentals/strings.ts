@@ -42,7 +42,7 @@ export const stringsMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'pf-strings-mc-5',
     question: 'What does "abc" * 3 produce?',
-    options: ['"abcabcabc"', '"abc3"', '["abc", "abc", "abc"]', 'Error'],
+    options: ['"abcabcabc"', '"abc3"', '["abc", "abc", "abc",]', 'Error'],
     correctAnswer: 0,
     explanation: 'String multiplication repeats the string n times.',
   },

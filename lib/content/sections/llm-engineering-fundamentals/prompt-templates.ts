@@ -554,7 +554,7 @@ class ProductionTemplateSystem:
                 required_vars=config.get('required_vars', []),
                 default_vars=config.get('default_vars', {}),
                 version=config.get('version', '1.0'),
-                description=config.get('description', '')
+                description=config.get('description', ')
             )
     
     def render(

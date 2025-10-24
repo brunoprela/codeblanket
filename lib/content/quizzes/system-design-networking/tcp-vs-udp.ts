@@ -345,7 +345,7 @@ query {
 
 *Detect mobile clients*:
 \`\`\`javascript
-if (request.headers['User-Agent'].includes('Mobile')) {
+if (request.headers['User-Agent',].includes('Mobile')) {
   // Return smaller images
   // Reduce API response size
   // Enable aggressive caching
@@ -553,7 +553,7 @@ Key: (domain, record_type)
   Example: ("example.com", A)
 
 Value: {
-  records: ["93.184.216.34"],
+  records: ["93.184.216.34",],
   ttl: 300,
   expires_at: 1640000000
 }

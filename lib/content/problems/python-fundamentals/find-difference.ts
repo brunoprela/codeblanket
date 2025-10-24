@@ -77,7 +77,7 @@ print(find_the_difference("abcd", "abcde"))
         if t_count[char] > s_count[char]:
             return char
     
-    return ''
+    return '
 
 
 # XOR solution

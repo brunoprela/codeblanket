@@ -1,75 +1,84 @@
-import { MultipleChoiceQuestion } from '../../../types';
-
-export const featureImportanceInterpretationMultipleChoice: MultipleChoiceQuestion[] =
-  [
+export const featureImportanceInterpretationMultipleChoice = {
+  title: 'Feature Importance & Interpretation - Multiple Choice Questions',
+  questions: [
     {
-      id: 'feature-importance-interpretation-mc-1',
+      id: 1,
       question:
-        'What does it mean if "customer_id" has the highest feature importance in your model?',
+        'What is the main limitation of built-in feature importance from Random Forest models?',
       options: [
-        'Customer ID is genuinely predictive',
-        'The model is working correctly',
-        'There is likely data leakage or overfitting',
-        'You should use customer ID in production',
-      ],
-      correctAnswer: 2,
-      explanation:
-        'High importance for identifier columns like customer_id is a red flag indicating data leakage. The model has memorized specific customers rather than learning generalizable patterns. This will fail on new customers. Remove the feature and investigate why it had signal.',
-    },
-    {
-      id: 'feature-importance-interpretation-mc-2',
-      question:
-        'Which feature importance method is model-agnostic and works with any ML model?',
-      options: [
-        'Built-in feature importance from Random Forest',
-        'Coefficients from Logistic Regression',
-        'Permutation importance',
-        'Gini importance from Decision Trees',
-      ],
-      correctAnswer: 2,
-      explanation:
-        'Permutation importance is model-agnostic—it works with any model by shuffling feature values and measuring performance drop. Built-in importance is specific to tree models, and coefficients only apply to linear models.',
-    },
-    {
-      id: 'feature-importance-interpretation-mc-3',
-      question:
-        'What do SHAP values provide that other importance methods do not?',
-      options: [
-        'Faster computation time',
-        'Global feature ranking only',
-        'Individual prediction explanations with direction and magnitude',
-        'Works only with tree-based models',
-      ],
-      correctAnswer: 2,
-      explanation:
-        'SHAP values uniquely provide individual prediction explanations, showing how much each feature contributed to a specific prediction (with direction: +/-) and magnitude. This is essential for explaining decisions to stakeholders and regulatory compliance.',
-    },
-    {
-      id: 'feature-importance-interpretation-mc-4',
-      question:
-        'If two features are highly correlated, what happens with permutation importance?',
-      options: [
-        'Both features show high importance',
-        'Importance might be underestimated because shuffling one still leaves the other',
-        'One feature gets all the importance',
-        'The model will fail',
+        "It's too slow to compute",
+        "It's biased toward high-cardinality features and doesn't work for non-tree models",
+        'It only works for classification',
+        'It requires labeled data',
       ],
       correctAnswer: 1,
       explanation:
-        "With highly correlated features, permutation importance can underestimate their importance. When you shuffle one feature, the correlated feature still provides similar information, so performance doesn't drop as much. This is a known limitation of permutation importance.",
+        "Built-in tree importance (Gini/impurity reduction) is biased toward features with more unique values (high cardinality) and can be misleading with correlated features. It's also specific to tree models. Permutation importance and SHAP are more robust alternatives.",
+      difficulty: 'intermediate' as const,
+      category: 'Limitations',
     },
     {
-      id: 'feature-importance-interpretation-mc-5',
-      question:
-        'A feature has high SHAP importance but low permutation importance. What might this indicate?',
+      id: 2,
+      question: 'How does permutation importance determine feature importance?',
       options: [
-        'The feature is important for specific predictions but not globally',
-        'There is a bug in the SHAP calculation',
-        'You should remove the feature',
-        'The model is overfitting',
+        'By removing the feature entirely',
+        'By shuffling the feature values and measuring performance drop',
+        'By looking at feature correlations',
+        'By counting how many times a feature is used',
       ],
-      correctAnswer: 0,
+      correctAnswer: 1,
       explanation:
-        'High SHAP importance but low permutation importance can indicate that the feature is important for specific subsets of predictions (high local importance) but not important on average across all predictions (low global importance). This highlights the difference between local and global explanations.',
+        "Permutation importance randomly shuffles each feature's values (breaking its relationship with target) and measures how much model performance drops. Large drop = important feature. It's model-agnostic and accounts for feature interactions.",
+      difficulty: 'beginner' as const,
+      category: 'Methods',
     },
-  ];
+    {
+      id: 3,
+      question:
+        'What key advantage do SHAP values provide over other feature importance methods?',
+      options: [
+        'They are faster to compute',
+        'They provide directional explanations for individual predictions with theoretical guarantees',
+        'They only work for simple models',
+        "They don't require a trained model",
+      ],
+      correctAnswer: 1,
+      explanation:
+        "SHAP values show both magnitude and direction of each feature's contribution to individual predictions, based on game theory (Shapley values). They have theoretical guarantees (consistency, local accuracy) and can explain individual predictions, not just global importance.",
+      difficulty: 'advanced' as const,
+      category: 'SHAP',
+    },
+    {
+      id: 4,
+      question:
+        'Your model shows feature X as most important, but domain experts disagree. What should you investigate first?',
+      options: [
+        'Ignore the experts - trust the model',
+        'Check for data leakage, feature correlations, and data quality issues',
+        'Remove feature X immediately',
+        'Retrain with a different algorithm',
+      ],
+      correctAnswer: 1,
+      explanation:
+        'Discrepancy between model importance and domain knowledge is a red flag. Investigate: (1) Data leakage (X contains target information), (2) X correlated with truly important feature (proxy), (3) Data quality (X clean while important features have missing values), (4) Non-linear relationships model captures.',
+      difficulty: 'intermediate' as const,
+      category: 'Debugging',
+    },
+    {
+      id: 5,
+      question:
+        'For a production system requiring GDPR Article 22 compliance (right to explanation), which interpretation method is most appropriate?',
+      options: [
+        'No explanation needed',
+        'Built-in tree importance only',
+        'SHAP values with individual prediction explanations',
+        'Just show the model accuracy',
+      ],
+      correctAnswer: 2,
+      explanation:
+        'GDPR Article 22 requires the right to explanation for automated decisions. SHAP values provide rigorous, individual prediction explanations showing which features influenced each decision and by how much. Essential for regulatory compliance and building user trust.',
+      difficulty: 'advanced' as const,
+      category: 'Compliance',
+    },
+  ],
+};

@@ -87,7 +87,7 @@ print(add_binary("1010", "1011"))
         i -= 1
         j -= 1
     
-    return ''.join(reversed(result))
+    return '.join(reversed(result))
 
 
 # Alternative using Python's int conversion

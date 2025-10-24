@@ -284,7 +284,7 @@ const depthLimit = 7;  // Maximum nesting depth
 
 const validationRules = [
   depthLimit(7, {
-    ignore: ['IntrospectionQuery']  // Allow introspection
+    ignore: ['IntrospectionQuery',]  // Allow introspection
   })
 ];
 

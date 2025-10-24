@@ -1,75 +1,84 @@
-import { MultipleChoiceQuestion } from '../../../types';
-
-export const multiClassMultiLabelMetricsMultipleChoice: MultipleChoiceQuestion[] =
-  [
+export const multiClassMultiLabelMetricsMultipleChoice = {
+  title: 'Multi-class & Multi-label Metrics - Multiple Choice Questions',
+  questions: [
     {
-      id: 'multi-class-multi-label-metrics-mc-1',
+      id: 1,
       question:
-        'For a 5-class classification problem with per-class F1 scores of [0.9, 0.8, 0.7, 0.6, 0.5], what is the macro-averaged F1 score?',
+        'What is the key difference between macro-average and micro-average F1 score in multi-class classification?',
       options: [
-        '0.90 (the highest class score)',
-        '0.70 (the arithmetic mean)',
-        '0.75 (the weighted average)',
-        '0.80 (the median)',
+        'Macro is always higher than micro',
+        'Macro gives equal weight to each class; micro gives equal weight to each sample',
+        'Micro is used for regression; macro for classification',
+        'They are the same thing with different names',
       ],
       correctAnswer: 1,
       explanation:
-        'Macro-averaged F1 is the simple arithmetic mean of per-class F1 scores: (0.9 + 0.8 + 0.7 + 0.6 + 0.5) / 5 = 3.5 / 5 = 0.70. All classes are weighted equally regardless of their frequency in the dataset.',
+        'Macro-average calculates metrics per class then averages (all classes equal weight). Micro-average aggregates all predictions globally then calculates (all samples equal weight). Macro highlights minority class performance; micro reflects overall accuracy.',
+      difficulty: 'intermediate' as const,
+      category: 'Averaging',
     },
     {
-      id: 'multi-class-multi-label-metrics-mc-2',
+      id: 2,
       question:
-        'In multi-label classification, a movie has true genres {Action, Comedy} and predicted genres {Action, Sci-Fi}. What is the Jaccard score for this prediction?',
+        'For a multi-class problem with imbalanced classes where all classes are equally important for business, which averaging method should you use?',
       options: [
-        '0.0 (completely wrong)',
-        '0.33 (1 correct out of 3 total)',
-        '0.50 (1 correct, 1 wrong)',
-        '1.0 (perfect match)',
+        'Micro-average - focuses on overall accuracy',
+        'Macro-average - treats each class equally regardless of size',
+        'Weighted-average - accounts for class imbalance',
+        'No averaging - just use accuracy',
       ],
       correctAnswer: 1,
       explanation:
-        'Jaccard score (Intersection over Union) = |True ∩ Pred| / |True ∪ Pred|. Intersection: {Action} (1 label). Union: {Action, Comedy, Sci-Fi} (3 labels). Jaccard = 1/3 = 0.33. It measures the overlap between predicted and true label sets.',
+        'When all classes are equally important (e.g., all disease types matter equally), use macro-average. It prevents frequent classes from dominating the metric and ensures good performance across all classes, including rare ones.',
+      difficulty: 'intermediate' as const,
+      category: 'Strategy',
     },
     {
-      id: 'multi-class-multi-label-metrics-mc-3',
+      id: 3,
       question:
-        'For multi-class classification, what does it mean when micro-averaged F1 equals macro-averaged F1?',
+        'In multi-label classification, what does Hamming Loss measure?',
       options: [
-        'The model has perfect performance',
-        'All classes have identical F1 scores',
-        'The classes are perfectly balanced in the dataset',
-        'The model makes no predictions',
+        'The total number of classes',
+        'The fraction of labels that are incorrectly predicted',
+        'The accuracy on the most frequent label',
+        'The time to make predictions',
       ],
       correctAnswer: 1,
       explanation:
-        'Micro and macro F1 are equal when all classes have the same F1 score. Micro-average aggregates all TP/FP/FN globally, while macro-average is the mean of per-class scores. They converge when per-class performance is uniform. This does NOT require balanced classes or perfect performance.',
+        'Hamming Loss is the fraction of wrong labels (both false positives and false negatives) divided by total labels. For example, if you predict [1,0,1] but truth is [1,1,0], 2 out of 3 labels are wrong, Hamming Loss = 2/3 = 0.67.',
+      difficulty: 'beginner' as const,
+      category: 'Multi-label',
     },
     {
-      id: 'multi-class-multi-label-metrics-mc-4',
-      question:
-        'In a 3-class problem with 80% Class A, 15% Class B, and 5% Class C, which averaging strategy would be MOST sensitive to poor performance on Class C?',
+      id: 4,
+      question: 'What is the strictest metric for multi-label classification?',
       options: [
-        'Micro-average (treats all predictions equally)',
-        'Weighted-average (accounts for class frequency)',
-        'Macro-average (treats all classes equally)',
-        'All strategies are equally sensitive',
+        'Hamming Loss',
+        'Jaccard Score (IoU)',
+        'Exact Match Ratio (Subset Accuracy)',
+        'Macro F1',
       ],
       correctAnswer: 2,
       explanation:
-        'Macro-average treats all classes equally (each contributes 33.3% to the final score), so poor Class C performance significantly impacts the metric. Micro and weighted averages are dominated by the majority class (80%), making them less sensitive to minority class performance.',
+        'Exact Match Ratio (Subset Accuracy) requires ALL labels to be correct for a prediction to count as correct. If ground truth is [1,1,0] and prediction is [1,1,1], this counts as wrong even though 2/3 labels are correct.',
+      difficulty: 'advanced' as const,
+      category: 'Multi-label',
     },
     {
-      id: 'multi-class-multi-label-metrics-mc-5',
+      id: 5,
       question:
-        'What is the key difference between multi-class and multi-label classification evaluation?',
+        'A multi-class classifier has Macro F1=0.60, Micro F1=0.85. What does this tell you?',
       options: [
-        'Multi-class uses confusion matrices; multi-label does not',
-        'Multi-class has one label per sample; multi-label allows multiple simultaneous labels',
-        'Multi-class requires more training data than multi-label',
-        'Multi-label always has better performance metrics',
+        'The model is performing consistently across all classes',
+        'The model performs well on frequent classes but poorly on minority classes',
+        'The model is overfitting',
+        "There's an error in the calculations",
       ],
       correctAnswer: 1,
       explanation:
-        'Multi-class classification assigns each sample to exactly ONE class (mutually exclusive). Multi-label classification allows each sample to have MULTIPLE labels simultaneously (non-exclusive). This fundamental difference requires different evaluation metrics: multi-label needs metrics like Hamming loss and Jaccard score that handle label sets.',
+        'Large gap between macro (0.60) and micro (0.85) indicates imbalanced performance. High micro F1 shows good overall accuracy (dominated by frequent classes), but low macro F1 shows poor performance on minority classes. The model is biased toward frequent classes.',
+      difficulty: 'advanced' as const,
+      category: 'Interpretation',
     },
-  ];
+  ],
+};

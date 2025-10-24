@@ -25,7 +25,7 @@ workflow = Workflow(
     start_node=ToolNode("search_location", 
         children=[
             ConditionalNode(
-                condition=lambda state: state['location_found'],
+                condition=lambda state: state['location_found',],
                 if_true=ToolNode("get_weather"),
                 if_false=ToolNode("ask_user_clarification")
             )
@@ -214,8 +214,8 @@ Thought:"""
         for i, (thought, action) in enumerate(zip(self.thoughts, self.actions)):
             history_parts.append(f"Step {i+1}:")
             history_parts.append(f"Thought: {thought}")
-            history_parts.append(f"Action: {action['action']}")
-            history_parts.append(f"Observation: {action['observation']}")
+            history_parts.append(f"Action: {action['action',]}")
+            history_parts.append(f"Observation: {action['observation',]}")
         return "\\n\\n".join(history_parts)
 \`\`\`
 
@@ -251,7 +251,7 @@ def _detect_loop(self):
     return False
 
 def _action_signature(self, action):
-    return f"{action['action']['name']}:{action['action']['args']}"
+    return f"{action['action',]['name',]}:{action['action',]['args',]}"
 
 async def _break_loop(self):
     # Force different approach
@@ -502,13 +502,13 @@ class LangChainResearchAgent(Agent):
         self.agent = core_agent
     
     def _call(self, inputs):
-        return await self.agent.research(inputs["topic"])
+        return await self.agent.research(inputs["topic",])
 
 # LangGraph adapter  
 from langgraph.graph import StateGraph
 def create_langgraph_agent(core_agent):
     workflow = StateGraph(AgentState)
-    workflow.add_node("research", lambda state: core_agent.research(state["topic"]))
+    workflow.add_node("research", lambda state: core_agent.research(state["topic",]))
     return workflow.compile()
 
 # CrewAI adapter

@@ -255,7 +255,7 @@ result = pd.merge(
     left_on='manager_id',
     right_on='emp_id',
     how='left',
-    suffixes=('', '_manager')
+    suffixes=(', '_manager')
 )
 print(result[['emp_id', 'name', 'name_manager']])
 #    emp_id     name name_manager

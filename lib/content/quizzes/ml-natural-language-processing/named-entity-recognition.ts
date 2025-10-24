@@ -27,7 +27,7 @@ Enables models to identify separate entities even when adjacent.`,
       'Why is label alignment necessary when tokenizing for NER with transformers?',
     sampleAnswer: `Transformer tokenizers may split words into subwords, but NER labels are per word. Must align subword tokens to original labels.
 
-Example: "Apple's" → ["Apple", "'", "s"]
+Example: "Apple's" → ["Apple", "'", "s",]
 - Original label: B-ORG for "Apple's"
 - Must handle: Which subword gets the label?
 - Solution: First subword gets label, rest marked -100 (ignored)

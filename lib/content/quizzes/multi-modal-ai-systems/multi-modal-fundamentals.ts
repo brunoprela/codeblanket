@@ -193,7 +193,7 @@ class CustomerServiceSystem:
         results = {}
         
         # Always process text (fast)
-        results['text_analysis'] = self.analyze_text(text)
+        results['text_analysis',] = self.analyze_text(text)
         
         # Process other modalities in parallel if present
         if image and audio:
@@ -201,14 +201,14 @@ class CustomerServiceSystem:
                 img_future = executor.submit(self.analyze_image, image)
                 audio_future = executor.submit(self.transcribe_audio, audio)
                 
-                results['image_analysis'] = img_future.result()
-                results['audio_transcript'] = audio_future.result()
+                results['image_analysis',] = img_future.result()
+                results['audio_transcript',] = audio_future.result()
         
         elif image:
-            results['image_analysis'] = self.analyze_image(image)
+            results['image_analysis',] = self.analyze_image(image)
         
         elif audio:
-            results['audio_transcript'] = self.transcribe_audio(audio)
+            results['audio_transcript',] = self.transcribe_audio(audio)
         
         # Combine insights
         return self.generate_response(results)

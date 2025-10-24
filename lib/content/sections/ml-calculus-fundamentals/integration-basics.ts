@@ -169,7 +169,7 @@ def visualize_definite_integral():
     ax2.axhline(F(b), color='blue', linestyle='--', alpha=0.5, label=f'F({b}) = {F(b):.2f}')
     
     # Show difference
-    ax2.annotate('', xy=(3.3, F(b)), xytext=(3.3, F(a)),
+    ax2.annotate(', xy=(3.3, F(b)), xytext=(3.3, F(a)),
                 arrowprops=dict(arrowstyle='<->', color='purple', lw=2))
     ax2.text(3.5, (F(a) + F(b))/2, f'F(b)-F(a)\\n={F(b)-F(a):.2f}', 
             fontsize=10, va='center')

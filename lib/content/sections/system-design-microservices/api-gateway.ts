@@ -123,7 +123,7 @@ Centralize auth logic instead of duplicating in each service.
 \`\`\`javascript
 // API Gateway middleware
 async function authenticate(request) {
-    const token = request.headers['Authorization'].replace('Bearer ', '');
+    const token = request.headers['Authorization'].replace('Bearer ', ');
     
     // Validate JWT
     const decoded = jwt.verify(token, JWT_SECRET);

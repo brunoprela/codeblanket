@@ -156,13 +156,13 @@ def create_http_tools_from_openapi(spec: Dict) -> List[Tool]:
     """Generate tools from OpenAPI specification."""
     tools = []
     
-    for path, methods in spec["paths"].items():
+    for path, methods in spec["paths",].items():
         for method, details in methods.items():
             tool = Tool(
                 name=f"{method}_{path.replace('/', '_')}",
                 description=details.get("summary"),
                 function=create_http_function(method, path),
-                schema=extract_schema(details["parameters"])
+                schema=extract_schema(details["parameters",])
             )
             tools.append(tool)
     
@@ -304,7 +304,7 @@ class ToolTestSuite:
     def test_documentation(self):
         """Tool has good documentation."""
         assert len(self.tool.description) > 50
-        for param in self.tool.schema["properties"]:
+        for param in self.tool.schema["properties",]:
             assert "description" in param
 \`\`\`
 
@@ -368,7 +368,7 @@ class ToolQualityValidator:
             issues.append("Description too short")
         
         # Schema completeness
-        for param in tool.schema["properties"].values():
+        for param in tool.schema["properties",].values():
             if "description" not in param:
                 issues.append("Parameter missing description")
         

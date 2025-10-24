@@ -104,13 +104,13 @@ point = Point("cpu") \\
 write_api.write(bucket="metrics", record=point)
 
 # Query data
-query = '''
+query = ''
 from(bucket: "metrics")
   |> range(start: -1h)
   |> filter(fn: (r) => r._measurement == "cpu")
   |> filter(fn: (r) => r.host == "server01")
   |> aggregateWindow(every: 1m, fn: mean)
-'''
+''
 
 result = client.query_api().query(query=query)
 \`\`\`

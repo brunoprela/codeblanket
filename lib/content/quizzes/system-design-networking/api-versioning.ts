@@ -83,8 +83,8 @@ export const apiversioningQuiz = [
       // Log usage
       logger.warn('V1 API usage', {
         endpoint: req.originalUrl,
-        client: req.headers['x-client-id'] || 'unknown',
-        userAgent: req.headers['user-agent'],
+        client: req.headers['x-client-id',] || 'unknown',
+        userAgent: req.headers['user-agent',],
         ip: req.ip,
         timestamp: new Date().toISOString()
       });
@@ -93,7 +93,7 @@ export const apiversioningQuiz = [
       metrics.apiVersionUsage.inc({
         version: 'v1',
         endpoint: req.path,
-        client: req.headers['x-client-id'] || 'unknown'
+        client: req.headers['x-client-id',] || 'unknown'
       });
       
       next();
@@ -247,7 +247,7 @@ export const apiversioningQuiz = [
     \`\`\`javascript
     // V1 rate limit: 500 requests/day
     router.use(async (req, res, next) => {
-      const clientId = req.headers['x-client-id'] || req.ip;
+      const clientId = req.headers['x-client-id',] || req.ip;
       const key = \`v1_rate_limit:\${clientId}\`;
       
       const requests = await redis.incr(key);
@@ -280,7 +280,7 @@ export const apiversioningQuiz = [
     ]);
     
     router.use((req, res, next) => {
-      const clientId = req.headers['x-client-id'];
+      const clientId = req.headers['x-client-id',];
       
       if (v1Whitelist.has(clientId)) {
         // Skip rate limiting
@@ -328,8 +328,8 @@ export const apiversioningQuiz = [
             name: 'John Doe'
           });
           
-          expect(res.headers['deprecation']).toBe('true');
-          expect(res.headers['sunset']).toBeDefined();
+          expect(res.headers['deprecation',]).toBe('true');
+          expect(res.headers['sunset',]).toBeDefined();
         });
       });
       
@@ -343,7 +343,7 @@ export const apiversioningQuiz = [
             lastName: 'Doe'
           });
           
-          expect(res.headers['x-api-version']).toBe('2.0.0');
+          expect(res.headers['x-api-version',]).toBe('2.0.0');
         });
       });
     });
@@ -544,7 +544,7 @@ res.setHeader('Vary', 'Accept');
 // Whitelist Accept header
 const cloudFrontConfig = {
   headers: {
-    whitelist: ['Accept']
+    whitelist: ['Accept',]
   }
 };
 \`\`\`
@@ -880,7 +880,7 @@ interface ClientUsage {
 
 // Middleware
 app.use((req, res, next) => {
-  const apiKey = req.headers['x-api-key'] as string;
+  const apiKey = req.headers['x-api-key',] as string;
   const version = req.path.startsWith('/api/v1/') ? 'v1' : 
                   req.path.startsWith('/api/v2/') ? 'v2' : 'unknown';
   
@@ -1055,7 +1055,7 @@ async function getMigrationProgress() {
 
 \`\`\`typescript
 app.use('/api/v1/*', async (req, res, next) => {
-  const apiKey = req.headers['x-api-key'];
+  const apiKey = req.headers['x-api-key',];
   
   // Rate limit v1 to 500 requests/day
   const dailyLimit = 500;
@@ -1123,7 +1123,7 @@ const WHITELISTED_CLIENTS = [
 ];
 
 app.use('/api/v1/*', (req, res, next) => {
-  const apiKey = req.headers['x-api-key'];
+  const apiKey = req.headers['x-api-key',];
   
   if (WHITELISTED_CLIENTS.includes(apiKey)) {
     // Allow but log
@@ -1142,7 +1142,7 @@ app.use('/api/v1/*', (req, res, next) => {
 
 \`\`\`typescript
 app.use('/api/v1/*', (req, res) => {
-  const apiKey = req.headers['x-api-key'];
+  const apiKey = req.headers['x-api-key',];
   
   // Check whitelist
   if (WHITELISTED_CLIENTS.includes(apiKey)) {

@@ -19,7 +19,7 @@ print(type(s.values))  # <class 'numpy.ndarray'>
 print(s.values.dtype)  # int64
 
 df = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})
-print(type(df['A'].values))  # <class 'numpy.ndarray'>
+print(type(df['A',].values))  # <class 'numpy.ndarray'>
 \`\`\`
 
 2. **Memory Efficiency**: Pandas inherits NumPy's contiguous memory layout and efficient operations
@@ -30,7 +30,7 @@ print(type(df['A'].values))  # <class 'numpy.ndarray'>
 arr = df.values  # or df.to_numpy()
 
 # NumPy to Pandas
-df = pd.DataFrame(arr, columns=['A', 'B'])
+df = pd.DataFrame(arr, columns=['A', 'B',])
 \`\`\`
 
 **Why Pandas Builds on NumPy:**
@@ -57,11 +57,11 @@ value = arr[0, 1]  # Must remember positions
 
 # Pandas: Labeled, heterogeneous
 df = pd.DataFrame({
-    'Name': ['Alice', 'Bob'],
+    'Name': ['Alice', 'Bob',],
     'Age': [25, 30],
     'Salary': [50000, 60000]
 })
-value = df.loc[0, 'Salary']  # Self-documenting
+value = df.loc[0, 'Salary',]  # Self-documenting
 \`\`\`
 
 **When to Use NumPy:**
@@ -99,10 +99,10 @@ X_torch = torch.from_numpy(X)
 \`\`\`python
 # Employee data with mixed types
 df = pd.DataFrame({
-    'name': ['Alice', 'Bob'],
+    'name': ['Alice', 'Bob',],
     'age': [25, 30],
     'salary': [50000, 60000],
-    'department': ['IT', 'HR']
+    'department': ['IT', 'HR',]
 })
 \`\`\`
 
@@ -110,18 +110,18 @@ df = pd.DataFrame({
 \`\`\`python
 df = df.dropna()  # Remove missing values
 df = df.drop_duplicates()  # Remove duplicates
-df['age'] = pd.to_numeric(df['age'], errors='coerce')
+df['age',] = pd.to_numeric(df['age',], errors='coerce')
 \`\`\`
 
 3. **Exploratory analysis**: Quick statistics, grouping, aggregation
 \`\`\`python
 # Group by department, calculate average salary
-avg_salary = df.groupby('department')['salary'].mean()
+avg_salary = df.groupby('department')['salary',].mean()
 \`\`\`
 
 4. **Time series**: Date/time indexing and operations
 \`\`\`python
-df['date'] = pd.to_datetime(df['date'])
+df['date',] = pd.to_datetime(df['date',])
 df = df.set_index('date')
 monthly_avg = df.resample('M').mean()
 \`\`\`
@@ -183,18 +183,18 @@ Pandas makes data analysis intuitive and expressive, while NumPy provides the co
 
 \`\`\`python
 df = pd.DataFrame({
-    'Name': ['Alice', 'Bob', 'Charlie'],
+    'Name': ['Alice', 'Bob', 'Charlie',],
     'Age': [25, 30, 35],
     'Salary': [50000, 60000, 75000]
 })
 
 # Column selection
-ages = df['Age']  # Returns Series
-subset = df[['Name', 'Age']]  # Returns DataFrame
+ages = df['Age',]  # Returns Series
+subset = df[['Name', 'Age',]]  # Returns DataFrame
 
 # Row selection (only with slices or boolean mask)
 first_two = df[0:2]  # Rows 0-1
-adults = df[df['Age'] >= 30]  # Boolean indexing
+adults = df[df['Age',] >= 30]  # Boolean indexing
 \`\`\`
 
 **Use cases:**
@@ -205,7 +205,7 @@ adults = df[df['Age'] >= 30]  # Boolean indexing
 **Limitations:**
 - Cannot select both rows and columns simultaneously
 - Cannot select single row by position (df[0] doesn't work)
-- Ambiguous: df['Age'] is column, df[0:2] is rows!
+- Ambiguous: df['Age',] is column, df[0:2] is rows!
 
 **2. .loc: Label-Based Indexing**
 
@@ -214,27 +214,27 @@ adults = df[df['Age'] >= 30]  # Boolean indexing
 df = df.set_index('Name')
 
 # Single row by label
-alice = df.loc['Alice']
+alice = df.loc['Alice',]
 
 # Multiple rows by label
-subset = df.loc[['Alice', 'Charlie']]
+subset = df.loc[['Alice', 'Charlie',]]
 
 # Rows and columns by label
-value = df.loc['Alice', 'Salary']  # Single value
-subset = df.loc['Alice':'Charlie', 'Age':'Salary']  # Range
+value = df.loc['Alice', 'Salary',]  # Single value
+subset = df.loc['Alice':'Charlie', 'Age':'Salary',]  # Range
 
 # Boolean indexing
-high_earners = df.loc[df['Salary'] > 60000]
+high_earners = df.loc[df['Salary',] > 60000]
 
 # Modify values
-df.loc['Alice', 'Age'] = 26  # Change Alice's age
-df.loc[df['Salary'] < 60000, 'Salary'] *= 1.1  # 10% raise
+df.loc['Alice', 'Age',] = 26  # Change Alice's age
+df.loc[df['Salary',] < 60000, 'Salary',] *= 1.1  # 10% raise
 \`\`\`
 
 **Key characteristic: Uses labels, includes endpoint in slices**
 \`\`\`python
 # 'Alice':'Charlie' includes both Alice AND Charlie
-df.loc['Alice':'Charlie']  # Both included!
+df.loc['Alice':'Charlie',]  # Both included!
 \`\`\`
 
 **Use cases:**
@@ -276,7 +276,7 @@ last_col = df.iloc[:, -1]
 
 | Aspect | df[...] | .loc | .iloc |
 |--------|---------|------|-------|
-| **Syntax** | df['col'] or df[0:2] | df.loc[row, col] | df.iloc[pos, pos] |
+| **Syntax** | df['col',] or df[0:2] | df.loc[row, col] | df.iloc[pos, pos] |
 | **Row selection** | Slice or boolean only | By label | By position |
 | **Column selection** | By label | By label | By position |
 | **Both rows & cols** | ❌ No | ✅ Yes | ✅ Yes |
@@ -289,10 +289,10 @@ last_col = df.iloc[:, -1]
 **Pitfall 1: SettingWithCopyWarning**
 \`\`\`python
 # BAD: Chained indexing
-df[df['Age'] > 30]['Salary'] = 100000  # Warning!
+df[df['Age',] > 30]['Salary',] = 100000  # Warning!
 
 # GOOD: Use .loc
-df.loc[df['Age'] > 30, 'Salary'] = 100000  # No warning
+df.loc[df['Age',] > 30, 'Salary',] = 100000  # No warning
 \`\`\`
 
 **Pitfall 2: Confusing .loc and .iloc**
@@ -305,7 +305,7 @@ df.iloc[10]  # Row at position 10 → IndexError!
 
 **Pitfall 3: Slice endpoint behavior**
 \`\`\`python
-df.loc['Alice':'Charlie']  # Includes Charlie
+df.loc['Alice':'Charlie',]  # Includes Charlie
 df.iloc[0:2]               # Excludes position 2
 \`\`\`
 
@@ -318,11 +318,11 @@ df.iloc[0]  # Better: explicit and returns Series
 
 **Pitfall 5: Forgetting to copy**
 \`\`\`python
-subset = df[df['Age'] > 30]  # View or copy? Unclear!
-subset.loc[:, 'Salary'] = 100000  # Might modify original df
+subset = df[df['Age',] > 30]  # View or copy? Unclear!
+subset.loc[:, 'Salary',] = 100000  # Might modify original df
 
 # Better: explicit copy
-subset = df[df['Age'] > 30].copy()
+subset = df[df['Age',] > 30].copy()
 \`\`\`
 
 **When to Use Each:**
@@ -349,24 +349,24 @@ subset = df[df['Age'] > 30].copy()
 
 1. **Prefer .loc for clarity**
 \`\`\`python
-# Instead of: value = df[df['Age'] > 30]['Salary'].iloc[0]
-# Write: value = df.loc[df['Age'] > 30, 'Salary'].iloc[0]
+# Instead of: value = df[df['Age',] > 30]['Salary',].iloc[0]
+# Write: value = df.loc[df['Age',] > 30, 'Salary',].iloc[0]
 \`\`\`
 
 2. **Use .copy() to avoid warnings**
 \`\`\`python
-subset = df[df['Age'] > 30].copy()
+subset = df[df['Age',] > 30].copy()
 \`\`\`
 
 3. **Avoid chained indexing**
 \`\`\`python
-# BAD: df['A'][0] = 100
-# GOOD: df.loc[0, 'A'] = 100
+# BAD: df['A',][0] = 100
+# GOOD: df.loc[0, 'A',] = 100
 \`\`\`
 
 4. **Use .at and .iat for single values** (faster)
 \`\`\`python
-value = df.at['Alice', 'Salary']   # Faster than .loc
+value = df.at['Alice', 'Salary',]   # Faster than .loc
 value = df.iat[0, 2]               # Faster than .iloc
 \`\`\`
 
@@ -377,17 +377,17 @@ value = df.iat[0, 2]               # Faster than .iloc
 df = pd.read_csv('stocks.csv', index_col='Date', parse_dates=True)
 
 # .loc: Select by date label
-jan_data = df.loc['2024-01-01':'2024-01-31']
+jan_data = df.loc['2024-01-01':'2024-01-31',]
 
 # .iloc: Get first and last day
 first_day = df.iloc[0]
 last_day = df.iloc[-1]
 
 # Bracket: Quick column access
-closing_prices = df['Close']
+closing_prices = df['Close',]
 
 # .loc: Conditional update
-df.loc[df['Volume'] > 1_000_000, 'High_Volume'] = True
+df.loc[df['Volume',] > 1_000_000, 'High_Volume',] = True
 \`\`\`
 
 Understanding these indexing methods and their nuances is essential for writing efficient, correct Pandas code!`,
@@ -416,8 +416,8 @@ import numpy as np
 
 df = pd.DataFrame({
     'id': [1, 2, 3, 4, 5],
-    'name': ['Alice', 'Bob', 'Charlie', 'David', 'Eve'],
-    'department': ['IT', 'IT', 'HR', 'IT', 'Sales'],
+    'name': ['Alice', 'Bob', 'Charlie', 'David', 'Eve',],
+    'department': ['IT', 'IT', 'HR', 'IT', 'Sales',],
     'age': [25, 30, 35, 28, 32],
     'salary': [50000, 60000, 75000, 55000, 68000]
 })
@@ -457,16 +457,16 @@ print(f"Memory: {df.memory_usage(deep=True).sum():,} bytes")
 df_optimized = df.copy()
 
 # ID: values 1-5, use uint8 (0-255)
-df_optimized['id'] = df_optimized['id'].astype(np.uint8)
+df_optimized['id',] = df_optimized['id',].astype(np.uint8)
 
 # Age: values 25-35, use uint8 (0-255)
-df_optimized['age'] = df_optimized['age'].astype(np.uint8)
+df_optimized['age',] = df_optimized['age',].astype(np.uint8)
 
 # Salary: values < 2B, use uint32
-df_optimized['salary'] = df_optimized['salary'].astype(np.uint32)
+df_optimized['salary',] = df_optimized['salary',].astype(np.uint32)
 
 # Department: repeated values, use category
-df_optimized['department'] = df_optimized['department'].astype('category')
+df_optimized['department',] = df_optimized['department',].astype('category')
 
 # Name: keep as object (unique strings)
 
@@ -488,13 +488,13 @@ Category is powerful for columns with repeated values:
 # Large dataset with repeated departments
 n = 1_000_000
 df_large = pd.DataFrame({
-    'department': np.random.choice(['IT', 'HR', 'Sales', 'Marketing'], n)
+    'department': np.random.choice(['IT', 'HR', 'Sales', 'Marketing',], n)
 })
 
 print(f"Object dtype: {df_large.memory_usage(deep=True).sum() / 1e6:.2f} MB")
 # Object dtype: ~50-60 MB
 
-df_large['department'] = df_large['department'].astype('category')
+df_large['department',] = df_large['department',].astype('category')
 print(f"Category dtype: {df_large.memory_usage(deep=True).sum() / 1e6:.2f} MB")
 # Category dtype: ~1-2 MB
 
@@ -504,13 +504,13 @@ print(f"Category dtype: {df_large.memory_usage(deep=True).sum() / 1e6:.2f} MB")
 **How Category Works:**
 
 \`\`\`python
-s = pd.Series(['IT', 'HR', 'IT', 'Sales', 'IT'], dtype='category')
+s = pd.Series(['IT', 'HR', 'IT', 'Sales', 'IT',], dtype='category')
 
 # Under the hood:
-# Categories: ['HR', 'IT', 'Sales'] (stored once)
+# Categories: ['HR', 'IT', 'Sales',] (stored once)
 # Codes: [1, 0, 1, 2, 1] (integers referencing categories)
 
-print(s.cat.categories)  # Index(['HR', 'IT', 'Sales'], dtype='object')
+print(s.cat.categories)  # Index(['HR', 'IT', 'Sales',], dtype='object')
 print(s.cat.codes)       # [1, 0, 1, 2, 1]
 
 # Memory: 5 integers + 3 strings
@@ -580,11 +580,11 @@ arr_int64 = np.random.randint(0, 100, 10_000_000, dtype=np.int64)
 
 2. **Category enables faster groupby**
 \`\`\`python
-df['dept_obj'] = df['department'].astype('object')
-df['dept_cat'] = df['department'].astype('category')
+df['dept_obj',] = df['department',].astype('object')
+df['dept_cat',] = df['department',].astype('category')
 
-%timeit df.groupby('dept_obj')['salary'].mean()  # ~10ms
-%timeit df.groupby('dept_cat')['salary'].mean()  # ~2ms (5x faster)
+%timeit df.groupby('dept_obj')['salary',].mean()  # ~10ms
+%timeit df.groupby('dept_cat')['salary',].mean()  # ~2ms (5x faster)
 \`\`\`
 
 3. **Float32 vs Float64**
@@ -632,17 +632,17 @@ n = 10_000_000
 df_raw = pd.DataFrame({
     'customer_id': np.arange(n),                    # int64: 76 MB
     'age': np.random.randint(18, 80, n),            # int64: 76 MB
-    'country': np.random.choice(['USA', 'UK', 'CA', 'AU'], n),  # object: ~400 MB
+    'country': np.random.choice(['USA', 'UK', 'CA', 'AU',], n),  # object: ~400 MB
     'amount': np.random.uniform(0, 1000, n)         # float64: 76 MB
 })
 print(f"Raw memory: {df_raw.memory_usage(deep=True).sum() / 1e6:.0f} MB")
 # ~628 MB
 
 df_opt = df_raw.copy()
-df_opt['customer_id'] = df_opt['customer_id'].astype(np.uint32)  # 38 MB
-df_opt['age'] = df_opt['age'].astype(np.uint8)                   # 10 MB
-df_opt['country'] = df_opt['country'].astype('category')         # 10 MB
-df_opt['amount'] = df_opt['amount'].astype(np.float32)           # 38 MB
+df_opt['customer_id',] = df_opt['customer_id',].astype(np.uint32)  # 38 MB
+df_opt['age',] = df_opt['age',].astype(np.uint8)                   # 10 MB
+df_opt['country',] = df_opt['country',].astype('category')         # 10 MB
+df_opt['amount',] = df_opt['amount',].astype(np.float32)           # 38 MB
 print(f"Optimized memory: {df_opt.memory_usage(deep=True).sum() / 1e6:.0f} MB")
 # ~96 MB
 
@@ -669,7 +669,7 @@ df = pd.read_csv('data.csv', dtype=dtypes)
 
 4. **Consider nullable integer dtypes** (pandas 1.0+)
 \`\`\`python
-df['age'] = df['age'].astype('Int8')  # Capital I = nullable
+df['age',] = df['age',].astype('Int8')  # Capital I = nullable
 \`\`\`
 
 5. **Profile before and after**

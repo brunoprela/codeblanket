@@ -64,8 +64,8 @@ async function authenticate(req, res, next) {
     req.user = decoded;
     
     // Add user context for downstream services
-    req.headers['x-user-id'] = decoded.userId;
-    req.headers['x-user-role'] = decoded.role;
+    req.headers['x-user-id',] = decoded.userId;
+    req.headers['x-user-role',] = decoded.role;
     
     next();
   } catch (error) {
@@ -75,7 +75,7 @@ async function authenticate(req, res, next) {
 
 // API Key validation for third-party developers
 async function validateApiKey(req, res, next) {
-  const apiKey = req.headers['x-api-key'];
+  const apiKey = req.headers['x-api-key',];
   
   if (!apiKey) {
     return res.status(401).json({ error: 'API key required' });
@@ -292,7 +292,7 @@ const prometheus = require('prom-client');
 const httpRequestDuration = new prometheus.Histogram({
   name: 'http_request_duration_seconds',
   help: 'HTTP request duration',
-  labelNames: ['method', 'route', 'status']
+  labelNames: ['method', 'route', 'status',]
 });
 
 app.use((req, res, next) => {
@@ -321,7 +321,7 @@ app.use((err, req, res, next) => {
   console.error(err);
   res.status(500).json({
     error: 'Internal server error',
-    requestId: req.headers['x-request-id']
+    requestId: req.headers['x-request-id',]
   });
 });
 
@@ -568,7 +568,7 @@ app.use(compression({
   threshold: 1024,  // Only compress responses > 1KB
   filter: (req, res) => {
     // Don't compress already compressed formats
-    if (req.headers['x-no-compression']) return false;
+    if (req.headers['x-no-compression',]) return false;
     return compression.filter(req, res);
   }
 }));
@@ -708,7 +708,7 @@ const prometheus = require('prom-client');
 const gatewayDuration = new prometheus.Histogram({
   name: 'gateway_request_duration_seconds',
   help: 'Gateway request duration',
-  labelNames: ['route', 'backend'],
+  labelNames: ['route', 'backend',],
   buckets: [0.01, 0.05, 0.1, 0.5, 1, 2, 5]
 });
 

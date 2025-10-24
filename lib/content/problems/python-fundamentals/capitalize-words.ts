@@ -78,7 +78,7 @@ def capitalize_words_manual(s):
 
 # Without split
 def capitalize_words_alt(s):
-    return ' '.join(word[0].upper() + word[1:] if len(word) > 0 else '' for word in s.split())`,
+    return ' '.join(word[0].upper() + word[1:] if len(word) > 0 else ' for word in s.split())`,
   timeComplexity: 'O(n)',
   spaceComplexity: 'O(n)',
   order: 16,

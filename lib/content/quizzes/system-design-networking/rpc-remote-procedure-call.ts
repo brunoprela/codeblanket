@@ -574,7 +574,7 @@ static_resources:
                   name: local_route
                   virtual_hosts:
                     - name: backend
-                      domains: ["*"]
+                      domains: ["*",]
                       routes:
                         # gRPC-Web routes
                         - match:

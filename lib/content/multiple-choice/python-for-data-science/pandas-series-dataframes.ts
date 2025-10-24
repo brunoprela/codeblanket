@@ -17,7 +17,7 @@ export const pandasseriesdataframesMultipleChoice: MultipleChoiceQuestion[] = [
   },
   {
     id: 'pandas-series-dataframes-mc-2',
-    question: "Given df = pd.DataFrame(data), what does df['column'] return?",
+    question: "Given df = pd.DataFrame(data), what does df['column',] return?",
     options: [
       'A DataFrame with one column',
       'A Series',
@@ -26,7 +26,7 @@ export const pandasseriesdataframesMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Selecting a single column with df['column'] returns a Pandas Series. To get a DataFrame with one column, use df[['column']] (double brackets).",
+      "Selecting a single column with df['column',] returns a Pandas Series. To get a DataFrame with one column, use df[['column',]] (double brackets).",
   },
   {
     id: 'pandas-series-dataframes-mc-3',
@@ -59,13 +59,13 @@ export const pandasseriesdataframesMultipleChoice: MultipleChoiceQuestion[] = [
     question:
       'What is the correct way to filter a DataFrame for rows where Age > 30 AND Department is "IT"?',
     options: [
-      "df[df['Age'] > 30 and df['Department'] == 'IT']",
-      "df[(df['Age'] > 30) & (df['Department'] == 'IT')]",
-      "df[df['Age'] > 30].filter(df['Department'] == 'IT')",
+      "df[df['Age',] > 30 and df['Department',] == 'IT',]",
+      "df[(df['Age',] > 30) & (df['Department',] == 'IT')]",
+      "df[df['Age',] > 30].filter(df['Department',] == 'IT')",
       "df.filter(('Age' > 30) and ('Department' == 'IT'))",
     ],
     correctAnswer: 1,
     explanation:
-      "Boolean indexing requires bitwise operators (&, |, ~) not logical operators (and, or, not), and parentheses around each condition: (df['Age'] > 30) & (df['Department'] == 'IT').",
+      "Boolean indexing requires bitwise operators (&, |, ~) not logical operators (and, or, not), and parentheses around each condition: (df['Age',] > 30) & (df['Department',] == 'IT').",
   },
 ];

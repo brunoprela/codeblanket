@@ -280,14 +280,14 @@ export const ratelimitingQuiz = [
       rateLimitHitsTotal: new Counter({
         name: 'rate_limit_hits_total',
         help: 'Total rate limit hits',
-        labelNames: ['limit_type', 'endpoint']
+        labelNames: ['limit_type', 'endpoint',]
       }),
       
       // Allowed requests
       rateLimitAllowed: new Counter({
         name: 'rate_limit_allowed_total',
         help: 'Allowed requests',
-        labelNames: ['limit_type']
+        labelNames: ['limit_type',]
       }),
       
       // Redis latency
@@ -399,7 +399,7 @@ export const ratelimitingQuiz = [
             expect(res.status).toBe(200);
           } else {
             expect(res.status).toBe(429);
-            expect(res.headers['retry-after']).toBeDefined();
+            expect(res.headers['retry-after',]).toBeDefined();
           }
         }
       });
@@ -654,7 +654,7 @@ async function checkTrial(userId: string): Promise<TrialStatus> {
   const daysRemaining = Math.ceil((endTime - now) / 86400000);
   
   // Prompt upgrade at 80% and 100% of usage
-  const usage = await getDailyUsage({ userId, tier: 'trial', apiKey: '' });
+  const usage = await getDailyUsage({ userId, tier: 'trial', apiKey: ' });
   const usagePercent = (usage / trial.limits.dailyLimit) * 100;
   
   if (usagePercent >= 80 && trial.upgradePrompt) {
@@ -767,7 +767,7 @@ app.get('/api/usage', async (req, res) => {
   const userId = req.user.id;
   const tier = req.user.tier;
   
-  const daily = await getDailyUsage({ userId, tier, apiKey: '' });
+  const daily = await getDailyUsage({ userId, tier, apiKey: ' });
   const limits = tiers[tier];
   
   const overageCharges = await redis.get(\`overage_charges:\${userId}:\${getMonth()}\`);
@@ -782,7 +782,7 @@ app.get('/api/usage', async (req, res) => {
     },
     burst: {
       limit: limits.burstLimit,
-      current: await getBurstUsage({ userId, tier, apiKey: '' })
+      current: await getBurstUsage({ userId, tier, apiKey: ' })
     },
     overage: {
       allowed: limits.overage.allowed,

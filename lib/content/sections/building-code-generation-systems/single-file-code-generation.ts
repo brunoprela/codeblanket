@@ -706,7 +706,7 @@ validator = GeneratedFileValidator()
 
 generated_code = """
 def calculate_sum(numbers: List[int]) -> int:
-    '''Calculate sum of numbers.'''
+    ''Calculate sum of numbers.''
     return sum(numbers)
 """
 

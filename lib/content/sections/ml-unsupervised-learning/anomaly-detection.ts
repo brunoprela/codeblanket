@@ -101,7 +101,7 @@ Less sensitive to extreme values than z-score
 
 \`\`\`python
 def detect_outliers_iqr(data):
-    '''Detect outliers using IQR method'''
+    ''Detect outliers using IQR method''
     Q1 = np.percentile(data, 25, axis=0)
     Q3 = np.percentile(data, 75, axis=0)
     IQR = Q3 - Q1

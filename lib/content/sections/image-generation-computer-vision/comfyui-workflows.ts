@@ -658,7 +658,7 @@ NODE_CLASS_MAPPINGS = {
 }
 """
 
-custom_node_template = '''
+custom_node_template = ''
 class CustomEnhancer:
     """Custom enhancement node."""
     
@@ -694,7 +694,7 @@ class CustomEnhancer:
     def color_correct(self, image):
         # Color correction logic
         return image
-'''
+''
 \`\`\`
 
 ## Production Workflows

@@ -690,7 +690,7 @@ correct_path = Path("C:/") / "Users" / "data" / "file.txt"
 correct_str = os.path.join("C:", "Users", "data", "file.txt")
 
 # Current platform separator
-print(os.sep)  # '/' on Unix, '\\\\' on Windows
+print(os.sep)  # '/' on Unix, '\\' on Windows
 \`\`\`
 
 ### Home Directory and Environment

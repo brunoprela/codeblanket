@@ -196,7 +196,7 @@ SET tag_names = ARRAY(
 
 -- Query posts by tag (GIN index)
 CREATE INDEX idx_posts_tags ON posts USING GIN(tag_names);
-SELECT * FROM posts WHERE tag_names @> ARRAY['postgresql'];
+SELECT * FROM posts WHERE tag_names @> ARRAY['postgresql',];
 \`\`\`
 
 *Benefits:*
@@ -552,38 +552,38 @@ def handle_order_created(event):
     
     # 1. Update PostgreSQL read model
     order_summary.insert({
-        'order_id': data['order_id'],
-        'customer_id': data['customer_id'],
-        'customer_name': get_customer_name(data['customer_id']),
-        'customer_email': get_customer_email(data['customer_id']),
+        'order_id': data['order_id',],
+        'customer_id': data['customer_id',],
+        'customer_name': get_customer_name(data['customer_id',]),
+        'customer_email': get_customer_email(data['customer_id',]),
         'order_status': 'pending',
-        'total_amount': data['total_amount'],
-        'item_count': len(data['items']),
-        'items': serialize_items(data['items']),
+        'total_amount': data['total_amount',],
+        'item_count': len(data['items',]),
+        'items': serialize_items(data['items',]),
         'created_at': event.created_at
     })
     
     # 2. Update Redis cache
     redis.zadd(
-        f"user:orders:{data['customer_id']}",
+        f"user:orders:{data['customer_id',]}",
         {
             json.dumps({
-                'order_id': data['order_id'],
-                'total': data['total_amount'],
+                'order_id': data['order_id',],
+                'total': data['total_amount',],
                 'status': 'pending',
-                'item_count': len(data['items'])
+                'item_count': len(data['items',])
             }): event.created_at.timestamp()
         }
     )
     
     # 3. Update product sales count (Elasticsearch)
-    for item in data['items']:
+    for item in data['items',]:
         elasticsearch.update(
             index='products',
-            id=item['product_id'],
+            id=item['product_id',],
             script={
                 'source': 'ctx._source.total_sales += params.quantity',
-                'params': {'quantity': item['quantity']}
+                'params': {'quantity': item['quantity',]}
             }
         )
 \`\`\`

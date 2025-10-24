@@ -153,7 +153,7 @@ export const apiversioningSection = {
     **Implementation**:
     \`\`\`javascript
     app.get('/api/users', (req, res) => {
-      const accept = req.headers['accept'] || '';
+      const accept = req.headers['accept'] || ';
       
       if (accept.includes('vnd.myapi.v1+json')) {
         return res

@@ -16,7 +16,7 @@ export const collectionsmoduleMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Counter counts occurrences of hashable elements: Counter(["a","b","a"]) → Counter({"a":2, "b":1})',
+      'Counter counts occurrences of hashable elements: Counter(["a","b","a",]) → Counter({"a":2, "b":1})',
   },
   {
     id: 'mc2',
@@ -29,7 +29,7 @@ export const collectionsmoduleMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'defaultdict provides a default value for missing keys, avoiding KeyError: d = defaultdict(list); d["key"].append(1)',
+      'defaultdict provides a default value for missing keys, avoiding KeyError: d = defaultdict(list); d["key",].append(1)',
   },
   {
     id: 'mc3',
@@ -63,6 +63,6 @@ export const collectionsmoduleMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 0,
     explanation:
-      'namedtuple creates tuple subclasses with named fields: Point = namedtuple("Point", ["x", "y"])',
+      'namedtuple creates tuple subclasses with named fields: Point = namedtuple("Point", ["x", "y",])',
   },
 ];

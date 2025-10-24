@@ -285,7 +285,7 @@ import logging
 import logging.config
 
 # logging.ini
-'''
+''
 [loggers]
 keys=root
 
@@ -316,7 +316,7 @@ format=%(levelname)s - %(message)s
 
 [formatter_detailed]
 format=%(asctime)s - %(name)s - %(levelname)s - %(message)s
-'''
+''
 
 # Load configuration
 logging.config.fileConfig('logging.ini')

@@ -530,7 +530,7 @@ class FeedbackCollector:
         try:
             async for chunk in generator:
                 chunks.append(chunk)
-                print(chunk, end='', flush=True)
+                print(chunk, end=', flush=True)
                 
                 # Check for feedback
                 if not self.feedback_queue.empty():

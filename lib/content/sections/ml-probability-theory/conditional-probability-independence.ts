@@ -420,8 +420,8 @@ def feature_importance_conditional():
         importance = abs(p_pos_given_high - p_pos_given_low)
         importances.append(importance)
         
-        print(f"{feature_names[i][:30]:30s}: ", end='')
-        print(f"P(+|high)={p_pos_given_high:.2f}, P(+|low)={p_pos_given_low:.2f}, ", end='')
+        print(f"{feature_names[i][:30]:30s}: ", end=')
+        print(f"P(+|high)={p_pos_given_high:.2f}, P(+|low)={p_pos_given_low:.2f}, ", end=')
         print(f"Δ={importance:.2f}")
     
     print(f"\\nFeatures with largest Δ are most informative!")

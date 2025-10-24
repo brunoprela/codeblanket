@@ -282,7 +282,7 @@ code = """
 from typing import List, Optional
 
 class DataProcessor:
-    '''Process data with various methods.'''
+    ''Process data with various methods.''
     
     def __init__(self, config: dict):
         self.config = config
@@ -290,17 +290,17 @@ class DataProcessor:
     
     @staticmethod
     def validate_input(data: List[int]) -> bool:
-        '''Validate that input data is correct.'''
+        ''Validate that input data is correct.''
         return all(x > 0 for x in data)
     
     @classmethod
     def from_file(cls, filename: str) -> 'DataProcessor':
-        '''Create processor from config file.'''
+        ''Create processor from config file.''
         config = load_config(filename)
         return cls(config)
     
     async def process(self, data: List[int], *, strict: bool = False) -> Optional[dict]:
-        '''
+        ''
         Process data asynchronously.
         
         Args:
@@ -309,7 +309,7 @@ class DataProcessor:
             
         Returns:
             Processed results or None
-        '''
+        ''
         if self.validate_input(data):
             result = await self._process_internal(data)
             return result
@@ -328,7 +328,7 @@ analyzer.visit(tree)
 print("=== Function Analysis ===\\n")
 for func in analyzer.functions:
     print(f"Function: {func.name} (line {func.lineno})")
-    print(f"  Type: {'Async' if func.is_async else 'Sync'}", end='')
+    print(f"  Type: {'Async' if func.is_async else 'Sync'}", end=')
     if func.is_method:
         if func.is_static:
             print(" Static Method")
@@ -515,7 +515,7 @@ code = """
 from abc import ABC, abstractmethod
 
 class Animal(ABC):
-    '''Base animal class.'''
+    ''Base animal class.''
     species_count = 0
     
     def __init__(self, name: str, age: int):
@@ -540,7 +540,7 @@ class Animal(ABC):
         return f"{self.name} ({self.age} years)"
 
 class Dog(Animal):
-    '''Dog class inheriting from Animal.'''
+    ''Dog class inheriting from Animal.''
     breed: str = "Unknown"
     
     def __init__(self, name: str, age: int, breed: str):
@@ -555,7 +555,7 @@ class Dog(Animal):
         self.tricks.append(trick)
 
 class ServiceDog(Dog):
-    '''Service dog with additional capabilities.'''
+    ''Service dog with additional capabilities.''
     
     def __init__(self, name: str, age: int, breed: str, service_type: str):
         super().__init__(name, age, breed)
@@ -651,7 +651,7 @@ class ImportAnalyzer(ast.NodeVisitor):
     
     def visit_ImportFrom(self, node: ast.ImportFrom):
         """Handle 'from x import y' statements."""
-        module = node.module if node.module else ''
+        module = node.module if node.module else '
         names = []
         asnames = []
         
@@ -1082,24 +1082,24 @@ from typing import List, Optional
 import pandas as pd
 
 class DataAnalyzer:
-    '''Analyze data with pandas.'''
+    ''Analyze data with pandas.''
     
     def __init__(self, data: pd.DataFrame):
         self.data = data
     
     def compute_stats(self) -> dict:
-        '''Compute basic statistics.'''
+        ''Compute basic statistics.''
         return {
             'mean': self.data.mean(),
             'std': self.data.std()
         }
     
     def filter_data(self, threshold: float) -> pd.DataFrame:
-        '''Filter data above threshold.'''
+        ''Filter data above threshold.''
         return self.data[self.data > threshold]
 
 def load_data(filename: str) -> pd.DataFrame:
-    '''Load data from CSV file.'''
+    ''Load data from CSV file.''
     return pd.read_csv(filename)
 
 def main():

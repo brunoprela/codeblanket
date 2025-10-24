@@ -84,7 +84,7 @@ Note that after backspacing an empty text, the text will continue empty.`,
                     stack.pop()
             else:
                 stack.append(char)
-        return ''.join(stack)
+        return '.join(stack)
     
     return build_string(s) == build_string(t)
 

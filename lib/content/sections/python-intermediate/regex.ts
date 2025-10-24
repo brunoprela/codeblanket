@@ -102,11 +102,11 @@ matches = pattern.findall("I have 3 apples and 5 oranges")
 # Flags
 pattern = re.compile(r'hello', re.IGNORECASE)  # Case-insensitive
 pattern = re.compile(r'line 1.*line 2', re.DOTALL)  # . matches newline
-pattern = re.compile(r'''
+pattern = re.compile(r''
     \\d{3}   # Area code
     -        # Separator
     \\d{4}   # Number
-''', re.VERBOSE)  # Allow comments and whitespace
+'', re.VERBOSE)  # Allow comments and whitespace
 \`\`\`
 
 ## Common Patterns

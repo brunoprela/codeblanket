@@ -254,7 +254,7 @@ class VisionAgent:
 4. The overall scene or context
 5. Any potential actions or tasks suggested
 
-{f'Context: {context}' if context else ''}
+{f'Context: {context}' if context else '}
 
 Return as JSON:
 {{
@@ -516,7 +516,7 @@ Return as JSON array:
             
             elif "generate" in action.lower() and "image" in action.lower():
                 # Image generation
-                prompt = results.get('step_1', '')  # Use previous step result
+                prompt = results.get('step_1', ')  # Use previous step result
                 
                 response = self.client.images.generate(
                     model="dall-e-3",

@@ -421,9 +421,9 @@ const FingerprintJS = require('@fingerprintjs/fingerprintjs');
 // Generate device fingerprint
 async function getDeviceFingerprint(req) {
   const factors = [
-    req.headers['user-agent'],
-    req.headers['accept-language'],
-    req.headers['accept-encoding'],
+    req.headers['user-agent',],
+    req.headers['accept-language',],
+    req.headers['accept-encoding',],
     req.connection.remoteAddress,
     // Additional factors from client fingerprinting
     req.body.screenResolution,
@@ -546,13 +546,13 @@ class BehavioralAnalyzer {
       !req.headers.cookie,
       
       // Suspicious user-agent
-      /bot|crawler|spider|scraper/i.test(req.headers['user-agent']),
+      /bot|crawler|spider|scraper/i.test(req.headers['user-agent',]),
       
       // Missing common headers
-      !req.headers['accept-language'],
+      !req.headers['accept-language',],
       
       // Headless browser detection
-      req.headers['chrome-lighthouse'] !== undefined,
+      req.headers['chrome-lighthouse',] !== undefined,
       
       // Too fast (< 100ms between requests)
       await this.checkRequestTiming(req.user?.id || req.ip)

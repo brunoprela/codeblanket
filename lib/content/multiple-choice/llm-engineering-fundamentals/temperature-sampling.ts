@@ -64,6 +64,6 @@ export const temperaturesamplingMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Stop sequences tell the model to stop generating when it encounters specific strings (e.g., "\\n\\n" for paragraph breaks, "```" for code blocks, "}" for JSON). This provides precise control over output length and format without relying on max_tokens alone.',
+      'Stop sequences tell the model to stop generating when it encounters specific strings (e.g., "\\\\n\\\\n" for paragraph breaks, "```" for code blocks, "}" for JSON). This provides precise control over output length and format without relying on max_tokens alone.',
   },
 ];

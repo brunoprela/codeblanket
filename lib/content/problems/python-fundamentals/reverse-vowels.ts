@@ -84,7 +84,7 @@ print(reverse_vowels("leetcode"))
             left += 1
             right -= 1
     
-    return ''.join(chars)`,
+    return '.join(chars)`,
   timeComplexity: 'O(n)',
   spaceComplexity: 'O(n)',
   order: 53,

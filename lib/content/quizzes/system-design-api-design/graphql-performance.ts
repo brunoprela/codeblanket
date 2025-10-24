@@ -114,7 +114,7 @@ const server = new ApolloServer({
   schema,
   validationRules: [
     depthLimit(7, {
-      ignore: ['IntrospectionQuery']
+      ignore: ['IntrospectionQuery',]
     })
   ]
 });
@@ -477,20 +477,20 @@ const prometheus = require('prom-client');
 const queryDuration = new prometheus.Histogram({
   name: 'graphql_query_duration_seconds',
   help: 'GraphQL query duration',
-  labelNames: ['operation_name', 'operation_type'],
+  labelNames: ['operation_name', 'operation_type',],
   buckets: [0.1, 0.5, 1, 2, 5, 10]
 });
 
 const queryErrors = new prometheus.Counter({
   name: 'graphql_query_errors_total',
   help: 'GraphQL query errors',
-  labelNames: ['operation_name', 'error_type']
+  labelNames: ['operation_name', 'error_type',]
 });
 
 const queryComplexity = new prometheus.Histogram({
   name: 'graphql_query_complexity',
   help: 'GraphQL query complexity',
-  labelNames: ['operation_name'],
+  labelNames: ['operation_name',],
   buckets: [10, 50, 100, 500, 1000, 5000]
 });
 
@@ -542,7 +542,7 @@ const server = new ApolloServer({
 const resolverDuration = new prometheus.Histogram({
   name: 'graphql_resolver_duration_seconds',
   help: 'Resolver execution time',
-  labelNames: ['type', 'field'],
+  labelNames: ['type', 'field',],
   buckets: [0.001, 0.01, 0.1, 0.5, 1]
 });
 
@@ -577,13 +577,13 @@ const resolvers = {
 const loaderHits = new prometheus.Counter({
   name: 'dataloader_cache_hits_total',
   help: 'DataLoader cache hits',
-  labelNames: ['loader_name']
+  labelNames: ['loader_name',]
 });
 
 const loaderMisses = new prometheus.Counter({
   name: 'dataloader_cache_misses_total',
   help: 'DataLoader cache misses',
-  labelNames: ['loader_name']
+  labelNames: ['loader_name',]
 });
 
 const instrumentedDataLoader = (name, batchFn) => {

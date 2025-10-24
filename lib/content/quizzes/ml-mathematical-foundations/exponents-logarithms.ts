@@ -151,8 +151,8 @@ def portfolio_log_likelihood(returns, weights, params):
     """
     residuals = returns - np.dot(weights, params)
     # Log of Gaussian likelihood
-    log_like = -0.5 * np.sum(residuals**2 / params['variance'])
-    log_like -= 0.5 * len(returns) * np.log(2 * np.pi * params['variance'])
+    log_like = -0.5 * np.sum(residuals**2 / params['variance',])
+    log_like -= 0.5 * len(returns) * np.log(2 * np.pi * params['variance',])
     return log_like
 
 # Optimize in log space, interpret results in probability space

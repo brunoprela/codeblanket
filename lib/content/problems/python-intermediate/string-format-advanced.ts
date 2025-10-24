@@ -76,7 +76,7 @@ print(format_table("Bob", 87, 0.87))
 # More examples
 def format_currency(amount):
     # Comma separator, 2 decimals
-    return f"${'$'}{amount:,.2f}"
+    return f"\${'$'}{amount:,.2f}"
 
 def format_hex(number):
     # Hex with 0x prefix, padded

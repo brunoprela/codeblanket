@@ -560,7 +560,7 @@ spec:
         lifecycle:
           preStop:
             exec:
-              command: ["/bin/sh", "-c", "sleep 15"]  # Grace period
+              command: ["/bin/sh", "-c", "sleep 15",]  # Grace period
 \`\`\`
 
 **Behavior**:
@@ -742,7 +742,7 @@ spec:
       preStop:
         exec:
           # Sleep before shutdown to allow endpoint removal
-          command: ["/bin/sh", "-c", "sleep 15"]
+          command: ["/bin/sh", "-c", "sleep 15",]
     
     readinessProbe:
       httpGet:
@@ -993,7 +993,7 @@ const prometheus = require('prom-client');
 const connectionFailures = new prometheus.Counter({
   name: 'http_connection_failures_total',
   help: 'Total number of connection failures',
-  labelNames: ['service', 'error']
+  labelNames: ['service', 'error',]
 });
 
 async function monitoredRequest(url, options) {
@@ -1249,7 +1249,7 @@ await consul.agent.service.register({
   id: 'order-service-pod-1',
   address: '10.0.1.5',
   port: 8080,
-  tags: ['v1', 'http'],
+  tags: ['v1', 'http',],
   meta: {
     region: 'us-east-1',
     zone: 'us-east-1a',

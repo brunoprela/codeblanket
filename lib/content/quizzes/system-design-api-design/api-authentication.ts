@@ -121,7 +121,7 @@ Benefit: Even if YOUR database is compromised, keys can't be recovered
 \`\`\`json
 {
   "key_id": "key_123",
-  "scopes": ["read:public_data"],
+  "scopes": ["read:public_data",],
   "rate_limit": "1000/hour"
 }
 \`\`\`
@@ -129,7 +129,7 @@ Benefit: Compromised key has limited permissions
 
 **3. IP Whitelisting**:
 \`\`\`json
-{"key_id": "key_123", "allowed_ips": ["52.12.34.56"]}
+{"key_id": "key_123", "allowed_ips": ["52.12.34.56",]}
 \`\`\`
 Benefit: Stolen key useless from other IPs
 

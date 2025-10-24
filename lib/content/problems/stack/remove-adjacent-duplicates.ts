@@ -79,7 +79,7 @@ Return the final string after all such duplicate removals have been made. It can
             # Add character
             stack.append(char)
     
-    return ''.join(stack)
+    return '.join(stack)
 `,
   timeComplexity: 'O(n)',
   spaceComplexity: 'O(n)',

@@ -94,7 +94,7 @@ def simple_stream(prompt: str):
         # Check if chunk has content
         if chunk.choices[0].delta.content is not None:
             content = chunk.choices[0].delta.content
-            print(content, end='', flush=True)
+            print(content, end=', flush=True)
     
     print()  # New line at end
 
@@ -267,7 +267,7 @@ class StreamingHandler:
                 
                 # Check if done
                 if finish_reason:
-                    complete_text = ''.join(full_content)
+                    complete_text = '.join(full_content)
                     
                     if on_complete:
                         on_complete(complete_text)
@@ -284,7 +284,7 @@ handler = StreamingHandler()
 
 def on_chunk(content: str):
     """Called for each chunk."""
-    print(content, end='', flush=True)
+    print(content, end=', flush=True)
 
 def on_complete(full_text: str):
     """Called when done."""
@@ -351,7 +351,7 @@ class StreamAccumulator:
     
     def get_full_content(self) -> str:
         """Get complete accumulated content."""
-        return ''.join(self.chunks)
+        return '.join(self.chunks)
     
     def to_message(self) -> Dict[str, str]:
         """Convert to message format."""
@@ -385,7 +385,7 @@ response = client.chat.completions.create(
 for chunk in response:
     content = accumulator.add_chunk(chunk)
     if content:
-        print(content, end='', flush=True)
+        print(content, end=', flush=True)
 
 print(f"\\n\\nFull content: {accumulator.get_full_content()}")
 print(f"Message format: {accumulator.to_message()}")
@@ -432,16 +432,16 @@ def safe_stream(
                 if chunk.choices and chunk.choices[0].delta.content:
                     content = chunk.choices[0].delta.content
                     content_parts.append(content)
-                    print(content, end='', flush=True)
+                    print(content, end=', flush=True)
                 
                 # Check if done
                 if chunk.choices and chunk.choices[0].finish_reason:
                     print()  # New line
-                    return ''.join(content_parts)
+                    return '.join(content_parts)
             
             # If we get here, stream ended without finish_reason
             print("\\n[Warning: Stream ended unexpectedly]")
-            return ''.join(content_parts)
+            return '.join(content_parts)
         
         except Exception as e:
             print(f"\\n[Error on attempt {attempt + 1}: {e}]")
@@ -483,12 +483,12 @@ def stream_to_console(prompt: str):
         stream=True
     )
     
-    print("Assistant: ", end='')
+    print("Assistant: ", end=')
     
     for chunk in response:
         if chunk.choices[0].delta.content:
             content = chunk.choices[0].delta.content
-            print(content, end='', flush=True)
+            print(content, end=', flush=True)
             sys.stdout.flush()  # Force output
     
     print()  # Newline at end
@@ -577,7 +577,7 @@ def stream_to_file(prompt: str, filepath: str):
                 content = chunk.choices[0].delta.content
                 
                 # Write to console
-                print(content, end='', flush=True)
+                print(content, end=', flush=True)
                 
                 # Write to file
                 f.write(content)
@@ -625,18 +625,18 @@ class StreamingConversation:
         # Accumulate assistant response
         assistant_message = []
         
-        print("Assistant: ", end='')
+        print("Assistant: ", end=')
         
         for chunk in response:
             if chunk.choices[0].delta.content:
                 content = chunk.choices[0].delta.content
                 assistant_message.append(content)
-                print(content, end='', flush=True)
+                print(content, end=', flush=True)
         
         print()  # Newline
         
         # Add to history
-        full_response = ''.join(assistant_message)
+        full_response = '.join(assistant_message)
         self.messages.append({
             "role": "assistant",
             "content": full_response
@@ -709,7 +709,7 @@ def measure_stream_performance(prompt: str) -> StreamMetrics:
             content = chunk.choices[0].delta.content
             token_count += len(content.split())
             
-            print(content, end='', flush=True)
+            print(content, end=', flush=True)
     
     total_time = time.time() - start_time
     tokens_per_second = token_count / total_time if total_time > 0 else 0
@@ -777,9 +777,9 @@ class CancelableStream:
             if chunk.choices[0].delta.content:
                 content = chunk.choices[0].delta.content
                 content_parts.append(content)
-                print(content, end='', flush=True)
+                print(content, end=', flush=True)
         
-        return ''.join(content_parts)
+        return '.join(content_parts)
 
 # Usage
 streamer = CancelableStream()

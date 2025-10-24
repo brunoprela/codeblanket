@@ -73,7 +73,7 @@ print(f"Verification: f({root}) = {f(root)}")
 
 ## Taylor Series Approximation
 
-**Taylor Series**: f(x) ≈ f(a) + f'(a)(x-a) + f''(a)(x-a)²/2! + ...
+**Taylor Series**: f(x) ≈ f(a) + f'(a)(x-a) + f'(a)(x-a)²/2! + ...
 
 \`\`\`python
 def taylor_approximation(f, derivatives, a, x, order):

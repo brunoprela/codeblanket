@@ -23,7 +23,7 @@ export const regexQuiz = [
       'Why should you use raw strings (r"...") for regex patterns? What problems does it prevent?',
     hint: 'Think about backslashes and Python string escaping.',
     sampleAnswer:
-      'Raw strings treat backslashes literally, preventing double-escaping issues. Without raw strings, to match a literal backslash you\'d need "\\\\\\\\", but with raw strings just r"\\\\". Common patterns like \\d (digit) or \\w (word) work as r"\\d" instead of "\\\\d". Always use raw strings for regex - it makes patterns readable and prevents bugs. Without raw strings, you\'d need to escape every backslash twice: once for Python, once for regex.',
+      'Raw strings treat backslashes literally, preventing double-escaping issues. Without raw strings, to match a literal backslash you\'d need "\\\\\\\\\\\\\\\\", but with raw strings just r"\\\\\\\\". Common patterns like \\\\d (digit) or \\\\w (word) work as r"\\\\d" instead of "\\\\\\\\d". Always use raw strings for regex - it makes patterns readable and prevents bugs. Without raw strings, you\'d need to escape every backslash twice: once for Python, once for regex.',
     keyPoints: [
       'Prevents double-escaping of backslashes',
       'Makes patterns more readable',

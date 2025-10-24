@@ -54,7 +54,7 @@ export const sequenceToSequenceMultipleChoice = [
     ],
     correctAnswer: 2,
     explanation:
-      "Beam search maintains **up to k partial sequences** at each step. Process: (1) Start with 1 sequence [START], (2) Generate top-k tokens → 5 sequences, (3) For each sequence, generate top-k next tokens → 5×k=25 candidates, (4) Keep only top-5 of these 25, (5) Repeat until all beams end with <END>. Example with k=3: Step 1: ['The'], ['A'], ['This']. Step 2: Expand each, keep top-3 overall: ['The','cat'], ['The','dog'], ['A','cat']. Each beam is a partial sequence exploring different paths. Benefits: (1) Better than greedy (k=1) which picks single best token, (2) Explores multiple hypotheses, (3) Can recover if early token suboptimal. Trade-off: k× slower than greedy. Typical: k=5-10 gives good quality/speed balance.",
+      "Beam search maintains **up to k partial sequences** at each step. Process: (1) Start with 1 sequence [START], (2) Generate top-k tokens → 5 sequences, (3) For each sequence, generate top-k next tokens → 5×k=25 candidates, (4) Keep only top-5 of these 25, (5) Repeat until all beams end with <END>. Example with k=3: Step 1: ['The',], ['A',], ['This',]. Step 2: Expand each, keep top-3 overall: ['The','cat',], ['The','dog',], ['A','cat',]. Each beam is a partial sequence exploring different paths. Benefits: (1) Better than greedy (k=1) which picks single best token, (2) Explores multiple hypotheses, (3) Can recover if early token suboptimal. Trade-off: k× slower than greedy. Typical: k=5-10 gives good quality/speed balance.",
   },
   {
     id: 'cnn-mc-5',

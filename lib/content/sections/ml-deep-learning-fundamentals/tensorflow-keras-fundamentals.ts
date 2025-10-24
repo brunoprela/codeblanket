@@ -134,7 +134,7 @@ model = keras.Sequential([
 # Print model summary
 model.summary()
 
-'''
+''
 Output:
 _________________________________________________________________
 Layer (type)                 Output Shape              Param #   
@@ -150,7 +150,7 @@ dense_2 (Dense)              (None, 10)                2570
 Total params: 538,890
 Trainable params: 537,354
 Non-trainable params: 1,536
-'''
+''
 \`\`\`
 
 ### Compiling and Training

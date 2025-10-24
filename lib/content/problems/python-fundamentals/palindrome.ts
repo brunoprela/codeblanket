@@ -79,14 +79,14 @@ print(is_palindrome("A man, a plan, a canal: Panama"))
   ],
   solution: `def is_palindrome(s):
     # Remove non-alphanumeric and convert to lowercase
-    cleaned = ''.join(char.lower() for char in s if char.isalnum())
+    cleaned = '.join(char.lower() for char in s if char.isalnum())
     return cleaned == cleaned[::-1]
 
 
 # Alternative: Two pointers
 def is_palindrome_two_pointers(s):
     # Clean the string
-    cleaned = ''.join(char.lower() for char in s if char.isalnum())
+    cleaned = '.join(char.lower() for char in s if char.isalnum())
     
     left, right = 0, len(cleaned) - 1
     while left < right:

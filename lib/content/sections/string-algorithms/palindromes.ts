@@ -39,7 +39,7 @@ def is_palindrome_alphanumeric(s):
     Example: "A man, a plan, a canal: Panama" -> True
     """
     # Clean string: only alphanumeric, lowercase
-    cleaned = ''.join(c.lower() for c in s if c.isalnum())
+    cleaned = '.join(c.lower() for c in s if c.isalnum())
     
     left, right = 0, len(cleaned) - 1
     while left < right:
@@ -52,7 +52,7 @@ def is_palindrome_alphanumeric(s):
 
 # Or use Python's slicing (less efficient but concise)
 def is_palindrome_simple(s):
-    cleaned = ''.join(c.lower() for c in s if c.isalnum())
+    cleaned = '.join(c.lower() for c in s if c.isalnum())
     return cleaned == cleaned[::-1]
 \`\`\`
 

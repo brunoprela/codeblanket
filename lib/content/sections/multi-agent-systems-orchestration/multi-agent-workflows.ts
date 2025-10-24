@@ -640,7 +640,7 @@ class LoopWorkflow:
                 "iteration": i + 1,
                 "output": current_output,
                 "quality": quality,
-                "feedback": evaluation.get('feedback', '')
+                "feedback": evaluation.get('feedback', ')
             })
             
             print(f"  Quality score: {quality:.2f}")
@@ -659,7 +659,7 @@ class LoopWorkflow:
             print("  Refining...")
             current_output = await self.refiner.execute({
                 "output": current_output,
-                "feedback": evaluation.get('feedback', '')
+                "feedback": evaluation.get('feedback', ')
             })
         
         # Max iterations reached

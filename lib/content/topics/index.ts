@@ -88,6 +88,8 @@ import { mlUnsupervisedLearning } from '../modules/ml-unsupervised-learning';
 import { mlDeepLearningFundamentals } from '../modules/ml-deep-learning-fundamentals';
 import { mlAdvancedDeepLearningModule } from '../modules/ml-advanced-deep-learning';
 import { naturalLanguageProcessingModule } from '../modules/ml-natural-language-processing';
+import { mlModelEvaluationOptimizationModule } from '../modules/ml-model-evaluation-optimization';
+import { largeLanguageModelsModule } from '../modules/large-language-models';
 
 import { promptEngineeringOptimizationModule } from '../modules/prompt-engineering-optimization';
 import { llmEngineeringFundamentalsModule } from '../modules/llm-engineering-fundamentals';
@@ -99,6 +101,12 @@ import { multiAgentSystemsOrchestrationModule } from '../modules/multi-agent-sys
 import { imageGenerationComputerVisionModule } from '../modules/image-generation-computer-vision';
 import { videoAudioGenerationModule } from '../modules/video-audio-generation';
 import { multiModalAiSystemsModule } from '../modules/multi-modal-ai-systems';
+import { ragSemanticSearchModule } from '../modules/rag-semantic-search';
+import { buildingCompleteAIProductsModule } from '../modules/building-complete-ai-products';
+import { productionLlmApplicationsModule } from '../modules/production-llm-applications';
+import { scalingCostOptimizationModule } from '../modules/scaling-cost-optimization';
+import aiSafetyGuardrailsModule from '../modules/ai-safety-guardrails';
+import { evaluationDataOpsFinetuningModule } from '../modules/evaluation-data-ops-fine-tuning';
 
 // Create a map of all modules by ID
 const allModulesMap: Record<string, Module> = {
@@ -156,6 +164,7 @@ const allModulesMap: Record<string, Module> = {
   'ml-deep-learning-fundamentals': mlDeepLearningFundamentals,
   'ml-advanced-deep-learning': mlAdvancedDeepLearningModule,
   'ml-natural-language-processing': naturalLanguageProcessingModule,
+  'ml-model-evaluation-optimization': mlModelEvaluationOptimizationModule,
 
   'applied-ai-llm-fundamentals': llmEngineeringFundamentalsModule,
   'applied-ai-prompt-engineering': promptEngineeringOptimizationModule,
@@ -167,6 +176,12 @@ const allModulesMap: Record<string, Module> = {
   'applied-ai-image-generation': imageGenerationComputerVisionModule,
   'applied-ai-video-audio': videoAudioGenerationModule,
   'applied-ai-multi-modal': multiModalAiSystemsModule,
+  'applied-ai-rag-search': ragSemanticSearchModule,
+  'applied-ai-production': productionLlmApplicationsModule,
+  'applied-ai-complete-products': buildingCompleteAIProductsModule,
+  'applied-ai-scaling': scalingCostOptimizationModule,
+  'applied-ai-safety': aiSafetyGuardrailsModule,
+  'applied-ai-evaluation-dataops-finetuning': evaluationDataOpsFinetuningModule,
 };
 
 // Define all topics in order

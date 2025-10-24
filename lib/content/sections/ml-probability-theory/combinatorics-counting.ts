@@ -283,7 +283,7 @@ for k in range(n + 1):
     term = f"{coeff}x^{power_x}y^{power_y}" if power_x > 0 and power_y > 0 else \
            f"{coeff}x^{power_x}" if power_y == 0 else \
            f"{coeff}y^{power_y}" if power_x == 0 else f"{coeff}"
-    terms.append(term.replace('^1', '').replace('^0', ''))
+    terms.append(term.replace('^1', ').replace('^0', '))
 print(' + '.join(terms))
 
 # Output:

@@ -496,11 +496,11 @@ illustration_prompt = builder.illustration_style(
 advanced_techniques = {
     "text_in_images": {
         "description": "DALL-E 3 can render text (mostly)",
-        "example": '''
+        "example": ''
         A vintage poster with the text "COFFEE SHOP" in bold serif font,
         below it "EST. 1995" in smaller text, coffee bean illustrations around the text,
         cream background, retro aesthetic
-        ''',
+        '',
         "tips": [
             "Put text in quotes",
             "Specify font style (serif, sans-serif, handwritten)",
@@ -512,11 +512,11 @@ advanced_techniques = {
     
     "precise_composition": {
         "description": "Control exact layout",
-        "example": '''
+        "example": ''
         A split composition image: left half shows a busy city street in daylight,
         right half shows the same street at night with neon signs,
         sharp vertical division in the middle
-        ''',
+        '',
         "tips": [
             "Use spatial terms (left/right, top/bottom, center)",
             "Describe relationships (in front of, behind, next to)",
@@ -527,11 +527,11 @@ advanced_techniques = {
     
     "multiple_objects": {
         "description": "Include several specific items",
-        "example": '''
+        "example": ''
         A flat lay photo on white marble: a laptop (top left), a coffee mug (top right),
         a notebook with pen (center), wireless headphones (bottom left),
         a succulent plant (bottom right), professional product photography
-        ''',
+        '',
         "tips": [
             "List each object with position",
             "Use consistent view (flat lay, scene, etc.)",
@@ -542,10 +542,10 @@ advanced_techniques = {
     
     "style_mixing": {
         "description": "Combine multiple style references",
-        "example": '''
+        "example": ''
         A portrait combining the geometric style of Picasso with the color palette
         of Matisse, showing a woman in contemplation, modern digital art
-        ''',
+        '',
         "tips": [
             "Reference specific artists or styles",
             "Explain what aspect from each (color, geometry, texture)",

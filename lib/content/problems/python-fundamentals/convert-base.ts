@@ -83,7 +83,7 @@ print(convert_base("FF", 16, 10))
         result.append(digits[decimal % to_base])
         decimal //= to_base
     
-    return ''.join(reversed(result))`,
+    return '.join(reversed(result))`,
   timeComplexity: 'O(log n)',
   spaceComplexity: 'O(log n)',
   order: 61,

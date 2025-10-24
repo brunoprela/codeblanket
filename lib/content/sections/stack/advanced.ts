@@ -97,7 +97,7 @@ def generate_parentheses(n: int) -> List[str]:
     Generate all valid parentheses combinations.
     """
     result = []
-    stack = [('', 0, 0)]  # (current_string, open_count, close_count)
+    stack = [(', 0, 0)]  # (current_string, open_count, close_count)
     
     while stack:
         s, open_count, close_count = stack.pop()

@@ -90,7 +90,7 @@ HTTP/1.1 403 Forbidden
     "constraints": {
       "minimumAge": 18,
       "currentAge": 16,
-      "allowedDays": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      "allowedDays": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday",],
       "currentDay": "Saturday"
     },
     "availableFrom": "2024-01-22T00:00:00Z",  // Next Monday

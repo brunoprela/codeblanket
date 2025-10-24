@@ -203,7 +203,7 @@ def parse_code(code: str, language: Language) -> 'Tree':
 # Example: Parse Python code
 python_code = """
 def calculate_total(items, tax_rate=0.1):
-    '''Calculate total with tax.'''
+    ''Calculate total with tax.''
     subtotal = sum(item['price'] for item in items)
     tax = subtotal * tax_rate
     return subtotal + tax

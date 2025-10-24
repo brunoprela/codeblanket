@@ -567,7 +567,7 @@ class DocumentationGenerator(ast.NodeVisitor):
     
     def _generate_google_style(self, func: ast.FunctionDef) -> str:
         """Generate Google-style docstring."""
-        lines = [f'"""Summary of {func.name}.', '', '']
+        lines = [f'"""Summary of {func.name}.', ', ']
         
         # Parameters
         if func.args.args:
@@ -577,21 +577,21 @@ class DocumentationGenerator(ast.NodeVisitor):
                 if arg.annotation:
                     arg_type = ast.unparse(arg.annotation)
                 lines.append(f'    {arg.arg} ({arg_type}): Description of {arg.arg}')
-            lines.append('')
+            lines.append(')
         
         # Returns
         if func.returns:
             return_type = ast.unparse(func.returns)
             lines.append('Returns:')
             lines.append(f'    {return_type}: Description of return value')
-            lines.append('')
+            lines.append(')
         
         lines.append('"""')
         return '\\n'.join(lines)
     
     def _generate_numpy_style(self, func: ast.FunctionDef) -> str:
         """Generate NumPy-style docstring."""
-        lines = [f'"""', f'Summary of {func.name}.', '', '']
+        lines = [f'"""', f'Summary of {func.name}.', ', ']
         
         # Parameters
         if func.args.args:
@@ -603,7 +603,7 @@ class DocumentationGenerator(ast.NodeVisitor):
                     arg_type = ast.unparse(arg.annotation)
                 lines.append(f'{arg.arg} : {arg_type}')
                 lines.append(f'    Description of {arg.arg}')
-            lines.append('')
+            lines.append(')
         
         # Returns
         if func.returns:
@@ -612,14 +612,14 @@ class DocumentationGenerator(ast.NodeVisitor):
             lines.append('-------')
             lines.append(return_type)
             lines.append('    Description of return value')
-            lines.append('')
+            lines.append(')
         
         lines.append('"""')
         return '\\n'.join(lines)
     
     def _generate_sphinx_style(self, func: ast.FunctionDef) -> str:
         """Generate Sphinx-style docstring."""
-        lines = [f'"""Summary of {func.name}.', '']
+        lines = [f'"""Summary of {func.name}.', ']
         
         # Parameters
         for arg in func.args.args:

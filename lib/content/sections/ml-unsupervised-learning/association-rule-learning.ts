@@ -157,12 +157,12 @@ The most famous algorithm for association rule mining
 # Manual Apriori implementation (simplified)
 
 def get_support(itemset, transactions):
-    '''Calculate support for an itemset'''
+    ''Calculate support for an itemset''
     count = sum(1 for t in transactions if set(itemset).issubset(set(t)))
     return count / len(transactions)
 
 def find_frequent_itemsets(transactions, min_support):
-    '''Find all frequent itemsets using Apriori'''
+    ''Find all frequent itemsets using Apriori''
     from itertools import combinations
     
     # Get all unique items
@@ -569,7 +569,7 @@ except (ImportError, NameError):
 
 \`\`\`python
 def recommend_products(cart_items, rules_df, n_recommendations=3):
-    '''Recommend products based on current cart'''
+    ''Recommend products based on current cart''
     # Find rules where antecedents match cart items
     recommendations = []
     

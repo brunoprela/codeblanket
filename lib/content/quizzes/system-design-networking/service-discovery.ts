@@ -386,7 +386,7 @@ export const servicediscoveryQuiz = [
     \`\`\`javascript
     // Track service discovery health
     setInterval(async () => {
-      const services = ['user-service', 'inventory-service', 'payment-service'];
+      const services = ['user-service', 'inventory-service', 'payment-service',];
       
       for (const service of services) {
         try {
@@ -540,7 +540,7 @@ export const servicediscoveryQuiz = [
     client_addr = "0.0.0.0"      # Listen on all interfaces
     
     # Join other servers in same DC
-    retry_join = ["10.0.1.11", "10.0.1.12"]
+    retry_join = ["10.0.1.11", "10.0.1.12",]
     
     # UI
     ui_config {
@@ -676,7 +676,7 @@ export const servicediscoveryQuiz = [
       name = "user-service"
       id = "user-service-1"
       port = 3000
-      tags = ["v1", "http"]
+      tags = ["v1", "http",]
       
       # Health check
       check {
@@ -809,7 +809,7 @@ export const servicediscoveryQuiz = [
       - job_name: 'consul'
         metrics_path: '/v1/agent/metrics'
         params:
-          format: ['prometheus']
+          format: ['prometheus',]
         static_configs:
           - targets:
               - 'consul-server-1:8500'

@@ -18,8 +18,10 @@ export const quantitativeProgrammingTopic = {
     'ml-eda-feature-engineering',
     'ml-supervised-learning',
     'ml-unsupervised-learning',
+    'ml-model-evaluation-optimization',
     'ml-deep-learning-fundamentals',
     'ml-advanced-deep-learning',
     'ml-natural-language-processing',
+    'ml-ai-large-language-models',
   ],
 };

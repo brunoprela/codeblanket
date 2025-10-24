@@ -197,8 +197,8 @@ def create_few_shot_prompt(examples, query):
     
     # Add examples
     for ex in examples:
-        prompt += f"News: {ex['text']}\\n"
-        prompt += f"Sentiment: {ex['label']}\\n\\n"
+        prompt += f"News: {ex['text',]}\\n"
+        prompt += f"Sentiment: {ex['label',]}\\n\\n"
     
     # Add query
     prompt += f"News: {query}\\n"
@@ -251,7 +251,7 @@ def few_shot_sentiment(news_text, examples):
     )
     
     # Extract sentiment (text after "Sentiment:")
-    output = response[0]['generated_text']
+    output = response[0]['generated_text',]
     sentiment = output.split("Sentiment:")[-1].strip().split()[0]
     
     return sentiment
@@ -272,10 +272,10 @@ class DynamicFewShotClassifier:
     def __init__(self, example_pool):
         self.examples = example_pool
         self.encoder = SentenceTransformer('all-MiniLM-L6-v2')
-        self.example_embeddings = self.encoder.encode([ex['text'] for ex in example_pool])
+        self.example_embeddings = self.encoder.encode([ex['text',] for ex in example_pool])
         
     def select_examples(self, query, k=5):
-        '''Select most relevant examples for query'''
+        ''Select most relevant examples for query''
         query_embedding = self.encoder.encode([query])
         
         # Compute similarity
@@ -290,9 +290,9 @@ class DynamicFewShotClassifier:
         
         for idx in top_indices:
             ex = self.examples[idx]
-            if ex['label'] not in labels_seen or len(selected) < k:
+            if ex['label',] not in labels_seen or len(selected) < k:
                 selected.append(ex)
-                labels_seen.add(ex['label'])
+                labels_seen.add(ex['label',])
             
             if len(selected) == k:
                 break
@@ -419,7 +419,7 @@ class NewsAggregator:
         self.news_buffer = []
         
     async def stream_news(self):
-        '''Real-time news streaming'''
+        ''Real-time news streaming''
         while True:
             for source in self.sources:
                 news = await source.fetch_latest()
@@ -428,16 +428,16 @@ class NewsAggregator:
                     # Deduplicate
                     if not self.is_duplicate(article):
                         self.news_buffer.append({
-                            'text': article['title'] + ' ' + article['content'],
-                            'source': article['source'],
-                            'timestamp': article['published_at'],
-                            'url': article['url']
+                            'text': article['title',] + ' ' + article['content',],
+                            'source': article['source',],
+                            'timestamp': article['published_at',],
+                            'url': article['url',]
                         })
                         
             await asyncio.sleep(10)  # Poll every 10 seconds
     
     def is_duplicate(self, article):
-        '''Check for duplicate/similar articles'''
+        ''Check for duplicate/similar articles''
         # Use embeddings to detect near-duplicates
         # Often same story from multiple sources
         pass
@@ -452,10 +452,10 @@ class FinancialEntityExtractor:
         self.ticker_map = load_ticker_mapping()  # Company name → ticker
         
     def extract_entities(self, text):
-        '''Extract companies mentioned'''
+        ''Extract companies mentioned''
         entities = self.ner_model(text)
         
-        companies = [e['word'] for e in entities if e['entity_group'] == 'ORG']
+        companies = [e['word',] for e in entities if e['entity_group',] == 'ORG',]
         
         # Link to tickers
         tickers = []
@@ -467,8 +467,8 @@ class FinancialEntityExtractor:
         return {
             'companies': companies,
             'tickers': tickers,
-            'people': [e['word'] for e in entities if e['entity_group'] == 'PER'],
-            'locations': [e['word'] for e in entities if e['entity_group'] == 'LOC']
+            'people': [e['word',] for e in entities if e['entity_group',] == 'PER',],
+            'locations': [e['word',] for e in entities if e['entity_group',] == 'LOC',]
         }
 \`\`\`
 
@@ -485,12 +485,12 @@ class EnsembleSentimentAnalyzer:
         ]
         
     def analyze(self, text, ticker=None):
-        '''Ensemble sentiment analysis'''
+        ''Ensemble sentiment analysis''
         sentiments = []
         
         for model in self.models:
             result = model(text[:512])[0]
-            score = result['score'] if result['label'] == 'positive' else -result['score']
+            score = result['score',] if result['label',] == 'positive' else -result['score',]
             sentiments.append(score)
         
         # Weighted average (FinBERT gets higher weight)
@@ -519,24 +519,24 @@ class TradingSignalGenerator:
         self.signal_history = {}  # Track signals over time
         
     def process_news(self, news_article):
-        '''Convert news to trading signals'''
+        ''Convert news to trading signals''
         # Extract entities
-        entities = self.entity_extractor.extract_entities(news_article['text'])
+        entities = self.entity_extractor.extract_entities(news_article['text',])
         
-        if not entities['tickers']:
+        if not entities['tickers',]:
             return None
         
         # Analyze sentiment
         sentiment_result = self.sentiment_analyzer.analyze(
-            news_article['text'],
-            ticker=entities['tickers'][0]
+            news_article['text',],
+            ticker=entities['tickers',][0]
         )
         
         # Generate signals for each ticker
         signals = []
-        for ticker in entities['tickers']:
+        for ticker in entities['tickers',]:
             # Calculate metrics
-            sentiment_score = sentiment_result['sentiment']
+            sentiment_score = sentiment_result['sentiment',]
             momentum = self.calculate_momentum(ticker)
             volume = self.get_news_volume(ticker, hours=1)
             volatility = self.get_market_volatility(ticker)
@@ -546,17 +546,17 @@ class TradingSignalGenerator:
                 sentiment_score,
                 momentum,
                 volume,
-                sentiment_result['confidence']
+                sentiment_result['confidence',]
             )
             
             signal = {
                 'ticker': ticker,
-                'timestamp': news_article['timestamp'],
+                'timestamp': news_article['timestamp',],
                 'action': self.determine_action(signal_strength),
-                'confidence': sentiment_result['confidence'],
+                'confidence': sentiment_result['confidence',],
                 'sentiment': sentiment_score,
                 'magnitude': abs(signal_strength),
-                'source_news': news_article['text'][:200],
+                'source_news': news_article['text',][:200],
                 'reasoning': self.explain_signal(sentiment_score, momentum, volume)
             }
             
@@ -565,7 +565,7 @@ class TradingSignalGenerator:
         return signals
     
     def calculate_signal_strength(self, sentiment, momentum, volume, confidence):
-        '''Combine multiple factors'''
+        ''Combine multiple factors''
         # Weighted combination
         signal = (
             0.4 * sentiment +           # Current sentiment
@@ -577,7 +577,7 @@ class TradingSignalGenerator:
         return signal
     
     def determine_action(self, signal_strength, threshold=0.3):
-        '''Convert signal to action'''
+        ''Convert signal to action''
         if signal_strength > threshold:
             return 'BUY'
         elif signal_strength < -threshold:
@@ -586,7 +586,7 @@ class TradingSignalGenerator:
             return 'HOLD'
     
     def calculate_momentum(self, ticker, hours=24):
-        '''Sentiment momentum over time'''
+        ''Sentiment momentum over time''
         recent_signals = self.get_recent_signals(ticker, hours=hours)
         
         if len(recent_signals) < 2:
@@ -594,8 +594,8 @@ class TradingSignalGenerator:
         
         # Compare recent vs earlier
         mid = len(recent_signals) // 2
-        recent_avg = np.mean([s['sentiment'] for s in recent_signals[mid:]])
-        earlier_avg = np.mean([s['sentiment'] for s in recent_signals[:mid]])
+        recent_avg = np.mean([s['sentiment',] for s in recent_signals[mid:]])
+        earlier_avg = np.mean([s['sentiment',] for s in recent_signals[:mid]])
         
         return recent_avg - earlier_avg
 \`\`\`
@@ -610,14 +610,14 @@ class RiskManager:
         self.signal_filters = []
         
     def validate_signal(self, signal, portfolio, market_data):
-        '''Apply risk checks before execution'''
+        ''Apply risk checks before execution''
         checks = {
-            'confidence_check': signal['confidence'] > 0.6,
-            'volatility_check': market_data['volatility'] < 0.5,
+            'confidence_check': signal['confidence',] > 0.6,
+            'volatility_check': market_data['volatility',] < 0.5,
             'position_size_check': self.check_position_size(signal, portfolio),
-            'daily_loss_check': portfolio['daily_pnl'] > -self.max_daily_loss,
+            'daily_loss_check': portfolio['daily_pnl',] > -self.max_daily_loss,
             'market_hours_check': self.is_market_open(),
-            'liquidity_check': market_data['volume'] > 1000000,
+            'liquidity_check': market_data['volume',] > 1000000,
         }
         
         # All checks must pass
@@ -628,7 +628,7 @@ class RiskManager:
             return False, f"Failed checks: {failed}"
     
     def calculate_position_size(self, signal, portfolio):
-        '''Kelly criterion for position sizing'''
+        ''Kelly criterion for position sizing''
         # Simplified Kelly: f = (p*b - q) / b
         # where p = win probability, q = loss probability, b = win/loss ratio
         
@@ -641,7 +641,7 @@ class RiskManager:
         # Use fractional Kelly (more conservative)
         position_size = max(0, min(kelly_fraction * 0.5, self.max_position_size))
         
-        return position_size * portfolio['total_value']
+        return position_size * portfolio['total_value',]
 \`\`\`
 
 **Component 6: Integration & Monitoring**
@@ -656,7 +656,7 @@ class NewsTrading System:
         self.metrics_tracker = MetricsTracker()
         
     async def run(self):
-        '''Main trading loop'''
+        ''Main trading loop''
         while True:
             # Get latest news
             news_batch = self.news_aggregator.get_latest()
@@ -673,7 +673,7 @@ class NewsTrading System:
                     approved, reason = self.risk_manager.validate_signal(
                         signal,
                         self.portfolio.get_state(),
-                        market_data=self.get_market_data(signal['ticker'])
+                        market_data=self.get_market_data(signal['ticker',])
                     )
                     
                     if approved:
@@ -684,7 +684,7 @@ class NewsTrading System:
                         )
                         
                         # Execute trade
-                        self.execute_trade(signal['ticker'], signal['action'], size)
+                        self.execute_trade(signal['ticker',], signal['action',], size)
                         
                         # Log
                         self.log_trade(signal, size, reason)

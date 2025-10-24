@@ -189,7 +189,7 @@ class TextAnalyzer:
     
     def _extract_words(self):
         # Remove punctuation and split
-        text_clean = self.text.translate(str.maketrans('', '', string.punctuation))
+        text_clean = self.text.translate(str.maketrans(', ', string.punctuation))
         words = text_clean.lower().split()
         return [w for w in words if w]
     
@@ -218,7 +218,7 @@ class TextAnalyzer:
     def get_character_count(self, include_spaces=True):
         if include_spaces:
             return len(self.text)
-        return len(self.text.replace(' ', ''))
+        return len(self.text.replace(' ', '))
     
     def get_unique_word_count(self):
         return len(set(self.words))

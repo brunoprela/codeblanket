@@ -61,7 +61,7 @@ def parse_url(url):
     Examples:
         >>> parse_url("https://example.com/page?id=123")
         {'protocol': 'https', 'domain': 'example.com', 'path': '/page', 
-         'query': {'id': '123'}, 'fragment': ''}
+         'query': {'id': '123'}, 'fragment': '}
     """
     pass
 
@@ -96,7 +96,7 @@ def extract_query_params(url):
     pass
 
 
-def build_url(protocol, domain, path='', query_params=None, fragment=''):
+def build_url(protocol, domain, path=', query_params=None, fragment='):
     """
     Build URL from components.
     
@@ -183,18 +183,18 @@ def extract_query_params(url):
     return {k: v[0] if len(v) == 1 else v for k, v in params.items()}
 
 
-def build_url(protocol, domain, path='', query_params=None, fragment=''):
+def build_url(protocol, domain, path=', query_params=None, fragment='):
     # Ensure path starts with /
     if path and not path.startswith('/'):
         path = '/' + path
     
     # Build query string
-    query = ''
+    query = '
     if query_params:
         query = urlencode(query_params)
     
     # Build URL using urlunparse
-    url_parts = (protocol, domain, path, '', query, fragment)
+    url_parts = (protocol, domain, path, ', query, fragment)
     return urlunparse(url_parts)`,
   timeComplexity: 'O(n) where n is URL length',
   spaceComplexity: 'O(p) where p is number of query parameters',

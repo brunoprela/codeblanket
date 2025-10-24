@@ -137,7 +137,7 @@ Header: Accept-Version: 2.3.1  (full semantic version)
 Implementation:
 \`\`\`javascript
 app.use('/v2/users', (req, res, next) => {
-  const fullVersion = req.headers['accept-version'] || '2.0.0';
+  const fullVersion = req.headers['accept-version',] || '2.0.0';
   const [major, minor, patch] = fullVersion.split('.').map(Number);
   
   // Route to appropriate handler based on version

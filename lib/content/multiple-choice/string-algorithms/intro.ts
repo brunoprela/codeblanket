@@ -12,7 +12,7 @@ export const introMultipleChoice: MultipleChoiceQuestion[] = [
     options: ['O(n)', 'O(n log n)', 'O(n²)', 'O(1)'],
     correctAnswer: 2,
     explanation:
-      "String concatenation with + creates a new string each time, copying all previous characters. For n iterations: 1+2+3+...+n = O(n²). Use list.append() and ''.join() instead for O(n).",
+      "String concatenation with + creates a new string each time, copying all previous characters. For n iterations: 1+2+3+...+n = O(n²). Use list.append() and '.join() instead for O(n).",
   },
   {
     id: 'mc2',
@@ -38,12 +38,12 @@ export const introMultipleChoice: MultipleChoiceQuestion[] = [
     options: [
       's = s + part (repeated concatenation)',
       's += part (in-place concatenation)',
-      "parts = []; parts.append(part); ''.join(parts)",
+      "parts = []; parts.append(part); '.join(parts)",
       'All are equally efficient',
     ],
     correctAnswer: 2,
     explanation:
-      "Using a list and ''.join() is O(n) total. Repeated concatenation with + or += is O(n²) because strings are immutable and each operation creates a new string.",
+      "Using a list and '.join() is O(n) total. Repeated concatenation with + or += is O(n²) because strings are immutable and each operation creates a new string.",
   },
   {
     id: 'mc5',

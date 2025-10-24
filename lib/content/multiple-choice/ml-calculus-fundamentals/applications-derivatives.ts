@@ -33,7 +33,7 @@ export const applicationsderivativesMultipleChoice: MultipleChoiceQuestion[] = [
     options: [
       'f(a)',
       "f(a) + f'(a)(x-a)",
-      "f(a) + f'(a)(x-a) + f''(a)(x-a)²/2",
+      "f(a) + f'(a)(x-a) + f'(a)(x-a)²/2",
       'f(x)',
     ],
     correctAnswer: 1,

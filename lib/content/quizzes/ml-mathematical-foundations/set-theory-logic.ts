@@ -294,8 +294,8 @@ data = pd.DataFrame({
     'approved': [0, 1, 1, 0, 1, 1, 0, 1, 1, 0]
 })
 
-X = data[['age', 'income', 'credit_score']]
-y = data['approved']
+X = data[['age', 'income', 'credit_score',]]
+y = data['approved',]
 
 # Train decision tree
 tree = DecisionTreeClassifier(max_depth=3, random_state=42)
@@ -303,12 +303,12 @@ tree.fit(X, y)
 
 # Visualize
 plt.figure(figsize=(20, 10))
-plot_tree(tree, feature_names=['age', 'income', 'credit_score'],
-          class_names=['Reject', 'Approve'], filled=True, fontsize=10)
+plot_tree(tree, feature_names=['age', 'income', 'credit_score',],
+          class_names=['Reject', 'Approve',], filled=True, fontsize=10)
 plt.show()
 
 # Extract rules as text
-tree_rules = export_text(tree, feature_names=['age', 'income', 'credit_score'])
+tree_rules = export_text(tree, feature_names=['age', 'income', 'credit_score',])
 print("Decision Tree Rules:")
 print(tree_rules)
 \`\`\`

@@ -387,9 +387,9 @@ class ImageProcessor:
                 'filepath': str(path),
                 'filename': path.name,
                 'metadata': {},
-                'ocr_text': '',
+                'ocr_text': ',
                 'ocr_data': [],
-                'vision_analysis': ''
+                'vision_analysis': '
             }
             
             # Load image and get metadata
@@ -546,7 +546,7 @@ print(f"OCR Text: {result['ocr_text']}")
 print(f"Vision Analysis: {result['vision_analysis']}")
 
 # Extract structured data (e.g., invoice)
-invoice_schema = '''
+invoice_schema = ''
 {
   "invoice_number": "string",
   "date": "string",
@@ -554,7 +554,7 @@ invoice_schema = '''
   "total": "number",
   "items": [{"description": "string", "amount": "number"}]
 }
-'''
+''
 
 invoice_data = processor.extract_structured_data("invoice.jpg", invoice_schema)
 print(f"Extracted Invoice Data: {invoice_data}")

@@ -133,7 +133,7 @@ def _execute_transfer(from_account_id, to_account_id, amount):
             FOR UPDATE
         """, (from_account_id,))[0]
         
-        if limit_info['amount_transferred_today'] + amount > limit_info['daily_limit']:
+        if limit_info['amount_transferred_today',] + amount > limit_info['daily_limit',]:
             tx.execute("""
                 UPDATE transfers 
                 SET status = 'failed', error_message = 'Daily limit exceeded'
@@ -143,7 +143,7 @@ def _execute_transfer(from_account_id, to_account_id, amount):
             raise DailyLimitExceededError(f"Daily limit exceeded for account {from_account_id}")
         
         # Step 4: Check sufficient funds
-        if from_account['balance'] < amount:
+        if from_account['balance',] < amount:
             tx.execute("""
                 UPDATE transfers 
                 SET status = 'failed', error_message = 'Insufficient funds'
@@ -179,8 +179,8 @@ def _execute_transfer(from_account_id, to_account_id, amount):
                 (%s, %s, 'debit', %s, %s),
                 (%s, %s, 'credit', %s, %s)
         """, (
-            transfer_id, from_account_id, from_account['balance'], from_account['balance'] - amount,
-            transfer_id, to_account_id, to_account['balance'], to_account['balance'] + amount
+            transfer_id, from_account_id, from_account['balance',], from_account['balance',] - amount,
+            transfer_id, to_account_id, to_account['balance',], to_account['balance',] + amount
         ))
         
         # Step 8: Mark transfer as completed
@@ -398,9 +398,9 @@ def acquire_section_lock(section_id, user_id, timeout_seconds=30):
                     FROM edit_locks 
                     WHERE section_id = %s
                 """, (section_id,))[0]
-                raise SectionLockedError(f"Section locked by user {current_lock['user_id']}")
+                raise SectionLockedError(f"Section locked by user {current_lock['user_id',]}")
         
-        return result[0]['lock_id']
+        return result[0]['lock_id',]
 
 def update_section_with_lock(section_id, user_id, new_content):
     with db.transaction():
@@ -498,17 +498,17 @@ def save_document(document_id, new_content, expected_version, user_id):
             
             raise ConcurrentModificationError({
                 'expected_version': expected_version,
-                'current_version': current['version'],
-                'current_content': current['content']
+                'current_version': current['version',],
+                'current_content': current['content',]
             })
         
         # Save revision history
         db.execute("""
             INSERT INTO document_revisions (document_id, content, version, created_by)
             VALUES (%s, %s, %s, %s)
-        """, (document_id, new_content, result[0]['version'], user_id))
+        """, (document_id, new_content, result[0]['version',], user_id))
         
-        return result[0]['version']
+        return result[0]['version',]
 \`\`\`
 
 **Conflict Resolution (Client-Side):**
@@ -607,17 +607,17 @@ def apply_operation(document_id, user_id, operation):
             INSERT INTO operations (document_id, user_id, operation_type, position, text)
             VALUES (%s, %s, %s, %s, %s)
             RETURNING operation_id
-        """, (document_id, user_id, operation['type'], operation['position'], operation['text']))[0]
+        """, (document_id, user_id, operation['type',], operation['position',], operation['text',]))[0]
         
         # Apply to document (simplified)
         current_content = db.query("""
             SELECT content FROM documents WHERE document_id = %s FOR UPDATE
-        """, (document_id,))[0]['content']
+        """, (document_id,))[0]['content',]
         
-        if operation['type'] == 'insert':
-            new_content = current_content[:operation['position']] + operation['text'] + current_content[operation['position']:]
-        elif operation['type'] == 'delete':
-            new_content = current_content[:operation['position']] + current_content[operation['position'] + operation['length']:]
+        if operation['type',] == 'insert':
+            new_content = current_content[:operation['position',]] + operation['text',] + current_content[operation['position',]:]
+        elif operation['type',] == 'delete':
+            new_content = current_content[:operation['position',]] + current_content[operation['position',] + operation['length',]:]
         
         db.execute("""
             UPDATE documents SET content = %s WHERE document_id = %s
@@ -870,7 +870,7 @@ def hold_seats(user_id, seat_ids, hold_duration_minutes=10):
                 """, (seat_id,))[0]
                 
                 # Check if seat is available
-                if seat['status'] != 'available':
+                if seat['status',] != 'available':
                     raise SeatUnavailableError(f"Seat {seat_id} is no longer available")
                 
                 # Hold the seat
@@ -929,23 +929,23 @@ def complete_purchase(user_id, seat_ids, payment_token):
         """, (seat_ids,))
         
         for seat in seats:
-            if seat['status'] != 'held':
-                raise BookingError(f"Seat {seat['seat_id']} is not held")
+            if seat['status',] != 'held':
+                raise BookingError(f"Seat {seat['seat_id',]} is not held")
             
-            if seat['held_by_user'] != user_id:
-                raise UnauthorizedError(f"Seat {seat['seat_id']} is held by another user")
+            if seat['held_by_user',] != user_id:
+                raise UnauthorizedError(f"Seat {seat['seat_id',]} is held by another user")
             
-            if seat['hold_expires_at'] < datetime.now():
-                raise BookingError(f"Hold expired for seat {seat['seat_id']}")
+            if seat['hold_expires_at',] < datetime.now():
+                raise BookingError(f"Hold expired for seat {seat['seat_id',]}")
         
         # Calculate total
-        total_amount = sum(seat['price'] for seat in seats)
+        total_amount = sum(seat['price',] for seat in seats)
         
         # Process payment (idempotent, outside DB transaction)
         # In practice, call payment service here
         payment_result = process_payment(user_id, total_amount, payment_token)
         
-        if not payment_result['success']:
+        if not payment_result['success',]:
             raise PaymentError("Payment failed")
         
         # Create booking
@@ -953,7 +953,7 @@ def complete_purchase(user_id, seat_ids, payment_token):
             INSERT INTO bookings (user_id, event_id, total_amount, status, confirmed_at)
             VALUES (%s, %s, %s, 'confirmed', NOW())
             RETURNING booking_id
-        """, (user_id, seats[0]['event_id'], total_amount))[0]['booking_id']
+        """, (user_id, seats[0]['event_id',], total_amount))[0]['booking_id',]
         
         # Update seats to booked
         db.execute("""
@@ -1006,7 +1006,7 @@ def release_expired_holds():
         """)
         
         if result.rowcount > 0:
-            released_seats = [row['seat_id'] for row in result]
+            released_seats = [row['seat_id',] for row in result]
             logger.info(f"Released {len(released_seats)} expired holds")
             
             # Notify clients via WebSocket
@@ -1046,8 +1046,8 @@ def extend_hold(user_id, seat_ids, additional_minutes=5):
             raise BookingError("Some seats could not be extended (expired or not held by you)")
         
         return {
-            'extended_seats': [row['seat_id'] for row in result],
-            'new_expires_at': result[0]['hold_expires_at']
+            'extended_seats': [row['seat_id',] for row in result],
+            'new_expires_at': result[0]['hold_expires_at',]
         }
 \`\`\`
 
@@ -1116,7 +1116,7 @@ def get_available_seats_count(event_id):
         count = db.query("""
             SELECT COUNT(*) FROM seats 
             WHERE event_id = %s AND status = 'available'
-        """, (event_id,))[0]['count']
+        """, (event_id,))[0]['count',]
         
         redis.setex(cache_key, 10, count)  # Cache for 10 seconds
         return count

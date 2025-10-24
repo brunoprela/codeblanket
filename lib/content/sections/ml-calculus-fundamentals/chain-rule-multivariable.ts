@@ -315,7 +315,7 @@ Modern deep learning frameworks use computational graphs to automatically apply 
 \`\`\`python
 class ComputationNode:
     """Node in a computational graph"""
-    def __init__(self, value, children=(), op=''):
+    def __init__(self, value, children=(), op='):
         self.value = value
         self.grad = 0
         self.children = children

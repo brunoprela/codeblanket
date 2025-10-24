@@ -499,7 +499,7 @@ def create_comprehensive_boxplot(data):
         
         # Labels
         ax.set_title(f'{col}\\n(n={len(data)})')
-        ax.set_xticklabels([''])
+        ax.set_xticklabels(['])
         ax.legend()
         
         # Add text annotations

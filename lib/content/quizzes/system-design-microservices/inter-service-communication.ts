@@ -230,7 +230,7 @@ class OrderService {
 \`\`\`javascript
 // Idempotency middleware
 async function idempotencyMiddleware(req, res, next) {
-  const idempotencyKey = req.headers['x-idempotency-key'];
+  const idempotencyKey = req.headers['x-idempotency-key',];
   
   if (!idempotencyKey) {
     return res.status(400).json({ error: 'Idempotency-Key header required' });
@@ -273,7 +273,7 @@ async function retryWithBackoff(fn, maxRetries = 3) {
       if (i === maxRetries - 1) throw error;
       
       // Retry on transient errors
-      if (['TIMEOUT', 'CONNECTION_ERROR', 'SERVICE_UNAVAILABLE'].includes(error.code)) {
+      if (['TIMEOUT', 'CONNECTION_ERROR', 'SERVICE_UNAVAILABLE',].includes(error.code)) {
         const delay = Math.pow(2, i) * 1000; // 1s, 2s, 4s
         await sleep(delay);
         continue;
@@ -784,8 +784,8 @@ app.use((req, res, next) => {
   });
   
   // Extract or generate trace context
-  const traceId = req.headers['traceparent'] 
-    ? extractTraceId(req.headers['traceparent'])
+  const traceId = req.headers['traceparent',] 
+    ? extractTraceId(req.headers['traceparent',])
     : generateTraceId();
   
   // Inject into request context

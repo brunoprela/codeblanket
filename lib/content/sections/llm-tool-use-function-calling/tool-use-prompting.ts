@@ -637,7 +637,7 @@ Your goal is to help users by providing accurate, current information and perfor
     
     # Examples
     prompt += "\\n\\nExamples:\\n"
-    prompt += "User: 'What's the weather?' → Use get_weather\\n"
+    prompt += "User: "What's the weather?" → Use get_weather\\n"
     prompt += "User: 'What is Python?' → Answer directly (general knowledge)\\n"
     prompt += "User: 'How many users signed up today?' → Use query_database\\n"
     

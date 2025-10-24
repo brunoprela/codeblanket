@@ -1,75 +1,85 @@
-import { MultipleChoiceQuestion } from '../../../types';
-
-export const trainTestSplitValidationMultipleChoice: MultipleChoiceQuestion[] =
-  [
+export const trainTestSplitValidationMultipleChoice = {
+  title: 'Train-Test Split & Validation - Multiple Choice Questions',
+  questions: [
     {
-      id: 'train-test-split-validation-mc-1',
+      id: 1,
       question:
-        'Which of the following represents the CORRECT order of operations to prevent data leakage?',
+        'Why is it critical to split data into train/test sets BEFORE any preprocessing steps like scaling or normalization?',
       options: [
-        'Scale data → Split data → Train model → Evaluate',
-        'Split data → Scale training data → Scale test data using training statistics → Train model',
-        'Split data → Scale all data together → Train model → Evaluate',
-        'Train model → Split data → Scale data → Evaluate',
+        'To make the code run faster',
+        'To prevent data leakage where test set information influences training',
+        'To ensure both sets have the same number of samples',
+        'To make the model more complex',
       ],
       correctAnswer: 1,
       explanation:
-        'Data must be split FIRST, then preprocessing (like scaling) should be fitted on training data only and applied to test data using the training statistics. This prevents test set information from leaking into the training process.',
+        'Preprocessing fitted on all data (including test) leaks information about test distribution into the model, leading to optimistically biased performance estimates. Always split first, then fit preprocessing only on training data.',
+      difficulty: 'intermediate' as const,
+      category: 'Best Practices',
     },
     {
-      id: 'train-test-split-validation-mc-2',
+      id: 2,
       question:
-        'You have a binary classification dataset with 95% class 0 and 5% class 1. Which splitting strategy should you use?',
+        'For a binary classification problem with 95% negative and 5% positive examples, what splitting strategy is most appropriate?',
       options: [
-        'Random split with shuffle=True',
-        'Random split with shuffle=False',
-        'Stratified split with stratify=y',
-        'Sequential split in time order',
+        'Random split without any special consideration',
+        'Stratified split to maintain 95/5 ratio in both train and test',
+        'Put all positive examples in training set',
+        'Use 50/50 split to balance the classes',
+      ],
+      correctAnswer: 1,
+      explanation:
+        'Stratified splitting maintains the original class distribution (95/5) across train and test sets, ensuring both sets are representative. This prevents scenarios where test set might have 98% negative by random chance.',
+      difficulty: 'beginner' as const,
+      category: 'Splitting Strategies',
+    },
+    {
+      id: 3,
+      question:
+        'In a time series forecasting problem for stock prices, which split strategy is correct?',
+      options: [
+        'Random 80/20 split',
+        'Stratified split based on price levels',
+        'Time-based split where training data comes before test data chronologically',
+        'K-fold cross-validation with random folds',
       ],
       correctAnswer: 2,
       explanation:
-        'For imbalanced classification problems, stratified splitting (stratify=y) ensures that both train and test sets maintain the same class proportions (95%-5%) as the original dataset. Random splitting might create unrepresentative splits by chance.',
+        'Time series data requires temporal ordering. Training must always precede testing chronologically to avoid using future information to predict the past (lookahead bias). Random splitting would create severe data leakage.',
+      difficulty: 'intermediate' as const,
+      category: 'Time Series',
     },
     {
-      id: 'train-test-split-validation-mc-3',
+      id: 4,
       question:
-        'For a time series forecasting problem (e.g., predicting stock prices), what is the MOST appropriate splitting strategy?',
+        'What is the purpose of having a separate validation set in addition to train and test sets?',
       options: [
-        'Random split with shuffle=True to ensure IID data',
-        'Stratified split based on price ranges',
-        'Sequential split where training data comes before test data chronologically',
-        'Split randomly but maintain temporal order within each split',
+        'To have more data for training',
+        'To make the evaluation process longer',
+        'To tune hyperparameters and make model selection decisions without touching the test set',
+        'To confuse other data scientists',
       ],
       correctAnswer: 2,
       explanation:
-        'Time series data has temporal dependencies and must use sequential splitting where training data comes before test data chronologically. Random shuffling destroys the temporal structure and creates data leakage by allowing the model to "predict the past using the future".',
+        'The validation set is used during development for hyperparameter tuning and model selection. The test set remains untouched until final evaluation to provide an unbiased estimate of real-world performance.',
+      difficulty: 'beginner' as const,
+      category: 'Validation',
     },
     {
-      id: 'train-test-split-validation-mc-4',
+      id: 5,
       question:
-        'What is the PRIMARY purpose of the validation set in a train-validation-test split?',
+        'A model achieves 95% accuracy on training set and 70% on test set. What is the most likely issue?',
       options: [
-        'To provide additional training data when the training set is too small',
-        'To tune hyperparameters and select between different models',
-        'To give a final unbiased estimate of model performance',
-        'To replace the test set when you need to evaluate multiple times',
+        'The model is underfitting',
+        'The test set is too small',
+        'The model is overfitting to the training data',
+        'The model is perfect and ready for production',
       ],
-      correctAnswer: 1,
+      correctAnswer: 2,
       explanation:
-        'The validation set is used for hyperparameter tuning and model selection during development. It can be used many times to compare different models and configurations. The test set (not validation) provides the final unbiased performance estimate and should only be used once.',
+        "The large gap between training (95%) and test (70%) performance indicates overfitting. The model has learned patterns specific to the training data that don't generalize to new data.",
+      difficulty: 'beginner' as const,
+      category: 'Diagnosis',
     },
-    {
-      id: 'train-test-split-validation-mc-5',
-      question:
-        'You notice your model achieves 98% accuracy on the test set but only 70% in production. What is the MOST likely cause?',
-      options: [
-        'The model is too simple (high bias)',
-        'Data leakage during training - test set information influenced the model',
-        'The test set was too large',
-        'Random variation in performance metrics',
-      ],
-      correctAnswer: 1,
-      explanation:
-        'A large drop from test set to production performance typically indicates data leakage. Common causes include: scaling before splitting, using test set for feature selection, peeking at test set during model development, or including future information in time series features. This creates artificially inflated test set performance.',
-    },
-  ];
+  ],
+};

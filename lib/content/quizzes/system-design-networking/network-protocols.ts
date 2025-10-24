@@ -341,7 +341,7 @@ export const networkprotocolsQuiz = [
     
     ws.send(JSON.stringify({
       type: 'subscribe',
-      devices: ['device-1', 'device-2', 'device-3']
+      devices: ['device-1', 'device-2', 'device-3',]
     }));
     
     ws.onmessage = (event) => {
@@ -538,7 +538,7 @@ const req = client.request({
 });
 
 req.on('response', (headers) => {
-  const cacheStatus = headers['x-cache-status'];
+  const cacheStatus = headers['x-cache-status',];
   // 'hit' or 'miss' from origin shield
   
   if (cacheStatus === 'miss') {
@@ -747,7 +747,7 @@ app.use((req, res, next) => {
       bytes_sent: res.getHeader('content-length'),
       response_time_ms: Date.now() - start,
       cache_status: res.getHeader('x-cache-status'),
-      user_agent: req.headers['user-agent'],
+      user_agent: req.headers['user-agent',],
       geo_country: geoip.lookup(req.ip).country,
       timestamp: Date.now()
     });

@@ -298,7 +298,7 @@ plt.show()
 
 \`\`\`python
 def biplot(X_pca, loadings, labels, feature_names):
-    '''Create a biplot showing data and loadings'''
+    ''Create a biplot showing data and loadings''
     plt.figure(figsize=(12, 8))
     
     # Plot data points

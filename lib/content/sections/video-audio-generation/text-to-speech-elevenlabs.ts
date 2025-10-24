@@ -717,7 +717,7 @@ def preprocess_for_tts(text: str) -> str:
     Prepare text for optimal TTS output
     """
     # Remove unwanted characters
-    text = re.sub(r'[\\x00-\\x1f\\x7f-\\x9f]', '', text)
+    text = re.sub(r'[\\x00-\\x1f\\x7f-\\x9f]', ', text)
     
     # Fix common issues
     text = text.replace('&', 'and')

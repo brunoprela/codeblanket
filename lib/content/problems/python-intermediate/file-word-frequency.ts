@@ -112,7 +112,7 @@ def count_word_frequency(filename):
         raise FileNotFoundError(f"File '{filename}' not found")
     
     # Remove punctuation and convert to lowercase
-    translator = str.maketrans('', '', string.punctuation)
+    translator = str.maketrans(', ', string.punctuation)
     text = text.translate(translator).lower()
     
     # Count words

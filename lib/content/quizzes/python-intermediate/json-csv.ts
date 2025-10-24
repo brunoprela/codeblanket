@@ -37,10 +37,10 @@ export const jsoncsvQuiz = [
       'Why is DictReader/DictWriter often preferred over basic reader/writer in the CSV module?',
     hint: 'Think about code readability, maintainability, and column ordering.',
     sampleAnswer:
-      'DictReader/DictWriter use column names (headers) instead of positional indices, making code more readable and maintainable. Benefits: 1) row["name"] is clearer than row[0], 2) Code doesn\'t break if column order changes, 3) Automatic header handling, 4) Easier to work with when columns are added/removed. Trade-offs: slightly more memory/processing, but worth it for code clarity. Only use basic reader/writer for headerless CSV or when performance is absolutely critical.',
+      'DictReader/DictWriter use column names (headers) instead of positional indices, making code more readable and maintainable. Benefits: 1) row["name",] is clearer than row[0], 2) Code doesn\'t break if column order changes, 3) Automatic header handling, 4) Easier to work with when columns are added/removed. Trade-offs: slightly more memory/processing, but worth it for code clarity. Only use basic reader/writer for headerless CSV or when performance is absolutely critical.',
     keyPoints: [
       'Uses column names instead of indices',
-      'More readable: row["name"] vs row[0]',
+      'More readable: row["name",] vs row[0]',
       'Resilient to column reordering',
       'Slightly more overhead, but worth it',
     ],

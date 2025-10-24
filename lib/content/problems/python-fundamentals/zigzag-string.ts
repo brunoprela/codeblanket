@@ -75,7 +75,7 @@ print(convert_zigzag("PAYPALISHIRING", 3))
     if num_rows == 1 or num_rows >= len(s):
         return s
     
-    rows = [''] * num_rows
+    rows = ['] * num_rows
     current_row = 0
     going_down = False
     
@@ -87,7 +87,7 @@ print(convert_zigzag("PAYPALISHIRING", 3))
         
         current_row += 1 if going_down else -1
     
-    return ''.join(rows)`,
+    return '.join(rows)`,
   timeComplexity: 'O(n)',
   spaceComplexity: 'O(n)',
   order: 65,

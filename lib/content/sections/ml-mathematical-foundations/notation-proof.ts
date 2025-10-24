@@ -201,14 +201,14 @@ if zero_grad_indices:
 
 \`\`\`python
 # Example: Convexity
-# f is convex ⇔ f''(x) ≥ 0 ∀x
+# f is convex ⇔ f'(x) ≥ 0 ∀x
 
 def f_convex(x):
     """Convex function: f(x) = x²"""
     return x**2
 
 def f_second_derivative(x):
-    """f''(x) = 2"""
+    """f'(x) = 2"""
     return 2
 
 x_test = np.linspace(-5, 5, 100)
@@ -216,7 +216,7 @@ second_derivs = [f_second_derivative(x) for x in x_test]
 
 is_convex = all(d >= 0 for d in second_derivs)
 print(f"f(x) = x²")
-print(f"f''(x) = 2 ≥ 0 ∀x: {is_convex}")
+print(f"f'(x) = 2 ≥ 0 ∀x: {is_convex}")
 print(f"Therefore, f is convex")
 \`\`\`
 

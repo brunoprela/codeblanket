@@ -443,7 +443,7 @@ result = client.generate(
 print(f"✅ Video URL: {result.url}")
 print(f"   Duration: {result.duration}s")
 print(f"   Resolution: {result.resolution[0]}x{result.resolution[1]}")
-print(f"   Cost: ${'{'}result.cost:.2f{'}'}")
+print(f"   Cost: \${'{'}result.cost:.2f{'}'}")
     
     # Example 2: Camera movement
 print("\\n📹 Example 2: With camera movement")

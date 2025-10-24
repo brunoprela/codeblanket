@@ -17,7 +17,7 @@ export const timeseriespandasMultipleChoice: MultipleChoiceQuestion[] = [
   },
   {
     id: 'time-series-pandas-mc-2',
-    question: 'What does df["price"].shift(1) do in a time series DataFrame?',
+    question: 'What does df["price",].shift(1) do in a time series DataFrame?',
     options: [
       'Moves all values forward by 1 position (creates lag)',
       'Adds 1 to all values',

@@ -17,9 +17,9 @@ export const dataaggregationgroupingQuiz: QuizQuestion[] = [
 # Visual representation
 Original DataFrame
 ├── Split by "Category"
-│   ├── Group A: [rows where Category == 'A']
-│   ├── Group B: [rows where Category == 'B']
-│   └── Group C: [rows where Category == 'C']
+│   ├── Group A: [rows where Category == 'A',]
+│   ├── Group B: [rows where Category == 'B',]
+│   └── Group C: [rows where Category == 'C',]
 ├── Apply function to each group
 │   ├── Group A → result_A
 │   ├── Group B → result_B
@@ -37,14 +37,14 @@ import numpy as np
 
 # Sample data
 df = pd.DataFrame({
-    'Department': ['Sales', 'Sales', 'IT', 'IT', 'HR', 'HR'] * 100,
+    'Department': ['Sales', 'Sales', 'IT', 'IT', 'HR', 'HR',] * 100,
     'Employee': range(600),
     'Salary': np.random.randint(40000, 120000, 600),
     'Performance': np.random.uniform(2.5, 5.0, 600)
 })
 
 # Single aggregation
-dept_avg_salary = df.groupby('Department')['Salary'].agg('mean')
+dept_avg_salary = df.groupby('Department')['Salary',].agg('mean')
 # Output: One value per department
 # Department
 # HR       75234.5
@@ -53,8 +53,8 @@ dept_avg_salary = df.groupby('Department')['Salary'].agg('mean')
 
 # Multiple aggregations
 dept_stats = df.groupby('Department').agg({
-    'Salary': ['mean', 'median', 'std', 'min', 'max'],
-    'Performance': ['mean', 'count']
+    'Salary': ['mean', 'median', 'std', 'min', 'max',],
+    'Performance': ['mean', 'count',]
 })
 # Output: Statistical summary per department
 
@@ -83,10 +83,10 @@ result = df.groupby('Department').agg(
 
 \`\`\`python
 # Add group statistics to each row
-df['dept_avg_salary'] = df.groupby('Department')['Salary'].transform('mean')
+df['dept_avg_salary',] = df.groupby('Department')['Salary',].transform('mean')
 
 # Now each row has its department's average
-print(df[['Employee', 'Department', 'Salary', 'dept_avg_salary']].head())
+print(df[['Employee', 'Department', 'Salary', 'dept_avg_salary',]].head())
 #    Employee Department  Salary  dept_avg_salary
 # 0         0      Sales   65000          78456.1
 # 1         1      Sales   82000          78456.1
@@ -95,24 +95,24 @@ print(df[['Employee', 'Department', 'Salary', 'dept_avg_salary']].head())
 # 4         4         HR   68000          75234.5
 
 # Compare individual to group
-df['salary_vs_dept_avg'] = df['Salary'] - df['dept_avg_salary']
-df['salary_pct_of_dept_avg'] = df['Salary'] / df['dept_avg_salary'] * 100
+df['salary_vs_dept_avg',] = df['Salary',] - df['dept_avg_salary',]
+df['salary_pct_of_dept_avg',] = df['Salary',] / df['dept_avg_salary',] * 100
 
 # Normalize within group
-df['normalized_salary'] = df.groupby('Department')['Salary'].transform(
+df['normalized_salary',] = df.groupby('Department')['Salary',].transform(
     lambda x: (x - x.mean()) / x.std()
 )
 
 # Rank within group
-df['salary_rank_in_dept'] = df.groupby('Department')['Salary'].transform(
+df['salary_rank_in_dept',] = df.groupby('Department')['Salary',].transform(
     lambda x: x.rank(ascending=False)
 )
 
 # Cumulative sum within group
-df['cumsum_in_dept'] = df.groupby('Department')['Salary'].transform('cumsum')
+df['cumsum_in_dept',] = df.groupby('Department')['Salary',].transform('cumsum')
 
 # Fill missing with group mean
-df['Salary_filled'] = df.groupby('Department')['Salary'].transform(
+df['Salary_filled',] = df.groupby('Department')['Salary',].transform(
     lambda x: x.fillna(x.mean())
 )
 \`\`\`
@@ -140,19 +140,19 @@ print(f"Original: {len(df)} rows, After filter: {len(large_depts)} rows")
 
 # Keep departments with average salary > 80000
 high_paying = df.groupby('Department').filter(
-    lambda x: x['Salary'].mean() > 80000
+    lambda x: x['Salary',].mean() > 80000
 )
 
 # Keep departments with low performance variance (consistent)
 consistent_depts = df.groupby('Department').filter(
-    lambda x: x['Performance'].std() < 0.5
+    lambda x: x['Performance',].std() < 0.5
 )
 
 # Multiple conditions
 quality_depts = df.groupby('Department').filter(
     lambda x: (len(x) > 100) and 
-              (x['Salary'].mean() > 70000) and 
-              (x['Performance'].mean() > 4.0)
+              (x['Salary',].mean() > 70000) and 
+              (x['Performance',].mean() > 4.0)
 )
 
 # Note: filter() removes entire groups, not individual rows!
@@ -177,10 +177,10 @@ quality_depts = df.groupby('Department').filter(
 def group_report(group):
     return pd.Series({
         'count': len(group),
-        'avg_salary': group['Salary'].mean(),
-        'top_performer': group.loc[group['Performance'].idxmax(), 'Employee'],
-        'salary_range': group['Salary'].max() - group['Salary'].min(),
-        'high_performers_pct': (group['Performance'] > 4.5).sum() / len(group) * 100
+        'avg_salary': group['Salary',].mean(),
+        'top_performer': group.loc[group['Performance',].idxmax(), 'Employee',],
+        'salary_range': group['Salary',].max() - group['Salary',].min(),
+        'high_performers_pct': (group['Performance',] > 4.5).sum() / len(group) * 100
     })
 
 dept_reports = df.groupby('Department').apply(group_report)
@@ -189,9 +189,9 @@ print(dept_reports)
 # Return modified DataFrame
 def add_rankings(group):
     group = group.copy()
-    group['salary_rank'] = group['Salary'].rank(ascending=False)
-    group['perf_rank'] = group['Performance'].rank(ascending=False)
-    group['combined_rank'] = (group['salary_rank'] + group['perf_rank']) / 2
+    group['salary_rank',] = group['Salary',].rank(ascending=False)
+    group['perf_rank',] = group['Performance',].rank(ascending=False)
+    group['combined_rank',] = (group['salary_rank',] + group['perf_rank',]) / 2
     return group
 
 df_ranked = df.groupby('Department').apply(add_rankings)
@@ -201,11 +201,11 @@ def department_analysis(group):
     # Compute correlations, percentiles, custom metrics
     return {
         'size': len(group),
-        'salary_perf_corr': group['Salary'].corr(group['Performance']),
-        'p90_salary': group['Salary'].quantile(0.9),
+        'salary_perf_corr': group['Salary',].corr(group['Performance',]),
+        'p90_salary': group['Salary',].quantile(0.9),
         'top_talent_ratio': (
-            (group['Salary'] > group['Salary'].quantile(0.75)) &
-            (group['Performance'] > 4.5)
+            (group['Salary',] > group['Salary',].quantile(0.75)) &
+            (group['Performance',] > 4.5)
         ).sum() / len(group)
     }
 
@@ -232,28 +232,28 @@ import time
 # Large dataset
 np.random.seed(42)
 large_df = pd.DataFrame({
-    'Category': np.random.choice(['A', 'B', 'C', 'D'], 1000000),
+    'Category': np.random.choice(['A', 'B', 'C', 'D',], 1000000),
     'Value': np.random.randn(1000000)
 })
 
 # Method 1: .agg() with built-in
 start = time.time()
-result1 = large_df.groupby('Category')['Value'].agg('mean')
+result1 = large_df.groupby('Category')['Value',].agg('mean')
 time1 = time.time() - start
 
 # Method 2: .agg() with lambda
 start = time.time()
-result2 = large_df.groupby('Category')['Value'].agg(lambda x: x.mean())
+result2 = large_df.groupby('Category')['Value',].agg(lambda x: x.mean())
 time2 = time.time() - start
 
 # Method 3: .transform() with built-in
 start = time.time()
-result3 = large_df.groupby('Category')['Value'].transform('mean')
+result3 = large_df.groupby('Category')['Value',].transform('mean')
 time3 = time.time() - start
 
 # Method 4: .apply()
 start = time.time()
-result4 = large_df.groupby('Category').apply(lambda x: x['Value'].mean())
+result4 = large_df.groupby('Category').apply(lambda x: x['Value',].mean())
 time4 = time.time() - start
 
 print(f".agg('mean'): {time1:.4f}s (baseline)")
@@ -275,7 +275,7 @@ Need to operate on groups?
 │
 ├─ Want summary statistics? → Use .agg()
 │  ├─ Single statistic → .agg('mean')
-│  ├─ Multiple statistics → .agg(['mean', 'std', 'count'])
+│  ├─ Multiple statistics → .agg(['mean', 'std', 'count',])
 │  └─ Different stats per column → .agg({'col1': 'mean', 'col2': 'sum'})
 │
 ├─ Want to add group info to each row? → Use .transform()
@@ -298,10 +298,10 @@ Need to operate on groups?
 2. **Use built-in functions** when possible
    \`\`\`python
    # Good
-   df.groupby('Cat')['Val'].transform('mean')
+   df.groupby('Cat')['Val',].transform('mean')
    
    # Bad
-   df.groupby('Cat')['Val'].transform(lambda x: x.mean())
+   df.groupby('Cat')['Val',].transform(lambda x: x.mean())
    \`\`\`
 
 3. **Avoid .apply() unless necessary**
@@ -311,7 +311,7 @@ Need to operate on groups?
    \`\`\`python
    result = (df
        .groupby('Department')
-       .agg({'Salary': ['mean', 'std'], 'Count': 'size'})
+       .agg({'Salary': ['mean', 'std',], 'Count': 'size'})
        .round(2)
        .sort_values(('Salary', 'mean'), ascending=False)
    )
@@ -363,15 +363,15 @@ import numpy as np
 
 # Sample sales data
 df = pd.DataFrame({
-    'Region': ['East', 'East', 'West', 'West', 'East', 'West'] * 10,
-    'Product': ['A', 'B', 'A', 'B', 'A', 'B'] * 10,
-    'Quarter': ['Q1', 'Q1', 'Q1', 'Q1', 'Q2', 'Q2'] * 10,
+    'Region': ['East', 'East', 'West', 'West', 'East', 'West',] * 10,
+    'Product': ['A', 'B', 'A', 'B', 'A', 'B',] * 10,
+    'Quarter': ['Q1', 'Q1', 'Q1', 'Q1', 'Q2', 'Q2',] * 10,
     'Sales': np.random.randint(1000, 5000, 60),
     'Quantity': np.random.randint(10, 100, 60)
 })
 
 # GroupBy approach
-grouped = df.groupby(['Region', 'Product'])['Sales'].mean()
+grouped = df.groupby(['Region', 'Product',])['Sales',].mean()
 print(grouped)
 # Output: Series with MultiIndex
 # Region  Product
@@ -410,7 +410,7 @@ print(pivot)
 \`\`\`python
 # Department-level analysis
 dept_stats = df.groupby('Department').agg({
-    'Salary': ['mean', 'median', 'std'],
+    'Salary': ['mean', 'median', 'std',],
     'Experience': 'mean',
     'Employee': 'count'
 })
@@ -420,7 +420,7 @@ dept_stats = df.groupby('Department').agg({
 **b) Many grouping levels (3+):**
 \`\`\`python
 # Multi-level analysis
-complex_group = df.groupby(['Region', 'Product', 'Quarter', 'Salesperson'])['Sales'].sum()
+complex_group = df.groupby(['Region', 'Product', 'Quarter', 'Salesperson',])['Sales',].sum()
 # Pivot table becomes unwieldy with 4+ dimensions
 \`\`\`
 
@@ -429,7 +429,7 @@ complex_group = df.groupby(['Region', 'Product', 'Quarter', 'Salesperson'])['Sal
 def custom_stat(x):
     return (x > x.median()).sum() / len(x) * 100
 
-result = df.groupby('Region')['Sales'].agg([
+result = df.groupby('Region')['Sales',].agg([
     'mean',
     ('above_median_pct', custom_stat)
 ])
@@ -439,14 +439,14 @@ result = df.groupby('Region')['Sales'].agg([
 \`\`\`python
 # Iterate through groups
 for region, group in df.groupby('Region'):
-    print(f"{region}: {group['Sales'].sum()}")
+    print(f"{region}: {group['Sales',].sum()}")
     # Perform region-specific analysis
 \`\`\`
 
 **e) Chaining operations:**
 \`\`\`python
 result = (df
-    .groupby('Region')['Sales']
+    .groupby('Region')['Sales',]
     .sum()
     .sort_values(ascending=False)
     .head(5)
@@ -486,7 +486,7 @@ pivot = df.pivot_table(
 \`\`\`python
 # Executive summary
 summary = df.pivot_table(
-    values=['Sales', 'Quantity'],
+    values=['Sales', 'Quantity',],
     index='Region',
     columns='Quarter',
     aggfunc={'Sales': 'sum', 'Quantity': 'mean'},
@@ -501,7 +501,7 @@ summary = df.pivot_table(
 # With subtotals
 pivot = df.pivot_table(
     values='Sales',
-    index=['Region', 'Product'],
+    index=['Region', 'Product',],
     columns='Quarter',
     aggfunc='sum',
     fill_value=0,
@@ -532,7 +532,7 @@ plt.show()
 **GroupBy → Pivot Table (unstack):**
 \`\`\`python
 # GroupBy result
-grouped = df.groupby(['Region', 'Product'])['Sales'].mean()
+grouped = df.groupby(['Region', 'Product',])['Sales',].mean()
 # Region  Product
 # East    A          2543.5
 #         B          2987.2
@@ -549,8 +549,8 @@ print(pivot)
 # West     3124.8  2756.1
 
 # Multiple levels
-grouped = df.groupby(['Region', 'Product', 'Quarter'])['Sales'].mean()
-pivot = grouped.unstack(level=['Product', 'Quarter'])
+grouped = df.groupby(['Region', 'Product', 'Quarter',])['Sales',].mean()
+pivot = grouped.unstack(level=['Product', 'Quarter',])
 \`\`\`
 
 **Pivot Table → GroupBy (stack):**
@@ -581,14 +581,14 @@ import time
 # Large dataset
 n = 1_000_000
 large_df = pd.DataFrame({
-    'Category1': np.random.choice(['A', 'B', 'C'], n),
-    'Category2': np.random.choice(['X', 'Y', 'Z'], n),
+    'Category1': np.random.choice(['A', 'B', 'C',], n),
+    'Category2': np.random.choice(['X', 'Y', 'Z',], n),
     'Value': np.random.randn(n)
 })
 
 # GroupBy
 start = time.time()
-gb_result = large_df.groupby(['Category1', 'Category2'])['Value'].mean()
+gb_result = large_df.groupby(['Category1', 'Category2',])['Value',].mean()
 gb_time = time.time() - start
 
 # Pivot Table
@@ -618,18 +618,18 @@ print(f"Difference: {abs(pv_time - gb_time) / min(pv_time, gb_time) * 100:.1f}%"
 np.random.seed(42)
 sales = pd.DataFrame({
     'Date': pd.date_range('2024-01-01', periods=1000, freq='D'),
-    'Region': np.random.choice(['North', 'South', 'East', 'West'], 1000),
-    'Product': np.random.choice(['A', 'B', 'C'], 1000),
-    'Salesperson': np.random.choice(['SP1', 'SP2', 'SP3', 'SP4'], 1000),
+    'Region': np.random.choice(['North', 'South', 'East', 'West',], 1000),
+    'Product': np.random.choice(['A', 'B', 'C',], 1000),
+    'Salesperson': np.random.choice(['SP1', 'SP2', 'SP3', 'SP4',], 1000),
     'Sales': np.random.randint(1000, 10000, 1000),
     'Quantity': np.random.randint(1, 50, 1000)
 })
-sales['Month'] = sales['Date'].dt.to_period('M')
+sales['Month',] = sales['Date',].dt.to_period('M')
 
 # GroupBy approach: Complex multi-metric analysis
-groupby_analysis = sales.groupby(['Region', 'Product']).agg({
-    'Sales': ['sum', 'mean', 'std', 'count'],
-    'Quantity': ['sum', 'mean'],
+groupby_analysis = sales.groupby(['Region', 'Product',]).agg({
+    'Sales': ['sum', 'mean', 'std', 'count',],
+    'Quantity': ['sum', 'mean',],
     'Salesperson': lambda x: x.nunique()  # Unique salespeople
 }).round(2)
 groupby_analysis.columns = ['_'.join(col) for col in groupby_analysis.columns]
@@ -656,15 +656,15 @@ pivot_mix = sales.pivot_table(
     aggfunc='sum'
 )
 # Add percentage columns
-pivot_mix['Total'] = pivot_mix.sum(axis=1)
-for col in ['A', 'B', 'C']:
-    pivot_mix[f'{col}_pct'] = pivot_mix[col] / pivot_mix['Total'] * 100
+pivot_mix['Total',] = pivot_mix.sum(axis=1)
+for col in ['A', 'B', 'C',]:
+    pivot_mix[f'{col}_pct',] = pivot_mix[col] / pivot_mix['Total',] * 100
 print("\\nProduct Mix by Region:")
 print(pivot_mix)
 
 # Best of both: GroupBy then unstack
 combo = (sales
-    .groupby(['Region', 'Product'])
+    .groupby(['Region', 'Product',])
     .agg({'Sales': 'sum', 'Quantity': 'mean'})
     .unstack(level='Product')
 )
@@ -678,7 +678,7 @@ print(combo)
 \`\`\`python
 # Show both sales and quantity
 multi_pivot = df.pivot_table(
-    values=['Sales', 'Quantity'],
+    values=['Sales', 'Quantity',],
     index='Region',
     columns='Product',
     aggfunc={'Sales': 'sum', 'Quantity': 'mean'}
@@ -702,7 +702,7 @@ pivot = df.pivot_table(
 **Conditional pivot:**
 \`\`\`python
 # Only high-value transactions
-high_value = df[df['Sales'] > df['Sales'].median()]
+high_value = df[df['Sales',] > df['Sales',].median()]
 pivot = high_value.pivot_table(
     values='Sales',
     index='Region',
@@ -763,15 +763,15 @@ import numpy as np
 
 # Create sample data
 df = pd.DataFrame({
-    'Region': ['East', 'East', 'West', 'West'] * 4,
-    'Product': ['A', 'B', 'A', 'B'] * 4,
-    'Quarter': ['Q1', 'Q1', 'Q1', 'Q1', 'Q2', 'Q2', 'Q2', 'Q2'] * 2,
+    'Region': ['East', 'East', 'West', 'West',] * 4,
+    'Product': ['A', 'B', 'A', 'B',] * 4,
+    'Quarter': ['Q1', 'Q1', 'Q1', 'Q1', 'Q2', 'Q2', 'Q2', 'Q2',] * 2,
     'Sales': np.random.randint(1000, 5000, 16),
     'Quantity': np.random.randint(10, 100, 16)
 })
 
 # Group by multiple columns creates MultiIndex
-grouped = df.groupby(['Region', 'Product', 'Quarter'])['Sales'].sum()
+grouped = df.groupby(['Region', 'Product', 'Quarter',])['Sales',].sum()
 print(grouped)
 # Region  Product  Quarter
 # East    A        Q1        3245
@@ -785,36 +785,36 @@ print(grouped)
 
 print(type(grouped.index))  # <class 'pandas.core.indexes.multi.MultiIndex'>
 print(f"Index levels: {grouped.index.nlevels}")  # 3
-print(f"Index names: {grouped.index.names}")  # ['Region', 'Product', 'Quarter']
+print(f"Index names: {grouped.index.names}")  # ['Region', 'Product', 'Quarter',]
 \`\`\`
 
 **Creating MultiIndex:**
 
 \`\`\`python
 # Method 1: From groupby
-multi_idx = df.groupby(['Region', 'Product'])['Sales'].mean()
+multi_idx = df.groupby(['Region', 'Product',])['Sales',].mean()
 
 # Method 2: set_index with multiple columns
-df_multi = df.set_index(['Region', 'Product', 'Quarter'])
+df_multi = df.set_index(['Region', 'Product', 'Quarter',])
 
 # Method 3: From arrays
 arrays = [
-    ['East', 'East', 'West', 'West'],
-    ['A', 'B', 'A', 'B']
+    ['East', 'East', 'West', 'West',],
+    ['A', 'B', 'A', 'B',]
 ]
-index = pd.MultiIndex.from_arrays(arrays, names=['Region', 'Product'])
+index = pd.MultiIndex.from_arrays(arrays, names=['Region', 'Product',])
 df_multi = pd.DataFrame({'Sales': [100, 200, 300, 400]}, index=index)
 
 # Method 4: From tuples
 tuples = [('East', 'A'), ('East', 'B'), ('West', 'A'), ('West', 'B')]
-index = pd.MultiIndex.from_tuples(tuples, names=['Region', 'Product'])
+index = pd.MultiIndex.from_tuples(tuples, names=['Region', 'Product',])
 
 # Method 5: From product (cartesian)
 index = pd.MultiIndex.from_product([
-    ['East', 'West'],
-    ['A', 'B', 'C'],
-    ['Q1', 'Q2']
-], names=['Region', 'Product', 'Quarter'])
+    ['East', 'West',],
+    ['A', 'B', 'C',],
+    ['Q1', 'Q2',]
+], names=['Region', 'Product', 'Quarter',])
 \`\`\`
 
 **Selecting from MultiIndex:**
@@ -826,7 +826,7 @@ print(f"East, Product A, Q1: {value}")
 
 # Select with .loc
 # Single level
-east_sales = grouped.loc['East']
+east_sales = grouped.loc['East',]
 print(east_sales)
 # Product  Quarter
 # A        Q1        3245
@@ -882,10 +882,10 @@ print(swapped.head())
 # ...
 
 # Reorder levels
-reordered = grouped.reorder_levels(['Quarter', 'Region', 'Product'])
+reordered = grouped.reorder_levels(['Quarter', 'Region', 'Product',])
 
 # Remove level (aggregate)
-by_region_product = grouped.groupby(level=['Region', 'Product']).sum()
+by_region_product = grouped.groupby(level=['Region', 'Product',]).sum()
 print(by_region_product)
 # Region  Product
 # East    A          7368
@@ -947,19 +947,19 @@ print(partially_flat)
 \`\`\`python
 # Aggregate across specific level
 # Sum across quarters (collapse Quarter level)
-by_region_product = grouped.groupby(level=['Region', 'Product']).sum()
+by_region_product = grouped.groupby(level=['Region', 'Product',]).sum()
 
 # Sum across products (collapse Product level)
-by_region_quarter = grouped.groupby(level=['Region', 'Quarter']).sum()
+by_region_quarter = grouped.groupby(level=['Region', 'Quarter',]).sum()
 
 # Multiple aggregations
-result = grouped.groupby(level='Region').agg(['sum', 'mean', 'count'])
+result = grouped.groupby(level='Region').agg(['sum', 'mean', 'count',])
 print(result)
 
 # Complex aggregation
 df_multi = grouped.reset_index()
-complex_agg = df_multi.groupby(['Region', 'Product']).agg({
-    'Sales': ['sum', 'mean', 'std'],
+complex_agg = df_multi.groupby(['Region', 'Product',]).agg({
+    'Sales': ['sum', 'mean', 'std',],
     'Quarter': 'count'
 })
 print(complex_agg)
@@ -971,19 +971,19 @@ print(complex_agg)
 \`\`\`python
 # Problem: Slicing unsorted MultiIndex
 try:
-    result = grouped.loc['East':'West']  # Error!
+    result = grouped.loc['East':'West',]  # Error!
 except KeyError as e:
     print("Error: MultiIndex not sorted")
 
 # Solution: Sort first
 grouped_sorted = grouped.sort_index()
-result = grouped_sorted.loc['East':'West']  # Works
+result = grouped_sorted.loc['East':'West',]  # Works
 \`\`\`
 
 **Pitfall 2: Confusing loc with tuple indexing**
 \`\`\`python
 # Wrong: Missing comma (interpreted as list)
-# grouped.loc[['East' 'A']]  # Error
+# grouped.loc[['East' 'A',]]  # Error
 
 # Correct: Tuple for multiple levels
 result = grouped.loc[('East', 'A')]
@@ -996,14 +996,14 @@ result = grouped.loc[[('East', 'A'), ('West', 'B')]]
 \`\`\`python
 # Be careful with operations on MultiIndex
 df_multi = grouped.reset_index()
-df_multi = df_multi.set_index(['Region', 'Product'])
+df_multi = df_multi.set_index(['Region', 'Product',])
 
 # Adding scalar works as expected
 result = df_multi + 100
 
 # But operations between MultiIndex DataFrames require alignment
-df1 = df_multi.loc['East']
-df2 = df_multi.loc['West']
+df1 = df_multi.loc['East',]
+df2 = df_multi.loc['West',]
 # result = df1 + df2  # Alignment issues
 
 # Solution: Reset index or use explicit joins
@@ -1012,9 +1012,9 @@ df2 = df_multi.loc['West']
 **Pitfall 4: Column names after groupby.agg()**
 \`\`\`python
 # Problem: Hierarchical column names
-result = df.groupby(['Region', 'Product']).agg({
-    'Sales': ['sum', 'mean'],
-    'Quantity': ['sum', 'mean']
+result = df.groupby(['Region', 'Product',]).agg({
+    'Sales': ['sum', 'mean',],
+    'Quantity': ['sum', 'mean',]
 })
 print(result.columns)
 # MultiIndex([('Sales', 'sum'), ('Sales', 'mean'), ...])
@@ -1022,10 +1022,10 @@ print(result.columns)
 # Solution: Flatten column names
 result.columns = ['_'.join(col).strip() for col in result.columns.values]
 print(result.columns)
-# Index(['Sales_sum', 'Sales_mean', 'Quantity_sum', 'Quantity_mean'])
+# Index(['Sales_sum', 'Sales_mean', 'Quantity_sum', 'Quantity_mean',])
 
 # Or use named aggregations (Pandas 0.25+)
-result = df.groupby(['Region', 'Product']).agg(
+result = df.groupby(['Region', 'Product',]).agg(
     sales_sum=('Sales', 'sum'),
     sales_mean=('Sales', 'mean'),
     qty_sum=('Quantity', 'sum'),
@@ -1039,9 +1039,9 @@ result = df.groupby(['Region', 'Product']).agg(
 # Each index level stores all values
 
 # Solution: Use categorical for repeated values
-df['Region'] = df['Region'].astype('category')
-df['Product'] = df['Product'].astype('category')
-grouped = df.groupby(['Region', 'Product'])['Sales'].sum()
+df['Region',] = df['Region',].astype('category')
+df['Product',] = df['Product',].astype('category')
+grouped = df.groupby(['Region', 'Product',])['Sales',].sum()
 # Reduced memory usage
 \`\`\`
 
@@ -1052,7 +1052,7 @@ grouped = df.groupby(['Region', 'Product'])['Sales'].sum()
 1. **Hierarchical data structure**
 \`\`\`python
 # Organizational hierarchy
-company_data = df.groupby(['Division', 'Department', 'Team'])
+company_data = df.groupby(['Division', 'Department', 'Team',])
 \`\`\`
 
 2. **Time series with multiple dimensions**
@@ -1064,13 +1064,13 @@ time_series = df.groupby(['Region', pd.Grouper(key='Date', freq='M')])
 3. **Statistical tables**
 \`\`\`python
 # Demographic analysis
-demographics = df.groupby(['Age_Group', 'Gender', 'Income_Bracket'])
+demographics = df.groupby(['Age_Group', 'Gender', 'Income_Bracket',])
 \`\`\`
 
 4. **Pivot-like operations**
 \`\`\`python
 # Cross-tabulation
-cross_tab = df.groupby(['Category1', 'Category2', 'Category3'])
+cross_tab = df.groupby(['Category1', 'Category2', 'Category3',])
 \`\`\`
 
 **Avoid MultiIndex when:**
@@ -1089,7 +1089,7 @@ grouped = grouped.sort_index()
 
 2. **Name your index levels**
 \`\`\`python
-grouped.index.names = ['Region', 'Product', 'Quarter']
+grouped.index.names = ['Region', 'Product', 'Quarter',]
 \`\`\`
 
 3. **Flatten for exports**
@@ -1100,7 +1100,7 @@ df_flat.to_csv('output.csv')
 
 4. **Use named aggregations**
 \`\`\`python
-result = df.groupby(['A', 'B']).agg(
+result = df.groupby(['A', 'B',]).agg(
     sum_sales=('Sales', 'sum'),
     avg_sales=('Sales', 'mean')
 )
@@ -1117,7 +1117,7 @@ def analyze_sales(df):
       1: Product (str)
     Values: Total sales (float)
     """
-    return df.groupby(['Region', 'Product'])['Sales'].sum()
+    return df.groupby(['Region', 'Product',])['Sales',].sum()
 \`\`\`
 
 **Key Takeaway:**

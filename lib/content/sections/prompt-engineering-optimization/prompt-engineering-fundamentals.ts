@@ -683,7 +683,7 @@ variant1 = {
 # Variant 2: Detailed prompt
 variant2 = {
     'name': 'Detailed with Examples',
-    'template': '''Classify the sentiment as positive, negative, or neutral.
+    'template': ''Classify the sentiment as positive, negative, or neutral.
 
 Examples:
 "Great product!" → positive
@@ -691,7 +691,7 @@ Examples:
 "It's fine." → neutral
 
 Review: {review}
-Sentiment:''',
+Sentiment:'',
     'test_cases': test_cases,
     'eval_func': sentiment_accuracy
 }
@@ -699,10 +699,10 @@ Sentiment:''',
 # Variant 3: Format-constrained
 variant3 = {
     'name': 'Format Constrained',
-    'template': '''Analyze sentiment. Output ONLY: positive, negative, or neutral
+    'template': ''Analyze sentiment. Output ONLY: positive, negative, or neutral
 
 Review: {review}
-Sentiment:''',
+Sentiment:'',
     'test_cases': test_cases,
     'eval_func': sentiment_accuracy
 }

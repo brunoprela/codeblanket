@@ -490,7 +490,7 @@ class StyleNormalizer(ast.NodeTransformer):
     def _to_pascal_case(self, name: str) -> str:
         """Convert to PascalCase."""
         words = name.replace('_', ' ').replace('-', ' ').split()
-        return ''.join(word.capitalize() for word in words)
+        return '.join(word.capitalize() for word in words)
 
 # Example usage
 code = """
@@ -820,7 +820,7 @@ class ProductionRefactoringEngine:
             fromfile='original',
             tofile='refactored'
         )
-        return ''.join(diff)
+        return '.join(diff)
     
     def get_current_code(self) -> str:
         """Get current code state."""

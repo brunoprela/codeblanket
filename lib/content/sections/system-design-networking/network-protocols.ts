@@ -332,7 +332,7 @@ export const networkprotocolsSection = {
     
     setInterval(() => {
       const msg = \`Log message \${Date.now()}\`;
-      channel.publish('logs', '', Buffer.from(msg));
+      channel.publish('logs', ', Buffer.from(msg));
       console.log(\`Sent: \${msg}\`);
     }, 1000);
     
@@ -342,8 +342,8 @@ export const networkprotocolsSection = {
     
     await channel2.assertExchange('logs', 'fanout', { durable: false });
     
-    const q = await channel2.assertQueue('', { exclusive: true });
-    await channel2.bindQueue(q.queue, 'logs', '');
+    const q = await channel2.assertQueue(', { exclusive: true });
+    await channel2.bindQueue(q.queue, 'logs', ');
     
     channel2.consume(q.queue, (msg) => {
       console.log(\`Received: \${msg.content.toString()}\`);

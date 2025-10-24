@@ -131,19 +131,19 @@ import re
 text = "Hello, world! How are you? I'm fine, thanks."
 
 # Method 1: Using string.punctuation
-no_punct = text.translate(str.maketrans('', '', string.punctuation))
+no_punct = text.translate(str.maketrans(', ', string.punctuation))
 print(f"No punctuation: {no_punct}")
 # "Hello world How are you Im fine thanks"
 
 # Method 2: Using regex (keeps contractions)
-no_punct_regex = re.sub(r'[^\\w\\s\\']', '', text)
+no_punct_regex = re.sub(r'[^\\w\\s']', ', text)
 print(f"Regex (keeps apostrophes): {no_punct_regex}")
 # "Hello world How are you I'm fine thanks"
 
 # Method 3: Selective removal
 def remove_punct_except(text, keep='.,!?'):
-    punct_to_remove = ''.join([c for c in string.punctuation if c not in keep])
-    return text.translate(str.maketrans('', '', punct_to_remove))
+    punct_to_remove = '.join([c for c in string.punctuation if c not in keep])
+    return text.translate(str.maketrans(', ', punct_to_remove))
 
 selective = remove_punct_except(text)
 print(f"Selective removal: {selective}")
@@ -155,12 +155,12 @@ print(f"Selective removal: {selective}")
 text = "I have 3 cats and 2 dogs. They cost $150 total."
 
 # Remove all numbers
-no_numbers = re.sub(r'\\d+', '', text)
+no_numbers = re.sub(r'\\d+', ', text)
 print(f"No numbers: {no_numbers}")
 # "I have  cats and  dogs. They cost $ total."
 
 # Remove numbers but keep currency
-no_numbers_keep_currency = re.sub(r'(?<!\\$)\\b\\d+\\b', '', text)
+no_numbers_keep_currency = re.sub(r'(?<!\\$)\\b\\d+\\b', ', text)
 print(f"Keep currency: {no_numbers_keep_currency}")
 
 # Replace numbers with <NUM> token
@@ -196,7 +196,7 @@ Email me at user@example.com or visit http://website.com
 """
 
 # Remove HTML tags
-no_html = re.sub(r'<.*?>', '', text)
+no_html = re.sub(r'<.*?>', ', text)
 print(f"No HTML: {no_html}")
 
 # Unescape HTML entities
@@ -206,11 +206,11 @@ print(f"\\nUnescaped: {unescaped}")
 # "AT&T and "quotes" <tags>"
 
 # Remove URLs
-no_urls = re.sub(r'http\\S+|www\\S+', '', text)
+no_urls = re.sub(r'http\\S+|www\\S+', ', text)
 print(f"\\nNo URLs: {no_urls}")
 
 # Remove email addresses
-no_emails = re.sub(r'\\S+@\\S+', '', text)
+no_emails = re.sub(r'\\S+@\\S+', ', text)
 print(f"No emails: {no_emails}")
 \`\`\`
 
@@ -491,14 +491,14 @@ class TextPreprocessor:
         """Basic text cleaning"""
         # Remove HTML tags
         if self.remove_html:
-            text = re.sub(r'<.*?>', '', text)
+            text = re.sub(r'<.*?>', ', text)
             from html import unescape
             text = unescape(text)
         
         # Remove URLs
         if self.remove_urls:
-            text = re.sub(r'http\\S+|www\\S+|https\\S+', '', text)
-            text = re.sub(r'\\S+@\\S+', '', text)  # Remove emails too
+            text = re.sub(r'http\\S+|www\\S+|https\\S+', ', text)
+            text = re.sub(r'\\S+@\\S+', ', text)  # Remove emails too
         
         # Lowercase
         if self.lowercase:
@@ -506,11 +506,11 @@ class TextPreprocessor:
         
         # Remove punctuation
         if self.remove_punctuation:
-            text = text.translate(str.maketrans('', '', string.punctuation))
+            text = text.translate(str.maketrans(', ', string.punctuation))
         
         # Remove numbers
         if self.remove_numbers:
-            text = re.sub(r'\\d+', '', text)
+            text = re.sub(r'\\d+', ', text)
         
         # Normalize whitespace
         text = ' '.join(text.split())

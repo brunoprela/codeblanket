@@ -83,13 +83,13 @@ from prometheus_client import Counter, Histogram, Gauge, start_http_server
 http_requests_total = Counter(
     'http_requests_total',
     'Total HTTP requests',
-    ['method', 'endpoint', 'status']
+    ['method', 'endpoint', 'status',]
 )
 
 http_request_duration_seconds = Histogram(
     'http_request_duration_seconds',
     'HTTP request duration',
-    ['method', 'endpoint']
+    ['method', 'endpoint',]
 )
 
 # System metrics
@@ -236,7 +236,7 @@ logger.error(json.dumps(log_record))
 \`\`\`json
 // Index template
 {
-  "index_patterns": ["logs-*"],
+  "index_patterns": ["logs-*",],
   "settings": {
     "number_of_shards": 3,
     "number_of_replicas": 1,
@@ -323,7 +323,7 @@ trace.get_tracer_provider().add_span_processor(
 tracer = trace.get_tracer(__name__)
 
 # Instrument code
-@app.route('/api/order', methods=['POST'])
+@app.route('/api/order', methods=['POST',])
 def create_order():
     with tracer.start_as_current_span("create_order") as span:
         span.set_attribute("user_id", user_id)
@@ -395,7 +395,7 @@ groups:
 
 # alertmanager.yml
 route:
-  group_by: ['alertname', 'service']
+  group_by: ['alertname', 'service',]
   group_wait: 30s
   group_interval: 5m
   repeat_interval: 4h
@@ -590,12 +590,12 @@ def write_sensor_data(device_id, temperature, humidity, motion):
     write_api.write(bucket="hot", record=point)
 
 # Query hot data (fast)
-query = '''
+query = ''
 FROM(bucket: "hot")
   |> range(start: -7d)
   |> filter(fn: (r) => r._measurement == "sensors")
   |> filter(fn: (r) => r.device_id == "device_123")
-'''
+''
 \`\`\`
 
 **2. Warm Tier (7-30 days): 5-Minute Aggregates**
@@ -685,13 +685,13 @@ def migrate_hot_to_warm():
     cutoff = datetime.utcnow() - timedelta(days=7)
     
     # Downsample and write to warm tier
-    result = client.query(f'''
+    result = client.query(f''
         SELECT mean(temperature), mean(humidity), sum(motion)
         FROM sensors
         WHERE time < '{cutoff.isoformat()}'
         GROUP BY time(5m), device_id
         INTO warm.sensors_5m
-    ''')
+    '')
     
     # Delete from hot tier (automatically handled by retention policy)
     logger.info(f"Migrated {result.count} points to warm tier")
@@ -700,13 +700,13 @@ def migrate_warm_to_cold():
     """Run weekly: migrate 30-day-old data to cold tier"""
     cutoff = datetime.utcnow() - timedelta(days=30)
     
-    result = client.query(f'''
+    result = client.query(f''
         SELECT mean(temperature_avg), mean(humidity_avg), sum(motion_count)
         FROM warm.sensors_5m
         WHERE time < '{cutoff.isoformat()}'
         GROUP BY time(1h), device_id
         INTO cold.sensors_1h
-    ''')
+    '')
     
     logger.info(f"Migrated {result.count} points to cold tier")
 
@@ -715,12 +715,12 @@ def migrate_cold_to_archive():
     cutoff = datetime.utcnow() - timedelta(days=90)
     
     # Export to S3
-    result = client.query(f'''
+    result = client.query(f''
         SELECT mean(temperature_avg), max(temperature_max), min(temperature_min)
         FROM cold.sensors_1h
         WHERE time < '{cutoff.isoformat()}'
         GROUP BY time(1d), device_id
-    ''')
+    '')
     
     # Write to S3 in Parquet format
     df = result_to_dataframe(result)
@@ -767,13 +767,13 @@ def query_sensor_data(device_id, start_time, end_time):
         measurement = "sensors_daily"
         granularity = "1d"
     
-    query = f'''
+    query = f''
         FROM(bucket: "{bucket}")
           |> range(start: {start_time}, stop: {end_time})
           |> filter(fn: (r) => r._measurement == "{measurement}")
           |> filter(fn: (r) => r.device_id == "{device_id}")
           |> aggregateWindow(every: {granularity}, fn: mean)
-    '''
+    ''
     
     return client.query_api().query(query)
 \`\`\`
@@ -892,13 +892,13 @@ point = Point("temperature") \\
 write_api.write(bucket="sensors", record=point)
 
 # Query: Get average temperature per floor last 24h
-query = '''
+query = ''
 from(bucket: "sensors")
   |> range(start: -24h)
   |> filter(fn: (r) => r._measurement == "temperature")
-  |> group(columns: ["floor"])
+  |> group(columns: ["floor",])
   |> aggregateWindow(every: 1h, fn: mean)
-'''
+''
 
 # Downsampling (automatic)
 CREATE CONTINUOUS QUERY "hourly_avg" ON "iot_data"
@@ -1063,8 +1063,8 @@ scrape_configs:
 # Application exposes metrics
 from prometheus_client import Counter, Histogram, start_http_server
 
-request_count = Counter('http_requests_total', 'Total HTTP requests', ['method', 'endpoint', 'status'])
-request_duration = Histogram('http_request_duration_seconds', 'HTTP request duration', ['method', 'endpoint'])
+request_count = Counter('http_requests_total', 'Total HTTP requests', ['method', 'endpoint', 'status',])
+request_duration = Histogram('http_request_duration_seconds', 'HTTP request duration', ['method', 'endpoint',])
 
 @app.route('/api/users')
 @request_duration.labels(method='GET', endpoint='/api/users').time()

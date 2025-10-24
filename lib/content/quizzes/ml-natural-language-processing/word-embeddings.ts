@@ -194,13 +194,13 @@ from gensim.models import FastText, Word2Vec
 # Word2Vec fails on OOV
 w2v = Word2Vec(...)
 try:
-    vec = w2v.wv['unseen_word']
+    vec = w2v.wv['unseen_word',]
 except KeyError:
-    vec = w2v.wv['<UNK>']  # Loses all semantic info
+    vec = w2v.wv['<UNK>',]  # Loses all semantic info
 
 # FastText handles gracefully
 ft = FastText(...)
-vec = ft.wv['unseen_word']  # Always works!
+vec = ft.wv['unseen_word',]  # Always works!
 similar = ft.wv.most_similar('unseen_word')  # Can find similar words
 \`\`\`
 
@@ -397,8 +397,8 @@ Each occurrence gets unique embedding based on context:
 
 Static (Word2Vec):
 \`\`\`python
-vec_1 = w2v['bank']  # In "financial bank"
-vec_2 = w2v['bank']  # In "river bank"
+vec_1 = w2v['bank',]  # In "financial bank"
+vec_2 = w2v['bank',]  # In "river bank"
 # vec_1 == vec_2 (same vector always!)
 \`\`\`
 

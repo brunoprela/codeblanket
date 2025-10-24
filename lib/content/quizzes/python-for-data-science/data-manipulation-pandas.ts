@@ -23,18 +23,18 @@ df = pd.DataFrame({
 
 # Method 1: Apply with lambda (SLOW)
 start = time.time()
-df['C_apply'] = df['A'].apply(lambda x: x ** 2 if x > 0 else 0)
+df['C_apply',] = df['A',].apply(lambda x: x ** 2 if x > 0 else 0)
 time_apply = time.time() - start
 
 # Method 2: Vectorized with np.where (FAST)
 start = time.time()
-df['C_vectorized'] = np.where(df['A'] > 0, df['A'] ** 2, 0)
+df['C_vectorized',] = np.where(df['A',] > 0, df['A',] ** 2, 0)
 time_vectorized = time.time() - start
 
 # Method 3: Vectorized with boolean indexing (FAST)
 start = time.time()
-df['C_boolean'] = 0
-df.loc[df['A'] > 0, 'C_boolean'] = df.loc[df['A'] > 0, 'A'] ** 2
+df['C_boolean',] = 0
+df.loc[df['A',] > 0, 'C_boolean',] = df.loc[df['A',] > 0, 'A',] ** 2
 time_boolean = time.time() - start
 
 print(f"Apply: {time_apply:.3f}s")
@@ -74,27 +74,27 @@ Despite the performance penalty, .apply() is sometimes necessary:
 **1. Complex Business Logic:**
 \`\`\`python
 def complex_calculation(row):
-    if row['type'] == 'A':
-        if row['value'] > 100:
-            return row['value'] * 1.5 + row['bonus']
+    if row['type',] == 'A':
+        if row['value',] > 100:
+            return row['value',] * 1.5 + row['bonus',]
         else:
-            return row['value'] * 1.2
-    elif row['type'] == 'B':
-        return row['value'] * 0.8 if row['flag'] else row['value']
+            return row['value',] * 1.2
+    elif row['type',] == 'B':
+        return row['value',] * 0.8 if row['flag',] else row['value',]
     else:
         return 0
 
 # Too complex for np.where/np.select
-df['result'] = df.apply(complex_calculation, axis=1)
+df['result',] = df.apply(complex_calculation, axis=1)
 \`\`\`
 
 **2. Multiple Column Dependencies:**
 \`\`\`python
 # Create full name from multiple columns with complex logic
-df['full_info'] = df.apply(
-    lambda row: f"{row['first_name']} {row['middle_initial']}. {row['last_name']}" 
-                if pd.notna(row['middle_initial']) 
-                else f"{row['first_name']} {row['last_name']}",
+df['full_info',] = df.apply(
+    lambda row: f"{row['first_name',]} {row['middle_initial',]}. {row['last_name',]}" 
+                if pd.notna(row['middle_initial',]) 
+                else f"{row['first_name',]} {row['last_name',]}",
     axis=1
 )
 \`\`\`
@@ -104,7 +104,7 @@ df['full_info'] = df.apply(
 # Call external API or complex library
 import some_external_library
 
-df['processed'] = df['text'].apply(
+df['processed',] = df['text',].apply(
     lambda x: some_external_library.complex_function(x)
 )
 \`\`\`
@@ -112,7 +112,7 @@ df['processed'] = df['text'].apply(
 **4. Non-Vectorizable Operations:**
 \`\`\`python
 # Operations that can't be vectorized
-df['word_count'] = df['text'].apply(lambda x: len(x.split()))
+df['word_count',] = df['text',].apply(lambda x: len(x.split()))
 # Note: This specific example can be vectorized with .str.split().str.len()
 # but illustrates the concept
 \`\`\`
@@ -122,19 +122,19 @@ df['word_count'] = df['text'].apply(lambda x: len(x.split()))
 **Strategy 1: Vectorize When Possible**
 \`\`\`python
 # Instead of:
-df['C'] = df.apply(lambda row: row['A'] + row['B'], axis=1)
+df['C',] = df.apply(lambda row: row['A',] + row['B',], axis=1)
 
 # Use:
-df['C'] = df['A'] + df['B']  # 100x faster
+df['C',] = df['A',] + df['B',]  # 100x faster
 \`\`\`
 
 **Strategy 2: Use np.where for Conditionals**
 \`\`\`python
 # Instead of:
-df['category'] = df['value'].apply(lambda x: 'High' if x > 100 else 'Low')
+df['category',] = df['value',].apply(lambda x: 'High' if x > 100 else 'Low')
 
 # Use:
-df['category'] = np.where(df['value'] > 100, 'High', 'Low')  # 50x faster
+df['category',] = np.where(df['value',] > 100, 'High', 'Low')  # 50x faster
 \`\`\`
 
 **Strategy 3: Use np.select for Multiple Conditions**
@@ -146,38 +146,38 @@ def categorize(x):
     elif x < 100: return 'High'
     else: return 'Very High'
 
-df['category'] = df['value'].apply(categorize)
+df['category',] = df['value',].apply(categorize)
 
 # Use:
 conditions = [
-    df['value'] < 10,
-    df['value'] < 50,
-    df['value'] < 100
+    df['value',] < 10,
+    df['value',] < 50,
+    df['value',] < 100
 ]
-choices = ['Low', 'Medium', 'High']
-df['category'] = np.select(conditions, choices, default='Very High')  # 30x faster
+choices = ['Low', 'Medium', 'High',]
+df['category',] = np.select(conditions, choices, default='Very High')  # 30x faster
 \`\`\`
 
 **Strategy 4: Use Vectorized String Methods**
 \`\`\`python
 # Instead of:
-df['upper'] = df['name'].apply(lambda x: x.upper())
+df['upper',] = df['name',].apply(lambda x: x.upper())
 
 # Use:
-df['upper'] = df['name'].str.upper()  # 20x faster
+df['upper',] = df['name',].str.upper()  # 20x faster
 \`\`\`
 
 **Strategy 5: Use .transform() for Group Operations**
 \`\`\`python
 # Instead of:
 def pct_of_group_total(row):
-    group_total = df[df['group'] == row['group']]['value'].sum()
-    return row['value'] / group_total
+    group_total = df[df['group',] == row['group',]]['value',].sum()
+    return row['value',] / group_total
 
-df['pct'] = df.apply(pct_of_group_total, axis=1)
+df['pct',] = df.apply(pct_of_group_total, axis=1)
 
 # Use:
-df['pct'] = df.groupby('group')['value'].transform(lambda x: x / x.sum())  # 100x faster
+df['pct',] = df.groupby('group')['value',].transform(lambda x: x / x.sum())  # 100x faster
 \`\`\`
 
 **Strategy 6: Cythonize or Numba for Complex Logic**
@@ -194,7 +194,7 @@ def complex_calculation_numba(A, B):
             result[i] = B[i] * 2
     return result
 
-df['result'] = complex_calculation_numba(df['A'].values, df['B'].values)
+df['result',] = complex_calculation_numba(df['A',].values, df['B',].values)
 # Faster than apply, nearly as fast as pure vectorization
 \`\`\`
 
@@ -203,7 +203,7 @@ df['result'] = complex_calculation_numba(df['A'].values, df['B'].values)
 \`\`\`
 Can you vectorize the operation?
 ├─ Yes → Use vectorized operations (fastest)
-│  ├─ Single operation → df['A'] + df['B']
+│  ├─ Single operation → df['A',] + df['B',]
 │  ├─ Conditional → np.where() or np.select()
 │  ├─ String operations → .str accessor
 │  └─ Group operations → .transform()
@@ -257,7 +257,7 @@ df = pd.DataFrame({
 })
 
 # On Series (column-wise by default)
-df['A_squared'] = df['A'].apply(lambda x: x ** 2)
+df['A_squared',] = df['A',].apply(lambda x: x ** 2)
 # Result: [1, 4, 9]
 
 # On DataFrame, axis=0 (apply to each column)
@@ -271,8 +271,8 @@ row_sums = df.apply(sum, axis=1)
 # 0: 12, 1: 15, 2: 18
 
 # Complex row-wise operation
-df['row_info'] = df.apply(
-    lambda row: f"A:{row['A']}, B:{row['B']}, Sum:{row['A']+row['B']}", 
+df['row_info',] = df.apply(
+    lambda row: f"A:{row['A',]}, B:{row['B',]}, Sum:{row['A',]+row['B',]}", 
     axis=1
 )
 \`\`\`
@@ -289,7 +289,7 @@ df['row_info'] = df.apply(
 Series only, primarily for substitution or element-wise transformation:
 
 \`\`\`python
-s = pd.Series(['A', 'B', 'C', 'A'])
+s = pd.Series(['A', 'B', 'C', 'A',])
 
 # Mapping with dictionary
 mapping = {'A': 1, 'B': 2, 'C': 3}
@@ -302,7 +302,7 @@ s_squared = s_numbers.map(lambda x: x ** 2)
 # Result: [1, 4, 9, 16]
 
 # Mapping with Series (useful for lookups)
-lookup = pd.Series([100, 200, 300], index=['A', 'B', 'C'])
+lookup = pd.Series([100, 200, 300], index=['A', 'B', 'C',])
 s_looked_up = s.map(lookup)
 # Result: [100, 200, 300, 100]
 
@@ -355,24 +355,24 @@ Ensures output has same index as input (crucial for group operations):
 
 \`\`\`python
 df = pd.DataFrame({
-    'Group': ['A', 'A', 'B', 'B'],
+    'Group': ['A', 'A', 'B', 'B',],
     'Value': [1, 2, 3, 4]
 })
 
 # .transform returns Series with same index as input
-df['Value_Normalized'] = df.groupby('Group')['Value'].transform(
+df['Value_Normalized',] = df.groupby('Group')['Value',].transform(
     lambda x: (x - x.mean()) / x.std()
 )
 # Result: Normalized within each group, same length as original
 
 # Compare with .apply (aggregates by default)
-group_means = df.groupby('Group')['Value'].apply(lambda x: x.mean())
+group_means = df.groupby('Group')['Value',].apply(lambda x: x.mean())
 # Result: Series with 2 elements (one per group)
 # A: 1.5, B: 3.5
 
 # .transform with built-in functions (faster)
-df['Group_Mean'] = df.groupby('Group')['Value'].transform('mean')
-df['Cumulative_Sum'] = df['Value'].transform('cumsum')
+df['Group_Mean',] = df.groupby('Group')['Value',].transform('mean')
+df['Cumulative_Sum',] = df['Value',].transform('cumsum')
 \`\`\`
 
 **Characteristics:**
@@ -438,8 +438,8 @@ print(f"Vectorized: {time3:.3f}s")
 - No vectorized alternative exists
 
 \`\`\`python
-df['complex'] = df.apply(
-    lambda row: row['A'] * 2 if row['B'] > 50 else row['A'] + row['B'],
+df['complex',] = df.apply(
+    lambda row: row['A',] * 2 if row['B',] > 50 else row['A',] + row['B',],
     axis=1
 )
 \`\`\`
@@ -451,7 +451,7 @@ df['complex'] = df.apply(
 - Want NaN for unmapped values
 
 \`\`\`python
-df['category'] = df['code'].map({1: 'Low', 2: 'Medium', 3: 'High'})
+df['category',] = df['code',].map({1: 'Low', 2: 'Medium', 3: 'High'})
 \`\`\`
 
 **Use DataFrame.map() (was applymap) when:**
@@ -470,7 +470,7 @@ df_formatted = df.map(lambda x: f"\${x:,.2f}")  # Format all values as currency
 - Want to preserve index alignment
 
 \`\`\`python
-df['value_pct_of_group'] = df.groupby('category')['value'].transform(
+df['value_pct_of_group',] = df.groupby('category')['value',].transform(
     lambda x: x / x.sum()
 )
 \`\`\`
@@ -479,14 +479,14 @@ df['value_pct_of_group'] = df.groupby('category')['value'].transform(
 
 **1. Always Try Vectorization First:**
 \`\`\`python
-# Don't: df['C'] = df.apply(lambda row: row['A'] + row['B'], axis=1)
-# Do: df['C'] = df['A'] + df['B']
+# Don't: df['C',] = df.apply(lambda row: row['A',] + row['B',], axis=1)
+# Do: df['C',] = df['A',] + df['B',]
 \`\`\`
 
 **2. Use Built-in Functions When Available:**
 \`\`\`python
-# Don't: df.groupby('group')['value'].transform(lambda x: x.mean())
-# Do: df.groupby('group')['value'].transform('mean')  # Much faster
+# Don't: df.groupby('group')['value',].transform(lambda x: x.mean())
+# Do: df.groupby('group')['value',].transform('mean')  # Much faster
 \`\`\`
 
 **3. Avoid .map() on DataFrames (use vectorization):**
@@ -498,7 +498,7 @@ df['value_pct_of_group'] = df.groupby('category')['value'].transform(
 **4. Use .map() for Dictionaries:**
 \`\`\`python
 # Best use case for .map()
-df['state_code'] = df['state'].map({
+df['state_code',] = df['state',].map({
     'California': 'CA',
     'Texas': 'TX',
     'New York': 'NY'
@@ -508,10 +508,10 @@ df['state_code'] = df['state'].map({
 **5. Remember .transform() Maintains Shape:**
 \`\`\`python
 # transform: Returns same length as input (good for adding column)
-df['group_mean'] = df.groupby('group')['value'].transform('mean')
+df['group_mean',] = df.groupby('group')['value',].transform('mean')
 
 # apply: Returns aggregated result (good for summary)
-group_means = df.groupby('group')['value'].apply('mean')
+group_means = df.groupby('group')['value',].apply('mean')
 \`\`\`
 
 **Memory Considerations:**
@@ -544,7 +544,7 @@ Accessors are special attributes that provide domain-specific functionality for 
 import pandas as pd
 
 # .str accessor for string operations
-s_str = pd.Series(['hello', 'world', 'PANDAS'])
+s_str = pd.Series(['hello', 'world', 'PANDAS',])
 print(s_str.str.upper())  # Vectorized uppercase
 
 # .dt accessor for datetime operations
@@ -552,7 +552,7 @@ s_dt = pd.Series(pd.date_range('2024-01-01', periods=3))
 print(s_dt.dt.month)  # Extract month
 
 # .cat accessor for categorical data
-s_cat = pd.Series(['A', 'B', 'C'], dtype='category')
+s_cat = pd.Series(['A', 'B', 'C',], dtype='category')
 print(s_cat.cat.categories)  # Access categories
 \`\`\`
 
@@ -647,7 +647,7 @@ s_numbers.str.upper()  # AttributeError: Can only use .str accessor with string 
 Manual loops are slow; accessors provide vectorized operations:
 
 \`\`\`python
-s = pd.Series(['hello', 'world'] * 50000)
+s = pd.Series(['hello', 'world',] * 50000)
 
 # Slow: Manual loop
 import time
@@ -762,7 +762,7 @@ print(s.str.len())  # [18.0, 6.0, 12.0, NaN]
 print(s.str.replace('World', 'Earth'))
 
 # Regex operations
-s_num = pd.Series(['abc123', 'def456', 'ghi789'])
+s_num = pd.Series(['abc123', 'def456', 'ghi789',])
 print(s_num.str.extract(r'(\\d+)'))  # Extract digits
 
 # Padding
@@ -810,11 +810,11 @@ dates_tz_ny = dates_tz.dt.tz_convert('America/New_York')
 Key advantage: accessors handle NaN automatically:
 
 \`\`\`python
-s = pd.Series(['hello', None, 'world', np.nan, 'pandas'])
+s = pd.Series(['hello', None, 'world', np.nan, 'pandas',])
 
 # .str handles NaN gracefully
 result = s.str.upper()
-# ['HELLO', NaN, 'WORLD', NaN, 'PANDAS']
+# ['HELLO', NaN, 'WORLD', NaN, 'PANDAS',]
 
 # Manual operations require explicit NaN handling
 def manual_upper(x):
@@ -831,7 +831,7 @@ result_manual = s.apply(manual_upper)
 For very simple operations on small data, list comprehensions can be faster:
 
 \`\`\`python
-s_small = pd.Series(['a', 'b', 'c'] * 10)
+s_small = pd.Series(['a', 'b', 'c',] * 10)
 
 # List comprehension (faster for small data)
 result = pd.Series([x.upper() for x in s_small])
@@ -848,41 +848,41 @@ result = s_small.str.upper()
 **1. Use Accessors for Consistency:**
 \`\`\`python
 # Good: Clear and handles NaN
-df['month'] = df['date'].dt.month
+df['month',] = df['date',].dt.month
 
 # Bad: Might fail on NaN
-df['month'] = df['date'].apply(lambda x: x.month)
+df['month',] = df['date',].apply(lambda x: x.month)
 \`\`\`
 
 **2. Chain Operations:**
 \`\`\`python
 # Clean text data
-df['clean_text'] = (df['text']
+df['clean_text',] = (df['text',]
     .str.lower()
     .str.strip()
-    .str.replace(r'[^a-z\\s]', '', regex=True)
+    .str.replace(r'[^a-z\\s]', ', regex=True)
 )
 \`\`\`
 
 **3. Use Built-in Methods:**
 \`\`\`python
 # Good: Vectorized
-df['contains_python'] = df['text'].str.contains('python')
+df['contains_python',] = df['text',].str.contains('python')
 
 # Bad: Slower
-df['contains_python'] = df['text'].apply(lambda x: 'python' in x)
+df['contains_python',] = df['text',].apply(lambda x: 'python' in x)
 \`\`\`
 
 **4. Batch Date Conversions:**
 \`\`\`python
 # Good: Convert once
-df['date'] = pd.to_datetime(df['date_string'])
-df['year'] = df['date'].dt.year
-df['month'] = df['date'].dt.month
+df['date',] = pd.to_datetime(df['date_string',])
+df['year',] = df['date',].dt.year
+df['month',] = df['date',].dt.month
 
 # Bad: Multiple conversions
-df['year'] = pd.to_datetime(df['date_string']).dt.year
-df['month'] = pd.to_datetime(df['date_string']).dt.month  # Redundant conversion!
+df['year',] = pd.to_datetime(df['date_string',]).dt.year
+df['month',] = pd.to_datetime(df['date_string',]).dt.month  # Redundant conversion!
 \`\`\`
 
 **Key Takeaways:**

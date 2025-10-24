@@ -104,7 +104,7 @@ def group_anagrams(words):
     
     for word in words:
         # Use sorted word as key
-        key = ''.join(sorted(word))
+        key = '.join(sorted(word))
         anagrams[key].append(word)
     
     return list(anagrams.values())

@@ -20,10 +20,10 @@ export const datamanipulationpandasMultipleChoice: MultipleChoiceQuestion[] = [
     question:
       'Which is the fastest way to create a new column based on a condition in Pandas?',
     options: [
-      'df["new"] = df["col"].apply(lambda x: val1 if x > 5 else val2)',
-      'df["new"] = np.where(df["col"] > 5, val1, val2)',
-      'for i in range(len(df)): df.loc[i, "new"] = val1 if df.loc[i, "col"] > 5 else val2',
-      'df["new"] = df["col"].map(lambda x: val1 if x > 5 else val2)',
+      'df["new",] = df["col",].apply(lambda x: val1 if x > 5 else val2)',
+      'df["new",] = np.where(df["col",] > 5, val1, val2)',
+      'for i in range(len(df)): df.loc[i, "new",] = val1 if df.loc[i, "col",] > 5 else val2',
+      'df["new",] = df["col",].map(lambda x: val1 if x > 5 else val2)',
     ],
     correctAnswer: 1,
     explanation:
@@ -45,16 +45,16 @@ export const datamanipulationpandasMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'data-manipulation-pandas-mc-4',
     question:
-      'Given df["date"] as a datetime column, how do you extract the month name?',
+      'Given df["date",] as a datetime column, how do you extract the month name?',
     options: [
-      'df["date"].month_name()',
-      'df["date"].str.month_name()',
-      'df["date"].dt.month_name()',
-      'df["date"].datetime.month_name()',
+      'df["date",].month_name()',
+      'df["date",].str.month_name()',
+      'df["date",].dt.month_name()',
+      'df["date",].datetime.month_name()',
     ],
     correctAnswer: 2,
     explanation:
-      'The .dt accessor provides datetime-specific operations. Use df["date"].dt.month_name() to extract month names. The .dt accessor is specifically for datetime operations, similar to how .str is for strings.',
+      'The .dt accessor provides datetime-specific operations. Use df["date",].dt.month_name() to extract month names. The .dt accessor is specifically for datetime operations, similar to how .str is for strings.',
   },
   {
     id: 'data-manipulation-pandas-mc-5',

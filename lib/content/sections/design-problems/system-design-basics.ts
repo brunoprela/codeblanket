@@ -214,7 +214,7 @@ class URLShortener:
         while num:
             result.append(self.base62[num % 62])
             num //= 62
-        return ''.join(reversed(result))
+        return '.join(reversed(result))
     
     def shorten(self, long_url):
         if long_url in self.url_to_short:

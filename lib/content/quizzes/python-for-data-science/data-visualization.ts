@@ -54,7 +54,7 @@ sales_by_region = pd.Series({
 
 plt.figure(figsize=(10, 6))
 bars = plt.bar(sales_by_region.index, sales_by_region.values, 
-               color=['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A'])
+               color=['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A',])
 plt.ylabel('Sales ($)')
 plt.title('Sales by Region')
 for i, (region, value) in enumerate(sales_by_region.items()):
@@ -71,7 +71,7 @@ df = pd.DataFrame({
 }, index=dates)
 
 plt.figure(figsize=(12, 6))
-plt.plot(df.index, df['sales'], linewidth=2)
+plt.plot(df.index, df['sales',], linewidth=2)
 plt.title('Daily Sales Trend 2024')
 plt.xlabel('Date')
 plt.ylabel('Sales ($)')
@@ -91,7 +91,7 @@ ax1.set_title('Distribution (Histogram)')
 ax1.set_xlabel('Value')
 ax1.set_ylabel('Frequency')
 
-ax2.boxplot([data], labels=['Data'])
+ax2.boxplot([data], labels=['Data',])
 ax2.set_title('Distribution (Box Plot)')
 ax2.set_ylabel('Value')
 
@@ -124,7 +124,7 @@ plt.show()
 
 # GOOD: Simple 2D pie or bar
 values = [30, 25, 20, 15, 10]
-labels = ['A', 'B', 'C', 'D', 'E']
+labels = ['A', 'B', 'C', 'D', 'E',]
 
 plt.figure(figsize=(10, 5))
 
@@ -169,7 +169,7 @@ plt.show()
 values = [23, 45, 67, 89, 34, 56, 78, 90, 12]
 highlight_idx = 3  # 4th bar is important
 
-colors = ['#CCCCCC'] * len(values)
+colors = ['#CCCCCC',] * len(values)
 colors[highlight_idx] = '#FF6B6B'  # Highlight one
 
 plt.figure(figsize=(10, 6))
@@ -193,7 +193,7 @@ plt.plot([1, 2, 3, 4], [10, 20, 15, 25], marker='o', linewidth=2)
 plt.title('Quarterly Revenue Growth 2024', fontsize=14, fontweight='bold')
 plt.xlabel('Quarter', fontsize=12)
 plt.ylabel('Revenue ($ millions)', fontsize=12)
-plt.xticks([1, 2, 3, 4], ['Q1', 'Q2', 'Q3', 'Q4'])
+plt.xticks([1, 2, 3, 4], ['Q1', 'Q2', 'Q3', 'Q4',])
 plt.grid(True, alpha=0.3)
 plt.show()
 \`\`\`
@@ -257,7 +257,7 @@ plt.xlabel('Month', fontsize = 12)
 plt.ylabel('Revenue ($ millions)', fontsize = 12)
 plt.title('Revenue Growth - 200% Increase YoY', fontsize = 16, fontweight = 'bold')
 plt.xticks(range(1, 13), ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])
+                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',])
 plt.legend(fontsize = 12)
 plt.grid(True, alpha = 0.3)
 plt.tight_layout()
@@ -272,7 +272,7 @@ plt.show()
 
 \`\`\`python
 # Colorblind-friendly colors
-colorblind_safe = ['#0173B2', '#DE8F05', '#029E73', '#CC78BC', '#CA9161']
+colorblind_safe = ['#0173B2', '#DE8F05', '#029E73', '#CC78BC', '#CA9161',]
 
 plt.figure(figsize=(10, 6))
 for i, color in enumerate(colorblind_safe):
@@ -388,7 +388,7 @@ plt.show()
 # Use LaTeX fonts for consistency with paper
 plt.rcParams.update({
     'font.family': 'serif',
-    'font.serif': ['Times New Roman'],
+    'font.serif': ['Times New Roman',],
     'font.size': 10,
     'axes.labelsize': 11,
     'axes.titlesize': 12,
@@ -402,7 +402,7 @@ plt.rcParams.update({
 plt.rcParams.update({
     "text.usetex": True,
     "font.family": "serif",
-    "font.serif": ["Computer Modern Roman"],
+    "font.serif": ["Computer Modern Roman",],
 })
 
 fig, ax = plt.subplots(figsize=(6, 4))
@@ -425,13 +425,13 @@ plt.show()
 
 # Grayscale-friendly (for black & white printing)
 grayscale_friendly = {
-    'colors': ['#000000', '#E69F00', '#56B4E9', '#009E73', '#F0E442'],
+    'colors': ['#000000', '#E69F00', '#56B4E9', '#009E73', '#F0E442',],
     'linestyles': ['-', '--', '-.', ':', (0, (3, 1, 1, 1))]
 }
 
 fig, ax = plt.subplots(figsize=(8, 5))
-for i, (color, linestyle) in enumerate(zip(grayscale_friendly['colors'], 
-                                            grayscale_friendly['linestyles'])):
+for i, (color, linestyle) in enumerate(zip(grayscale_friendly['colors',], 
+                                            grayscale_friendly['linestyles',])):
     ax.plot(np.random.randn(100).cumsum(), 
             color=color, linestyle=linestyle, linewidth=2,
             label=f'Series {i+1}')
@@ -443,7 +443,7 @@ plt.show()
 
 # Colorblind-friendly (Okabe-Ito palette)
 okabe_ito = ['#E69F00', '#56B4E9', '#009E73', '#F0E442', 
-             '#0072B2', '#D55E00', '#CC79A7', '#000000']
+             '#0072B2', '#D55E00', '#CC79A7', '#000000',]
 
 fig, ax = plt.subplots(figsize=(8, 5))
 for i, color in enumerate(okabe_ito):
@@ -540,7 +540,7 @@ def create_multipanel_figure():
     
     # Panel C (spans bottom)
     ax3 = fig.add_subplot(gs[1, :])
-    categories = ['A', 'B', 'C', 'D', 'E']
+    categories = ['A', 'B', 'C', 'D', 'E',]
     values = [23, 45, 56, 78, 32]
     ax3.bar(categories, values, edgecolor='black')
     ax3.set_xlabel('Category')
@@ -629,7 +629,7 @@ plt.savefig('web_figure.png', dpi=96, bbox_inches='tight')  # Screen resolution
 
 \`\`\`python
 # Comprehensive export function
-def save_figure(fig, basename, formats=['pdf', 'png', 'svg'], **kwargs):
+def save_figure(fig, basename, formats=['pdf', 'png', 'svg',], **kwargs):
     """
     Save figure in multiple formats
     
@@ -655,7 +655,7 @@ def save_figure(fig, basename, formats=['pdf', 'png', 'svg'], **kwargs):
 # Usage
 fig, ax = plt.subplots(figsize=(8, 6))
 ax.plot([1, 2, 3], [1, 4, 9])
-save_figure(fig, 'my_figure', formats=['pdf', 'png', 'svg'])
+save_figure(fig, 'my_figure', formats=['pdf', 'png', 'svg',])
 \`\`\`
 
 **Checklist for Publication:**
@@ -739,8 +739,8 @@ stocks = pd.DataFrame({
 }, index=dates)
 
 plt.figure(figsize=(12, 6))
-plt.plot(stocks.index, stocks['AAPL'], label='AAPL', linewidth=2)
-plt.plot(stocks.index, stocks['GOOGL'], label='GOOGL', linewidth=2)
+plt.plot(stocks.index, stocks['AAPL',], label='AAPL', linewidth=2)
+plt.plot(stocks.index, stocks['GOOGL',], label='GOOGL', linewidth=2)
 plt.xlabel('Date')
 plt.ylabel('Price ($)')
 plt.title('Stock Prices Over Time')
@@ -768,11 +768,11 @@ plt.show()
 
 \`\`\`python
 # Example: Sales by region
-regions = ['North', 'South', 'East', 'West']
+regions = ['North', 'South', 'East', 'West',]
 sales = [45000, 38000, 52000, 41000]
 
 plt.figure(figsize=(10, 6))
-bars = plt.bar(regions, sales, color=['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A'])
+bars = plt.bar(regions, sales, color=['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A',])
 plt.ylabel('Sales ($)')
 plt.title('Sales by Region')
 
@@ -782,7 +782,7 @@ for i, (region, value) in enumerate(zip(regions, sales)):
 plt.show()
 
 # Horizontal for long labels
-categories = ['Category A', 'Category B with Long Name', 'Category C']
+categories = ['Category A', 'Category B with Long Name', 'Category C',]
 values = [23, 45, 67]
 
 plt.figure(figsize = (10, 6))
@@ -792,7 +792,7 @@ plt.title('Horizontal Bar Plot')
 plt.show()
 
 # Grouped bar for comparisons
-quarters = ['Q1', 'Q2', 'Q3', 'Q4']
+quarters = ['Q1', 'Q2', 'Q3', 'Q4',]
 product_a = [20, 25, 30, 35]
 product_b = [15, 20, 28, 32]
 
@@ -849,9 +849,9 @@ plt.grid(True, alpha=0.3)
 plt.show()
 
 # With categorical color
-categories = np.random.choice(['A', 'B', 'C'], n)
+categories = np.random.choice(['A', 'B', 'C',], n)
 plt.figure(figsize=(10, 8))
-for category in ['A', 'B', 'C']:
+for category in ['A', 'B', 'C',]:
     mask = categories == category
     plt.scatter(height[mask], weight[mask], label=category, alpha=0.6, s=50)
 plt.xlabel('Height (cm)')
@@ -881,7 +881,7 @@ plt.show()
 
 \`\`\`python
 # Example: Salary by department
-departments = ['Engineering', 'Sales', 'Marketing', 'HR']
+departments = ['Engineering', 'Sales', 'Marketing', 'HR',]
 salaries = [
     np.random.normal(80000, 15000, 100),
     np.random.normal(70000, 12000, 100),
@@ -896,8 +896,8 @@ plt.title('Salary Distribution by Department')
 plt.grid(True, alpha=0.3, axis='y')
 
 # Color boxes
-colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A']
-for patch, color in zip(box['boxes'], colors):
+colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A',]
+for patch, color in zip(box['boxes',], colors):
     patch.set_facecolor(color)
     patch.set_alpha(0.6)
 
@@ -924,7 +924,7 @@ plt.show()
 
 \`\`\`python
 # Example: Test scores by class
-classes = ['Class A', 'Class B', 'Class C']
+classes = ['Class A', 'Class B', 'Class C',]
 scores = [
     np.concatenate([np.random.normal(70, 10, 50), np.random.normal(90, 5, 50)]),  # Bimodal
     np.random.normal(80, 12, 100),  # Normal
@@ -1003,9 +1003,9 @@ plt.show()
 
 \`\`\`python
 # Example: Correlation matrix
-df = pd.DataFrame(np.random.randn(100, 5), columns=['A', 'B', 'C', 'D', 'E'])
-df['B'] = df['A'] * 0.8 + df['B'] * 0.4
-df['C'] = df['A'] * -0.6 + df['C'] * 0.5
+df = pd.DataFrame(np.random.randn(100, 5), columns=['A', 'B', 'C', 'D', 'E',])
+df['B',] = df['A',] * 0.8 + df['B',] * 0.4
+df['C',] = df['A',] * -0.6 + df['C',] * 0.5
 corr = df.corr()
 
 plt.figure(figsize=(10, 8))
@@ -1017,8 +1017,8 @@ plt.show()
 
 # Example: Categorical grid
 pivot_data = pd.DataFrame({
-    'Month': ['Jan', 'Feb', 'Mar'] * 4,
-    'Region': np.repeat(['North', 'South', 'East', 'West'], 3),
+    'Month': ['Jan', 'Feb', 'Mar',] * 4,
+    'Region': np.repeat(['North', 'South', 'East', 'West',], 3),
     'Sales': np.random.randint(1000, 5000, 12)
 })
 pivot = pivot_data.pivot('Region', 'Month', 'Sales')

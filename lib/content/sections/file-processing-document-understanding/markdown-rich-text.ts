@@ -72,7 +72,7 @@ def create_markdown_doc(title: str, sections: list) -> str:
                 md += f"- {item}\\n"
             md += "\\n"
         elif section['type'] == 'code':
-            lang = section.get('language', '')
+            lang = section.get('language', ')
             md += f"\`\`\`{lang}\\n{section['code']}\\n\`\`\`\\n\\n"
     
     return md

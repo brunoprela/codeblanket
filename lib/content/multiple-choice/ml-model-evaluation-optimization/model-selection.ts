@@ -1,74 +1,85 @@
-import { MultipleChoiceQuestion } from '../../../types';
-
-export const modelSelectionMultipleChoice: MultipleChoiceQuestion[] = [
-  {
-    id: 'model-selection-mc-1',
-    question:
-      'You tested 20 models on the same test set and chose the one with highest accuracy. What is the primary risk?',
-    options: [
-      'The model might be too complex',
-      'You overfitted to the test set through multiple comparisons',
-      'You need to test more models',
-      'The test set is too small',
-    ],
-    correctAnswer: 1,
-    explanation:
-      "Testing many models on the same test set leads to overfitting through multiple comparisons. By chance, one model will perform better even if it's not truly better. The test set essentially becomes a validation set. Use Bonferroni correction or reserve test set for final evaluation only.",
-  },
-  {
-    id: 'model-selection-mc-2',
-    question:
-      'Two models have similar performance (AUC: 0.85 vs 0.84, p=0.15). Which should you choose?',
-    options: [
-      'Always choose the higher AUC model',
-      'Choose the simpler, more interpretable model',
-      'Train more models to find a better one',
-      'Increase the test set size',
-    ],
-    correctAnswer: 1,
-    explanation:
-      'When performance is not statistically significantly different (p=0.15 > 0.05), choose the simpler model. It will be easier to maintain, faster to train/deploy, more interpretable, and less prone to overfitting. The marginal 0.01 AUC improvement is likely not meaningful.',
-  },
-  {
-    id: 'model-selection-mc-3',
-    question:
-      'For real-time fraud detection requiring <100ms latency, which factor should you prioritize?',
-    options: [
-      'Maximize AUC above all else',
-      'Find a model that meets minimum AUC threshold and latency constraint',
-      'Choose the most interpretable model',
-      'Use the largest ensemble possible',
-    ],
-    correctAnswer: 1,
-    explanation:
-      'In production systems with hard constraints (latency, memory), you must meet those constraints first. Find models that meet minimum performance AND latency requirements, then optimize. A model with 0.95 AUC but 500ms latency is useless if you need <100ms.',
-  },
-  {
-    id: 'model-selection-mc-4',
-    question:
-      'What is the purpose of nested cross-validation in model selection?',
-    options: [
-      'To make model training faster',
-      'To get an unbiased performance estimate when comparing models',
-      'To tune hyperparameters more efficiently',
-      'To reduce overfitting on the training set',
-    ],
-    correctAnswer: 1,
-    explanation:
-      'Nested CV provides unbiased performance estimates when you evaluate and compare multiple models. The outer loop evaluates performance, the inner loop selects models/tunes hyperparameters. This prevents overfitting to the validation set that occurs with repeated evaluation.',
-  },
-  {
-    id: 'model-selection-mc-5',
-    question:
-      'You deployed Model A (AUC=0.90 offline) to production but it performs at AUC=0.80. What is the most likely cause?',
-    options: [
-      'The test set was too small',
-      'Data distribution shift between training and production',
-      'The model is too simple',
-      'You need more training data',
-    ],
-    correctAnswer: 1,
-    explanation:
-      'A large gap between offline (0.90) and online (0.80) performance usually indicates data distribution shift. Production data has different characteristics than training data (different time period, user behavior, data collection process). This emphasizes the importance of monitoring and retraining.',
-  },
-];
+export const modelSelectionMultipleChoice = {
+  title: 'Model Selection - Multiple Choice Questions',
+  questions: [
+    {
+      id: 1,
+      question:
+        'Three models achieve similar validation F1 scores (0.84, 0.85, 0.84). Model A predicts in 0.1s, Model B in 2s, Model C in 10s. Your application requires <1s response time. Which model should you deploy?',
+      options: [
+        'Model B - it has the highest F1 score',
+        'Model A - only option meeting latency requirement',
+        'Model C - more time means better predictions',
+        'Use all three in an ensemble',
+      ],
+      correctAnswer: 1,
+      explanation:
+        'Model A is the only option meeting the hard constraint of <1s response time. In production, hard constraints (latency, memory, cost) often dominate selection. A 1% accuracy gain means nothing if the system is too slow for users.',
+      difficulty: 'intermediate' as const,
+      category: 'Production',
+    },
+    {
+      id: 2,
+      question:
+        'According to the No Free Lunch theorem, which statement is true?',
+      options: [
+        'Neural networks are always the best choice',
+        'Random Forest always outperforms Logistic Regression',
+        'No single algorithm performs best across all possible problems',
+        'Gradient Boosting solves all machine learning problems',
+      ],
+      correctAnswer: 2,
+      explanation:
+        'The No Free Lunch theorem states that averaged over ALL possible problems, every algorithm performs equally well. Algorithm success depends on match between algorithm assumptions and problem structure. Always try multiple approaches for your specific problem.',
+      difficulty: 'intermediate' as const,
+      category: 'Theory',
+    },
+    {
+      id: 3,
+      question:
+        'For a medical diagnosis system that must be interpretable for regulatory compliance, which model is most appropriate?',
+      options: [
+        'Deep neural network with 100 layers',
+        'Logistic regression or decision tree with max_depth=5',
+        'Random forest with 1000 trees',
+        'Black-box ensemble of all models',
+      ],
+      correctAnswer: 1,
+      explanation:
+        'Logistic regression (interpretable coefficients) and shallow decision trees (visible decision rules) provide clear explanations for predictions. Essential for regulatory compliance, stakeholder trust, and debugging. Deep learning and large ensembles are black boxes.',
+      difficulty: 'beginner' as const,
+      category: 'Interpretability',
+    },
+    {
+      id: 4,
+      question:
+        "You've compared 5 models using 5-fold cross-validation. Model A and B have similar mean scores but B has much lower standard deviation. What does this suggest?",
+      options: [
+        'Model A is better',
+        'Model B is more stable and robust across different data splits',
+        'The models are identical',
+        "Standard deviation doesn't matter",
+      ],
+      correctAnswer: 1,
+      explanation:
+        'Lower standard deviation across CV folds indicates the model performs consistently regardless of the specific train-test split. This suggests better generalization and more reliable performance. Stability is valuable in production where data distribution may vary.',
+      difficulty: 'advanced' as const,
+      category: 'Evaluation',
+    },
+    {
+      id: 5,
+      question:
+        'When comparing models with statistical significance testing, what does a p-value < 0.05 mean?',
+      options: [
+        'The first model is 5% better',
+        'The difference in performance is statistically significant, unlikely due to random chance',
+        'The second model is definitely worse',
+        'You should always choose the first model',
+      ],
+      correctAnswer: 1,
+      explanation:
+        "P-value < 0.05 means there's less than 5% probability the observed difference occurred by random chance. The performance difference is statistically significant. However, still consider practical significance (is the difference large enough to matter?) and other factors (speed, interpretability).",
+      difficulty: 'intermediate' as const,
+      category: 'Statistics',
+    },
+  ],
+};

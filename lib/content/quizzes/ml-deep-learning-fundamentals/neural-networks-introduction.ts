@@ -277,9 +277,9 @@ class TradingNeuralNetwork:
     def create_features(self, data, lookback=20):
         # Only use past information
         features = {
-            'returns': data['close'].pct_change(lookback),
-            'volatility': data['returns'].rolling(lookback).std(),
-            'rsi': calculate_rsi(data['close']),
+            'returns': data['close',].pct_change(lookback),
+            'volatility': data['returns',].rolling(lookback).std(),
+            'rsi': calculate_rsi(data['close',]),
             # etc.
         }
         return features
@@ -299,7 +299,7 @@ class TradingNeuralNetwork:
     
     def evaluate_sharpe(self, model, data):
         predictions = model.predict(data)
-        returns = predictions * data['forward_returns']
+        returns = predictions * data['forward_returns',]
         return np.mean(returns) / np.std(returns) * np.sqrt(252)
 \`\`\`
 

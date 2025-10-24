@@ -107,10 +107,10 @@ class DatabaseConnectionManager:
     
     def _create_write_pool(self):
         return ConnectionPool(
-            host=os.environ['PRIMARY_DB_HOST'],
-            database=os.environ['DB_NAME'],
-            user=os.environ['DB_USER'],
-            password=os.environ['DB_PASSWORD'],
+            host=os.environ['PRIMARY_DB_HOST',],
+            database=os.environ['DB_NAME',],
+            user=os.environ['DB_USER',],
+            password=os.environ['DB_PASSWORD',],
             minconn=5,
             maxconn=20,
             timeout=10,
@@ -120,13 +120,13 @@ class DatabaseConnectionManager:
         )
     
     def _create_read_pools(self):
-        replica_hosts = os.environ['REPLICA_DB_HOSTS'].split(',')
+        replica_hosts = os.environ['REPLICA_DB_HOSTS',].split(',')
         return [
             ConnectionPool(
                 host=host,
-                database=os.environ['DB_NAME'],
-                user=os.environ['DB_USER'],
-                password=os.environ['DB_PASSWORD'],
+                database=os.environ['DB_NAME',],
+                user=os.environ['DB_USER',],
+                password=os.environ['DB_PASSWORD',],
                 minconn=10,
                 maxconn=50,
                 timeout=5,
@@ -268,7 +268,7 @@ def create_order(user_id, items):
             cursor.execute("""
                 INSERT INTO order_items (order_id, product_id, quantity, price)
                 VALUES (%s, %s, %s, %s)
-            """, (order_id, item['product_id'], item['quantity'], item['price']))
+            """, (order_id, item['product_id',], item['quantity',], item['price',]))
         
         return order_id
 
@@ -319,7 +319,7 @@ def collect_pool_metrics():
         metrics.update(read_metrics.get_metrics())
     
     # Failed replicas
-    metrics['failed_replicas_count'] = len(db_manager.failed_replicas)
+    metrics['failed_replicas_count',] = len(db_manager.failed_replicas)
     
     return metrics
 
@@ -333,15 +333,15 @@ def check_alerts():
     metrics = collect_pool_metrics()
     
     # Write pool exhaustion
-    if metrics['write_pool_idle_connections'] == 0:
+    if metrics['write_pool_idle_connections',] == 0:
         alert("CRITICAL: Write pool exhausted!")
     
     # High wait times
-    if metrics['write_pool_avg_wait_time_ms'] > 100:
+    if metrics['write_pool_avg_wait_time_ms',] > 100:
         alert("WARNING: High write pool wait time")
     
     # All replicas failed
-    if metrics['failed_replicas_count'] == len(db_manager.read_pools):
+    if metrics['failed_replicas_count',] == len(db_manager.read_pools):
         alert("CRITICAL: All read replicas failed!")
 \`\`\`
 
@@ -529,7 +529,7 @@ class LeakDetectionPool:
             # Track where connection was acquired
             self.active_connections[id(conn)] = {
                 'acquired_at': time.time(),
-                'stack_trace': ''.join(traceback.format_stack()),
+                'stack_trace': '.join(traceback.format_stack()),
                 'thread': threading.current_thread().name
             }
         
@@ -548,13 +548,13 @@ class LeakDetectionPool:
             current_time = time.time()
             
             for conn_id, info in self.active_connections.items():
-                age = current_time - info['acquired_at']
+                age = current_time - info['acquired_at',]
                 
                 if age > 60:  # Connection held > 60 seconds
                     logger.error(f"Connection leak detected!")
                     logger.error(f"Age: {age:.2f}s")
-                    logger.error(f"Thread: {info['thread']}")
-                    logger.error(f"Stack trace:\\n{info['stack_trace']}")
+                    logger.error(f"Thread: {info['thread',]}")
+                    logger.error(f"Stack trace:\\n{info['stack_trace',]}")
                     
                     metrics.increment('db.connection.leak_detected')
 \`\`\`

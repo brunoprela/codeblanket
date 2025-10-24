@@ -196,7 +196,7 @@ filtered = list(filter(None, values))
 print(filtered)  # [1, 3, 5]
 
 # Filter empty strings
-strings = ['hello', '', 'world', '', 'python']
+strings = ['hello', ', 'world', ', 'python']
 non_empty = list(filter(len, strings))
 print(non_empty)  # ['hello', 'world', 'python']
 \`\`\`
@@ -311,7 +311,7 @@ print(reversed_nums)  # [5, 4, 3, 2, 1]
 
 # With strings
 word = 'hello'
-backwards = ''.join(reversed(word))
+backwards = '.join(reversed(word))
 print(backwards)  # 'olleh'
 \`\`\`
 

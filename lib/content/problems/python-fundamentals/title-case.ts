@@ -89,7 +89,7 @@ This problem tests:
         else:
             result.append(char.lower())
     
-    return ''.join(result)
+    return '.join(result)
 
 # Alternative using enumerate
 def to_title_case_alt(s):
@@ -104,7 +104,7 @@ def to_title_case_alt(s):
         if result[i-1] == ' ' and result[i] != ' ':
             result[i] = result[i].upper()
     
-    return ''.join(result)`,
+    return '.join(result)`,
   timeComplexity: 'O(n)',
   spaceComplexity: 'O(n)',
   order: 30,

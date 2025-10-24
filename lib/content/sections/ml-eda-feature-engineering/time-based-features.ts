@@ -279,7 +279,7 @@ def create_time_since_features(df, date_col):
     
     for campaign_date in campaign_dates:
         plt.axvline(campaign_date, color='r', linestyle='--', alpha=0.7, 
-                   label='Campaign' if campaign_date == campaign_dates[0] else '')
+                   label='Campaign' if campaign_date == campaign_dates[0] else ')
     
     plt.xlabel('Date')
     plt.ylabel('Sales')

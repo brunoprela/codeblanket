@@ -513,8 +513,8 @@ interface GenerationParams {
 
 const ImageGenerator: React.FC = () => {
   const [params, setParams] = useState<GenerationParams>({
-    prompt: '',
-    negativePrompt: '',
+    prompt: ',
+    negativePrompt: ',
     model: 'sd21',
     width: 512,
     height: 512,

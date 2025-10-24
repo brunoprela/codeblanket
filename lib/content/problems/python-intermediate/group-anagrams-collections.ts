@@ -82,7 +82,7 @@ def group_anagrams(strs):
     for word in strs:
         # Sort characters to create key
         # Anagrams will have same sorted key
-        key = ''.join(sorted(word))
+        key = '.join(sorted(word))
         anagram_groups[key].append(word)
     
     return list(anagram_groups.values())

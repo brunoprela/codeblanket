@@ -33,17 +33,17 @@ def generate_unified_diff(old_text: str, new_text: str):
         new_lines,
         fromfile='old.txt',
         tofile='new.txt',
-        lineterm=''
+        lineterm='
     )
     
     return '\\n'.join(diff)
 
 # Usage - similar to how Cursor shows changes
-old_code = '''def hello():
-    print("hi")'''
+old_code = ''def hello():
+    print("hi")''
 
-new_code = '''def hello():
-    print("Hello, World!")'''
+new_code = ''def hello():
+    print("Hello, World!")''
 
 diff = generate_unified_diff(old_code, new_code)
 print(diff)

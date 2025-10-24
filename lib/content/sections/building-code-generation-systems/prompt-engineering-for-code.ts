@@ -235,7 +235,7 @@ def extract_function_signatures(code: str) -> List[str]:
             # Add docstring if present
             docstring = ast.get_docstring(node)
             if docstring:
-                signature += f"\\n    '''{docstring}'''"
+                signature += f"\\n    ''{docstring}''"
             
             signatures.append(signature)
     
@@ -281,7 +281,7 @@ def extract_type_definitions(code: str) -> str:
             # Get docstring
             docstring = ast.get_docstring(node)
             if docstring:
-                class_def += f"\\n    '''{docstring}'''"
+                class_def += f"\\n    ''{docstring}''"
             
             # Get methods (just signatures)
             for item in node.body:
@@ -531,7 +531,7 @@ def summarize_functions(code: str) -> str:
             args = [arg.arg for arg in node.args.args]
             sig = f"def {node.name}({', '.join(args)})"
             
-            functions.append(f"{sig}:\\n    '''{docstring}'''\\n    ...")
+            functions.append(f"{sig}:\\n    ''{docstring}''\\n    ...")
     
     return "\\n\\n".join(functions)
 

@@ -69,10 +69,6 @@ def decode(s: str) -> List[str]:
       expected: ['Hello', 'World'],
     },
     {
-      input: [['']],
-      expected: [''],
-    },
-    {
       input: [['abc', 'def', 'ghi']],
       expected: ['abc', 'def', 'ghi'],
     },

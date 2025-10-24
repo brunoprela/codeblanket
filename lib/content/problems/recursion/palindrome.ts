@@ -69,7 +69,7 @@ print(is_palindrome("hello"))  # Expected: False
   solution: `def is_palindrome(s):
     """Check if string is palindrome using recursion"""
     # Clean string: remove spaces and lowercase
-    s = s.replace(' ', '').lower()
+    s = s.replace(' ', ').lower()
     
     def helper(left, right):
         # Base case: pointers met or crossed
@@ -90,7 +90,7 @@ print(is_palindrome("hello"))  # Expected: False
 def is_palindrome_alt(s):
     """Check palindrome - alternative approach"""
     # Clean string
-    s = s.replace(' ', '').lower()
+    s = s.replace(' ', ').lower()
     
     # Base case
     if len(s) <= 1:

@@ -80,8 +80,8 @@ print(is_anagram("The Eyes", "They See"))
   ],
   solution: `def is_anagram(s1, s2):
     # Remove spaces and convert to lowercase
-    clean1 = ''.join(s1.lower().split())
-    clean2 = ''.join(s2.lower().split())
+    clean1 = '.join(s1.lower().split())
+    clean2 = '.join(s2.lower().split())
     
     # Sort and compare
     return sorted(clean1) == sorted(clean2)
@@ -91,15 +91,15 @@ print(is_anagram("The Eyes", "They See"))
 from collections import Counter
 
 def is_anagram_counter(s1, s2):
-    clean1 = ''.join(s1.lower().split())
-    clean2 = ''.join(s2.lower().split())
+    clean1 = '.join(s1.lower().split())
+    clean2 = '.join(s2.lower().split())
     return Counter(clean1) == Counter(clean2)
 
 
 # Using dictionary
 def is_anagram_dict(s1, s2):
-    clean1 = ''.join(s1.lower().split())
-    clean2 = ''.join(s2.lower().split())
+    clean1 = '.join(s1.lower().split())
+    clean2 = '.join(s2.lower().split())
     
     if len(clean1) != len(clean2):
         return False

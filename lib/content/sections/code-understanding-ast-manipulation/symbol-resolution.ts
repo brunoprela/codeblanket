@@ -587,7 +587,7 @@ class ImportResolver:
                     self.modules.add(alias.name)
             
             elif isinstance(node, ast.ImportFrom):
-                module = node.module or ''
+                module = node.module or '
                 for alias in node.names:
                     symbol_name = alias.asname if alias.asname else alias.name
                     self.imports[symbol_name] = ImportedSymbol(

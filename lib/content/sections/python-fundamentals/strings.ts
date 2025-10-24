@@ -13,9 +13,9 @@ export const stringsSection = {
 # Creating strings
 single = 'Hello'
 double = "World"
-triple = '''Multi
+triple = ''Multi
 line
-string'''
+string''
 
 # Escape characters
 quote = "He said \\"Hello\\""

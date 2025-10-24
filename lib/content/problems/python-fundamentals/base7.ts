@@ -82,7 +82,7 @@ print(convert_to_base7(100))
         result.append(str(num % 7))
         num //= 7
     
-    base7 = ''.join(reversed(result))
+    base7 = '.join(reversed(result))
     return '-' + base7 if negative else base7`,
   timeComplexity: 'O(log n)',
   spaceComplexity: 'O(log n)',

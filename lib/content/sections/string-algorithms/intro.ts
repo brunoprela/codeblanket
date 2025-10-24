@@ -103,10 +103,10 @@ for char in "hello":
 chars = []
 for char in "hello":
     chars.append(char)
-result = ''.join(chars)  # O(n)
+result = '.join(chars)  # O(n)
 
 # Or use list comprehension
-result = ''.join([char for char in "hello"])
+result = '.join([char for char in "hello"])
 \`\`\`
 
 ## Common String Patterns
@@ -210,7 +210,7 @@ def longest_palindromic_substring_length(s):
 | Concatenation s1 + s2 | O(n+m) | O(n+m) |
 | s.find(sub) | O(n*m) | O(1) |
 | s.split() | O(n) | O(n) |
-| ''.join(list) | O(n) | O(n) |
+| '.join(list) | O(n) | O(n) |
 | s.replace(old, new) | O(n) | O(n) |
 
 ## Common Mistakes to Avoid
@@ -223,7 +223,7 @@ def longest_palindromic_substring_length(s):
        result += c
    
    # ✅ O(n)
-   result = ''.join([c for c in string])
+   result = '.join([c for c in string])
    \`\`\`
 
 2. **Not considering edge cases**

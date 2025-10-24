@@ -24,6 +24,6 @@ export const appliedAiTopic = {
     'applied-ai-scaling',
     'applied-ai-safety',
     'applied-ai-complete-products',
-    'applied-ai-evaluation-finetuning',
+    'applied-ai-evaluation-dataops-finetuning',
   ],
 };

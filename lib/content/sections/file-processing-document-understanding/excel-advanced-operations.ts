@@ -144,7 +144,7 @@ class FormulaGenerator:
     def concat_formula(cells: List[str], delimiter: str = "") -> str:
         """Generate concatenation formula."""
         if delimiter:
-            parts = [f'"{delimiter}"' if i > 0 else '' for i in range(len(cells))]
+            parts = [f'"{delimiter}"' if i > 0 else ' for i in range(len(cells))]
             combined = []
             for i, cell in enumerate(cells):
                 if i > 0:

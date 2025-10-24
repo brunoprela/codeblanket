@@ -351,7 +351,7 @@ print("User: Hello!")
 print(f"Bot: {chatbot.respond('Hello!')}")
 
 print("\\nUser: What's the weather like?")
-print(f"Bot: {chatbot.respond('What\\'s the weather like?')}")
+print(f"Bot: {chatbot.respond('What's the weather like?')}")
 
 print("\\nUser: Thanks!")
 print(f"Bot: {chatbot.respond('Thanks!')}")

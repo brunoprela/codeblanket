@@ -56,7 +56,7 @@ Guidelines:
 - Describe important details that convey meaning
 - Avoid redundant information
 
-{f'Context: This image appears in a {context}' if context else ''}
+{f'Context: This image appears in a {context}' if context else '}
 
 Provide only the alt-text, nothing else."""
 

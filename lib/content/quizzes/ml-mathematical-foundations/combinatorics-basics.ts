@@ -264,11 +264,11 @@ import pandas as pd
 
 comparison = pd.DataFrame({
     'Method': ['Exhaustive', 'Forward Selection', 'Backward Elimination', 
-               'Genetic Algorithm', 'Random Search'],
-    'Complexity': ['O(2^n)', 'O(n²)', 'O(n²)', 'O(p×g×n)', 'O(k)'],
-    'Guarantees Optimal': ['Yes', 'No', 'No', 'No', 'No'],
-    'Feasible for n=20': ['No', 'Yes', 'Yes', 'Yes', 'Yes'],
-    'Feasible for n=100': ['No', 'Maybe', 'Maybe', 'Yes', 'Yes']
+               'Genetic Algorithm', 'Random Search',],
+    'Complexity': ['O(2^n)', 'O(n²)', 'O(n²)', 'O(p×g×n)', 'O(k)',],
+    'Guarantees Optimal': ['Yes', 'No', 'No', 'No', 'No',],
+    'Feasible for n=20': ['No', 'Yes', 'Yes', 'Yes', 'Yes',],
+    'Feasible for n=100': ['No', 'Maybe', 'Maybe', 'Yes', 'Yes',]
 })
 
 print("\\nFeature Selection Methods Comparison:")
@@ -355,7 +355,7 @@ import numpy as np
 from math import factorial, perm
 
 # Transformations
-transformations = ['flip', 'rotate_90', 'rotate_180', 'rotate_270', 'no_op']
+transformations = ['flip', 'rotate_90', 'rotate_180', 'rotate_270', 'no_op',]
 n = len(transformations)
 
 print("Single transformation:")

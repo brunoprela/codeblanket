@@ -520,10 +520,10 @@ class TwoLayerNet:
         - ∂L/∂W^(1), ∂L/∂b^(1)
         """
         # Retrieve cached values
-        x = self.cache['x']
-        z1 = self.cache['z1']
-        h = self.cache['h']
-        y_pred = self.cache['y_pred']
+        x = self.cache['x',]
+        z1 = self.cache['z1',]
+        h = self.cache['h',]
+        y_pred = self.cache['y_pred',]
         
         # Gradient of loss w.r.t. output
         # ∂L/∂ŷ = 2(ŷ - y)
@@ -592,10 +592,10 @@ print(f"Loss: {loss[0]:.4f}\\n")
 gradients = net.backward(y)
 
 print("Gradients:")
-print(f"  ∂L/∂W^(2) shape: {gradients['dW2'].shape}")
-print(f"  ∂L/∂b^(2) shape: {gradients['db2'].shape}")
-print(f"  ∂L/∂W^(1) shape: {gradients['dW1'].shape}")
-print(f"  ∂L/∂b^(1) shape: {gradients['db1'].shape}")
+print(f"  ∂L/∂W^(2) shape: {gradients['dW2',].shape}")
+print(f"  ∂L/∂b^(2) shape: {gradients['db2',].shape}")
+print(f"  ∂L/∂W^(1) shape: {gradients['dW1',].shape}")
+print(f"  ∂L/∂b^(1) shape: {gradients['db1',].shape}")
 \`\`\`
 
 **Gradient Checking (Verify Implementation)**:
@@ -620,7 +620,7 @@ def numerical_gradient(net, x, y, param_name, epsilon=1e-5):
         param = net.b2
     
     numerical_grad = np.zeros_like(param)
-    it = np.nditer(param, flags=['multi_index'], op_flags=['readwrite'])
+    it = np.nditer(param, flags=['multi_index',], op_flags=['readwrite',])
     
     while not it.finished:
         idx = it.multi_index
@@ -653,8 +653,8 @@ y_pred = net.forward(x)
 gradients = net.backward(y)
 
 # Check each parameter
-for param_name in ['W1', 'b1', 'W2', 'b2']:
-    analytical_grad = gradients[f'd{param_name}']
+for param_name in ['W1', 'b1', 'W2', 'b2',]:
+    analytical_grad = gradients[f'd{param_name}',]
     numerical_grad = numerical_gradient(net, x, y, param_name)
     
     # Compute relative error

@@ -101,7 +101,7 @@ for fold, (train_idx, val_idx) in enumerate(kfold.split(X), 1):
     for idx in val_idx:
         indicator[idx] = 'V'
     # Show pattern for first 50 samples
-    print(''.join(indicator[:50]))
+    print('.join(indicator[:50]))
 
 print("\\nEach sample appears in validation exactly once!")
 print("Each sample appears in training K-1 times!")
@@ -354,7 +354,7 @@ for fold, (train_idx, test_idx) in enumerate(tscv.split(ts_data), 1):
 fig, axes = plt.subplots(5, 1, figsize=(12, 10))
 for fold, (train_idx, test_idx) in enumerate(tscv.split(ts_data)):
     # Create indicator array
-    indicator = np.array([''] * len(ts_data), dtype=object)
+    indicator = np.array(['] * len(ts_data), dtype=object)
     indicator[train_idx] = 'Train'
     indicator[test_idx] = 'Test'
     

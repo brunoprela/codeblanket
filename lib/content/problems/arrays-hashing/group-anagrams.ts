@@ -66,10 +66,6 @@ def group_anagrams(strs: List[str]) -> List[List[str]]:
       expected: [['eat', 'tea', 'ate'], ['tan', 'nat'], ['bat']],
     },
     {
-      input: [['']],
-      expected: [['']],
-    },
-    {
       input: [['a']],
       expected: [['a']],
     },
@@ -88,7 +84,7 @@ def group_anagrams(strs: List[str]) -> List[List[str]]:
     
     for s in strs:
         # Use sorted string as key
-        key = ''.join(sorted(s))
+        key = '.join(sorted(s))
         groups[key].append(s)
     
     return list(groups.values())

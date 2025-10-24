@@ -193,7 +193,7 @@ generator = TestGenerator()
 
 function_code = """
 def calculate_average(numbers: List[float]) -> float:
-    '''Calculate the average of a list of numbers.'''
+    ''Calculate the average of a list of numbers.''
     if not numbers:
         raise ValueError("Cannot calculate average of empty list")
     return sum(numbers) / len(numbers)
@@ -212,22 +212,22 @@ print(tests)
 # from typing import List
 #
 # def test_calculate_average_normal_case():
-#     '''Test average with normal positive numbers.'''
+#     ''Test average with normal positive numbers.''
 #     result = calculate_average([1.0, 2.0, 3.0])
 #     assert result == 2.0
 #
 # def test_calculate_average_single_number():
-#     '''Test average with single number.'''
+#     ''Test average with single number.''
 #     result = calculate_average([5.0])
 #     assert result == 5.0
 #
 # def test_calculate_average_negative_numbers():
-#     '''Test average with negative numbers.'''
+#     ''Test average with negative numbers.''
 #     result = calculate_average([-1.0, -2.0, -3.0])
 #     assert result == -2.0
 #
 # def test_calculate_average_empty_list_raises_error():
-#     '''Test that empty list raises ValueError.'''
+#     ''Test that empty list raises ValueError.''
 #     with pytest.raises(ValueError, match="Cannot calculate average"):
 #         calculate_average([])
 \`\`\`
@@ -337,8 +337,8 @@ case_gen = TestCaseGenerator()
 
 function_code = """
 def is_palindrome(text: str) -> bool:
-    '''Check if text is a palindrome.'''
-    cleaned = ''.join(c.lower() for c in text if c.isalnum())
+    ''Check if text is a palindrome.''
+    cleaned = '.join(c.lower() for c in text if c.isalnum())
     return cleaned == cleaned[::-1]
 """
 
@@ -448,7 +448,7 @@ mock_gen = MockGenerator()
 
 function_code = """
 def process_payment(payment_gateway, amount: float, card_token: str):
-    '''Process a payment through gateway.'''
+    ''Process a payment through gateway.''
     if amount <= 0:
         raise ValueError("Amount must be positive")
     

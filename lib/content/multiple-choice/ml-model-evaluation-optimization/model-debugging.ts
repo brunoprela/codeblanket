@@ -1,74 +1,85 @@
-import { MultipleChoiceQuestion } from '../../../types';
-
-export const modelDebuggingMultipleChoice: MultipleChoiceQuestion[] = [
-  {
-    id: 'model-debugging-mc-1',
-    question:
-      'Your model has 98% training accuracy and 72% test accuracy. What is the primary issue?',
-    options: [
-      'High bias (underfitting)',
-      'High variance (overfitting)',
-      'Perfect fit',
-      'Data leakage',
-    ],
-    correctAnswer: 1,
-    explanation:
-      'The large gap (26%) between training (98%) and test (72%) accuracy indicates high variance (overfitting). The model has memorized the training data rather than learning generalizable patterns. Solutions: add regularization, get more data, or reduce model complexity.',
-  },
-  {
-    id: 'model-debugging-mc-2',
-    question:
-      'What should you do FIRST when debugging a model that performs worse than a baseline that always predicts the majority class?',
-    options: [
-      'Increase model complexity',
-      'Get more training data',
-      'Check the class distribution and use appropriate metrics',
-      'Add more features',
-    ],
-    correctAnswer: 2,
-    explanation:
-      "When a model performs worse than majority-class baseline, first check if class imbalance makes accuracy misleading. With 90% majority class, always predicting it gives 90% accuracy. Your model might actually be learning patterns but accuracy doesn't show it. Use precision, recall, F1, and AUC instead.",
-  },
-  {
-    id: 'model-debugging-mc-3',
-    question:
-      'Your model has AUC=0.90 offline but AUC=0.70 in production. What is the most likely cause?',
-    options: [
-      'The model is perfect',
-      'Data distribution shift or data leakage in training',
-      'The model is underfitting',
-      'You need more training data',
-    ],
-    correctAnswer: 1,
-    explanation:
-      'A large gap between offline (0.90) and online (0.70) performance indicates either: (1) data leakage in training (used future information), or (2) distribution shift (production data differs from training data). Use temporal validation and check for leakage.',
-  },
-  {
-    id: 'model-debugging-mc-4',
-    question:
-      'Learning curves show both training and validation errors plateau at high values with a small gap. What does this indicate?',
-    options: [
-      'High variance - model is overfitting',
-      'High bias - model is underfitting',
-      'Perfect fit - model is optimal',
-      'Need different evaluation metric',
-    ],
-    correctAnswer: 1,
-    explanation:
-      "When both curves plateau at high error with a small gap, the model has high bias (underfitting). The model has reached its representational limit—adding more data won't help. You need to increase model complexity or add better features.",
-  },
-  {
-    id: 'model-debugging-mc-5',
-    question:
-      'Which visualization is MOST useful for diagnosing bias vs variance?',
-    options: [
-      'Confusion matrix',
-      'ROC curve',
-      'Learning curves (training and validation scores vs dataset size)',
-      'Feature importance plot',
-    ],
-    correctAnswer: 2,
-    explanation:
-      "Learning curves are the best tool for diagnosing bias vs variance. They show: (1) if both curves plateau high = high bias, (2) if large gap = high variance, (3) if validation curve still rising = more data would help. Other visualizations are useful but don't specifically diagnose bias/variance.",
-  },
-];
+export const modelDebuggingMultipleChoice = {
+  title: 'Model Debugging - Multiple Choice Questions',
+  questions: [
+    {
+      id: 1,
+      question:
+        'Your model achieves 98% training accuracy but 65% test accuracy. What is the most likely cause?',
+      options: [
+        'The test set is corrupted',
+        'The model is overfitting to the training data',
+        'The model is underfitting',
+        'This is normal and expected',
+      ],
+      correctAnswer: 1,
+      explanation:
+        "Large gap between training (98%) and test (65%) performance is a classic sign of overfitting. The model has memorized training data specifics that don't generalize. Solutions: reduce complexity, add regularization, get more data, or improve feature engineering.",
+      difficulty: 'beginner' as const,
+      category: 'Diagnosis',
+    },
+    {
+      id: 2,
+      question:
+        'What is the most common cause of unexpectedly poor model performance in production?',
+      options: [
+        'The algorithm is wrong',
+        'Data leakage or preprocessing done incorrectly',
+        'The model is too simple',
+        'The computer is too slow',
+      ],
+      correctAnswer: 1,
+      explanation:
+        'Data leakage (using test data in training or having target information in features) is the most common cause of the train-test performance gap. Other common issues: preprocessing fitted on all data, temporal data not split correctly, or features computed using future information.',
+      difficulty: 'intermediate' as const,
+      category: 'Production',
+    },
+    {
+      id: 3,
+      question:
+        "In a trading backtest, your strategy shows Sharpe ratio of 2.0 but loses money in live trading. What's the most likely issue?",
+      options: [
+        'Bad luck in live trading',
+        'Lookahead bias, transaction costs not modeled, or survivorship bias',
+        'The market changed overnight',
+        'The strategy is perfect, just needs more time',
+      ],
+      correctAnswer: 1,
+      explanation:
+        'Backtest-to-live degradation in trading usually comes from: (1) Lookahead bias (using future data), (2) Ignoring transaction costs and slippage, (3) Survivorship bias (only backtesting surviving stocks), (4) Overfitting to specific historical periods, or (5) Implementation differences between backtest and live code.',
+      difficulty: 'advanced' as const,
+      category: 'Trading',
+    },
+    {
+      id: 4,
+      question:
+        'Learning curves show train and validation errors are high and close together. What action should you take?',
+      options: [
+        'Get more data',
+        "Increase model complexity - it's underfitting",
+        "Reduce model complexity - it's overfitting",
+        'The model is optimal',
+      ],
+      correctAnswer: 1,
+      explanation:
+        'High errors that are close together (small gap) indicate underfitting/high bias. The model is too simple to capture patterns. Solution: increase complexity (more features, deeper trees, more layers), reduce regularization, or try a more powerful model class.',
+      difficulty: 'intermediate' as const,
+      category: 'Learning Curves',
+    },
+    {
+      id: 5,
+      question:
+        'When debugging a model, what should you check FIRST before diving into complex analysis?',
+      options: [
+        'Hyperparameter tuning',
+        'Data quality - missing values, correct labels, distribution shifts',
+        'Try a different algorithm',
+        'Add more features',
+      ],
+      correctAnswer: 1,
+      explanation:
+        "80% of ML problems are data problems! Always check data quality first: missing values, incorrect labels, data leakage, train-test distribution match, feature preprocessing, and temporal ordering. Most 'model' problems are actually data problems in disguise.",
+      difficulty: 'beginner' as const,
+      category: 'Best Practices',
+    },
+  ],
+};

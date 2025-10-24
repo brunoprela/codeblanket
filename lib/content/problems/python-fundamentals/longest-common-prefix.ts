@@ -114,7 +114,7 @@ def longest_common_prefix_zip(strs):
         else:
             break
     
-    return ''.join(result)`,
+    return '.join(result)`,
   timeComplexity: 'O(S) where S is sum of all characters',
   spaceComplexity: 'O(1)',
   order: 29,

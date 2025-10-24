@@ -74,7 +74,7 @@ data = [
     ['Bob', 25, 'LA']
 ]
 
-with open('output.csv', 'w', newline='') as f:
+with open('output.csv', 'w', newline=') as f:
     writer = csv.writer(f)
     writer.writerows(data)
 
@@ -84,7 +84,7 @@ data = [
     {'Name': 'Bob', 'Age': 25, 'City': 'LA'}
 ]
 
-with open('output.csv', 'w', newline='') as f:
+with open('output.csv', 'w', newline=') as f:
     fieldnames = ['Name', 'Age', 'City']
     writer = csv.DictWriter(f, fieldnames=fieldnames)
     writer.writeheader()

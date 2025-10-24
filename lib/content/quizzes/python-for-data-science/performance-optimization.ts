@@ -199,16 +199,16 @@ df = pd.DataFrame({
 def process_iterrows(df):
     results = []
     for index, row in df.iterrows():
-        results.append(row['A'] * row['B'] + row['C'])
+        results.append(row['A',] * row['B',] + row['C',])
     return results
 
 # BAD: apply (better than iterrows, still slow)
 def process_apply(df):
-    return df.apply(lambda row: row['A'] * row['B'] + row['C'], axis=1)
+    return df.apply(lambda row: row['A',] * row['B',] + row['C',], axis=1)
 
 # GOOD: Vectorized
 def process_vectorized(df):
-    return df['A'] * df['B'] + df['C']
+    return df['A',] * df['B',] + df['C',]
 
 # Benchmark
 start = time.time()
@@ -237,16 +237,16 @@ print(f"vectorized: {time3:.4f}s ({time1/time3:.0f}x faster than iterrows)")
 \`\`\`python
 # Create DataFrame with text
 df = pd.DataFrame({
-    'text': ['Hello World', 'foo bar', 'Test String'] * 100_000
+    'text': ['Hello World', 'foo bar', 'Test String',] * 100_000
 })
 
 # BAD: apply with Python string methods
 def lowercase_apply(df):
-    return df['text'].apply(lambda x: x.lower())
+    return df['text',].apply(lambda x: x.lower())
 
 # GOOD: Vectorized str accessor
 def lowercase_vectorized(df):
-    return df['text'].str.lower()
+    return df['text',].str.lower()
 
 # Benchmark
 start = time.time()
@@ -275,7 +275,7 @@ def fetch_data(user_id):
     return some_data
 
 # Can't vectorize this - must use apply
-df['api_data'] = df['user_id'].apply(fetch_data)
+df['api_data',] = df['user_id',].apply(fetch_data)
 
 # But you can still optimize:
 # 1. Batch API calls
@@ -335,7 +335,7 @@ n = 1_000_000
 df = pd.DataFrame({
     'id': range(n),
     'value': np.random.randn(n),
-    'category': np.random.choice(['A', 'B', 'C'], n),
+    'category': np.random.choice(['A', 'B', 'C',], n),
     'date': pd.date_range('2020-01-01', periods=n, freq='1min'),
     'flag': np.random.choice([True, False], n)
 })
@@ -374,16 +374,16 @@ df = pd.DataFrame({
     'age': np.random.randint(0, 120, 1_000_000)
 })
 
-print(f"int64: {df['age'].memory_usage() / 1024**2:.2f} MB")
+print(f"int64: {df['age',].memory_usage() / 1024**2:.2f} MB")
 # 7.63 MB
 
 # Optimize: Age fits in int8 (0-127)
-df['age'] = df['age'].astype(np.int8)
-print(f"int8: {df['age'].memory_usage() / 1024**2:.2f} MB")
+df['age',] = df['age',].astype(np.int8)
+print(f"int8: {df['age',].memory_usage() / 1024**2:.2f} MB")
 # 0.95 MB (8x reduction!)
 
 # Automatic downcasting
-df['age'] = pd.to_numeric(df['age'], downcast='integer')
+df['age',] = pd.to_numeric(df['age',], downcast='integer')
 # Automatically chooses smallest int type that fits
 \`\`\`
 
@@ -394,12 +394,12 @@ df = pd.DataFrame({
     'price': np.random.uniform(0, 1000, 1_000_000)
 })
 
-print(f"float64: {df['price'].memory_usage() / 1024**2:.2f} MB")
+print(f"float64: {df['price',].memory_usage() / 1024**2:.2f} MB")
 # 7.63 MB
 
 # If you don't need full precision
-df['price'] = df['price'].astype(np.float32)
-print(f"float32: {df['price'].memory_usage() / 1024**2:.2f} MB")
+df['price',] = df['price',].astype(np.float32)
+print(f"float32: {df['price',].memory_usage() / 1024**2:.2f} MB")
 # 3.81 MB (2x reduction)
 
 # Be careful with float16 (limited range and precision)
@@ -413,27 +413,27 @@ This is often the biggest win:
 \`\`\`python
 # Example: Country column
 n = 1_000_000
-countries = ['USA', 'UK', 'Canada', 'Australia', 'Germany']
+countries = ['USA', 'UK', 'Canada', 'Australia', 'Germany',]
 
 df = pd.DataFrame({
     'country': np.random.choice(countries, n)
 })
 
 # As object (default for strings)
-print(f"Object dtype: {df['country'].memory_usage(deep=True) / 1024**2:.2f} MB")
+print(f"Object dtype: {df['country',].memory_usage(deep=True) / 1024**2:.2f} MB")
 # 57.22 MB
 
 # Convert to categorical
-df['country'] = df['country'].astype('category')
-print(f"Categorical: {df['country'].memory_usage(deep=True) / 1024**2:.2f} MB")
+df['country',] = df['country',].astype('category')
+print(f"Categorical: {df['country',].memory_usage(deep=True) / 1024**2:.2f} MB")
 # 0.96 MB (60x reduction!)
 
 # Why? Categorical stores unique values once
-print(df['country'].cat.categories)
-# Index(['Australia', 'Canada', 'Germany', 'UK', 'USA'], dtype='object')
+print(df['country',].cat.categories)
+# Index(['Australia', 'Canada', 'Germany', 'UK', 'USA',], dtype='object')
 
 # Then uses integer codes
-print(df['country'].cat.codes[:10])
+print(df['country',].cat.codes[:10])
 # 0, 2, 1, 4, 3, 0, 1, 2, 4, 0
 # These integers are tiny compared to storing strings
 \`\`\`
@@ -455,17 +455,17 @@ def should_be_categorical(series, threshold=0.5):
 
 # Example
 df = pd.DataFrame({
-    'country': np.random.choice(['USA', 'UK', 'CA'], 1_000_000),  # Low
+    'country': np.random.choice(['USA', 'UK', 'CA',], 1_000_000),  # Low
     'user_id': range(1_000_000)  # High (all unique)
 })
 
-print(f"country cardinality: {df['country'].nunique() / len(df):.2%}")
-print(f"Should be categorical: {should_be_categorical(df['country'])}")
+print(f"country cardinality: {df['country',].nunique() / len(df):.2%}")
+print(f"Should be categorical: {should_be_categorical(df['country',])}")
 # country cardinality: 0.00%
 # Should be categorical: True
 
-print(f"\\nuser_id cardinality: {df['user_id'].nunique() / len(df):.2%}")
-print(f"Should be categorical: {should_be_categorical(df['user_id'])}")
+print(f"\\nuser_id cardinality: {df['user_id',].nunique() / len(df):.2%}")
+print(f"Should be categorical: {should_be_categorical(df['user_id',])}")
 # user_id cardinality: 100.00%
 # Should be categorical: False (would use MORE memory!)
 \`\`\`
@@ -481,22 +481,22 @@ df = pd.DataFrame({
     'value': np.random.choice([0, 0, 0, 0, 0, 1, 2, 3], n)  # 62.5% zeros
 })
 
-print(f"Dense: {df['value'].memory_usage() / 1024**2:.2f} MB")
+print(f"Dense: {df['value',].memory_usage() / 1024**2:.2f} MB")
 # 0.76 MB
 
 # Convert to sparse
-df['value_sparse'] = df['value'].astype(pd.SparseDtype(int, fill_value=0))
-print(f"Sparse: {df['value_sparse'].memory_usage(deep=True) / 1024**2:.2f} MB")
+df['value_sparse',] = df['value',].astype(pd.SparseDtype(int, fill_value=0))
+print(f"Sparse: {df['value_sparse',].memory_usage(deep=True) / 1024**2:.2f} MB")
 # 0.29 MB (2.6x reduction)
 
 # More zeros = bigger savings
 df2 = pd.DataFrame({
     'value': np.random.choice([0] * 99 + [1], n)  # 99% zeros
 })
-df2['value_sparse'] = df2['value'].astype(pd.SparseDtype(int, fill_value=0))
+df2['value_sparse',] = df2['value',].astype(pd.SparseDtype(int, fill_value=0))
 print(f"\\n99% zeros:")
-print(f"Dense: {df2['value'].memory_usage() / 1024**2:.2f} MB")
-print(f"Sparse: {df2['value_sparse'].memory_usage(deep=True) / 1024**2:.2f} MB")
+print(f"Dense: {df2['value',].memory_usage() / 1024**2:.2f} MB")
+print(f"Sparse: {df2['value_sparse',].memory_usage(deep=True) / 1024**2:.2f} MB")
 # Dense: 0.76 MB
 # Sparse: 0.01 MB (76x reduction!)
 \`\`\`
@@ -515,7 +515,7 @@ results = []
 
 for chunk in pd.read_csv('huge_file.csv', chunksize=chunk_size):
     # Process chunk
-    processed = chunk[chunk['value'] > 0]
+    processed = chunk[chunk['value',] > 0]
     results.append(processed)
 
 # Combine results
@@ -525,7 +525,7 @@ df = pd.concat(results, ignore_index=True)
 totals = {}
 for chunk in pd.read_csv('huge_file.csv', chunksize=chunk_size):
     for category, group in chunk.groupby('category'):
-        totals[category] = totals.get(category, 0) + group['value'].sum()
+        totals[category] = totals.get(category, 0) + group['value',].sum()
 
 print(totals)
 \`\`\`
@@ -538,7 +538,7 @@ print(totals)
 df = pd.read_csv('data.csv')  # All 50 columns
 
 # GOOD: Load only what you need
-df = pd.read_csv('data.csv', usecols=['id', 'value', 'date'])
+df = pd.read_csv('data.csv', usecols=['id', 'value', 'date',])
 # 94% memory reduction if you only need 3 of 50 columns!
 \`\`\`
 
@@ -566,11 +566,11 @@ def optimize_dataframe(df):
         col_type = df[col].dtype
         
         # Optimize integers
-        if col_type in ['int64', 'int32']:
+        if col_type in ['int64', 'int32',]:
             df[col] = pd.to_numeric(df[col], downcast='integer')
         
         # Optimize floats
-        elif col_type in ['float64']:
+        elif col_type in ['float64',]:
             df[col] = pd.to_numeric(df[col], downcast='float')
         
         # Optimize objects (strings)
@@ -599,8 +599,8 @@ df = pd.DataFrame({
     'product_id': np.random.randint(1, 1000, n),
     'quantity': np.random.randint(1, 10, n),
     'price': np.random.uniform(10, 1000, n),
-    'category': np.random.choice(['A', 'B', 'C', 'D'], n),
-    'country': np.random.choice(['USA', 'UK', 'CA', 'AU'], n)
+    'category': np.random.choice(['A', 'B', 'C', 'D',], n),
+    'country': np.random.choice(['USA', 'UK', 'CA', 'AU',], n)
 })
 
 df_optimized = optimize_dataframe(df.copy())
@@ -699,35 +699,35 @@ df = pd.DataFrame({
 def method_iterrows(df):
     results = []
     for idx, row in df.iterrows():
-        z = np.sqrt(row['x']**2 + row['y']**2)
+        z = np.sqrt(row['x',]**2 + row['y',]**2)
         results.append(z)
     return results
 
 # Method 2: apply with Python function
 def calc_distance_python(row):
-    return (row['x']**2 + row['y']**2)**0.5
+    return (row['x',]**2 + row['y',]**2)**0.5
 
 def method_apply_python(df):
     return df.apply(calc_distance_python, axis=1)
 
 # Method 3: apply with NumPy function
 def calc_distance_numpy(row):
-    return np.sqrt(row['x']**2 + row['y']**2)
+    return np.sqrt(row['x',]**2 + row['y',]**2)
 
 def method_apply_numpy(df):
     return df.apply(calc_distance_numpy, axis=1)
 
 # Method 4: Vectorized Pandas
 def method_vectorized_pandas(df):
-    return (df['x']**2 + df['y']**2)**0.5
+    return (df['x',]**2 + df['y',]**2)**0.5
 
 # Method 5: NumPy directly
 def method_numpy_direct(df):
-    return np.sqrt(df['x'].values**2 + df['y'].values**2)
+    return np.sqrt(df['x',].values**2 + df['y',].values**2)
 
 # Method 6: NumPy hypot (optimized)
 def method_numpy_hypot(df):
-    return np.hypot(df['x'].values, df['y'].values)
+    return np.hypot(df['x',].values, df['y',].values)
 
 # Benchmark all methods
 methods = [
@@ -756,7 +756,7 @@ for name, func in methods:
     print(f"{name:20s}: {elapsed:.4f}s")
 
 # Compare speedups
-baseline = results['iterrows']
+baseline = results['iterrows',]
 print("\\nSpeedup vs iterrows:")
 for name, elapsed in results.items():
     speedup = baseline / elapsed
@@ -798,8 +798,8 @@ def process_with_api(df):
     results = []
     for idx, row in df.iterrows():
         # Call external API (can't vectorize)
-        response = external_api.get(row['user_id'])
-        results.append(response['data'])
+        response = external_api.get(row['user_id',])
+        results.append(response['data',])
     return results
 
 # Even better: Batch API calls
@@ -808,7 +808,7 @@ def process_with_api_batched(df, batch_size=100):
     for i in range(0, len(df), batch_size):
         batch = df.iloc[i:i+batch_size]
         # Call API with batch
-        responses = external_api.batch_get(batch['user_id'].tolist())
+        responses = external_api.batch_get(batch['user_id',].tolist())
         results.extend(responses)
     return results
 \`\`\`
@@ -824,24 +824,24 @@ def process_with_api_batched(df, batch_size=100):
 # Example: Complex business logic
 def calculate_discount(row):
     """Complex discount logic"""
-    if row['is_premium'] and row['purchase_count'] > 10:
+    if row['is_premium',] and row['purchase_count',] > 10:
         discount = 0.20
-    elif row['is_premium']:
+    elif row['is_premium',]:
         discount = 0.10
-    elif row['purchase_count'] > 20:
+    elif row['purchase_count',] > 20:
         discount = 0.15
-    elif row['total_spent'] > 1000:
+    elif row['total_spent',] > 1000:
         discount = 0.12
     else:
         discount = 0.05
     
     # Additional complex logic
-    if row['last_purchase_days'] < 30:
+    if row['last_purchase_days',] < 30:
         discount += 0.05
     
     return min(discount, 0.30)  # Cap at 30%
 
-df['discount'] = df.apply(calculate_discount, axis=1)
+df['discount',] = df.apply(calculate_discount, axis=1)
 
 # This is readable and maintainable
 # Once it works, you can vectorize if needed
@@ -877,21 +877,21 @@ df_normalized = df.div(np.linalg.norm(df, axis=1), axis=0)
 
 \`\`\`python
 # Examples
-df['total'] = df['price'] * df['quantity']
-df['profit'] = df['revenue'] - df['cost']
-df['normalized'] = (df['value'] - df['value'].mean()) / df['value'].std()
+df['total',] = df['price',] * df['quantity',]
+df['profit',] = df['revenue',] - df['cost',]
+df['normalized',] = (df['value',] - df['value',].mean()) / df['value',].std()
 
 # Conditional logic
-df['category'] = np.where(df['value'] > 100, 'high',
-                 np.where(df['value'] > 50, 'medium', 'low'))
+df['category',] = np.where(df['value',] > 100, 'high',
+                 np.where(df['value',] > 50, 'medium', 'low'))
 
 # String operations
-df['upper'] = df['text'].str.upper()
-df['contains'] = df['text'].str.contains('keyword')
+df['upper',] = df['text',].str.upper()
+df['contains',] = df['text',].str.contains('keyword')
 
 # Date operations
-df['year'] = df['date'].dt.year
-df['month'] = df['date'].dt.month
+df['year',] = df['date',].dt.year
+df['month',] = df['date',].dt.month
 \`\`\`
 
 **5. NumPy directly**
@@ -904,17 +904,17 @@ df['month'] = df['date'].dt.month
 
 \`\`\`python
 # Extract values, compute with NumPy
-x = df['x'].values
-y = df['y'].values
+x = df['x',].values
+y = df['y',].values
 
 # NumPy operations
 z = np.sqrt(x**2 + y**2)
 
 # Put back in DataFrame
-df['z'] = z
+df['z',] = z
 
 # Or: Matrix operations
-matrix = df[['col1', 'col2', 'col3']].values
+matrix = df[['col1', 'col2', 'col3',]].values
 result = np.dot(matrix, weights)
 \`\`\`
 
@@ -934,7 +934,7 @@ result = np.dot(matrix, weights)
 Need to process DataFrame?
 │
 ├─ Can it be expressed as column operations?
-│  └─ YES → Use vectorized Pandas (df['a'] + df['b'])
+│  └─ YES → Use vectorized Pandas (df['a',] + df['b',])
 │
 ├─ Is it pure numerical computation?
 │  └─ YES → Use NumPy directly (.values then np operations)
@@ -957,27 +957,27 @@ Need to process DataFrame?
 \`\`\`python
 # ORIGINAL: Slow (apply with Python)
 def calculate_score(row):
-    base = row['metric1'] * 0.3 + row['metric2'] * 0.5 + row['metric3'] * 0.2
-    if row['is_premium']:
+    base = row['metric1',] * 0.3 + row['metric2',] * 0.5 + row['metric3',] * 0.2
+    if row['is_premium',]:
         base *= 1.5
-    if row['tenure_years'] > 5:
+    if row['tenure_years',] > 5:
         base *= 1.2
     return min(base, 100)
 
-df['score'] = df.apply(calculate_score, axis=1)
+df['score',] = df.apply(calculate_score, axis=1)
 
 # REFACTORED: Fast (vectorized)
 # Step 1: Calculate base vectorized
-df['score'] = (df['metric1'] * 0.3 + 
-               df['metric2'] * 0.5 + 
-               df['metric3'] * 0.2)
+df['score',] = (df['metric1',] * 0.3 + 
+               df['metric2',] * 0.5 + 
+               df['metric3',] * 0.2)
 
 # Step 2: Apply multipliers vectorized
-df.loc[df['is_premium'], 'score'] *= 1.5
-df.loc[df['tenure_years'] > 5, 'score'] *= 1.2
+df.loc[df['is_premium',], 'score',] *= 1.5
+df.loc[df['tenure_years',] > 5, 'score',] *= 1.2
 
 # Step 3: Cap at 100 vectorized
-df['score'] = df['score'].clip(upper=100)
+df['score',] = df['score',].clip(upper=100)
 
 # 100-1000x faster!
 \`\`\`
@@ -1003,12 +1003,12 @@ def complex_calculation(x, y, z):
     return result
 
 # Extract arrays
-x = df['x'].values
-y = df['y'].values
-z = df['z'].values
+x = df['x',].values
+y = df['y',].values
+z = df['z',].values
 
 # Call JIT-compiled function
-df['result'] = complex_calculation(x, y, z)
+df['result',] = complex_calculation(x, y, z)
 
 # First call is slow (compilation)
 # Subsequent calls are fast (compiled to machine code)

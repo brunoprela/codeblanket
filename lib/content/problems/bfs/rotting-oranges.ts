@@ -35,10 +35,10 @@ This is multi-source BFS where rot spreads simultaneously from all sources. Proc
       input: 'grid = [[2,1,1],[1,1,0],[0,1,1]]',
       output: '4',
       explanation:
-        'Minute 0: [[2,1,1],[1,1,0],[0,1,1]]\n' +
-        'Minute 1: [[2,2,1],[2,1,0],[0,1,1]]\n' +
-        'Minute 2: [[2,2,2],[2,2,0],[0,1,1]]\n' +
-        'Minute 3: [[2,2,2],[2,2,0],[0,2,1]]\n' +
+        'Minute 0: [[2,1,1],[1,1,0],[0,1,1]]\\n' +
+        'Minute 1: [[2,2,1],[2,1,0],[0,1,1]]\\n' +
+        'Minute 2: [[2,2,2],[2,2,0],[0,1,1]]\\n' +
+        'Minute 3: [[2,2,2],[2,2,0],[0,2,1]]\\n' +
         'Minute 4: [[2,2,2],[2,2,0],[0,2,2]]',
     },
     {

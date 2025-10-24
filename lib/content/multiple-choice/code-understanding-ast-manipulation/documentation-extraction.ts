@@ -35,7 +35,7 @@ export const documentationextractionMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'cuam-documentationextraction-mc-3',
     question:
-      'How can you extract type information from docstrings?\n\ndef add(x, y):\n    """Add two numbers.\n    \n    Args:\n        x (int): First number\n        y (int): Second number\n    \n    Returns:\n        int: Sum\n    """',
+      'How can you extract type information from docstrings?\\n\\ndef add(x, y):\\n    """Add two numbers.\\n    \\n    Args:\\n        x (int): First number\\n        y (int): Second number\\n    \\n    Returns:\\n        int: Sum\\n    """',
     options: [
       'Type information is in the AST',
       'Parse docstring text to extract structured type info',

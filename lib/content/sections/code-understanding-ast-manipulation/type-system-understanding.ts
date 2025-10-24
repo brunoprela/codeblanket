@@ -206,7 +206,7 @@ def process_users(users: List[Dict[str, str]], strict: bool = False) -> Optional
     names: List[str] = []
     
     for user in users:
-        name: str = user.get('name', '')
+        name: str = user.get('name', ')
         if name:
             names.append(name)
     
@@ -693,11 +693,11 @@ code = """
 from typing import List, Dict
 
 def process_users(users: List[Dict[str, str]], strict: bool = False) -> List[str]:
-    '''Process user data.'''
+    ''Process user data.''
     names: List[str] = []
     
     for user in users:
-        name: str = user.get('name', '')
+        name: str = user.get('name', ')
         if name:
             names.append(name)
     

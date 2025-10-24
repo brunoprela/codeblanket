@@ -24,7 +24,7 @@ export const definingFunctionsToolsQuiz = [
             "start_time": {"type": "string"},
             "recurrence_pattern": {
                 "type": "string",
-                "enum": ["daily", "weekly", "monthly"],
+                "enum": ["daily", "weekly", "monthly",],
                 "description": "If provided, recurrence_end_date is required"
             },
             "recurrence_end_date": {
@@ -32,7 +32,7 @@ export const definingFunctionsToolsQuiz = [
                 "description": "REQUIRED when recurrence_pattern is set"
             }
         },
-        "required": ["title", "start_time"]
+        "required": ["title", "start_time",]
     }
 }
 \`\`\`
@@ -46,19 +46,19 @@ export const definingFunctionsToolsQuiz = [
             "type": "object",
             "description": "Optional recurrence settings. If provided, both fields required",
             "properties": {
-                "pattern": {"type": "string", "enum": ["daily", "weekly"]},
+                "pattern": {"type": "string", "enum": ["daily", "weekly",]},
                 "end_date": {"type": "string"}
             },
-            "required": ["pattern", "end_date"]
+            "required": ["pattern", "end_date",]
         },
         "location": {
             "type": "object",
             "description": "Location details",
             "properties": {
-                "type": {"type": "string", "enum": ["physical", "virtual"]},
+                "type": {"type": "string", "enum": ["physical", "virtual",]},
                 "details": {"type": "string", "description": "Address or meeting link"}
             },
-            "required": ["type", "details"]
+            "required": ["type", "details",]
         }
     }
 }
@@ -156,7 +156,7 @@ class SearchParams(BaseModel):
     query: str = Field(
         description="Search query. Examples: 'Python tutorials', 'machine learning basics'"
     )
-    category: Optional[Literal["web", "images", "news"]] = Field(
+    category: Optional[Literal["web", "images", "news",]] = Field(
         default="web",
         description="Type of search. Default: web"
     )
@@ -176,13 +176,13 @@ def generate_enhanced_schema(model: BaseModel) -> dict:
     schema = model.schema()
     
     # Add LLM-friendly examples
-    schema["examples"] = [
+    schema["examples",] = [
         {"query": "Python tutorials", "category": "web", "limit": 5},
         {"query": "cat videos", "category": "images"}
     ]
     
     # Add usage hints
-    schema["usage_hints"] = "Use this for searching the web. Prefer specific queries."
+    schema["usage_hints",] = "Use this for searching the web. Prefer specific queries."
     
     return schema
 \`\`\`
@@ -266,14 +266,14 @@ def test_schema_structure():
     assert "name" in schema
     assert "description" in schema
     assert "parameters" in schema
-    assert "properties" in schema["parameters"]
+    assert "properties" in schema["parameters",]
 
 def test_schema_completeness():
     """Test schema has good descriptions."""
     schema = get_weather_schema()
     
-    for param in schema["parameters"]["properties"]:
-        assert len(param["description"]) > 20  # Non-trivial description
+    for param in schema["parameters",]["properties",]:
+        assert len(param["description",]) > 20  # Non-trivial description
         assert "example" in param.lower() or has_enum(param)
 \`\`\`
 
@@ -297,15 +297,15 @@ def test_llm_can_call_function():
     for case in test_cases:
         response = openai.chat.completions.create(
             model="gpt-4",
-            messages=[{"role": "user", "content": case["prompt"]}],
+            messages=[{"role": "user", "content": case["prompt",]}],
             functions=[weather_schema]
         )
         
         assert response.choices[0].message.function_call
-        assert response.choices[0].message.function_call.name == case["expected_function"]
+        assert response.choices[0].message.function_call.name == case["expected_function",]
         
         args = json.loads(response.choices[0].message.function_call.arguments)
-        for key, value in case["expected_args"].items():
+        for key, value in case["expected_args",].items():
             assert key in args
             assert args[key] == value
 
@@ -339,7 +339,7 @@ def test_invalid_parameters():
 
 **4. Cross-Model Testing**
 \`\`\`python
-@pytest.mark.parametrize("model", ["gpt-4", "gpt-3.5-turbo", "claude-3-opus"])
+@pytest.mark.parametrize("model", ["gpt-4", "gpt-3.5-turbo", "claude-3-opus",])
 def test_schema_works_across_models(model):
     """Test schema works with different LLMs."""
     response = call_llm_with_model(
@@ -378,13 +378,13 @@ def test_schema_quality_score():
     score = 0
     
     # Description length and quality
-    if len(schema["description"]) > 100:
+    if len(schema["description",]) > 100:
         score += 20
-    if "example" in schema["description"].lower():
+    if "example" in schema["description",].lower():
         score += 10
     
     # Parameter descriptions
-    for param in schema["parameters"]["properties"].values():
+    for param in schema["parameters",]["properties",].values():
         if len(param.get("description", "")) > 30:
             score += 5
         if param.get("enum"):

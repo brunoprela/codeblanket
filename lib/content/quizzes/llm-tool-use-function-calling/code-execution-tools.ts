@@ -32,7 +32,7 @@ class SecureCodeExecutor:
     def execute(self, code: str) -> dict:
         container = docker.run(
             image="python-sandbox",
-            command=["python", "/code/script.py"],
+            command=["python", "/code/script.py",],
             mem_limit="256m",
             cpu_quota=50000,
             network_disabled=True,
@@ -87,16 +87,16 @@ class FileManager:
     
     def store_output(self, user_id: str, execution_id: str, files: List[File]):
         # Check limits
-        if len(files) > self.limits["max_files"]:
+        if len(files) > self.limits["max_files",]:
             raise TooManyFilesError()
         
         for file in files:
-            if file.size > self.limits["max_file_size"]:
+            if file.size > self.limits["max_file_size",]:
                 raise FileTooLargeError()
             
             # Upload to S3 with expiration
             key = f"{user_id}/{execution_id}/{file.name}"
-            self.storage.upload(key, file.content, ttl=self.limits["ttl"])
+            self.storage.upload(key, file.content, ttl=self.limits["ttl",])
             
             # Generate signed URL
             url = self.storage.generate_url(key, expires_in=3600)
@@ -185,12 +185,12 @@ def validate_code(code: str) -> Tuple[bool, str]:
 class ExecutionMonitor:
     def monitor(self, container):
         # CPU usage
-        if container.stats()["cpu_percent"] > 90:
+        if container.stats()["cpu_percent",] > 90:
             container.kill()
             raise ResourceExhaustedError("CPU limit exceeded")
         
         # Memory usage
-        if container.stats()["memory_usage"] > MAX_MEMORY:
+        if container.stats()["memory_usage",] > MAX_MEMORY:
             container.kill()
             raise ResourceExhaustedError("Memory limit exceeded")
         

@@ -135,7 +135,7 @@ def export_filtered_data(input_file, output_file, department):
     if not filtered:
         return
     
-    with open(output_file, 'w', newline='') as f:
+    with open(output_file, 'w', newline=') as f:
         fieldnames = filtered[0].keys()
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()

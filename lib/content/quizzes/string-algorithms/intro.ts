@@ -8,12 +8,12 @@ export const introQuiz = [
     question:
       'Why is repeated string concatenation in a loop O(n²) instead of O(n)?',
     sampleAnswer:
-      "Strings in Python are immutable, so each concatenation s += char creates a new string by copying all existing characters plus the new one. For n iterations: 1st copy=1, 2nd=2, 3rd=3, ..., nth=n characters. Total: 1+2+3+...+n = n(n+1)/2 = O(n²). Solution: Build a list and use ''.join(list) at the end, which is O(n) since it only copies characters once.",
+      "Strings in Python are immutable, so each concatenation s += char creates a new string by copying all existing characters plus the new one. For n iterations: 1st copy=1, 2nd=2, 3rd=3, ..., nth=n characters. Total: 1+2+3+...+n = n(n+1)/2 = O(n²). Solution: Build a list and use '.join(list) at the end, which is O(n) since it only copies characters once.",
     keyPoints: [
       'Strings are immutable in Python',
       'Each += creates new string and copies all chars',
       'n iterations: 1+2+3+...+n = O(n²)',
-      "Solution: list.append() + ''.join() = O(n)",
+      "Solution: list.append() + '.join() = O(n)",
       'join() only copies once',
     ],
   },

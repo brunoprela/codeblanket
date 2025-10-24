@@ -844,8 +844,8 @@ def full_gradient_check_example():
     else:
         print("\\n✗ Implementation has errors. Fix before training.")
         for param, result in results.items():
-            if not result['passed']:
-                print(f"  {param}: error = {result['relative_diff']:.2e}")
+            if not result['passed',]:
+                print(f"  {param}: error = {result['relative_diff',]:.2e}")
 
 full_gradient_check_example()
 \\\`\\\`\\\`

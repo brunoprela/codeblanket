@@ -36,7 +36,7 @@ export const implementationQuiz = [
     question:
       'Walk me through the autocomplete get_words_with_prefix implementation. How does DFS collect all words?',
     sampleAnswer:
-      'Autocomplete has two phases. Phase 1: Navigate to prefix node. Traverse character by character from root. If any character missing, return empty list (no words with prefix). If reach end, we have the prefix subtree. Phase 2: DFS from prefix node to collect all words. Recursive DFS: if current node is_end_of_word, add accumulated path to results. Then recurse on all children, adding each child character to path. The DFS explores entire subtree under prefix node. For example, prefix "ca": navigate to node C→A, then DFS finds all paths: R (→car), R→P→E→T (→carpet), T (→cat). Return ["car", "carpet", "cat"]. The beauty: all words starting with prefix are in one subtree.',
+      'Autocomplete has two phases. Phase 1: Navigate to prefix node. Traverse character by character from root. If any character missing, return empty list (no words with prefix). If reach end, we have the prefix subtree. Phase 2: DFS from prefix node to collect all words. Recursive DFS: if current node is_end_of_word, add accumulated path to results. Then recurse on all children, adding each child character to path. The DFS explores entire subtree under prefix node. For example, prefix "ca": navigate to node C→A, then DFS finds all paths: R (→car), R→P→E→T (→carpet), T (→cat). Return ["car", "carpet", "cat",]. The beauty: all words starting with prefix are in one subtree.',
     keyPoints: [
       'Phase 1: navigate to prefix node',
       'Phase 2: DFS to collect all words in subtree',

@@ -50,8 +50,8 @@ export const taskdecompositionplanningMultipleChoice = [
     question:
       'A planning agent decomposes "Build a REST API" into tasks. Which decomposition is MOST appropriate?',
     options: [
-      '["Build API"]—keep it simple, one task',
-      '["Design schema", "Implement endpoints", "Write tests", "Deploy"]—sequential stages',
+      '["Build API",]—keep it simple, one task',
+      '["Design schema", "Implement endpoints", "Write tests", "Deploy",]—sequential stages',
       '["Write POST /users", "Write GET /users", "Write DELETE /users", ...]—one task per endpoint',
       '["Install Python", "Open VSCode", "Create file", "Write code", ...]—very granular steps',
     ],

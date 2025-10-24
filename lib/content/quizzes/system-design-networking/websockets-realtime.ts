@@ -1246,7 +1246,7 @@ const ws = new WebSocket('wss://example.com/socket', {
 
 // Server: Verify custom header
 wss.on('connection', (ws, req) => {
-  const customAuth = req.headers['x-custom-auth'];
+  const customAuth = req.headers['x-custom-auth',];
   if (customAuth !== expectedToken) {
     ws.close(4003, 'Invalid auth header');
     return;
@@ -1286,7 +1286,7 @@ ws.on('message', (message) => {
   }
   
   // Validate message type
-  const allowedTypes = ['chat', 'typing', 'read'];
+  const allowedTypes = ['chat', 'typing', 'read',];
   if (!allowedTypes.includes(data.type)) {
     ws.send(JSON.stringify({ type: 'error', message: 'Invalid message type' }));
     return;
@@ -1294,7 +1294,7 @@ ws.on('message', (message) => {
   
   // Sanitize HTML
   const cleanMessage = sanitizeHtml(data.message, {
-    allowedTags: ['b', 'i', 'em', 'strong'],
+    allowedTags: ['b', 'i', 'em', 'strong',],
     allowedAttributes: {}
   });
   

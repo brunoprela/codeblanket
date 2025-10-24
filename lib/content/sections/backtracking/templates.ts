@@ -134,7 +134,7 @@ def constraint_backtrack_template(n):
     
     def backtrack(row):
         if row == n:
-            result.append([''.join(r) for r in board])
+            result.append(['.join(r) for r in board])
             return
         
         for col in range(n):

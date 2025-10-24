@@ -101,7 +101,7 @@ def check_convexity():
     
     # Test convexity via second derivative
     def is_convex_1d(f, df, ddf, x_range):
-        """For 1D: f is convex if f''(x) ≥ 0 for all x"""
+        """For 1D: f is convex if f'(x) ≥ 0 for all x"""
         x = np.linspace(*x_range, 100)
         second_deriv = ddf(x)
         return np.all(second_deriv >= -1e-10), second_deriv

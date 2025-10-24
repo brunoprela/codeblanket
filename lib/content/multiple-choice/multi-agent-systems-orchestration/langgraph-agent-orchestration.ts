@@ -57,7 +57,7 @@ export const langgraphagentorchestrationMultipleChoice = [
     ],
     correctAnswer: 1,
     explanation:
-      'The developer must implement safeguards—typically a counter in the state that the conditional edge checks: `if state["iterations"] >= 5: return "end"`. Option A is incorrect—LangGraph doesn\'t have built-in infinite loop prevention. Option C (timeout) is a backup, not the primary solution. Option D is wrong—loops are supported.',
+      'The developer must implement safeguards—typically a counter in the state that the conditional edge checks: `if state["iterations",] >= 5: return "end"`. Option A is incorrect—LangGraph doesn\'t have built-in infinite loop prevention. Option C (timeout) is a backup, not the primary solution. Option D is wrong—loops are supported.',
   },
   {
     id: 'maas-langgraph-mc-5',

@@ -468,13 +468,13 @@ const prometheus = require('prom-client');
 const grpcDuration = new prometheus.Histogram({
   name: 'grpc_request_duration_seconds',
   help: 'gRPC request duration',
-  labelNames: ['service', 'method', 'status']
+  labelNames: ['service', 'method', 'status',]
 });
 
 const grpcErrors = new prometheus.Counter({
   name: 'grpc_errors_total',
   help: 'gRPC errors',
-  labelNames: ['service', 'method', 'code']
+  labelNames: ['service', 'method', 'code',]
 });
 
 // Interceptor

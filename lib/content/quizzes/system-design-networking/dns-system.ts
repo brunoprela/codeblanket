@@ -82,7 +82,7 @@ example.com  IN  A  1.2.3.4  (US-East, largest capacity)
   requestInterval: 30, // seconds
   failureThreshold: 3, // 3 consecutive failures
   measureLatency: true,
-  regions: ['us-east-1', 'eu-west-1', 'ap-southeast-1']
+  regions: ['us-east-1', 'eu-west-1', 'ap-southeast-1',]
 }
 
 // Health endpoint response
@@ -536,7 +536,7 @@ k6 run --vus 10000 --duration 30m loadtest.js
 const monitor = {
   url: 'https://example.com/health',
   interval: 60, // seconds
-  locations: ['US-East', 'US-West', 'EU', 'Asia'],
+  locations: ['US-East', 'US-West', 'EU', 'Asia',],
   expectedStatus: 200,
   expectedLatency: '<500ms'
 };

@@ -376,7 +376,7 @@ df['Has_Brown'] = df['Name'].str.contains('Brown')
 df['Username'] = df['Email'].str.extract(r'([^@]+)@')
 
 # Replace
-df['Phone_Clean'] = df['Phone'].str.replace('-', '')
+df['Phone_Clean'] = df['Phone'].str.replace('-', ')
 
 # String length
 df['Name_Length'] = df['Name'].str.len()

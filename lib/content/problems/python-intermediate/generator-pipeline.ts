@@ -137,7 +137,7 @@ batches = batch_lines(lines2, 2)
 for i, batch in enumerate(batches, 1):
     print(f"\\nBatch {i}:")
     for line in batch:
-        print(f"  {line}", end='')
+        print(f"  {line}", end=')
 `,
   testCases: [
     {

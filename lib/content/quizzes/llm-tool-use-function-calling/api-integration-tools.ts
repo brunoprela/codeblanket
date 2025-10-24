@@ -82,9 +82,9 @@ class OAuth2Tool:
         token_data = self.token_manager.get_token(user_id)
         
         # Check if expired
-        if datetime.now() >= token_data["expires_at"]:
+        if datetime.now() >= token_data["expires_at",]:
             # Refresh token
-            new_token = await self.refresh_token(token_data["refresh_token"])
+            new_token = await self.refresh_token(token_data["refresh_token",])
             self.token_manager.store_token(user_id, new_token)
             return new_token
         

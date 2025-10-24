@@ -298,7 +298,7 @@ class PasswordValidator:
         # Shuffle to avoid predictable pattern
         random.shuffle(chars)
         
-        return ''.join(chars)
+        return '.join(chars)
 
 
 # Test helper function (for automated testing)

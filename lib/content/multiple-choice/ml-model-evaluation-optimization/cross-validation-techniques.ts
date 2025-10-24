@@ -1,74 +1,84 @@
-import { MultipleChoiceQuestion } from '../../../types';
-
-export const crossValidationTechniquesMultipleChoice: MultipleChoiceQuestion[] =
-  [
+export const crossValidationTechniquesMultipleChoice = {
+  title: 'Cross-Validation Techniques - Multiple Choice Questions',
+  questions: [
     {
-      id: 'cross-validation-techniques-mc-1',
+      id: 1,
       question:
-        'What is the primary advantage of cross-validation over a single train-test split?',
+        'What is the main advantage of k-fold cross-validation over a single train-test split?',
       options: [
-        'Cross-validation is faster to compute',
-        'Cross-validation requires less data',
-        'Cross-validation provides a more robust performance estimate by averaging across multiple splits',
-        'Cross-validation always gives better model performance',
-      ],
-      correctAnswer: 2,
-      explanation:
-        'Cross-validation provides multiple train-test splits and averages their performance, reducing the variance in performance estimates caused by the randomness of a single split. This gives a more reliable estimate of how well the model will generalize.',
-    },
-    {
-      id: 'cross-validation-techniques-mc-2',
-      question:
-        'In 5-fold cross-validation, how many times is each data point used for training?',
-      options: [
-        '1 time',
-        '4 times',
-        '5 times',
-        'Never (only used for testing)',
+        "It's faster to compute",
+        'It provides more reliable performance estimates by averaging over k different splits',
+        'It requires less data',
+        'It always gives higher accuracy scores',
       ],
       correctAnswer: 1,
       explanation:
-        "In 5-fold CV, the data is split into 5 folds. Each fold serves as the test set once while the other 4 folds are used for training. Therefore, each data point appears in the training set 4 times (when it's not in the test fold).",
+        'K-fold CV provides k different train-test splits, and averaging the results gives a more robust and reliable estimate of model performance with confidence intervals, reducing variance from a single lucky or unlucky split.',
+      difficulty: 'beginner' as const,
+      category: 'Concepts',
     },
     {
-      id: 'cross-validation-techniques-mc-3',
+      id: 2,
       question:
-        'Which cross-validation technique should you use for an imbalanced classification dataset with 95% class 0 and 5% class 1?',
+        'For a dataset with 1000 samples, what is the main disadvantage of Leave-One-Out Cross-Validation (LOOCV)?',
       options: [
-        'Regular K-Fold',
-        'Stratified K-Fold',
-        'Leave-One-Out CV',
-        'Time Series Split',
+        "It doesn't provide reliable estimates",
+        'It requires 1000 model trainings, making it computationally expensive',
+        "It can't be used for classification problems",
+        'It always gives worse results than k-fold CV',
       ],
       correctAnswer: 1,
       explanation:
-        'Stratified K-Fold maintains the class proportions (95%-5%) in each fold, ensuring that every fold is representative of the original dataset. Regular K-Fold might create folds with no class 1 samples by chance.',
+        "LOOCV requires training the model N times (once per sample), which becomes prohibitively expensive for large datasets. With 1000 samples, you'd need 1000 model trainings vs 5-10 for k-fold CV.",
+      difficulty: 'intermediate' as const,
+      category: 'Computational Cost',
     },
     {
-      id: 'cross-validation-techniques-mc-4',
+      id: 3,
       question:
-        'For a stock price prediction problem, which is the CORRECT cross-validation approach?',
+        'Why is standard k-fold cross-validation inappropriate for time series data?',
       options: [
-        'Regular K-Fold with shuffle=True',
-        'Stratified K-Fold',
-        'TimeSeriesSplit (sequential splits preserving temporal order)',
-        'Leave-One-Out Cross-Validation',
-      ],
-      correctAnswer: 2,
-      explanation:
-        'Time series data must use TimeSeriesSplit which preserves temporal order—training data always comes before test data. Regular K-Fold with shuffling would create data leakage by allowing the model to use future information to predict the past.',
-    },
-    {
-      id: 'cross-validation-techniques-mc-5',
-      question: 'What is the purpose of nested cross-validation?',
-      options: [
-        'To make cross-validation faster by using fewer folds',
-        'To provide an unbiased estimate of model performance when tuning hyperparameters',
-        'To handle time series data correctly',
-        'To increase the size of the training set',
+        'Time series data has too many features',
+        'It would use future data to predict past data, creating data leakage',
+        "K-fold CV doesn't work with continuous target variables",
+        "Time series models don't need validation",
       ],
       correctAnswer: 1,
       explanation:
-        'Nested CV uses an outer loop for performance estimation and an inner loop for hyperparameter tuning. This ensures the test sets in the outer loop never participate in hyperparameter selection, providing an unbiased performance estimate. Non-nested CV is biased because hyperparameters are selected based on the same folds used for evaluation.',
+        'Random k-fold CV shuffles data, putting future observations in training and past observations in test set. This violates temporal ordering and creates lookahead bias. Use TimeSeriesSplit instead.',
+      difficulty: 'intermediate' as const,
+      category: 'Time Series',
     },
-  ];
+    {
+      id: 4,
+      question: 'What is nested cross-validation used for?',
+      options: [
+        'Making models train faster',
+        'Getting unbiased performance estimates when tuning hyperparameters',
+        'Reducing the amount of data needed',
+        'Making the code more complex for no reason',
+      ],
+      correctAnswer: 1,
+      explanation:
+        'Nested CV uses an outer loop for performance estimation and inner loop for hyperparameter tuning. This prevents optimistic bias from selecting hyperparameters that happen to work well on a specific validation set.',
+      difficulty: 'advanced' as const,
+      category: 'Methodology',
+    },
+    {
+      id: 5,
+      question:
+        'In 5-fold stratified cross-validation for a classification problem, what is preserved across folds?',
+      options: [
+        'The exact same samples in each fold',
+        'The class distribution (proportion of each class)',
+        'The order of the samples',
+        'The feature correlations',
+      ],
+      correctAnswer: 1,
+      explanation:
+        'Stratified CV ensures each fold maintains the same class distribution as the original dataset. For example, if the original data has 70% class A and 30% class B, each fold will have approximately the same 70/30 split.',
+      difficulty: 'beginner' as const,
+      category: 'Stratification',
+    },
+  ],
+};

@@ -22,7 +22,7 @@ export const pythoncodeanalysisMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'cuam-pythoncodeanalysis-mc-2',
     question:
-      'What does this ast.NodeTransformer do?\n\nclass ConstantFolder(ast.NodeTransformer):\n    def visit_BinOp(self, node):\n        if isinstance(node.left, ast.Constant) and isinstance(node.right, ast.Constant):\n            return ast.Constant(eval(compile(...)))',
+      'What does this ast.NodeTransformer do?\\n\\nclass ConstantFolder(ast.NodeTransformer):\\n    def visit_BinOp(self, node):\\n        if isinstance(node.left, ast.Constant) and isinstance(node.right, ast.Constant):\\n            return ast.Constant(eval(compile(...)))',
     options: [
       'Removes all binary operations',
       'Evaluates constant expressions at compile time',

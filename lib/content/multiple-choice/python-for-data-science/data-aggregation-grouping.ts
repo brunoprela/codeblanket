@@ -44,7 +44,7 @@ export const dataaggregationgroupingMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'data-aggregation-grouping-mc-4',
     question:
-      'What does df.groupby("Category")["Value"].transform("mean") return?',
+      'What does df.groupby("Category")["Value",].transform("mean") return?',
     options: [
       'A Series with one mean value per category',
       'A Series with the same length as the original DataFrame, with each row showing its group mean',
@@ -58,7 +58,7 @@ export const dataaggregationgroupingMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'data-aggregation-grouping-mc-5',
     question:
-      'Why is df.groupby("Category")["Value"].mean() faster than df.groupby("Category")["Value"].agg(lambda x: x.mean())?',
+      'Why is df.groupby("Category")["Value",].mean() faster than df.groupby("Category")["Value",].agg(lambda x: x.mean())?',
     options: [
       'They are equally fast',
       'Built-in functions like mean() use optimized C code, while lambda functions use slower Python',

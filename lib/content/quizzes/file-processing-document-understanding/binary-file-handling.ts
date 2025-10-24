@@ -24,7 +24,7 @@ export const binaryfilehandlingQuiz = [
       'Explain magic numbers and how they are used for file type detection. Why are they more reliable than file extensions?',
     hint: 'Think about file signatures, extension spoofing, and detection reliability.',
     sampleAnswer:
-      'Magic numbers are signature bytes at the start of files identifying format. Examples: PDF starts with %PDF, ZIP with PK\\x03\\x04, PNG with \\x89PNG. More reliable than extensions because: (1) Extensions can be changed/spoofed. (2) Magic numbers are intrinsic to file format. (3) Extensions may be missing or incorrect. (4) Security: detect malicious files disguised with wrong extensions. Always validate via magic numbers not just extension for security.',
+      'Magic numbers are signature bytes at the start of files identifying format. Examples: PDF starts with %PDF, ZIP with PK\\\\x03\\\\x04, PNG with \\\\x89PNG. More reliable than extensions because: (1) Extensions can be changed/spoofed. (2) Magic numbers are intrinsic to file format. (3) Extensions may be missing or incorrect. (4) Security: detect malicious files disguised with wrong extensions. Always validate via magic numbers not just extension for security.',
     keyPoints: [
       'Magic numbers: signature bytes identifying format',
       'More reliable than file extensions',

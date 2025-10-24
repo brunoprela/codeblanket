@@ -351,7 +351,7 @@ class ControlFlowAnalyzer(ast.NodeVisitor):
 # Example usage
 code = """
 def process_order(order, inventory):
-    '''Process an order with various checks.'''
+    ''Process an order with various checks.''
     if not order or not order.items:
         return None
     
@@ -749,7 +749,7 @@ def send_notification(result):
     pass
 
 def orphan_function():
-    '''This is never called.'''
+    ''This is never called.''
     pass
 """
 

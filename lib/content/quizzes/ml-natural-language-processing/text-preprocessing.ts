@@ -335,7 +335,7 @@ class VersionedPreprocessor:
         # Load models/resources
         if config.get('use_spacy', False):
             import spacy
-            self.nlp = spacy.load(config['spacy_model'])
+            self.nlp = spacy.load(config['spacy_model',])
     
     def _compute_config_hash(self) -> str:
         """Compute hash of configuration for versioning"""
@@ -371,10 +371,10 @@ class VersionedPreprocessor:
         with open(f"{path}/metadata.json", 'r') as f:
             metadata = json.load(f)
         
-        print(f"Loading preprocessor version {metadata['version']}")
-        print(f"Config hash: {metadata['config_hash']}")
+        print(f"Loading preprocessor version {metadata['version',]}")
+        print(f"Config hash: {metadata['config_hash',]}")
         
-        with open(f"{path}/preprocessor_v{metadata['version']}.pkl", 'rb') as f:
+        with open(f"{path}/preprocessor_v{metadata['version',]}.pkl", 'rb') as f:
             return pickle.load(f)
 
 # Usage at training time

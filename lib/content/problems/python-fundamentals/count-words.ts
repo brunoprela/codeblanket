@@ -71,7 +71,7 @@ print(count_words("The quick brown fox jumps over the lazy dog"))
   solution: `def count_words(text):
     # Remove punctuation and convert to lowercase
     import string
-    translator = str.maketrans('', '', string.punctuation)
+    translator = str.maketrans(', ', string.punctuation)
     cleaned = text.translate(translator).lower()
     
     # Split and count
@@ -87,7 +87,7 @@ from collections import Counter
 
 def count_words_counter(text):
     import string
-    translator = str.maketrans('', '', string.punctuation)
+    translator = str.maketrans(', ', string.punctuation)
     cleaned = text.translate(translator).lower()
     return dict(Counter(cleaned.split()))`,
   timeComplexity: 'O(n) where n is text length',

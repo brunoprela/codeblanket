@@ -97,7 +97,7 @@ f = w2 * np.maximum(0, w1)
 
 # Check second derivative
 # f'(w₁) = w₂ if w₁ > 0, else 0
-# f''(w₁) = 0 everywhere (except at 0, undefined)
+# f'(w₁) = 0 everywhere (except at 0, undefined)
 # But f has a "kink" at 0 → not convex!
 \`\`\`
 

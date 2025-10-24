@@ -31,7 +31,7 @@ export const microservicessecurityMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Parameterized queries (prepared statements) prevent SQL injection by separating SQL code from data. With string concatenation, attacker can inject malicious SQL: email=\"' OR '1'='1\" becomes SELECT * FROM users WHERE email='' OR '1'='1' (returns all users!). Parameterized queries treat user input as data, not code: db.query(\"SELECT * FROM users WHERE email=$1\", [email]). The database escapes input automatically. This is the #1 defense against SQL injection. Option 1 is sometimes true but not the main reason. Options 3 and 4 are not primary benefits.",
+      "Parameterized queries (prepared statements) prevent SQL injection by separating SQL code from data. With string concatenation, attacker can inject malicious SQL: email=\"' OR '1'='1\" becomes SELECT * FROM users WHERE email=' OR '1'='1' (returns all users!). Parameterized queries treat user input as data, not code: db.query(\"SELECT * FROM users WHERE email=$1\", [email]). The database escapes input automatically. This is the #1 defense against SQL injection. Option 1 is sometimes true but not the main reason. Options 3 and 4 are not primary benefits.",
   },
   {
     id: 'mc-security-3',

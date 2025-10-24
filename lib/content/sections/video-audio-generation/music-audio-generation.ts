@@ -237,7 +237,7 @@ class MusicGenerator:
         
         # audio_write handles normalization and format
         audio_write(
-            str(output_path.with_suffix('')),
+            str(output_path.with_suffix(')),
             torch.from_numpy(audio),
             sample_rate,
             strategy="loudness",

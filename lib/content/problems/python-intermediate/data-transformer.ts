@@ -48,7 +48,7 @@ csv_string = json_to_csv(json_data)
 import csv
 from io import StringIO
 
-def flatten_dict(d, parent_key='', sep='.'):
+def flatten_dict(d, parent_key=', sep='.'):
     """
     Flatten nested dictionary.
     
@@ -127,7 +127,7 @@ print(json_data)
 import csv
 from io import StringIO
 
-def flatten_dict(d, parent_key='', sep='.'):
+def flatten_dict(d, parent_key=', sep='.'):
     items = []
     for k, v in d.items():
         new_key = f"{parent_key}{sep}{k}" if parent_key else k

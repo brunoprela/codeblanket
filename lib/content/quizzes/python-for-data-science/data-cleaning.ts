@@ -35,20 +35,20 @@ df_clean = df.dropna()
 \`\`\`python
 # Customer database where email is required
 # Only 2% missing email - safe to remove
-df = df.dropna(subset=['email'])
+df = df.dropna(subset=['email',])
 \`\`\`
 
 **2. Simple Imputation (Mean/Median/Mode)**
 
 \`\`\`python
 # Mean imputation
-df['age'].fillna(df['age'].mean(), inplace=True)
+df['age',].fillna(df['age',].mean(), inplace=True)
 
 # Median imputation (better for skewed data)
-df['salary'].fillna(df['salary'].median(), inplace=True)
+df['salary',].fillna(df['salary',].median(), inplace=True)
 
 # Mode imputation (categorical)
-df['department'].fillna(df['department'].mode()[0], inplace=True)
+df['department',].fillna(df['department',].mode()[0], inplace=True)
 \`\`\`
 
 **When to use:**
@@ -74,14 +74,14 @@ df['department'].fillna(df['department'].mode()[0], inplace=True)
 \`\`\`python
 # Survey data with 10% missing age values
 # Use median (robust to outliers)
-df['age'].fillna(df['age'].median(), inplace=True)
+df['age',].fillna(df['age',].median(), inplace=True)
 \`\`\`
 
 **3. Group-Based Imputation**
 
 \`\`\`python
 # Impute with group mean
-df['salary'] = df.groupby('department')['salary'].transform(
+df['salary',] = df.groupby('department')['salary',].transform(
     lambda x: x.fillna(x.mean())
 )
 \`\`\`
@@ -107,8 +107,8 @@ df['salary'] = df.groupby('department')['salary'].transform(
 from sklearn.impute import KNNImputer
 
 imputer = KNNImputer(n_neighbors=5)
-df[['age', 'salary', 'experience']] = imputer.fit_transform(
-    df[['age', 'salary', 'experience']]
+df[['age', 'salary', 'experience',]] = imputer.fit_transform(
+    df[['age', 'salary', 'experience',]]
 )
 \`\`\`
 
@@ -197,7 +197,7 @@ df = pd.DataFrame({
     'age': np.random.randint(20, 80, 1000),
     'blood_pressure': np.random.normal(120, 15, 1000),
     'cholesterol': np.random.normal(200, 30, 1000),
-    'outcome': np.random.choice(['healthy', 'at_risk'], 1000)
+    'outcome': np.random.choice(['healthy', 'at_risk',], 1000)
 })
 
 # Introduce missing values (10%)
@@ -207,20 +207,20 @@ df = df.mask(mask)
 
 # Strategy selection:
 # 1. Patient ID: Must have (drop if missing)
-df = df.dropna(subset=['patient_id'])
+df = df.dropna(subset=['patient_id',])
 
 # 2. Age: Use median (robust to outliers)
-df['age'].fillna(df['age'].median(), inplace=True)
+df['age',].fillna(df['age',].median(), inplace=True)
 
 # 3. Blood pressure & cholesterol: Correlated, use KNN
 from sklearn.impute import KNNImputer
 imputer = KNNImputer(n_neighbors=5)
-df[['blood_pressure', 'cholesterol']] = imputer.fit_transform(
-    df[['blood_pressure', 'cholesterol']]
+df[['blood_pressure', 'cholesterol',]] = imputer.fit_transform(
+    df[['blood_pressure', 'cholesterol',]]
 )
 
 # 4. Outcome: Categorical, use mode or model-based
-df['outcome'].fillna(df['outcome'].mode()[0], inplace=True)
+df['outcome',].fillna(df['outcome',].mode()[0], inplace=True)
 \`\`\`
 
 **Best Practices:**
@@ -230,7 +230,7 @@ df['outcome'].fillna(df['outcome'].mode()[0], inplace=True)
 3. **Compare multiple strategies** on a validation set
 4. **Create a missing indicator** if missingness is informative
    \`\`\`python
-   df['age_was_missing'] = df['age'].isna()
+   df['age_was_missing',] = df['age',].isna()
    \`\`\`
 5. **Check distributions** before and after imputation
 6. **Use domain knowledge** to guide imputation
@@ -572,15 +572,15 @@ df = pd.DataFrame({
 })
 # Introduce 20% missing
 mask = np.random.random((1000, 2)) < 0.2
-df[['feature1', 'feature2']] = df[['feature1', 'feature2']].mask(mask)
+df[['feature1', 'feature2',]] = df[['feature1', 'feature2',]].mask(mask)
 
 # WRONG: Impute before split
-df['feature1'].fillna(df['feature1'].mean(), inplace=True)  # Uses ALL data including test!
-df['feature2'].fillna(df['feature2'].mean(), inplace=True)
+df['feature1',].fillna(df['feature1',].mean(), inplace=True)  # Uses ALL data including test!
+df['feature2',].fillna(df['feature2',].mean(), inplace=True)
 
 # Split
 X_train, X_test, y_train, y_test = train_test_split(
-    df[['feature1', 'feature2']], df['target'], test_size=0.2
+    df[['feature1', 'feature2',]], df['target',], test_size=0.2
 )
 
 # Train model
@@ -595,18 +595,18 @@ score = model.score(X_test, y_test)  # Overly optimistic
 \`\`\`python
 # Split FIRST
 X_train, X_test, y_train, y_test = train_test_split(
-    df[['feature1', 'feature2']], df['target'], test_size=0.2, random_state=42
+    df[['feature1', 'feature2',]], df['target',], test_size=0.2, random_state=42
 )
 
 # Compute statistics on training set only
-train_mean_f1 = X_train['feature1'].mean()
-train_mean_f2 = X_train['feature2'].mean()
+train_mean_f1 = X_train['feature1',].mean()
+train_mean_f2 = X_train['feature2',].mean()
 
 # Apply to both sets
-X_train['feature1'].fillna(train_mean_f1, inplace=True)
-X_train['feature2'].fillna(train_mean_f2, inplace=True)
-X_test['feature1'].fillna(train_mean_f1, inplace=True)  # Use training statistics
-X_test['feature2'].fillna(train_mean_f2, inplace=True)
+X_train['feature1',].fillna(train_mean_f1, inplace=True)
+X_train['feature2',].fillna(train_mean_f2, inplace=True)
+X_test['feature1',].fillna(train_mean_f1, inplace=True)  # Use training statistics
+X_test['feature2',].fillna(train_mean_f2, inplace=True)
 
 # Now test score is realistic
 model.fit(X_train, y_train)
@@ -626,18 +626,18 @@ df = pd.DataFrame({
 })
 
 # Make missingness correlated with target
-mask = (df['target'] == 1) & (np.random.random(n) < 0.5)
-df.loc[mask, 'feature'] = np.nan
+mask = (df['target',] == 1) & (np.random.random(n) < 0.5)
+df.loc[mask, 'feature',] = np.nan
 
-print(f"Missing in class 0: {df[df['target']==0]['feature'].isna().sum()}")
-print(f"Missing in class 1: {df[df['target']==1]['feature'].isna().sum()}")
+print(f"Missing in class 0: {df[df['target',]==0]['feature',].isna().sum()}")
+print(f"Missing in class 1: {df[df['target',]==1]['feature',].isna().sum()}")
 # Class 1 has more missing values!
 
 # Wrong way (leaks)
 df_wrong = df.copy()
-df_wrong['feature'].fillna(df_wrong['feature'].mean(), inplace=True)
+df_wrong['feature',].fillna(df_wrong['feature',].mean(), inplace=True)
 X_train, X_test, y_train, y_test = train_test_split(
-    df_wrong[['feature']], df_wrong['target'], test_size=0.2
+    df_wrong[['feature',]], df_wrong['target',], test_size=0.2
 )
 model = LogisticRegression()
 model.fit(X_train, y_train)
@@ -645,9 +645,9 @@ score_wrong = model.score(X_test, y_test)
 
 # Correct way (no leakage)
 X_train, X_test, y_train, y_test = train_test_split(
-    df[['feature']], df['target'], test_size=0.2, random_state=42
+    df[['feature',]], df['target',], test_size=0.2, random_state=42
 )
-train_mean = X_train['feature'].mean()
+train_mean = X_train['feature',].mean()
 X_train_filled = X_train.fillna(train_mean)
 X_test_filled = X_test.fillna(train_mean)
 model.fit(X_train_filled, y_train)
@@ -689,10 +689,10 @@ X_test_scaled = scaler.transform(X_test)  # Don't use fit_transform!
 **Wrong:**
 \`\`\`python
 # WRONG: Remove outliers from combined data
-Q1 = df['feature'].quantile(0.25)
-Q3 = df['feature'].quantile(0.75)
+Q1 = df['feature',].quantile(0.25)
+Q3 = df['feature',].quantile(0.75)
 IQR = Q3 - Q1
-df_clean = df[(df['feature'] >= Q1 - 1.5*IQR) & (df['feature'] <= Q3 + 1.5*IQR)]
+df_clean = df[(df['feature',] >= Q1 - 1.5*IQR) & (df['feature',] <= Q3 + 1.5*IQR)]
 
 # Split after outlier removal
 X_train, X_test = train_test_split(df_clean, test_size=0.2)
@@ -705,21 +705,21 @@ X_train, X_test = train_test_split(df_clean, test_size=0.2)
 X_train, X_test = train_test_split(df, test_size=0.2)
 
 # Compute outlier bounds on training set only
-Q1 = X_train['feature'].quantile(0.25)
-Q3 = X_train['feature'].quantile(0.75)
+Q1 = X_train['feature',].quantile(0.25)
+Q3 = X_train['feature',].quantile(0.75)
 IQR = Q3 - Q1
 lower_bound = Q1 - 1.5 * IQR
 upper_bound = Q3 + 1.5 * IQR
 
 # Remove outliers from training set
 X_train_clean = X_train[
-    (X_train['feature'] >= lower_bound) & 
-    (X_train['feature'] <= upper_bound)
+    (X_train['feature',] >= lower_bound) & 
+    (X_train['feature',] <= upper_bound)
 ]
 
 # For test set: either keep all data or cap outliers
 X_test_capped = X_test.copy()
-X_test_capped['feature'] = X_test_capped['feature'].clip(lower_bound, upper_bound)
+X_test_capped['feature',] = X_test_capped['feature',].clip(lower_bound, upper_bound)
 \`\`\`
 
 **4. Leakage from Feature Engineering**
@@ -727,7 +727,7 @@ X_test_capped['feature'] = X_test_capped['feature'].clip(lower_bound, upper_boun
 **Wrong:**
 \`\`\`python
 # Create target encoding before split
-df['category_mean_target'] = df.groupby('category')['target'].transform('mean')
+df['category_mean_target',] = df.groupby('category')['target',].transform('mean')
 # This uses future information!
 
 X_train, X_test = train_test_split(df, test_size=0.2)
@@ -736,18 +736,18 @@ X_train, X_test = train_test_split(df, test_size=0.2)
 **Correct:**
 \`\`\`python
 X_train, X_test, y_train, y_test = train_test_split(
-    df[['category']], df['target'], test_size=0.2
+    df[['category',]], df['target',], test_size=0.2
 )
 
 # Compute target encoding on training set
-category_means = X_train.join(y_train).groupby('category')['target'].mean()
+category_means = X_train.join(y_train).groupby('category')['target',].mean()
 
 # Apply to both sets
-X_train['category_mean_target'] = X_train['category'].map(category_means)
-X_test['category_mean_target'] = X_test['category'].map(category_means)
+X_train['category_mean_target',] = X_train['category',].map(category_means)
+X_test['category_mean_target',] = X_test['category',].map(category_means)
 
 # Handle unseen categories in test set
-X_test['category_mean_target'].fillna(y_train.mean(), inplace=True)
+X_test['category_mean_target',].fillna(y_train.mean(), inplace=True)
 \`\`\`
 
 **5. Temporal Leakage (Time Series)**
@@ -764,9 +764,9 @@ X_train, X_test = train_test_split(df, test_size=0.2, shuffle=True)
 \`\`\`python
 # Time-based split
 df = df.sort_values('date')
-split_date = df['date'].quantile(0.8)
-X_train = df[df['date'] < split_date]
-X_test = df[df['date'] >= split_date]
+split_date = df['date',].quantile(0.8)
+X_train = df[df['date',] < split_date]
+X_test = df[df['date',] >= split_date]
 # Respects temporal order
 \`\`\`
 
@@ -787,7 +787,7 @@ pipeline = Pipeline([
 
 # Split data first
 X_train, X_test, y_train, y_test = train_test_split(
-    df[features], df['target'], test_size=0.2, random_state=42
+    df[features], df['target',], test_size=0.2, random_state=42
 )
 
 # Fit pipeline on training data only

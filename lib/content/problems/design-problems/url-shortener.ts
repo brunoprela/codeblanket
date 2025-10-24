@@ -138,7 +138,7 @@ expand("http://short.url/1"):
             result.append(self.base62[num % 62])
             num //= 62
         
-        return ''.join(reversed(result))
+        return '.join(reversed(result))
     
     def shorten(self, long_url: str) -> str:
         """Shorten long URL - O(1)"""

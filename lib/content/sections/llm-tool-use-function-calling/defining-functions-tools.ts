@@ -696,7 +696,7 @@ DATABASE_QUERY_TOOL = {
         "properties": {
             "query": {
                 "type": "string",
-                "description": "SQL SELECT query to execute. Must be read-only. Example: 'SELECT COUNT(*) FROM users WHERE created_at > \\'2024-01-01\\''"
+                "description": "SQL SELECT query to execute. Must be read-only. Example: 'SELECT COUNT(*) FROM users WHERE created_at > '2024-01-01''"
             },
             "format": {
                 "type": "string",

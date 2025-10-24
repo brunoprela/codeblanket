@@ -90,7 +90,7 @@ print(compress_string("aabcccccaaa"))
     # Add last group
     compressed.append(s[-1] + str(count))
     
-    result = ''.join(compressed)
+    result = '.join(compressed)
     return result if len(result) < len(s) else s`,
   timeComplexity: 'O(n)',
   spaceComplexity: 'O(n)',

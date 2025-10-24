@@ -66,7 +66,7 @@ print(group_anagrams(["eat","tea","tan","ate","nat","bat"]))
     
     for s in strs:
         # Sort string to get signature
-        key = ''.join(sorted(s))
+        key = '.join(sorted(s))
         groups[key].append(s)
     
     return list(groups.values())`,

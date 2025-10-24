@@ -699,7 +699,7 @@ def remove_comments(code: str, language: str = "python") -> str:
         code = re.sub(r"#.*$", "", code, flags=re.MULTILINE)
         # Remove docstrings (simplified)
         code = re.sub(r'"""[\\s\\S]*?"""', "", code)
-        code = re.sub(r"'''[\\s\\S]*?'''", "", code)
+        code = re.sub(r"''[\\s\\S]*?''", "", code)
     elif language in ["javascript", "typescript", "java", "cpp"]:
         # Remove single-line comments
         code = re.sub(r"//.*$", "", code, flags=re.MULTILINE)

@@ -79,7 +79,7 @@ losses = []
 lr = 1e-7
 
 for i in range(100):
-    optimizer.param_groups[0]['lr'] = lr
+    optimizer.param_groups[0]['lr',] = lr
     loss = train_step()
     
     lrs.append(lr)

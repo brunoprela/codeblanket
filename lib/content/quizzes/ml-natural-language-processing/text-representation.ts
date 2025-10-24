@@ -135,63 +135,63 @@ With neural networks and word embeddings, both BoW and TF-IDF are being replaced
 **Example 1: "not good"**
 
 Unigrams only:
-- Tokens: ["not", "good"]
+- Tokens: ["not", "good",]
 - "good" has positive sentiment → model sees positive signal
 - "not" might be a stopword → removed entirely
 - Result: Positive sentiment (WRONG!)
 
 Unigrams + Bigrams:
-- Tokens: ["not", "good", "not good"]
+- Tokens: ["not", "good", "not good",]
 - "not good" is a distinct feature with negative sentiment
 - Model learns "not good" ≠ "good"
 - Result: Negative sentiment (CORRECT!)
 
 **Example 2: "not bad"**
 
-Unigrams: ["not", "bad"] → negative sentiment (WRONG - double negative!)
-Bigrams: ["not", "bad", "not bad"] → positive/neutral sentiment (CORRECT!)
+Unigrams: ["not", "bad",] → negative sentiment (WRONG - double negative!)
+Bigrams: ["not", "bad", "not bad",] → positive/neutral sentiment (CORRECT!)
 
 **The Intensifier Problem:**
 
 **Example 3: "very good"**
 
-Unigrams: ["very", "good"]
+Unigrams: ["very", "good",]
 - "very" is often a stopword or has neutral sentiment
 - "good" has mild positive sentiment
 - Combined signal: mildly positive
 
-Bigrams: ["very", "good", "very good"]
+Bigrams: ["very", "good", "very good",]
 - "very good" is a distinct feature with strong positive sentiment
 - Model learns intensity: "very good" > "good"
 - Result: Strongly positive sentiment (MORE ACCURATE!)
 
 **Example 4: "absolutely terrible"**
 
-Unigrams: ["absolutely", "terrible"]
+Unigrams: ["absolutely", "terrible",]
 - Misses the intensification effect
 
-Bigrams: ["absolutely", "terrible", "absolutely terrible"]
+Bigrams: ["absolutely", "terrible", "absolutely terrible",]
 - Captures extreme negative sentiment
 
 **The Phrase Problem:**
 
 **Example 5: "not worth the money"**
 
-Unigrams: ["not", "worth", "money"]
+Unigrams: ["not", "worth", "money",]
 - Individual words have mixed or neutral sentiment
 - Hard to detect overall negative sentiment
 
-Bigrams: ["not worth", "worth the", "the money"]
+Bigrams: ["not worth", "worth the", "the money",]
 - "not worth" is a clear negative phrase
 - Model can learn this specific phrase pattern
 
 **Example 6: "waste of money"**
 
-Unigrams: ["waste", "of", "money"]
+Unigrams: ["waste", "of", "money",]
 - "waste" is negative, but "money" is neutral
 - "of" is a stopword
 
-Bigrams: ["waste of", "of money", "waste of money"] (with trigrams)
+Bigrams: ["waste of", "of money", "waste of money",] (with trigrams)
 - "waste of money" is a strongly negative phrase in reviews
 - Much clearer signal
 

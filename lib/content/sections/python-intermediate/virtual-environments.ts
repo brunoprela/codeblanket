@@ -95,12 +95,12 @@ pip uninstall requests
 pip freeze > requirements.txt
 
 # Example requirements.txt:
-'''
+''
 requests==2.31.0
 numpy==1.24.3
 pandas==2.0.2
 Django==4.2.0
-'''
+''
 
 # Install from requirements.txt
 pip install -r requirements.txt
@@ -176,7 +176,7 @@ poetry add pytest --dev  # Development dependency
 poetry install
 
 # pyproject.toml (Poetry's config file):
-'''
+''
 [tool.poetry]
 name = "my-project"
 version = "0.1.0"
@@ -187,7 +187,7 @@ requests = "^2.31.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.4.0"
-'''
+''
 
 # Poetry automatically creates and manages virtual environment
 poetry run python script.py
@@ -263,9 +263,9 @@ requests==2.31.0
 3.11.4
 
 # Or in README:
-'''
+''
 Requires Python 3.11+
-'''
+''
 \`\`\`
 
 **5. Use requirements.txt for simple projects, Poetry for complex ones:**

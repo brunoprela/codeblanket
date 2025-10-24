@@ -89,7 +89,7 @@ print(plus_one([9,9,9]))
 
 # Alternative converting to/from int
 def plus_one_simple(digits):
-    num = int(''.join(map(str, digits))) + 1
+    num = int('.join(map(str, digits))) + 1
     return [int(d) for d in str(num)]`,
   timeComplexity: 'O(n)',
   spaceComplexity: 'O(1) or O(n) if all 9s',
